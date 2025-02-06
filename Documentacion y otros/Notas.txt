@@ -10,3 +10,4 @@ DANIEL:
 - modificar graphics engine para que funcione con space
 - modificar graphics engine para que funcione con object y player(cuando esten implementados)
 - revisar todo el código por si hay algún error o mala práctica.
+-preguntar como mover bloques de memoria de tamaño conocido para la función sort
