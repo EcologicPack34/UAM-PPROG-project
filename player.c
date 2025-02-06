@@ -1,0 +1,88 @@
+/**
+ * @brief It implements the player module
+ *
+ * @file player.c
+ * @author Maksym Polyak
+ * @version 0
+ * @date 04-02-2025
+ * @copyright GNU Public License
+ */
+
+#include "player.h"
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define NO_NAME ""
+
+/**
+ * @brief Player
+ *
+ * This struct stores all the information of a player
+ */
+struct _Player {
+    Entity *entity;           /*!< Entity type of the player */
+};
+
+
+/**
+   Private functions
+*/
+
+/**
+ * @brief Gets the entity pointer from the player
+ * @author Profesores PPROG
+ *
+ * @param player struct with the information of a player
+ * @return entity pointer if everything went fine or NULL if there was a mistake
+ */
+Entity *player_get_entity(Player *player){
+    if (!player)
+        return NULL;
+
+    return player->entity;
+}
+
+/**
+ * @brief Sets the entity pointer of the player
+ * @author Profesores PPROG
+ *
+ * @param player struct with the information of a player
+ * @return OK if everything went fine or NULL if there was a mistake
+ */
+Status player_set_entity(Player *player, Entity *entity){
+    if (!player || !entity)
+        return ERROR;
+
+
+    player->entity = entity;
+
+    return OK;
+}
+
+/**
+   Game interface implementation
+*/
+
+Player *player_create(char *name, Id identity, Id location){
+    Player *player = NULL;
+
+    if(!(player = (Player *)malloc(sizeof(player))))
+        return NULL;
+    
+    if(player_set_entity(player,entity_create(name, identity, location)) == ERROR)
+        return NULL;
+    
+    return player;
+}
+
+void player_destroy(Player *player){
+    if(!player)
+        return;
+
+    entity_destroy(player_get_entity(player));
+}
+
+
+
