@@ -1,0 +1,97 @@
+\doxysection{game.\+h File Reference}
+\hypertarget{game_8h}{}\label{game_8h}\index{game.h@{game.h}}
+
+
+It defines the game interface.  
+
+
+{\ttfamily \#include "{}command.\+h"{}}\newline
+{\ttfamily \#include "{}space.\+h"{}}\newline
+{\ttfamily \#include "{}types.\+h"{}}\newline
+\doxysubsubsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{struct___game}{\+\_\+\+Game}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{game_8h_a5f54fd55f983a2e33ce076cd9f587e82}\label{game_8h_a5f54fd55f983a2e33ce076cd9f587e82} 
+\#define {\bfseries MAX\+\_\+\+SPACES}~100
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{game_8h_a57156d39c530aec3fba3a9dad8c2dc6a}\label{game_8h_a57156d39c530aec3fba3a9dad8c2dc6a} 
+typedef struct \mbox{\hyperlink{struct___game}{\+\_\+\+Game}} {\bfseries Game}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+Status \mbox{\hyperlink{game_8h_aa5688cd474a26fcef4a3c1c4ee8977bc}{game\+\_\+create}} (\mbox{\hyperlink{struct___game}{Game}} \texorpdfstring{$\ast$}{*}game)
+\item 
+\Hypertarget{game_8h_a144779fa421c5291c0c164518a249ca1}\label{game_8h_a144779fa421c5291c0c164518a249ca1} 
+Status {\bfseries game\+\_\+create\+\_\+from\+\_\+file} (\mbox{\hyperlink{struct___game}{Game}} \texorpdfstring{$\ast$}{*}game, char \texorpdfstring{$\ast$}{*}filename)
+\item 
+\Hypertarget{game_8h_a59ccc668c2549c02771bdbf98103ca71}\label{game_8h_a59ccc668c2549c02771bdbf98103ca71} 
+Status {\bfseries game\+\_\+destroy} (\mbox{\hyperlink{struct___game}{Game}} \texorpdfstring{$\ast$}{*}game)
+\item 
+\Hypertarget{game_8h_a34242ac78c87036f8194fee3e92c7fb7}\label{game_8h_a34242ac78c87036f8194fee3e92c7fb7} 
+\mbox{\hyperlink{struct___space}{Space}} \texorpdfstring{$\ast$}{*} {\bfseries game\+\_\+get\+\_\+space} (\mbox{\hyperlink{struct___game}{Game}} \texorpdfstring{$\ast$}{*}game, Id id)
+\item 
+\Hypertarget{game_8h_ac6a628f2106f81c37d0e83c67920615f}\label{game_8h_ac6a628f2106f81c37d0e83c67920615f} 
+Id {\bfseries game\+\_\+get\+\_\+player\+\_\+location} (\mbox{\hyperlink{struct___game}{Game}} \texorpdfstring{$\ast$}{*}game)
+\item 
+\Hypertarget{game_8h_a191f795a7f18bc8feda8546c4dc3634f}\label{game_8h_a191f795a7f18bc8feda8546c4dc3634f} 
+Status {\bfseries game\+\_\+set\+\_\+player\+\_\+location} (\mbox{\hyperlink{struct___game}{Game}} \texorpdfstring{$\ast$}{*}game, Id id)
+\item 
+\Hypertarget{game_8h_a9f94101c2f40c5ddfdeeea70b107efe8}\label{game_8h_a9f94101c2f40c5ddfdeeea70b107efe8} 
+Id {\bfseries game\+\_\+get\+\_\+object\+\_\+location} (\mbox{\hyperlink{struct___game}{Game}} \texorpdfstring{$\ast$}{*}game)
+\item 
+\Hypertarget{game_8h_a9a2a2684cc9478c919743f80b651ccec}\label{game_8h_a9a2a2684cc9478c919743f80b651ccec} 
+Status {\bfseries game\+\_\+set\+\_\+object\+\_\+location} (\mbox{\hyperlink{struct___game}{Game}} \texorpdfstring{$\ast$}{*}game, Id id)
+\item 
+\Hypertarget{game_8h_ac8d90fcffcb96d380650d5c3820ef505}\label{game_8h_ac8d90fcffcb96d380650d5c3820ef505} 
+\mbox{\hyperlink{struct___command}{Command}} \texorpdfstring{$\ast$}{*} {\bfseries game\+\_\+get\+\_\+last\+\_\+command} (\mbox{\hyperlink{struct___game}{Game}} \texorpdfstring{$\ast$}{*}game)
+\item 
+\Hypertarget{game_8h_a0b9b4b011b49c44928c047188ebb099d}\label{game_8h_a0b9b4b011b49c44928c047188ebb099d} 
+Status {\bfseries game\+\_\+set\+\_\+last\+\_\+command} (\mbox{\hyperlink{struct___game}{Game}} \texorpdfstring{$\ast$}{*}game, \mbox{\hyperlink{struct___command}{Command}} \texorpdfstring{$\ast$}{*}command)
+\item 
+\Hypertarget{game_8h_a7def4a688e3db8aa7261b677b79943c4}\label{game_8h_a7def4a688e3db8aa7261b677b79943c4} 
+Bool {\bfseries game\+\_\+get\+\_\+finished} (\mbox{\hyperlink{struct___game}{Game}} \texorpdfstring{$\ast$}{*}game)
+\item 
+\Hypertarget{game_8h_aaeb153fbe0298a054b6b29ed0b7debae}\label{game_8h_aaeb153fbe0298a054b6b29ed0b7debae} 
+Status {\bfseries game\+\_\+set\+\_\+finished} (\mbox{\hyperlink{struct___game}{Game}} \texorpdfstring{$\ast$}{*}game, Bool finished)
+\item 
+\Hypertarget{game_8h_a6a00b3f5db99150d9180e439d400e083}\label{game_8h_a6a00b3f5db99150d9180e439d400e083} 
+void {\bfseries game\+\_\+print} (\mbox{\hyperlink{struct___game}{Game}} \texorpdfstring{$\ast$}{*}game)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+It defines the game interface. 
+
+It defines the game update interface.
+
+\begin{DoxyAuthor}{Author}
+Profesores PPROG 
+\end{DoxyAuthor}
+\begin{DoxyVersion}{Version}
+0 
+\end{DoxyVersion}
+\begin{DoxyDate}{Date}
+27-\/01-\/2025 
+\end{DoxyDate}
+\begin{DoxyCopyright}{Copyright}
+GNU Public License 
+\end{DoxyCopyright}
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{game_8h_aa5688cd474a26fcef4a3c1c4ee8977bc}\index{game.h@{game.h}!game\_create@{game\_create}}
+\index{game\_create@{game\_create}!game.h@{game.h}}
+\doxysubsubsection{\texorpdfstring{game\_create()}{game\_create()}}
+{\footnotesize\ttfamily \label{game_8h_aa5688cd474a26fcef4a3c1c4ee8977bc} 
+Status game\+\_\+create (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct___game}{Game}} \texorpdfstring{$\ast$}{*}}]{game}{}\end{DoxyParamCaption})}
+
+Game interface implementation 

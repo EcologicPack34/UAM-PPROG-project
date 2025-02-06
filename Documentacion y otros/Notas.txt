@@ -1,0 +1,12 @@
+Preguntar al profesor:
+- Si el heap es un único bloque en C
+- si hay alguna manera de ver si un trozo del heap asignado al programa esta alocado a algún pointer
+- si hay alguna manera fácil de organizar el proyecto en subcarpetas sin tener que preocuparse por los directorios en los #includes, solo en makefile
+- se puede conseguir el stack trace en runtime con alguna función?
+
+DANIEL:
+- implementar utils y añadirlo al makefile
+- implementar link en space
+- modificar graphics engine para que funcione con space
+- modificar graphics engine para que funcione con object y player(cuando esten implementados)
+- revisar todo el código por si hay algún error o mala práctica.

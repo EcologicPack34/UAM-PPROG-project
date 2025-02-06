@@ -1,0 +1,131 @@
+\doxysection{debug\+\_\+printing.\+h File Reference}
+\hypertarget{debug__printing_8h}{}\label{debug__printing_8h}\index{debug\_printing.h@{debug\_printing.h}}
+\doxysubsubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{debug__printing_8h_a9b170c161c1f465b946ba7ba2b153573}\label{debug__printing_8h_a9b170c161c1f465b946ba7ba2b153573} 
+\#define {\bfseries MAX\+\_\+\+FILE\+\_\+\+PATH\+\_\+\+LENGTH}~32
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{debug__printing_8h_aa90925833aff044f4ba03f43f8084bf7}\label{debug__printing_8h_aa90925833aff044f4ba03f43f8084bf7} 
+typedef enum \mbox{\hyperlink{debug__printing_8h_a7898a2c3a87496daad04bfb45321843f}{\+\_\+\+LOG\+\_\+\+LEVEL}} {\bfseries LOG\+\_\+\+LEVEL}
+\begin{DoxyCompactList}\small\item\em Data type for the different log types. \end{DoxyCompactList}\item 
+\Hypertarget{debug__printing_8h_a8560222c43843af08847708f3644c2b4}\label{debug__printing_8h_a8560222c43843af08847708f3644c2b4} 
+typedef struct \mbox{\hyperlink{struct___debug}{\+\_\+\+Debug}} {\bfseries Debug}
+\begin{DoxyCompactList}\small\item\em Data type containing information like the log file path. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{debug__printing_8h_a7898a2c3a87496daad04bfb45321843f}\label{debug__printing_8h_a7898a2c3a87496daad04bfb45321843f} 
+enum \mbox{\hyperlink{debug__printing_8h_a7898a2c3a87496daad04bfb45321843f}{\+\_\+\+LOG\+\_\+\+LEVEL}} \{ {\bfseries PRINT} = 10
+, {\bfseries WARNING} = 20
+, {\bfseries ERROR} = 30
+, {\bfseries DEBUG} = 40
+ \}
+\begin{DoxyCompactList}\small\item\em Data type for the different log types. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{debug__printing_8h_a8560222c43843af08847708f3644c2b4}{Debug}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{debug__printing_8h_a584b33092abc2ff70493462007e66d44}{debug\+\_\+create}} (char \texorpdfstring{$\ast$}{*}debug\+File\+Path)
+\begin{DoxyCompactList}\small\item\em Creates and Initializes a \doxylink{debug__printing_8h_a8560222c43843af08847708f3644c2b4}{Debug}. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{debug__printing_8h_a8a4c85f185f9f64da2a38a2ffa728540}{debug\+\_\+destroy}} (\mbox{\hyperlink{debug__printing_8h_a8560222c43843af08847708f3644c2b4}{Debug}} \texorpdfstring{$\ast$}{*}info)
+\begin{DoxyCompactList}\small\item\em Frees all the memory and closes file. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{debug__printing_8h_a310b1d13e0bc8c8489d51e72fd2b4b7e}{debug\+\_\+log}} (\mbox{\hyperlink{debug__printing_8h_a8560222c43843af08847708f3644c2b4}{Debug}} \texorpdfstring{$\ast$}{*}info, \mbox{\hyperlink{debug__printing_8h_aa90925833aff044f4ba03f43f8084bf7}{LOG\+\_\+\+LEVEL}} level, char \texorpdfstring{$\ast$}{*}formated\+String,...)
+\begin{DoxyCompactList}\small\item\em Prints a message with format into the log file. \end{DoxyCompactList}\item 
+char \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{debug__printing_8h_a6691ae8e679f62290c57709104b172e0}{debug\+\_\+get\+Path}} (\mbox{\hyperlink{debug__printing_8h_a8560222c43843af08847708f3644c2b4}{Debug}} \texorpdfstring{$\ast$}{*}info)
+\begin{DoxyCompactList}\small\item\em Returns the path of the log file. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\begin{DoxyAuthor}{Author}
+Daniel Gómez Rodríguez 
+\end{DoxyAuthor}
+\begin{DoxyVersion}{Version}
+1. 1 
+\end{DoxyVersion}
+\begin{DoxyDate}{Date}
+2025-\/01-\/30
+\end{DoxyDate}
+\begin{DoxyCopyright}{Copyright}
+GNU Public License 
+\end{DoxyCopyright}
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{debug__printing_8h_a584b33092abc2ff70493462007e66d44}\index{debug\_printing.h@{debug\_printing.h}!debug\_create@{debug\_create}}
+\index{debug\_create@{debug\_create}!debug\_printing.h@{debug\_printing.h}}
+\doxysubsubsection{\texorpdfstring{debug\_create()}{debug\_create()}}
+{\footnotesize\ttfamily \label{debug__printing_8h_a584b33092abc2ff70493462007e66d44} 
+\mbox{\hyperlink{debug__printing_8h_a8560222c43843af08847708f3644c2b4}{Debug}} \texorpdfstring{$\ast$}{*} debug\+\_\+create (\begin{DoxyParamCaption}\item[{char \texorpdfstring{$\ast$}{*}}]{debug\+File\+Path}{}\end{DoxyParamCaption})}
+
+
+
+Creates and Initializes a \doxylink{debug__printing_8h_a8560222c43843af08847708f3644c2b4}{Debug}. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em debug\+File\+Path} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Debug\texorpdfstring{$\ast$}{*} 
+\end{DoxyReturn}
+\Hypertarget{debug__printing_8h_a8a4c85f185f9f64da2a38a2ffa728540}\index{debug\_printing.h@{debug\_printing.h}!debug\_destroy@{debug\_destroy}}
+\index{debug\_destroy@{debug\_destroy}!debug\_printing.h@{debug\_printing.h}}
+\doxysubsubsection{\texorpdfstring{debug\_destroy()}{debug\_destroy()}}
+{\footnotesize\ttfamily \label{debug__printing_8h_a8a4c85f185f9f64da2a38a2ffa728540} 
+void debug\+\_\+destroy (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{debug__printing_8h_a8560222c43843af08847708f3644c2b4}{Debug}} \texorpdfstring{$\ast$}{*}}]{info}{}\end{DoxyParamCaption})}
+
+
+
+Frees all the memory and closes file. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em info} & \\
+\hline
+\end{DoxyParams}
+\Hypertarget{debug__printing_8h_a6691ae8e679f62290c57709104b172e0}\index{debug\_printing.h@{debug\_printing.h}!debug\_getPath@{debug\_getPath}}
+\index{debug\_getPath@{debug\_getPath}!debug\_printing.h@{debug\_printing.h}}
+\doxysubsubsection{\texorpdfstring{debug\_getPath()}{debug\_getPath()}}
+{\footnotesize\ttfamily \label{debug__printing_8h_a6691ae8e679f62290c57709104b172e0} 
+char \texorpdfstring{$\ast$}{*} debug\+\_\+get\+Path (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{debug__printing_8h_a8560222c43843af08847708f3644c2b4}{Debug}} \texorpdfstring{$\ast$}{*}}]{info}{}\end{DoxyParamCaption})}
+
+
+
+Returns the path of the log file. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em info} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+char\texorpdfstring{$\ast$}{*} 
+\end{DoxyReturn}
+\Hypertarget{debug__printing_8h_a310b1d13e0bc8c8489d51e72fd2b4b7e}\index{debug\_printing.h@{debug\_printing.h}!debug\_log@{debug\_log}}
+\index{debug\_log@{debug\_log}!debug\_printing.h@{debug\_printing.h}}
+\doxysubsubsection{\texorpdfstring{debug\_log()}{debug\_log()}}
+{\footnotesize\ttfamily \label{debug__printing_8h_a310b1d13e0bc8c8489d51e72fd2b4b7e} 
+int debug\+\_\+log (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{debug__printing_8h_a8560222c43843af08847708f3644c2b4}{Debug}} \texorpdfstring{$\ast$}{*}}]{info}{, }\item[{\mbox{\hyperlink{debug__printing_8h_aa90925833aff044f4ba03f43f8084bf7}{LOG\+\_\+\+LEVEL}}}]{level}{, }\item[{char \texorpdfstring{$\ast$}{*}}]{formated\+String}{, }\item[{}]{...}{}\end{DoxyParamCaption})}
+
+
+
+Prints a message with format into the log file. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em info} & \\
+\hline
+{\em level} & \\
+\hline
+{\em formated\+String} & \\
+\hline
+{\em ...} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int 
+\end{DoxyReturn}
