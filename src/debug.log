@@ -1,12 +1,12 @@
-[Tue Feb  4 23:50:08 2025]DEBUG_LOG: Debug global variable
-[Tue Feb  4 23:50:08 2025]DEBUG_LOG: Leido: 11|Entry|-1|-1|12|-1
+[Fri Feb  7 18:36:47 2025]DEBUG_LOG: Debug global variable
+[Fri Feb  7 18:36:47 2025]DEBUG_LOG: Leido: 11|Entry|-1|-1|12|-1
 
-[Tue Feb  4 23:50:08 2025]DEBUG_LOG: Leido: 12|Corridor|11|-1|13|-1
+[Fri Feb  7 18:36:47 2025]DEBUG_LOG: Leido: 12|Corridor|11|-1|13|-1
 
-[Tue Feb  4 23:50:08 2025]DEBUG_LOG: Leido: 13|Pantry|12|-1|14|-1
+[Fri Feb  7 18:36:47 2025]DEBUG_LOG: Leido: 13|Pantry|12|-1|14|-1
 
-[Tue Feb  4 23:50:08 2025]DEBUG_LOG: Leido: 14|AMONGUS|13|-1|-1|-1
+[Fri Feb  7 18:36:47 2025]DEBUG_LOG: Leido: 14|AMONGUS|13|-1|-1|-1
 
-[Tue Feb  4 23:50:08 2025]DEBUG_LOG: Game created
-[Tue Feb  4 23:50:17 2025]DEBUG_LOG: Game ended
-[Tue Feb  4 23:50:17 2025]DEBUG_LOG: Debug global variable destruction
+[Fri Feb  7 18:36:47 2025]DEBUG_LOG: Game Initialized correctly
+[Fri Feb  7 18:37:07 2025]DEBUG_LOG: Game ended
+[Fri Feb  7 18:37:07 2025]DEBUG_LOG: Debug global variable destruction

@@ -12,7 +12,10 @@
 #ifndef UTILS_H
 #define UTILS_H
 
-
+/* Util para hacer un graphics engine nuevo
+#define console_clear() printf("\033[H\033[J")
+#define console_gotoxy(x,y) printf("\033[%d;%dH", (y), (x))
+*/
 
 typedef struct _Random Random;
 
