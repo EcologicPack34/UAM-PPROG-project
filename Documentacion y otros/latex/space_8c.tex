@@ -1,0 +1,408 @@
+\doxysection{space.\+c File Reference}
+\hypertarget{space_8c}{}\label{space_8c}\index{space.c@{space.c}}
+
+
+It implements the space module.  
+
+
+{\ttfamily \#include "{}space.\+h"{}}\newline
+{\ttfamily \#include $<$stdio.\+h$>$}\newline
+{\ttfamily \#include $<$stdlib.\+h$>$}\newline
+{\ttfamily \#include $<$string.\+h$>$}\newline
+\doxysubsubsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{struct___space}{\+\_\+\+Space}}
+\begin{DoxyCompactList}\small\item\em Space. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{struct___space}{Space}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{space_8c_ad3a5834be733066e8a7d8586be0ac610}{space\+\_\+create}} (Id id)
+\begin{DoxyCompactList}\small\item\em It creates a new space, allocating memory and initializing its members. \end{DoxyCompactList}\item 
+Status \mbox{\hyperlink{space_8c_a278763d4b530df17823ef9e4f9db2896}{space\+\_\+destroy}} (\mbox{\hyperlink{struct___space}{Space}} \texorpdfstring{$\ast$}{*}space)
+\begin{DoxyCompactList}\small\item\em It destroys a space, freeing the allocated memory. \end{DoxyCompactList}\item 
+Id \mbox{\hyperlink{space_8c_ac8ddfd0d8692fd852ee49698c446cb50}{space\+\_\+get\+\_\+id}} (\mbox{\hyperlink{struct___space}{Space}} \texorpdfstring{$\ast$}{*}space)
+\begin{DoxyCompactList}\small\item\em It gets the id of a space. \end{DoxyCompactList}\item 
+Status \mbox{\hyperlink{space_8c_a03ae5d9d7a842346d89e56409c3cb3e1}{space\+\_\+set\+\_\+name}} (\mbox{\hyperlink{struct___space}{Space}} \texorpdfstring{$\ast$}{*}space, char \texorpdfstring{$\ast$}{*}name)
+\begin{DoxyCompactList}\small\item\em It sets the name of a space. \end{DoxyCompactList}\item 
+const char \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{space_8c_ae2006c76eb167f71c7fd7614e0edd37a}{space\+\_\+get\+\_\+name}} (\mbox{\hyperlink{struct___space}{Space}} \texorpdfstring{$\ast$}{*}space)
+\begin{DoxyCompactList}\small\item\em It gets the name of a space. \end{DoxyCompactList}\item 
+Status \mbox{\hyperlink{space_8c_a2050ee6abf28cf78cd6708dea121e048}{space\+\_\+set\+\_\+north}} (\mbox{\hyperlink{struct___space}{Space}} \texorpdfstring{$\ast$}{*}space, Id id)
+\begin{DoxyCompactList}\small\item\em It sets the id of the space located at the north. \end{DoxyCompactList}\item 
+Id \mbox{\hyperlink{space_8c_ad331fba774897900f615d9d2e8d81a90}{space\+\_\+get\+\_\+north}} (\mbox{\hyperlink{struct___space}{Space}} \texorpdfstring{$\ast$}{*}space)
+\begin{DoxyCompactList}\small\item\em It gets the id of the space located at the north. \end{DoxyCompactList}\item 
+Status \mbox{\hyperlink{space_8c_a294b0f8ff311f18f399fcd66da99f53a}{space\+\_\+set\+\_\+south}} (\mbox{\hyperlink{struct___space}{Space}} \texorpdfstring{$\ast$}{*}space, Id id)
+\begin{DoxyCompactList}\small\item\em It sets the id of the space located at the south. \end{DoxyCompactList}\item 
+Id \mbox{\hyperlink{space_8c_a9b86e1335c423eaad832e50d4c12cf1f}{space\+\_\+get\+\_\+south}} (\mbox{\hyperlink{struct___space}{Space}} \texorpdfstring{$\ast$}{*}space)
+\begin{DoxyCompactList}\small\item\em It gets the id of the space located at the south. \end{DoxyCompactList}\item 
+Status \mbox{\hyperlink{space_8c_a188b2408fb4f545f8a2c7851763474a4}{space\+\_\+set\+\_\+east}} (\mbox{\hyperlink{struct___space}{Space}} \texorpdfstring{$\ast$}{*}space, Id id)
+\begin{DoxyCompactList}\small\item\em It sets the id of the space located at the east. \end{DoxyCompactList}\item 
+Id \mbox{\hyperlink{space_8c_a978a22b77f74bb2dab68a00571abbe0b}{space\+\_\+get\+\_\+east}} (\mbox{\hyperlink{struct___space}{Space}} \texorpdfstring{$\ast$}{*}space)
+\begin{DoxyCompactList}\small\item\em It gets the id of the space located at the east. \end{DoxyCompactList}\item 
+Status \mbox{\hyperlink{space_8c_ac3a7afb75347d31e1034a27cabc18244}{space\+\_\+set\+\_\+west}} (\mbox{\hyperlink{struct___space}{Space}} \texorpdfstring{$\ast$}{*}space, Id id)
+\begin{DoxyCompactList}\small\item\em It sets the id of the space located at the west. \end{DoxyCompactList}\item 
+Id \mbox{\hyperlink{space_8c_af495ebfd5d13eba1a48cebd10992a17f}{space\+\_\+get\+\_\+west}} (\mbox{\hyperlink{struct___space}{Space}} \texorpdfstring{$\ast$}{*}space)
+\begin{DoxyCompactList}\small\item\em It gets the id of the space located at the west. \end{DoxyCompactList}\item 
+Status \mbox{\hyperlink{space_8c_aca45b785d7dcf4ef28fdc69bc5a58328}{space\+\_\+set\+\_\+object}} (\mbox{\hyperlink{struct___space}{Space}} \texorpdfstring{$\ast$}{*}space, Bool value)
+\begin{DoxyCompactList}\small\item\em It sets whether the space has an object or not. \end{DoxyCompactList}\item 
+Bool \mbox{\hyperlink{space_8c_a3ec7b124a08565b1f7aa377b53c1014f}{space\+\_\+get\+\_\+object}} (\mbox{\hyperlink{struct___space}{Space}} \texorpdfstring{$\ast$}{*}space)
+\begin{DoxyCompactList}\small\item\em It gets whether the space has an object or not. \end{DoxyCompactList}\item 
+Status \mbox{\hyperlink{space_8c_a013d3166ac751f717612c5b0d6510c2c}{space\+\_\+print}} (\mbox{\hyperlink{struct___space}{Space}} \texorpdfstring{$\ast$}{*}space)
+\begin{DoxyCompactList}\small\item\em It prints the space information. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+It implements the space module. 
+
+\begin{DoxyAuthor}{Author}
+Profesores PPROG 
+\end{DoxyAuthor}
+\begin{DoxyVersion}{Version}
+0 
+\end{DoxyVersion}
+\begin{DoxyDate}{Date}
+27-\/01-\/2025 
+\end{DoxyDate}
+\begin{DoxyCopyright}{Copyright}
+GNU Public License 
+\end{DoxyCopyright}
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{space_8c_ad3a5834be733066e8a7d8586be0ac610}\index{space.c@{space.c}!space\_create@{space\_create}}
+\index{space\_create@{space\_create}!space.c@{space.c}}
+\doxysubsubsection{\texorpdfstring{space\_create()}{space\_create()}}
+{\footnotesize\ttfamily \label{space_8c_ad3a5834be733066e8a7d8586be0ac610} 
+\mbox{\hyperlink{struct___space}{Space}} \texorpdfstring{$\ast$}{*} space\+\_\+create (\begin{DoxyParamCaption}\item[{Id}]{id}{}\end{DoxyParamCaption})}
+
+
+
+It creates a new space, allocating memory and initializing its members. 
+
+space\+\_\+create allocates memory for a new space and initializes its members \Hypertarget{space_8c_a278763d4b530df17823ef9e4f9db2896}\index{space.c@{space.c}!space\_destroy@{space\_destroy}}
+\index{space\_destroy@{space\_destroy}!space.c@{space.c}}
+\doxysubsubsection{\texorpdfstring{space\_destroy()}{space\_destroy()}}
+{\footnotesize\ttfamily \label{space_8c_a278763d4b530df17823ef9e4f9db2896} 
+Status space\+\_\+destroy (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct___space}{Space}} \texorpdfstring{$\ast$}{*}}]{space}{}\end{DoxyParamCaption})}
+
+
+
+It destroys a space, freeing the allocated memory. 
+
+\begin{DoxyAuthor}{Author}
+Profesores PPROG
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em space} & a pointer to the space that must be destroyed \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+OK, if everything goes well or ERROR if there was some mistake 
+\end{DoxyReturn}
+\Hypertarget{space_8c_a978a22b77f74bb2dab68a00571abbe0b}\index{space.c@{space.c}!space\_get\_east@{space\_get\_east}}
+\index{space\_get\_east@{space\_get\_east}!space.c@{space.c}}
+\doxysubsubsection{\texorpdfstring{space\_get\_east()}{space\_get\_east()}}
+{\footnotesize\ttfamily \label{space_8c_a978a22b77f74bb2dab68a00571abbe0b} 
+Id space\+\_\+get\+\_\+east (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct___space}{Space}} \texorpdfstring{$\ast$}{*}}]{space}{}\end{DoxyParamCaption})}
+
+
+
+It gets the id of the space located at the east. 
+
+\begin{DoxyAuthor}{Author}
+Profesores PPROG
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em space} & a pointer to the space \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the id number of the space located at the east 
+\end{DoxyReturn}
+\Hypertarget{space_8c_ac8ddfd0d8692fd852ee49698c446cb50}\index{space.c@{space.c}!space\_get\_id@{space\_get\_id}}
+\index{space\_get\_id@{space\_get\_id}!space.c@{space.c}}
+\doxysubsubsection{\texorpdfstring{space\_get\_id()}{space\_get\_id()}}
+{\footnotesize\ttfamily \label{space_8c_ac8ddfd0d8692fd852ee49698c446cb50} 
+Id space\+\_\+get\+\_\+id (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct___space}{Space}} \texorpdfstring{$\ast$}{*}}]{space}{}\end{DoxyParamCaption})}
+
+
+
+It gets the id of a space. 
+
+\begin{DoxyAuthor}{Author}
+Profesores PPROG
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em space} & a pointer to the space \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the id of space 
+\end{DoxyReturn}
+\Hypertarget{space_8c_ae2006c76eb167f71c7fd7614e0edd37a}\index{space.c@{space.c}!space\_get\_name@{space\_get\_name}}
+\index{space\_get\_name@{space\_get\_name}!space.c@{space.c}}
+\doxysubsubsection{\texorpdfstring{space\_get\_name()}{space\_get\_name()}}
+{\footnotesize\ttfamily \label{space_8c_ae2006c76eb167f71c7fd7614e0edd37a} 
+const char \texorpdfstring{$\ast$}{*} space\+\_\+get\+\_\+name (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct___space}{Space}} \texorpdfstring{$\ast$}{*}}]{space}{}\end{DoxyParamCaption})}
+
+
+
+It gets the name of a space. 
+
+\begin{DoxyAuthor}{Author}
+Profesores PPROG
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em space} & a pointer to the space \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+a string with the name of the space 
+\end{DoxyReturn}
+\Hypertarget{space_8c_ad331fba774897900f615d9d2e8d81a90}\index{space.c@{space.c}!space\_get\_north@{space\_get\_north}}
+\index{space\_get\_north@{space\_get\_north}!space.c@{space.c}}
+\doxysubsubsection{\texorpdfstring{space\_get\_north()}{space\_get\_north()}}
+{\footnotesize\ttfamily \label{space_8c_ad331fba774897900f615d9d2e8d81a90} 
+Id space\+\_\+get\+\_\+north (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct___space}{Space}} \texorpdfstring{$\ast$}{*}}]{space}{}\end{DoxyParamCaption})}
+
+
+
+It gets the id of the space located at the north. 
+
+\begin{DoxyAuthor}{Author}
+Profesores PPROG
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em space} & a pointer to the space \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the id number of the space located at the north 
+\end{DoxyReturn}
+\Hypertarget{space_8c_a3ec7b124a08565b1f7aa377b53c1014f}\index{space.c@{space.c}!space\_get\_object@{space\_get\_object}}
+\index{space\_get\_object@{space\_get\_object}!space.c@{space.c}}
+\doxysubsubsection{\texorpdfstring{space\_get\_object()}{space\_get\_object()}}
+{\footnotesize\ttfamily \label{space_8c_a3ec7b124a08565b1f7aa377b53c1014f} 
+Bool space\+\_\+get\+\_\+object (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct___space}{Space}} \texorpdfstring{$\ast$}{*}}]{space}{}\end{DoxyParamCaption})}
+
+
+
+It gets whether the space has an object or not. 
+
+\begin{DoxyAuthor}{Author}
+Profesores PPROG
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em space} & a pointer to the space \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+a boolean, specifying if in the space there is an object (TRUE) or not (FALSE) 
+\end{DoxyReturn}
+\Hypertarget{space_8c_a9b86e1335c423eaad832e50d4c12cf1f}\index{space.c@{space.c}!space\_get\_south@{space\_get\_south}}
+\index{space\_get\_south@{space\_get\_south}!space.c@{space.c}}
+\doxysubsubsection{\texorpdfstring{space\_get\_south()}{space\_get\_south()}}
+{\footnotesize\ttfamily \label{space_8c_a9b86e1335c423eaad832e50d4c12cf1f} 
+Id space\+\_\+get\+\_\+south (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct___space}{Space}} \texorpdfstring{$\ast$}{*}}]{space}{}\end{DoxyParamCaption})}
+
+
+
+It gets the id of the space located at the south. 
+
+\begin{DoxyAuthor}{Author}
+Profesores PPROG
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em space} & a pointer to the space \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the id number of the space located at the south 
+\end{DoxyReturn}
+\Hypertarget{space_8c_af495ebfd5d13eba1a48cebd10992a17f}\index{space.c@{space.c}!space\_get\_west@{space\_get\_west}}
+\index{space\_get\_west@{space\_get\_west}!space.c@{space.c}}
+\doxysubsubsection{\texorpdfstring{space\_get\_west()}{space\_get\_west()}}
+{\footnotesize\ttfamily \label{space_8c_af495ebfd5d13eba1a48cebd10992a17f} 
+Id space\+\_\+get\+\_\+west (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct___space}{Space}} \texorpdfstring{$\ast$}{*}}]{space}{}\end{DoxyParamCaption})}
+
+
+
+It gets the id of the space located at the west. 
+
+\begin{DoxyAuthor}{Author}
+Profesores PPROG
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em space} & a pointer to the space \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the id number of the space located at the west 
+\end{DoxyReturn}
+\Hypertarget{space_8c_a013d3166ac751f717612c5b0d6510c2c}\index{space.c@{space.c}!space\_print@{space\_print}}
+\index{space\_print@{space\_print}!space.c@{space.c}}
+\doxysubsubsection{\texorpdfstring{space\_print()}{space\_print()}}
+{\footnotesize\ttfamily \label{space_8c_a013d3166ac751f717612c5b0d6510c2c} 
+Status space\+\_\+print (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct___space}{Space}} \texorpdfstring{$\ast$}{*}}]{space}{}\end{DoxyParamCaption})}
+
+
+
+It prints the space information. 
+
+\begin{DoxyAuthor}{Author}
+Profesores PPROG
+\end{DoxyAuthor}
+This fucntion shows the id and name of the space, the spaces that surrounds it and wheter it has an object or not. 
+\begin{DoxyParams}{Parameters}
+{\em space} & a pointer to the space \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+OK, if everything goes well or ERROR if there was some mistake 
+\end{DoxyReturn}
+\Hypertarget{space_8c_a188b2408fb4f545f8a2c7851763474a4}\index{space.c@{space.c}!space\_set\_east@{space\_set\_east}}
+\index{space\_set\_east@{space\_set\_east}!space.c@{space.c}}
+\doxysubsubsection{\texorpdfstring{space\_set\_east()}{space\_set\_east()}}
+{\footnotesize\ttfamily \label{space_8c_a188b2408fb4f545f8a2c7851763474a4} 
+Status space\+\_\+set\+\_\+east (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct___space}{Space}} \texorpdfstring{$\ast$}{*}}]{space}{, }\item[{Id}]{id}{}\end{DoxyParamCaption})}
+
+
+
+It sets the id of the space located at the east. 
+
+\begin{DoxyAuthor}{Author}
+Profesores PPROG
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em space} & a pointer to the space \\
+\hline
+{\em id} & the id number of the space located at the east \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+OK, if everything goes well or ERROR if there was some mistake 
+\end{DoxyReturn}
+\Hypertarget{space_8c_a03ae5d9d7a842346d89e56409c3cb3e1}\index{space.c@{space.c}!space\_set\_name@{space\_set\_name}}
+\index{space\_set\_name@{space\_set\_name}!space.c@{space.c}}
+\doxysubsubsection{\texorpdfstring{space\_set\_name()}{space\_set\_name()}}
+{\footnotesize\ttfamily \label{space_8c_a03ae5d9d7a842346d89e56409c3cb3e1} 
+Status space\+\_\+set\+\_\+name (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct___space}{Space}} \texorpdfstring{$\ast$}{*}}]{space}{, }\item[{char \texorpdfstring{$\ast$}{*}}]{name}{}\end{DoxyParamCaption})}
+
+
+
+It sets the name of a space. 
+
+\begin{DoxyAuthor}{Author}
+Profesores PPROG
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em space} & a pointer to the space \\
+\hline
+{\em name} & a string with the name to store \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+OK, if everything goes well or ERROR if there was some mistake 
+\end{DoxyReturn}
+\Hypertarget{space_8c_a2050ee6abf28cf78cd6708dea121e048}\index{space.c@{space.c}!space\_set\_north@{space\_set\_north}}
+\index{space\_set\_north@{space\_set\_north}!space.c@{space.c}}
+\doxysubsubsection{\texorpdfstring{space\_set\_north()}{space\_set\_north()}}
+{\footnotesize\ttfamily \label{space_8c_a2050ee6abf28cf78cd6708dea121e048} 
+Status space\+\_\+set\+\_\+north (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct___space}{Space}} \texorpdfstring{$\ast$}{*}}]{space}{, }\item[{Id}]{id}{}\end{DoxyParamCaption})}
+
+
+
+It sets the id of the space located at the north. 
+
+\begin{DoxyAuthor}{Author}
+Profesores PPROG
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em space} & a pointer to the space \\
+\hline
+{\em id} & the id number of the space located at the north \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+OK, if everything goes well or ERROR if there was some mistake 
+\end{DoxyReturn}
+\Hypertarget{space_8c_aca45b785d7dcf4ef28fdc69bc5a58328}\index{space.c@{space.c}!space\_set\_object@{space\_set\_object}}
+\index{space\_set\_object@{space\_set\_object}!space.c@{space.c}}
+\doxysubsubsection{\texorpdfstring{space\_set\_object()}{space\_set\_object()}}
+{\footnotesize\ttfamily \label{space_8c_aca45b785d7dcf4ef28fdc69bc5a58328} 
+Status space\+\_\+set\+\_\+object (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct___space}{Space}} \texorpdfstring{$\ast$}{*}}]{space}{, }\item[{Bool}]{value}{}\end{DoxyParamCaption})}
+
+
+
+It sets whether the space has an object or not. 
+
+\begin{DoxyAuthor}{Author}
+Profesores PPROG
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em space} & a pointer to the space \\
+\hline
+{\em value} & a boolean, specifying if in the space there is an object (TRUE) or not (FALSE) \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+OK, if everything goes well or ERROR if there was some mistake 
+\end{DoxyReturn}
+\Hypertarget{space_8c_a294b0f8ff311f18f399fcd66da99f53a}\index{space.c@{space.c}!space\_set\_south@{space\_set\_south}}
+\index{space\_set\_south@{space\_set\_south}!space.c@{space.c}}
+\doxysubsubsection{\texorpdfstring{space\_set\_south()}{space\_set\_south()}}
+{\footnotesize\ttfamily \label{space_8c_a294b0f8ff311f18f399fcd66da99f53a} 
+Status space\+\_\+set\+\_\+south (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct___space}{Space}} \texorpdfstring{$\ast$}{*}}]{space}{, }\item[{Id}]{id}{}\end{DoxyParamCaption})}
+
+
+
+It sets the id of the space located at the south. 
+
+\begin{DoxyAuthor}{Author}
+Profesores PPROG
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em space} & a pointer to the space \\
+\hline
+{\em id} & the id number of the space located at the south \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+OK, if everything goes well or ERROR if there was some mistake 
+\end{DoxyReturn}
+\Hypertarget{space_8c_ac3a7afb75347d31e1034a27cabc18244}\index{space.c@{space.c}!space\_set\_west@{space\_set\_west}}
+\index{space\_set\_west@{space\_set\_west}!space.c@{space.c}}
+\doxysubsubsection{\texorpdfstring{space\_set\_west()}{space\_set\_west()}}
+{\footnotesize\ttfamily \label{space_8c_ac3a7afb75347d31e1034a27cabc18244} 
+Status space\+\_\+set\+\_\+west (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct___space}{Space}} \texorpdfstring{$\ast$}{*}}]{space}{, }\item[{Id}]{id}{}\end{DoxyParamCaption})}
+
+
+
+It sets the id of the space located at the west. 
+
+\begin{DoxyAuthor}{Author}
+Profesores PPROG
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em space} & a pointer to the space \\
+\hline
+{\em id} & the id number of the space located at the west \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+OK, if everything goes well or ERROR if there was some mistake 
+\end{DoxyReturn}

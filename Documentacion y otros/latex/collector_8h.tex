@@ -1,0 +1,228 @@
+\doxysection{collector.\+h File Reference}
+\hypertarget{collector_8h}{}\label{collector_8h}\index{collector.h@{collector.h}}
+
+
+This library tries to make memory managment easier, keeping track of all pointers in a single place so they can be freed at any given moment in an easy way.  
+
+
+\doxysubsubsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{struct_collector}{Collector}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{collector_8h_aae967ee655cda7c4cb24cbebc9563fe9}\label{collector_8h_aae967ee655cda7c4cb24cbebc9563fe9} 
+\#define {\bfseries COLLECTOR\+\_\+\+INITIAL\+\_\+\+SIZE}~10
+\item 
+\Hypertarget{collector_8h_a8f4bb41ae465cf7fd22cfc269eeb1564}\label{collector_8h_a8f4bb41ae465cf7fd22cfc269eeb1564} 
+\#define {\bfseries COLLECTOR\+\_\+H}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{collector_8h_acd3f5fcfe76e976982b2ef4935f6c035}\label{collector_8h_acd3f5fcfe76e976982b2ef4935f6c035} 
+typedef struct Collector {\bfseries Collector}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+short \mbox{\hyperlink{collector_8h_a508a3a6dafb73adb302a7bb158deabee}{c\+\_\+initialize\+Collector}} (\mbox{\hyperlink{struct_collector}{Collector}} \texorpdfstring{$\ast$}{*}collector)
+\begin{DoxyCompactList}\small\item\em Tries to initialize a collector. Returns 1 if done correctly, 0 if not. \end{DoxyCompactList}\item 
+short \mbox{\hyperlink{collector_8h_af29b6b20a91a89a9201a1840890610c6}{c\+\_\+add\+Pointer\+To\+Collector}} (\mbox{\hyperlink{struct_collector}{Collector}} \texorpdfstring{$\ast$}{*}collector, void \texorpdfstring{$\ast$}{*}pointer)
+\begin{DoxyCompactList}\small\item\em Adds a pointer to the list to keep track to the collector. Returns 0 if correct, 1 if there is an error in the parameters, 2 if size reallocation fails. \end{DoxyCompactList}\item 
+short \mbox{\hyperlink{collector_8h_a85bd5bfcab9f5919e395a9a665866370}{c\+\_\+remove\+Collector\+Pointer}} (\mbox{\hyperlink{struct_collector}{Collector}} \texorpdfstring{$\ast$}{*}collector, void \texorpdfstring{$\ast$}{*}pointer)
+\begin{DoxyCompactList}\small\item\em Tries to remove a given pointer from a collector. If not posible it will return 0. \end{DoxyCompactList}\item 
+void \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{collector_8h_a3d5aa6d08b713fc2f59fe7e75ec71a4f}{c\+\_\+malloc}} (\mbox{\hyperlink{struct_collector}{Collector}} \texorpdfstring{$\ast$}{*}collector, size\+\_\+t size)
+\begin{DoxyCompactList}\small\item\em Allocates memory for a pointer and stores that pointer in the given collector. \end{DoxyCompactList}\item 
+void \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{collector_8h_aa1ca5e439a79b4c1b77549f769836037}{c\+\_\+calloc}} (\mbox{\hyperlink{struct_collector}{Collector}} \texorpdfstring{$\ast$}{*}collector, size\+\_\+t num\+Of\+Elements, size\+\_\+t size\+Of\+Elements)
+\begin{DoxyCompactList}\small\item\em Allocates memory, sets it to 0 and stores the pointer in the given collector. \end{DoxyCompactList}\item 
+void \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{collector_8h_a6be5b03d2fde78b0cce9e1188fa6a3cc}{c\+\_\+realloc}} (\mbox{\hyperlink{struct_collector}{Collector}} \texorpdfstring{$\ast$}{*}collector, void \texorpdfstring{$\ast$}{*}element, size\+\_\+t new\+Size)
+\begin{DoxyCompactList}\small\item\em Reallocates memory for a given pointer and changes the pointer value in the collector. \end{DoxyCompactList}\item 
+short \mbox{\hyperlink{collector_8h_a7959941a0f487ec6c9c5a8200fe993d9}{c\+\_\+free}} (\mbox{\hyperlink{struct_collector}{Collector}} \texorpdfstring{$\ast$}{*}collector, void \texorpdfstring{$\ast$}{*}pointer)
+\begin{DoxyCompactList}\small\item\em Frees a pointer and tries to remove it from a given collector. \end{DoxyCompactList}\item 
+short \mbox{\hyperlink{collector_8h_a25826bed53c9cdac7d88508e0e48c5f3}{c\+\_\+free\+Collector}} (\mbox{\hyperlink{struct_collector}{Collector}} \texorpdfstring{$\ast$}{*}collector, short stop\+Collector)
+\begin{DoxyCompactList}\small\item\em Frees the memory used by the pointers in the collector. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+This library tries to make memory managment easier, keeping track of all pointers in a single place so they can be freed at any given moment in an easy way. 
+
+\begin{DoxyAuthor}{Author}
+Daniel Gómez Rodríguez 
+\end{DoxyAuthor}
+\begin{DoxyVersion}{Version}
+1.\+1.\+2 
+\end{DoxyVersion}
+\begin{DoxyDate}{Date}
+2025-\/01-\/30
+\end{DoxyDate}
+\begin{DoxyCopyright}{Copyright}
+GNU Public License 
+\end{DoxyCopyright}
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{collector_8h_af29b6b20a91a89a9201a1840890610c6}\index{collector.h@{collector.h}!c\_addPointerToCollector@{c\_addPointerToCollector}}
+\index{c\_addPointerToCollector@{c\_addPointerToCollector}!collector.h@{collector.h}}
+\doxysubsubsection{\texorpdfstring{c\_addPointerToCollector()}{c\_addPointerToCollector()}}
+{\footnotesize\ttfamily \label{collector_8h_af29b6b20a91a89a9201a1840890610c6} 
+short c\+\_\+add\+Pointer\+To\+Collector (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_collector}{Collector}} \texorpdfstring{$\ast$}{*}}]{collector}{, }\item[{void \texorpdfstring{$\ast$}{*}}]{pointer}{}\end{DoxyParamCaption})}
+
+
+
+Adds a pointer to the list to keep track to the collector. Returns 0 if correct, 1 if there is an error in the parameters, 2 if size reallocation fails. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em collector} & \\
+\hline
+{\em pointer} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+short 
+\end{DoxyReturn}
+\Hypertarget{collector_8h_aa1ca5e439a79b4c1b77549f769836037}\index{collector.h@{collector.h}!c\_calloc@{c\_calloc}}
+\index{c\_calloc@{c\_calloc}!collector.h@{collector.h}}
+\doxysubsubsection{\texorpdfstring{c\_calloc()}{c\_calloc()}}
+{\footnotesize\ttfamily \label{collector_8h_aa1ca5e439a79b4c1b77549f769836037} 
+void \texorpdfstring{$\ast$}{*} c\+\_\+calloc (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_collector}{Collector}} \texorpdfstring{$\ast$}{*}}]{collector}{, }\item[{size\+\_\+t}]{num\+Of\+Elements}{, }\item[{size\+\_\+t}]{size\+Of\+Elements}{}\end{DoxyParamCaption})}
+
+
+
+Allocates memory, sets it to 0 and stores the pointer in the given collector. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em collector} & \\
+\hline
+{\em num\+Of\+Elements} & \\
+\hline
+{\em size\+Of\+Elements} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void\texorpdfstring{$\ast$}{*} 
+\end{DoxyReturn}
+\Hypertarget{collector_8h_a7959941a0f487ec6c9c5a8200fe993d9}\index{collector.h@{collector.h}!c\_free@{c\_free}}
+\index{c\_free@{c\_free}!collector.h@{collector.h}}
+\doxysubsubsection{\texorpdfstring{c\_free()}{c\_free()}}
+{\footnotesize\ttfamily \label{collector_8h_a7959941a0f487ec6c9c5a8200fe993d9} 
+short c\+\_\+free (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_collector}{Collector}} \texorpdfstring{$\ast$}{*}}]{collector}{, }\item[{void \texorpdfstring{$\ast$}{*}}]{pointer}{}\end{DoxyParamCaption})}
+
+
+
+Frees a pointer and tries to remove it from a given collector. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em collector} & \\
+\hline
+{\em pointer} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+short 
+\end{DoxyReturn}
+\Hypertarget{collector_8h_a25826bed53c9cdac7d88508e0e48c5f3}\index{collector.h@{collector.h}!c\_freeCollector@{c\_freeCollector}}
+\index{c\_freeCollector@{c\_freeCollector}!collector.h@{collector.h}}
+\doxysubsubsection{\texorpdfstring{c\_freeCollector()}{c\_freeCollector()}}
+{\footnotesize\ttfamily \label{collector_8h_a25826bed53c9cdac7d88508e0e48c5f3} 
+short c\+\_\+free\+Collector (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_collector}{Collector}} \texorpdfstring{$\ast$}{*}}]{collector}{, }\item[{short}]{stop\+Collector}{}\end{DoxyParamCaption})}
+
+
+
+Frees the memory used by the pointers in the collector. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em collector} & \\
+\hline
+{\em stop\+Collector} & If true, then the collector will free itself. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+short 
+\end{DoxyReturn}
+\Hypertarget{collector_8h_a508a3a6dafb73adb302a7bb158deabee}\index{collector.h@{collector.h}!c\_initializeCollector@{c\_initializeCollector}}
+\index{c\_initializeCollector@{c\_initializeCollector}!collector.h@{collector.h}}
+\doxysubsubsection{\texorpdfstring{c\_initializeCollector()}{c\_initializeCollector()}}
+{\footnotesize\ttfamily \label{collector_8h_a508a3a6dafb73adb302a7bb158deabee} 
+short c\+\_\+initialize\+Collector (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_collector}{Collector}} \texorpdfstring{$\ast$}{*}}]{collector}{}\end{DoxyParamCaption})}
+
+
+
+Tries to initialize a collector. Returns 1 if done correctly, 0 if not. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em collector} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+short 
+\end{DoxyReturn}
+\Hypertarget{collector_8h_a3d5aa6d08b713fc2f59fe7e75ec71a4f}\index{collector.h@{collector.h}!c\_malloc@{c\_malloc}}
+\index{c\_malloc@{c\_malloc}!collector.h@{collector.h}}
+\doxysubsubsection{\texorpdfstring{c\_malloc()}{c\_malloc()}}
+{\footnotesize\ttfamily \label{collector_8h_a3d5aa6d08b713fc2f59fe7e75ec71a4f} 
+void \texorpdfstring{$\ast$}{*} c\+\_\+malloc (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_collector}{Collector}} \texorpdfstring{$\ast$}{*}}]{collector}{, }\item[{size\+\_\+t}]{size}{}\end{DoxyParamCaption})}
+
+
+
+Allocates memory for a pointer and stores that pointer in the given collector. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em collector} & \\
+\hline
+{\em size} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void\texorpdfstring{$\ast$}{*} 
+\end{DoxyReturn}
+\Hypertarget{collector_8h_a6be5b03d2fde78b0cce9e1188fa6a3cc}\index{collector.h@{collector.h}!c\_realloc@{c\_realloc}}
+\index{c\_realloc@{c\_realloc}!collector.h@{collector.h}}
+\doxysubsubsection{\texorpdfstring{c\_realloc()}{c\_realloc()}}
+{\footnotesize\ttfamily \label{collector_8h_a6be5b03d2fde78b0cce9e1188fa6a3cc} 
+void \texorpdfstring{$\ast$}{*} c\+\_\+realloc (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_collector}{Collector}} \texorpdfstring{$\ast$}{*}}]{collector}{, }\item[{void \texorpdfstring{$\ast$}{*}}]{element}{, }\item[{size\+\_\+t}]{new\+Size}{}\end{DoxyParamCaption})}
+
+
+
+Reallocates memory for a given pointer and changes the pointer value in the collector. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em collector} & \\
+\hline
+{\em element} & \\
+\hline
+{\em new\+Size} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void\texorpdfstring{$\ast$}{*} 
+\end{DoxyReturn}
+\Hypertarget{collector_8h_a85bd5bfcab9f5919e395a9a665866370}\index{collector.h@{collector.h}!c\_removeCollectorPointer@{c\_removeCollectorPointer}}
+\index{c\_removeCollectorPointer@{c\_removeCollectorPointer}!collector.h@{collector.h}}
+\doxysubsubsection{\texorpdfstring{c\_removeCollectorPointer()}{c\_removeCollectorPointer()}}
+{\footnotesize\ttfamily \label{collector_8h_a85bd5bfcab9f5919e395a9a665866370} 
+short c\+\_\+remove\+Collector\+Pointer (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_collector}{Collector}} \texorpdfstring{$\ast$}{*}}]{collector}{, }\item[{void \texorpdfstring{$\ast$}{*}}]{pointer}{}\end{DoxyParamCaption})}
+
+
+
+Tries to remove a given pointer from a collector. If not posible it will return 0. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em collector} & \\
+\hline
+{\em pointer} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+short 
+\end{DoxyReturn}

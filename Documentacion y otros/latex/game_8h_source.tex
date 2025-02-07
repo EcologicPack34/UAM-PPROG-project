@@ -1,0 +1,52 @@
+\doxysection{game.\+h}
+\hypertarget{game_8h_source}{}\label{game_8h_source}\mbox{\hyperlink{game_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ }
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#ifndef\ GAME\_H}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#define\ GAME\_H}}
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{command_8h}{command.h}}"{}}}
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{space_8h}{space.h}}"{}}}
+\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{types_8h}{types.h}}"{}}}
+\DoxyCodeLine{00017\ }
+\DoxyCodeLine{00018\ \textcolor{preprocessor}{\#define\ MAX\_SPACES\ 100}}
+\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00020\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct___game}{\_Game}}\ \{}
+\DoxyCodeLine{00021\ \ \ Id\ player\_location;}
+\DoxyCodeLine{00022\ \ \ Id\ object\_location;}
+\DoxyCodeLine{00023\ \ \ Space\ *spaces[MAX\_SPACES];}
+\DoxyCodeLine{00024\ \ \ \textcolor{keywordtype}{int}\ n\_spaces;}
+\DoxyCodeLine{00025\ \ \ Command\ *last\_cmd;}
+\DoxyCodeLine{00026\ \ \ Bool\ finished;}
+\DoxyCodeLine{00027\ \}\ Game;}
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00029\ Status\ \mbox{\hyperlink{game_8h_aa5688cd474a26fcef4a3c1c4ee8977bc}{game\_create}}(Game\ *game);}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ Status\ game\_create\_from\_file(Game\ *game,\ \textcolor{keywordtype}{char}\ *filename);}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00033\ Status\ game\_destroy(Game\ *game);}
+\DoxyCodeLine{00034\ }
+\DoxyCodeLine{00035\ Space\ *game\_get\_space(Game\ *game,\ Id\ \textcolor{keywordtype}{id});}
+\DoxyCodeLine{00036\ }
+\DoxyCodeLine{00037\ Id\ game\_get\_player\_location(Game\ *game);}
+\DoxyCodeLine{00038\ }
+\DoxyCodeLine{00039\ Status\ game\_set\_player\_location(Game\ *game,\ Id\ \textcolor{keywordtype}{id});}
+\DoxyCodeLine{00040\ }
+\DoxyCodeLine{00041\ Id\ game\_get\_object\_location(Game\ *game);}
+\DoxyCodeLine{00042\ }
+\DoxyCodeLine{00043\ Status\ game\_set\_object\_location(Game\ *game,\ Id\ \textcolor{keywordtype}{id});}
+\DoxyCodeLine{00044\ }
+\DoxyCodeLine{00045\ Command*\ game\_get\_last\_command(Game\ *game);}
+\DoxyCodeLine{00046\ }
+\DoxyCodeLine{00047\ Status\ game\_set\_last\_command(Game\ *game,\ Command\ *command);}
+\DoxyCodeLine{00048\ }
+\DoxyCodeLine{00049\ Bool\ game\_get\_finished(Game\ *game);}
+\DoxyCodeLine{00050\ }
+\DoxyCodeLine{00051\ Status\ game\_set\_finished(Game\ *game,\ Bool\ finished);}
+\DoxyCodeLine{00052\ }
+\DoxyCodeLine{00053\ \textcolor{keywordtype}{void}\ game\_print(Game\ *game);}
+\DoxyCodeLine{00054\ }
+\DoxyCodeLine{00055\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}
