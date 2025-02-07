@@ -136,7 +136,7 @@ Status inventory_rearrange_objects(Inventory *inventory){
     /*!< numnull = Number of NULL on the inventory | indexnull = index of the numnull*/
     int i, j, indexnull[INVENTORY_MAX_SIZE], numnull;
     bool found;
-    Object *object1 = NULL, *object2 = NULL;
+    Object *object1 = NULL;
 
     if(!inventory)
         return ERROR;
@@ -148,37 +148,42 @@ Status inventory_rearrange_objects(Inventory *inventory){
     
     /*Search for null objects in inventory*/
     for(i = 0, numnull = 0; i < INVENTORY_MAX_SIZE; i++){
-        numnull++;
-        indexnull[i] = 1;
+        if(inventory_get_object_from_index(inventory, i) == NULL){
+            numnull++;
+            indexnull[i] = 1;
+        }
     }
 
+    /*If there are not nulls, function ends*/
     if(numnull == 0)
         return OK;
     
     /*Searches in indexnull if the index i is NULL, then replaces it with the nearest non NULL pointer that is greater than i*/
     for(i = 0; (i < INVENTORY_MAX_SIZE); i++){
         if(indexnull[i] == 1){
-            /*Finds the nearest non NULL pointer, if it doesn't find it, function ends*/
-            for(j = i, found = false; (j < INVENTORY_MAX_SIZE) && (found == false); j++){
+            /*Finds the nearest non NULL pointer from the next index (i + 1), if it doesn't find it, function ends*/
+            for(j = i + 1, found = false; (j < INVENTORY_MAX_SIZE) && (found == false); j++){
                 object1 = inventory_get_object_from_index(inventory,j);
-                object2 = inventory_get_object_from_index(inventory, i);
-                if(object2 != NULL){
-                    if(inventory_set_object_on_index(inventory, inventory_get_object_from_index(inventory, j), i) == ERROR)
+                if(object1 != NULL){
+                    if(inventory_set_object_on_index(inventory, object1, i) == ERROR)
                         return ERROR;
                     
+                    inventory_set_object_on_index(inventory,NULL, j);
                     found = true;
+                /*If it reaches the end, finishes function*/
+                } else if(j == INVENTORY_MAX_SIZE - 1){
+                    return OK;
                 }
-
-                return OK;
             }
         }
     }
 
-    return OK; /*It should not reach this point because if numnull == 0 function ends*/
+    return OK;
 }
 
 Status inventory_set_object_on_index(Inventory *inventory, Object *object, int index){
-    if(!inventory || !object || index >= INVENTORY_MAX_SIZE || index < 0)
+    /*The comprobation does not check object because it can be set to NULL*/
+    if(!inventory || index >= INVENTORY_MAX_SIZE || index < 0)
         return ERROR;
     
     inventory->Array[index] = object;
