@@ -28,7 +28,6 @@ void game_loop_run(Game game, Graphic_engine *gengine);
 
 void game_loop_cleanup(Game game, Graphic_engine *gengine);
 
-Status game_player_init(Game *game);
 
 /**
  * @brief Checks the arguments and initializes the game.
@@ -42,13 +41,14 @@ int main(int argc, char *argv[]){
   Game game;
   Graphic_engine *gengine;
   Debug *debugLog;
-
+  
   /*Checks if num of arguments if correct, if not stops the programm*/
   if (argc < 2)
   {
     fprintf(stderr, "Use: %s <game_data_file>\n", argv[0]);
     return 1;
   }
+  
   /*Initialize the global variable for debug*/
   debugLog = debug_create(DEBUG_FILE_PATH, 1);
   debug_log(DEBUG, "Debug global variable");
@@ -56,16 +56,16 @@ int main(int argc, char *argv[]){
   /*Initializes and runs the game */
   if (!game_loop_init(&game, &gengine, argv[1]))
   {
-    debug_log(DEBUG, "Game Initialized correctly");
+    debug_log(PRINT, "Game Initialized correctly");
 
     game_loop_run(game, gengine);
     game_loop_cleanup(game, gengine);
 
-    debug_log(DEBUG, "Game ended");
+    debug_log(PRINT, "Game ended");
   }
 
   /*Frees Debug Log memory*/
-  debug_log(DEBUG, "Debug global variable destruction");
+  debug_log(PRINT, "Debug global variable destruction");
   debug_destroy(debugLog);
 
   return 0;

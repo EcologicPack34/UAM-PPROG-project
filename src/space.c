@@ -22,10 +22,10 @@
 struct _Space {
   Id id;                    /*!< Id number of the space, it must be unique */
   char name[WORD_SIZE + 1]; /*!< Name of the space */
-  Id north;                 /*!< Id of the space at the north */
-  Id south;                 /*!< Id of the space at the south */
-  Id east;                  /*!< Id of the space at the east */
-  Id west;                  /*!< Id of the space at the west */
+  Link *north;                 /*!< Id of the space at the north */
+  Link *south;                 /*!< Id of the space at the south */
+  Link *east;                  /*!< Id of the space at the east */
+  Link *west;                  /*!< Id of the space at the west */
   bool object;              /*!< Whether the space has an object or not */
 };
 
@@ -46,10 +46,10 @@ Space* space_create(Id id) {
   /* Initialization of an empty space*/
   newSpace->id = id;
   newSpace->name[0] = '\0';
-  newSpace->north = NO_ID;
-  newSpace->south = NO_ID;
-  newSpace->east = NO_ID;
-  newSpace->west = NO_ID;
+  newSpace->north = NULL;
+  newSpace->south = NULL;
+  newSpace->east = NULL;
+  newSpace->west = NULL;
   newSpace->object = false;
 
   return newSpace;
@@ -86,35 +86,35 @@ Status space_set_name(Space* space, char* name) {
   return OK;
 }
 
-Status space_set_north(Space* space, Id id) {
-  if (!space || id == NO_ID) {
+Status space_set_north(Space* space, Link* link) {
+  if (!space || !link) {
     return ERROR;
   }
-  space->north = id;
+  space->north = link;
   return OK;
 }
 
-Status space_set_south(Space* space, Id id) {
-  if (!space || id == NO_ID) {
+Status space_set_south(Space* space, Link* link) {
+  if (!space || !link) {
     return ERROR;
   }
-  space->south = id;
+  space->south = link;
   return OK;
 }
 
-Status space_set_east(Space* space, Id id) {
-  if (!space || id == NO_ID) {
+Status space_set_east(Space* space, Link* link) {
+  if (!space || !link) {
     return ERROR;
   }
-  space->east = id;
+  space->east = link;
   return OK;
 }
 
-Status space_set_west(Space* space, Id id) {
-  if (!space || id == NO_ID) {
+Status space_set_west(Space* space, Link* link) {
+  if (!space || !link) {
     return ERROR;
   }
-  space->west = id;
+  space->west = link;
   return OK;
 }
 
@@ -138,36 +138,34 @@ const char* space_get_name(Space* space) {
   return space->name;
 }
 
-Id space_get_north(Space* space) {
+Link* space_get_north(Space* space) {
   if (!space) {
-    return NO_ID;
+    return NULL;
   }
   return space->north;
 }
 
-
-
-Id space_get_south(Space* space) {
+Link* space_get_south(Space* space) {
   if (!space) {
-    return NO_ID;
+    return NULL;
   }
   return space->south;
 }
 
 
 
-Id space_get_east(Space* space) {
+Link* space_get_east(Space* space) {
   if (!space) {
-    return NO_ID;
+    return NULL;
   }
   return space->east;
 }
 
 
 
-Id space_get_west(Space* space) {
+Link* space_get_west(Space* space) {
   if (!space) {
-    return NO_ID;
+    return NULL;
   }
   return space->west;
 }

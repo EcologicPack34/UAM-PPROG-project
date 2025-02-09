@@ -1,6 +1,0 @@
-{
-    "files.associations": {
-        "entity.h": "c",
-        "game_actions.h": "c"
-    }
-}

@@ -12,7 +12,9 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
+#include "debug_printing.h"
 #include "command.h"
 #include "libscreen.h"
 #include "space.h"
@@ -65,15 +67,161 @@ void graphic_engine_destroy(Graphic_engine *ge) {
   free(ge);
 }
 
-void graphic_engine_paint_game(Graphic_engine *ge, Game *game) {
-  Id id_act = NO_ID, id_back = NO_ID, id_next = NO_ID, obj_loc = NO_ID;
+void graphic_engine_paint_game(Graphic_engine *ge, Game *game){
+  Id id_act = NO_ID, obj_loc = NO_ID;
   Space *space_act = NULL;
+  Link *south = NULL, *north = NULL, *east = NULL, *west = NULL;
+
   char obj = '\0';
-  char str[255];
+  char locked = '\0';
+  char str[WORD_SIZE];
   CommandCode last_cmd = UNKNOWN;
   extern char *cmd_to_str[N_CMD][N_CMDT];
 
   /* Paint the in the map area */
+  screen_area_clear(ge->map);
+
+  id_act = game_get_player_location(game);
+  if(id_act != NO_ID){
+    space_act = game_get_space(game, id_act);
+
+    north = space_get_north(space_act);
+    south = space_get_south(space_act);
+    west = space_get_west(space_act);
+    east = space_get_east(space_act);
+
+    /* prints space to north*/
+    if(north != NULL){
+
+      if(link_is_locked(north))
+        locked = '-';
+      else
+        locked = ' ';
+
+      sprintf(str, "                 | %c |     ", locked);
+      screen_area_puts(ge->map, str);
+      sprintf(str, "                 |   |     ");
+      screen_area_puts(ge->map, str);
+      sprintf(str, "                   ^      ");
+      screen_area_puts(ge->map, str);
+    }
+
+    /*Prints current space*/
+    if (game_get_object_location(game) == id_act)
+      obj = '*';
+    else
+      obj = ' ';
+
+    if (id_act != NO_ID) {
+
+      sprintf(str,"             +-----------+             ");
+      screen_area_puts(ge->map, str);
+
+      if(west != NULL){
+        if(east != NULL){/*west and east*/
+          sprintf(str,"       ----- | m0^     %2d| -----", (int)id_act);
+          screen_area_puts(ge->map, str);
+          sprintf(str,"         %c  <|     %c     |>  %c ", (link_is_locked(west)) ? '|': ' ', obj, (link_is_locked(east)) ? '|': ' ');
+          screen_area_puts(ge->map, str);
+          sprintf(str,"       ----- |           | -----");
+          screen_area_puts(ge->map, str);
+        }
+        else{/*west and not east*/
+          sprintf(str,"       ----- | m0^     %2d|", (int)id_act);
+          screen_area_puts(ge->map, str);
+          sprintf(str,"         %c  <|     %c     |", (link_is_locked(west)) ? '|': ' ', obj);
+          screen_area_puts(ge->map, str);
+          sprintf(str,"       ----- |           |");
+          screen_area_puts(ge->map, str);
+        }
+      }
+      else{
+        if(east != NULL){/*not west and east*/
+          sprintf(str,"             | m0^     %2d| -----", (int)id_act);
+          screen_area_puts(ge->map, str);
+          sprintf(str,"             |     %c     |>  %c ", obj, (link_is_locked(east)) ? '|': ' ');
+          screen_area_puts(ge->map, str);
+          sprintf(str,"             |           | -----");
+          screen_area_puts(ge->map, str);
+        }else{/*not west and not east*/
+          sprintf(str,"             | m0^     %2d|", (int)id_act);
+          screen_area_puts(ge->map, str);
+          sprintf(str,"             |     %c     |", obj);
+          screen_area_puts(ge->map, str);
+          sprintf(str,"             |           |");
+          screen_area_puts(ge->map, str);
+        }
+      }
+
+      sprintf(str,"             +-----------+             ");
+      screen_area_puts(ge->map, str);
+
+
+      /*sprintf(str, "  +-----------+");
+      screen_area_puts(ge->map, str);
+      sprintf(str, "  | m0^     %2d|", (int)id_act);
+      screen_area_puts(ge->map, str);
+      sprintf(str, "  |     %c     |", obj);
+      screen_area_puts(ge->map, str);
+      sprintf(str, "  |           |");
+      screen_area_puts(ge->map, str);
+      sprintf(str, "  +-----------+");
+      screen_area_puts(ge->map, str);*/
+    }
+
+    /*Prints space to south */
+    if(south != NULL){
+
+      if(link_is_locked(south))
+        locked = '-';
+      else
+        locked = ' ';
+
+      sprintf(str, "                   v      ");
+      screen_area_puts(ge->map, str);
+      sprintf(str, "                 |   |     ");
+      screen_area_puts(ge->map, str);
+      sprintf(str, "                 | %c |     ", locked);
+      screen_area_puts(ge->map, str);
+    }
+  }
+  /* Paint in the description area */
+  screen_area_clear(ge->descript);
+  if ((obj_loc = game_get_object_location(game)) != NO_ID) {
+    sprintf(str, "  Object location:%d", (int)obj_loc);
+    screen_area_puts(ge->descript, str);
+  }
+ 
+  /* Paint in the banner area */
+  screen_area_puts(ge->banner, "    The anthill game ");
+ 
+   /* Paint in the help area */
+  screen_area_clear(ge->help);
+  sprintf(str, " The commands you can use are:");
+  screen_area_puts(ge->help, str);
+  command_get_list(str);
+  screen_area_puts(ge->help, str);
+ 
+  /* Paint in the feedback area */
+  last_cmd = command_get_code(game_get_last_command(game));
+  sprintf(str, " %s (%s)", cmd_to_str[last_cmd - NO_CMD][CMDL], cmd_to_str[last_cmd - NO_CMD][CMDS]);
+  screen_area_puts(ge->feedback, str);
+ 
+  /* Dump to the terminal */
+  screen_paint();
+  printf("input:> ");
+}
+
+/*
+void graphic_engine_paint_game(Graphic_engine *ge, Game *game) {
+  Id id_act = NO_ID, id_back = NO_ID, id_next = NO_ID, obj_loc = NO_ID;
+  Space *space_act = NULL;
+  char obj = '\0';
+  char str[WORD_SIZE];
+  CommandCode last_cmd = UNKNOWN;
+  extern char *cmd_to_str[N_CMD][N_CMDT];
+
+  
   screen_area_clear(ge->map);
   if ((id_act = game_get_player_location(game)) != NO_ID) {
     space_act = game_get_space(game, id_act);
@@ -129,29 +277,26 @@ void graphic_engine_paint_game(Graphic_engine *ge, Game *game) {
     }
   }
 
-  /* Paint in the description area */
+  
   screen_area_clear(ge->descript);
   if ((obj_loc = game_get_object_location(game)) != NO_ID) {
     sprintf(str, "  Object location:%d", (int)obj_loc);
     screen_area_puts(ge->descript, str);
   }
 
-  /* Paint in the banner area */
   screen_area_puts(ge->banner, "    The anthill game ");
 
-  /* Paint in the help area */
   screen_area_clear(ge->help);
   sprintf(str, " The commands you can use are:");
   screen_area_puts(ge->help, str);
-  sprintf(str, "     next or n, back or b, take or t, drop or d, exit or e");
+  command_get_list(str);
   screen_area_puts(ge->help, str);
 
-  /* Paint in the feedback area */
   last_cmd = command_get_code(game_get_last_command(game));
   sprintf(str, " %s (%s)", cmd_to_str[last_cmd - NO_CMD][CMDL], cmd_to_str[last_cmd - NO_CMD][CMDS]);
   screen_area_puts(ge->feedback, str);
-
-  /* Dump to the terminal */
+ 
   screen_paint();
   printf("input:> ");
-}
+}*/
+

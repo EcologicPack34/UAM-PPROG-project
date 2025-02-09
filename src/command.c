@@ -15,12 +15,12 @@
 #include <string.h>
 #include <strings.h>
 
-#define CMD_LENGHT 30 /*!< Maximum length of a command */
+#define CMD_LENGTH 30 /*!< Maximum length of a command */
 
 /**
  * @brief Global variable that stores all the commands and their shortucts.
  */
-char *cmd_to_str[N_CMD][N_CMDT] = {{"", "No command"}, {"", "Unknown"}, {"e", "Exit"}, {"n", "Next"}, {"b", "Back"}, {"t", "Take"}, {"d", "Drop"}};
+char *cmd_to_str[N_CMD][N_CMDT] = {{"", "No command"}, {"", "Unknown"}, {"ex", "Exit"}, {"n", "Next"}, {"b", "Back"}, {"t", "Take"}, {"d", "Drop"}};
 
 /**
  * @brief Command
@@ -73,7 +73,7 @@ CommandCode command_get_code(Command* command) {
 }
 
 Status command_get_user_input(Command* command) {
-  char input[CMD_LENGHT] = "", *token = NULL;
+  char input[CMD_LENGTH] = "", *token = NULL;
   int i = UNKNOWN - NO_CMD + 1;
   CommandCode cmd;
 
@@ -81,7 +81,7 @@ Status command_get_user_input(Command* command) {
     return ERROR;
   }
 
-  if (fgets(input, CMD_LENGHT, stdin)) {
+  if (fgets(input, CMD_LENGTH, stdin)) {
     token = strtok(input, " \n");
     if (!token) {
       return command_set_code(command, UNKNOWN);
@@ -101,3 +101,30 @@ Status command_get_user_input(Command* command) {
     return command_set_code(command, EXIT);
   
 }
+
+Status command_get_list(char *destination){
+  char *aux;
+  int i,j;
+
+  if(destination == NULL)
+    return ERROR;
+
+  aux = (char*)calloc((N_CMD-2)*(N_CMDT) * (CMD_LENGTH) + WORD_SIZE, sizeof(char));
+  if(aux == NULL){
+    return ERROR;
+  }
+  
+  for (i = 2; i < N_CMD; i++){
+    for (j = 0; j < N_CMDT; j++){
+      strcat(aux,cmd_to_str[i][j]);
+      if(j < N_CMDT -1)
+        strcat(aux," or ");
+    }
+    strcat(aux,", ");
+  }
+  
+  strcpy(destination,aux);
+  free(aux);
+  return OK;
+}
+

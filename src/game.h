@@ -11,14 +11,16 @@
 #ifndef GAME_H
 #define GAME_H
 
-#include "command.h"
+#include "link.h"
 #include "space.h"
+#include "command.h"
 #include "types.h"
 #include "player.h"
 
 #include <stdbool.h>
 
-#define MAX_SPACES 100 /*!< Maximum number of spaces on the map */
+#define MAX_SPACES 100          /*!< Maximum number of spaces on the map */
+#define MAX_LINKS 400   /*!< Maximum number of links on the map */
 
 /**
  * @brief Game struct, defines all the information of the game
@@ -28,6 +30,9 @@ typedef struct _Game {
   Object *object;              /*!< Contains all the information related to the object */
   Space *spaces[MAX_SPACES];   /*!< Array with all the spaces of the map */
   int n_spaces;                /*!< int with the number of spaces on *spaces */
+  Link *links[MAX_LINKS];     /*!< Array with all the links in the map*/
+  int n_links;
+
   Command *last_cmd;           /*!< string with the last command */
   bool finished;               /*!< bool that determines if the game has finished*/
 } Game;
@@ -151,6 +156,24 @@ Id game_get_player_location(Game *game);
  */
 Id game_get_object_location(Game *game);
 
+/**
+ * @brief Gets the numer of links stored in a game
+ * @author Daniel Gómez
+ * 
+ * @param game 
+ * @return long 
+ */
+long game_get_n_links(Game *game);
+
+/**
+ * @brief Trys to get the reference of a link by its Id
+ * @author Daniel Gómez
+ * 
+ * @param game 
+ * @return the pointer if found, NULL if not found
+ */
+Link *game_get_link_by_id(Game *game, Id id);
+
 #pragma endregion
 
 #pragma region SETTERS
@@ -208,6 +231,16 @@ Status game_set_object_location(Game *game, Id id);
  * @return OK if everything goes well or ERROR if there was some mistake
  */
 Status game_add_space(Game *game, Space *space);
+
+/**
+ * @brief Adds the link received to the array of links on game
+ * @author Daniel Gómez
+ * 
+ * @param game 
+ * @param link 
+ * @return Status 
+ */
+Status game_add_link(Game *game, Link *link);
 
 #pragma endregion
 

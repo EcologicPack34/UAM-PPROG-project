@@ -48,4 +48,7 @@ Reorganizado la estructura de object.c, separando las funciones privadas en decl
     -->Fixed some errors and documentation
     -->Probably more, but I don't remember xDD
 
-
+-09/02/2025 18:25 - Daniel Gómez - Implementado link complentamente-> en space, graphic_engine, etc.
+	--> añadido y modificado algunas funciones relacionadas con link.h y link.c en su propio modulo y otros.
+	--> modificado graphic_engine.c para que renderice los links y salas laterales
+	--> añadido una función al modulo command para obtener la lista de comandos en forma de string

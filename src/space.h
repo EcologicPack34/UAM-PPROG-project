@@ -13,6 +13,8 @@
 
 #include "types.h"
 #include "object.h"
+#include "link.h"
+
 
 #include <stdbool.h>
 
@@ -57,41 +59,41 @@ Status space_set_name(Space* space, char* name);
  * @author Profesores PPROG
  *
  * @param space a pointer to the space
- * @param id the id number of the space located at the north
+ * @param link reference of the link to the north
  * @return OK, if everything goes well or ERROR if there was some mistake
  */
 
-Status space_set_north(Space* space, Id id);
+Status space_set_north(Space* space, Link * link);
 
 /**
  * @brief It sets the id of the space located at the south
  * @author Profesores PPROG
  *
  * @param space a pointer to the space
- * @param id the id number of the space located at the south
+ * @param link reference of the link to the south
  * @return OK, if everything goes well or ERROR if there was some mistake
  */
-Status space_set_south(Space* space, Id id);
+Status space_set_south(Space* space, Link * link);
 
 /**
  * @brief It sets the id of the space located at the east
  * @author Profesores PPROG
  *
  * @param space a pointer to the space
- * @param id the id number of the space located at the east
+ * @param link reference of the link to the east
  * @return OK, if everything goes well or ERROR if there was some mistake
  */
-Status space_set_east(Space* space, Id id);
+Status space_set_east(Space* space, Link * link);
 
 /**
  * @brief It sets the id of the space located at the west
  * @author Profesores PPROG
  *
  * @param space a pointer to the space
- * @param id the id number of the space located at the west
+ * @param link reference of the link to the west
  * @return OK, if everything goes well or ERROR if there was some mistake
  */
-Status space_set_west(Space* space, Id id);
+Status space_set_west(Space* space, Link * link);
 
 /**
  * @brief It sets whether the space has an object or not
@@ -131,36 +133,36 @@ const char* space_get_name(Space* space);
  * @author Profesores PPROG
  *
  * @param space a pointer to the space
- * @return the id number of the space located at the north
+ * @return reference of the link in the position
  */
-Id space_get_north(Space* space);
+Link *space_get_north(Space* space);
 
 /**
  * @brief It gets the id of the space located at the south
  * @author Profesores PPROG
  *
  * @param space a pointer to the space
- * @return the id number of the space located at the south
+ * @return reference of the link in the position
  */
-Id space_get_south(Space* space);
+Link *space_get_south(Space* space);
 
 /**
  * @brief It gets the id of the space located at the east
  * @author Profesores PPROG
  *
  * @param space a pointer to the space
- * @return the id number of the space located at the east
+ * @return reference of the link in the position
  */
-Id space_get_east(Space* space);
+Link *space_get_east(Space* space);
 
 /**
  * @brief It gets the id of the space located at the west
  * @author Profesores PPROG
  *
  * @param space a pointer to the space
- * @return the id number of the space located at the west
+ * @return reference of the link in the position
  */
-Id space_get_west(Space* space);
+Link *space_get_west(Space* space);
 
 /**
  * @brief It gets whether the space has an object or not

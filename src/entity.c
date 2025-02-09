@@ -125,7 +125,7 @@ Inventory *entity_get_inventory(Entity *entity){
 
 Id entity_get_id(Entity *entity){
     if(!entity)
-        return ERROR;
+        return NO_ID;
     
     return entity->id;
 }

@@ -1,4 +1,12 @@
-#s:11|Entry|-1|-1|12|-1
-#s:12|Corridor|11|-1|13|-1
-#s:13|Pantry|12|-1|14|-1
-#s:14|AMONGUS|13|-1|-1|-1
+Formato Space: #s:ID|Nombre|northLink|eastLink|southLink|westLink
+Formato Link: #s:ID|Space1|Space2|locked|unlockingObjectID
+
+#s:11|Entry|-1|-1|1|4
+#s:12|Corridor|1|-1|2|-1
+#s:13|Pantry|2|4|3|-1
+#s:14|AMONGUS|3|-1|-1|-1
+
+#l:1|11|12|0|0
+#l:2|12|13|0|0
+#l:3|13|14|0|0
+#l:4|11|13|0|0

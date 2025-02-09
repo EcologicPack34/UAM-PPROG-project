@@ -71,4 +71,15 @@ CommandCode command_get_code(Command* command);
  */
 Status command_get_user_input(Command* command);
 
+
+/**
+ * @brief makes a string of the current commands and copies it to a given string
+ * @author Daniel Gómez
+ * 
+ * @param destination 
+ * @return Status 
+ */
+Status command_get_list(char *destination);
+
+
 #endif

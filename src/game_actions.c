@@ -9,6 +9,8 @@
  */
 
 #include "game_actions.h"
+#include "link.h"
+#include "entity.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -95,47 +97,54 @@ void game_actions_exit(Game *game) {}
 
 /**
  * @brief Retrieves the south ID, checks if it exists, then changes player location to south
- * @author Profesores PPROG
+ * @author Daniel Gómez
  *
  * @param game struct that saves all information related to the game
  */
 void game_actions_next(Game *game) {
-  Id current_id = NO_ID;
   Id space_id = NO_ID;
+  Link *link = NULL;
+  Entity *entity = NULL;
 
   space_id = game_get_player_location(game);
   if (space_id == NO_ID) {
     return;
   }
 
-  current_id = space_get_south(game_get_space(game, space_id));
-  if (current_id != NO_ID) {
-    game_set_player_location(game, current_id);
-  }
+  link = space_get_south(game_get_space(game, space_id));
+  if(link == NULL) return;
+
+  entity = (Entity*)game_get_player(game);
+  if(entity == NULL) return;
+
+  link_move_entity(link, entity);
 
   return;
 }
 
 /**
  * @brief Retrieves the north ID, checks if it exists, then changes player location to north
- * @author Profesores PPROG
+ * @author Daniel Gómez
  *
  * @param game struct that saves all information related to the game
  */
 void game_actions_back(Game *game) {
-  Id current_id = NO_ID;
   Id space_id = NO_ID;
+  Link *link = NULL;
+  Entity *entity = NULL;
 
   space_id = game_get_player_location(game);
-
-  if (NO_ID == space_id) {
+  if (space_id == NO_ID) {
     return;
   }
 
-  current_id = space_get_north(game_get_space(game, space_id));
-  if (current_id != NO_ID) {
-    game_set_player_location(game, current_id);
-  }
+  link = space_get_north(game_get_space(game, space_id));
+  if(link == NULL) return;
+
+  entity = (Entity*)game_get_player(game);
+  if(entity == NULL) return;
+
+  link_move_entity(link, entity);
 
   return;
 }
