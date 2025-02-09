@@ -30,7 +30,7 @@ struct _Entity {
     Inventory *inventory;     /*!< entity inventory */
 };
 
-Entity *entity_create(char *name, Id id, Id location){
+Entity *entity_create(char *name, Id id, Id location, InventoryType inventoryType){
     Entity *entity = NULL;
 
     if(name == NULL){
@@ -44,7 +44,7 @@ Entity *entity_create(char *name, Id id, Id location){
         return NULL;
     }
 
-    entity->inventory = inventory_create();
+    entity->inventory = inventory_create(location, inventoryType);
     if((entity->inventory) == NULL){
         free(entity);
         return NULL;
@@ -123,7 +123,7 @@ Inventory *entity_get_inventory(Entity *entity){
     return entity->inventory;
 }
 
-Status entity_get_id(Entity *entity, Id id){
+Id entity_get_id(Entity *entity){
     if(!entity)
         return ERROR;
     

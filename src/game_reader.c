@@ -23,6 +23,8 @@ Status game_reader_load_spaces(Game *game, char *filename);
 * Public functions implementation
 */
 Status game_reader_create_from_file(Game *game, char *filename){
+  Entity *player;
+  Object *object;
   if (game_create(game) == ERROR){
     debug_log(LOG_ERROR, "Error creating game at: game_reader_create_from_file(Game*, char*) in game_reader.c");
     return ERROR;
@@ -34,8 +36,11 @@ Status game_reader_create_from_file(Game *game, char *filename){
   }
 
   /* The player and the object are located in the first space */
-  game_set_player_location(game, game_get_space_id_at(game, 0));
-  game_set_object_location(game, game_get_space_id_at(game, 0));
+  player = (Entity*)game_get_player(game);
+  entity_set_location(player, game_get_space_id_at(game, 0));
+
+  object = game_get_object(game);
+  object_set_location(object, game_get_space_id_at(game, 0));
 
   return OK;
 }
@@ -84,8 +89,8 @@ Status game_reader_load_spaces(Game *game, char *filename) {
 
       debug_log(DEBUG,"Leido: %ld|%s|%ld|%ld|%ld|%ld\n", id, name, north, east, south, west);
 
-  /*Creates a space with space_create, and sets the ID on that space
-  then saves it on the game with game_add_space*/
+      /*Creates a space with space_create, and sets the ID on that space
+      then saves it on the game with game_add_space*/
       space = space_create(id);
       if (space != NULL) {
         space_set_name(space, name);

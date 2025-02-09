@@ -35,5 +35,12 @@ Player *player_create(char *name, Id identity, Id location);
  */
 void player_destroy(Player *player);
 
+/**
+ * @brief Prints a player struct
+ * @author Profesores PPROG
+ *
+ * @param player struct with the information of a player
+ */
+void player_print(Player *player);
 
 #endif

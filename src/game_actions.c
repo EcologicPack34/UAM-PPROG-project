@@ -26,6 +26,10 @@ void game_actions_next(Game *game);
 
 void game_actions_back(Game *game);
 
+void game_actions_take(Game *game);
+
+void game_actions_drop(Game *game);
+
 /**
    Game actions implementation
 */
@@ -52,6 +56,14 @@ Status game_actions_update(Game *game, Command *command) {
 
     case BACK:
       game_actions_back(game);
+      break;
+
+    case TAKE:
+      game_actions_take(game);
+      break;
+    
+    case DROP:
+      game_actions_drop(game);
       break;
 
     default:
@@ -126,4 +138,45 @@ void game_actions_back(Game *game) {
   }
 
   return;
+}
+
+/**
+ * @brief Checks if the object is located on the same space as the player, then leaves it in the player
+ * inventory and sets the object_location to INSIDE_INVENTORY;
+ * @author Maksym Polyak
+ *
+ * @param game struct that saves all information related to the game
+ */
+void game_actions_take(Game *game){
+  Entity *player;
+  Object *object;
+
+  player = (Entity *)game_get_player(game);
+  if(game_get_object_location(game) != entity_get_location(player))
+    return;
+
+  object = game_get_object(game);
+  inventory_add_object(entity_get_inventory(player), object);
+  object_set_location(object, -2);
+
+  game_set_object_location(game, INSIDE_INVENTORY);
+}
+
+void game_actions_drop(Game *game){
+  Entity *player;
+  Object *object;
+  Id id;
+
+  if(game_get_object_location(game) != INSIDE_INVENTORY)
+    return;
+  
+  
+  
+  id = game_get_player_location(game);
+  game_set_object_location(game, id);
+
+  player = (Entity *)game_get_player(game);
+  object = game_get_object(game);
+  object_set_location(object, id);
+  inventory_remove_object(entity_get_inventory(player),object);
 }

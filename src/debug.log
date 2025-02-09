@@ -1,12 +1,14 @@
-[Fri Feb  7 18:36:47 2025]DEBUG_LOG: Debug global variable
-[Fri Feb  7 18:36:47 2025]DEBUG_LOG: Leido: 11|Entry|-1|-1|12|-1
+[Sun Feb  9 13:15:50 2025]DEBUG_LOG: Debug global variable
+[Sun Feb  9 13:15:50 2025]WARNING: No Id assigned at: game_get_space_id_at(Game*, int) in game.c
+[Sun Feb  9 13:15:50 2025]DEBUG_LOG: Leido: 11|Entry|-1|-1|12|-1
 
-[Fri Feb  7 18:36:47 2025]DEBUG_LOG: Leido: 12|Corridor|11|-1|13|-1
+[Sun Feb  9 13:15:50 2025]DEBUG_LOG: Leido: 12|Corridor|11|-1|13|-1
 
-[Fri Feb  7 18:36:47 2025]DEBUG_LOG: Leido: 13|Pantry|12|-1|14|-1
+[Sun Feb  9 13:15:50 2025]DEBUG_LOG: Leido: 13|Pantry|12|-1|14|-1
 
-[Fri Feb  7 18:36:47 2025]DEBUG_LOG: Leido: 14|AMONGUS|13|-1|-1|-1
+[Sun Feb  9 13:15:50 2025]DEBUG_LOG: Leido: 14|AMONGUS|13|-1|-1|-1
 
-[Fri Feb  7 18:36:47 2025]DEBUG_LOG: Game Initialized correctly
-[Fri Feb  7 18:37:07 2025]DEBUG_LOG: Game ended
-[Fri Feb  7 18:37:07 2025]DEBUG_LOG: Debug global variable destruction
+[Sun Feb  9 13:15:50 2025]DEBUG_LOG: Game Initialized correctly
+[Sun Feb  9 13:15:57 2025]DEBUG_LOG: GAME FINISHED BY CONDITION
+[Sun Feb  9 13:15:57 2025]DEBUG_LOG: Game ended
+[Sun Feb  9 13:15:57 2025]DEBUG_LOG: Debug global variable destruction

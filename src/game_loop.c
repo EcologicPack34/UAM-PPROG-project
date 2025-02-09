@@ -20,12 +20,15 @@
 #include "graphic_engine.h"
 
 #define DEBUG_FILE_PATH "./debug.log"
+#define END_LOCATION 14 /*!< Location where the object has to be located to end the game */
 
 int game_loop_init(Game *game, Graphic_engine **gengine, char *file_name);
 
 void game_loop_run(Game game, Graphic_engine *gengine);
 
 void game_loop_cleanup(Game game, Graphic_engine *gengine);
+
+Status game_player_init(Game *game);
 
 /**
  * @brief Checks the arguments and initializes the game.
@@ -114,6 +117,13 @@ void game_loop_run(Game game, Graphic_engine *gengine){
   while ((command_get_code(last_cmd) != EXIT) && (game_get_finished(&game) == false))
   {
     graphic_engine_paint_game(gengine, &game);
+    /*Checks if the game has been completed*/
+    if(game_get_object_location(&game) == END_LOCATION){
+      game_set_finished(&game, 1);
+      printf("Congratulations, you completed the game!\n");
+      debug_log(DEBUG, "GAME FINISHED BY CONDITION");
+      return;
+    }
     command_get_user_input(last_cmd);
     game_actions_update(&game, last_cmd);
   }

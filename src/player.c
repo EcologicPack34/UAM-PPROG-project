@@ -71,7 +71,7 @@ Player *player_create(char *name, Id identity, Id location){
     if(!(player = (Player *)malloc(sizeof(player))))
         return NULL;
     
-    if(player_set_entity(player,entity_create(name, identity, location)) == ERROR)
+    if(player_set_entity(player,entity_create(name, identity, location, PLAYER_INVENTORY)) == ERROR)
         return NULL;
     
     return player;
@@ -82,6 +82,21 @@ void player_destroy(Player *player){
         return;
 
     entity_destroy(player_get_entity(player));
+}
+
+void player_print(Player *player){
+    Entity *entityPlayer;
+    if(!player)
+        return;
+    
+    printf("\n\n-------------\n\n");
+
+    printf("=> Player:  \n");
+    
+    entityPlayer = player_get_entity(player);
+    printf("=> Player id: %d\n", (int)entity_get_id(entityPlayer));
+    printf("=> Player name: %s\n", entity_get_name(entityPlayer));
+    printf("=> Player location: %d\n", (int)entity_get_location(entityPlayer));
 }
 
 
