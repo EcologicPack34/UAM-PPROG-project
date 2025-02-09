@@ -23,8 +23,9 @@
  * This struct stores all the information of an object
  */
 struct _Object {
-  Id id;              /*!< Id number of the object, it must be unique */
+  Id id;                    /*!< Id number of the object, it must be unique */
   char name[WORD_SIZE + 1]; /*!< Name of the object */
+  Id location;              /*!< Id with the location of the object */
 };
 
 /**
@@ -33,8 +34,10 @@ struct _Object {
  * This struct stores all the information of the player inventory
  */
 struct _Inventory {
-    Object **Array;  /*!< Array of pointers that point to the objects in the inventory */
-    int objectnum;   /*!< Total number of objects on the inventory */
+    Object **Array;                 /*!< Array of pointers that point to the objects in the inventory */
+    int objectnum;                  /*!< Total number of objects on the inventory */
+    Id id;                          /*!< Id with the inventory location */
+    InventoryType inventoryType;    /*!< Inventory type (PLAYER, NPC, SPACE) */
 };
 
 /**
@@ -216,10 +219,6 @@ int inventory_get_object_count(Inventory *inventory){
 
 #pragma endregion
 
-
-
-
-
 /**
    Game interface implementation
 */
@@ -282,6 +281,15 @@ Status object_set_name(Object* object, char* name){
     return OK;
 }
 
+Status object_set_location(Object* object, Id id){
+    if(!object)
+        return ERROR;
+
+    object->location = id;
+
+    return OK;
+}
+
 #pragma endregion
 
 /*Object GETTERS*/
@@ -301,14 +309,32 @@ char *object_get_name(Object *object){
     return object->name;
 }
 
+Id object_get_location(Object* object){
+    if(!object)
+        return -1;
+
+    return object->location;
+}
+
 #pragma endregion
+
+void object_print(Object *object){
+    
+    printf("\n\n-------------\n\n");
+
+    printf("=> Object:  \n");
+    
+
+    printf("=> Object id: %d\n", (int)object_get_id(object));
+    printf("=> Object name: %s\n", object_get_name(object));
+}
 
 #pragma endregion
 
 /*Inventory public functions*/
 #pragma region INVENTORY
 
-Inventory *inventory_create(){
+Inventory *inventory_create(Id id, InventoryType inventoryType){
     Inventory *inventory = NULL;
 
     if(!(inventory = (Inventory *)malloc(sizeof(Inventory))))
@@ -321,6 +347,8 @@ Inventory *inventory_create(){
     }
 
     inventory->objectnum = 0;
+    inventory->id = id;
+    inventory->inventoryType = inventoryType;
     
     return inventory;
 }
@@ -337,8 +365,49 @@ void inventory_destroy(Inventory *inventory){
     }
 
     free(inventory);
-    inventory = NULL;
 }
+
+/*Inventory SETTERS*/
+#pragma region SETTERS
+
+Status inventory_set_location_id(Inventory *inventory, Id id){
+    if(!inventory)
+        return ERROR;
+    
+    inventory->id = id;
+
+    return OK;
+}
+
+Status inventory_set_inventory_type(Inventory *inventory, InventoryType inventoryType){
+    if(!inventory)
+        return ERROR;
+    
+    inventory->inventoryType = inventoryType;
+
+    return OK;
+}
+
+#pragma endregion
+
+/*Inventory GETTERS*/
+#pragma region GETTERS
+
+Id inventory_get_location_id(Inventory *inventory){
+    if(!inventory)
+        return -1;
+    
+    return inventory->id;
+}
+
+InventoryType inventory_get_inventory_type(Inventory *inventory){
+    if(!inventory)
+        return -1;
+    
+    return inventory->inventoryType;
+}
+
+#pragma endregion
 
 /*Inventory interactions with objects*/
 #pragma region INVENTORY_OBJECT_INTERACTION
@@ -352,6 +421,8 @@ Status inventory_add_object(Inventory *inventory, Object *object){
     /*Increases the objectnum and then replaces the object on the new spot*/
     inventory_set_object_count(inventory, inventory_get_object_count(inventory) + 1);
     inventory_set_object_on_index(inventory, object, inventory_get_object_count(inventory));
+
+    object_set_location(object, inventory_get_location_id(inventory));
 
     return OK;
 }
@@ -367,9 +438,8 @@ Status inventory_remove_object(Inventory *inventory, Object *object){
         return ERROR;
     }
 
-    /*Sets to NULL the object in the inventory and destroys the object*/
+    /*Sets to NULL the object in the inventory*/
     inventory_set_object_on_index(inventory, NULL, index);
-    object_destroy(object);
 
     /*Reduces the objectnum on inventory*/
     inventory_set_object_count(inventory, inventory_get_object_count(inventory) - 1);
@@ -404,6 +474,9 @@ Status inventory_object_move(Inventory *inventoryOUT, Inventory *inventoryIN, Ob
 
     /*Adds the object to the other inventory(that should actually be rearranged)*/
     inventory_set_object_count(inventoryIN, inventory_get_object_count(inventoryIN) + 1);
+
+    /*Changes the location id of the object*/
+    object_set_location(object, inventory_get_location_id(inventoryIN));
 
     return OK;
 }

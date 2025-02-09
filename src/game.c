@@ -15,6 +15,10 @@
 #include <stdlib.h>
 #include <string.h>
 
+#define NOMBRE_PLAYER "Heroe" /*!< Nombre del player */
+#define PLAYER_BASE_ID 0      /*!< Id del player */
+#define OBJECT_NAME "Grain"   /*!< Nombre del objeto principal */
+
 /**
    Game interface implementation
 */
@@ -27,8 +31,9 @@ Status game_create(Game *game) {
   }
 
   game->n_spaces = 0;
-  game->player_location = NO_ID;
-  game->object_location = NO_ID;
+  game->player = player_create(NOMBRE_PLAYER, (Id)PLAYER_BASE_ID, -1);
+  /*Creates the object with the first id not taken by the spaces*/
+  game->object = object_create(game_get_space_id_at(game, game_get_n_spaces(game) - 1) + 1, OBJECT_NAME);
   game->last_cmd = command_create();
   game->finished = false;
 
@@ -43,23 +48,12 @@ Status game_destroy(Game *game) {
     space_destroy(game->spaces[i]);
   }
 
+  player_destroy(game_get_player(game));
+  object_destroy(game_get_object(game));
+
   command_destroy(game->last_cmd);
 
   return OK;
-}
-
-void game_print(Game *game) {
-  int i = 0;
-
-  printf("\n\n-------------\n\n");
-
-  printf("=> Spaces: \n");
-  for (i = 0; i < game->n_spaces; i++) {
-    space_print(game->spaces[i]);
-  }
-
-  printf("=> Object location: %d\n", (int)game->object_location);
-  printf("=> Player location: %d\n", (int)game->player_location);
 }
 
 #pragma region GETTERS
@@ -81,9 +75,13 @@ Space *game_get_space(Game *game, Id id) {
   return NULL;
 }
 
-Id game_get_player_location(Game *game) { return game->player_location; }
+Player* game_get_player(Game *game) {return game->player; }
 
-Id game_get_object_location(Game *game) { return game->object_location; }
+Id game_get_player_location(Game *game) {return entity_get_location((Entity *)game_get_player(game));}
+
+Object* game_get_object(Game *game) {return game->object; }
+
+Id game_get_object_location(Game *game) {return (object_get_location(game_get_object(game)));}
 
 Command* game_get_last_command(Game *game) { return game->last_cmd; }
 
@@ -98,32 +96,12 @@ Id game_get_space_id_at(Game *game, int position) {
   return space_get_id(game->spaces[position]);
 }
 
+int game_get_n_spaces(Game *game) {return game->n_spaces;}
+
 #pragma endregion
 
 #pragma region SETTERS
 
-Status game_set_player_location(Game *game, Id id) {
-  if (id == NO_ID) {
-    debug_log(LOG_WARNING, "No Id assigned at: game_set_player_location(Game*, Id) in game.c");
-    return ERROR;
-  }
-
-  game->player_location = id;
-
-  return OK;
-}
-
-Status game_set_object_location(Game *game, Id id) {
-
-  if (id == NO_ID) {
-        debug_log(LOG_WARNING, "No Id assigned at: game_set_object_location(Game*, Id) in game.c");
-    return ERROR;
-  }
-
-  game->object_location = id;
-  space_set_object(game_get_space(game, id), true);
-  return OK;
-}
 Status game_set_last_command(Game *game, Command *command) {
   game->last_cmd = command;
 
@@ -135,6 +113,28 @@ Status game_set_finished(Game *game, bool finished) {
 
   return OK;
 }
+
+Status game_set_player_location(Game *game, Id id){
+  entity_set_location((Entity *)game_get_player(game), id);
+
+  return OK;
+}
+
+Status game_set_object_location(Game *game, Id id){
+  object_set_location(game_get_object(game), id);
+
+  return OK;
+}
+
+/**
+ * @brief Sets the object location
+ * @author Profesores PPROG
+ *
+ * @param game struct that saves all information related to the game
+ * @param id id with the location of the object
+ * @return OK if everything went well or ERROR if there was a mistake
+ */
+Status game_set_object_location(Game *game, Id id);
 
 #pragma endregion
 

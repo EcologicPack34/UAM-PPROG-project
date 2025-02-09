@@ -14,6 +14,7 @@
 #include "command.h"
 #include "space.h"
 #include "types.h"
+#include "player.h"
 
 #include <stdbool.h>
 
@@ -23,8 +24,8 @@
  * @brief Game struct, defines all the information of the game
  */
 typedef struct _Game {
-  Id player_location;          /*!< Id of the player location */
-  Id object_location;          /*!< Id of the object location */
+  Player *player;              /*!< Contains all the information related to the player */
+  Object *object;              /*!< Contains all the information related to the object */
   Space *spaces[MAX_SPACES];   /*!< Array with all the spaces of the map */
   int n_spaces;                /*!< int with the number of spaces on *spaces */
   Command *last_cmd;           /*!< string with the last command */
@@ -88,22 +89,31 @@ Space *game_get_space(Game *game, Id id);
 Id game_get_space_id_at(Game *game, int position);
 
 /**
- * @brief Gets the player_location (actual location of the player)
+ * @brief Gets the total number of spaces on game
  * @author Profesores PPROG
  *
  * @param game struct that saves all information related to the game
- * @return player_location from game
+ * @return n_spaces if everything goes well or -1 if there was a mistake
  */
-Id game_get_player_location(Game *game);
+int game_get_n_spaces(Game *game);
 
 /**
- * @brief Gets the object_location (actual object location)
- * @author Profesores PPROG
+ * @brief Gets the player pointer of the game struct
+ * @author maksym Polyak
  *
  * @param game struct that saves all information related to the game
- * @return object_location
+ * @return player pointer from game or NULL if there was a mistake
  */
-Id game_get_object_location(Game *game);
+Player* game_get_player(Game *game);
+
+/**
+ * @brief Gets the object pointer of the game struct
+ * @author Maksym Polyak
+ *
+ * @param game struct that saves all information related to the game
+ * @return object pointer from game or NULL if there was a mistake
+ */
+Object* game_get_object(Game *game);
 
 /**
  * @brief Gets the last command from the game struct
@@ -123,31 +133,27 @@ Command* game_get_last_command(Game *game);
  */
 bool game_get_finished(Game *game);
 
+/**
+ * @brief Gets the player location
+ * @author Profesores PPROG
+ *
+ * @param game struct that saves all information related to the game
+ * @return player location id or -1 if there was a mistake
+ */
+Id game_get_player_location(Game *game);
+
+/**
+ * @brief Gets the object location
+ * @author Profesores PPROG
+ *
+ * @param game struct that saves all information related to the game
+ * @return object location id or -1 if there was a mistake
+ */
+Id game_get_object_location(Game *game);
+
 #pragma endregion
 
 #pragma region SETTERS
-/**
- * @brief Sets the player location to the id received as argument
- * @author Profesores PPROG
- *
- * @param game struct that saves all information related to the game
- * @param id long that saves the location of a space
- * @return OK if everything goes well or ERROR if there was some mistake
- */
-Status game_set_player_location(Game *game, Id id);
-
-
-/**
- * @brief Sets the object_location to the received id
- * @author Profesores PPROG
- *
- * @param game struct that saves all information related to the game
- * @param id long that saves the location of a space
- * @return OK if everything goes well or ERROR if there was some mistake
- */
-Status game_set_object_location(Game *game, Id id);
-
-
 
 /**
  * @brief Sets the received command on the game struct
@@ -168,6 +174,26 @@ Status game_set_last_command(Game *game, Command *command);
  * @return OK if everything goes well
  */
 Status game_set_finished(Game *game, bool finished);
+
+/**
+ * @brief Sets the player location
+ * @author Profesores PPROG
+ *
+ * @param game struct that saves all information related to the game
+ * @param id id with the location of the player
+ * @return OK if everything went well or ERROR if there was a mistake
+ */
+Status game_set_player_location(Game *game, Id id);
+
+/**
+ * @brief Sets the object location
+ * @author Profesores PPROG
+ *
+ * @param game struct that saves all information related to the game
+ * @param id id with the location of the object
+ * @return OK if everything went well or ERROR if there was a mistake
+ */
+Status game_set_object_location(Game *game, Id id);
 
 #pragma endregion
 

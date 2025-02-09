@@ -24,9 +24,10 @@ typedef struct _Entity Entity;
  * @param name name of the entity
  * @param identity id of the entity
  * @param idlocation id of the location of the entity
+ * @param inventoryType type of inventory of the entity
  * @return Entity pointer if everything goes well or NULL if there was a mistake
  */
-Entity *entity_create(char *name, Id identity, Id idlocation);
+Entity *entity_create(char *name, Id identity, Id idlocation, InventoryType inventoryType);
 
 /**
  * @brief Frees a entity
@@ -117,9 +118,9 @@ Inventory *entity_get_inventory(Entity *entity);
  * @author Maksym Polyak
  *
  * @param entity contains all the information related to the entity
- * @return inventory pointer or NULL if there was a mistake
+ * @return entity id or NULL if there was a mistake
  */
-Status entity_get_id(Entity *entity, Id id);
+Id entity_get_id(Entity *entity);
 
 /**
  * @brief Gets an entity entityType
