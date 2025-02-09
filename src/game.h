@@ -16,22 +16,26 @@
 #include "command.h"
 #include "types.h"
 #include "player.h"
+#include "condition.h"
+
 
 #include <stdbool.h>
 
-#define MAX_SPACES 100          /*!< Maximum number of spaces on the map */
-#define MAX_LINKS 400   /*!< Maximum number of links on the map */
+#define MAX_SPACES 100                /*!< Maximum number of spaces on the map */
+#define MAX_LINKS 400                 /*!< Maximum number of links on the map */
 
 /**
  * @brief Game struct, defines all the information of the game
  */
 typedef struct _Game {
   Player *player;              /*!< Contains all the information related to the player */
-  Object *object;              /*!< Contains all the information related to the object */
-  Space *spaces[MAX_SPACES];   /*!< Array with all the spaces of the map */
+  Object *objects[MAX_OBJECTS]; /*!< Contains all the information related to the object */
+  int n_objects;               /*!< int with the number of objects on *objects */
+  Space *spaces[MAX_SPACES];   /*!< Array with all the spaces of the map */ 
   int n_spaces;                /*!< int with the number of spaces on *spaces */
-  Link *links[MAX_LINKS];     /*!< Array with all the links in the map*/
-  int n_links;
+  Link *links[MAX_LINKS];      /*!< Array with all the links in the map*/
+  int n_links;                 /*!< int with the number of links on *links */
+  Conditions *conditions;      /*!< Conditions structure with finish conditions */
 
   Command *last_cmd;           /*!< string with the last command */
   bool finished;               /*!< bool that determines if the game has finished*/
@@ -148,16 +152,7 @@ bool game_get_finished(Game *game);
 Id game_get_player_location(Game *game);
 
 /**
- * @brief Gets the object location
- * @author Profesores PPROG
- *
- * @param game struct that saves all information related to the game
- * @return object location id or -1 if there was a mistake
- */
-Id game_get_object_location(Game *game);
-
-/**
- * @brief Gets the numer of links stored in a game
+ * @brief Gets the number of links stored in a game
  * @author Daniel Gómez
  * 
  * @param game 
@@ -173,6 +168,42 @@ long game_get_n_links(Game *game);
  * @return the pointer if found, NULL if not found
  */
 Link *game_get_link_by_id(Game *game, Id id);
+
+/**
+ * @brief Gets the objects pointer of game
+ * @author Maksym Polyak
+ * 
+ * @param game 
+ * @return object pointer or NULL if not found 
+ */
+Object **game_get_objects(Game *game);
+
+/**
+ * @brief Gets the number of objects stored in a game
+ * @author Maksym Polyak
+ * 
+ * @param game 
+ * @return long or -1 if not found 
+ */
+long game_get_n_objects(Game *game);
+
+/**
+ * @brief Gets the object pointer on the index i;
+ * @author Maksym Polyak
+ * 
+ * @param game 
+ * @return object pointer or NULL if not found 
+ */
+Object *game_get_object_at(Game *game, int i);
+
+/**
+ * @brief Gets the conditions struct from game
+ * @author Maksym Polyak
+ * 
+ * @param game struct with all the information related to the game
+ * @return conditions pointer or NULL if not found 
+ */
+Conditions *game_get_conditions(Game *game);
 
 #pragma endregion
 
@@ -209,14 +240,14 @@ Status game_set_finished(Game *game, bool finished);
 Status game_set_player_location(Game *game, Id id);
 
 /**
- * @brief Sets the object location
- * @author Profesores PPROG
+ * @brief Sets the number of objects on game
+ * @author Maksym Polyak
  *
  * @param game struct that saves all information related to the game
- * @param id id with the location of the object
+ * @param num number of objects
  * @return OK if everything went well or ERROR if there was a mistake
  */
-Status game_set_object_location(Game *game, Id id);
+Status game_set_n_objects(Game *game, int num);
 
 #pragma endregion
 
@@ -241,6 +272,25 @@ Status game_add_space(Game *game, Space *space);
  * @return Status 
  */
 Status game_add_link(Game *game, Link *link);
+
+/**
+ * @brief Checks if the game finish condition has been fullfilled
+ * @author Maksym Polyak
+ * 
+ * @param game struct with all the information of the game
+ * @return 1 if game finished, 0 if game is not finished
+ */
+bool game_finish_condition_check(Game *game);
+
+/**
+ * @brief Adds an object to *objects in game
+ * @author Maksym Polyak
+ * 
+ * @param game struct with all the information of the game
+ * @param object object to be stored in *objects
+ * @return OK if everything goes well or ERROR if there was some mistake
+ */
+Status game_add_object(Game *game, Object *object);
 
 #pragma endregion
 

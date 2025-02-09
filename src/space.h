@@ -95,16 +95,6 @@ Status space_set_east(Space* space, Link * link);
  */
 Status space_set_west(Space* space, Link * link);
 
-/**
- * @brief It sets whether the space has an object or not
- * @author Profesores PPROG
- *
- * @param space a pointer to the space
- * @param value a boolean, specifying if in the space there is an object (true) or not (false)
- * @return OK, if everything goes well or ERROR if there was some mistake
- */
-Status space_set_object(Space* space, bool value);
-
 #pragma endregion
 
 /*Space GETTERS*/
@@ -165,13 +155,13 @@ Link *space_get_east(Space* space);
 Link *space_get_west(Space* space);
 
 /**
- * @brief It gets whether the space has an object or not
+ * @brief Gets the inventory pointer of a space
  * @author Profesores PPROG
  *
  * @param space a pointer to the space
- * @return a boolean, specifying if in the space there is an object (true) or not (false)
+ * @return Inventory pointer if everything well right or NULL if there was a mistake
  */
-bool space_get_object(Space* space);
+Inventory *space_get_inventory(Space* space);
 
 #pragma endregion
 
@@ -179,7 +169,7 @@ bool space_get_object(Space* space);
  * @brief It prints the space information
  * @author Profesores PPROG
  *
- * This fucntion shows the id and name of the space, the spaces that surrounds it and wheter it has an object or not.
+ * This function shows the id and name of the space, the spaces that surrounds it and their inventory.
  * @param space a pointer to the space
  * @return OK, if everything goes well or ERROR if there was some mistake
  */

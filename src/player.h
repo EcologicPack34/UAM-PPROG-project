@@ -36,6 +36,15 @@ Player *player_create(char *name, Id identity, Id location);
 void player_destroy(Player *player);
 
 /**
+ * @brief Gets a player entity
+ * @author Profesores PPROG
+ *
+ * @param player struct with the information of a player
+ * @return entity pointer or NULL if wrong
+ */
+Entity *player_get_entity(Player *player);
+
+/**
  * @brief Prints a player struct
  * @author Profesores PPROG
  *

@@ -26,6 +26,7 @@ struct _Object {
   Id id;                    /*!< Id number of the object, it must be unique */
   char name[WORD_SIZE + 1]; /*!< Name of the object */
   Id location;              /*!< Id with the location of the object */
+  Id condition_location;    /*!< Id with the space where the object has to be to complete the condition */
 };
 
 /**
@@ -44,15 +45,6 @@ struct _Inventory {
    Private functions
 */
 #pragma region PRIVATE_DECLARATION
-/**
- * @brief Returns the object from the inventory in the index i
- * @author Maksym Polyak
- *
- * @param inventory contains the information of an inventory
- * @param index index of the object
- * @return Object pointer if everything went fine or NULL if there was a mistake
- */
-Object *inventory_get_object_from_index(Inventory *inventory, int index);
 
 /**
  * @brief Searchs the index of an object in a inventory
@@ -103,26 +95,9 @@ Object **inventory_get_array(Inventory *inventory);
  */
 Status inventory_set_object_count(Inventory *inventory, int num);
 
-/**
- * @brief Gets the total number of objects stored in the inventory
- * @author Maksym Polyak
- *
- * @param inventory contains the information of an inventory
- * @param num number of objects stored in the inventory
- * @return num if everything went fine or -1 if there was a mistake
- */
-int inventory_get_object_count(Inventory *inventory);
-
 #pragma endregion
 
 #pragma region PRIVATE_IMPLEMENTATION
-
-Object *inventory_get_object_from_index(Inventory *inventory, int index){
-    if(!inventory || index >= INVENTORY_MAX_SIZE || index < 0)
-        return NULL;
-    
-    return inventory->Array[index];
-}
 
 int inventory_object_search(Inventory *inventory, Object *object){
     int i;
@@ -210,13 +185,6 @@ Status inventory_set_object_count(Inventory *inventory, int count){
     return OK;
 }
 
-int inventory_get_object_count(Inventory *inventory){
-    if(!inventory)
-        return -1;
-    
-    return inventory->objectnum;
-}
-
 #pragma endregion
 
 /**
@@ -227,7 +195,7 @@ int inventory_get_object_count(Inventory *inventory){
 /*Object public functions*/
 #pragma region OBJECT
 
-Object *object_create(Id id, char *name){
+Object *object_create(Id id, char *name, Id location, Id conditionlocation){
     Object *object = NULL;
 
     if(!(object = (Object *)calloc(1,sizeof(Object))))
@@ -235,6 +203,8 @@ Object *object_create(Id id, char *name){
     
     object->id = id;
     strcpy(object->name,name);
+    object->location = location;
+    object->condition_location = conditionlocation;
     
     return object;
 }
@@ -258,6 +228,13 @@ int object_isEqual(Object *object1, Object *object2){
         return 1;
     
     return 0;
+}
+
+int inventory_get_object_count(Inventory *inventory){
+    if(!inventory)
+        return -1;
+    
+    return inventory->objectnum;
 }
 
 /*Object SETTERS*/
@@ -290,6 +267,15 @@ Status object_set_location(Object* object, Id id){
     return OK;
 }
 
+Status object_set_condition_location(Object* object, Id id){
+    if(!object)
+        return ERROR;
+    
+    object->condition_location = id;
+
+    return OK;
+}
+
 #pragma endregion
 
 /*Object GETTERS*/
@@ -316,6 +302,21 @@ Id object_get_location(Object* object){
     return object->location;
 }
 
+Id object_get_condition_location(Object* object){
+    if(!object)
+        return -1;
+
+    return object->condition_location;
+}
+
+Object *inventory_get_object_from_index(Inventory *inventory, int index){
+    if(!inventory || index >= INVENTORY_MAX_SIZE || index < 0)
+        return NULL;
+    
+    return inventory->Array[index];
+}
+
+
 #pragma endregion
 
 void object_print(Object *object){
@@ -327,6 +328,7 @@ void object_print(Object *object){
 
     printf("=> Object id: %d\n", (int)object_get_id(object));
     printf("=> Object name: %s\n", object_get_name(object));
+    printf("=> Object Condition location: %d\n", (int)object_get_condition_location(object));
 }
 
 #pragma endregion
@@ -337,11 +339,14 @@ void object_print(Object *object){
 Inventory *inventory_create(Id id, InventoryType inventoryType){
     Inventory *inventory = NULL;
 
-    if(!(inventory = (Inventory *)malloc(sizeof(Inventory))))
+    if(!(inventory = (Inventory *)malloc(sizeof(Inventory)))){
+        debug_log(LOG_ERROR, "Error allocating memory for inventory");
         return NULL;
+    }
     
     /*Creates memory for the pointers to the objects*/
     if(!(inventory->Array = (Object **)calloc(INVENTORY_MAX_SIZE, sizeof(Object)))){
+        debug_log(LOG_ERROR, "Error allocating memory for inventory array");
         free(inventory);
         return NULL;
     }
@@ -349,6 +354,8 @@ Inventory *inventory_create(Id id, InventoryType inventoryType){
     inventory->objectnum = 0;
     inventory->id = id;
     inventory->inventoryType = inventoryType;
+
+    
     
     return inventory;
 }
@@ -495,6 +502,24 @@ int inventory_contains_object(Inventory *inventory, Id object){
             return i;
     }
     return -1;
+}
+
+void inventory_print_objects(Inventory *inventory){
+    int numobj, i;
+    Object *object;
+    if(!inventory)
+        return;
+    
+    printf("-----------\n");
+    printf("Objects in the inventory:\n");
+    
+    numobj = inventory_get_object_count(inventory);
+    for(i = 0; i < numobj; i++){
+        object = inventory_get_object_from_index(inventory, i);
+        printf("%d. Name: %s - Id: %ld\n", i + 1, object_get_name(object), object_get_id(object));
+    }
+
+    printf("-----------\n");
 }
 
 #pragma endregion

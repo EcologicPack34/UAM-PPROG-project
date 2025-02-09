@@ -14,6 +14,9 @@
 #include "command.h"
 #include "game.h"
 #include "types.h"
+#include "debug_printing.h"
+#include "link.h"
+#include "entity.h"
 
 /**
  * @brief Updates the game action, checks the las command and uses game_actions functions

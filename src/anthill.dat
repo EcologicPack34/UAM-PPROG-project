@@ -1,5 +1,6 @@
 Formato Space: #s:ID|Nombre|northLink|eastLink|southLink|westLink
-Formato Link: #s:ID|Space1|Space2|locked|unlockingObjectID
+Formato Link: #l:ID|Space1|Space2|locked|unlockingObjectID
+Formato Object: #o:ID|Nombre|IdLocation|ConditionLocation
 
 #s:11|Entry|-1|-1|1|4
 #s:12|Corridor|1|-1|2|-1
@@ -10,3 +11,5 @@ Formato Link: #s:ID|Space1|Space2|locked|unlockingObjectID
 #l:2|12|13|0|0
 #l:3|13|14|0|0
 #l:4|11|13|0|0
+
+#o:1|Grain|11|14

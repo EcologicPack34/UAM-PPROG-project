@@ -46,8 +46,6 @@ Link *game_get_link_at(Game *game, long index){
 
 #pragma endregion
 
-
-
 /**
    Game interface implementation
 */
@@ -61,31 +59,44 @@ Status game_create(Game *game) {
 
   game->n_spaces = 0;
   game->player = player_create(NOMBRE_PLAYER, (Id)PLAYER_BASE_ID, -1);
-  /*Creates the object with the first id not taken by the spaces*/
-  game->object = object_create(game_get_space_id_at(game, game_get_n_spaces(game) - 1) + 1, OBJECT_NAME);
   game->last_cmd = command_create();
   game->finished = false;
+  game->n_objects = 0;
+  game->conditions = conditions_create();
+
+  
 
   return OK;
 }
 
 
 Status game_destroy(Game *game) {
-  int i = 0;
+  int i = 0, num;
+  Object *object;
 
   for (i = 0; i < game->n_spaces; i++) {
     space_destroy(game->spaces[i]);
   }
 
   player_destroy(game_get_player(game));
-  object_destroy(game_get_object(game));
 
   command_destroy(game->last_cmd);
 
-  for (int i = 0; i < game_get_n_links(game); i++)
+  num = game_get_n_links(game);
+  for (int i = 0; i < num; i++)
   {
-    free(game_get_link_at(game,i));
+    link_destroy(game_get_link_at(game,i));
   }
+
+
+  num = game_get_n_objects(game);
+  for(i = 0; i < num; i++)
+  {
+    object = game_get_object_at(game, i);
+    object_destroy(object);
+  }
+
+  conditions_destroy(game_get_conditions(game));
 
   return OK;
 }
@@ -126,13 +137,10 @@ Space *game_get_space(Game *game, Id id) {
   return NULL;
 }
 
-Player* game_get_player(Game *game) {return game->player; }
+Player* game_get_player(Game *game) {
+  return game->player; }
 
 Id game_get_player_location(Game *game) {return entity_get_location((Entity *)game_get_player(game));}
-
-Object* game_get_object(Game *game) {return game->object; }
-
-Id game_get_object_location(Game *game) {return (object_get_location(game_get_object(game)));}
 
 Command* game_get_last_command(Game *game) { return game->last_cmd; }
 
@@ -157,6 +165,27 @@ long game_get_n_links(Game *game){
   return game->n_links;
 }
 
+Object **game_get_objects(Game *game){
+  if(!game) return NULL;
+  return game->objects;
+}
+
+long game_get_n_objects(Game *game){
+  if(!game) return -1;
+  return game->n_objects;
+}
+
+Object *game_get_object_at(Game *game, int i){
+  if(!game) return NULL;
+  return (game->objects)[i];
+}
+
+Conditions *game_get_conditions(Game *game){
+  if(!game) return NULL;
+
+  return game->conditions;
+}
+
 #pragma endregion
 
 #pragma region SETTERS
@@ -179,21 +208,13 @@ Status game_set_player_location(Game *game, Id id){
   return OK;
 }
 
-Status game_set_object_location(Game *game, Id id){
-  object_set_location(game_get_object(game), id);
 
+Status game_set_n_objects(Game *game, int num){
+  if(!game) return ERROR;
+
+  game->n_objects = num;
   return OK;
 }
-
-/**
- * @brief Sets the object location
- * @author Profesores PPROG
- *
- * @param game struct that saves all information related to the game
- * @param id id with the location of the object
- * @return OK if everything went well or ERROR if there was a mistake
- */
-Status game_set_object_location(Game *game, Id id);
 
 #pragma endregion
 
@@ -231,3 +252,29 @@ Status game_add_link(Game *game, Link *link){
   return OK;
 }
 
+bool game_finish_condition_check(Game *game){
+  if(!game) return 0;
+
+  if(conditions_check(game_get_conditions(game)) == 1){
+    printf("Congratulations, you completed the game!\n");
+    game_set_finished(game, 1);
+    return 1;
+  }
+
+  return 0;
+}
+
+Status game_add_object(Game *game, Object *object){
+  int n_objects;
+  if(!game || !object)
+    return ERROR;
+
+  n_objects = game_get_n_objects(game);
+  if(n_objects == MAX_OBJECTS)
+    return ERROR;
+  
+  (game->objects)[n_objects] = object;
+  game_set_n_objects(game, n_objects + 1);
+
+  return OK;
+}

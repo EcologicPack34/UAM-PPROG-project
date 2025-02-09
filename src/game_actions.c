@@ -9,8 +9,6 @@
  */
 
 #include "game_actions.h"
-#include "link.h"
-#include "entity.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -159,33 +157,50 @@ void game_actions_back(Game *game) {
 void game_actions_take(Game *game){
   Entity *player;
   Object *object;
+  Space *space;
+  Id spaceId;
+  Inventory *spaceInventory, *playerInventory;
+  int num;
 
-  player = (Entity *)game_get_player(game);
-  if(game_get_object_location(game) != entity_get_location(player))
+  player = player_get_entity(game_get_player(game));
+  spaceId = entity_get_location(player);
+  space = game_get_space(game, spaceId);
+  spaceInventory = space_get_inventory(space);
+  playerInventory = entity_get_inventory(player);
+
+  inventory_print_objects(spaceInventory);
+  printf("Introduce el numero del objeto a tomar:");
+  scanf("%d", &num);
+
+  object = inventory_get_object_from_index(spaceInventory, num - 1);
+  if(inventory_object_move(spaceInventory, playerInventory, object) == ERROR){
     return;
+  }
 
-  object = game_get_object(game);
-  inventory_add_object(entity_get_inventory(player), object);
   object_set_location(object, -2);
-
-  game_set_object_location(game, INSIDE_INVENTORY);
 }
 
 void game_actions_drop(Game *game){
   Entity *player;
   Object *object;
-  Id id;
-
-  if(game_get_object_location(game) != INSIDE_INVENTORY)
-    return;
-  
-  
-  
-  id = game_get_player_location(game);
-  game_set_object_location(game, id);
+  Space *space;
+  Id spaceId;
+  Inventory *spaceInventory, *playerInventory;
+  int num;
 
   player = (Entity *)game_get_player(game);
-  object = game_get_object(game);
-  object_set_location(object, id);
-  inventory_remove_object(entity_get_inventory(player),object);
+  spaceId = entity_get_location(player);
+  space = game_get_space(game, spaceId);
+  spaceInventory = space_get_inventory(space);
+  playerInventory = entity_get_inventory(player);
+
+  inventory_print_objects(playerInventory);
+  printf("Introduce el numero del objeto a dejar: ");
+  scanf("%d", &num);
+
+  object = inventory_get_object_from_index(playerInventory, num - 1);
+  if(inventory_object_move(playerInventory, spaceInventory, object) == ERROR)
+    return;
+
+  object_set_location(object, entity_get_location(player));
 }
