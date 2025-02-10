@@ -129,7 +129,7 @@ Id space_get_id(Space* space);
 const char* space_get_name(Space* space);
 
 /**
- * @brief It gets the id of the space located at the north
+ * @brief It gets the link of the space located at the north
  * @author Profesores PPROG
  *
  * @param space a pointer to the space
@@ -138,7 +138,7 @@ const char* space_get_name(Space* space);
 Link *space_get_north(Space* space);
 
 /**
- * @brief It gets the id of the space located at the south
+ * @brief It gets the link of the space located at the south
  * @author Profesores PPROG
  *
  * @param space a pointer to the space
@@ -147,7 +147,7 @@ Link *space_get_north(Space* space);
 Link *space_get_south(Space* space);
 
 /**
- * @brief It gets the id of the space located at the east
+ * @brief It gets the link of the space located at the east
  * @author Profesores PPROG
  *
  * @param space a pointer to the space
@@ -156,7 +156,7 @@ Link *space_get_south(Space* space);
 Link *space_get_east(Space* space);
 
 /**
- * @brief It gets the id of the space located at the west
+ * @brief It gets the link of the space located at the west
  * @author Profesores PPROG
  *
  * @param space a pointer to the space

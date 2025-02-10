@@ -1,0 +1,116 @@
+/**
+ * @brief It defines the inventory module interface
+ *
+ * @file inventory.h
+ * @author Maksym Polyak
+ * @version 0
+ * @date 10-02-2025
+ * @copyright GNU Public License
+*/
+
+#ifndef INVENTORY_H
+#define INVENTORY_H
+ 
+#include "types.h"
+#include "object.h"
+ 
+#include <stdbool.h>
+ 
+#define INVENTORY_MAX_SIZE 10
+#define INSIDE_INVENTORY -2  /*!< Id of the location of an object if it is inside an inventory */
+ 
+typedef enum {UNKNOWN_INVENTORY, PLAYER_INVENTORY, NPC_INVENTORY, SPACE_INVENTORY} InventoryType;
+ 
+typedef struct _Inventory Inventory;
+
+/*Game public interface functions*/
+#pragma region INVENTORY
+
+/**
+ * @brief Creates an inventory with its type and locationid
+ * @author Maksym Polyak
+ *
+ * @param type contains the inventory type of an inventory
+ * @param locationid id with the id location of the inventory
+ * @return inventory initialized without objects or NULL if error
+ */
+Inventory *inventory_create(InventoryType type, Id locationid);
+
+/**
+ * @brief Frees an inventory but not its objects (Objects are controled in game->objects)
+ * @author Maksym Polyak
+ *
+ * @param inventory contains the inventory information
+ */
+void inventory_destroy(Inventory *inventory);
+
+#pragma region GETTERS
+
+/**
+ * @brief Gets an object from an inventory by its id
+ * @author Maksym Polyak
+ *
+ * @param inventory contains the inventory information
+ * @param objectid id of the object
+ * @return object pointer if it went well or NULL if there was a mistake (NULL if the object isn't in the inventory)
+ */
+Object *inventory_get_object_by_id(Inventory *inventory, Id objectid);
+
+#pragma endregion
+
+#pragma region DERIVATED FUNCTIONS
+
+/**
+ * @brief Checks if an object is in the inventory by id
+ * @author Maksym Polyak
+ *
+ * @param inventory contains the inventory information
+ * @param objectid id of the object
+ * @return 1 if it is in the inventory or 0 if not(ERROR also is set as 0)
+ */
+bool inventory_contains_object(Inventory *inventory, Id objectid);
+
+/**
+ * @brief Adds an object to an inventory
+ * @author Maksym Polyak
+ *
+ * @param inventory contains the inventory information
+ * @param object object to be added to the inventory
+ * @return OK if the object has been added(OK if the objet was in the inventory) or ERROR if there was a mistake
+ */
+Status inventory_add_object(Inventory *inventory, Object *object);
+
+/**
+ * @brief Removes an object from an inventory (Does not free the object)
+ * @author Maksym Polyak
+ *
+ * @param inventory contains the inventory information
+ * @param object object to be removed from the inventory
+ * @return OK if the object has been removed (OK if the object wasn't in the inventory) or ERROR if there was a mistake 
+ */
+Status inventory_remove_object(Inventory *inventory, Object *object);
+
+/**
+ * @brief Moves an object from inventoryOUT to inventoryIN by the id of the object
+ * 
+ * @param inventoryOUT inventory from where the object is taken
+ * @param inventoryIN inventory where the object is going to be located
+ * @param objectid id of the object in inventoryOUT to move
+ * @return OK if the object was moved or ERROR if there was a mistake (ERROR also if the object to move was not in inventoryOUT)
+ */
+Status inventory_move_object(Inventory *inventoryOUT, Inventory *inventoryIN, Id objectid);
+
+/**
+ * @brief Gets the inventory object list as a string from the inventory
+ * 
+ * @param inventory inventory where the objects are located
+ * @param objectlist string where the object list is going to be located
+ * @return OK if well or ERROR if error
+ */
+Status inventory_get_object_list(Inventory *inventory, char *objectlist);
+
+#pragma endregion
+
+#pragma endregion
+
+#endif

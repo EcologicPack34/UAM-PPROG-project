@@ -15,13 +15,7 @@
 
 #include <stdbool.h>
 
-#define INSIDE_INVENTORY -2  /*!< Id of the location of an object if it is inside an inventory */
-
-typedef enum {UNKNOWN_INVENTORY, PLAYER_INVENTORY, NPC_INVENTORY, SPACE_INVENTORY} InventoryType;
-
 typedef struct _Object Object;
-
-typedef struct _Inventory Inventory;
 
 /*Object public functions*/
 #pragma region OBJECTS
@@ -127,133 +121,6 @@ Id object_get_location(Object* object);
  * @param inventory stores the information of an inventory
  */
 void object_print(Object *object);
-
-#pragma endregion
-
-/*Inventory public functions*/
-#pragma region INVENTORY
-
-/**
- * @brief Creates an inventory
- * @author Maksym Polyak
- *
- * @param id id with the location of the inventory
- * @param inventoryType inventory type
- * @return inventory pointer if everything went fine or NULL if there was a mistake
- */
-Inventory *inventory_create(Id id, InventoryType inventoryType);
-
-/**
- * @brief Frees an inventory
- * @author Maksym Polyak
- *
- * @param inventory stores the information of an inventory
- */
-void inventory_destroy(Inventory *inventory);
-
-/*Inventory SETTERS*/
-#pragma region SETTERS
-
-/**
- * @brief Sets the location of an inventory
- * @author Maksym Polyak
- *
- * @param inventory stores the information of an inventory
- * @param id stores the inventory location
- * @return OK if everything went fine or ERROR if there was a mistake
- */
-Status inventory_set_location_id(Inventory *inventory, Id id);
-
-/**
- * @brief Sets an inventory to a type (UNKNOWN, PLAYER, NPC, SPACE)
- * @author Maksym Polyak
- *
- * @param inventory stores the information of an inventory
- * @param inventoryType inventory type of the inventory
- * @return OK if everything went fine or ERROR if there was a mistake
- */
-Status inventory_set_inventory_type(Inventory *inventory, InventoryType inventoryType);
-
-#pragma endregion
-
-/*Inventory GETTERS*/
-#pragma region GETTERS
-
-/**
- * @brief Gets the location of an inventory
- * @author Maksym Polyak
- *
- * @param inventory stores the information of an inventory
- * @return inventory location id if everything went fine or -1 if there was a mistake
- */
-Id inventory_get_location_id(Inventory *inventory);
-
-/**
- * @brief Gets the inventory type of an inventory
- * @author Maksym Polyak
- *
- * @param inventory stores the information of an inventory
- * @return inventory type if everything went fine or -1 if there was a mistake
- */
-InventoryType inventory_get_inventory_type(Inventory *inventory);
-
-#pragma endregion
-
-/*Inventory interactions with objects*/
-#pragma region INVENTORY_OBJECT_INTERACTION
-
-/**
- * @brief Adds an object to the inventory
- * @author Maksym Polyak
- *
- * @param inventory contains the information of an inventory
- * @param object contains the information of an object
- * @return OK if everything went fine or ERROR if there was a mistake
- */
-Status inventory_add_object(Inventory *inventory, Object *object);
-
-
-/**
- * @brief Removes an object from the inventory but does not destroy it
- * @author Maksym Polyak
- *
- * @param inventory contains the information of an inventory
- * @param object contains the information of an object
- * @return OK if everything went fine or ERROR if there was a mistake
- */
-Status inventory_remove_object(Inventory *inventory, Object *object);
-
-/**
- * @brief Moves an object from an inventory to another (NOT COPYING)
- * @author Maksym Polyak
- *
- * @param inventoryOUT inventory where the object is taken
- * @param inventoryIN inventory where the object is received
- * @param object contains the information of an object
- * @return OK if everything went fine or NULL if there was a mistake
- */
-Status inventory_object_move(Inventory *inventoryOUT, Inventory *inventoryIN, Object *object);
-
-/**
- * @brief Checks if an object is in a invetory by its id
- * 
- * @param inventory 
- * @param object 
- * @return The index of the object if found, -1 if not
- */
-int inventory_contains_object(Inventory *inventory, Id object);
-
-#pragma endregion
-
-/**
- * @brief NON IMPLEMENTED - Prints on screen all the objects
- * @author Maksym Polyak
- *
- * @param inventory stores the information of an inventory
- */
-/*
-void inventory_print(Inventory *inventory){}
-*/
 
 #pragma endregion
 

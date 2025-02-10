@@ -1,23 +1,39 @@
-[Sun Feb  9 18:23:20 2025]DEBUG_LOG: Debug global variable
-[Sun Feb  9 18:23:20 2025]WARNING: No Id assigned at: game_get_space_id_at(Game*, int) in game.c
-[Sun Feb  9 18:23:20 2025]DEBUG_LOG: Read Link: #l:1|11|12|0|0
-[Sun Feb  9 18:23:20 2025]DEBUG_LOG: Game Added link: Count:1, Id:1 ,Space1:11, Space2:12
-[Sun Feb  9 18:23:20 2025]DEBUG_LOG: Read Link: #l:2|12|13|0|0
-[Sun Feb  9 18:23:20 2025]DEBUG_LOG: Game Added link: Count:2, Id:2 ,Space1:12, Space2:13
-[Sun Feb  9 18:23:20 2025]DEBUG_LOG: Read Link: #l:3|13|14|0|0
-[Sun Feb  9 18:23:20 2025]DEBUG_LOG: Game Added link: Count:3, Id:3 ,Space1:13, Space2:14
-[Sun Feb  9 18:23:20 2025]DEBUG_LOG: Read Link: #l:4|11|13|0|0
-[Sun Feb  9 18:23:20 2025]DEBUG_LOG: Game Added link: Count:4, Id:4 ,Space1:11, Space2:13
-[Sun Feb  9 18:23:20 2025]DEBUG_LOG: Read Space: #s:11|Entry|-1|-1|1|4
-[Sun Feb  9 18:23:20 2025]DEBUG_LOG: Game Added space: Count:1, north: -1, east:-1, south:1, west:4
-[Sun Feb  9 18:23:20 2025]DEBUG_LOG: Read Space: #s:12|Corridor|1|-1|2|-1
-[Sun Feb  9 18:23:20 2025]DEBUG_LOG: Game Added space: Count:2, north: 1, east:-1, south:2, west:-1
-[Sun Feb  9 18:23:20 2025]DEBUG_LOG: Read Space: #s:13|Pantry|2|4|3|-1
-[Sun Feb  9 18:23:20 2025]DEBUG_LOG: Game Added space: Count:3, north: 2, east:4, south:3, west:-1
-[Sun Feb  9 18:23:20 2025]DEBUG_LOG: Read Space: #s:14|AMONGUS|3|-1|-1|-1
-[Sun Feb  9 18:23:20 2025]DEBUG_LOG: Game Added space: Count:4, north: 3, east:-1, south:-1, west:-1
-[Sun Feb  9 18:23:20 2025]LOG: Game Initialized correctly
-[Sun Feb  9 18:23:22 2025]DEBUG_LOG: Moved entity 0 from space 11 to 12
-[Sun Feb  9 18:23:22 2025]DEBUG_LOG: Moved entity 0 from space 12 to 13
-[Sun Feb  9 18:23:40 2025]LOG: Game ended
-[Sun Feb  9 18:23:40 2025]LOG: Debug global variable destruction
+[Mon Feb 10 20:21:54 2025]DEBUG_LOG: Debug global variable
+[Mon Feb 10 20:21:54 2025]WARNING: No Id assigned at: game_get_space_id_at(Game*, int) in game.c
+[Mon Feb 10 20:21:54 2025]DEBUG_LOG: Read Link: #l:1|11|12|0|0
+[Mon Feb 10 20:21:54 2025]DEBUG_LOG: Game Added link: Count:1, Id:1 ,Space1:11, Space2:12
+[Mon Feb 10 20:21:54 2025]DEBUG_LOG: Read Link: #l:2|12|13|0|0
+[Mon Feb 10 20:21:54 2025]DEBUG_LOG: Game Added link: Count:2, Id:2 ,Space1:12, Space2:13
+[Mon Feb 10 20:21:54 2025]DEBUG_LOG: Read Link: #l:3|13|14|0|0
+[Mon Feb 10 20:21:54 2025]DEBUG_LOG: Game Added link: Count:3, Id:3 ,Space1:13, Space2:14
+[Mon Feb 10 20:21:54 2025]DEBUG_LOG: Read Link: #l:4|11|13|0|0
+[Mon Feb 10 20:21:54 2025]DEBUG_LOG: Game Added link: Count:4, Id:4 ,Space1:11, Space2:13
+[Mon Feb 10 20:21:54 2025]DEBUG_LOG: Read Space: #s:11|Entry|-1|-1|1|4
+[Mon Feb 10 20:21:54 2025]DEBUG_LOG: Game Added space: Count:1, north: -1, east:-1, south:1, west:4
+[Mon Feb 10 20:21:54 2025]DEBUG_LOG: Read Space: #s:12|Corridor|1|-1|2|-1
+[Mon Feb 10 20:21:54 2025]DEBUG_LOG: Game Added space: Count:2, north: 1, east:-1, south:2, west:-1
+[Mon Feb 10 20:21:54 2025]DEBUG_LOG: Read Space: #s:13|Pantry|2|4|3|-1
+[Mon Feb 10 20:21:54 2025]DEBUG_LOG: Game Added space: Count:3, north: 2, east:4, south:3, west:-1
+[Mon Feb 10 20:21:54 2025]DEBUG_LOG: Read Space: #s:14|AMONGUS|3|-1|-1|-1
+[Mon Feb 10 20:21:54 2025]DEBUG_LOG: Game Added space: Count:4, north: 3, east:-1, south:-1, west:-1
+[Mon Feb 10 20:21:54 2025]LOG: Game Initialized correctly
+[Mon Feb 10 20:21:56 2025]DEBUG_LOG: Moved entity 0 from space 11 to 12
+[Mon Feb 10 20:21:57 2025]DEBUG_LOG: Moved entity 0 from space 12 to 13
+[Mon Feb 10 20:21:58 2025]DEBUG_LOG: Moved entity 0 from space 13 to 14
+[Mon Feb 10 20:21:59 2025]DEBUG_LOG: Moved entity 0 from space 14 to 13
+[Mon Feb 10 20:21:59 2025]DEBUG_LOG: Moved entity 0 from space 13 to 12
+[Mon Feb 10 20:21:59 2025]DEBUG_LOG: Moved entity 0 from space 12 to 11
+[Mon Feb 10 20:22:01 2025]inventory is NULL in inventory_add_object
+[Mon Feb 10 20:22:02 2025]inventory is NULL in inventory_add_remove
+[Mon Feb 10 20:22:03 2025]inventory is NULL in inventory_add_object
+[Mon Feb 10 20:22:03 2025]inventory is NULL in inventory_add_remove
+[Mon Feb 10 20:22:03 2025]inventory is NULL in inventory_add_object
+[Mon Feb 10 20:22:04 2025]inventory is NULL in inventory_add_remove
+[Mon Feb 10 20:22:06 2025]inventory is NULL in inventory_add_object
+[Mon Feb 10 20:22:07 2025]DEBUG_LOG: Moved entity 0 from space 11 to 12
+[Mon Feb 10 20:22:07 2025]DEBUG_LOG: Moved entity 0 from space 12 to 13
+[Mon Feb 10 20:22:08 2025]DEBUG_LOG: Moved entity 0 from space 13 to 14
+[Mon Feb 10 20:22:09 2025]inventory is NULL in inventory_add_remove
+[Mon Feb 10 20:22:09 2025]DEBUG_LOG: GAME FINISHED BY CONDITION
+[Mon Feb 10 20:22:09 2025]LOG: Game ended
+[Mon Feb 10 20:22:09 2025]LOG: Debug global variable destruction
