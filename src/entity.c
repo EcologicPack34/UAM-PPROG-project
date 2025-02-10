@@ -40,17 +40,15 @@ Entity *entity_create(char *name, Id id, Id location, InventoryType inventoryTyp
 
     entity = (Entity *)calloc(1,sizeof(Entity));
     if(entity == NULL){
-        debug_log(LOG_ERROR, "Error allocating memory for entity");
+    debug_log(LOG_ERROR, "Error allocating memory for entity");
         return NULL;
     }
 
     entity->inventory = inventory_create(location, inventoryType);
     if((entity->inventory) == NULL){
-        debug_log(LOG_ERROR, "Error allocating memory for entity inventory");
         free(entity);
         return NULL;
     }
-    
 
     return entity;
 }

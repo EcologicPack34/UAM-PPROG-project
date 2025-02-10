@@ -18,23 +18,7 @@
  */
 Status game_reader_load_spaces(Game *game, char *filename);
 
-/**
- * @brief Reads the filename to save all links
- *
- * @param game struct that saves all information related to the game
- * @param filename string that stores the data file name
- * @return OK if everything goes well or ERROR if there was some error
- */
 Status game_reader_load_links(Game *game, char *filename);
-
-/**
- * @brief Reads the filename to save all objects
- *
- * @param game struct that saves all information related to the game
- * @param filename string that stores the data file name
- * @return OK if everything goes well or ERROR if there was some error
- */
-Status game_reader_load_objects(Game *game, char *filename);
 
 
 /*
@@ -42,13 +26,9 @@ Status game_reader_load_objects(Game *game, char *filename);
 */
 Status game_reader_create_from_file(Game *game, char *filename){
   Entity *player;
+  Object *object;
   if (game_create(game) == ERROR){
     debug_log(LOG_ERROR, "Error creating game at: game_reader_create_from_file(Game*, char*) in game_reader.c");
-    return ERROR;
-  }
-
-  if(game_reader_load_objects(game, filename) == ERROR){
-    debug_log(LOG_ERROR, "Error loading links at: game_reader_create_from_file(Game*, char*) in game_reader.c");
     return ERROR;
   }
 
@@ -61,10 +41,12 @@ Status game_reader_create_from_file(Game *game, char *filename){
     return ERROR;
   }
 
-
-  /* The player is located in the first space */
-  player = player_get_entity(game_get_player(game));
+  /* The player and the object are located in the first space */
+  player = (Entity*)game_get_player(game);
   entity_set_location(player, game_get_space_id_at(game, 0));
+
+  object = game_get_object(game);
+  object_set_location(object, game_get_space_id_at(game, 0));
 
   return OK;
 }
@@ -72,66 +54,6 @@ Status game_reader_create_from_file(Game *game, char *filename){
 /*
 * Private functions implementation
 */
-
-Status game_reader_load_objects(Game *game, char *filename){
-  FILE *file = NULL;
-
-  char line[WORD_SIZE] = "";
-  char *toks = NULL;
-
-  Id id = NO_ID, location = NO_ID, conditionlocation = NO_ID;
-  char name[WORD_SIZE];
-  Object *object = NULL;
-  Status status = OK;
-
-  if (!filename) {
-    debug_log(LOG_ERROR, "Missing file name at: game_reader_load_objects(Game*, char*) in game_reader.c");
-    return ERROR;
-  }
-
-  file = fopen(filename, "r");
-  if (file == NULL) {
-    debug_log(LOG_ERROR, "Error in file at: game_reader_load_objects(Game*, char*) in game_reader.c");
-    return ERROR;
-  }
-
-  while (fgets(line, WORD_SIZE, file)) {
-    if (strncmp("#o:", line, 3) == 0) {
-      toks = strtok(line + 3, "|");
-      id = atol(toks);
-      toks = strtok(NULL, "|");
-      strcpy(name, toks);
-      toks = strtok(NULL, "|");
-      location = atol(toks);
-      toks = strtok(NULL, "|");
-      conditionlocation = atol(toks);
-
-
-      debug_log(DEBUG,"Read object: #o:%ld|%s|%ld|%ld", id, name, location, conditionlocation);
-
-      object = object_create(id, name, location, conditionlocation);
-      if(object != NULL){
-        game_add_object(game, object);
-        inventory_add_object(space_get_inventory(game_get_space(game, location)), object);
-        debug_log(DEBUG,"Added object: #o:%ld|%s|%ld|%ld", id, name, location, conditionlocation);
-      }
-
-      if(conditionlocation != -1){
-          conditions_add_object_conditioned(game_get_conditions(game), object);
-      }
-
-    }
-  }
-
-  if (ferror(file)) {
-    status = ERROR;
-    debug_log(LOG_ERROR, "Error in file at: game_reader_load_objects(Game*, char*) in game_reader.c");
-  }
-
-  fclose(file);
-
-  return status;
-}
 
 Status game_reader_load_links(Game *game, char *filename){
   FILE *file = NULL;

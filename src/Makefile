@@ -1,8 +1,8 @@
 CC = gcc
 
 CFLAGS = -Wall -pedantic
-SRC = collector.c command.c debug_printing.c game_actions.c game_loop.c game.c graphic_engine.c space.c object.c player.c game_reader.c entity.c link.c condition.c
-OBJ = collector.o command.o debug_printing.o game_actions.o game_loop.o game.o graphic_engine.o space.o object.o player.o libscreen.a entity.o game_reader.o link.o condition.o
+SRC = collector.c command.c debug_printing.c game_actions.c game_loop.c game.c graphic_engine.c space.c object.c player.c game_reader.c entity.c link.c
+OBJ = collector.o command.o debug_printing.o game_actions.o game_loop.o game.o graphic_engine.o space.o object.o player.o libscreen.a entity.o game_reader.o link.o
 EXE = anthill
 
 #link: $(OBJ)
@@ -55,8 +55,6 @@ game_reader.o : game_reader.c game_reader.h space.h types.h game.c
 link.o : link.c link.h types.h entity.c game.c
 	$(CC) $(CFLAGS) -c link.c
 
-condition.o:	condition.c game.c condition.h
-	$(CC) $(CFLAGS) -c condition.c
 
 .PHONY:	clean compile run
 clean:

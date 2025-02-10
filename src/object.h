@@ -12,11 +12,8 @@
 #define OBJECT_H
 
 #include "types.h"
-#include "debug_printing.h"
 
 #include <stdbool.h>
-
-#define MAX_OBJECTS 100               /*!< Maximum number of objects on the map */
 
 #define INSIDE_INVENTORY -2  /*!< Id of the location of an object if it is inside an inventory */
 
@@ -35,11 +32,9 @@ typedef struct _Inventory Inventory;
  *
  * @param id id of the object that is created
  * @param name name of the object
- * @param location id of the location with the object
- * @param conditionlocation id for the condition to be fulfilled
  * @return a new object, initialized or NULL if there was a mistake
  */
-Object *object_create(Id id, char *name, Id location, Id conditionlocation);
+Object *object_create(Id id, char *name);
 
 /**
  * @brief It destroys an object
@@ -91,16 +86,6 @@ Status object_set_name(Object* object, char* name);
  */
 Status object_set_location(Object* object, Id id);
 
-/**
- * @brief Sets the object condition location
- * @author Maksym Polyak
- *
- * @param object contains the information of an object
- * @param id id of the space where the object has to be located
- * @return OK if everything went fine or ERROR if there was a mistake
- */
-Status object_set_condition_location(Object* object, Id id);
-
 #pragma endregion
 
 /*Object GETTERS*/
@@ -132,16 +117,6 @@ char *object_get_name(Object *object);
  * @return id with the space id where the object is located or -1 if there was a mistake
  */
 Id object_get_location(Object* object);
-
-/**
- * @brief Gets the object condition location
- * @author Maksym Polyak
- *
- * @param object contains the information of an object
- * @return id with the space id where the object has to be located or -1 if there was a mistake
- */
-Id object_get_condition_location(Object* object);
-
 
 #pragma endregion
 
@@ -222,26 +197,6 @@ Id inventory_get_location_id(Inventory *inventory);
  */
 InventoryType inventory_get_inventory_type(Inventory *inventory);
 
-/**
- * @brief Returns the object from the inventory in the index i
- * @author Maksym Polyak
- *
- * @param inventory contains the information of an inventory
- * @param index index of the object
- * @return Object pointer if everything went fine or NULL if there was a mistake
- */
-Object *inventory_get_object_from_index(Inventory *inventory, int index);
-
-/**
- * @brief Gets the total number of objects stored in the inventory
- * @author Maksym Polyak
- *
- * @param inventory contains the information of an inventory
- * @param num number of objects stored in the inventory
- * @return num if everything went fine or -1 if there was a mistake
- */
-int inventory_get_object_count(Inventory *inventory);
-
 #pragma endregion
 
 /*Inventory interactions with objects*/
@@ -291,12 +246,14 @@ int inventory_contains_object(Inventory *inventory, Id object);
 #pragma endregion
 
 /**
- * @brief Prints on screen all the objects of an inventory
+ * @brief NON IMPLEMENTED - Prints on screen all the objects
  * @author Maksym Polyak
  *
  * @param inventory stores the information of an inventory
  */
-void inventory_print_objects(Inventory *inventory);
+/*
+void inventory_print(Inventory *inventory){}
+*/
 
 #pragma endregion
 

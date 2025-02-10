@@ -68,9 +68,7 @@ void graphic_engine_destroy(Graphic_engine *ge) {
 }
 
 void graphic_engine_paint_game(Graphic_engine *ge, Game *game){
-  Id id_act = NO_ID;
-  int num_conditionedObjects, i;
-  Conditions *conditions = NULL;
+  Id id_act = NO_ID, obj_loc = NO_ID;
   Space *space_act = NULL;
   Link *south = NULL, *north = NULL, *east = NULL, *west = NULL;
 
@@ -109,11 +107,7 @@ void graphic_engine_paint_game(Graphic_engine *ge, Game *game){
     }
 
     /*Prints current space*/
-    /*Prints if there is an object or not*/
-
-    Id playerLocation = game_get_player_location(game);
-    Space *space = game_get_space(game, playerLocation);
-    if (inventory_get_object_count(space_get_inventory(space)) > 0)
+    if (game_get_object_location(game) == id_act)
       obj = '*';
     else
       obj = ' ';
@@ -193,13 +187,8 @@ void graphic_engine_paint_game(Graphic_engine *ge, Game *game){
   }
   /* Paint in the description area */
   screen_area_clear(ge->descript);
-  conditions = game_get_conditions(game);
-  num_conditionedObjects = condition_get_n_objects_conditioned(game_get_conditions(game));
-  if (num_conditionedObjects > 0) {
-    
-    for(i = 0; i < num_conditionedObjects; i++)
-      sprintf(str, "  Object %d location:%d", i + 1, (int)object_get_location(condition_get_objects_conditioned_at(conditions, i)));
-
+  if ((obj_loc = game_get_object_location(game)) != NO_ID) {
+    sprintf(str, "  Object location:%d", (int)obj_loc);
     screen_area_puts(ge->descript, str);
   }
  

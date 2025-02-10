@@ -31,6 +31,20 @@ struct _Player {
 */
 
 /**
+ * @brief Gets the entity pointer from the player
+ * @author Profesores PPROG
+ *
+ * @param player struct with the information of a player
+ * @return entity pointer if everything went fine or NULL if there was a mistake
+ */
+Entity *player_get_entity(Player *player){
+    if (!player)
+        return NULL;
+
+    return player->entity;
+}
+
+/**
  * @brief Sets the entity pointer of the player
  * @author Profesores PPROG
  *
@@ -53,20 +67,12 @@ Status player_set_entity(Player *player, Entity *entity){
 
 Player *player_create(char *name, Id identity, Id location){
     Player *player = NULL;
-    Entity *entity = NULL;
 
-    if(!(player = (Player *)malloc(sizeof(Player))))
+    if(!(player = (Player *)malloc(sizeof(player))))
         return NULL;
     
-    if((entity = entity_create(name, identity, location, PLAYER_INVENTORY)) == NULL){
-        debug_log(LOG_ERROR, "Error allocating memory for entity on player creation");
+    if(player_set_entity(player,entity_create(name, identity, location, PLAYER_INVENTORY)) == ERROR)
         return NULL;
-    }
-
-    if(player_set_entity(player, entity) == ERROR){
-        debug_log(LOG_ERROR, "Error setting player entity");
-        return NULL;
-    }
     
     return player;
 }
@@ -76,13 +82,6 @@ void player_destroy(Player *player){
         return;
 
     entity_destroy(player_get_entity(player));
-}
-
-Entity *player_get_entity(Player *player){
-    if(!player)
-        return NULL;
-    
-    return player->entity;
 }
 
 void player_print(Player *player){
