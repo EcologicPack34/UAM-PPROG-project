@@ -11,7 +11,7 @@
 #ifndef ENTITY_H
 #define ENTITY_H
 
-#include "object.h"
+#include "inventory.h"
 
 typedef enum {UNKNOWN_ENTITY, PLAYER, NPC} EntityType;
 
