@@ -128,7 +128,7 @@ Space *game_get_space(Game *game, Id id) {
 
 Player* game_get_player(Game *game) {return game->player; }
 
-Id game_get_player_location(Game *game) {return entity_get_location((Entity *)game_get_player(game));}
+Id game_get_player_location(Game *game) {return entity_get_location(player_get_entity(game_get_player(game)));}
 
 Object* game_get_object(Game *game) {return game->object; }
 
@@ -212,7 +212,7 @@ Status game_add_space(Game *game, Space *space) {
   game->spaces[game->n_spaces] = space;
   game->n_spaces++;
 
-  debug_log(DEBUG, "Game Added space: Count:%d, north: %d, east:%d, south:%d, west:%d", game_get_n_spaces(game), link_get_id(space_get_north(space)) 
+  debug_log(PRINT, "Game Added space: Count:%d, north: %d, east:%d, south:%d, west:%d", game_get_n_spaces(game), link_get_id(space_get_north(space)) 
             ,link_get_id(space_get_east(space)), link_get_id(space_get_south(space)), link_get_id(space_get_west(space)));
   return OK;
 
@@ -227,7 +227,7 @@ Status game_add_link(Game *game, Link *link){
   }
 
   game->links[(game->n_links)++] = link;
-  debug_log(DEBUG, "Game Added link: Count:%d, Id:%d ,Space1:%d, Space2:%d", game_get_n_links(game), link_get_id(link), link_get_space1(link), link_get_space2(link));
+  debug_log(PRINT, "Game Added link: Count:%d, Id:%d ,Space1:%d, Space2:%d", game_get_n_links(game), link_get_id(link), link_get_space1(link), link_get_space2(link));
   return OK;
 }
 

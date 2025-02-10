@@ -42,7 +42,7 @@ Status game_reader_create_from_file(Game *game, char *filename){
   }
 
   /* The player and the object are located in the first space */
-  player = (Entity*)game_get_player(game);
+  player = player_get_entity(game_get_player(game));
   entity_set_location(player, game_get_space_id_at(game, 0));
 
   object = game_get_object(game);
@@ -91,7 +91,7 @@ Status game_reader_load_links(Game *game, char *filename){
       unlockingObject = atol(toks);
 
 
-      debug_log(DEBUG,"Read Link: #l:%ld|%ld|%ld|%ld|%ld", id, space1, space2, locked, unlockingObject);
+      debug_log(PRINT,"Read Link: #l:%ld|%ld|%ld|%ld|%ld", id, space1, space2, locked, unlockingObject);
 
       link = link_create(id,space1, space2, locked, unlockingObject);
       if(link != NULL){
@@ -149,7 +149,7 @@ Status game_reader_load_spaces(Game *game, char *filename) {
       toks = strtok(NULL, "|");
       west = atol(toks);
 
-      debug_log(DEBUG,"Read Space: #s:%ld|%s|%ld|%ld|%ld|%ld", id, name, north, east, south, west);
+      debug_log(PRINT,"Read Space: #s:%ld|%s|%ld|%ld|%ld|%ld", id, name, north, east, south, west);
 
       /*Creates a space with space_create, and sets the ID on that space
       then saves it on the game with game_add_space*/

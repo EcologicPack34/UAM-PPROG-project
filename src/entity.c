@@ -50,6 +50,11 @@ Entity *entity_create(char *name, Id id, Id location, InventoryType inventoryTyp
         return NULL;
     }
 
+
+    entity_set_id(entity, id);
+    entity_set_name(entity, name);
+    entity_set_location(entity, location);
+
     return entity;
 }
 

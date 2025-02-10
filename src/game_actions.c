@@ -114,7 +114,7 @@ void game_actions_next(Game *game) {
   link = space_get_south(game_get_space(game, space_id));
   if(link == NULL) return;
 
-  entity = (Entity*)game_get_player(game);
+  entity = player_get_entity(game_get_player(game));
   if(entity == NULL) return;
 
   link_move_entity(link, entity);
@@ -141,7 +141,7 @@ void game_actions_back(Game *game) {
   link = space_get_north(game_get_space(game, space_id));
   if(link == NULL) return;
 
-  entity = (Entity*)game_get_player(game);
+  entity = player_get_entity(game_get_player(game));
   if(entity == NULL) return;
 
   link_move_entity(link, entity);
@@ -160,7 +160,7 @@ void game_actions_take(Game *game){
   Entity *player;
   Object *object;
 
-  player = (Entity *)game_get_player(game);
+  player = player_get_entity(game_get_player(game));
   if(game_get_object_location(game) != entity_get_location(player))
     return;
 
@@ -184,7 +184,7 @@ void game_actions_drop(Game *game){
   id = game_get_player_location(game);
   game_set_object_location(game, id);
 
-  player = (Entity *)game_get_player(game);
+  player = player_get_entity(game_get_player(game));
   object = game_get_object(game);
   object_set_location(object, id);
   inventory_remove_object(entity_get_inventory(player),object);

@@ -43,4 +43,14 @@ void player_destroy(Player *player);
  */
 void player_print(Player *player);
 
+/**
+ * @brief returns the entity of the player
+ * @author Daniel Gómez
+ * 
+ * @param player struct with the information of a player
+ * @return Entity* 
+ */
+Entity *player_get_entity(Player *player);
+
+
 #endif

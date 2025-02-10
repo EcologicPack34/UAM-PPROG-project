@@ -31,20 +31,6 @@ struct _Player {
 */
 
 /**
- * @brief Gets the entity pointer from the player
- * @author Profesores PPROG
- *
- * @param player struct with the information of a player
- * @return entity pointer if everything went fine or NULL if there was a mistake
- */
-Entity *player_get_entity(Player *player){
-    if (!player)
-        return NULL;
-
-    return player->entity;
-}
-
-/**
  * @brief Sets the entity pointer of the player
  * @author Profesores PPROG
  *
@@ -99,5 +85,10 @@ void player_print(Player *player){
     printf("=> Player location: %d\n", (int)entity_get_location(entityPlayer));
 }
 
+Entity *player_get_entity(Player *player){
+    if (!player)
+        return NULL;
 
+    return player->entity;
+}
 

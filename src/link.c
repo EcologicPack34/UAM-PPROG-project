@@ -201,7 +201,7 @@ Status link_move_entity(Link *link, Entity *entity){
                 debug_log(LOG_WARNING, "Couldn't move entity: at link_move_entity(Link*, Entity*) in link.c");
                 return ERROR;
             }
-            debug_log(DEBUG,"Moved entity %ld from space %ld to %ld", entity_get_id(entity), link_get_space2(link), link_get_space1(link));
+            debug_log(PRINT,"Moved entity %ld from space %ld to %ld", entity_get_id(entity), link_get_space2(link), link_get_space1(link));
         }
     }
 

@@ -55,3 +55,6 @@ Reorganizado la estructura de object.c, separando las funciones privadas en decl
 
 -10/02/2025 18:25 - Maksym Polyak - Implementado modulo inventory, inventory TAD sacado de object --> Misma funcionalidad in-game, ha sido una reestructuración interna para crear un modulo diferente
 	-->Tan sólo se ha modificado object.c, object.h y se ha añadido inventory.c e inventory.h
+
+--10/02/2025 21:46 - Daniel Gómez - Arreglado game_get_player_location() para usar player_get_entity en vez de (Entity*). del modo contrario no funciona.
+	--> Arreglado en Entity.c créate(), no se asignaban los valores de inicio en ningún momento, entonces la entidad se quedaba con todos los campos a cero
