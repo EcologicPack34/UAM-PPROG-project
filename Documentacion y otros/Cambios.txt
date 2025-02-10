@@ -38,17 +38,20 @@ Cambiado inventory_get_objectnum() a inventory_get_object_count(). algunos (poco
 Reorganizado la estructura de object.c, separando las funciones privadas en declaración e implementación para evitar errores al compilar
 
 -09/02/2025 13:30 - Maksym Polyak - Añadida implementación take y drop por completo
-    -->Modified various .c and .h to implement the take/drop functionality on the game
-    -->inventory_remove_object now does not destroy the object
-    -->For now, the only existent inventory is the player one, as there is only one object, the object location is tracked by the game struct
-    -->Added location id for each object struct and the primitive functions related to it ---> Whenever an object has been taken to an inventory, their location ID is set to INSIDE_INVENTORY (-2), meaning that an inventory has that object.
-    -->Added finish condition on game_loop with a message --> If the object location is the same as the MACRO, game ends, to change it, change the macro on game_loop
-    -->Added functions related to take / drop commands --> Functionality works fine, tested in game
-    -->Modified game struct in order to hold a player and an object, the related functions have been modified to fit the game functionality
-    -->Fixed some errors and documentation
-    -->Probably more, but I don't remember xDD
+    	 -->Modified various .c and .h to implement the take/drop functionality on the game
+    	 -->inventory_remove_object now does not destroy the object
+    	 -->For now, the only existent inventory is the player one, as there is only one object, the object location is tracked by the game struct
+  	 -->Added location id for each object struct and the primitive functions related to it ---> Whenever an object has been taken to an inventory, their location ID is set to INSIDE_INVENTORY (-2), meaning that an inventory has that object.
+    	 -->Added finish condition on game_loop with a message --> If the object location is the same as the MACRO, game ends, to change it, change the macro on game_loop
+   	 -->Added functions related to take / drop commands --> Functionality works fine, tested in game
+    	 -->Modified game struct in order to hold a player and an object, the related functions have been modified to fit the game functionality
+   	 -->Fixed some errors and documentation
+   	 -->Probably more, but I don't remember xDD
 
 -09/02/2025 18:25 - Daniel Gómez - Implementado link complentamente-> en space, graphic_engine, etc.
 	--> añadido y modificado algunas funciones relacionadas con link.h y link.c en su propio modulo y otros.
 	--> modificado graphic_engine.c para que renderice los links y salas laterales
 	--> añadido una función al modulo command para obtener la lista de comandos en forma de string
+
+-10/02/2025 18:25 - Maksym Polyak - Implementado modulo inventory, inventory TAD sacado de object --> Misma funcionalidad in-game, ha sido una reestructuración interna para crear un modulo diferente
+	-->Tan sólo se ha modificado object.c, object.h y se ha añadido inventory.c e inventory.h
