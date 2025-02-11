@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "game_reader.h"
 #include "debug_printing.h"
 #include "game.h"
 #include "space.h"

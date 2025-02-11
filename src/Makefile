@@ -8,9 +8,6 @@ EXE = anthill
 #link: $(OBJ)
 #	$(CC) $(CFLAGS) -o $(EXE) $(OBJ)
 
-#debug: $(SRC) ARREGLAR
-#	$(CC) $(CFLAGS) -g $(OBJ) -o anthilldebug
-
 all: (EXE)
 
 (EXE):	$(OBJ)
@@ -69,8 +66,15 @@ compile:
 link:
 	$(CC) $(CFLAGS) -o $(OBJ)
 
-run:	(EXE)
+run:
 	./anthill anthill.dat
+
+debug:
+	$(CC) $(CFLAGS) -g $(SRC) -o anthilldebug libscreen.a
+
+runv:
+	make debug
+	valgrind --leak-check=full ./anthilldebug anthill.dat
 	
 #PARA COMPILAR SOLO LO NECESARIO SE USA LA SIGUIENTE SINTAXIS sustituyendo: (REVISAR)
 #.o: .c (dependencias)
@@ -80,4 +84,4 @@ run:	(EXE)
 
 # A la hora de añadir dependencias de librerias de otra carpeta se puede usar:
 # por ejemplo y siestoy compilando en src y hay una carpeta contigua llamada include
-# gcc -I ../include (PARA BUSCAR EN LA CARPETA ../include)
+# gcc -I ../include (PARA BUSCAR EN LA CARPETA ../include)q
