@@ -72,7 +72,9 @@ Status game_create(Game *game) {
 
 Status game_destroy(Game *game) {
   int i = 0;
+  int linkCount;
 
+  /*Destroys all spaces*/
   for (i = 0; i < game->n_spaces; i++) {
     space_destroy(game->spaces[i]);
   }
@@ -82,7 +84,11 @@ Status game_destroy(Game *game) {
 
   command_destroy(game->last_cmd);
 
-  for (int i = 0; i < game_get_n_links(game); i++)
+
+  /*Destroys all links */
+  linkCount = game_get_n_links(game);
+
+  for (i = 0; i < linkCount; i++)
   {
     free(game_get_link_at(game,i));
   }

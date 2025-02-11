@@ -1,21 +1,21 @@
-[Tue Feb 11 13:55:19 2025]DEBUG_LOG: Debug global variable
-[Tue Feb 11 13:55:19 2025]WARNING: No Id assigned at: game_get_space_id_at(Game*, int) in game.c
-[Tue Feb 11 13:55:19 2025]LOG: Read Link: #l:1|11|12|0|0
-[Tue Feb 11 13:55:19 2025]LOG: Game Added link: Count:1, Id:1 ,Space1:11, Space2:12
-[Tue Feb 11 13:55:19 2025]LOG: Read Link: #l:2|12|13|0|0
-[Tue Feb 11 13:55:19 2025]LOG: Game Added link: Count:2, Id:2 ,Space1:12, Space2:13
-[Tue Feb 11 13:55:19 2025]LOG: Read Link: #l:3|13|14|0|0
-[Tue Feb 11 13:55:19 2025]LOG: Game Added link: Count:3, Id:3 ,Space1:13, Space2:14
-[Tue Feb 11 13:55:19 2025]LOG: Read Link: #l:4|11|13|0|0
-[Tue Feb 11 13:55:19 2025]LOG: Game Added link: Count:4, Id:4 ,Space1:11, Space2:13
-[Tue Feb 11 13:55:19 2025]LOG: Read Space: #s:11|Entry|-1|-1|1|4
-[Tue Feb 11 13:55:19 2025]LOG: Game Added space: Count:1, north: -1, east:-1, south:1, west:4
-[Tue Feb 11 13:55:19 2025]LOG: Read Space: #s:12|Corridor|1|-1|2|-1
-[Tue Feb 11 13:55:19 2025]LOG: Game Added space: Count:2, north: 1, east:-1, south:2, west:-1
-[Tue Feb 11 13:55:19 2025]LOG: Read Space: #s:13|Pantry|2|4|3|-1
-[Tue Feb 11 13:55:19 2025]LOG: Game Added space: Count:3, north: 2, east:4, south:3, west:-1
-[Tue Feb 11 13:55:19 2025]LOG: Read Space: #s:14|AMONGUS|3|-1|-1|-1
-[Tue Feb 11 13:55:19 2025]LOG: Game Added space: Count:4, north: 3, east:-1, south:-1, west:-1
-[Tue Feb 11 13:55:19 2025]LOG: Game Initialized correctly
-[Tue Feb 11 13:55:37 2025]LOG: Game ended
-[Tue Feb 11 13:55:37 2025]LOG: Debug global variable destruction
+[Tue Feb 11 21:48:00 2025]DEBUG_LOG: Debug global variable
+[Tue Feb 11 21:48:00 2025]WARNING: No Id assigned at: game_get_space_id_at(Game*, int) in game.c
+[Tue Feb 11 21:48:00 2025]LOG: Read Link: #l:1|11|12|0|0
+[Tue Feb 11 21:48:00 2025]LOG: Game Added link: Count:1, Id:1 ,Space1:11, Space2:12
+[Tue Feb 11 21:48:00 2025]LOG: Read Link: #l:2|12|13|0|0
+[Tue Feb 11 21:48:00 2025]LOG: Game Added link: Count:2, Id:2 ,Space1:12, Space2:13
+[Tue Feb 11 21:48:00 2025]LOG: Read Link: #l:3|13|14|0|0
+[Tue Feb 11 21:48:00 2025]LOG: Game Added link: Count:3, Id:3 ,Space1:13, Space2:14
+[Tue Feb 11 21:48:00 2025]LOG: Read Link: #l:4|11|13|0|0
+[Tue Feb 11 21:48:00 2025]LOG: Game Added link: Count:4, Id:4 ,Space1:11, Space2:13
+[Tue Feb 11 21:48:00 2025]LOG: Read Space: #s:11|Entry|-1|-1|1|4
+[Tue Feb 11 21:48:00 2025]LOG: Game Added space: Count:1, north: -1, east:-1, south:1, west:4
+[Tue Feb 11 21:48:00 2025]LOG: Read Space: #s:12|Corridor|1|-1|2|-1
+[Tue Feb 11 21:48:00 2025]LOG: Game Added space: Count:2, north: 1, east:-1, south:2, west:-1
+[Tue Feb 11 21:48:00 2025]LOG: Read Space: #s:13|Pantry|2|4|3|-1
+[Tue Feb 11 21:48:00 2025]LOG: Game Added space: Count:3, north: 2, east:4, south:3, west:-1
+[Tue Feb 11 21:48:00 2025]LOG: Read Space: #s:14|AMONGUS|3|-1|-1|-1
+[Tue Feb 11 21:48:00 2025]LOG: Game Added space: Count:4, north: 3, east:-1, south:-1, west:-1
+[Tue Feb 11 21:48:00 2025]LOG: Game Initialized correctly
+[Tue Feb 11 21:48:01 2025]LOG: Game ended
+[Tue Feb 11 21:48:01 2025]LOG: Debug global variable destruction

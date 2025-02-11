@@ -68,6 +68,7 @@ void player_destroy(Player *player){
         return;
 
     entity_destroy(player_get_entity(player));
+    free(player);
 }
 
 void player_print(Player *player){

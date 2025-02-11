@@ -98,19 +98,24 @@ int debug_log(LOG_LEVEL level, char *formatedString, ...)
     }
 
     done = fprintf((globalDebug->logFile), "%s", finalString);
-    if(!done)
+    if(!done){
+        free(finalString);
         return -1;
+    }
 
     va_start(arg, formatedString);
     done = vfprintf(globalDebug->logFile, formatedString, arg);
     va_end(arg);
-    if(!done)
+    if(!done){
+        free(finalString);
         return -1;
-
+    }
     done = fprintf((globalDebug->logFile), "\n");
-    if(!done)
+    if(!done){
+        free(finalString);
         return -1;
-
+    }
+    free(finalString);
     return 1;
 }
 
