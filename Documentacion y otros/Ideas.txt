@@ -1,16 +1,35 @@
-APROBADO - Hacer un array dinamico en Game que lleve la cuenta de todos los objetos que hay en el juego, tanto jugador, como espacios.
-APROBADO - Diferenciar enities mediante un entity type y guardarlas en Game como puntero a entity, de manera que podemos hacer un recast de vuelta al tipo original sabiendo que tipo de entidad es.
-
-APROBADO - usar un void (*update)(Game*, Entity*)para las entidades.
+PENDIENTE- usar un void (*update)(Game*, Entity*)para las entidades.
 en la entidad padre, haces Status entity_set_update(&function). function deberá tener el formato void funtion(Game*, Entity*). Para actualizar todas las entidades simplemente iteramos en game y llamamos a update.
-
 APROBADO - modulo utils : contiene funciones útiles de uso general.
 
-PENDIENTE - Remodelación de graphic_engine ?? --> Hay que evaluar si nos conviene rehacerlo o modificarlo
-PENDIENTE - En un futuro aleatorizar el mapa (objetos, enemigos y demás si lo implementamos)
+APROBADO / BRANCH SEPARADA - Remodelación de graphic_engine --> OpenGL
+
+APROBADO - Implementar funcionalidad de inventario (1 inventario por space) 
+
+APROBADO - Gestion de ID unico por parte de game y set(renombrar a collection) --> de este modo inventory y otros no tienen que encargarse de ello.
+^- Hacer un array dinamico en Game que lleve la cuenta de todos los objetos que hay en el juego, tanto jugador, como espacios.
+
+APROBADO - Sistema de eventos para manejar el fin del juego(temporalmente) --> luego se modificará para otras cosas
+
+
+APROBADO - Modulo NPC basado en Entity --> Gestiona NPCs (Aliados y enemigos)
+APROBADO - Modificar Player para tener vida, escudo y otros posibles stats.
+APROBADO - Sistema de combate.
+
+
+
+APROBADO - Hacer un módulo de collection --> Almacene punteros a entity, object, player para gestionar liberacion --> Añadir last_id para trackear la originalidad de las ids
+APROBADO - Array de entitys en game
+APROBADO - Añadir gestión varios jugadores
+APROBADO - 
+
+
+
 PENDIENTE - Implementación Combate estilo RPG? --> Se puede desarrollar uno sencillo
 PENDIENTE - Creación de objetos con funciones (Ejemplo: Cristal de teletransporte(Te lleva a la zona X))
 PENDIENTE - Sistema de guardado de juego
 PENDIENTE - Añadir 2 tipos de inicio: elegir archivo de guardado o NEW GAME, donde puedas configurar lo que sea que implementemos
 PENDIENTE - Añadir logros (xD)
 PENDIENTE - Si añadimos NPCs, añadir dialogos
+
+PENDIENTE  A FUTURO - En un futuro aleatorizar el mapa (objetos, enemigos y demás si lo implementamos)
