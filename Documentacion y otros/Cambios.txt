@@ -52,3 +52,5 @@ Reorganizado la estructura de object.c, separando las funciones privadas en decl
 	--> añadido y modificado algunas funciones relacionadas con link.h y link.c en su propio modulo y otros.
 	--> modificado graphic_engine.c para que renderice los links y salas laterales
 	--> añadido una función al modulo command para obtener la lista de comandos en forma de string
+
+-13/02/2025 18:25 - Maksym Polyak - Documentado todo excepto collector y debug_printing --> Añadido mapa requerido para la iteración 1
