@@ -1,6 +1,11 @@
 /**
  * @brief It defines the game interface
  *
+ * It is the second highest level module, controls internal functionality of the game,
+ * uses the other modules to create the map, place the player and the object, but also keeps
+ * track of the spaces, the links and the object, also contians the last command and a bool
+ * to determine if the game has finished or not.
+ * 
  * @file game.h
  * @author Profesores PPROG
  * @version 0

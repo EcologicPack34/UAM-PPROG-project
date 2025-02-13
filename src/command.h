@@ -1,5 +1,12 @@
 /**
  * @brief It defines the command interpreter interface
+ * 
+ * Commands are defined by a CommandCode, command regulates the interaction 
+ * between the player and the game, and translates the player intention into 
+ * a CommandCode for game_action.
+ * 
+ * This module also makes sure that till the user doesn't enter a command, 
+ * the game does not keep running.
  *
  * @file command.h
  * @author Profesores PPROG

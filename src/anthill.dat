@@ -1,12 +1,33 @@
 Formato Space: #s:ID|Nombre|northLink|eastLink|southLink|westLink
 Formato Link: #s:ID|Space1|Space2|locked|unlockingObjectID
 
-#s:11|Entry|-1|-1|1|4
-#s:12|Corridor|1|-1|2|-1
-#s:13|Pantry|2|4|3|-1
-#s:14|AMONGUS|3|-1|-1|-1
+-#s:11|Entry|-1|-1|1|4
+-#s:12|Corridor1|1|-1|2|-1
+-#s:13|Corridor2|2|4|3|-1
+-#s:14|AMONGUS|3|-1|-1|-1
 
-#l:1|11|12|0|0
-#l:2|12|13|0|0
-#l:3|13|14|0|0
-#l:4|11|13|0|0
+#s:11|Entry|-1|-1|1|-1
+#s:121|Corridor1|1|-1|2|-1
+#s:122|Corridor2|2|6|3|-1
+#s:123|Corridor3|3|-1|4|-1
+#s:124|Corridor4|4|-1|5|-1
+#s:13|Pantry|5|-1|-1|-1
+#s:125|Corridor5|-1|7|-1|6
+#s:126|Corridor6|-1|8|-1|7
+#s:127|Corridor7|-1|9|-1|8
+#s:14|Hole|-1|-1|1|9
+
+-#l:1|11|12|0|0
+-#l:2|12|13|0|0
+-#l:3|13|14|0|0
+-#l:4|11|13|0|0
+
+#l:1|11|121|0|0
+#l:2|121|122|0|0
+#l:3|122|123|0|0
+#l:4|123|124|0|0
+#l:5|124|13|0|0
+#l:6|122|125|0|0
+#l:7|125|126|0|0
+#l:8|126|127|0|0
+#l:9|127|14|0|0

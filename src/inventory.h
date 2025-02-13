@@ -1,6 +1,13 @@
 /**
  * @brief It defines the inventory module interface
  *
+ * The inventory is defined by a location id, which is associated
+ * to its location, if the inventorytype is the one of a player, then
+ * the id corresponds to the one of an entity of type player, same will 
+ * happen with NPCs and spaces.
+ * 
+ * Functions related to inventory can add, remove and move objects between two inventories.
+ * 
  * @file inventory.h
  * @author Maksym Polyak
  * @version 0

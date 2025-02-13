@@ -1,6 +1,10 @@
 /**
  * @brief It implements the game update through user actions
  *
+ * the main function of game_actions is game_actions_update, which keeps
+ * track of the las tcommand, gets a new one and then uses a switch to
+ * decide the next game_action.
+ * 
  * @file game.c
  * @author Profesores PPROG
  * @version 0
@@ -20,6 +24,8 @@
    Private functions
 */
 
+#pragma region PRIVATE
+
 void game_actions_unknown(Game *game);
 
 void game_actions_exit(Game *game);
@@ -31,6 +37,8 @@ void game_actions_back(Game *game);
 void game_actions_take(Game *game);
 
 void game_actions_drop(Game *game);
+
+#pragma endregion
 
 /**
    Game actions implementation
@@ -78,6 +86,8 @@ Status game_actions_update(Game *game, Command *command) {
 /**
    Calls implementation for each action
 */
+
+#pragma region GAME_ACTIONS_FUNCTIONS
 
 /**
  * @brief No functionality.
@@ -189,3 +199,5 @@ void game_actions_drop(Game *game){
   object_set_location(object, id);
   inventory_remove_object(entity_get_inventory(player),object);
 }
+
+#pragma endregion

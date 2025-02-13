@@ -1,7 +1,11 @@
 /**
+ * @brief Header file definin links between spaces.
+ * 
+ * Controls the movement of the player between two spaces, each space can have
+ * up to four links which can be locked and has to be unlocked by an object and more.
+ * 
  * @file link.h
  * @author Daniel Gómez Rodríguez
- * @brief Header file definin links between spaces.
  * @version 0.1
  * @date 2025-02-06
  * 

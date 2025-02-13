@@ -1,3 +1,14 @@
+/**
+ * @brief It defines the game reader public interface
+ *
+ * It is the module that interacts with data files to get the information of the game running.
+ * 
+ * @file game_reader.h
+ * @author Daniel Gómez Rodríguez
+ * @version 0
+ * @date 8-02-2025
+ * @copyright GNU Public License
+ */
 
 #ifndef GAME_READER_H
 #define GAME_READER_H

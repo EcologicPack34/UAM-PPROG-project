@@ -1,5 +1,10 @@
 /**
  * @brief It defines the player module interface
+ * 
+ * The player is the main character inside the game, the one with the ability to move,
+ * take objects and more. For now the player module is just an entity, but further functionality will be added.
+ * 
+ * The player memory in the game is controlled by the game struct in game.h
  *
  * @file object.h
  * @author Maksym Polyak
@@ -15,6 +20,8 @@
 
 typedef struct _Player Player;
 
+/*Player public functions*/
+#pragma region PLAYER
 
 /**
  * @brief Creates a player struct
@@ -35,13 +42,8 @@ Player *player_create(char *name, Id identity, Id location);
  */
 void player_destroy(Player *player);
 
-/**
- * @brief Prints a player struct
- * @author Profesores PPROG
- *
- * @param player struct with the information of a player
- */
-void player_print(Player *player);
+/*Player GETTERS*/
+#pragma region GETTERS
 
 /**
  * @brief returns the entity of the player
@@ -52,5 +54,21 @@ void player_print(Player *player);
  */
 Entity *player_get_entity(Player *player);
 
+#pragma endregion
+
+/*Player SETTERS*/
+#pragma region SETTERS
+
+#pragma endregion
+
+/**
+ * @brief Prints a player struct
+ * @author Profesores PPROG
+ *
+ * @param player struct with the information of a player
+ */
+void player_print(Player *player);
+
+#pragma endregion
 
 #endif

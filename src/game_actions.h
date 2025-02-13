@@ -1,6 +1,11 @@
 /**
  * @brief It defines the game update interface
  *
+ * game_actions is the module that controls movement and takes or drops objects. 
+ * In further iterations more commands will be implemented, for now, the only
+ * functionality of game_actions is to move north and south, exit the game and
+ * take or drop an object.
+ * 
  * @file game.h
  * @author Profesores PPROG
  * @version 0

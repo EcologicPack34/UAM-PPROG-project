@@ -119,7 +119,7 @@ void graphic_engine_paint_game(Graphic_engine *ge, Game *game){
 
       if(west != NULL){
         if(east != NULL){/*west and east*/
-          sprintf(str,"       ----- | m0^     %2d| -----", (int)id_act);
+          sprintf(str,"       ----- | m0^   %4d| -----", (int)id_act);
           screen_area_puts(ge->map, str);
           sprintf(str,"         %c  <|     %c     |>  %c ", (link_is_locked(west)) ? '|': ' ', obj, (link_is_locked(east)) ? '|': ' ');
           screen_area_puts(ge->map, str);
@@ -127,7 +127,7 @@ void graphic_engine_paint_game(Graphic_engine *ge, Game *game){
           screen_area_puts(ge->map, str);
         }
         else{/*west and not east*/
-          sprintf(str,"       ----- | m0^     %2d|", (int)id_act);
+          sprintf(str,"       ----- | m0^   %4d|", (int)id_act);
           screen_area_puts(ge->map, str);
           sprintf(str,"         %c  <|     %c     |", (link_is_locked(west)) ? '|': ' ', obj);
           screen_area_puts(ge->map, str);
@@ -137,14 +137,14 @@ void graphic_engine_paint_game(Graphic_engine *ge, Game *game){
       }
       else{
         if(east != NULL){/*not west and east*/
-          sprintf(str,"             | m0^     %2d| -----", (int)id_act);
+          sprintf(str,"             | m0^   %4d| -----", (int)id_act);
           screen_area_puts(ge->map, str);
           sprintf(str,"             |     %c     |>  %c ", obj, (link_is_locked(east)) ? '|': ' ');
           screen_area_puts(ge->map, str);
           sprintf(str,"             |           | -----");
           screen_area_puts(ge->map, str);
         }else{/*not west and not east*/
-          sprintf(str,"             | m0^     %2d|", (int)id_act);
+          sprintf(str,"             | m0^   %4d|", (int)id_act);
           screen_area_puts(ge->map, str);
           sprintf(str,"             |     %c     |", obj);
           screen_area_puts(ge->map, str);
@@ -187,8 +187,11 @@ void graphic_engine_paint_game(Graphic_engine *ge, Game *game){
   }
   /* Paint in the description area */
   screen_area_clear(ge->descript);
-  if ((obj_loc = game_get_object_location(game)) != NO_ID) {
+  if (((obj_loc = game_get_object_location(game)) != NO_ID) && (obj_loc != INSIDE_INVENTORY)) {
     sprintf(str, "  Object location:%d", (int)obj_loc);
+    screen_area_puts(ge->descript, str);
+  } else if(obj_loc == INSIDE_INVENTORY){
+    sprintf(str, "  Object location: Player");
     screen_area_puts(ge->descript, str);
   }
  

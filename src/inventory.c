@@ -1,5 +1,10 @@
 /**
  * @brief It implements the inventory module
+ * 
+ * Defines the internal functionality of the inventory system,
+ * works with the object ADT to keep track of items, but also has
+ * an InventoryType for further iterations, were NPCs will be added.
+ * 
  *
  * @file inventory.c
  * @author Maksym Polyak
@@ -34,7 +39,11 @@ struct _Inventory {
  * Private functions
 */
 
+#pragma region PRIVATE
+
 #pragma region PRIVATE_DECLARATION
+
+#pragma region PRIVATE_GETTERS
 
 /**
  * @brief Gets the object array
@@ -69,15 +78,6 @@ InventoryType inventory_get_type(Inventory *inventory);
 Id inventory_get_location_id(Inventory *inventory);
 
 /**
- * @brief Sets the number of objects in the inventory
- * 
- * @param inventory struct with all the information related to the inventory
- * @param object_count number of objects to set in the inventory
- * @return OK if well or ERROR if error
- */
-Status inventory_set_object_count(Inventory *inventory, int object_count);
-
-/**
  * @brief Gets the object on the object array at the position index
  * 
  * @param inventory struct with all the information related to the inventory
@@ -85,18 +85,6 @@ Status inventory_set_object_count(Inventory *inventory, int object_count);
  * @return Object* if well or NULL if error
  */
 Object *inventory_get_object_at(Inventory *inventory, int index);
-
-/**
- * @brief Sets an inventory on the position index of the inventory object array
- * NOTE object can be null
- * 
- * @param inventory struct with all the information related to the inventory
- * @param object object to be set at the index
- * @param index index with the position of the object
- * @return OK if well or ERROR if error
- */
-Status inventory_set_object_at(Inventory *inventory, Object *object, int index);
-
 
 /**
  * @brief Gets the object index in the inventory object array
@@ -109,7 +97,35 @@ int inventory_get_object_index(Inventory *inventory, Object *object);
 
 #pragma endregion
 
+#pragma region PRIVATE_SETTERS
+
+/**
+ * @brief Sets the number of objects in the inventory
+ * 
+ * @param inventory struct with all the information related to the inventory
+ * @param object_count number of objects to set in the inventory
+ * @return OK if well or ERROR if error
+ */
+Status inventory_set_object_count(Inventory *inventory, int object_count);
+
+/**
+ * @brief Sets an inventory on the position index of the inventory object array
+ * NOTE object can be null
+ * 
+ * @param inventory struct with all the information related to the inventory
+ * @param object object to be set at the index
+ * @param index index with the position of the object
+ * @return OK if well or ERROR if error
+ */
+Status inventory_set_object_at(Inventory *inventory, Object *object, int index);
+
+#pragma endregion
+
+#pragma endregion
+
 #pragma region PRIVATE_IMPLEMENTATION
+
+#pragma region PRIVATE_GETTERS
 
 Object **inventory_get_object_array(Inventory *inventory){
     if(!inventory)
@@ -139,29 +155,11 @@ Id inventory_get_location_id(Inventory *inventory){
     return inventory->id;
 }
 
-Status inventory_set_object_count(Inventory *inventory, int object_count){
-    if(!inventory)
-        return ERROR;
-    
-    inventory->objectcount = object_count;
-
-    return OK;
-}
-
 Object *inventory_get_object_at(Inventory *inventory, int index){
     if(!inventory)
         return NULL;
 
     return (inventory->Array)[index];
-}
-
-Status inventory_set_object_at(Inventory *inventory, Object *object, int index){
-    if(!inventory)
-        return ERROR;
-    
-    (inventory->Array)[index] = object;
-
-    return OK;
 }
 
 int inventory_get_object_index(Inventory *inventory, Object *object){
@@ -178,6 +176,34 @@ int inventory_get_object_index(Inventory *inventory, Object *object){
     /*If object was not found returns error as -1*/
     return -1;
 }
+
+#pragma endregion
+
+#pragma region PRIVATE_SETTERS
+
+Status inventory_set_object_count(Inventory *inventory, int object_count){
+    if(!inventory)
+        return ERROR;
+    
+    inventory->objectcount = object_count;
+
+    return OK;
+}
+
+
+
+Status inventory_set_object_at(Inventory *inventory, Object *object, int index){
+    if(!inventory)
+        return ERROR;
+    
+    (inventory->Array)[index] = object;
+
+    return OK;
+}
+
+#pragma endregion
+
+#pragma endregion
 
 #pragma endregion
 

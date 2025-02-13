@@ -1,6 +1,14 @@
 /**
  * @brief It defines the object module interface
  *
+ * The ADT object represents the base for the inventory and item interaction in game.
+ * Each object is defined by a unique id, a name and a location and is the ADT that
+ * regulates how the items work in the inventory ADT.
+ *
+ * All items will be stored in their corresponding inventory, but in the next iteration,
+ * object pointers will be organized also by an array on the collection module(set module),
+ * the same way as it is implemented on the game struct but with an array.
+ *
  * @file object.h
  * @author Maksym Polyak
  * @version 0
@@ -58,7 +66,7 @@ int object_isEqual(Object *object1, Object *object2);
  * @param id id of the object
  * @return OK if everything went fine or ERROR if there was a mistake
  */
-Status object_set_id(Object* object, Id id);
+Status object_set_id(Object *object, Id id);
 
 /**
  * @brief Sets the object name to the one received as an argument
@@ -68,7 +76,7 @@ Status object_set_id(Object* object, Id id);
  * @param name name of the object
  * @return OK if everything went fine or ERROR if there was a mistake
  */
-Status object_set_name(Object* object, char* name);
+Status object_set_name(Object *object, char *name);
 
 /**
  * @brief Sets the object location to the one received as an argument
@@ -78,7 +86,7 @@ Status object_set_name(Object* object, char* name);
  * @param id id of the space where the object is going to be located
  * @return OK if everything went fine or ERROR if there was a mistake
  */
-Status object_set_location(Object* object, Id id);
+Status object_set_location(Object *object, Id id);
 
 #pragma endregion
 
@@ -110,7 +118,7 @@ char *object_get_name(Object *object);
  * @param object contains the information of an object
  * @return id with the space id where the object is located or -1 if there was a mistake
  */
-Id object_get_location(Object* object);
+Id object_get_location(Object *object);
 
 #pragma endregion
 

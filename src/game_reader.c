@@ -1,3 +1,15 @@
+/**
+ * @brief It defines the game reader public interface
+ *
+ * Defines how data is read by the .dat and saves it on the game struct.
+ * 
+ * @file game_reader.c
+ * @author Daniel Gómez Rodríguez
+ * @version 0
+ * @date 8-02-2025
+ * @copyright GNU Public License
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

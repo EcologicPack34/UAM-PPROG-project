@@ -1,3 +1,18 @@
+/**
+ * @brief Defines the internal functionality of the links.
+ * 
+ * links are defined by an id, two spaces, a bool that regulates if they are locked
+ * or not and the id of an object that can unlock them. This makes the game able to
+ * create labyrints, teleports and more because two spaces don't need to be near in
+ * order for the player to move between them.
+ * 
+ * @file link.c
+ * @author Daniel Gómez Rodríguez
+ * @version 0.1
+ * @date 2025-02-06
+ * 
+ * @copyright GNU Public License
+ */
 
 #include "link.h"
 #include "debug_printing.h"

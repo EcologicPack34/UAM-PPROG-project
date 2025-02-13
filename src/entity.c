@@ -1,5 +1,8 @@
 /**
  * @brief It implements the entity module
+ * 
+ * The entity module is created but further functions will be added, it is a simple ADT
+ * to control the common parts of characters in game.
  *
  * @file entity.c
  * @author Maksym Polyak
@@ -29,6 +32,12 @@ struct _Entity {
     Id location;              /*!< Id of the space where the entity is located*/
     Inventory *inventory;     /*!< entity inventory */
 };
+
+/*
+ * Entity public implementation
+*/
+
+#pragma region ENTITY
 
 Entity *entity_create(char *name, Id id, Id location, InventoryType inventoryType){
     Entity *entity = NULL;

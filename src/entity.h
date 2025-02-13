@@ -1,5 +1,13 @@
 /**
  * @brief It defines the entity module interface
+ * 
+ * An entity is the base ADT which stores essential information about Non-Playables Characters,
+ * players and everything that moves. For now, each entity is defined by their type (EntityType),
+ * a name, a unique id between entities, a location and an own inventory.
+ * 
+ * Right now the only entity that exists is the player, but in further iterations, NPCs functionality
+ * will be added and this module will change, in the future it will store stats and other information
+ * like health, defense, magic... To implement the combat module.
  *
  * @file entity.h
  * @author Maksym Polyak
@@ -16,6 +24,10 @@
 typedef enum {UNKNOWN_ENTITY, PLAYER, NPC} EntityType;
 
 typedef struct _Entity Entity;
+
+/*
+ * Entity public implementation
+*/
 
 /**
  * @brief Creates a entity

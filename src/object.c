@@ -1,5 +1,9 @@
 /**
  * @brief It implements the object module
+ * 
+ * An object ADT serves as the foundation to the item managment for the player,
+ * right now each object just saves its name, location and unique id, but it will
+ * be useful in next iterations to add special effects to objects, conditions and more.
  *
  * @file object.c
  * @author Maksym Polyak

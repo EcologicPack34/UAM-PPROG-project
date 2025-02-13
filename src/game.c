@@ -1,6 +1,8 @@
 /**
  * @brief It implements the game structure
  *
+ * Has functions related to the game struct, which interact with almost every module of the game
+ * 
  * @file game.c
  * @author Profesores PPROG
  * @version 0

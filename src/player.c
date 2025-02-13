@@ -1,5 +1,8 @@
 /**
  * @brief It implements the player module
+ * 
+ * A player ADT for now is just a struct with an entity ADT inside, in the next iterations this module
+ * will be improved to add further functionality in game.
  *
  * @file player.c
  * @author Maksym Polyak
@@ -29,10 +32,10 @@ struct _Player {
 /**
    Private functions
 */
-
+#pragma region PRIVATE
 /**
  * @brief Sets the entity pointer of the player
- * @author Profesores PPROG
+ * @author Maksym Polyak
  *
  * @param player struct with the information of a player
  * @return OK if everything went fine or NULL if there was a mistake
@@ -47,9 +50,13 @@ Status player_set_entity(Player *player, Entity *entity){
     return OK;
 }
 
+#pragma endregion
+
 /**
    Game interface implementation
 */
+
+#pragma region PLAYER
 
 Player *player_create(char *name, Id identity, Id location){
     Player *player = NULL;
@@ -71,6 +78,23 @@ void player_destroy(Player *player){
     free(player);
 }
 
+/*Player GETTERS*/
+#pragma region GETTERS
+
+Entity *player_get_entity(Player *player){
+    if (!player)
+        return NULL;
+
+    return player->entity;
+}
+
+#pragma endregion
+
+/*Player SETTERS*/
+#pragma region SETTERS
+
+#pragma endregion
+
 void player_print(Player *player){
     Entity *entityPlayer;
     if(!player)
@@ -86,10 +110,6 @@ void player_print(Player *player){
     printf("=> Player location: %d\n", (int)entity_get_location(entityPlayer));
 }
 
-Entity *player_get_entity(Player *player){
-    if (!player)
-        return NULL;
+#pragma endregion
 
-    return player->entity;
-}
 

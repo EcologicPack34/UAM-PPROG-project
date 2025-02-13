@@ -4,9 +4,7 @@ CFLAGS = -Wall -pedantic
 SRC = collector.c command.c debug_printing.c game_actions.c game_loop.c game.c graphic_engine.c space.c object.c player.c game_reader.c entity.c link.c inventory.c
 OBJ = collector.o command.o debug_printing.o game_actions.o game_loop.o game.o graphic_engine.o space.o object.o player.o libscreen.a entity.o game_reader.o link.o inventory.o
 EXE = anthill
-
-#link: $(OBJ)
-#	$(CC) $(CFLAGS) -o $(EXE) $(OBJ)
+EXED = anthilldebug
 
 all: (EXE)
 
@@ -58,7 +56,7 @@ inventory.o: inventory.c inventory.h
 
 .PHONY:	clean compile run
 clean:
-	rm -f *.o $(EXE)
+	rm -f *.o $(EXE) debug.log $(EXED)
 
 compile:
 	$(CC) $(CFLAGS) -c $(SRC)
@@ -70,18 +68,14 @@ run:
 	./anthill anthill.dat
 
 debug:
-	$(CC) $(CFLAGS) -g $(SRC) -o anthilldebug libscreen.a
+	$(CC) $(CFLAGS) -g $(SRC) -o $(EXED) libscreen.a
 
 runv:
 	make debug
 	valgrind --leak-check=full ./anthilldebug anthill.dat
 	
-#PARA COMPILAR SOLO LO NECESARIO SE USA LA SIGUIENTE SINTAXIS sustituyendo: (REVISAR)
-#.o: .c (dependencias)
-#	$(CC) $(CFLAGS) -c $@ $^
-
 # $@ devuelve lo que hay a la izquierda de los :, $^ devuelve todas las dependencias
 
 # A la hora de añadir dependencias de librerias de otra carpeta se puede usar:
-# por ejemplo y siestoy compilando en src y hay una carpeta contigua llamada include
+# por ejemplo si estoy compilando en src y hay una carpeta contigua llamada include
 # gcc -I ../include (PARA BUSCAR EN LA CARPETA ../include)q

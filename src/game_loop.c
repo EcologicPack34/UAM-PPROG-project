@@ -1,6 +1,12 @@
 /**
  * @brief It defines the game loop
  *
+ * It is the main module, takes care of how the game starts and ends, but also it controls
+ * the main game loops, the ones that update and control the game struct in order for the
+ * game to work correctly. It is the highest level module in the proyect.
+ * 
+ * In order for the game to finish, the object has to be taken and dropped on the space id 13 (END_LOCATION)
+ * 
  * @file game_loop.c
  * @author Profesores PPROG
  * @version 0
@@ -20,7 +26,7 @@
 #include "graphic_engine.h"
 
 #define DEBUG_FILE_PATH "./debug.log"
-#define END_LOCATION 14 /*!< Location where the object has to be located to end the game */
+#define END_LOCATION 13 /*!< Location where the object has to be located to end the game */
 
 int game_loop_init(Game *game, Graphic_engine **gengine, char *file_name);
 

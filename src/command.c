@@ -1,5 +1,7 @@
 /**
  * @brief It implements the command interpreter
+ * 
+ * Commands are defined by the global variable cmd_to_str, which stores each command and their fast access.
  *
  * @file command.c
  * @author Profesores PPROG

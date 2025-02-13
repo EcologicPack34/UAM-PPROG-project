@@ -1,5 +1,9 @@
 /**
  * @brief It implements the space module
+ * 
+ * The internal structure of space.c is controlled by links. Each location in the game is defined by
+ * a space, but the connections between these spaces are controlled by links, thats why each space
+ * has four pointers to link in all directions.
  *
  * @file space.c
  * @author Profesores PPROG

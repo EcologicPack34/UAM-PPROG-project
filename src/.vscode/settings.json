@@ -4,6 +4,7 @@
         "game_actions.h": "c",
         "string.h": "c",
         "stdlib.h": "c",
-        "command.h": "c"
+        "command.h": "c",
+        "stdio.h": "c"
     }
 }
