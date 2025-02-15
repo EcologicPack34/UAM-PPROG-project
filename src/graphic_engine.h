@@ -2,7 +2,7 @@
  * @brief It defines the textual graphic engine interface
  *
  * @file graphic_engine.h
- * @author Profesores PPROG
+ * @author Original: Profesores PPROG. Modified by: Daniel Gómez
  * @version 0
  * @date 27-01-2025
  * @copyright GNU Public License

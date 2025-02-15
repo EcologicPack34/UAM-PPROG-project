@@ -2,6 +2,10 @@
  * @file utils.h
  * @author Daniel Gómez
  * @brief 
+ *      Module that implements various utilities that can be used in a general use case.
+ * 
+ *      NOT-IMPLEMENTED
+ * 
  * @version 0.1
  * @date 2025-02-06
  * 

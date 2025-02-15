@@ -21,11 +21,11 @@
 #include "types.h"
 
 #define N_CMDT 2 /*!< Total number of CommandType in the enum */
-#define N_CMD 7  /*!< Total number of CommandCode in the enum */
+#define N_CMD 9  /*!< Total number of CommandCode in the enum */
 
 typedef enum { CMDS, CMDL } CommandType; /* CMDS: Command Short | CMDL: Command Long */
 
-typedef enum { NO_CMD = -1, UNKNOWN, EXIT, NEXT, BACK, TAKE, DROP} CommandCode; /* All values that a command can take */
+typedef enum { NO_CMD = -1, UNKNOWN, EXIT, SOUTH, NORTH, EAST, WEST, TAKE, DROP} CommandCode; /* All values that a command can take */
 
 /* 
  * Struct that contains all the information of the command
@@ -83,8 +83,8 @@ Status command_get_user_input(Command* command);
  * @brief makes a string of the current commands and copies it to a given string
  * @author Daniel Gómez
  * 
- * @param destination 
- * @return Status 
+ * @param destination string to which the information is copied. Requires the user to assing this string a proper length
+ * @return Status
  */
 Status command_get_list(char *destination);
 

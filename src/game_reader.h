@@ -18,7 +18,7 @@
 
 /**
  * @brief Initializes game, loads the spaces in game and sets the player/object location
- * @author Profesores PPROG
+ * @author Daniel Gómez Rodríguez and Maksym Polyak
  *
  * @param game struct that saves all information related to the game
  * @param filename string with the name of the data file

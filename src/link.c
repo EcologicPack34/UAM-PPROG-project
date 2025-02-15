@@ -34,7 +34,7 @@ struct _Link{
  * @brief Checks if an entity is on one of the spaces connected by the link
  * 
  * @param link 
- * @param entity 
+ * @param entity entity to be checked
  * @return bool 
  */
 bool link_is_entity_on_valid_spaces(Link *link, Entity *entity){

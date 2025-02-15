@@ -7,8 +7,8 @@
  * to determine if the game has finished or not.
  * 
  * @file game.h
- * @author Profesores PPROG
- * @version 0
+ * @author Original: Profesores PPROG. Modified by: Daniel Gómez and Maksym Polyak
+ * @version 1
  * @date 27-01-2025
  * @copyright GNU Public License
  */

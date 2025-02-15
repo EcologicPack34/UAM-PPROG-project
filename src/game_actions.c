@@ -6,7 +6,7 @@
  * decide the next game_action.
  * 
  * @file game.c
- * @author Profesores PPROG
+ * @author Original: Profesores PPROG. Modified by: Daniel Gómez and Maksym Polyak
  * @version 0
  * @date 27-01-2025
  * @copyright GNU Public License
@@ -30,9 +30,13 @@ void game_actions_unknown(Game *game);
 
 void game_actions_exit(Game *game);
 
-void game_actions_next(Game *game);
+void game_actions_south(Game *game);
 
-void game_actions_back(Game *game);
+void game_actions_north(Game *game);
+
+void game_actions_east(Game *game);
+
+void game_actions_west(Game *game);
 
 void game_actions_take(Game *game);
 
@@ -47,6 +51,8 @@ void game_actions_drop(Game *game);
 Status game_actions_update(Game *game, Command *command) {
   CommandCode cmd;
 
+  if(!game || !command) return ERROR;
+
   game_set_last_command(game, command);
 
   cmd = command_get_code(command);
@@ -60,14 +66,19 @@ Status game_actions_update(Game *game, Command *command) {
       game_actions_exit(game);
       break;
 
-    case NEXT:
-      game_actions_next(game);
+    case SOUTH:
+      game_actions_south(game);
       break;
 
-    case BACK:
-      game_actions_back(game);
+    case NORTH:
+      game_actions_north(game);
       break;
-
+    case EAST:
+      game_actions_east(game);
+      break;
+    case WEST:
+      game_actions_west(game);
+      break;
     case TAKE:
       game_actions_take(game);
       break;
@@ -111,7 +122,7 @@ void game_actions_exit(Game *game) {}
  *
  * @param game struct that saves all information related to the game
  */
-void game_actions_next(Game *game) {
+void game_actions_south(Game *game) {
   Id space_id = NO_ID;
   Link *link = NULL;
   Entity *entity = NULL;
@@ -138,7 +149,7 @@ void game_actions_next(Game *game) {
  *
  * @param game struct that saves all information related to the game
  */
-void game_actions_back(Game *game) {
+void game_actions_north(Game *game) {
   Id space_id = NO_ID;
   Link *link = NULL;
   Entity *entity = NULL;
@@ -160,6 +171,61 @@ void game_actions_back(Game *game) {
 }
 
 /**
+ * @brief Retrieves the north ID, checks if it exists, then changes player location to east
+ * @author Daniel Gómez
+ *
+ * @param game struct that saves all information related to the game
+ */
+void game_actions_east(Game *game) {
+  Id space_id = NO_ID;
+  Link *link = NULL;
+  Entity *entity = NULL;
+
+  space_id = game_get_player_location(game);
+  if (space_id == NO_ID) {
+    return;
+  }
+
+  link = space_get_east(game_get_space(game, space_id));
+  if(link == NULL) return;
+
+  entity = player_get_entity(game_get_player(game));
+  if(entity == NULL) return;
+
+  link_move_entity(link, entity);
+
+  return;
+}
+
+/**
+ * @brief Retrieves the north ID, checks if it exists, then changes player location to east
+ * @author Daniel Gómez
+ *
+ * @param game struct that saves all information related to the game
+ */
+void game_actions_west(Game *game) {
+  Id space_id = NO_ID;
+  Link *link = NULL;
+  Entity *entity = NULL;
+
+  space_id = game_get_player_location(game);
+  if (space_id == NO_ID) {
+    return;
+  }
+
+  link = space_get_west(game_get_space(game, space_id));
+  if(link == NULL) return;
+
+  entity = player_get_entity(game_get_player(game));
+  if(entity == NULL) return;
+
+  link_move_entity(link, entity);
+
+  return;
+}
+
+
+/**
  * @brief Checks if the object is located on the same space as the player, then leaves it in the player
  * inventory and sets the object_location to INSIDE_INVENTORY;
  * @author Maksym Polyak
@@ -177,10 +243,16 @@ void game_actions_take(Game *game){
   object = game_get_object(game);
   inventory_add_object(entity_get_inventory(player), object);
   object_set_location(object, -2);
-
+  printf("AAA");
   game_set_object_location(game, INSIDE_INVENTORY);
 }
 
+/**
+ * @brief Drops object to a space
+ * @author Maksym Polyak
+ *
+ * @param game struct that saves all information related to the game
+ */
 void game_actions_drop(Game *game){
   Entity *player;
   Object *object;

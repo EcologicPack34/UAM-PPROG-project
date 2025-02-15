@@ -22,7 +22,7 @@
 /**
  * @brief Global variable that stores all the commands and their shortucts.
  */
-char *cmd_to_str[N_CMD][N_CMDT] = {{"", "No command"}, {"", "Unknown"}, {"ex", "Exit"}, {"n", "Next"}, {"b", "Back"}, {"t", "Take"}, {"d", "Drop"}};
+char *cmd_to_str[N_CMD][N_CMDT] = {{"", "No command"}, {"", "Unknown"}, {"ex", "Exit"}, {"s", "South"}, {"n", "North"}, {"e", "East"}, {"w", "West"},{"t", "Take"}, {"d", "Drop"}};
 
 /**
  * @brief Command
@@ -122,11 +122,13 @@ Status command_get_list(char *destination){
       if(j < N_CMDT -1)
         strcat(aux," or ");
     }
-    strcat(aux,", ");
+    if(i < N_CMD-1)
+      strcat(aux,", ");
   }
   
   strcpy(destination,aux);
   free(aux);
   return OK;
 }
+
 

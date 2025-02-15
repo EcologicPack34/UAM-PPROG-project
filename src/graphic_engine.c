@@ -105,6 +105,14 @@ void graphic_engine_paint_game(Graphic_engine *ge, Game *game){
       sprintf(str, "                   ^      ");
       screen_area_puts(ge->map, str);
     }
+    else{/*Print 3 empty lines so the rendering doesnt move in case there's nothing to the north*/
+      sprintf(str, " ");
+      screen_area_puts(ge->map, str);
+      sprintf(str, " ");
+      screen_area_puts(ge->map, str);
+      sprintf(str, " ");
+      screen_area_puts(ge->map, str);
+    }
 
     /*Prints current space*/
     if (game_get_object_location(game) == id_act)

@@ -2,7 +2,7 @@
  * @file debug_printing.h
  * @author Daniel Gómez Rodríguez
  * @brief
- * @version 1.  1
+ * @version 1.1
  * @date 2025-01-30
  *
  * @copyright GNU Public License

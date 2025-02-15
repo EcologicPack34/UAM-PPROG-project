@@ -23,10 +23,10 @@ typedef struct _Link Link;
 /**
  * @brief Function to create and initialize a link
  * 
- * @param space1 
- * @param space2 
- * @param locked 
- * @param unlockingObject 
+ * @param space1 space connected by link
+ * @param space2 space connected by link
+ * @param locked if the link is blocked and cant be used or not
+ * @param unlockingObject object required to unlock the link
  * @return Link* 
  */
 Link * link_create(Id id,Id space1, Id space2, bool locked, Id unlockingObject);

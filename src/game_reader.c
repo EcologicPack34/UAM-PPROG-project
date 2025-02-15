@@ -22,8 +22,10 @@
 /*
 * Declaration of private functions
 */
+
 /**
- * @brief Reads the filename to save all space and their contiguous spaces
+ * @brief Reads the filename to save all space and their links
+ * @author Daniel Gómez
  *
  * @param game struct that saves all information related to the game
  * @param filename string that stores the data file name
@@ -31,6 +33,14 @@
  */
 Status game_reader_load_spaces(Game *game, char *filename);
 
+/**
+ * @brief Reads the filename to save all links between spaces
+ * @author Daniel Gómez
+ *
+ * @param game struct that saves all information related to the game
+ * @param filename string that stores the data file name
+ * @return OK if everything goes well or ERROR if there was some error
+ */
 Status game_reader_load_links(Game *game, char *filename);
 
 

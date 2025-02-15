@@ -5,10 +5,9 @@
  * the main game loops, the ones that update and control the game struct in order for the
  * game to work correctly. It is the highest level module in the proyect.
  * 
- * In order for the game to finish, the object has to be taken and dropped on the space id 13 (END_LOCATION)
  * 
  * @file game_loop.c
- * @author Profesores PPROG
+ * @author Original: Profesores PPROG, Modified By: Daniel Gómez and Maksym Polyak
  * @version 0
  * @date 27-01-2025
  * @copyright GNU Public License
@@ -25,13 +24,36 @@
 #include "game_actions.h"
 #include "graphic_engine.h"
 
-#define DEBUG_FILE_PATH "./debug.log"
-#define END_LOCATION 13 /*!< Location where the object has to be located to end the game */
+#define DEBUG_FILE_PATH "./debug.log"   /*!< stores the path in which the debug_log will print messages*/
+#define END_LOCATION 13                 /*!< Location where the object has to be located to end the game */
 
+/**
+ * @brief Initializes game reading from the data file and starts the graphic engine
+ * @author Original: Profesores PPROG, Modified By: Daniel Gómez
+ *
+ * @param game struct that saves all information related to the game
+ * @param gengine struct that saves all information related to the graphic engine
+ * @return 0 if everything goes well or 1 if there was some mistake
+ */
 int game_loop_init(Game *game, Graphic_engine **gengine, char *file_name);
 
+/**
+ * @brief Essential function, receives last command, while the command isn't EXIT
+ * or the game has not finished, paints the game, receives user input and updates last_cmd
+ * @author Original: Profesores PPROG, Modified By: Maksym Polyak
+ *
+ * @param game struct that saves all information related to the game
+ * @param gengine struct that saves all information related to the graphic engine
+ */
 void game_loop_run(Game game, Graphic_engine *gengine);
 
+/**
+ * @brief Frees game memory and destroys graphic engine
+ * @author Profesores PPROG
+ *
+ * @param game struct that saves all information related to the game
+ * @param gengine struct that saves all information related to the graphic engine
+ */
 void game_loop_cleanup(Game game, Graphic_engine *gengine);
 
 
@@ -77,14 +99,7 @@ int main(int argc, char *argv[]){
   return 0;
 }
 
-/**
- * @brief Initializes game reading from the data file and starts the graphic engine
- * @author Profesores PPROG
- *
- * @param game struct that saves all information related to the game
- * @param gengine struct that saves all information related to the graphic engine
- * @return 0 if everything goes well or 1 if there was some mistake
- */
+
 int game_loop_init(Game *game, Graphic_engine **gengine, char *file_name){
   if (game_reader_create_from_file(game, file_name) == ERROR)
   {
@@ -102,14 +117,6 @@ int game_loop_init(Game *game, Graphic_engine **gengine, char *file_name){
   return 0;
 }
 
-/**
- * @brief Essential function, receives last command, while the command isn't EXIT
- * or the game has not finished, paints the game, receives user input and updates last_cmd
- * @author Profesores PPROG
- *
- * @param game struct that saves all information related to the game
- * @param gengine struct that saves all information related to the graphic engine
- */
 void game_loop_run(Game game, Graphic_engine *gengine){
   Command *last_cmd;
 
@@ -135,13 +142,6 @@ void game_loop_run(Game game, Graphic_engine *gengine){
   }
 }
 
-/**
- * @brief Frees game memory and destroys graphic engine
- * @author Profesores PPROG
- *
- * @param game struct that saves all information related to the game
- * @param gengine struct that saves all information related to the graphic engine
- */
 void game_loop_cleanup(Game game, Graphic_engine *gengine){
   game_destroy(&game);
   graphic_engine_destroy(gengine);

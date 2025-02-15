@@ -6,7 +6,7 @@
  * has four pointers to link in all directions.
  *
  * @file space.c
- * @author Profesores PPROG
+ * @author Original: Profesores PPROG. Modified by: Daniel Gómez
  * @version 0
  * @date 27-01-2025
  * @copyright GNU Public License

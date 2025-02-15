@@ -15,7 +15,7 @@ Formato Link: #s:ID|Space1|Space2|locked|unlockingObjectID
 #s:125|Corridor5|-1|7|-1|6
 #s:126|Corridor6|-1|8|-1|7
 #s:127|Corridor7|-1|9|-1|8
-#s:14|Hole|-1|-1|1|9
+#s:14|Hole|-1|-1|-1|9
 
 -#l:1|11|12|0|0
 -#l:2|12|13|0|0

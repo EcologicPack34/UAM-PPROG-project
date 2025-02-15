@@ -7,7 +7,7 @@
  * take or drop an object.
  * 
  * @file game.h
- * @author Profesores PPROG
+ * @author Original: Profesores PPROG. Modified By: Daniel Gómez and Maksym Polyak
  * @version 0
  * @date 27-01-2025
  * @copyright GNU Public License

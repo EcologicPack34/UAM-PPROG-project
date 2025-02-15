@@ -11,11 +11,11 @@
  */
 struct _Debug
 {
-    char logFilePath[MAX_FILE_PATH_LENGTH]; /*!<*/
-    FILE *logFile;
+    char logFilePath[MAX_FILE_PATH_LENGTH]; /*!< Stores the file path of the file to be written*/
+    FILE *logFile;                          /*!< Store the pointer to the open file*/
 };
 
-Debug* globalDebug;/*!< Debug global variable so debug_log doesnt require any Debug* type parameter*/
+Debug* globalDebug;     /*!< Debug global variable so debug_log doesnt require any Debug* type parameter (Tries to mimic the Singleton behaviour from C#)*/
 
 
 Debug* debug_create(char* debugFilePath, short setAsGlobal)
@@ -106,6 +106,7 @@ int debug_log(LOG_LEVEL level, char *formatedString, ...)
     va_start(arg, formatedString);
     done = vfprintf(globalDebug->logFile, formatedString, arg);
     va_end(arg);
+
     if(!done){
         free(finalString);
         return -1;
