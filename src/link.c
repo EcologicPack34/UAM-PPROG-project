@@ -24,6 +24,7 @@ struct _Link{
     Id id;
     Id space1;              /*<! One of the spaces connected by a link*/
     Id space2;              /*<! One of the spaces connected by a link*/
+    bool adjacent;          /*<! Stores if the connected spaces are adjacent or not*/
     bool locked;            /*<! Stores if the link can be used*/
     Id unlockingObject;     /*<! Stores id of object used to unlock link*/
 };
@@ -53,7 +54,7 @@ bool link_is_entity_on_valid_spaces(Link *link, Entity *entity){
 
 #pragma endregion
 
-Link *link_create(Id id,Id space1, Id space2, bool locked, Id unlockingObject){
+Link *link_create(Id id,Id space1, Id space2, bool adjacent,bool locked, Id unlockingObject){
     Link *link = NULL;
     
     /*Comprobacion de errores y reserva de memoria */
@@ -81,6 +82,7 @@ Link *link_create(Id id,Id space1, Id space2, bool locked, Id unlockingObject){
     /*no se comprueba el status pues sabemos que si hemos llegado aqui link no es null*/
     link_set_id(link,id);
     link_set_spaces(link, space1, space2);
+    link_set_is_adjacent(link, adjacent);
     link_set_locked(link, locked);
     link_set_unlocking_object(link, unlockingObject);
 
@@ -109,6 +111,17 @@ Status link_set_spaces(Link* link, Id id1, Id id2){
     
     link->space1 = id1;
     link->space2 = id2;
+
+    return OK;
+}
+
+Status link_set_is_adjacent(Link *link, bool status){
+    if(link == NULL){
+        debug_log(LOG_ERROR, "Null Link* argument: at link_set_is_adjacent(Link*, bool) in link.c");
+        return ERROR;
+    }
+
+    link->adjacent = status;
 
     return OK;
 }
@@ -160,6 +173,13 @@ Id link_get_space2(Link *link){
     return link->space2;
 }
 
+bool link_is_adjacent(Link *link){
+    if(link == NULL){
+        return false;
+    }
+    return link->adjacent;
+}
+
 bool link_is_locked(Link *link){
     if(link == NULL){
         return false;
@@ -204,7 +224,7 @@ Status link_move_entity(Link *link, Entity *entity){
                 debug_log(LOG_WARNING, "Couldn't move entity: at link_move_entity(Link*, Entity*) in link.c");
                 return ERROR;
             }
-            debug_log(DEBUG,"Moved entity %ld from space %ld to %ld", entity_get_id(entity), link_get_space1(link), link_get_space2(link));
+            debug_log(PRINT,"Moved entity %ld from space %ld to %ld", entity_get_id(entity), link_get_space1(link), link_get_space2(link));
         }
     }else{
         /*caso en el que la entidad se encuentra en el espacio 2*/

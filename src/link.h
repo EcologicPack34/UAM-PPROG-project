@@ -22,6 +22,7 @@ typedef struct _Link Link;
 
 /**
  * @brief Function to create and initialize a link
+ * @author Daniel Gómez
  * 
  * @param space1 space connected by link
  * @param space2 space connected by link
@@ -29,10 +30,11 @@ typedef struct _Link Link;
  * @param unlockingObject object required to unlock the link
  * @return Link* 
  */
-Link * link_create(Id id,Id space1, Id space2, bool locked, Id unlockingObject);
+Link * link_create(Id id,Id space1, Id space2, bool adjacent,bool locked, Id unlockingObject);
 
 /**
  * @brief frees dynamic memory in use by a link
+ * @author Daniel Gómez
  * 
  * @param link 
  */
@@ -52,6 +54,7 @@ Status link_set_id(Link *link, Id id);
 
 /**
  * @brief Sets the ids of spaces that the link connects
+ * @author Daniel Gómez
  * 
  * @param link 
  * @param id1 
@@ -61,7 +64,18 @@ Status link_set_id(Link *link, Id id);
 Status link_set_spaces(Link* link, Id id1, Id id2);
 
 /**
+ * @brief Sets of the spaces connected are adjacent or not
+ * @author Daniel Gómez
+ * 
+ * @param link 
+ * @param status 
+ * @return Status 
+ */
+Status link_set_is_adjacent(Link *link, bool status);
+
+/**
  * @brief Sets if the link is locked
+ * @author Daniel Gómez
  * 
  * @param link 
  * @param status 
@@ -71,6 +85,7 @@ Status link_set_locked(Link* link, bool status);
 
 /**
  * @brief sets the object that unlocks a link
+ * @author Daniel Gómez
  * 
  * @param link 
  * @param object 
@@ -94,6 +109,7 @@ Id link_get_id(Link *link);
 
 /**
  * @brief gets the id one of the spaces that is connected by the link
+ * @author Daniel Gómez
  * 
  * @param link 
  * @return Id 
@@ -102,6 +118,7 @@ Id link_get_space1(Link *link);
 
 /**
  * @brief gets the id one of the spaces that is connected by the link
+ * @author Daniel Gómez
  * 
  * @param link 
  * @return Id 
@@ -109,7 +126,18 @@ Id link_get_space1(Link *link);
 Id link_get_space2(Link *link);
 
 /**
+ * @brief Gets the state of adjacency between the spaces
+ * @author Daniel Gómez
+ * 
+ * @param link 
+ * @return true 
+ * @return false 
+ */
+bool link_is_adjacent(Link *link);
+
+/**
  * @brief gets if the link is locked
+ * @author Daniel Gómez
  * 
  * @param link 
  * @return true 
@@ -119,6 +147,7 @@ bool link_is_locked(Link *link);
 
 /**
  * @brief gets the id of the unlocking object
+ * @author Daniel Góme
  * 
  * @param link 
  * @return Id 
