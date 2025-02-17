@@ -64,7 +64,7 @@ Status game_create(Game *game) {
   game->n_spaces = 0;
   game->player = player_create(NOMBRE_PLAYER, (Id)PLAYER_BASE_ID, -1);
   /*Creates the object with the first id not taken by the spaces*/
-  game->object = object_create(game_get_space_id_at(game, game_get_n_spaces(game) - 1) + 1, OBJECT_NAME);
+  game->object = object_create(1, OBJECT_NAME);
   game->last_cmd = command_create();
   game->finished = false;
 
