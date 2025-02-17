@@ -62,3 +62,11 @@ Reorganizado la estructura de object.c, separando las funciones privadas en decl
 -11/02/2025 21:49 - Daniel Gómez - Arreglado memory leaks:
 	-->debug_log no esta liberando al salir de la función un string allocado con malloc
 	-->player_destroy_entity no esta liberando el puntero a player
+
+-13/02/2025 --:-- - Maksym Polyak- Documentación y nuevo .dat
+
+-15/02/2025 --:-- - Daniel Gómez - Documentación y movimiento lateral.
+
+-16/02/2025 --:-- - Daniel Gómez - Añadido adyascencia a los links y arreglado error en .dat
+
+-17/02/2025 --:-- - Daniel Gómez y Maksym Polyak - Arreglado warning en debug.log por acceder a un campo no inicializado
