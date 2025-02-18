@@ -12,12 +12,14 @@
 
 #include "command.h"
 
+#include "debug_printing.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <strings.h>
 
-#define CMD_LENGTH 30 /*!< Maximum length of a command */
+#define CMD_LENGTH 500 /*!< Maximum length of a command */
 
 /**
  * @brief Global variable that stores all the commands and their shortucts.
@@ -31,16 +33,71 @@ char *cmd_to_str[N_CMD][N_CMDT] = {{"", "No command"}, {"", "Unknown"}, {"ex", "
  */
 struct _Command {
   CommandCode code; /*!< Name of the command */
+  int argsCount;
+  char *arguments[MAX_CMD_ARGS_NUM];
 };
 
+/*--------------Private Functions---------------*/
+
+/**
+ * @brief Sets the number of readed arguments
+ * @author Daniel Gómez
+ * 
+ * @param command 
+ * @param num 
+ * @return Status 
+ */
+Status command_set_arguments_count(Command *command, int num){
+  if(!command) return ERROR;
+
+  if(num < 0 || num > MAX_CMD_ARGS_NUM) return ERROR;
+
+  command->argsCount = num;
+  return OK;
+}
+
+/**
+ * @brief Sets the argument to a given string at a given argument
+ * @author Daniel Gómez
+ * 
+ * @param command 
+ * @param args 
+ * @param index 
+ * @return Status 
+ */
+Status command_set_argument_at(Command *command, char args[MAX_CMD_ARGS_LENGTH], int index){
+
+  if((!command || !args) && index >= 0 && index < MAX_CMD_ARGS_NUM) return ERROR;
+
+  strcpy(command->arguments[index], args);
+  
+  return OK;
+}
+
+/*--------------Public Functions---------------*/
+
 Command* command_create() {
+  int i;
   Command* newCommand = NULL;
 
-  newCommand = (Command*)malloc(sizeof(Command));
+  /*Allocates memory and intializes to 0*/
+  newCommand = (Command*)calloc(1,sizeof(Command));
   if (newCommand == NULL) {
     return NULL;
   }
-
+  for (i = 0; i < MAX_CMD_ARGS_NUM; i++)
+  {
+    newCommand->arguments[i] = (char*)calloc(MAX_CMD_ARGS_LENGTH, sizeof(char));
+    /*In case of error we free all the previous memory*/
+    if(newCommand->arguments[i] == NULL){
+      for (i--; i >= 0; i--)
+      {
+        free(newCommand->arguments[i]);
+      }
+      free(newCommand);
+      return NULL;
+    }
+  }
   /* Initialization of an empty command*/
   newCommand->code = NO_CMD;
 
@@ -48,15 +105,18 @@ Command* command_create() {
 }
 
 Status command_destroy(Command* command) {
-  if (!command) {
-    return ERROR;
+  int i;
+  if(command){
+    for (i = 0; i < MAX_CMD_ARGS_NUM; i++)
+    {
+      free(command->arguments[i]);
+    }
+    free(command);
+    return OK;
   }
-
-  free(command);
-  command = NULL;
-  return OK;
+  return ERROR;
 }
-
+/*----SETTERS----*/
 Status command_set_code(Command* command, CommandCode code) {
   if (!command) {
     return ERROR;
@@ -67,6 +127,7 @@ Status command_set_code(Command* command, CommandCode code) {
   return OK;
 }
 
+/*----GETTERS----*/
 CommandCode command_get_code(Command* command) {
   if (!command) {
     return NO_CMD;
@@ -74,21 +135,45 @@ CommandCode command_get_code(Command* command) {
   return command->code;
 }
 
-Status command_get_user_input(Command* command) {
-  char input[CMD_LENGTH] = "", *token = NULL;
-  int i = UNKNOWN - NO_CMD + 1;
-  CommandCode cmd;
+int command_get_arguments_count(Command *command){
+  if(!command) return -1;
+  return command->argsCount;
+}
 
+char **command_get_arguments(Command * command){
+  if(!command) return NULL;
+  return command->arguments;
+}
+
+Status command_get_user_input(Command* command) {
+  char originalInput[CMD_LENGTH] = "";
+  char input[CMD_LENGTH] = "";
+  char *token = NULL;
+  char aux[MAX_CMD_ARGS_LENGTH];
+  
+  int i = UNKNOWN - NO_CMD + 1;
+  int wordCount = 0, argsCount = 0, counter;
+  int inputLength;
+  CommandCode cmd;
+  
   if (!command) {
     return ERROR;
   }
-
+  
   if (fgets(input, CMD_LENGTH, stdin)) {
+    
+    /*Changes the \n for a 0 and copies to an aux string so it isnt loose when using strtok*/
+    //input[strlen(input)-1] = 0;
+    strcpy(originalInput, input);
+
+    /*Reads which command is executed*/
     token = strtok(input, " \n");
     if (!token) {
+      command_set_arguments_count(command, argsCount);
       return command_set_code(command, UNKNOWN);
     }
-
+    
+    
     cmd = UNKNOWN;
     while (cmd == UNKNOWN && i < N_CMD) {
       if (!strcasecmp(token, cmd_to_str[i][CMDS]) || !strcasecmp(token, cmd_to_str[i][CMDL])) {
@@ -97,11 +182,41 @@ Status command_get_user_input(Command* command) {
         i++;
       }
     }
+    
+    /*Stores the arguments of the commands*/
+    wordCount = strlen(token);
+    inputLength = strlen(originalInput);
+    if(wordCount == inputLength -1){
+      command_set_arguments_count(command,0);
+      return command_set_code(command, cmd);
+    }
+    for (i = 0; i < MAX_CMD_ARGS_NUM; i++)
+    {
+      wordCount++;
+      counter = 0;
+      if(originalInput[wordCount] == '\n' || originalInput[wordCount] == '\00' || wordCount == inputLength)
+        break;
+
+      while(originalInput[wordCount + counter] != '\n' && originalInput[wordCount + counter] != '\00' && originalInput[wordCount + counter] != ' '
+          && wordCount + counter < inputLength && counter < MAX_CMD_ARGS_LENGTH){
+        
+        aux[counter] = originalInput[wordCount + counter];
+        counter++;
+      }
+      if(counter == MAX_CMD_ARGS_LENGTH){
+        debug_log(LOG_WARNING,"at command_get_user_input : argument count reached size limit tho it will be inclomplete");
+      }
+      /*We end the string by putting a null character*/
+      aux[counter] = '\00';
+      wordCount += counter;
+      command_set_argument_at(command, aux, i);
+    }
+    
+    command_set_arguments_count(command,i);
     return command_set_code(command, cmd);
   }
   else
-    return command_set_code(command, EXIT);
-  
+    return command_set_code(command, EXIT); 
 }
 
 Status command_get_list(char *destination){

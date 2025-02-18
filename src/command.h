@@ -23,6 +23,9 @@
 #define N_CMDT 2 /*!< Total number of CommandType in the enum */
 #define N_CMD 9  /*!< Total number of CommandCode in the enum */
 
+#define MAX_CMD_ARGS_NUM 5      /*!< Max number of arguments that can be passed to a command*/
+#define MAX_CMD_ARGS_LENGTH 20  /*!< Max length that the arguments of a command can have */
+
 typedef enum { CMDS, CMDL } CommandType; /* CMDS: Command Short | CMDL: Command Long */
 
 typedef enum { NO_CMD = -1, UNKNOWN, EXIT, SOUTH, NORTH, EAST, WEST, TAKE, DROP} CommandCode; /* All values that a command can take */
@@ -68,6 +71,24 @@ Status command_set_code(Command* command, CommandCode code);
  * @return retrieves code from command struct
  */
 CommandCode command_get_code(Command* command);
+
+/**
+ * @brief Gets the number of arguments in the command
+ * @author Daniel Gómez
+ * 
+ * @param command 
+ * @return returns the number of arguments or -1 if error
+ */
+int command_get_arguments_count(Command *command);
+
+/**
+ * @brief Gets the array of command arguments
+ * @author Daniel Gómez
+ * 
+ * @param command 
+ * @return returns the pointer to the array or null if error
+ */
+char **command_get_arguments(Command * command);
 
 /**
  * @brief Receives the user input and sets the command name to that of the input
