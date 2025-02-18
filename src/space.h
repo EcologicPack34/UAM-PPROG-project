@@ -27,7 +27,6 @@
 typedef struct _Space Space;
 
 /*Space public functions*/
-#pragma region SPACE
 
 /**
  * @brief It creates a new space, allocating memory and initializing its members
@@ -48,7 +47,6 @@ Space *space_create(Id id);
 Status space_destroy(Space *space);
 
 /*Space SETTERS*/
-#pragma region SETTERS
 
 /**
  * @brief It sets the name of a space
@@ -111,10 +109,7 @@ Status space_set_west(Space *space, Link *link);
  */
 Status space_set_object(Space *space, bool value);
 
-#pragma endregion
-
 /*Space GETTERS*/
-#pragma region GETTERS
 
 /**
  * @brief It gets the id of a space
@@ -179,8 +174,6 @@ Link *space_get_west(Space *space);
  */
 bool space_get_object(Space *space);
 
-#pragma endregion
-
 /**
  * @brief It prints the space information
  * @author Profesores PPROG
@@ -190,7 +183,5 @@ bool space_get_object(Space *space);
  * @return OK, if everything goes well or ERROR if there was some mistake
  */
 Status space_print(Space *space);
-
-#pragma endregion
 
 #endif

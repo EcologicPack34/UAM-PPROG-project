@@ -50,7 +50,6 @@ Entity *entity_create(char *name, Id identity, Id idlocation, InventoryType inve
 void entity_destroy(Entity *entity);
 
 /*Entity SETTERS*/
-#pragma region SETTERS
 
 /**
  * @brief Sets a entity name with the name argument
@@ -92,11 +91,7 @@ Status entity_set_id(Entity *entity, Id id);
  */
 Status entity_set_entityType(Entity *entity, EntityType entityType);
 
-
-#pragma endregion
-
 /*Entity GETTERS*/
-#pragma region GETTERS
 
 /**
  * @brief Gets the name of the entity
@@ -144,10 +139,7 @@ Id entity_get_id(Entity *entity);
  */
 EntityType entity_get_entityType(Entity *entity);
 
-#pragma endregion
-
 /*Entity PRINTERS*/
-#pragma region PRINTERS
 
 /**
  * @brief NON IMPLEMENTED - Prints the entity status
@@ -168,9 +160,5 @@ void entity_print_status(Entity *entity);
 /*
 void entity_print_inventory(Entity *entity);
 */
-
-#pragma endregion
-
-#pragma endregion
 
 #endif

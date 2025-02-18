@@ -37,8 +37,6 @@ struct _Entity {
  * Entity public implementation
 */
 
-#pragma region ENTITY
-
 Entity *entity_create(char *name, Id id, Id location, InventoryType inventoryType){
     Entity *entity = NULL;
 
@@ -77,7 +75,6 @@ void entity_destroy(Entity *entity){
 }
 
 /*Entity SETTERS*/
-#pragma region SETTERS
 
 Status entity_set_name(Entity *entity, char *name){
     if(!entity)
@@ -111,10 +108,7 @@ Status entity_set_entityType(Entity *entity, EntityType entityType){
     return OK;
 }
 
-#pragma endregion
-
 /*Entity GETTERS*/
-#pragma region GETTERS
 
 char *entity_get_name(Entity *entity){
     if(!entity)
@@ -150,7 +144,3 @@ EntityType entity_get_entityType(Entity *entity){
 
     return entity->entityType;
 }
-
-#pragma endregion
-
-#pragma endregion

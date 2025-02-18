@@ -24,8 +24,6 @@
    Private functions
 */
 
-#pragma region PRIVATE
-
 void game_actions_unknown(Game *game);
 
 void game_actions_exit(Game *game);
@@ -41,8 +39,6 @@ void game_actions_west(Game *game);
 void game_actions_take(Game *game);
 
 void game_actions_drop(Game *game);
-
-#pragma endregion
 
 /**
    Game actions implementation
@@ -97,8 +93,6 @@ Status game_actions_update(Game *game, Command *command) {
 /**
    Calls implementation for each action
 */
-
-#pragma region GAME_ACTIONS_FUNCTIONS
 
 /**
  * @brief No functionality.
@@ -271,5 +265,3 @@ void game_actions_drop(Game *game){
   object_set_location(object, id);
   inventory_remove_object(entity_get_inventory(player),object);
 }
-
-#pragma endregion

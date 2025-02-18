@@ -29,8 +29,6 @@ struct _Link{
     Id unlockingObject;     /*<! Stores id of object used to unlock link*/
 };
 
-#pragma region PRIVATE
-
 /**
  * @brief Checks if an entity is on one of the spaces connected by the link
  * 
@@ -51,8 +49,6 @@ bool link_is_entity_on_valid_spaces(Link *link, Entity *entity){
     
     return false;
 }
-
-#pragma endregion
 
 Link *link_create(Id id,Id space1, Id space2, bool adjacent,bool locked, Id unlockingObject){
     Link *link = NULL;
@@ -93,8 +89,6 @@ void link_destroy(Link *link){
     if(link)
         free(link);
 }
-
-#pragma region SETTERS
 
 Status link_set_id(Link *link, Id id){
     if(link == NULL || id == NO_ID) return ERROR;
@@ -148,10 +142,6 @@ Status link_set_unlocking_object(Link *link, Id object){
     return OK;
 }
 
-#pragma endregion
-
-#pragma region GETTERS
-
 Id link_get_id(Link *link){
     if(link == NULL){
         return NO_ID;
@@ -193,10 +183,6 @@ Id link_get_unlocking_object(Link *link){
     }
     return link->unlockingObject;
 }
-
-#pragma endregion
-
-#pragma region OTHERS
 
 Status link_move_entity(Link *link, Entity *entity){
     Id space = entity_get_location(entity);
@@ -242,6 +228,4 @@ Status link_move_entity(Link *link, Entity *entity){
 
     return OK;
 }
-
-#pragma endregion
 

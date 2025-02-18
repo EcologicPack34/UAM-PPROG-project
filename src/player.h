@@ -21,7 +21,6 @@
 typedef struct _Player Player;
 
 /*Player public functions*/
-#pragma region PLAYER
 
 /**
  * @brief Creates a player struct
@@ -43,7 +42,6 @@ Player *player_create(char *name, Id identity, Id location);
 void player_destroy(Player *player);
 
 /*Player GETTERS*/
-#pragma region GETTERS
 
 /**
  * @brief returns the entity of the player
@@ -54,12 +52,7 @@ void player_destroy(Player *player);
  */
 Entity *player_get_entity(Player *player);
 
-#pragma endregion
-
 /*Player SETTERS*/
-#pragma region SETTERS
-
-#pragma endregion
 
 /**
  * @brief Prints a player struct
@@ -68,7 +61,5 @@ Entity *player_get_entity(Player *player);
  * @param player struct with the information of a player
  */
 void player_print(Player *player);
-
-#pragma endregion
 
 #endif

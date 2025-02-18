@@ -76,8 +76,6 @@ void game_print(Game *game);
  */
 char* game_to_string(Game * game);
 
-#pragma region GETTERS
-
 /**
  * @brief 
  * @author Profesores PPROG
@@ -179,10 +177,6 @@ long game_get_n_links(Game *game);
  */
 Link *game_get_link_by_id(Game *game, Id id);
 
-#pragma endregion
-
-#pragma region SETTERS
-
 /**
  * @brief Sets the received command on the game struct
  * @author Profesores PPROG
@@ -223,10 +217,6 @@ Status game_set_player_location(Game *game, Id id);
  */
 Status game_set_object_location(Game *game, Id id);
 
-#pragma endregion
-
-#pragma region OTHERS
-
 /**
  * @brief Adds the space received to the array of spaces on game
  * @author Profesores PPROG
@@ -246,7 +236,5 @@ Status game_add_space(Game *game, Space *space);
  * @return Status 
  */
 Status game_add_link(Game *game, Link *link);
-
-#pragma endregion
 
 #endif

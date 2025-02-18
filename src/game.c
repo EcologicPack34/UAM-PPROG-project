@@ -21,8 +21,6 @@
 #define PLAYER_BASE_ID 1      /*!< Id del player */
 #define OBJECT_NAME "Grain"   /*!< Nombre del objeto principal */
 
-#pragma region PRIVATE_DECLARATIONS
-
 /**
  * @brief Gets the link in a certain position of the game links array
  * @author Daniel Gómez
@@ -33,10 +31,6 @@
  */
 Link *game_get_link_at(Game *game, long index);
 
-#pragma endregion
-
-#pragma region PRIVATE_IMPLEMENTATION
-
 Link *game_get_link_at(Game *game, long index){
   if(!game) return NULL;
 
@@ -45,8 +39,6 @@ Link *game_get_link_at(Game *game, long index){
 
   return game->links[index];
 }
-
-#pragma endregion
 
 
 
@@ -67,6 +59,7 @@ Status game_create(Game *game) {
   game->object = object_create(1, OBJECT_NAME);
   game->last_cmd = command_create();
   game->finished = false;
+  game->n_links = 0;
 
   return OK;
 }
@@ -114,8 +107,6 @@ Link *game_get_link_by_id(Game *game, Id id){
 
   return NULL;
 }
-
-#pragma region GETTERS
 
 Space *game_get_space(Game *game, Id id) {
   int i = 0;
@@ -165,10 +156,6 @@ long game_get_n_links(Game *game){
   return game->n_links;
 }
 
-#pragma endregion
-
-#pragma region SETTERS
-
 Status game_set_last_command(Game *game, Command *command) {
   game->last_cmd = command;
 
@@ -202,8 +189,6 @@ Status game_set_object_location(Game *game, Id id){
  * @return OK if everything went well or ERROR if there was a mistake
  */
 Status game_set_object_location(Game *game, Id id);
-
-#pragma endregion
 
 /*
 * Other functions that are not getters or setters

@@ -39,12 +39,6 @@ struct _Inventory {
  * Private functions
 */
 
-#pragma region PRIVATE
-
-#pragma region PRIVATE_DECLARATION
-
-#pragma region PRIVATE_GETTERS
-
 /**
  * @brief Gets the object array
  * 
@@ -95,10 +89,6 @@ Object *inventory_get_object_at(Inventory *inventory, int index);
  */
 int inventory_get_object_index(Inventory *inventory, Object *object);
 
-#pragma endregion
-
-#pragma region PRIVATE_SETTERS
-
 /**
  * @brief Sets the number of objects in the inventory
  * 
@@ -118,14 +108,6 @@ Status inventory_set_object_count(Inventory *inventory, int object_count);
  * @return OK if well or ERROR if error
  */
 Status inventory_set_object_at(Inventory *inventory, Object *object, int index);
-
-#pragma endregion
-
-#pragma endregion
-
-#pragma region PRIVATE_IMPLEMENTATION
-
-#pragma region PRIVATE_GETTERS
 
 Object **inventory_get_object_array(Inventory *inventory){
     if(!inventory)
@@ -177,10 +159,6 @@ int inventory_get_object_index(Inventory *inventory, Object *object){
     return -1;
 }
 
-#pragma endregion
-
-#pragma region PRIVATE_SETTERS
-
 Status inventory_set_object_count(Inventory *inventory, int object_count){
     if(!inventory)
         return ERROR;
@@ -201,17 +179,9 @@ Status inventory_set_object_at(Inventory *inventory, Object *object, int index){
     return OK;
 }
 
-#pragma endregion
-
-#pragma endregion
-
-#pragma endregion
-
 /*
  * Game public interface functions
 */
-
-#pragma region INVENTORY
 
 Inventory *inventory_create(InventoryType type, Id locationid){
     Inventory *inventory = NULL;
@@ -247,8 +217,6 @@ Object *inventory_get_object_by_id(Inventory *inventory, Id objectid){
 
     return NULL;
 }
-
-#pragma region DERIVED_FUNCTIONS
 
 bool inventory_contains_object(Inventory *inventory, Id objectid){
     if(!inventory)
@@ -360,7 +328,3 @@ Status inventory_get_object_list(Inventory *inventory, char *objectlist){
 
     return OK;
 }
-
-#pragma endregion
-
-#pragma endregion

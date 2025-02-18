@@ -40,8 +40,6 @@ Link * link_create(Id id,Id space1, Id space2, bool adjacent,bool locked, Id unl
  */
 void link_destroy(Link* link);
 
-#pragma region SETTERS
-
 /**
  * @brief Sets de Id of the link
  * @author Daniel Gómez
@@ -92,11 +90,6 @@ Status link_set_locked(Link* link, bool status);
  * @return Status 
  */
 Status link_set_unlocking_object(Link* link, Id object);
-
-#pragma endregion
-
-#pragma region GETTERS
-
 
 /**
  * @brief Gets the id of a link
@@ -154,10 +147,6 @@ bool link_is_locked(Link *link);
  */
 Id link_get_unlocking_object(Link *link);
 
-#pragma endregion
-
-#pragma region OTHERS
-
 /**
  * @brief Moves an entity from one end of the link to another if posible
  * @author Daniel Gómez
@@ -168,8 +157,5 @@ Id link_get_unlocking_object(Link *link);
  * @return Status 
  */
 Status link_move_entity(Link* link, Entity* entity);
-
-#pragma endregion
-
 
 #endif

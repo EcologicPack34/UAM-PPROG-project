@@ -36,7 +36,6 @@ struct _Object {
 
 
 /*Object public functions*/
-#pragma region OBJECT
 
 Object *object_create(Id id, char *name){
     Object *object = NULL;
@@ -72,7 +71,6 @@ int object_isEqual(Object *object1, Object *object2){
 }
 
 /*Object SETTERS*/
-#pragma region SETTERS
 
 Status object_set_id(Object* object, Id id){
     if(!object)
@@ -101,10 +99,7 @@ Status object_set_location(Object* object, Id id){
     return OK;
 }
 
-#pragma endregion
-
 /*Object GETTERS*/
-#pragma region GETTERS
 
 Id object_get_id(Object *object){
     if(!object)
@@ -127,8 +122,6 @@ Id object_get_location(Object* object){
     return object->location;
 }
 
-#pragma endregion
-
 void object_print(Object *object){
     
     printf("\n\n-------------\n\n");
@@ -139,5 +132,3 @@ void object_print(Object *object){
     printf("=> Object id: %d\n", (int)object_get_id(object));
     printf("=> Object name: %s\n", object_get_name(object));
 }
-
-#pragma endregion

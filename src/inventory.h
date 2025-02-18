@@ -31,7 +31,6 @@ typedef enum {UNKNOWN_INVENTORY, PLAYER_INVENTORY, NPC_INVENTORY, SPACE_INVENTOR
 typedef struct _Inventory Inventory;
 
 /*Game public interface functions*/
-#pragma region INVENTORY
 
 /**
  * @brief Creates an inventory with its type and locationid
@@ -51,8 +50,6 @@ Inventory *inventory_create(InventoryType type, Id locationid);
  */
 void inventory_destroy(Inventory *inventory);
 
-#pragma region GETTERS
-
 /**
  * @brief Gets an object from an inventory by its id
  * @author Maksym Polyak
@@ -62,10 +59,6 @@ void inventory_destroy(Inventory *inventory);
  * @return object pointer if it went well or NULL if there was a mistake (NULL if the object isn't in the inventory)
  */
 Object *inventory_get_object_by_id(Inventory *inventory, Id objectid);
-
-#pragma endregion
-
-#pragma region DERIVATED FUNCTIONS
 
 /**
  * @brief Checks if an object is in the inventory by id
@@ -115,9 +108,5 @@ Status inventory_move_object(Inventory *inventoryOUT, Inventory *inventoryIN, Id
  * @return OK if well or ERROR if error
  */
 Status inventory_get_object_list(Inventory *inventory, char *objectlist);
-
-#pragma endregion
-
-#pragma endregion
 
 #endif

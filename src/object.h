@@ -26,7 +26,6 @@
 typedef struct _Object Object;
 
 /*Object public functions*/
-#pragma region OBJECTS
 
 /**
  * @brief It creates an object and returns its pointer
@@ -56,7 +55,6 @@ void object_destroy(Object *object);
 int object_isEqual(Object *object1, Object *object2);
 
 /*Object SETTERS*/
-#pragma region SETTERS
 
 /**
  * @brief Sets the object id to the one received as an argument
@@ -88,10 +86,7 @@ Status object_set_name(Object *object, char *name);
  */
 Status object_set_location(Object *object, Id id);
 
-#pragma endregion
-
 /*Object GETTERS*/
-#pragma region GETTERS
 
 /**
  * @brief Gets the id of an object
@@ -120,8 +115,6 @@ char *object_get_name(Object *object);
  */
 Id object_get_location(Object *object);
 
-#pragma endregion
-
 /**
  * @brief Prints on screen an object
  * @author Maksym Polyak
@@ -129,7 +122,5 @@ Id object_get_location(Object *object);
  * @param inventory stores the information of an inventory
  */
 void object_print(Object *object);
-
-#pragma endregion
 
 #endif

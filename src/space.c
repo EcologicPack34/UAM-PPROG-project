@@ -34,7 +34,6 @@ struct _Space {
 };
 
 /*Space public functions*/
-#pragma region SPACE
 
 Space* space_create(Id id) {
   Space* newSpace = NULL;
@@ -77,7 +76,6 @@ Id space_get_id(Space* space) {
 }
 
 /*Space SETTERS*/
-#pragma region SETTERS
 
 Status space_set_name(Space* space, char* name) {
   if (!space || !name) {
@@ -130,10 +128,7 @@ Status space_set_object(Space* space, bool value) {
   return OK;
 }
 
-#pragma endregion
-
 /*Space GETTERS*/
-#pragma region GETTERS
 
 const char* space_get_name(Space* space) {
   if (!space) {
@@ -181,8 +176,6 @@ bool space_get_object(Space* space) {
   return space->object;
 }
 
-#pragma endregion
-
 Status space_print(Space* space) {
   Id idaux = NO_ID;
 
@@ -226,8 +219,6 @@ Status space_print(Space* space) {
   } else {
     fprintf(stdout, "---> No object in the space.\n");
   }
-
-  #pragma endregion
 
   return OK;
 }

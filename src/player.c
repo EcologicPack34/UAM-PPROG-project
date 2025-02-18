@@ -32,7 +32,6 @@ struct _Player {
 /**
    Private functions
 */
-#pragma region PRIVATE
 /**
  * @brief Sets the entity pointer of the player
  * @author Maksym Polyak
@@ -50,13 +49,9 @@ Status player_set_entity(Player *player, Entity *entity){
     return OK;
 }
 
-#pragma endregion
-
 /**
    Game interface implementation
 */
-
-#pragma region PLAYER
 
 Player *player_create(char *name, Id identity, Id location){
     Player *player = NULL;
@@ -79,7 +74,6 @@ void player_destroy(Player *player){
 }
 
 /*Player GETTERS*/
-#pragma region GETTERS
 
 Entity *player_get_entity(Player *player){
     if (!player)
@@ -88,12 +82,7 @@ Entity *player_get_entity(Player *player){
     return player->entity;
 }
 
-#pragma endregion
-
 /*Player SETTERS*/
-#pragma region SETTERS
-
-#pragma endregion
 
 void player_print(Player *player){
     Entity *entityPlayer;
@@ -109,7 +98,5 @@ void player_print(Player *player){
     printf("=> Player name: %s\n", entity_get_name(entityPlayer));
     printf("=> Player location: %d\n", (int)entity_get_location(entityPlayer));
 }
-
-#pragma endregion
 
 
