@@ -92,7 +92,7 @@ char **command_get_arguments(Command * command);
 
 /**
  * @brief Receives the user input and sets the command name to that of the input
- * @author Profesores PPROG
+ * @author Original: Profesores Prog, Modified by: Daniel Gómez
  *
  * @param command struct that saves all information related to a command
  * @return OK if everything goes well or ERROR if there was some mistake
