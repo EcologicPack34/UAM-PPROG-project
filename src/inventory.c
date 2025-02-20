@@ -189,7 +189,7 @@ Inventory *inventory_create(InventoryType type, Id locationid){
     /*Reserved with calloc to set to NULL the objects and the other variables*/
     inventory = calloc(1, sizeof(Inventory));
     if(!inventory){
-        debug_log(ERROR, "inventory_create dynamic memory error at inventory: inventoryType: %d locationid: %d", inventory->inventoryType, inventory->id);
+        debug_log(LOG_ERROR, "inventory_create dynamic memory error at inventory: inventoryType: %d locationid: %d", inventory->inventoryType, inventory->id);
         return NULL;
     }
 
@@ -235,12 +235,12 @@ Status inventory_add_object(Inventory *inventory, Object *object){
     Object *tempobject = NULL;
     
     if(!inventory){
-        debug_log(ERROR, "inventory is NULL in inventory_add_object");
+        debug_log(LOG_ERROR, "inventory is NULL in inventory_add_object");
         return ERROR;
     }
 
     if(!object){
-        debug_log(ERROR, "object is NULL in inventory_add_object");
+        debug_log(LOG_ERROR, "object is NULL in inventory_add_object");
         return ERROR;
     }
 
@@ -265,12 +265,12 @@ Status inventory_remove_object(Inventory *inventory, Object *object){
     int i;
     
     if(!inventory){
-        debug_log(ERROR, "inventory is NULL in inventory_add_remove");
+        debug_log(LOG_ERROR, "inventory is NULL in inventory_add_remove");
         return ERROR;
     }
 
     if(!object){
-        debug_log(ERROR, "object is NULL in inventory_add_remove");
+        debug_log(LOG_ERROR, "object is NULL in inventory_add_remove");
         return ERROR;
     }
     
@@ -291,12 +291,12 @@ Status inventory_move_object(Inventory *inventoryOUT, Inventory *inventoryIN, Id
     Object *object = NULL;
     
     if(!inventoryOUT){
-        debug_log(ERROR, "inventoryOUT is NULL in inventory_move_object");
+        debug_log(LOG_ERROR, "inventoryOUT is NULL in inventory_move_object");
         return ERROR;
     }
 
     if(!inventoryIN){
-        debug_log(ERROR, "inventoryIN is NULL in inventory_move_object");
+        debug_log(LOG_ERROR, "inventoryIN is NULL in inventory_move_object");
         return ERROR;
     }
 

@@ -67,7 +67,7 @@ void game_loop_cleanup(Game game, Graphic_engine *gengine);
  */
 int main(int argc, char *argv[]){
   Game game;
-  Graphic_engine *gengine;
+  Graphic_engine *gengine = NULL;
   Debug *debugLog;
   
   /*Checks if num of arguments if correct, if not stops the programm*/
@@ -104,6 +104,7 @@ int game_loop_init(Game *game, Graphic_engine **gengine, char *file_name){
   if (game_reader_create_from_file(game, file_name) == ERROR)
   {
     fprintf(stderr, "Error while initializing game.\n");
+    game_loop_cleanup(*game, *gengine);
     return 1;
   }
 

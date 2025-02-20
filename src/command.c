@@ -173,7 +173,6 @@ Status command_get_user_input(Command* command) {
       return command_set_code(command, UNKNOWN);
     }
     
-    
     cmd = UNKNOWN;
     while (cmd == UNKNOWN && i < N_CMD) {
       if (!strcasecmp(token, cmd_to_str[i][CMDS]) || !strcasecmp(token, cmd_to_str[i][CMDL])) {
@@ -190,13 +189,14 @@ Status command_get_user_input(Command* command) {
       command_set_arguments_count(command,0);
       return command_set_code(command, cmd);
     }
+    /*Tries to read all posible arguments*/
     for (i = 0; i < MAX_CMD_ARGS_NUM; i++)
     {
       wordCount++;
       counter = 0;
       if(originalInput[wordCount] == '\n' || originalInput[wordCount] == '\00' || wordCount == inputLength)
         break;
-
+      /*Counts the amount of letters and assing it to an aux string*/
       while(originalInput[wordCount + counter] != '\n' && originalInput[wordCount + counter] != '\00' && originalInput[wordCount + counter] != ' '
           && wordCount + counter < inputLength && counter < MAX_CMD_ARGS_LENGTH){
         
