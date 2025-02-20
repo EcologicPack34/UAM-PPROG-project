@@ -216,7 +216,7 @@ long collection_length(Collection *collection){
 Status collection_free_elements(Collection *collection, void (*free_element)(void *)){
     int i;
 
-    if(!collection || !free) return ERROR;
+    if(!collection || !free_element) return ERROR;
 
     for (i = 0; i < collection->length; i++)
     {
