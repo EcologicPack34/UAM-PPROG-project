@@ -21,6 +21,20 @@
 #define PLAYER_BASE_ID 1      /*!< Id del player */
 #define OBJECT_NAME "Grain"   /*!< Nombre del objeto principal */
 
+
+struct _Game {
+  Player *player;              /*!< Contains all the information related to the player */
+  Object *object;              /*!< Contains all the information related to the object */
+  Space *spaces[MAX_SPACES];   /*!< Array with all the spaces of the map */
+  int n_spaces;                /*!< int with the number of spaces on *spaces */
+  Link *links[MAX_LINKS];     /*!< Array with all the links in the map*/
+  int n_links;
+
+  Command *last_cmd;           /*!< string with the last command */
+  bool finished;               /*!< bool that determines if the game has finished*/
+};
+
+
 /**
  * @brief Gets the link in a certain position of the game links array
  * @author Daniel Gómez
@@ -29,8 +43,6 @@
  * @param index 
  * @return Link* 
  */
-Link *game_get_link_at(Game *game, long index);
-
 Link *game_get_link_at(Game *game, long index){
   if(!game) return NULL;
 
@@ -46,20 +58,23 @@ Link *game_get_link_at(Game *game, long index){
    Game interface implementation
 */
 
-Status game_create(Game *game) {
+Status game_create(Game **game) {
   int i;
 
+  *game = (Game*)calloc(1,sizeof(Game));
+  if(!(*game)) return ERROR;
+
   for (i = 0; i < MAX_SPACES; i++) {
-    game->spaces[i] = NULL;
+    (*game)->spaces[i] = NULL;
   }
 
-  game->n_spaces = 0;
-  game->player = player_create(NOMBRE_PLAYER, (Id)PLAYER_BASE_ID, -1);
+  (*game)->n_spaces = 0;
+  (*game)->player = player_create(NOMBRE_PLAYER, (Id)PLAYER_BASE_ID, -1);
   /*Creates the object with the first id not taken by the spaces*/
-  game->object = object_create(1, OBJECT_NAME);
-  game->last_cmd = command_create();
-  game->finished = false;
-  game->n_links = 0;
+  (*game)->object = object_create(1, OBJECT_NAME);
+  (*game)->last_cmd = command_create();
+  (*game)->finished = false;
+  (*game)->n_links = 0;
 
   return OK;
 }
@@ -88,6 +103,7 @@ Status game_destroy(Game *game) {
     free(game_get_link_at(game,i));
   }
 
+  free(game);
   return OK;
 }
 

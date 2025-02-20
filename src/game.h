@@ -30,26 +30,15 @@
 /**
  * @brief Game struct, defines all the information of the game
  */
-typedef struct _Game {
-  Player *player;              /*!< Contains all the information related to the player */
-  Object *object;              /*!< Contains all the information related to the object */
-  Space *spaces[MAX_SPACES];   /*!< Array with all the spaces of the map */
-  int n_spaces;                /*!< int with the number of spaces on *spaces */
-  Link *links[MAX_LINKS];     /*!< Array with all the links in the map*/
-  int n_links;
-
-  Command *last_cmd;           /*!< string with the last command */
-  bool finished;               /*!< bool that determines if the game has finished*/
-} Game;
+typedef struct _Game Game;
 
 /**
  * @brief Initializes game struct to the corresponding 0
- * @author Profesores PPROG
+ * @author Original:Profesores PPROG, Modified by: Daniel Gómez
  *
- * @param game struct that saves all information related to the game
  * @return OK if everything goes well or ERROR if there was some mistake
  */
-Status game_create(Game *game);
+Status game_create(Game **game);
 
 /**
  * @brief Frees corresponding memory from spaces and frees command

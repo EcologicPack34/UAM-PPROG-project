@@ -47,7 +47,7 @@ Status game_reader_load_links(Game *game, char *filename);
 /*
 * Public functions implementation
 */
-Status game_reader_create_from_file(Game *game, char *filename){
+Status game_reader_create_from_file(Game **game, char *filename){
   Entity *player;
   Object *object;
   if (game_create(game) == ERROR){
@@ -55,21 +55,21 @@ Status game_reader_create_from_file(Game *game, char *filename){
     return ERROR;
   }
 
-  if(game_reader_load_links(game, filename) == ERROR){
+  if(game_reader_load_links(*game, filename) == ERROR){
     debug_log(LOG_ERROR, "Error loading links at: game_reader_create_from_file(Game*, char*) in game_reader.c");
     return ERROR;
   }
-  if (game_reader_load_spaces(game, filename) == ERROR){
+  if (game_reader_load_spaces(*game, filename) == ERROR){
     debug_log(LOG_ERROR, "Error loading spaces at: game_reader_create_from_file(Game*, char*) in game_reader.c");
     return ERROR;
   }
 
   /* The player and the object are located in the first space */
-  player = player_get_entity(game_get_player(game));
-  entity_set_location(player, game_get_space_id_at(game, 0));
+  player = player_get_entity(game_get_player(*game));
+  entity_set_location(player, game_get_space_id_at(*game, 0));
 
-  object = game_get_object(game);
-  object_set_location(object, game_get_space_id_at(game, 0));
+  object = game_get_object(*game);
+  object_set_location(object, game_get_space_id_at(*game, 0));
 
   return OK;
 }

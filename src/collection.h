@@ -12,6 +12,9 @@
  * @copyright GNU Public license
  */
 
+#ifndef COLLECTION_H
+#define COLLECTION_H
+
 #include "types.h"
 #include <stdbool.h>
 
@@ -114,3 +117,5 @@ long collection_length(Collection *collection);
  * @return Status : ERROR if null references, else OK
  */
 Status collection_free_elements(Collection *collection, void (*free_element)(void *));
+
+#endif
