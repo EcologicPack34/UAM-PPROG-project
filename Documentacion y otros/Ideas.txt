@@ -21,7 +21,7 @@ APROBADO - Sistema de combate.
 APROBADO - Hacer un módulo de collection --> Almacene punteros a entity, object, player para gestionar liberacion --> Añadir last_id para trackear la originalidad de las ids
 APROBADO - Array de entitys en game
 APROBADO - Añadir gestión varios jugadores
-APROBADO - 
+APROBADO - Añadir a Game un enum GameState que controle en que estado esta el juego: combate, mapa, etc. Útil para grafics engine.
 
 
 
