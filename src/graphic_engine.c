@@ -20,13 +20,13 @@
 #include "space.h"
 #include "types.h"
 
-#define WIDTH_MAP 48   /*!< Total width of the map */
-#define WIDTH_DES 29   /*!< Total width of the ????? */
-#define WIDTH_BAN 23   /*!< Total width of the ????? */
+#define WIDTH_MAP 49   /*!< Total width of the map */
+#define WIDTH_DESCRIPTION 29   /*!< Total width of the description */
+#define WIDTH_BANNER 23   /*!< Total width of the banner */
 #define HEIGHT_MAP 13  /*!< Total height of the map */
-#define HEIGHT_BAN 1   /*!< Total height of the ????? */
-#define HEIGHT_HLP 2   /*!< Total height of the ????? */
-#define HEIGHT_FDB 3   /*!< Total height of the ????? */
+#define HEIGHT_HELP_BANNER 1   /*!< Total height of the banner */
+#define HEIGHT_HELP 3   /*!< Total height of the help */
+#define HEIGHT_FDB 3   /*!< Total height of the cmd history */
 
 struct _Graphic_engine {
   Area *map, *descript, *banner, *help, *feedback;
@@ -38,18 +38,18 @@ Graphic_engine *graphic_engine_create() {
   if (ge) {
     return ge;
   }
-
-  screen_init(HEIGHT_MAP + HEIGHT_BAN + HEIGHT_HLP + HEIGHT_FDB + 4, WIDTH_MAP + WIDTH_DES + 3);
+  /*Initializes screen and graphics engine*/
+  screen_init(HEIGHT_MAP + HEIGHT_HELP_BANNER + HEIGHT_HELP + HEIGHT_FDB + 4, WIDTH_MAP + WIDTH_DESCRIPTION + 3);
   ge = (Graphic_engine *)malloc(sizeof(Graphic_engine));
   if (ge == NULL) {
     return NULL;
   }
-
+  /*Initializes each area of the display*/
   ge->map = screen_area_init(1, 1, WIDTH_MAP, HEIGHT_MAP);
-  ge->descript = screen_area_init(WIDTH_MAP + 2, 1, WIDTH_DES, HEIGHT_MAP);
-  ge->banner = screen_area_init((int)((WIDTH_MAP + WIDTH_DES + 1 - WIDTH_BAN) / 2), HEIGHT_MAP + 2, WIDTH_BAN, HEIGHT_BAN);
-  ge->help = screen_area_init(1, HEIGHT_MAP + HEIGHT_BAN + 2, WIDTH_MAP + WIDTH_DES + 1, HEIGHT_HLP);
-  ge->feedback = screen_area_init(1, HEIGHT_MAP + HEIGHT_BAN + HEIGHT_HLP + 3, WIDTH_MAP + WIDTH_DES + 1, HEIGHT_FDB);
+  ge->descript = screen_area_init(WIDTH_MAP + 2, 1, WIDTH_DESCRIPTION, HEIGHT_MAP);
+  ge->banner = screen_area_init((int)((WIDTH_MAP + WIDTH_DESCRIPTION + 1 - WIDTH_BANNER) / 2), HEIGHT_MAP + 2, WIDTH_BANNER, HEIGHT_HELP_BANNER);
+  ge->help = screen_area_init(1, HEIGHT_MAP + HEIGHT_HELP_BANNER + 2, WIDTH_MAP + WIDTH_DESCRIPTION + 1, HEIGHT_HELP);
+  ge->feedback = screen_area_init(1, HEIGHT_MAP + HEIGHT_HELP_BANNER + HEIGHT_HELP + 3, WIDTH_MAP + WIDTH_DESCRIPTION + 1, HEIGHT_FDB);
 
   return ge;
 }

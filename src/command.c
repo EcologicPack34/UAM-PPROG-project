@@ -24,7 +24,7 @@
 /**
  * @brief Global variable that stores all the commands and their shortucts.
  */
-char *cmd_to_str[N_CMD][N_CMDT] = {{"", "No command"}, {"", "Unknown"}, {"ex", "Exit"}, {"s", "South"}, {"n", "North"}, {"e", "East"}, {"w", "West"},{"t", "Take"}, {"d", "Drop"}};
+char *cmd_to_str[N_CMD][N_CMDT] = {{"", "No command"}, {"", "Unknown"}, {"q", "Exit"}, {"s", "South"}, {"w", "North"}, {"d", "East"}, {"a", "West"},{"tk", "Take"}, {"dr", "Drop"}};
 
 /**
  * @brief Command
