@@ -23,7 +23,7 @@ struct _Collection{
     bool fixedLength;           /*<! Can the collection increase its allocated size*/
     bool uniqueElements;        /*<! Can the collection have repeated elements*/
 
-    int (*compare_elements)(void* e1, void* e2); /*Method to compare elements of the collection*/
+    int (*compare_elements)(void* e1, void* e2); /*Method to compare elements of the collection: return 0 if equal, < 0 if smaller and > 0 if greater*/
     void (*print_element)(void *element);        /*Method to print an element of the collection*/
 };
 
@@ -40,14 +40,9 @@ struct _Collection{
 Status collection_add_unique(Collection *collection, void *element){
     /*We omit error control as it is done in collection_add()*/
 
-    //Search in collection->list if the element is already stored using collection->compareElements
-
-    //If found return OK and do nothing more
-
-    //If it doesnt found it:
-    // Check allocated size and then add the element
-
-    return OK;
+    if(collection_contains(collection, element) != -1) return OK;
+    
+    return collection_add_non_unique(collection, element);
 }
 
 /**
@@ -88,7 +83,7 @@ Status collection_add_non_unique(Collection *collection, void *element){
 
 /*----------PUBLIC FUNCTIONS----------*/
 
-Collection *collection_create(unsigned long initialSize, bool fixedLength, bool uniqueElements, int (*compare_elements)(void* e1, void* e2), void (*print_element)(void *element)){
+Collection *collection_create(unsigned long initialSize, bool fixedLength, bool uniqueElements, int (*compare_elements)(void*, void*), void (*print_element)(void *)){
     Collection *collection = NULL;
     
     if(!compare_elements) return NULL;
@@ -137,5 +132,94 @@ void collection_destroy(Collection * collection){
 /*-----------SETTERS----------*/
 
 Status collection_add(Collection *collection, void *element){
+    if(!collection || !element) return ERROR;
+    
+    if(collection->uniqueElements){
+        return collection_add_unique(collection, element);
+    }
 
+    return collection_add_non_unique(collection, element);
+}
+
+Status collection_remove(Collection *collection, void *element){
+    int i;
+    if(!collection || !element) return ERROR;
+
+    /*Iterates through collection and moves every element*/
+    for (i = 0; i < collection->length ; i++)
+    {   
+        /*Checks if element is contained*/
+        if(collection->compare_elements(element, collection_get_element_at(collection, i)) == 0){
+            collection_remove_at(collection, i);
+            return OK;
+        }
+    }
+
+    return ERROR;
+}
+
+Status collection_remove_at(Collection *collection, unsigned long index){
+    int i;
+    
+    if(!collection) return ERROR;
+    if(index > collection->length) return ERROR;
+
+    collection->list[index] == NULL;
+
+    for (i = index + 1; i < collection->length; i++)
+    {
+        collection->list[i -1] = collection->list[i];
+    }
+
+    collection->list[collection->length] = NULL;
+    (collection->length)--;
+
+    return OK;
+}
+
+/*----------GETTERS----------*/
+
+void *collection_get_element_at(Collection *collection, unsigned long index){
+    if(!collection) return NULL;
+
+    if(index > collection->length) return NULL;
+
+    return collection->list[index];
+}
+
+int collection_contains(Collection *collection, void *element){
+    int i;
+    if(!collection || !element) return false;
+
+    for (i = 0; i < collection->length; i++)
+    {
+        if(collection->compare_elements(element, collection->list[i]) == 0){
+            return i;
+        }
+    }
+    return -1;
+}
+
+long collection_length(Collection *collection){
+    if(!collection) return -1;
+
+    return collection->length;
+}
+
+/**
+ * @brief Frees all the elements of the collection using the given fucntion
+ * 
+ * @param collection 
+ * @param free 
+ * @return Status 
+ */
+Status collection_free_elements(Collection *collection, void (*free_element)(void *)){
+    int i;
+
+    if(!collection || !free) return ERROR;
+
+    for (i = 0; i < collection->length; i++)
+    {
+        free_element(collection->list[i]);
+    }
 }
