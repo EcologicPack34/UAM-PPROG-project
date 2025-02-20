@@ -206,13 +206,8 @@ long collection_length(Collection *collection){
     return collection->length;
 }
 
-/**
- * @brief Frees all the elements of the collection using the given fucntion
- * 
- * @param collection 
- * @param free 
- * @return Status 
- */
+/*----------OTHERS----------*/
+
 Status collection_free_elements(Collection *collection, void (*free_element)(void *)){
     int i;
 
