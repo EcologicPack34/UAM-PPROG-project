@@ -3,7 +3,7 @@
  * @author Daniel Gómez
  * @brief 
  *          ADT that aims to implement a generic list of elements.
- *          It contains the behaviout of Set module asked for I2
+ *          It contains the behaviour of Set module asked for I2
  * 
  *          THE COLLECTION DOES NOT FREE THE MEMORY OF THE ELEMENTS WHEN REMOVED OR DESTROYED
  * @version 0.1
