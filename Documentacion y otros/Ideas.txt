@@ -4,16 +4,19 @@ APROBADO - modulo utils : contiene funciones útiles de uso general.
 
 APROBADO / BRANCH SEPARADA - Remodelación de graphic_engine --> OpenGL
 
-APROBADO - Implementar funcionalidad de inventario (1 inventario por space) 
-
 APROBADO - Gestion de ID unico por parte de game y set(renombrar a collection) --> de este modo inventory y otros no tienen que encargarse de ello.
 ^- Hacer un array dinamico en Game que lleve la cuenta de todos los objetos que hay en el juego, tanto jugador, como espacios.
 
+APROBADO - Implementar funcionalidad de inventario (1 inventario por space) 
+APROBADO - Modificaciones para el sistema de combate --> Hoja de papel
 APROBADO - Sistema de eventos para manejar el fin del juego(temporalmente) --> luego se modificará para otras cosas
 
 
 APROBADO - Modulo NPC basado en Entity --> Gestiona NPCs (Aliados y enemigos)
 APROBADO - Modificar Player para tener vida, escudo y otros posibles stats.
+APROBADO - Aplicar collection a objects, inventory
+APROBADO - Game_reader --> Lectura de objetos desde fichero
+APROBADO - take + drop --> Gestión de inventario del player (COMENTAR LA PARTE GRÁFICA PARA IMPLEMENTAR MÁS TARDE)
 APROBADO - Sistema de combate.
 
 
