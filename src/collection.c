@@ -212,9 +212,12 @@ Status collection_free_elements(Collection *collection, void (*free_element)(voi
     int i;
 
     if(!collection || !free_element) return ERROR;
+    if(!(collection->list)) return ERROR;
 
     for (i = 0; i < collection->length; i++)
     {
         free_element(collection->list[i]);
     }
+
+    return OK;
 }
