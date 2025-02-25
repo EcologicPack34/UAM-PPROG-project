@@ -12,6 +12,7 @@
 
 #include "debug_printing.h"
 #include "game.h"
+#include "collection.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -24,7 +25,7 @@
 
 struct _Game {
   Player *player;              /*!< Contains all the information related to the player */
-  Object *object;              /*!< Contains all the information related to the object */
+  Collection *objects;         /*!< Contains all the information related to the object */
   Space *spaces[MAX_SPACES];   /*!< Array with all the spaces of the map */
   int n_spaces;                /*!< int with the number of spaces on *spaces */
   Link *links[MAX_LINKS];     /*!< Array with all the links in the map*/
@@ -81,7 +82,7 @@ Status game_create(Game **game) {
   (*game)->n_spaces = 0;
   (*game)->player = player_create(NOMBRE_PLAYER, (Id)PLAYER_BASE_ID, -1);
   /*Creates the object with the first id not taken by the spaces*/
-  (*game)->object = object_create(1, OBJECT_NAME);
+  (*game)->objects = collection_create(1, 0, 1, object_isEqual, object_print)
   (*game)->last_cmd = command_create();
   (*game)->finished = false;
   (*game)->n_links = 0;

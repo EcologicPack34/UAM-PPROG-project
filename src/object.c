@@ -59,14 +59,14 @@ void object_destroy(Object *object){
     object = NULL;
 }
 
-int object_isEqual(Object *object1, Object *object2){
+int object_isEqual(void *object1, void *object2){
     if(!object1 || !object2)
         return -1;
 
-    if(object_get_id(object1) == NO_ID || object_get_id(object2) == NO_ID)
+    if(object_get_id((Object *)object1) == NO_ID || object_get_id((Object *)object2) == NO_ID)
         return -1;
 
-    if((object_get_id(object1) == object_get_id(object2)))
+    if((object_get_id((Object *)object1) == object_get_id((Object *)object2)))
         return 1;
     
     return 0;
@@ -140,13 +140,13 @@ InventoryType object_get_type(Object *object){
     return object->type;
 }
 
-void object_print(Object *object){
+void object_print(void *object){
     
     printf("\n\n-------------\n\n");
 
     printf("=> Object:  \n");
     
 
-    printf("=> Object id: %d\n", (int)object_get_id(object));
-    printf("=> Object name: %s\n", object_get_name(object));
+    printf("=> Object id: %d\n", (int)object_get_id((Object *)object));
+    printf("=> Object name: %s\n", object_get_name((Object *)object));
 }
