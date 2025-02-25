@@ -71,6 +71,15 @@ Object *inventory_get_object_by_id(Inventory *inventory, Id objectid);
 bool inventory_contains_object(Inventory *inventory, Id objectid);
 
 /**
+ * @brief Gets an object from an inventory by its name
+ * 
+ * @param inventory contains the inventory information
+ * @param objectname string with the name of the object
+ * @return Object* if found or NULL if not found;
+ */
+Object *inventory_get_object_by_name(Inventory *inventory, char *objectname);
+
+/**
  * @brief Adds an object to an inventory
  * @author Maksym Polyak
  *
