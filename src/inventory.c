@@ -2,8 +2,8 @@
  * @brief It implements the inventory module
  * 
  * Defines the internal functionality of the inventory system,
- * works with the object ADT to keep track of items, but also has
- * an InventoryType for further iterations, were NPCs will be added.
+ * works with the object and collection ADT to keep track of items, but also has
+ * an InventoryType in order to locate the inventories on the game struct easily.
  * 
  *
  * @file inventory.c
@@ -271,6 +271,8 @@ Status inventory_add_object(Inventory *inventory, Object *object){
         }
     }
 
+    object_set_type(object, inventory_get_type(inventory));
+
     inventory_set_object_count(inventory, inventory_get_object_count(inventory) + 1);
 
     debug_log(DEBUG, "Object %ld has been added to the inventory of type:%d and id:%ld", object_get_id(object), (int)inventory_get_type(inventory), inventory_get_location_id(inventory));
@@ -338,7 +340,7 @@ Status inventory_get_object_list(Inventory *inventory, char *objectlist){
 
     for(i = 0, num = 1; i < INVENTORY_MAX_SIZE; i++){
         if((tempobject = inventory_get_object_at(inventory, i)) != NULL){
-            sprintf(objectlist, "%d. Id: %ld | Name: %s | LocationId: %ld\n", num++, object_get_id(tempobject), object_get_name(tempobject), object_get_location(tempobject));
+            sprintf(objectlist, "%d. Id: %ld | Name: %s | LocationId: %ld | InventoryType: %d\n", num++, object_get_id(tempobject), object_get_name(tempobject), object_get_location(tempobject), (int)object_get_type(tempobject));
         }
     }
 

@@ -35,7 +35,7 @@ typedef struct _Object Object;
  * @param name name of the object
  * @return a new object, initialized or NULL if there was a mistake
  */
-Object *object_create(Id id, char *name);
+Object *object_create(Id id, char *name, InventoryType type);
 
 /**
  * @brief It destroys an object
@@ -52,7 +52,7 @@ void object_destroy(Object *object);
  * @param object contains the information of an object
  * @return 1 if the two objects are equal, 0 if they are not equal or -1 if there was a mistake
  */
-int object_isEqual(Object *object1, Object *object2);
+int object_isEqual(void *object1, void *object2);
 
 /*Object SETTERS*/
 
@@ -138,6 +138,6 @@ InventoryType object_get_type(Object *object);
  *
  * @param inventory stores the information of an inventory
  */
-void object_print(Object *object);
+void object_print(void *object);
 
 #endif
