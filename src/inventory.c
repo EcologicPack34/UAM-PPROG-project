@@ -222,11 +222,27 @@ bool inventory_contains_object(Inventory *inventory, Id objectid){
     if(!inventory)
         return 0;
     
-        /*Inventory_get_object_by_id returns NULL if it has not found the object*/
+    /*Inventory_get_object_by_id returns NULL if it has not found the object*/
     if(inventory_get_object_by_id(inventory, objectid) != NULL)
         return 1;
     
     return 0;
+}
+
+Object *inventory_get_object_by_name(Inventory *inventory, char *objectname){
+    int i;
+    Object *object = NULL;
+    
+    if(!inventory || !objectname)
+        return NULL;
+
+    for(i = 0; i < INVENTORY_MAX_SIZE; i++){
+        object = inventory_get_object_at(inventory, i);
+        if(strcmp(objectname, object_get_name(object)) == 0)
+            return object;
+    }
+
+    return NULL;
 }
 
 Status inventory_add_object(Inventory *inventory, Object *object){
