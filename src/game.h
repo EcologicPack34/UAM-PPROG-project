@@ -27,6 +27,8 @@
 #define MAX_SPACES 100          /*!< Maximum number of spaces on the map */
 #define MAX_LINKS 400   /*!< Maximum number of links on the map */
 
+typedef enum {ERROR_STATE ,DEFAULT, COMBAT, INVENTORY, DIALOGUE}GameState;
+
 /**
  * @brief Game struct, defines all the information of the game
  */
@@ -64,6 +66,8 @@ void game_print(Game *game);
  * @return todavia no se como implementarlo
  */
 char* game_to_string(Game * game);
+
+/*----------GETTERS----------*/
 
 /**
  * @brief 
@@ -167,6 +171,17 @@ long game_get_n_links(Game *game);
 Link *game_get_link_by_id(Game *game, Id id);
 
 /**
+ * @brief Gets the current state of the game
+ * 
+ * @param game 
+ * @return GameState 
+ */
+GameState game_get_state(Game *game);
+
+/*----------SETTERS----------*/
+
+
+/**
  * @brief Sets the received command on the game struct
  * @author Profesores PPROG
  *
@@ -205,6 +220,17 @@ Status game_set_player_location(Game *game, Id id);
  * @return OK if everything went well or ERROR if there was a mistake
  */
 Status game_set_object_location(Game *game, Id id);
+
+/**
+ * @brief Sets the current game state
+ * 
+ * @param game 
+ * @param state 
+ * @return Status 
+ */
+Status game_set_state(Game *game, GameState state);
+
+/*----------OTHERS----------*/
 
 /**
  * @brief Adds the space received to the array of spaces on game

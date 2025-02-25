@@ -30,10 +30,20 @@ struct _Game {
   Link *links[MAX_LINKS];     /*!< Array with all the links in the map*/
   int n_links;
 
+  GameState current_state;     /*!< Enum storing the current game state*/
   Command *last_cmd;           /*!< string with the last command */
   bool finished;               /*!< bool that determines if the game has finished*/
 };
 
+/**
+ * @brief Sets the object location
+ * @author Profesores PPROG
+ *
+ * @param game struct that saves all information related to the game
+ * @param id id with the location of the object
+ * @return OK if everything went well or ERROR if there was a mistake
+ */
+Status game_set_object_location(Game *game, Id id);
 
 /**
  * @brief Gets the link in a certain position of the game links array
@@ -75,6 +85,7 @@ Status game_create(Game **game) {
   (*game)->last_cmd = command_create();
   (*game)->finished = false;
   (*game)->n_links = 0;
+  (*game)->current_state = DEFAULT;
 
   return OK;
 }
@@ -106,6 +117,8 @@ Status game_destroy(Game *game) {
   free(game);
   return OK;
 }
+
+/*----------GETTERS----------*/
 
 Link *game_get_link_by_id(Game *game, Id id){
   Link *link = NULL;
@@ -172,6 +185,13 @@ long game_get_n_links(Game *game){
   return game->n_links;
 }
 
+GameState game_get_state(Game *game){
+  if(!game) return ERROR_STATE;
+  return game->current_state;
+}
+
+/*-----------SETTERS-----------*/
+
 Status game_set_last_command(Game *game, Command *command) {
   game->last_cmd = command;
 
@@ -196,15 +216,11 @@ Status game_set_object_location(Game *game, Id id){
   return OK;
 }
 
-/**
- * @brief Sets the object location
- * @author Profesores PPROG
- *
- * @param game struct that saves all information related to the game
- * @param id id with the location of the object
- * @return OK if everything went well or ERROR if there was a mistake
- */
-Status game_set_object_location(Game *game, Id id);
+Status game_set_state(Game *game, GameState state){
+  if(!game) return ERROR;
+  game->current_state = state;
+  return OK;
+}
 
 /*
 * Other functions that are not getters or setters
