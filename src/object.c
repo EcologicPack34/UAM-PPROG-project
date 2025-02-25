@@ -26,7 +26,7 @@
  */
 struct _Object {
   Id id;                    /*!< Id number of the object, it must be unique */
-  char name[WORD_SIZE + 1]; /*!< Name of the object */
+  char name[WORD_SIZE];     /*!< Name of the object */
   Id location;              /*!< Id with the location of the object */
   InventoryType type;       /*!< InventoryType where the object is located */
 };
@@ -38,13 +38,14 @@ struct _Object {
 
 /*Object public functions*/
 
-Object *object_create(Id id, char *name, InventoryType type){
+Object *object_create(Id id, char *name, Id location, InventoryType type){
     Object *object = NULL;
 
     if(!(object = (Object *)calloc(1,sizeof(Object))))
         return NULL;
     
     object->id = id;
+    object->location = location;
     strcpy(object->name,name);
     object->type = type;
     

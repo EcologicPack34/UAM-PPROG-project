@@ -23,6 +23,7 @@
 #include "game_reader.h"
 #include "game_actions.h"
 #include "graphic_engine.h"
+#include "collection.h"
 
 #define DEBUG_FILE_PATH "./debug.log"   /*!< stores the path in which the debug_log will print messages*/
 #define END_LOCATION 13                 /*!< Location where the object has to be located to end the game */
@@ -132,7 +133,7 @@ void game_loop_run(Game *game, Graphic_engine *gengine){
   {
     graphic_engine_paint_game(gengine, game);
     /*Checks if the game has been completed*/
-    if(game_get_object_location(game) == END_LOCATION){
+    if(collection_get_element_at(game_get_objects(game), 0) == END_LOCATION){ /*FOR NOW INDEX IS 0 FOR TESTING*/
       game_set_finished(game, 1);
       printf("Congratulations, you completed the game!\n");
       debug_log(DEBUG, "GAME FINISHED BY CONDITION");

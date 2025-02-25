@@ -278,6 +278,7 @@ Status inventory_add_object(Inventory *inventory, Object *object){
     collection_add(inventory_get_objects(inventory), (void *)object);
 
     object_set_type(object, inventory_get_type(inventory));
+    object_set_location(object, inventory_get_location_id(inventory));
 
     inventory_set_object_count(inventory, inventory_get_object_count(inventory) + 1);
 

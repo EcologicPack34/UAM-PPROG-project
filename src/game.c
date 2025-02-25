@@ -37,16 +37,6 @@ struct _Game {
 };
 
 /**
- * @brief Sets the object location
- * @author Profesores PPROG
- *
- * @param game struct that saves all information related to the game
- * @param id id with the location of the object
- * @return OK if everything went well or ERROR if there was a mistake
- */
-Status game_set_object_location(Game *game, Id id);
-
-/**
  * @brief Gets the link in a certain position of the game links array
  * @author Daniel Gómez
  * 
@@ -159,10 +149,6 @@ Player* game_get_player(Game *game) {return game->player; }
 
 Id game_get_player_location(Game *game) {return entity_get_location(player_get_entity(game_get_player(game)));}
 
-Object* game_get_object(Game *game) {return collection_get_element_at(game->objects,0);}
-
-Id game_get_object_location(Game *game) {return (object_get_location(game_get_object(game)));}
-
 Command* game_get_last_command(Game *game) { return game->last_cmd; }
 
 bool game_get_finished(Game *game) { return game->finished; }
@@ -191,6 +177,11 @@ GameState game_get_state(Game *game){
   return game->current_state;
 }
 
+Collection *game_get_objects(Game *game){
+  if(!game) return ERROR;
+  return game->objects;
+}
+
 /*-----------SETTERS-----------*/
 
 Status game_set_last_command(Game *game, Command *command) {
@@ -207,12 +198,6 @@ Status game_set_finished(Game *game, bool finished) {
 
 Status game_set_player_location(Game *game, Id id){
   entity_set_location((Entity *)game_get_player(game), id);
-
-  return OK;
-}
-
-Status game_set_object_location(Game *game, Id id){
-  object_set_location(game_get_object(game), id);
 
   return OK;
 }
@@ -257,3 +242,14 @@ Status game_add_link(Game *game, Link *link){
   return OK;
 }
 
+Status game_add_object(Game *game, Object *object){
+
+  if(!object || !game)
+    return ERROR;
+
+  if(collection_add(game_get_objects(game), object) == ERROR)
+    return ERROR;
+
+  debug_log(PRINT,"Game Added Object: ID: %ld, name: %s, objectlocation: %ld, inventoryType: %d", object_get_id(object), object_get_name(object), object_get_location(object), (int)object_get_type(object));
+  return OK;
+}

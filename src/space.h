@@ -166,13 +166,12 @@ Link *space_get_east(Space *space);
 Link *space_get_west(Space *space);
 
 /**
- * @brief It gets whether the space has an object or not
- * @author Profesores PPROG
- *
+ * @brief Gets the inventory pointer of a space struct
+ * 
  * @param space a pointer to the space
- * @return a boolean, specifying if in the space there is an object (true) or not (false)
+ * @return Inventory* or NULL if error
  */
-bool space_get_object(Space *space);
+Inventory *space_get_inventory(Space *space)
 
 /**
  * @brief It prints the space information
