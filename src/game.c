@@ -82,7 +82,7 @@ Status game_create(Game **game) {
   (*game)->n_spaces = 0;
   (*game)->player = player_create(NOMBRE_PLAYER, (Id)PLAYER_BASE_ID, -1);
   /*Creates the object with the first id not taken by the spaces*/
-  (*game)->objects = collection_create(1, 0, 1, object_isEqual, object_print)
+  (*game)->objects = collection_create(1, FALSE, TRUE, object_isEqual, object_print);
   (*game)->last_cmd = command_create();
   (*game)->finished = false;
   (*game)->n_links = 0;
@@ -159,7 +159,7 @@ Player* game_get_player(Game *game) {return game->player; }
 
 Id game_get_player_location(Game *game) {return entity_get_location(player_get_entity(game_get_player(game)));}
 
-Object* game_get_object(Game *game) {return game->object; }
+Object* game_get_object(Game *game) {return collection_get_element_at(game->objects,0);}
 
 Id game_get_object_location(Game *game) {return (object_get_location(game_get_object(game)));}
 

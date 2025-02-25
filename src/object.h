@@ -128,7 +128,7 @@ Id object_get_location(Object *object);
  * @brief Gets the inventorytype where the object is located
  * 
  * @param object object to be evaluated
- * @return InventoryType 
+ * @return InventoryType or 0 if error
  */
 InventoryType object_get_type(Object *object);
 

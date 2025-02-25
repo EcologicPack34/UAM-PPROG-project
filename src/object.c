@@ -135,7 +135,7 @@ Id object_get_location(Object* object){
 
 InventoryType object_get_type(Object *object){
     if(!object)
-        return NULL;
+        return 0;
 
     return object->type;
 }

@@ -22,8 +22,10 @@
 #include "object.h"
  
 #include <stdbool.h>
- 
-#define INVENTORY_MAX_SIZE 10
+
+#define INVENTORY_PLAYER_MAX_SIZE 10
+#define INVENTORY_ENTITY_MAX_SIZE 10
+#define INVENTORY_SPACE_MAX_SIZE 10
 #define INSIDE_INVENTORY -2  /*!< Id of the location of an object if it is inside an inventory */
  
 typedef struct _Inventory Inventory;

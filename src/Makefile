@@ -14,7 +14,7 @@ all: (EXE)
 game_loop.o:	game_loop.c command.h game_actions.h graphic_engine.h game.c game_reader.c
 	$(CC) $(CFLAGS) -c game_loop.c
 
-game.o:	game.c game.h
+game.o: game.c debug_printing.h game.h link.h types.h entity.h 
 	$(CC) $(CFLAGS) -c game.c
 
 command.o:	command.c command.h

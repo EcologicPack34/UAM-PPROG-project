@@ -15,6 +15,7 @@
 
 #include "inventory.h"
 #include "debug_printing.h"
+#include "collection.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -27,25 +28,16 @@
  * This struct stores all the information of the player inventory
  */
 struct _Inventory {
-    Object *Array[INVENTORY_MAX_SIZE];  /*!< Array of pointers that point to the objects in the inventory (NOT ORGANIZED) */
+    Collection *objects;                /*!< Collection with unique items and fixed space */
     int objectcount;                    /*!< Total number of objects on the inventory */
     InventoryType inventoryType;        /*!< Inventory type of the inventory */
     Id id;                              /*!< Id with the inventory location */
-
 };
 
 
 /*
  * Private functions
 */
-
-/**
- * @brief Gets the object array
- * 
- * @param inventory struct with all the information related to the inventory
- * @return Object* if well or NULL if ERROR
- */
-Object **inventory_get_object_array(Inventory *inventory);
 
 /**
  * @brief Gets the number of objects in the inventory
@@ -81,13 +73,20 @@ Id inventory_get_location_id(Inventory *inventory);
 Object *inventory_get_object_at(Inventory *inventory, int index);
 
 /**
- * @brief Gets the object index in the inventory object array
+ * @brief Gets the size of inventory a type has defined
  * 
- * @param inventory struct with all the information related to the inventory
- * @param object object to look for
- * @return index(int) if well or -1 if not found(But returns the index if the object is NULL)
+ * @param type 
+ * @return unsigned long if well or -1 if error
  */
-int inventory_get_object_index(Inventory *inventory, Object *object);
+unsigned long inventory_get_size_by_type(InventoryType type);
+
+/**
+ * @brief Gets the collection pointer with the objects of an inventory
+ * 
+ * @param inventory inventory where the objects are located
+ * @return Collection* or NULL if error
+ */
+Collection *inventory_get_objects(Inventory *inventory);
 
 /**
  * @brief Sets the number of objects in the inventory
@@ -108,13 +107,6 @@ Status inventory_set_object_count(Inventory *inventory, int object_count);
  * @return OK if well or ERROR if error
  */
 Status inventory_set_object_at(Inventory *inventory, Object *object, int index);
-
-Object **inventory_get_object_array(Inventory *inventory){
-    if(!inventory)
-        return NULL;
-    
-    return inventory->Array;
-}
 
 int inventory_get_object_count(Inventory *inventory){
     if(!inventory)
@@ -138,25 +130,32 @@ Id inventory_get_location_id(Inventory *inventory){
 }
 
 Object *inventory_get_object_at(Inventory *inventory, int index){
+    return collection_get_element_at(inventory_get_objects(inventory), index);
+}
+
+unsigned long inventory_get_size_by_type(InventoryType type){
+    unsigned long size;
+    
+    switch(type){
+        case UNKNOWN_INVENTORY:
+            debug_log(LOG_ERROR, "InventoryType is UNKNOWN_INVENTORY error at inventory_get_size_by_type");
+            return -1;
+        case PLAYER_INVENTORY:
+            size = INVENTORY_PLAYER_MAX_SIZE; break;
+        case NPC_INVENTORY:
+            size = INVENTORY_ENTITY_MAX_SIZE; break;
+        case SPACE_INVENTORY:
+            size = INVENTORY_SPACE_MAX_SIZE; break;
+    }  
+
+    return size;
+}
+
+Collection *inventory_get_objects(Inventory *inventory){
     if(!inventory)
         return NULL;
 
-    return (inventory->Array)[index];
-}
-
-int inventory_get_object_index(Inventory *inventory, Object *object){
-    int i;
-    
-    if(!inventory || !object)
-        return -1;
-    
-    for(i = 0; i < INVENTORY_MAX_SIZE; i++){
-        if(inventory_get_object_at(inventory, i) == object)
-            return i;
-    }
-
-    /*If object was not found returns error as -1*/
-    return -1;
+    return inventory->objects;
 }
 
 Status inventory_set_object_count(Inventory *inventory, int object_count){
@@ -168,13 +167,11 @@ Status inventory_set_object_count(Inventory *inventory, int object_count){
     return OK;
 }
 
-
-
 Status inventory_set_object_at(Inventory *inventory, Object *object, int index){
     if(!inventory)
         return ERROR;
-    
-    (inventory->Array)[index] = object;
+        
+    collection_add(inventory_get_objects(inventory), (void *)object);
 
     return OK;
 }
@@ -185,6 +182,7 @@ Status inventory_set_object_at(Inventory *inventory, Object *object, int index){
 
 Inventory *inventory_create(InventoryType type, Id locationid){
     Inventory *inventory = NULL;
+    unsigned long initialsize;
 
     /*Reserved with calloc to set to NULL the objects and the other variables*/
     inventory = calloc(1, sizeof(Inventory));
@@ -193,23 +191,42 @@ Inventory *inventory_create(InventoryType type, Id locationid){
         return NULL;
     }
 
+    initialsize = inventory_get_size_by_type(type);
+
+    /*Creates a collections with unique objects and fixed length determined by initialsize*/
+    inventory->objects = collection_create(initialsize, TRUE, TRUE, object_isEqual, object_print);
+    if(!(inventory->objects)){
+        debug_log(LOG_ERROR, "inventory_create on collection objects - dynamic memory error at inventory: inventoryType: %d locationid: %d", inventory->inventoryType, inventory->id);
+        free(inventory);
+        return NULL;
+    }
+    
+
     inventory->inventoryType = type;
     inventory->id = locationid;
 
     return inventory;
 }
 
-void inventory_destroy(Inventory *inventory){free(inventory);}
+void inventory_destroy(Inventory *inventory){
+    if(inventory){
+        if(inventory->objects)
+            collection_destroy(inventory->objects);
+        
+        free(inventory);
+    }
+}
 
 Object *inventory_get_object_by_id(Inventory *inventory, Id objectid){
     Object *object = NULL;
-    int i;
+    int i, size;
     
     if(!inventory)
         return NULL;
-    
+
+    size = (int)inventory_get_size_by_type(inventory_get_type(inventory));
     /*Searches by id in all the positions of the inventory array*/
-    for(i = 0; i < INVENTORY_MAX_SIZE; i++){
+    for(i = 0; i < size; i++){
         object = inventory_get_object_at(inventory, i);
         if(object_get_id(object) == objectid)
             return object;
@@ -230,13 +247,14 @@ bool inventory_contains_object(Inventory *inventory, Id objectid){
 }
 
 Object *inventory_get_object_by_name(Inventory *inventory, char *objectname){
-    int i;
+    int i, size;
     Object *object = NULL;
     
     if(!inventory || !objectname)
         return NULL;
 
-    for(i = 0; i < INVENTORY_MAX_SIZE; i++){
+    size = (int)inventory_get_size_by_type(inventory_get_type(inventory));
+    for(i = 0; i < size; i++){
         object = inventory_get_object_at(inventory, i);
         if(strcmp(objectname, object_get_name(object)) == 0)
             return object;
@@ -246,10 +264,6 @@ Object *inventory_get_object_by_name(Inventory *inventory, char *objectname){
 }
 
 Status inventory_add_object(Inventory *inventory, Object *object){
-    int i;
-    bool finished;
-    Object *tempobject = NULL;
-    
     if(!inventory){
         debug_log(LOG_ERROR, "inventory is NULL in inventory_add_object");
         return ERROR;
@@ -261,15 +275,7 @@ Status inventory_add_object(Inventory *inventory, Object *object){
     }
 
     /*Checks if the object is in the inventory*/
-    if(inventory_contains_object(inventory, object_get_id(object)) == 0)
-        return OK;
-
-    for(i = 0, finished = 0; (i < INVENTORY_MAX_SIZE) && (finished == 0); i++){
-        if((tempobject = inventory_get_object_at(inventory, i)) != NULL){
-            inventory_set_object_at(inventory, object, i);
-            finished = 1;
-        }
-    }
+    collection_add(inventory_get_objects(inventory), (void *)object);
 
     object_set_type(object, inventory_get_type(inventory));
 
@@ -280,8 +286,6 @@ Status inventory_add_object(Inventory *inventory, Object *object){
 }
 
 Status inventory_remove_object(Inventory *inventory, Object *object){
-    int i;
-    
     if(!inventory){
         debug_log(LOG_ERROR, "inventory is NULL in inventory_add_remove");
         return ERROR;
@@ -292,13 +296,7 @@ Status inventory_remove_object(Inventory *inventory, Object *object){
         return ERROR;
     }
     
-    for(i = 0; i < INVENTORY_MAX_SIZE; i++){
-        if(inventory_get_object_at(inventory, i) == object){
-            inventory_set_object_at(inventory, NULL, i);
-            inventory_set_object_count(inventory, inventory_get_object_count(inventory) - 1);
-            return OK;
-        }
-    }
+    collection_remove(inventory_get_objects(inventory), (void *)object);
     
     /*If not found it doesnt have to be removed*/
     debug_log(DEBUG, "Object %ld has been removed from the inventory of type:%d and id:%ld", object_get_id(object), (int)inventory_get_type(inventory), inventory_get_location_id(inventory));
@@ -332,13 +330,14 @@ Status inventory_move_object(Inventory *inventoryOUT, Inventory *inventoryIN, Id
 }
 
 Status inventory_get_object_list(Inventory *inventory, char *objectlist){
-    int num, i;
+    int num, i, size;
     Object *tempobject = NULL;
     
     if(!inventory || !objectlist)
         return ERROR;
 
-    for(i = 0, num = 1; i < INVENTORY_MAX_SIZE; i++){
+    size = (int)inventory_get_size_by_type(inventory_get_type(inventory));
+    for(i = 0, num = 1; i < size; i++){
         if((tempobject = inventory_get_object_at(inventory, i)) != NULL){
             sprintf(objectlist, "%d. Id: %ld | Name: %s | LocationId: %ld | InventoryType: %d\n", num++, object_get_id(tempobject), object_get_name(tempobject), object_get_location(tempobject), (int)object_get_type(tempobject));
         }
