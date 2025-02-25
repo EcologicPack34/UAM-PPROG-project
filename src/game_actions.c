@@ -15,6 +15,7 @@
 #include "game_actions.h"
 #include "link.h"
 #include "entity.h"
+#include "collection.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -227,18 +228,20 @@ void game_actions_west(Game *game) {
  * @param game struct that saves all information related to the game
  */
 void game_actions_take(Game *game){
-  Entity *player;
-  Object *object;
+  Entity *player = NULL;
+  Object *object = NULL;
+  Inventory *spaceInventory = NULL, *playerInventory = NULL;
 
   player = player_get_entity(game_get_player(game));
-  if(game_get_object_location(game) != entity_get_location(player))
+
+  object = collection_get_element_at(game_get_objects(game), 0); /*TEMPORAL TEST IMPLEMENTATION --> ADD PRINT INVENTORY AND PICK FROM NAME*/
+
+  if(object_get_location(object) != entity_get_location(player)) 
     return;
 
-  object = game_get_object(game);
-  inventory_add_object(entity_get_inventory(player), object);
-  object_set_location(object, -2);
-  printf("AAA");
-  game_set_object_location(game, INSIDE_INVENTORY);
+  spaceInventory = space_get_inventory(game_get_space(game, game_get_player_location(game)));
+  playerInventory = entity_get_inventory(player_get_entity(game_get_player(game)));
+  inventory_move_object(spaceInventory, playerInventory, object_get_id(object));
 }
 
 /**
@@ -248,20 +251,21 @@ void game_actions_take(Game *game){
  * @param game struct that saves all information related to the game
  */
 void game_actions_drop(Game *game){
-  Entity *player;
-  Object *object;
+  Entity *player = NULL;
+  Object *object = NULL;
+  Inventory *spaceInventory = NULL, *playerInventory = NULL;
   Id id;
 
   if(game_get_object_location(game) != INSIDE_INVENTORY)
     return;
   
-  
-  
   id = game_get_player_location(game);
-  game_set_object_location(game, id);
+
 
   player = player_get_entity(game_get_player(game));
-  object = game_get_object(game);
-  object_set_location(object, id);
-  inventory_remove_object(entity_get_inventory(player),object);
+  object = collection_get_element_at(game_get_objects(game), 0); /*TEMPORAL TEST IMPLEMENTATION --> ADD PRINT INVENTORY AND PICK FROM NAME*/
+
+  spaceInventory = space_get_inventory(game_get_space(game, game_get_player_location(game)));
+  playerInventory = entity_get_inventory(player_get_entity(game_get_player(game)));
+  inventory_move_object(playerInventory, spaceInventory, object_get_id(object));
 }

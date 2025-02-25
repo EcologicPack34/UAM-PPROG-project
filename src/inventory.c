@@ -81,14 +81,6 @@ Object *inventory_get_object_at(Inventory *inventory, int index);
 unsigned long inventory_get_size_by_type(InventoryType type);
 
 /**
- * @brief Gets the collection pointer with the objects of an inventory
- * 
- * @param inventory inventory where the objects are located
- * @return Collection* or NULL if error
- */
-Collection *inventory_get_objects(Inventory *inventory);
-
-/**
  * @brief Sets the number of objects in the inventory
  * 
  * @param inventory struct with all the information related to the inventory
@@ -149,13 +141,6 @@ unsigned long inventory_get_size_by_type(InventoryType type){
     }  
 
     return size;
-}
-
-Collection *inventory_get_objects(Inventory *inventory){
-    if(!inventory)
-        return NULL;
-
-    return inventory->objects;
 }
 
 Status inventory_set_object_count(Inventory *inventory, int object_count){
@@ -261,6 +246,13 @@ Object *inventory_get_object_by_name(Inventory *inventory, char *objectname){
     }
 
     return NULL;
+}
+
+Collection *inventory_get_objects(Inventory *inventory){
+    if(!inventory)
+        return NULL;
+
+    return inventory->objects;
 }
 
 Status inventory_add_object(Inventory *inventory, Object *object){

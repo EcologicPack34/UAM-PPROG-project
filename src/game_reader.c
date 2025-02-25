@@ -238,7 +238,7 @@ Status game_reader_load_objects(Game *game, char *filename){
   /*Gets each line of the data file, uses strtok to shred it and 
   saves each location ID on static memory*/
   while (fgets(line, WORD_SIZE, file)) {
-    if (strncmp("#s:", line, 3) == 0) {
+    if (strncmp("#o:", line, 3) == 0) {
       toks = strtok(line + 3, "|");
       objectid = atol(toks);
       toks = strtok(NULL, "|");

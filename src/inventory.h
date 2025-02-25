@@ -20,6 +20,7 @@
  
 #include "types.h"
 #include "object.h"
+#include "collection.h"
  
 #include <stdbool.h>
 
@@ -78,6 +79,14 @@ bool inventory_contains_object(Inventory *inventory, Id objectid);
  * @return Object* if found or NULL if not found;
  */
 Object *inventory_get_object_by_name(Inventory *inventory, char *objectname);
+
+/**
+ * @brief Gets the collection pointer with the objects of an inventory
+ * 
+ * @param inventory inventory where the objects are located
+ * @return Collection* or NULL if error
+ */
+Collection *inventory_get_objects(Inventory *inventory);
 
 /**
  * @brief Adds an object to an inventory

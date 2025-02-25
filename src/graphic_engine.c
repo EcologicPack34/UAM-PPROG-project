@@ -19,6 +19,7 @@
 #include "libscreen.h"
 #include "space.h"
 #include "types.h"
+#include "collection.h"
 
 #define WIDTH_MAP 49   /*!< Total width of the map */
 #define WIDTH_DESCRIPTION 29   /*!< Total width of the description */
@@ -115,7 +116,7 @@ void graphic_engine_paint_game(Graphic_engine *ge, Game *game){
     }
 
     /*Prints current space*/
-    if (game_get_object_location(game) == id_act)
+    if (collection_length(inventory_get_objects(space_get_inventory(game_get_space(game, id_act)))) >= 1) /* TEMPORAL IMPLEMENTATION TO SEE IF AT LEAST THERE IS AN OBJECT OR NOT*/
       obj = '*';
     else
       obj = ' ';
