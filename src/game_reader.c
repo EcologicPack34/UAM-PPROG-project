@@ -58,8 +58,6 @@ Status game_reader_load_objects(Game *game, char *filename);
 * Public functions implementation
 */
 Status game_reader_create_from_file(Game **game, char *filename){
-  Entity *player;
-  Object *object;
   if (game_create(game) == ERROR){
     debug_log(LOG_ERROR, "Error creating game at: game_reader_create_from_file(Game*, char*) in game_reader.c");
     return ERROR;
@@ -77,10 +75,6 @@ Status game_reader_create_from_file(Game **game, char *filename){
     debug_log(LOG_ERROR, "Error loading objects at: game_reader_create_from_file(Game*, char*) in game_reader.c");
     return ERROR;
   }
-
-  /* The player is located in the first space */
-  player = player_get_entity(game_get_player(*game));
-  entity_set_location(player, game_get_space_id_at(*game, 0));
 
   return OK;
 }
@@ -246,7 +240,7 @@ Status game_reader_load_objects(Game *game, char *filename){
       toks = strtok(NULL, "|");
       objectlocation = atol(toks);
       toks = strtok(NULL, "|");
-      objectlocationtype = (InventoryType)(toks);
+      objectlocationtype = (InventoryType)atol(toks);
 
       debug_log(PRINT,"Read Object: #o:%ld|%s|%ld|%ld", objectid, name, objectlocation, objectlocationtype);
 

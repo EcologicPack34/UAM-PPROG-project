@@ -78,7 +78,7 @@ Object *inventory_get_object_at(Inventory *inventory, int index);
  * @param type 
  * @return unsigned long if well or -1 if error
  */
-unsigned long inventory_get_size_by_type(InventoryType type);
+long inventory_get_size_by_type(InventoryType type);
 
 /**
  * @brief Sets the number of objects in the inventory
@@ -125,8 +125,8 @@ Object *inventory_get_object_at(Inventory *inventory, int index){
     return collection_get_element_at(inventory_get_objects(inventory), index);
 }
 
-unsigned long inventory_get_size_by_type(InventoryType type){
-    unsigned long size;
+long inventory_get_size_by_type(InventoryType type){
+    long size;
     
     switch(type){
         case UNKNOWN_INVENTORY:
@@ -167,7 +167,7 @@ Status inventory_set_object_at(Inventory *inventory, Object *object, int index){
 
 Inventory *inventory_create(InventoryType type, Id locationid){
     Inventory *inventory = NULL;
-    unsigned long initialsize;
+    long initialsize;
 
     /*Reserved with calloc to set to NULL the objects and the other variables*/
     inventory = calloc(1, sizeof(Inventory));

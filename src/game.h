@@ -21,6 +21,7 @@
 #include "command.h"
 #include "types.h"
 #include "player.h"
+#include "collection.h"
 
 #include <stdbool.h>
 

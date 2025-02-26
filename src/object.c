@@ -52,12 +52,11 @@ Object *object_create(Id id, char *name, Id location, InventoryType type){
     return object;
 }
 
-void object_destroy(Object *object){
+void object_destroy(void *object){
     if(!object)
         return;
 
     free(object);
-    object = NULL;
 }
 
 int object_isEqual(void *object1, void *object2){

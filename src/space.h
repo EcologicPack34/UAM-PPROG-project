@@ -21,6 +21,7 @@
 #include "types.h"
 #include "object.h"
 #include "link.h"
+#include "inventory.h"
 
 #include <stdbool.h>
 
@@ -171,7 +172,7 @@ Link *space_get_west(Space *space);
  * @param space a pointer to the space
  * @return Inventory* or NULL if error
  */
-Inventory *space_get_inventory(Space *space)
+Inventory *space_get_inventory(Space *space);
 
 /**
  * @brief It prints the space information

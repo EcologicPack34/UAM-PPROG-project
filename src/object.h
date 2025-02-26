@@ -45,7 +45,7 @@ Object *object_create(Id id, char *name, Id location, InventoryType type);
  *
  * @param object contains the information of an object
  */
-void object_destroy(Object *object);
+void object_destroy(void *object);
 
 /**
  * @brief Compares two objects and returns if their Id is equal or not

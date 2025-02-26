@@ -51,7 +51,7 @@ Entity *entity_create(char *name, Id id, Id location, InventoryType inventoryTyp
         return NULL;
     }
 
-    entity->inventory = inventory_create(location, inventoryType);
+    entity->inventory = inventory_create(inventoryType, id);
     if((entity->inventory) == NULL){
         free(entity);
         return NULL;

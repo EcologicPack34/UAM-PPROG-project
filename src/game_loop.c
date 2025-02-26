@@ -133,7 +133,7 @@ void game_loop_run(Game *game, Graphic_engine *gengine){
   {
     graphic_engine_paint_game(gengine, game);
     /*Checks if the game has been completed*/
-    if(collection_get_element_at(game_get_objects(game), 0) == END_LOCATION){ /*FOR NOW INDEX IS 0 FOR TESTING*/
+    if(object_get_location(collection_get_element_at(game_get_objects(game), 0)) == END_LOCATION){ /*FOR NOW INDEX IS 0 FOR TESTING*/
       game_set_finished(game, 1);
       printf("Congratulations, you completed the game!\n");
       debug_log(DEBUG, "GAME FINISHED BY CONDITION");

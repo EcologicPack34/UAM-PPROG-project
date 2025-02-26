@@ -17,8 +17,8 @@
 
 struct _Collection{
     void **list;                /*<! Stores the elements of the collections */
-    unsigned long length;       /*<! Stores the amount of elements in the collection*/
-    unsigned long allocatedSize;/*<! Stores the amount of memory used by the collection*/
+    long length;       /*<! Stores the amount of elements in the collection*/
+    long allocatedSize;/*<! Stores the amount of memory used by the collection*/
 
     bool fixedLength;           /*<! Can the collection increase its allocated size*/
     bool uniqueElements;        /*<! Can the collection have repeated elements*/
@@ -87,7 +87,7 @@ Status collection_add_non_unique(Collection *collection, void *element){
 
 /*----------PUBLIC FUNCTIONS----------*/
 
-Collection *collection_create(unsigned long initialSize, bool fixedLength, bool uniqueElements, int (*compare_elements)(void*, void*), void (*print_element)(void *)){
+Collection *collection_create(long initialSize, bool fixedLength, bool uniqueElements, int (*compare_elements)(void*, void*), void (*print_element)(void *)){
     Collection *collection = NULL;
     
     if(!compare_elements) return NULL;
@@ -107,8 +107,8 @@ Collection *collection_create(unsigned long initialSize, bool fixedLength, bool 
         
 
     collection->list = (void**)malloc(initialSize * sizeof(void*));
-    if(!(collection->list)){
-        debug_log(LOG_ERROR, "Error creating collection: Couldn't allocate memory for list");
+    if(collection->list == NULL){
+        debug_log(LOG_ERROR, "Error creating collection: Couldn't allocate memory for list, list size: %ld", initialSize);
         free(collection);
         return NULL;
     }
@@ -162,7 +162,7 @@ Status collection_remove(Collection *collection, void *element){
     return ERROR;
 }
 
-Status collection_remove_at(Collection *collection, unsigned long index){
+Status collection_remove_at(Collection *collection, long index){
     int i;
     
     if(!collection) return ERROR;
@@ -183,7 +183,7 @@ Status collection_remove_at(Collection *collection, unsigned long index){
 
 /*----------GETTERS----------*/
 
-void *collection_get_element_at(Collection *collection, unsigned long index){
+void *collection_get_element_at(Collection *collection, long index){
     if(!collection) return NULL;
 
     if(index > collection->length) return NULL;

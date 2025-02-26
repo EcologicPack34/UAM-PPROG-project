@@ -69,7 +69,7 @@ void graphic_engine_destroy(Graphic_engine *ge) {
 }
 
 void graphic_engine_paint_game(Graphic_engine *ge, Game *game){
-  Id id_act = NO_ID, obj_loc = NO_ID;
+  Id id_act = NO_ID;
   Space *space_act = NULL;
   Link *south = NULL, *north = NULL, *east = NULL, *west = NULL;
 
@@ -196,13 +196,14 @@ void graphic_engine_paint_game(Graphic_engine *ge, Game *game){
   }
   /* Paint in the description area */
   screen_area_clear(ge->descript);
-  if (((obj_loc = game_get_object_location(game)) != NO_ID) && (obj_loc != INSIDE_INVENTORY)) {
+  /*if (((obj_loc = game_get_object_location(game)) != NO_ID) && (obj_loc != INSIDE_INVENTORY)) { TEMPORARILY UNAVAILABLE DUE TO OBJECT REWORK*/
+  /*
     sprintf(str, "  Object location:%d", (int)obj_loc);
     screen_area_puts(ge->descript, str);
   } else if(obj_loc == INSIDE_INVENTORY){
     sprintf(str, "  Object location: Player");
     screen_area_puts(ge->descript, str);
-  }
+  }*/
  
   /* Paint in the banner area */
   screen_area_puts(ge->banner, "    The anthill game ");

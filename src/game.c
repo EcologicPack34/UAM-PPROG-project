@@ -70,9 +70,9 @@ Status game_create(Game **game) {
   }
 
   (*game)->n_spaces = 0;
-  (*game)->player = player_create(NOMBRE_PLAYER, (Id)PLAYER_BASE_ID, -1);
+  (*game)->player = player_create(NOMBRE_PLAYER, (Id)PLAYER_BASE_ID, 11);
   /*Creates the object with the first id not taken by the spaces*/
-  (*game)->objects = collection_create(1, FALSE, TRUE, object_isEqual, object_print);
+  (*game)->objects = collection_create(10, false, true, object_isEqual, object_print);
   (*game)->last_cmd = command_create();
   (*game)->finished = false;
   (*game)->n_links = 0;
@@ -92,7 +92,9 @@ Status game_destroy(Game *game) {
   }
 
   player_destroy(game_get_player(game));
-  object_destroy(game_get_object(game));
+  
+  collection_free_elements(game_get_objects(game), object_destroy);
+  collection_destroy(game_get_objects(game));
 
   command_destroy(game->last_cmd);
 
