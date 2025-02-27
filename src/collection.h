@@ -19,6 +19,13 @@
 #include <stdbool.h>
 
 /**
+ * @brief Generic compare function type
+ */
+
+typedef int (*P_elem_cmp)(void*, void*);
+
+
+/**
  * @brief Data type containing the info about the list
  */
 typedef struct _Collection Collection;
@@ -34,7 +41,7 @@ typedef struct _Collection Collection;
  * @param print_element Method to print elements
  * @return Collection*; NULL if something went wrong
  */
-Collection *collection_create(unsigned long initialSize, bool fixedLength, bool uniqueElements, int (*compare_elements)(void*, void*), void (*print_element)(void *));
+Collection *collection_create(long initialSize, bool fixedLength, bool uniqueElements, P_elem_cmp elemCmp, void (*print_element)(void *));
 
 /**
  * @brief Frees the memory of a collection
@@ -74,7 +81,7 @@ Status collection_remove(Collection *collection, void *element);
  * @param index 
  * @return Status 
  */
-Status collection_remove_at(Collection *collection, unsigned long index);
+Status collection_remove_at(Collection *collection, long index);
 
 /*------------GETTERS------------*/
 
@@ -85,7 +92,7 @@ Status collection_remove_at(Collection *collection, unsigned long index);
  * @param index 
  * @return NULL if something went wrong, pointer to element if correct
  */
-void *collection_get_element_at(Collection *collection, unsigned long index);
+void *collection_get_element_at(Collection *collection, long index);
 
 /**
  * @brief Checks if the collection contains a certain element

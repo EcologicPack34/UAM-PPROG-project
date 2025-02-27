@@ -17,13 +17,13 @@
 
 struct _Collection{
     void **list;                /*<! Stores the elements of the collections */
-    unsigned long length;       /*<! Stores the amount of elements in the collection*/
-    unsigned long allocatedSize;/*<! Stores the amount of memory used by the collection*/
+    long length;       /*<! Stores the amount of elements in the collection*/
+    long allocatedSize;/*<! Stores the amount of memory used by the collection*/
 
     bool fixedLength;           /*<! Can the collection increase its allocated size*/
     bool uniqueElements;        /*<! Can the collection have repeated elements*/
 
-    int (*compare_elements)(void* e1, void* e2); /*Method to compare elements of the collection: return 0 if equal, < 0 if smaller and > 0 if greater*/
+    P_elem_cmp compare_elements; /*Method to compare elements of the collection: return 0 if equal, < 0 if smaller and > 0 if greater*/
     void (*print_element)(void *element);        /*Method to print an element of the collection*/
 };
 
@@ -82,7 +82,7 @@ Status collection_add_unique(Collection *collection, void *element){
 
 /*----------PUBLIC FUNCTIONS----------*/
 
-Collection *collection_create(unsigned long initialSize, bool fixedLength, bool uniqueElements, int (*compare_elements)(void*, void*), void (*print_element)(void *)){
+Collection *collection_create(long initialSize, bool fixedLength, bool uniqueElements, P_elem_cmp compare_elements, void (*print_element)(void *)){
     Collection *collection = NULL;
     
     if(!compare_elements) return NULL;
@@ -157,7 +157,7 @@ Status collection_remove(Collection *collection, void *element){
     return ERROR;
 }
 
-Status collection_remove_at(Collection *collection, unsigned long index){
+Status collection_remove_at(Collection *collection, long index){
     int i;
     
     if(!collection) return ERROR;
@@ -178,7 +178,7 @@ Status collection_remove_at(Collection *collection, unsigned long index){
 
 /*----------GETTERS----------*/
 
-void *collection_get_element_at(Collection *collection, unsigned long index){
+void *collection_get_element_at(Collection *collection, long index){
     if(!collection) return NULL;
 
     if(index > collection->length) return NULL;
