@@ -88,6 +88,15 @@ Status object_set_name(Object *object, char *name);
  */
 Status object_set_location(Object *object, Id id);
 
+/**
+ * @brief Sets the inventorytype inside the object struct
+ * 
+ * @param object contains the information of an object
+ * @param type type to set
+ * @return Status 
+ */
+Status object_set_type(Object *object, InventoryType type);
+
 /*Object GETTERS*/
 
 /**

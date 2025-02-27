@@ -84,22 +84,6 @@ Status collection_add_non_unique(Collection *collection, void *element){
     return OK;
 }
 
-/**
- * @brief Adds a unique element to the collection
- * @author Daniel Gómez
- * 
- * @param collection
- * @param element 
- * @return Status 
- */
-Status collection_add_unique(Collection *collection, void *element){
-    /*We omit error control as it is done in collection_add()*/
-
-    if(collection_contains(collection, element) != -1) return OK;
-    
-    return collection_add_non_unique(collection, element);
-}
-
 /*----------PUBLIC FUNCTIONS----------*/
 Collection *collection_create(long initialSize, bool fixedLength, bool uniqueElements, P_elem_cmp compare_elements, void (*print_element)(void *)){
     Collection *collection = NULL;

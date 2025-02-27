@@ -29,8 +29,6 @@
 #define INVENTORY_SPACE_MAX_SIZE 10
 #define INSIDE_INVENTORY -2  /*!< Id of the location of an object if it is inside an inventory */
  
-typedef enum {UNKNOWN_INVENTORY, PLAYER_INVENTORY, NPC_INVENTORY, SPACE_INVENTORY} InventoryType;
- 
 typedef struct _Inventory Inventory;
 
 /*Game public interface functions*/
