@@ -31,13 +31,17 @@ struct _Entity {
     Id id;                    /*!< Unique id of the entity */
     Id location;              /*!< Id of the space where the entity is located*/
     Inventory *inventory;     /*!< entity inventory */
+
+    Entity_Stats stats;       /*!< Entity combat stats */
 };
+
+
 
 /*
  * Entity public implementation
 */
 
-Entity *entity_create(char *name, Id id, Id location, InventoryType inventoryType){
+Entity *entity_create(char *name, Id id, Id location, InventoryType inventoryType, double health, double baseDamage, int strength, int defense, int magicLevel){
     Entity *entity = NULL;
 
     if(name == NULL){
@@ -51,7 +55,7 @@ Entity *entity_create(char *name, Id id, Id location, InventoryType inventoryTyp
         return NULL;
     }
 
-    entity->inventory = inventory_create(location, inventoryType);
+    entity->inventory = inventory_create(inventoryType, id);
     if((entity->inventory) == NULL){
         free(entity);
         return NULL;
@@ -61,6 +65,12 @@ Entity *entity_create(char *name, Id id, Id location, InventoryType inventoryTyp
     entity_set_id(entity, id);
     entity_set_name(entity, name);
     entity_set_location(entity, location);
+    
+    entity_set_health(entity, health);
+    entity_set_baseDamage(entity, baseDamage);
+    entity_set_strength(entity, strength);
+    entity_set_defense(entity, defense);
+    entity_set_magicLevel(entity, magicLevel);
 
     return entity;
 }
@@ -108,6 +118,50 @@ Status entity_set_entityType(Entity *entity, EntityType entityType){
     return OK;
 }
 
+Status entity_set_health(Entity *entity, double health){
+    if(!entity)
+        return ERROR;
+
+    entity->stats.health = health;
+
+    return OK;
+}
+
+Status entity_set_baseDamage(Entity *entity, double baseDamage){
+    if(!entity)
+        return ERROR;
+    
+    entity->stats.baseDamage = baseDamage;
+    return OK;
+}
+
+Status entity_set_strength(Entity *entity, int strength){
+    if(!entity)
+        return ERROR;
+
+    entity->stats.strength = strength;
+
+    return OK;
+}
+
+Status entity_set_defense(Entity *entity, int defense){
+    if(!entity)
+        return ERROR;
+
+    entity->stats.defense = defense;
+    return OK;
+}
+
+Status entity_set_magicLevel(Entity *entity, int magicLevel){
+    if(!entity)
+        return ERROR;
+
+    
+    entity->stats.magicLevel = magicLevel;
+
+    return OK;
+}
+
 /*Entity GETTERS*/
 
 char *entity_get_name(Entity *entity){
@@ -144,3 +198,40 @@ EntityType entity_get_entityType(Entity *entity){
 
     return entity->entityType;
 }
+
+double entity_get_health(Entity *entity){
+    if(!entity)
+        return -1;
+
+    return entity->stats.health;
+}
+
+double entity_get_baseDamage(Entity *entity){
+    if(!entity)
+        return -1;
+    
+    return entity->stats.baseDamage;
+}
+
+int entity_get_strength(Entity *entity){
+    if(!entity)
+        return -1;
+
+    return entity->stats.strength;
+}
+
+int entity_get_defense(Entity *entity){
+    if(!entity)
+        return -1;
+
+    return entity->stats.defense;
+}
+
+int entity_get_magicLevel(Entity *entity){
+    if(!entity)
+        return -1;
+
+    
+    return entity->stats.magicLevel;
+}
+

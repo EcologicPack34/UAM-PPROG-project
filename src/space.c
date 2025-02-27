@@ -26,6 +26,7 @@
 struct _Space {
   Id id;                    /*!< Id number of the space, it must be unique */
   char name[WORD_SIZE + 1]; /*!< Name of the space */
+  Inventory *inventory;
   Link *north;                 /*!< Id of the space at the north */
   Link *south;                 /*!< Id of the space at the south */
   Link *east;                  /*!< Id of the space at the east */
@@ -49,6 +50,11 @@ Space* space_create(Id id) {
   /* Initialization of an empty space*/
   newSpace->id = id;
   newSpace->name[0] = '\0';
+  newSpace->inventory = inventory_create(SPACE_INVENTORY, id);
+  if(!newSpace->inventory){
+    free(newSpace);
+    return NULL;
+  }
   newSpace->north = NULL;
   newSpace->south = NULL;
   newSpace->east = NULL;
@@ -63,6 +69,8 @@ Status space_destroy(Space* space) {
     return ERROR;
   }
 
+  inventory_destroy(space->inventory);
+
   free(space);
   space = NULL;
   return OK;
@@ -73,6 +81,13 @@ Id space_get_id(Space* space) {
     return NO_ID;
   }
   return space->id;
+}
+
+Inventory *space_get_inventory(Space *space){
+  if(!space){
+    return NULL;
+  }
+  return space->inventory;
 }
 
 /*Space SETTERS*/

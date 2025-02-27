@@ -21,6 +21,7 @@
 #include "command.h"
 #include "types.h"
 #include "player.h"
+#include "collection.h"
 
 #include <stdbool.h>
 
@@ -108,13 +109,13 @@ int game_get_n_spaces(Game *game);
 Player* game_get_player(Game *game);
 
 /**
- * @brief Gets the object pointer of the game struct
+ * @brief Gets the collection pointer with the objects of the game struct
  * @author Maksym Polyak
  *
  * @param game struct that saves all information related to the game
  * @return object pointer from game or NULL if there was a mistake
  */
-Object* game_get_object(Game *game);
+Collection* game_get_objects(Game *game);
 
 /**
  * @brief Gets the last command from the game struct
@@ -142,15 +143,6 @@ bool game_get_finished(Game *game);
  * @return player location id or -1 if there was a mistake
  */
 Id game_get_player_location(Game *game);
-
-/**
- * @brief Gets the object location
- * @author Profesores PPROG
- *
- * @param game struct that saves all information related to the game
- * @return object location id or -1 if there was a mistake
- */
-Id game_get_object_location(Game *game);
 
 /**
  * @brief Gets the numer of links stored in a game
@@ -212,16 +204,6 @@ Status game_set_finished(Game *game, bool finished);
 Status game_set_player_location(Game *game, Id id);
 
 /**
- * @brief Sets the object location
- * @author Profesores PPROG
- *
- * @param game struct that saves all information related to the game
- * @param id id with the location of the object
- * @return OK if everything went well or ERROR if there was a mistake
- */
-Status game_set_object_location(Game *game, Id id);
-
-/**
  * @brief Sets the current game state
  * 
  * @param game 
@@ -251,5 +233,23 @@ Status game_add_space(Game *game, Space *space);
  * @return Status 
  */
 Status game_add_link(Game *game, Link *link);
+
+/**
+ * @brief Adds the object received to the collection of objects on game
+ * 
+ * @param game struct that saves all information related to the game
+ * @param object struct that saves all information related to the object
+ * @return Status 
+ */
+Status game_add_object(Game *game, Object *object);
+
+/**
+ * @brief Adds a player to the game struct
+ * 
+ * @param game struct that saves all information related to the game
+ * @param player struct that saves all information related to a player
+ * @return Status 
+ */
+Status game_add_player(Game *game, Player *player);
 
 #endif

@@ -30,6 +30,16 @@ struct _Collection{
 /*----------PRIVATE FUNCTIONS-----------*/
 
 /**
+ * @brief Adds a unique element to the collection
+ * @author Daniel Gómez
+ * 
+ * @param collection
+ * @param element 
+ * @return Status 
+ */
+Status collection_add_unique(Collection *collection, void *element);
+
+/**
  * @brief Adds a non unique element to the collection
  * @author Daniel Gómez
  * 
@@ -37,6 +47,16 @@ struct _Collection{
  * @param element 
  * @return Status 
  */
+Status collection_add_non_unique(Collection *collection, void *element);
+
+Status collection_add_unique(Collection *collection, void *element){
+    /*We omit error control as it is done in collection_add()*/
+
+    if(collection_contains(collection, element) != -1) return OK;
+    
+    return collection_add_non_unique(collection, element);
+}
+
 Status collection_add_non_unique(Collection *collection, void *element){
     /*We ommit error control as it is done in collection_add()*/
     void **auxp = NULL;
@@ -81,7 +101,6 @@ Status collection_add_unique(Collection *collection, void *element){
 }
 
 /*----------PUBLIC FUNCTIONS----------*/
-
 Collection *collection_create(long initialSize, bool fixedLength, bool uniqueElements, P_elem_cmp compare_elements, void (*print_element)(void *)){
     Collection *collection = NULL;
     
@@ -102,8 +121,8 @@ Collection *collection_create(long initialSize, bool fixedLength, bool uniqueEle
         
 
     collection->list = (void**)malloc(initialSize * sizeof(void*));
-    if(!(collection->list)){
-        debug_log(LOG_ERROR, "Error creating collection: Couldn't allocate memory for list");
+    if(collection->list == NULL){
+        debug_log(LOG_ERROR, "Error creating collection: Couldn't allocate memory for list, list size: %ld", initialSize);
         free(collection);
         return NULL;
     }
@@ -165,12 +184,15 @@ Status collection_remove_at(Collection *collection, long index){
 
     collection->list[index] = NULL;
 
-    for (i = index + 1; i < collection->length; i++)
-    {
-        collection->list[i -1] = collection->list[i];
+    if(index != collection->length -1){
+        for (i = index + 1; i < collection->length; i++)
+        {
+            collection->list[i -1] = collection->list[i];
+        }
     }
-
-    collection->list[collection->length] = NULL;
+    
+    
+    collection->list[collection->length -1] = NULL;
     (collection->length)--;
 
     return OK;

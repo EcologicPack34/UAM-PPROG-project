@@ -1,5 +1,11 @@
 Formato Space: #s:ID|Nombre|northLink|eastLink|southLink|westLink
-Formato Link: #s:ID|Space1|Space2|adjacent|locked|unlockingObjectID
+Formato Link: #l:ID|Space1|Space2|adjacent|locked|unlockingObjectID
+Formato Object: #o:ID|Nombre|LocationID|InventoryType
+Formato Player: #p:ID|Nombre|LocationID|Vida|DanoBase|Fuerza|Defensa|NivelMagia
+
+InventoryType = {UNKNOWN_INVENTORY == 0, PLAYER_INVENTORY == 1, NPC_INVENTORY == 2, SPACE_INVENTORY == 3}
+
+#p:1|Hero|11|10|2|1|1|1
 
 -#s:11|Entry|-1|-1|1|4
 -#s:12|Corridor1|1|-1|2|-1
@@ -31,3 +37,8 @@ Formato Link: #s:ID|Space1|Space2|adjacent|locked|unlockingObjectID
 #l:7|125|126|1|0|0
 #l:8|126|127|1|0|0
 #l:9|127|14|1|0|0
+
+#o:1|Grain1|11|3
+#o:2|Grain2|11|3
+#o:3|Grain3|121|3
+#o:4|Grain4|122|3

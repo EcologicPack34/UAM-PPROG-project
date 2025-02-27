@@ -11,31 +11,40 @@ all: (EXE)
 (EXE):	$(OBJ)
 	$(CC) $(CFLAGS) -o $(EXE) $(OBJ) libscreen.a
 
-game_loop.o:	game_loop.c command.h game_actions.h graphic_engine.h game.c game_reader.c
+game_loop.o: game_loop.c debug_printing.h command.h types.h game.h link.h \
+ entity.h inventory.h object.h collection.h space.h player.h \
+ game_reader.h game_actions.h graphic_engine.h
 	$(CC) $(CFLAGS) -c game_loop.c
 
-game.o:	game.c game.h
+game.o: game.c debug_printing.h game.h link.h types.h entity.h \
+ inventory.h object.h collection.h space.h command.h player.h
 	$(CC) $(CFLAGS) -c game.c
 
-command.o:	command.c command.h
+command.o: command.c command.h types.h debug_printing.h
 	$(CC) $(CFLAGS) -c command.c
 
-space.o:	space.c space.h
+space.o: space.c space.h types.h object.h link.h entity.h inventory.h \
+ collection.h
 	$(CC) $(CFLAGS) -c space.c
 
-game_actions.o:	game_actions.c game_actions.h
+game_actions.o: game_actions.c game_actions.h command.h types.h game.h \
+ link.h entity.h inventory.h object.h collection.h space.h player.h
 	$(CC) $(CFLAGS) -c game_actions.c
 
-graphic_engine.o:	graphic_engine.c graphic_engine.h
+graphic_engine.o: graphic_engine.c graphic_engine.h game.h link.h types.h \
+ entity.h inventory.h object.h collection.h space.h command.h player.h \
+ debug_printing.h libscreen.h
 	$(CC) $(CFLAGS) -c graphic_engine.c
 
-object.o:	object.c object.h
+object.o: object.c object.h types.h
 	$(CC) $(CFLAGS) -c object.c
 
-entity.o:	entity.c entity.h
+entity.o: entity.c entity.h inventory.h types.h object.h collection.h \
+ debug_printing.h
 	$(CC) $(CFLAGS) -c entity.c
 	
-player.o:	player.c player.h entity.h
+player.o: player.c player.h entity.h inventory.h types.h object.h \
+ collection.h
 	$(CC) $(CFLAGS) -c player.c
 
 collector.o:	collector.c collector.h
@@ -44,13 +53,17 @@ collector.o:	collector.c collector.h
 debug_printing.o:	debug_printing.c debug_printing.h
 	$(CC) $(CFLAGS) -c debug_printing.c
 
-game_reader.o : game_reader.c game_reader.h space.h types.h game.c
+game_reader.o: game_reader.c game_reader.h types.h game.h link.h entity.h \
+ inventory.h object.h collection.h space.h command.h player.h \
+ debug_printing.h
 	$(CC) $(CFLAGS) -c game_reader.c
 
-link.o : link.c link.h types.h entity.c game.c
+link.o: link.c link.h types.h entity.h inventory.h object.h collection.h \
+ debug_printing.h
 	$(CC) $(CFLAGS) -c link.c
 
-inventory.o: inventory.c inventory.h
+inventory.o: inventory.c inventory.h types.h object.h collection.h \
+ debug_printing.h
 	$(CC) $(CFLAGS) -c inventory.c
 
 

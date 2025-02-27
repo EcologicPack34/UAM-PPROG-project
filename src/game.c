@@ -12,6 +12,7 @@
 
 #include "debug_printing.h"
 #include "game.h"
+#include "collection.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -24,7 +25,7 @@
 
 struct _Game {
   Player *player;              /*!< Contains all the information related to the player */
-  Object *object;              /*!< Contains all the information related to the object */
+  Collection *objects;         /*!< Contains all the information related to the object */
   Space *spaces[MAX_SPACES];   /*!< Array with all the spaces of the map */
   int n_spaces;                /*!< int with the number of spaces on *spaces */
   Link *links[MAX_LINKS];     /*!< Array with all the links in the map*/
@@ -34,16 +35,6 @@ struct _Game {
   Command *last_cmd;           /*!< string with the last command */
   bool finished;               /*!< bool that determines if the game has finished*/
 };
-
-/**
- * @brief Sets the object location
- * @author Profesores PPROG
- *
- * @param game struct that saves all information related to the game
- * @param id id with the location of the object
- * @return OK if everything went well or ERROR if there was a mistake
- */
-Status game_set_object_location(Game *game, Id id);
 
 /**
  * @brief Gets the link in a certain position of the game links array
@@ -79,9 +70,9 @@ Status game_create(Game **game) {
   }
 
   (*game)->n_spaces = 0;
-  (*game)->player = player_create(NOMBRE_PLAYER, (Id)PLAYER_BASE_ID, -1);
+  (*game)->player = NULL; /*Player creation is controlled by game_reader*/
   /*Creates the object with the first id not taken by the spaces*/
-  (*game)->object = object_create(1, OBJECT_NAME);
+  (*game)->objects = collection_create(10, false, true, object_isEqual, object_print);
   (*game)->last_cmd = command_create();
   (*game)->finished = false;
   (*game)->n_links = 0;
@@ -101,7 +92,9 @@ Status game_destroy(Game *game) {
   }
 
   player_destroy(game_get_player(game));
-  object_destroy(game_get_object(game));
+  
+  collection_free_elements(game_get_objects(game), object_destroy);
+  collection_destroy(game_get_objects(game));
 
   command_destroy(game->last_cmd);
 
@@ -158,10 +151,6 @@ Player* game_get_player(Game *game) {return game->player; }
 
 Id game_get_player_location(Game *game) {return entity_get_location(player_get_entity(game_get_player(game)));}
 
-Object* game_get_object(Game *game) {return game->object; }
-
-Id game_get_object_location(Game *game) {return (object_get_location(game_get_object(game)));}
-
 Command* game_get_last_command(Game *game) { return game->last_cmd; }
 
 bool game_get_finished(Game *game) { return game->finished; }
@@ -190,6 +179,11 @@ GameState game_get_state(Game *game){
   return game->current_state;
 }
 
+Collection *game_get_objects(Game *game){
+  if(!game) return ERROR;
+  return game->objects;
+}
+
 /*-----------SETTERS-----------*/
 
 Status game_set_last_command(Game *game, Command *command) {
@@ -206,12 +200,6 @@ Status game_set_finished(Game *game, bool finished) {
 
 Status game_set_player_location(Game *game, Id id){
   entity_set_location((Entity *)game_get_player(game), id);
-
-  return OK;
-}
-
-Status game_set_object_location(Game *game, Id id){
-  object_set_location(game_get_object(game), id);
 
   return OK;
 }
@@ -256,3 +244,23 @@ Status game_add_link(Game *game, Link *link){
   return OK;
 }
 
+Status game_add_object(Game *game, Object *object){
+
+  if(!object || !game)
+    return ERROR;
+
+  if(collection_add(game_get_objects(game), object) == ERROR)
+    return ERROR;
+
+  debug_log(PRINT,"Game Added Object: ID: %ld, name: %s, objectlocation: %ld, inventoryType: %d", object_get_id(object), object_get_name(object), object_get_location(object), (int)object_get_type(object));
+  return OK;
+}
+
+Status game_add_player(Game *game, Player *player){
+  if(!game || !player)
+    return ERROR;
+
+  game->player = player;
+
+  return OK;
+}

@@ -33,9 +33,11 @@ typedef struct _Object Object;
  *
  * @param id id of the object that is created
  * @param name name of the object
+ * @param location id where the object is located
+ * @param type type of inventory where the object is located
  * @return a new object, initialized or NULL if there was a mistake
  */
-Object *object_create(Id id, char *name);
+Object *object_create(Id id, char *name, Id location, InventoryType type);
 
 /**
  * @brief It destroys an object
@@ -43,7 +45,7 @@ Object *object_create(Id id, char *name);
  *
  * @param object contains the information of an object
  */
-void object_destroy(Object *object);
+void object_destroy(void *object);
 
 /**
  * @brief Compares two objects and returns if their Id is equal or not
@@ -52,7 +54,7 @@ void object_destroy(Object *object);
  * @param object contains the information of an object
  * @return 1 if the two objects are equal, 0 if they are not equal or -1 if there was a mistake
  */
-int object_isEqual(Object *object1, Object *object2);
+int object_isEqual(void *object1, void *object2);
 
 /*Object SETTERS*/
 
@@ -116,11 +118,19 @@ char *object_get_name(Object *object);
 Id object_get_location(Object *object);
 
 /**
+ * @brief Gets the inventorytype where the object is located
+ * 
+ * @param object object to be evaluated
+ * @return InventoryType or 0 if error
+ */
+InventoryType object_get_type(Object *object);
+
+/**
  * @brief Prints on screen an object
  * @author Maksym Polyak
  *
  * @param inventory stores the information of an inventory
  */
-void object_print(Object *object);
+void object_print(void *object);
 
 #endif

@@ -19,9 +19,10 @@
 #include "libscreen.h"
 #include "space.h"
 #include "types.h"
+#include "collection.h"
 
 #define WIDTH_MAP 49   /*!< Total width of the map */
-#define WIDTH_DESCRIPTION 29   /*!< Total width of the description */
+#define WIDTH_DESCRIPTION 40   /*!< Total width of the description 29 default*/
 #define WIDTH_BANNER 23   /*!< Total width of the banner */
 #define HEIGHT_MAP 13  /*!< Total height of the map */
 #define HEIGHT_HELP_BANNER 1   /*!< Total height of the banner */
@@ -68,15 +69,17 @@ void graphic_engine_destroy(Graphic_engine *ge) {
 }
 
 void graphic_engine_paint_game(Graphic_engine *ge, Game *game){
-  Id id_act = NO_ID, obj_loc = NO_ID;
+  Id id_act = NO_ID;
   Space *space_act = NULL;
   Link *south = NULL, *north = NULL, *east = NULL, *west = NULL;
+  Inventory *spaceInventory = NULL, *playerInventory = NULL;
 
   char obj = '\0';
   char locked = '\0';
   char str[WORD_SIZE];
   CommandCode last_cmd = UNKNOWN;
   extern char *cmd_to_str[N_CMD][N_CMDT];
+  int inventorysize, i;
 
   /* Paint the in the map area */
   screen_area_clear(ge->map);
@@ -115,7 +118,9 @@ void graphic_engine_paint_game(Graphic_engine *ge, Game *game){
     }
 
     /*Prints current space*/
-    if (game_get_object_location(game) == id_act)
+    /*Gets the actual spaceinventory */
+    spaceInventory = space_get_inventory(game_get_space(game, id_act));
+    if (inventory_get_size(spaceInventory) >= 1) /* TEMPORAL IMPLEMENTATION TO SEE IF AT LEAST THERE IS AN OBJECT OR NOT*/
       obj = '*';
     else
       obj = ' ';
@@ -195,13 +200,34 @@ void graphic_engine_paint_game(Graphic_engine *ge, Game *game){
   }
   /* Paint in the description area */
   screen_area_clear(ge->descript);
-  if (((obj_loc = game_get_object_location(game)) != NO_ID) && (obj_loc != INSIDE_INVENTORY)) {
+
+  playerInventory = entity_get_inventory(player_get_entity(game_get_player(game)));
+  inventorysize = inventory_get_size(playerInventory);
+
+  strcpy(str, "Player inventory:");
+  screen_area_puts(ge->descript, str);
+  for(i = 0; i < inventorysize && i < 5; i++){
+    inventory_get_object_str_at(playerInventory, str, i);
+    screen_area_puts(ge->descript, str);
+  }
+
+  inventorysize = inventory_get_size(spaceInventory);
+  strcpy(str, "Space inventory:");
+  screen_area_puts(ge->descript, str);
+  for(i = 0; i < inventorysize && i < 5; i++){
+    inventory_get_object_str_at(spaceInventory, str, i);
+    screen_area_puts(ge->descript, str);
+  }
+  
+  
+  /*if (((obj_loc = game_get_object_location(game)) != NO_ID) && (obj_loc != INSIDE_INVENTORY)) { TEMPORARILY UNAVAILABLE DUE TO OBJECT REWORK*/
+  /*
     sprintf(str, "  Object location:%d", (int)obj_loc);
     screen_area_puts(ge->descript, str);
   } else if(obj_loc == INSIDE_INVENTORY){
     sprintf(str, "  Object location: Player");
     screen_area_puts(ge->descript, str);
-  }
+  }*/
  
   /* Paint in the banner area */
   screen_area_puts(ge->banner, "    The anthill game ");

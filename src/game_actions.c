@@ -15,6 +15,7 @@
 #include "game_actions.h"
 #include "link.h"
 #include "entity.h"
+#include "collection.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -227,18 +228,35 @@ void game_actions_west(Game *game) {
  * @param game struct that saves all information related to the game
  */
 void game_actions_take(Game *game){
-  Entity *player;
-  Object *object;
+  Entity *player = NULL;
+  Object *object = NULL;
+  Inventory *spaceInventory = NULL, *playerInventory = NULL;
+  char **arguments = NULL;
+  Id objectid;
 
-  player = player_get_entity(game_get_player(game));
-  if(game_get_object_location(game) != entity_get_location(player))
+  arguments = command_get_arguments(game_get_last_command(game));
+  /*Checks if the first letter of the argument is O or o*/
+  if((arguments[0][0] != 'O') && (arguments[0][0] != 'o')){
+    return;
+  }
+
+  /*Saves the id of the object*/
+  objectid = atol(arguments[0] + 1);
+
+  if(objectid < 0)
     return;
 
-  object = game_get_object(game);
-  inventory_add_object(entity_get_inventory(player), object);
-  object_set_location(object, -2);
-  printf("AAA");
-  game_set_object_location(game, INSIDE_INVENTORY);
+  player = player_get_entity(game_get_player(game));
+
+  spaceInventory = space_get_inventory(game_get_space(game, game_get_player_location(game)));
+  playerInventory = entity_get_inventory(player_get_entity(game_get_player(game)));
+
+  object = inventory_get_object_by_id(spaceInventory, objectid);
+
+  if(object_get_location(object) != entity_get_location(player)) 
+    return;
+
+  inventory_move_object(spaceInventory, playerInventory, object_get_id(object));
 }
 
 /**
@@ -248,20 +266,27 @@ void game_actions_take(Game *game){
  * @param game struct that saves all information related to the game
  */
 void game_actions_drop(Game *game){
-  Entity *player;
-  Object *object;
-  Id id;
+  Object *object = NULL;
+  Inventory *spaceInventory = NULL, *playerInventory = NULL;
+  char **arguments = NULL;
+  Id objectid;
 
-  if(game_get_object_location(game) != INSIDE_INVENTORY)
+  arguments = command_get_arguments(game_get_last_command(game));
+  /*Checks if the first letter of the argument is O or o*/
+  if((arguments[0][0] != 'O') && (arguments[0][0] != 'o')){
+    return;
+  }
+
+  /*Saves the id of the object*/
+  objectid = atol(arguments[0] + 1);
+
+  if(objectid < 0)
     return;
   
-  
-  
-  id = game_get_player_location(game);
-  game_set_object_location(game, id);
+  playerInventory = entity_get_inventory(player_get_entity(game_get_player(game)));
+  spaceInventory = space_get_inventory(game_get_space(game, game_get_player_location(game)));
 
-  player = player_get_entity(game_get_player(game));
-  object = game_get_object(game);
-  object_set_location(object, id);
-  inventory_remove_object(entity_get_inventory(player),object);
+  object = inventory_get_object_by_id(playerInventory, objectid);
+
+  inventory_move_object(playerInventory, spaceInventory, object_get_id(object));
 }

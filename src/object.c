@@ -26,7 +26,7 @@
  */
 struct _Object {
   Id id;                    /*!< Id number of the object, it must be unique */
-  char name[WORD_SIZE + 1]; /*!< Name of the object */
+  char name[WORD_SIZE];     /*!< Name of the object */
   Id location;              /*!< Id with the location of the object */
 };
 
@@ -36,38 +36,37 @@ struct _Object {
 
 
 /*Object public functions*/
-
-Object *object_create(Id id, char *name){
+Object *object_create(Id id, char *name, Id location, InventoryType type){
     Object *object = NULL;
 
     if(!(object = (Object *)calloc(1,sizeof(Object))))
         return NULL;
     
     object->id = id;
+    object->location = location;
     strcpy(object->name,name);
     
     return object;
 }
 
-void object_destroy(Object *object){
+void object_destroy(void *object){
     if(!object)
         return;
 
     free(object);
-    object = NULL;
 }
 
-int object_isEqual(Object *object1, Object *object2){
+int object_isEqual(void *object1, void *object2){
     if(!object1 || !object2)
         return -1;
 
-    if(object_get_id(object1) == NO_ID || object_get_id(object2) == NO_ID)
+    if(object_get_id((Object *)object1) == NO_ID || object_get_id((Object *)object2) == NO_ID)
         return -1;
 
-    if((object_get_id(object1) == object_get_id(object2)))
-        return 1;
+    if((object_get_id((Object *)object1) == object_get_id((Object *)object2)))
+        return 0;
     
-    return 0;
+    return -1;
 }
 
 /*Object SETTERS*/
@@ -122,13 +121,20 @@ Id object_get_location(Object* object){
     return object->location;
 }
 
-void object_print(Object *object){
+InventoryType object_get_type(Object *object){
+    if(!object)
+        return 0;
+
+    return object->type;
+}
+
+void object_print(void *object){
     
     printf("\n\n-------------\n\n");
 
     printf("=> Object:  \n");
     
 
-    printf("=> Object id: %d\n", (int)object_get_id(object));
-    printf("=> Object name: %s\n", object_get_name(object));
+    printf("=> Object id: %d\n", (int)object_get_id((Object *)object));
+    printf("=> Object name: %s\n", object_get_name((Object *)object));
 }
