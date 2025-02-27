@@ -1,6 +1,8 @@
 {
     "files.associations": {
         "compare": "c",
-        "type_traits": "c"
+        "type_traits": "c",
+        "collection.h": "c",
+        "string.h": "c"
     }
 }

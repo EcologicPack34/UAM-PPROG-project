@@ -88,15 +88,6 @@ Status object_set_name(Object *object, char *name);
  */
 Status object_set_location(Object *object, Id id);
 
-/**
- * @brief Sets the inventorytype where the object is located
- * 
- * @param object object to edit
- * @param type type of the inventory where it will be located
- * @return OK if everything went fine or ERROR if there was a mistake
- */
-Status object_set_type(Object *object, InventoryType type);
-
 /*Object GETTERS*/
 
 /**

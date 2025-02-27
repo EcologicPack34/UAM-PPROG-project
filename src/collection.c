@@ -23,7 +23,7 @@ struct _Collection{
     bool fixedLength;           /*<! Can the collection increase its allocated size*/
     bool uniqueElements;        /*<! Can the collection have repeated elements*/
 
-    int (*compare_elements)(void* e1, void* e2); /*Method to compare elements of the collection: return 0 if equal, < 0 if smaller and > 0 if greater*/
+    P_elem_cmp compare_elements; /*Method to compare elements of the collection: return 0 if equal, < 0 if smaller and > 0 if greater*/
     void (*print_element)(void *element);        /*Method to print an element of the collection*/
 };
 
@@ -84,10 +84,24 @@ Status collection_add_non_unique(Collection *collection, void *element){
     return OK;
 }
 
+/**
+ * @brief Adds a unique element to the collection
+ * @author Daniel Gómez
+ * 
+ * @param collection
+ * @param element 
+ * @return Status 
+ */
+Status collection_add_unique(Collection *collection, void *element){
+    /*We omit error control as it is done in collection_add()*/
+
+    if(collection_contains(collection, element) != -1) return OK;
+    
+    return collection_add_non_unique(collection, element);
+}
 
 /*----------PUBLIC FUNCTIONS----------*/
-
-Collection *collection_create(long initialSize, bool fixedLength, bool uniqueElements, int (*compare_elements)(void*, void*), void (*print_element)(void *)){
+Collection *collection_create(long initialSize, bool fixedLength, bool uniqueElements, P_elem_cmp compare_elements, void (*print_element)(void *)){
     Collection *collection = NULL;
     
     if(!compare_elements) return NULL;
