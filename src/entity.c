@@ -31,6 +31,13 @@ struct _Entity {
     Id id;                    /*!< Unique id of the entity */
     Id location;              /*!< Id of the space where the entity is located*/
     Inventory *inventory;     /*!< entity inventory */
+
+    double health;             /*!< Health of the entity */
+    double baseDamage;         /*!< Base damage of the entity */
+
+    int strength;             /*!< Strength stat of the entity */
+    int defense;              /*!< Defense stat of the entity */
+    int magicLevel;           /*!< magicLevel stat of the entity */
 };
 
 /*
@@ -108,6 +115,42 @@ Status entity_set_entityType(Entity *entity, EntityType entityType){
     return OK;
 }
 
+Status entity_set_health(Entity *entity, double health){
+    if(!entity)
+        return -1;
+
+    return entity->health;
+}
+
+Status entity_set_baseDamage(Entity *entity, double baseDamage){
+    if(!entity)
+        return -1;
+    
+    return entity->baseDamage;
+}
+
+Status entity_set_strength(Entity *entity, int strength){
+    if(!entity)
+        return -1;
+
+    return entity->strength;
+}
+
+Status entity_set_defense(Entity *entity, int defense){
+    if(!entity)
+        return -1;
+
+    return entity->defense;
+}
+
+Status entity_set_magicLevel(Entity *entity, int magicLevel){
+    if(!entity)
+        return -1;
+
+    
+    return entity->magicLevel;
+}
+
 /*Entity GETTERS*/
 
 char *entity_get_name(Entity *entity){
@@ -144,3 +187,40 @@ EntityType entity_get_entityType(Entity *entity){
 
     return entity->entityType;
 }
+
+double entity_get_health(Entity *entity){
+    if(!entity)
+        return -1;
+
+    return entity->health;
+}
+
+double entity_get_baseDamage(Entity *entity){
+    if(!entity)
+        return -1;
+    
+    return entity->baseDamage;
+}
+
+int entity_get_strength(Entity *entity){
+    if(!entity)
+        return -1;
+
+    return entity->strength;
+}
+
+int entity_get_defense(Entity *entity){
+    if(!entity)
+        return -1;
+
+    return entity->defense;
+}
+
+int entity_get_magicLevel(Entity *entity){
+    if(!entity)
+        return -1;
+
+    
+    return entity->magicLevel;
+}
+

@@ -91,6 +91,51 @@ Status entity_set_id(Entity *entity, Id id);
  */
 Status entity_set_entityType(Entity *entity, EntityType entityType);
 
+/**
+ * @brief Sets the entity health
+ * 
+ * @param entity contains all the information related to the entity
+ * @param health health to be set
+ * @return Status 
+ */
+Status entity_set_health(Entity *entity, double health);
+
+/**
+ * @brief Sets the base damage
+ * 
+ * @param entity contains all the information related to the entity
+ * @param baseDamage base damage to set
+ * @return Status 
+ */
+Status entity_set_baseDamage(Entity *entity, double baseDamage);
+
+/**
+ * @brief Sets the strength stat
+ * 
+ * @param entity contains all the information related to the entity
+ * @param strength strength stat to set
+ * @return Status 
+ */
+Status entity_set_strength(Entity *entity, int strength);
+
+/**
+ * @brief Sets the defense stat
+ * 
+ * @param entity contains all the information related to the entity
+ * @param defense defense stat to set
+ * @return Status 
+ */
+Status entity_set_defense(Entity *entity, int defense);
+
+/**
+ * @brief Sets the magic level stat
+ * 
+ * @param entity contains all the information related to the entity
+ * @param magicLevel magic level stat to set
+ * @return Status 
+ */
+Status entity_set_magicLevel(Entity *entity, int magicLevel);
+
 /*Entity GETTERS*/
 
 /**
@@ -138,6 +183,49 @@ Id entity_get_id(Entity *entity);
  * @return OK if everything went well or ERROR if there was a mistake
  */
 EntityType entity_get_entityType(Entity *entity);
+
+/**
+ * @brief Gets the entity health
+ * 
+ * @param entity contains all the information related to the entity
+ * @return health if well or -1 if wrong
+ */
+double entity_get_health(Entity *entity);
+
+
+/**
+ * @brief Gets the entity base damage
+ * 
+ * @param entity contains all the information related to the entity
+ * @return baseDamage if well or -1 if wrong
+ */
+double entity_get_baseDamage(Entity *entity);
+
+/**
+ * @brief Gets the strength stat of the entity
+ * 
+ * @param entity contains all the information related to the entity
+ * @return strength stat if well or -1 if wrong
+ */
+int entity_get_strength(Entity *entity);
+
+/**
+ * @brief Gets the defense stat of the entity
+ * 
+ * @param entity contains all the information related to the entity
+ * @return defense stat if well or -1 if wrong
+ */
+int entity_get_defense(Entity *entity);
+
+/**
+ * @brief Gets the magic Level stat of the entity
+ * 
+ * @param entity contains all the information related to the entity
+ * @return magicLevel stat if well or -1 if wrong
+ */
+int entity_get_magicLevel(Entity *entity);
+
+
 
 /*Entity PRINTERS*/
 
