@@ -64,15 +64,6 @@ InventoryType inventory_get_type(Inventory *inventory);
 Id inventory_get_location_id(Inventory *inventory);
 
 /**
- * @brief Gets the object on the object array at the position index
- * 
- * @param inventory struct with all the information related to the inventory
- * @param index index with the position of the object
- * @return Object* if well or NULL if error
- */
-Object *inventory_get_object_at(Inventory *inventory, int index);
-
-/**
  * @brief Gets the size of inventory a type has defined
  * 
  * @param type 
@@ -121,8 +112,8 @@ Id inventory_get_location_id(Inventory *inventory){
     return inventory->id;
 }
 
-Object *inventory_get_object_at(Inventory *inventory, int index){
-    return collection_get_element_at(inventory_get_objects(inventory), index);
+Object *inventory_get_object_at(Inventory *inventory, long index){
+    return collection_get_element_at(inventory_get_collection(inventory), index);
 }
 
 long inventory_get_size_by_type(InventoryType type){
@@ -156,7 +147,7 @@ Status inventory_set_object_at(Inventory *inventory, Object *object, int index){
     if(!inventory)
         return ERROR;
         
-    collection_add(inventory_get_objects(inventory), (void *)object);
+    collection_add(inventory_get_collection(inventory), (void *)object);
 
     return OK;
 }
@@ -248,7 +239,7 @@ Object *inventory_get_object_by_name(Inventory *inventory, char *objectname){
     return NULL;
 }
 
-Collection *inventory_get_objects(Inventory *inventory){
+Collection *inventory_get_collection(Inventory *inventory){
     if(!inventory)
         return NULL;
 
@@ -267,7 +258,7 @@ Status inventory_add_object(Inventory *inventory, Object *object){
     }
 
     /*Checks if the object is in the inventory*/
-    collection_add(inventory_get_objects(inventory), (void *)object);
+    collection_add(inventory_get_collection(inventory), (void *)object);
 
     object_set_type(object, inventory_get_type(inventory));
     object_set_location(object, inventory_get_location_id(inventory));
@@ -289,7 +280,7 @@ Status inventory_remove_object(Inventory *inventory, Object *object){
         return ERROR;
     }
     
-    if(collection_remove(inventory_get_objects(inventory), (void *)object) == ERROR) return ERROR;
+    if(collection_remove(inventory_get_collection(inventory), (void *)object) == ERROR) return ERROR;
     
     /*If not found it doesnt have to be removed*/
     debug_log(DEBUG, "Object %ld has been removed from the inventory of type:%d and id:%ld", object_get_id(object), (int)inventory_get_type(inventory), inventory_get_location_id(inventory));
@@ -345,4 +336,29 @@ Status inventory_get_object_list(Inventory *inventory, char *objectlist){
     }
 
     return OK;
+}
+
+long inventory_get_size(Inventory *inventory){
+    if(!inventory)
+        return -1;
+
+    return collection_length(inventory_get_collection(inventory));
+}
+
+Object *inventory_get_object(Inventory *inventory, Id objectid){
+    Object *object = NULL;
+    long size, i;
+    
+    if(!inventory || !objectid)
+        return NULL;
+
+    size = inventory_get_size(inventory);
+    for(i = 0; i < size; i++){
+        object = inventory_get_object_at(inventory, i);
+        if(objectid == object_get_id(object)){
+            return object;
+        }
+    }
+
+    return NULL;
 }

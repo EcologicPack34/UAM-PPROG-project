@@ -234,13 +234,14 @@ void game_actions_take(Game *game){
 
   player = player_get_entity(game_get_player(game));
 
-  object = collection_get_element_at(game_get_objects(game), 0); /*TEMPORAL TEST IMPLEMENTATION --> ADD PRINT INVENTORY AND PICK FROM NAME*/
+  spaceInventory = space_get_inventory(game_get_space(game, game_get_player_location(game)));
+  playerInventory = entity_get_inventory(player_get_entity(game_get_player(game)));
+
+  object = inventory_get_object_by_id(spaceInventory, 1); /*TEMPORAL ID 1*/
 
   if(object_get_location(object) != entity_get_location(player)) 
     return;
 
-  spaceInventory = space_get_inventory(game_get_space(game, game_get_player_location(game)));
-  playerInventory = entity_get_inventory(player_get_entity(game_get_player(game)));
   inventory_move_object(spaceInventory, playerInventory, object_get_id(object));
 }
 
@@ -257,7 +258,7 @@ void game_actions_drop(Game *game){
   playerInventory = entity_get_inventory(player_get_entity(game_get_player(game)));
   spaceInventory = space_get_inventory(game_get_space(game, game_get_player_location(game)));
 
-  object = collection_get_element_at(inventory_get_objects(playerInventory), 0); /*TEMPORAL TEST IMPLEMENTATION --> ADD PRINT INVENTORY AND PICK FROM NAME*/
+  object = inventory_get_object_by_id(playerInventory, 1); /*TEMPORAL ID 1*/
 
   inventory_move_object(playerInventory, spaceInventory, object_get_id(object));
 }

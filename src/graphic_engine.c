@@ -72,6 +72,7 @@ void graphic_engine_paint_game(Graphic_engine *ge, Game *game){
   Id id_act = NO_ID;
   Space *space_act = NULL;
   Link *south = NULL, *north = NULL, *east = NULL, *west = NULL;
+  Inventory *spaceInventory = NULL;
 
   char obj = '\0';
   char locked = '\0';
@@ -116,7 +117,9 @@ void graphic_engine_paint_game(Graphic_engine *ge, Game *game){
     }
 
     /*Prints current space*/
-    if (collection_length(inventory_get_objects(space_get_inventory(game_get_space(game, id_act)))) >= 1) /* TEMPORAL IMPLEMENTATION TO SEE IF AT LEAST THERE IS AN OBJECT OR NOT*/
+    /*Gets the actual spaceinventory */
+    spaceInventory = space_get_inventory(game_get_space(game, id_act));
+    if (inventory_get_size(spaceInventory) >= 1) /* TEMPORAL IMPLEMENTATION TO SEE IF AT LEAST THERE IS AN OBJECT OR NOT*/
       obj = '*';
     else
       obj = ' ';

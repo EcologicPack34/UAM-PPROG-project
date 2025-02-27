@@ -62,6 +62,15 @@ void inventory_destroy(Inventory *inventory);
 Object *inventory_get_object_by_id(Inventory *inventory, Id objectid);
 
 /**
+ * @brief Gets the object on the object array at the position index
+ * 
+ * @param inventory struct with all the information related to the inventory
+ * @param index index with the position of the object
+ * @return Object* if well or NULL if error
+ */
+Object *inventory_get_object_at(Inventory *inventory, long index);
+
+/**
  * @brief Checks if an object is in the inventory by id
  * @author Maksym Polyak
  *
@@ -81,12 +90,12 @@ bool inventory_contains_object(Inventory *inventory, Id objectid);
 Object *inventory_get_object_by_name(Inventory *inventory, char *objectname);
 
 /**
- * @brief Gets the collection pointer with the objects of an inventory
+ * @brief Gets the object ** of an inventory
  * 
  * @param inventory inventory where the objects are located
  * @return Collection* or NULL if error
  */
-Collection *inventory_get_objects(Inventory *inventory);
+Collection *inventory_get_collection(Inventory *inventory);
 
 /**
  * @brief Adds an object to an inventory
@@ -126,5 +135,22 @@ Status inventory_move_object(Inventory *inventoryOUT, Inventory *inventoryIN, Id
  * @return OK if well or ERROR if error
  */
 Status inventory_get_object_list(Inventory *inventory, char *objectlist);
+
+/**
+ * @brief Gets the inventory number of objects
+ * 
+ * @param inventory inventory where the objects are located
+ * @return long if well or -1 if error
+ */
+long inventory_get_size(Inventory *inventory);
+
+/**
+ * @brief Gets an object by its id on an inventory
+ * 
+ * @param inventory inventory where the objects are located
+ * @param objectid id of the object
+ * @return Object* if well or NULL if ERROR;
+ */
+Object *inventory_get_object(Inventory *inventory, Id objectid);
 
 #endif
