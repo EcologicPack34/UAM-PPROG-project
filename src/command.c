@@ -246,4 +246,21 @@ Status command_get_list(char *destination){
   return OK;
 }
 
+Status command_set_arguments_void(Command *command){
+  int i, j;
+  char **arguments = NULL;
 
+  if(!command)
+    return ERROR;
+
+  arguments = command_get_arguments(command);
+
+  /*Sets each character of each argument to \0*/
+  for(i = 0; i < MAX_CMD_ARGS_NUM; i++){
+    for(j = 0; j < MAX_CMD_ARGS_LENGTH; j++){
+      arguments[i][j] = '\0';
+    }
+  }
+
+  return OK;
+}

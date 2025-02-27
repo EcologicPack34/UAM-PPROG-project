@@ -109,5 +109,13 @@ Status command_get_user_input(Command* command);
  */
 Status command_get_list(char *destination);
 
+/**
+ * @brief sets to empty string each string of the arguments in order to avoid using another argument when calling other commmand
+ * 
+ * @param command 
+ * @return Status 
+ */
+Status command_set_arguments_void(Command *command);
+
 
 #endif

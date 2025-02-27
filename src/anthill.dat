@@ -38,4 +38,7 @@ InventoryType = {UNKNOWN_INVENTORY == 0, PLAYER_INVENTORY == 1, NPC_INVENTORY ==
 #l:8|126|127|1|0|0
 #l:9|127|14|1|0|0
 
-#o:1|Grain|11|3
+#o:1|Grain1|11|3
+#o:2|Grain2|11|3
+#o:3|Grain3|121|3
+#o:4|Grain4|122|3

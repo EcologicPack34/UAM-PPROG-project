@@ -139,6 +139,7 @@ void game_loop_run(Game *game, Graphic_engine *gengine){
       debug_log(DEBUG, "GAME FINISHED BY CONDITION");
       return;
     }
+    command_set_arguments_void(last_cmd); /*Avoids that the arguments are saved between user inputs*/
     command_get_user_input(last_cmd);
     game_actions_update(game, last_cmd);
   }

@@ -265,7 +265,6 @@ Status inventory_add_object(Inventory *inventory, Object *object){
 
     inventory_set_object_count(inventory, inventory_get_object_count(inventory) + 1);
 
-    debug_log(DEBUG, "Object %ld has been added to the inventory of type:%d and id:%ld", object_get_id(object), (int)inventory_get_type(inventory), inventory_get_location_id(inventory));
     return OK;
 }
 
@@ -283,7 +282,6 @@ Status inventory_remove_object(Inventory *inventory, Object *object){
     if(collection_remove(inventory_get_collection(inventory), (void *)object) == ERROR) return ERROR;
     
     /*If not found it doesnt have to be removed*/
-    debug_log(DEBUG, "Object %ld has been removed from the inventory of type:%d and id:%ld", object_get_id(object), (int)inventory_get_type(inventory), inventory_get_location_id(inventory));
     return OK;
 }
 
@@ -306,18 +304,16 @@ Status inventory_move_object(Inventory *inventoryOUT, Inventory *inventoryIN, Id
         return ERROR;
     
     if(inventory_remove_object(inventoryOUT, object) == ERROR){
-        debug_log(PRINT, "Object %ld has failed to move due to fail on inventory remove from the inventory of type:%d and id:%ld", object_get_id(object), (int)inventory_get_type(inventoryOUT), inventory_get_location_id(inventoryOUT));
+        debug_log(LOG_ERROR, "Object %ld has failed to move due to fail on inventory remove from the inventory of type:%d and id:%ld", object_get_id(object), (int)inventory_get_type(inventoryOUT), inventory_get_location_id(inventoryOUT));
         return ERROR;
     }
 
     if(inventory_add_object(inventoryIN, object) == ERROR){
-        debug_log(PRINT, "Object %ld was lost, move has failed due to fail on inventory add from the inventory of type:%d and id:%ld", object_get_id(object), (int)inventory_get_type(inventoryIN), inventory_get_location_id(inventoryIN));
+        debug_log(LOG_ERROR, "Object %ld was lost, move has failed due to fail on inventory add from the inventory of type:%d and id:%ld", object_get_id(object), (int)inventory_get_type(inventoryIN), inventory_get_location_id(inventoryIN));
         return ERROR;
     }
 
-    debug_log(DEBUG, "Object %ld location is: id:%ld locationtype:%d", object_get_id(object), object_get_location(object), object_get_type(object));
-
-    debug_log(DEBUG, "Object %ld has been moved to the inventory of type:%d and id:%ld to the inventory of type:%d and id:%ld", object_get_id(object), (int)inventory_get_type(inventoryOUT), inventory_get_location_id(inventoryOUT), (int)inventory_get_type(inventoryIN), inventory_get_location_id(inventoryIN));
+    debug_log(PRINT, "Object %ld has been moved to the inventory of type:%d and id:%ld to the inventory of type:%d and id:%ld", object_get_id(object), (int)inventory_get_type(inventoryOUT), inventory_get_location_id(inventoryOUT), (int)inventory_get_type(inventoryIN), inventory_get_location_id(inventoryIN));
     return OK;
 }
 
@@ -331,9 +327,21 @@ Status inventory_get_object_list(Inventory *inventory, char *objectlist){
     size = (int)inventory_get_size_by_type(inventory_get_type(inventory));
     for(i = 0, num = 1; i < size; i++){
         if((tempobject = inventory_get_object_at(inventory, i)) != NULL){
-            sprintf(objectlist, "%d. Id: %ld | Name: %s | LocationId: %ld | InventoryType: %d\n", num++, object_get_id(tempobject), object_get_name(tempobject), object_get_location(tempobject), (int)object_get_type(tempobject));
+            sprintf(objectlist, "%d. Id: %ld | Name: %s\n", num++, object_get_id(tempobject), object_get_name(tempobject));
         }
     }
+
+    return OK;
+}
+
+Status inventory_get_object_str_at(Inventory *inventory, char *objectdescr, int index){
+    Object *tempobject = NULL;
+    
+    if(!inventory || !objectdescr)
+        return ERROR;
+
+    tempobject = inventory_get_object_at(inventory, index);
+    sprintf(objectdescr, "%d. Id: %ld | Name: %s", index + 1, object_get_id(tempobject), object_get_name(tempobject));
 
     return OK;
 }

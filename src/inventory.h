@@ -137,6 +137,16 @@ Status inventory_move_object(Inventory *inventoryOUT, Inventory *inventoryIN, Id
 Status inventory_get_object_list(Inventory *inventory, char *objectlist);
 
 /**
+ * @brief Gets a str without \n with the id of the object and its name
+ * 
+ * @param inventory 
+ * @param objectdescr 
+ * @param index 
+ * @return Status 
+ */
+Status inventory_get_object_str_at(Inventory *inventory, char *objectdescr, int index);
+
+/**
  * @brief Gets the inventory number of objects
  * 
  * @param inventory inventory where the objects are located
