@@ -28,7 +28,6 @@ struct _Object {
   Id id;                    /*!< Id number of the object, it must be unique */
   char name[WORD_SIZE + 1]; /*!< Name of the object */
   Id location;              /*!< Id with the location of the object */
-  InventoryType type;       /*!< InventoryType where the object is located */
 };
 
 /**
@@ -38,7 +37,7 @@ struct _Object {
 
 /*Object public functions*/
 
-Object *object_create(Id id, char *name, InventoryType type){
+Object *object_create(Id id, char *name){
     Object *object = NULL;
 
     if(!(object = (Object *)calloc(1,sizeof(Object))))
@@ -46,7 +45,6 @@ Object *object_create(Id id, char *name, InventoryType type){
     
     object->id = id;
     strcpy(object->name,name);
-    object->type = type;
     
     return object;
 }
@@ -101,15 +99,6 @@ Status object_set_location(Object* object, Id id){
     return OK;
 }
 
-Status object_set_type(Object *object, InventoryType type){
-    if(!object)
-        return ERROR;
-    
-    object->type = type;
-
-    return OK;
-}
-
 /*Object GETTERS*/
 
 Id object_get_id(Object *object){
@@ -131,13 +120,6 @@ Id object_get_location(Object* object){
         return -1;
 
     return object->location;
-}
-
-InventoryType object_get_type(Object *object){
-    if(!object)
-        return NULL;
-
-    return object->type;
 }
 
 void object_print(Object *object){

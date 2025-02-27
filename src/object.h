@@ -86,15 +86,6 @@ Status object_set_name(Object *object, char *name);
  */
 Status object_set_location(Object *object, Id id);
 
-/**
- * @brief Sets the inventorytype where the object is located
- * 
- * @param object object to edit
- * @param type type of the inventory where it will be located
- * @return OK if everything went fine or ERROR if there was a mistake
- */
-Status object_set_type(Object *object, InventoryType type);
-
 /*Object GETTERS*/
 
 /**
@@ -123,14 +114,6 @@ char *object_get_name(Object *object);
  * @return id with the space id where the object is located or -1 if there was a mistake
  */
 Id object_get_location(Object *object);
-
-/**
- * @brief Gets the inventorytype where the object is located
- * 
- * @param object object to be evaluated
- * @return InventoryType 
- */
-InventoryType object_get_type(Object *object);
 
 /**
  * @brief Prints on screen an object

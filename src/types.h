@@ -23,6 +23,4 @@ typedef enum { ERROR, OK } Status; /*!< Status enum that admits ERROR or OK */
 
 typedef enum { N, S, E, W } Direction; /*!< Directions of the map: North, South, East, West */
 
-typedef enum {UNKNOWN_INVENTORY, PLAYER_INVENTORY, NPC_INVENTORY, SPACE_INVENTORY} InventoryType;
-
 #endif
