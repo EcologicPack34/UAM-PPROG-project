@@ -32,13 +32,10 @@ struct _Entity {
     Id location;              /*!< Id of the space where the entity is located*/
     Inventory *inventory;     /*!< entity inventory */
 
-    double health;             /*!< Health of the entity */
-    double baseDamage;         /*!< Base damage of the entity */
-
-    int strength;             /*!< Strength stat of the entity */
-    int defense;              /*!< Defense stat of the entity */
-    int magicLevel;           /*!< magicLevel stat of the entity */
+    Entity_Stats stats;       /*!< Entity combat stats */
 };
+
+
 
 /*
  * Entity public implementation
@@ -117,38 +114,46 @@ Status entity_set_entityType(Entity *entity, EntityType entityType){
 
 Status entity_set_health(Entity *entity, double health){
     if(!entity)
-        return -1;
+        return ERROR;
 
-    return entity->health;
+    entity->stats.health = health;
+
+    return OK;
 }
 
 Status entity_set_baseDamage(Entity *entity, double baseDamage){
     if(!entity)
-        return -1;
+        return ERROR;
     
-    return entity->baseDamage;
+    entity->stats.baseDamage = baseDamage;
+    return OK;
 }
 
 Status entity_set_strength(Entity *entity, int strength){
     if(!entity)
-        return -1;
+        return ERROR;
 
-    return entity->strength;
+    entity->stats.strength = strength;
+
+    return OK;
 }
 
 Status entity_set_defense(Entity *entity, int defense){
     if(!entity)
-        return -1;
+        return ERROR;
 
-    return entity->defense;
+    entity->stats.defense = defense;
+    return OK;
 }
 
 Status entity_set_magicLevel(Entity *entity, int magicLevel){
     if(!entity)
-        return -1;
+        return ERROR;
 
     
-    return entity->magicLevel;
+    entity->stats.magicLevel = magicLevel;
+
+    return OK;
 }
 
 /*Entity GETTERS*/
@@ -192,28 +197,28 @@ double entity_get_health(Entity *entity){
     if(!entity)
         return -1;
 
-    return entity->health;
+    return entity->stats.health;
 }
 
 double entity_get_baseDamage(Entity *entity){
     if(!entity)
         return -1;
     
-    return entity->baseDamage;
+    return entity->stats.baseDamage;
 }
 
 int entity_get_strength(Entity *entity){
     if(!entity)
         return -1;
 
-    return entity->strength;
+    return entity->stats.strength;
 }
 
 int entity_get_defense(Entity *entity){
     if(!entity)
         return -1;
 
-    return entity->defense;
+    return entity->stats.defense;
 }
 
 int entity_get_magicLevel(Entity *entity){
@@ -221,6 +226,6 @@ int entity_get_magicLevel(Entity *entity){
         return -1;
 
     
-    return entity->magicLevel;
+    return entity->stats.magicLevel;
 }
 

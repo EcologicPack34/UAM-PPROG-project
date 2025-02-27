@@ -25,6 +25,15 @@ typedef enum {UNKNOWN_ENTITY, PLAYER, NPC} EntityType;
 
 typedef struct _Entity Entity;
 
+typedef struct{
+    double health;             /*!< Health of the entity */
+    double baseDamage;         /*!< Base damage of the entity */
+
+    int strength;             /*!< Strength stat of the entity */
+    int defense;              /*!< Defense stat of the entity */
+    int magicLevel;           /*!< magicLevel stat of the entity */
+}Entity_Stats;
+
 /*
  * Entity public implementation
 */
