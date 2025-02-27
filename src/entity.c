@@ -41,7 +41,7 @@ struct _Entity {
  * Entity public implementation
 */
 
-Entity *entity_create(char *name, Id id, Id location, InventoryType inventoryType){
+Entity *entity_create(char *name, Id id, Id location, InventoryType inventoryType, double health, double baseDamage, int strength, int defense, int magicLevel){
     Entity *entity = NULL;
 
     if(name == NULL){
@@ -65,6 +65,12 @@ Entity *entity_create(char *name, Id id, Id location, InventoryType inventoryTyp
     entity_set_id(entity, id);
     entity_set_name(entity, name);
     entity_set_location(entity, location);
+    
+    entity_set_health(entity, health);
+    entity_set_baseDamage(entity, baseDamage);
+    entity_set_strength(entity, strength);
+    entity_set_defense(entity, defense);
+    entity_set_magicLevel(entity, magicLevel);
 
     return entity;
 }

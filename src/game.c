@@ -70,7 +70,7 @@ Status game_create(Game **game) {
   }
 
   (*game)->n_spaces = 0;
-  (*game)->player = player_create(NOMBRE_PLAYER, (Id)PLAYER_BASE_ID, 11);
+  (*game)->player = NULL; /*Player creation is controlled by game_reader*/
   /*Creates the object with the first id not taken by the spaces*/
   (*game)->objects = collection_create(10, false, true, object_isEqual, object_print);
   (*game)->last_cmd = command_create();
@@ -253,5 +253,14 @@ Status game_add_object(Game *game, Object *object){
     return ERROR;
 
   debug_log(PRINT,"Game Added Object: ID: %ld, name: %s, objectlocation: %ld, inventoryType: %d", object_get_id(object), object_get_name(object), object_get_location(object), (int)object_get_type(object));
+  return OK;
+}
+
+Status game_add_player(Game *game, Player *player){
+  if(!game || !player)
+    return ERROR;
+
+  game->player = player;
+
   return OK;
 }

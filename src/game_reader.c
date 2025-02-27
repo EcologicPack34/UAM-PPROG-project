@@ -72,8 +72,10 @@ Status game_reader_create_from_file(Game **game, char *filename){
     return ERROR;
   }
 
-  
-
+  if(game_reader_load_player(*game, filename) == ERROR){
+    debug_log(LOG_ERROR, "Error loading player at: game_reader_create_from_file(Game*, char*) in game_reader.c");
+    return ERROR;
+  }
   if(game_reader_load_links(*game, filename) == ERROR){
     debug_log(LOG_ERROR, "Error loading links at: game_reader_create_from_file(Game*, char*) in game_reader.c");
     return ERROR;
@@ -285,26 +287,26 @@ Status game_reader_load_objects(Game *game, char *filename){
   return status;
 }
 
-/* NEEDS IMPLEMENTATION*/
 Status game_reader_load_player(Game *game, char *filename){
   FILE *file = NULL;
+  Player *player = NULL;
   char line[WORD_SIZE] = "";
   char name[WORD_SIZE] = "";
   char *toks = NULL;
   double health, baseDamage;
   int strength, defense, magicLevel;
-  long playerid;
+  long playerid, startinglocation;
 
   Status status = OK;
 
   if (!filename) {
-    debug_log(LOG_ERROR, "Missing file name at: game_reader_load_objects(Game*, char*) in game_reader.c");
+    debug_log(LOG_ERROR, "Missing file name at: game_reader_load_player(Game*, char*) in game_reader.c");
     return ERROR;
   }
 
   file = fopen(filename, "r");
   if (file == NULL) {
-    debug_log(LOG_ERROR, "Error in file at: game_reader_load_objects(Game*, char*) in game_reader.c");
+    debug_log(LOG_ERROR, "Error in file at: game_reader_load_player(Game*, char*) in game_reader.c");
     return ERROR;
   }
 
@@ -312,41 +314,42 @@ Status game_reader_load_player(Game *game, char *filename){
   /*Gets each line of the data file, uses strtok to shred it and 
   saves each location ID on static memory*/
   while (fgets(line, WORD_SIZE, file)) {
-    if (strncmp("#o:", line, 3) == 0) {
+    if (strncmp("#p:", line, 3) == 0) {
       toks = strtok(line + 3, "|");
-      objectid = atol(toks);
+      playerid = atol(toks);
       toks = strtok(NULL, "|");
       strcpy(name, toks);
       toks = strtok(NULL, "|");
-      objectlocation = atol(toks);
+      startinglocation = atol(toks);
       toks = strtok(NULL, "|");
-      objectlocationtype = (InventoryType)atol(toks);
+      health = strtod(toks, NULL);
+      toks = strtok(NULL, "|");
+      baseDamage = strtod(toks, NULL);
+      toks = strtok(NULL, "|");
+      strength = atoi(toks);
+      toks = strtok(NULL, "|");
+      defense = atoi(toks);
+      toks = strtok(NULL, "|");
+      magicLevel = atoi(toks);
+      
 
-      debug_log(PRINT,"Read Object: #o:%ld|%s|%ld|%ld", objectid, name, objectlocation, objectlocationtype);
+      debug_log(PRINT,"Read Player: #p:%ld|%s|%ld|%lf|%lf|%d|%d|%d", playerid, name, startinglocation, health, baseDamage, strength, defense, magicLevel);
 
-      /*Creates a object with object_create then saves it on the game with game_add_space*/
-      object = object_create(objectid, name, objectlocation, objectlocationtype);
-      if (object != NULL) {
-        game_add_object(game, object);
-        switch(objectlocationtype){
-          case UNKNOWN_INVENTORY: return ERROR;
-          case PLAYER_INVENTORY:
-            inventory_add_object(entity_get_inventory(player_get_entity(game_get_player(game))), object);
-            break;
-          case NPC_INVENTORY:
-            /* NON IMPLEMENTEDinventory_add_object()*/
-            break;
-          case SPACE_INVENTORY:
-            inventory_add_object(space_get_inventory(game_get_space(game, objectlocation)), object);
-            break;
+      /*Creates a player with player_create then saves it on the game with game_add_player*/
+      player = player_create(name, playerid, startinglocation, health, baseDamage, strength, defense, magicLevel);
+      if (player != NULL) {
+        if(game_add_player(game, player) == ERROR){
+          player_destroy(player);
+          status = ERROR;
         }
       }
     }
   }
 
+
   if (ferror(file)) {
     status = ERROR;
-    debug_log(LOG_ERROR, "Error in file at: game_reader_load_objects(Game*, char*) in game_reader.c");
+    debug_log(LOG_ERROR, "Error in file at: game_reader_load_player(Game*, char*) in game_reader.c");
   }
 
   fclose(file);

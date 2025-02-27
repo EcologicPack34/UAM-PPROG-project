@@ -289,7 +289,7 @@ Status inventory_remove_object(Inventory *inventory, Object *object){
         return ERROR;
     }
     
-    collection_remove(inventory_get_objects(inventory), (void *)object);
+    if(collection_remove(inventory_get_objects(inventory), (void *)object) == ERROR) return ERROR;
     
     /*If not found it doesnt have to be removed*/
     debug_log(DEBUG, "Object %ld has been removed from the inventory of type:%d and id:%ld", object_get_id(object), (int)inventory_get_type(inventory), inventory_get_location_id(inventory));
@@ -314,9 +314,17 @@ Status inventory_move_object(Inventory *inventoryOUT, Inventory *inventoryIN, Id
     if(object == NULL)
         return ERROR;
     
-    inventory_remove_object(inventoryOUT, object);
+    if(inventory_remove_object(inventoryOUT, object) == ERROR){
+        debug_log(PRINT, "Object %ld has failed to move due to fail on inventory remove from the inventory of type:%d and id:%ld", object_get_id(object), (int)inventory_get_type(inventoryOUT), inventory_get_location_id(inventoryOUT));
+        return ERROR;
+    }
 
-    inventory_add_object(inventoryIN, object);
+    if(inventory_add_object(inventoryIN, object) == ERROR){
+        debug_log(PRINT, "Object %ld was lost, move has failed due to fail on inventory add from the inventory of type:%d and id:%ld", object_get_id(object), (int)inventory_get_type(inventoryIN), inventory_get_location_id(inventoryIN));
+        return ERROR;
+    }
+
+    debug_log(DEBUG, "Object %ld location is: id:%ld locationtype:%d", object_get_id(object), object_get_location(object), object_get_type(object));
 
     debug_log(DEBUG, "Object %ld has been moved to the inventory of type:%d and id:%ld to the inventory of type:%d and id:%ld", object_get_id(object), (int)inventory_get_type(inventoryOUT), inventory_get_location_id(inventoryOUT), (int)inventory_get_type(inventoryIN), inventory_get_location_id(inventoryIN));
     return OK;

@@ -53,13 +53,13 @@ Status player_set_entity(Player *player, Entity *entity){
    Game interface implementation
 */
 
-Player *player_create(char *name, Id identity, Id location){
+Player *player_create(char *name, Id identity, Id location, double health, double baseDamage, int strength, int defense, int magicLevel){
     Player *player = NULL;
 
     if(!(player = (Player *)malloc(sizeof(player))))
         return NULL;
     
-    if(player_set_entity(player,entity_create(name, identity, location, PLAYER_INVENTORY)) == ERROR)
+    if(player_set_entity(player,entity_create(name, identity, location, PLAYER_INVENTORY, health, baseDamage, strength, defense, magicLevel)) == ERROR)
         return NULL;
     
     return player;

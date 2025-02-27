@@ -67,9 +67,9 @@ int object_isEqual(void *object1, void *object2){
         return -1;
 
     if((object_get_id((Object *)object1) == object_get_id((Object *)object2)))
-        return 1;
+        return 0;
     
-    return 0;
+    return -1;
 }
 
 /*Object SETTERS*/

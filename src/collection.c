@@ -170,12 +170,15 @@ Status collection_remove_at(Collection *collection, long index){
 
     collection->list[index] = NULL;
 
-    for (i = index + 1; i < collection->length; i++)
-    {
-        collection->list[i -1] = collection->list[i];
+    if(index != collection->length -1){
+        for (i = index + 1; i < collection->length; i++)
+        {
+            collection->list[i -1] = collection->list[i];
+        }
     }
-
-    collection->list[collection->length] = NULL;
+    
+    
+    collection->list[collection->length -1] = NULL;
     (collection->length)--;
 
     return OK;

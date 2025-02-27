@@ -243,4 +243,13 @@ Status game_add_link(Game *game, Link *link);
  */
 Status game_add_object(Game *game, Object *object);
 
+/**
+ * @brief Adds a player to the game struct
+ * 
+ * @param game struct that saves all information related to the game
+ * @param player struct that saves all information related to a player
+ * @return Status 
+ */
+Status game_add_player(Game *game, Player *player);
+
 #endif
