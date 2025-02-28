@@ -24,12 +24,18 @@
 
 
 struct _Game {
+  /*Entity related*/
   Player *player;              /*!< Contains all the information related to the player */
   Collection *objects;         /*!< Contains all the information related to the object */
+
+  /*Space related*/
   Space *spaces[MAX_SPACES];   /*!< Array with all the spaces of the map */
   int n_spaces;                /*!< int with the number of spaces on *spaces */
   Link *links[MAX_LINKS];     /*!< Array with all the links in the map*/
   int n_links;
+
+  /*Others*/
+  EventManager *event_manager;
 
   GameState current_state;     /*!< Enum storing the current game state*/
   Command *last_cmd;           /*!< string with the last command */
@@ -78,6 +84,8 @@ Status game_create(Game **game) {
   (*game)->n_links = 0;
   (*game)->current_state = DEFAULT;
 
+  (*game)->event_manager = event_manager_create();
+
   return OK;
 }
 
@@ -97,7 +105,7 @@ Status game_destroy(Game *game) {
   collection_destroy(game_get_objects(game));
 
   command_destroy(game->last_cmd);
-
+  event_manager_destroy(game->event_manager);
 
   /*Destroys all links */
   linkCount = game_get_n_links(game);
@@ -180,8 +188,13 @@ GameState game_get_state(Game *game){
 }
 
 Collection *game_get_objects(Game *game){
-  if(!game) return ERROR;
+  if(!game) return NULL;
   return game->objects;
+}
+
+EventManager *game_get_event_manager(Game *game){
+  if(!game) return NULL;
+  return game->event_manager;
 }
 
 /*-----------SETTERS-----------*/
@@ -263,4 +276,8 @@ Status game_add_player(Game *game, Player *player){
   game->player = player;
 
   return OK;
+}
+Status game_add_event(Game *game, Event * event){
+  if(!game || !event) return ERROR;
+  return event_manager_add_event(game_get_event_manager(game), event);
 }

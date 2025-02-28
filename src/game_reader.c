@@ -18,6 +18,7 @@
 #include "debug_printing.h"
 #include "game.h"
 #include "space.h"
+#include "event_manager.h"
 
 /*
 * Declaration of private functions
@@ -62,6 +63,8 @@ Status game_reader_load_objects(Game *game, char *filename);
  */
 Status game_reader_load_player(Game *game, char *filename);
 
+Status game_reader_load_events(Game *game, char *filename);
+
 
 /*
 * Public functions implementation
@@ -86,6 +89,10 @@ Status game_reader_create_from_file(Game **game, char *filename){
   }
   if (game_reader_load_objects(*game, filename) == ERROR){
     debug_log(LOG_ERROR, "Error loading objects at: game_reader_create_from_file(Game*, char*) in game_reader.c");
+    return ERROR;
+  }
+  if (game_reader_load_events(*game, filename) == ERROR){
+    debug_log(LOG_ERROR, "Error loading events at: game_reader_create_from_file(Game*, char*) in game_reader.c");
     return ERROR;
   }
 
@@ -355,4 +362,80 @@ Status game_reader_load_player(Game *game, char *filename){
   fclose(file);
 
   return status;
+}
+
+Status game_reader_load_events(Game *game, char *filename){
+  FILE *file = NULL;
+  char line[WORD_SIZE] = "";
+  char *toks = NULL;
+
+  int i;
+
+  Event *event = NULL;
+  Id id = NO_ID;
+  EventType type = NO_EVENT;
+  CommandCode commands[N_CMD];
+  bool removeOnTrigger = false;
+
+  int numTriggers = 0;
+
+  Status status = OK;
+
+  if (!filename) {
+    debug_log(LOG_ERROR, "Missing file name at: game_reader_load_events(Game*, char*) in game_reader.c");
+    return ERROR;
+  }
+
+  file = fopen(filename, "r");
+  if (file == NULL) {
+    debug_log(LOG_ERROR, "Error in file at: game_reader_load_events(Game*, char*) in game_reader.c");
+    return ERROR;
+  }
+
+
+  /*#e:Id|Type|cmdTriggersNum| cmdName1 , ...|removeOnTrigger|data*/
+  while (fgets(line, WORD_SIZE, file)) {
+    if (strncmp("#e:", line, 3) == 0) {
+      /*Reads id*/
+      toks = strtok(line + 3, "|");
+      id = atol(toks);
+      /*Reads type*/
+      toks = strtok(NULL, "|");
+      type = event_type_from_str(toks);
+      /*Reads the number of command that trigger the event*/
+      toks = strtok(NULL, "|");
+      numTriggers = atoi(toks);
+
+      if(numTriggers > N_CMD)
+      debug_log(LOG_WARNING, "Number of commands to trigger event was superior to the number of commands in game");
+      
+      /*Reads each command*/
+      for (i = 0; i < numTriggers && i < N_CMD; i++)
+      {
+        toks = strtok(NULL, ",|");
+        commands[i] = command_get_code_from_str(toks);
+        debug_log(DEBUG, "Event: read command %s", toks);
+      }
+      /*Reads if event is destroyed on trigger*/
+      toks = strtok(NULL, "|");
+      removeOnTrigger = atoi(toks);
+      /*reads data*/
+      toks = strtok(NULL, "|");
+      
+      debug_log(PRINT,"Read Event: #e:%ld|%d|%d|...|%d|%s", id, type, numTriggers, removeOnTrigger,toks);
+
+      event = event_create(id, type, commands, numTriggers, toks, removeOnTrigger);
+      game_add_event(game, event);
+    }
+  }
+
+  if (ferror(file)) {
+    status = ERROR;
+    debug_log(LOG_ERROR, "Error in file at: game_reader_load_spaces(Game*, char*) in game_reader.c");
+  }
+
+  fclose(file);
+
+  return status;
+
 }

@@ -72,6 +72,8 @@ Status command_set_code(Command* command, CommandCode code);
  */
 CommandCode command_get_code(Command* command);
 
+CommandCode command_get_code_from_str(char *string);
+
 /**
  * @brief Gets the number of arguments in the command
  * @author Daniel Gómez

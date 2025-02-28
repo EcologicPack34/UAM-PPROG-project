@@ -145,6 +145,19 @@ char **command_get_arguments(Command * command){
   return command->arguments;
 }
 
+CommandCode command_get_code_from_str(char *string){
+  int i = UNKNOWN - NO_CMD + 1;
+  CommandCode cmd = UNKNOWN;
+  while (cmd == UNKNOWN && i < N_CMD) {
+    if (!strcasecmp(string, cmd_to_str[i][CMDS]) || !strcasecmp(string, cmd_to_str[i][CMDL])) {
+      cmd = i + NO_CMD;
+    } else {
+      i++;
+    }
+  }
+  return cmd;
+}
+
 Status command_get_user_input(Command* command) {
   char originalInput[CMD_LENGTH] = "";
   char input[CMD_LENGTH] = "";
@@ -173,14 +186,8 @@ Status command_get_user_input(Command* command) {
       return command_set_code(command, UNKNOWN);
     }
     
-    cmd = UNKNOWN;
-    while (cmd == UNKNOWN && i < N_CMD) {
-      if (!strcasecmp(token, cmd_to_str[i][CMDS]) || !strcasecmp(token, cmd_to_str[i][CMDL])) {
-        cmd = i + NO_CMD;
-      } else {
-        i++;
-      }
-    }
+    /*Gets the command code from the string that has been read*/
+    cmd = command_get_code_from_str(token);
     
     /*Stores the arguments of the commands*/
     wordCount = strlen(token);

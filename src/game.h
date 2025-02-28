@@ -22,6 +22,7 @@
 #include "types.h"
 #include "player.h"
 #include "collection.h"
+#include "event_manager.h"
 
 #include <stdbool.h>
 
@@ -170,6 +171,8 @@ Link *game_get_link_by_id(Game *game, Id id);
  */
 GameState game_get_state(Game *game);
 
+EventManager *game_get_event_manager(Game *game);
+
 /*----------SETTERS----------*/
 
 
@@ -251,5 +254,7 @@ Status game_add_object(Game *game, Object *object);
  * @return Status 
  */
 Status game_add_player(Game *game, Player *player);
+
+Status game_add_event(Game *game, Event *event);
 
 #endif
