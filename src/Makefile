@@ -59,12 +59,15 @@ game_reader.o: game_reader.c game_reader.h types.h game.h link.h entity.h \
 	$(CC) $(CFLAGS) -c game_reader.c
 
 link.o: link.c link.h types.h entity.h inventory.h object.h collection.h \
- debug_printing.h
+debug_printing.h
 	$(CC) $(CFLAGS) -c link.c
 
 inventory.o: inventory.c inventory.h types.h object.h collection.h \
- debug_printing.h
+debug_printing.h
 	$(CC) $(CFLAGS) -c inventory.c
+
+collection.o: collection.c collection.h types.h debug_printing.h
+	$(CC) $(CFLAGS) -c collection.c
 
 
 .PHONY:	clean compile run

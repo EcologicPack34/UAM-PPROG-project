@@ -18,9 +18,9 @@
 
 typedef enum {NO_EVENT, TEST}EventType;
 
-typedef _Event Event;
+typedef struct _Event Event;
 
-typedef _EventManager EventManager;
+typedef struct _EventManager EventManager;
 
 Event *event_create(Id id, EventType type, bool commandTriggers[N_CMD], char *data);
 
