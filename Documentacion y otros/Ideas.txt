@@ -1,4 +1,4 @@
-APROBADO - Hacer un array dinamico en Game que lleve la cuenta de todos los objetos que hay en el juego, tanto jugador, como espacios.
+APROBADO - Cambiar stats de tipo público al modulo combat cuando se cree para encapsular
 APROBADO - Diferenciar enities mediante un entity type y guardarlas en Game como puntero a entity, de manera que podemos hacer un recast de vuelta al tipo original sabiendo que tipo de entidad es.
 
 APROBADO - usar un void (*update)(Game*, Entity*)para las entidades.
