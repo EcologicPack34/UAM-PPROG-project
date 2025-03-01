@@ -165,6 +165,7 @@ Link *game_get_link_by_id(Game *game, Id id);
 
 /**
  * @brief Gets the current state of the game
+ * @author Daniel Gómez
  * 
  * @param game 
  * @return GameState 
@@ -208,6 +209,7 @@ Status game_set_player_location(Game *game, Id id);
 
 /**
  * @brief Sets the current game state
+ * @author Daniel Gómez
  * 
  * @param game 
  * @param state 
@@ -239,6 +241,7 @@ Status game_add_link(Game *game, Link *link);
 
 /**
  * @brief Adds the object received to the collection of objects on game
+ * @author Maksym Polyak
  * 
  * @param game struct that saves all information related to the game
  * @param object struct that saves all information related to the object
@@ -248,6 +251,7 @@ Status game_add_object(Game *game, Object *object);
 
 /**
  * @brief Adds a player to the game struct
+ * @author Maksym Polyak
  * 
  * @param game struct that saves all information related to the game
  * @param player struct that saves all information related to a player
@@ -255,6 +259,14 @@ Status game_add_object(Game *game, Object *object);
  */
 Status game_add_player(Game *game, Player *player);
 
+/**
+ * @brief Adds an event to the game struct
+ * @author Daniel Gómez
+ * 
+ * @param game struct that saves all information related to the game
+ * @param event event struct added
+ * @return Status 
+ */
 Status game_add_event(Game *game, Event *event);
 
 #endif

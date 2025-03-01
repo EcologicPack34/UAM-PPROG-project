@@ -4,6 +4,9 @@
  * An object ADT serves as the foundation to the item managment for the player,
  * right now each object just saves its name, location and unique id, but it will
  * be useful in next iterations to add special effects to objects, conditions and more.
+ * 
+ * If an object is inside an entity inventory, the location id of the object is the
+ * same as the one the entity has
  *
  * @file object.c
  * @author Maksym Polyak

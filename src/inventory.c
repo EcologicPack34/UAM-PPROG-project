@@ -211,16 +211,7 @@ Object *inventory_get_object_by_id(Inventory *inventory, Id objectid){
     return NULL;
 }
 
-bool inventory_contains_object(Inventory *inventory, Id objectid){
-    if(!inventory)
-        return 0;
-    
-    /*Inventory_get_object_by_id returns NULL if it has not found the object*/
-    if(inventory_get_object_by_id(inventory, objectid) != NULL)
-        return 1;
-    
-    return 0;
-}
+/*Inventory GETTERS*/
 
 Object *inventory_get_object_by_name(Inventory *inventory, char *objectname){
     int i, size;
@@ -245,6 +236,62 @@ Collection *inventory_get_collection(Inventory *inventory){
 
     return inventory->objects;
 }
+
+Status inventory_get_object_list(Inventory *inventory, char *objectlist){
+    int num, i, size;
+    Object *tempobject = NULL;
+    
+    if(!inventory || !objectlist)
+        return ERROR;
+
+    size = (int)inventory_get_size_by_type(inventory_get_type(inventory));
+    for(i = 0, num = 1; i < size; i++){
+        if((tempobject = inventory_get_object_at(inventory, i)) != NULL){
+            sprintf(objectlist, "%d. Id: %ld | Name: %s\n", num++, object_get_id(tempobject), object_get_name(tempobject));
+        }
+    }
+
+    return OK;
+}
+
+Status inventory_get_object_str_at(Inventory *inventory, char *objectdescr, int index){
+    Object *tempobject = NULL;
+    
+    if(!inventory || !objectdescr)
+        return ERROR;
+
+    tempobject = inventory_get_object_at(inventory, index);
+    sprintf(objectdescr, "%d. Id: %ld | Name: %s", index + 1, object_get_id(tempobject), object_get_name(tempobject));
+
+    return OK;
+}
+
+long inventory_get_size(Inventory *inventory){
+    if(!inventory)
+        return -1;
+
+    return collection_length(inventory_get_collection(inventory));
+}
+
+Object *inventory_get_object(Inventory *inventory, Id objectid){
+    Object *object = NULL;
+    long size, i;
+    
+    if(!inventory || !objectid)
+        return NULL;
+
+    size = inventory_get_size(inventory);
+    for(i = 0; i < size; i++){
+        object = inventory_get_object_at(inventory, i);
+        if(objectid == object_get_id(object)){
+            return object;
+        }
+    }
+
+    return NULL;
+}
+
+/*Inventory set functions*/
 
 Status inventory_add_object(Inventory *inventory, Object *object){
     if(!inventory){
@@ -317,56 +364,13 @@ Status inventory_move_object(Inventory *inventoryOUT, Inventory *inventoryIN, Id
     return OK;
 }
 
-Status inventory_get_object_list(Inventory *inventory, char *objectlist){
-    int num, i, size;
-    Object *tempobject = NULL;
-    
-    if(!inventory || !objectlist)
-        return ERROR;
-
-    size = (int)inventory_get_size_by_type(inventory_get_type(inventory));
-    for(i = 0, num = 1; i < size; i++){
-        if((tempobject = inventory_get_object_at(inventory, i)) != NULL){
-            sprintf(objectlist, "%d. Id: %ld | Name: %s\n", num++, object_get_id(tempobject), object_get_name(tempobject));
-        }
-    }
-
-    return OK;
-}
-
-Status inventory_get_object_str_at(Inventory *inventory, char *objectdescr, int index){
-    Object *tempobject = NULL;
-    
-    if(!inventory || !objectdescr)
-        return ERROR;
-
-    tempobject = inventory_get_object_at(inventory, index);
-    sprintf(objectdescr, "%d. Id: %ld | Name: %s", index + 1, object_get_id(tempobject), object_get_name(tempobject));
-
-    return OK;
-}
-
-long inventory_get_size(Inventory *inventory){
+bool inventory_contains_object(Inventory *inventory, Id objectid){
     if(!inventory)
-        return -1;
-
-    return collection_length(inventory_get_collection(inventory));
-}
-
-Object *inventory_get_object(Inventory *inventory, Id objectid){
-    Object *object = NULL;
-    long size, i;
+        return 0;
     
-    if(!inventory || !objectid)
-        return NULL;
-
-    size = inventory_get_size(inventory);
-    for(i = 0; i < size; i++){
-        object = inventory_get_object_at(inventory, i);
-        if(objectid == object_get_id(object)){
-            return object;
-        }
-    }
-
-    return NULL;
+    /*Inventory_get_object_by_id returns NULL if it has not found the object*/
+    if(inventory_get_object_by_id(inventory, objectid) != NULL)
+        return 1;
+    
+    return 0;
 }

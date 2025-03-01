@@ -22,6 +22,7 @@
 
 /**
  * @brief Entity
+ * @author Maksym Polyak
  *
  * This struct stores all the information of an entity
  */
