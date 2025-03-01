@@ -74,6 +74,29 @@ Status command_set_argument_at(Command *command, char args[MAX_CMD_ARGS_LENGTH],
   return OK;
 }
 
+/**
+ * @brief Resets the arguments to avoid getting them between commands
+ * 
+ * @param command 
+ * @return Status 
+ */
+Status command_reset_arguments(Command *command){
+  int i;
+  char **arguments = NULL;
+
+  if(!command)
+    return ERROR;
+
+  arguments = command_get_arguments(command);
+
+  /*Sets each character of each argument to \0*/
+  for(i = 0; i < MAX_CMD_ARGS_NUM; i++){
+      arguments[i][0] = '\0';
+  }
+
+  return OK;
+}
+
 /*--------------Public Functions---------------*/
 
 Command* command_create() {
@@ -173,6 +196,8 @@ Status command_get_user_input(Command* command) {
     return ERROR;
   }
   
+  command_reset_arguments(command);
+
   if (fgets(input, CMD_LENGTH, stdin)) {
     
     /*Changes the \n for a 0 and copies to an aux string so it isnt loose when using strtok*/
@@ -250,24 +275,5 @@ Status command_get_list(char *destination){
   
   strcpy(destination,aux);
   free(aux);
-  return OK;
-}
-
-Status command_set_arguments_void(Command *command){
-  int i, j;
-  char **arguments = NULL;
-
-  if(!command)
-    return ERROR;
-
-  arguments = command_get_arguments(command);
-
-  /*Sets each character of each argument to \0*/
-  for(i = 0; i < MAX_CMD_ARGS_NUM; i++){
-    for(j = 0; j < MAX_CMD_ARGS_LENGTH; j++){
-      arguments[i][j] = '\0';
-    }
-  }
-
   return OK;
 }

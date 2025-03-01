@@ -85,6 +85,7 @@ Status game_create(Game **game) {
   (*game)->current_state = DEFAULT;
 
   (*game)->event_manager = event_manager_create();
+  if(!((*game)->event_manager)) debug_log(LOG_ERROR,"Error creating event manager");
 
   return OK;
 }
@@ -279,5 +280,5 @@ Status game_add_player(Game *game, Player *player){
 }
 Status game_add_event(Game *game, Event * event){
   if(!game || !event) return ERROR;
-  return event_manager_add_event(game_get_event_manager(game), event);
+  return event_manager_add_event(game->event_manager, event);
 }

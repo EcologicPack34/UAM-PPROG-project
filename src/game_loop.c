@@ -24,6 +24,7 @@
 #include "game_actions.h"
 #include "graphic_engine.h"
 #include "collection.h"
+#include "event_actions.h"
 
 #define DEBUG_FILE_PATH "./debug.log"   /*!< stores the path in which the debug_log will print messages*/
 #define END_LOCATION 13                 /*!< Location where the object has to be located to end the game */
@@ -41,7 +42,7 @@ int game_loop_init(Game **game, Graphic_engine **gengine, char *file_name);
 /**
  * @brief Essential function, receives last command, while the command isn't EXIT
  * or the game has not finished, paints the game, receives user input and updates last_cmd
- * @author Original: Profesores PPROG, Modified By: Maksym Polyak
+ * @author Original: Profesores PPROG, Modified By: Maksym Polyak and Daniel Gómez
  *
  * @param game struct that saves all information related to the game
  * @param gengine struct that saves all information related to the graphic engine
@@ -129,17 +130,18 @@ void game_loop_run(Game *game, Graphic_engine *gengine){
 
   last_cmd = game_get_last_command(game);
 
-  while ((command_get_code(last_cmd) != EXIT) && (game_get_finished(game) == false))
+  while ((command_get_code(last_cmd) != EXIT) )
   {
+    /*Triggers event with last command actions*/
+    event_actions_trigger_events(game);
+
+    /*Paints graphics on screen*/
     graphic_engine_paint_game(gengine, game);
-    /*Checks if the game has been completed*/
-    if(object_get_location(collection_get_element_at(game_get_objects(game), 0)) == END_LOCATION){ /*FOR NOW INDEX IS 0 FOR TESTING*/
-      game_set_finished(game, 1);
-      printf("Congratulations, you completed the game!\n");
-      debug_log(DEBUG, "GAME FINISHED BY CONDITION");
-      return;
-    }
-    command_set_arguments_void(last_cmd); /*Avoids that the arguments are saved between user inputs*/
+
+    /*Checks if game finished before getting new input*/
+    if(game_get_finished(game) == true) break;
+
+    /*Gets new input and updates game*/
     command_get_user_input(last_cmd);
     game_actions_update(game, last_cmd);
   }

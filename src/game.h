@@ -255,6 +255,14 @@ Status game_add_object(Game *game, Object *object);
  */
 Status game_add_player(Game *game, Player *player);
 
+/**
+ * @brief Adds an event to game
+ * @author Daniel Gómez
+ * 
+ * @param game 
+ * @param event 
+ * @return Status 
+ */
 Status game_add_event(Game *game, Event *event);
 
 #endif

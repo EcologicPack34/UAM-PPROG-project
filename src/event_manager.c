@@ -11,7 +11,7 @@
 
 #define EVENT_MANAGER_DEFAULT_SIZE 10
 
-char *eventTags[N_EVENTS] = { "" , "test"};
+char *eventTags[N_EVENTS] = { "" , "object_on_space"};
 
 struct _Event{
     Id id;
@@ -32,26 +32,32 @@ Event *event_create(Id id, EventType type, CommandCode *commands, int cmdNum, ch
     int i;
     
     if(!data || cmdNum < 0){
+        debug_log(LOG_ERROR,"Invalid data or cmdNum when creating event");
         return NULL;
     }
     if(type == NO_EVENT) return NULL;
 
     event = (Event*)calloc(1, sizeof(Event));
-    if(!event) return NULL;
+    if(!event){
+        debug_log(LOG_ERROR,"Couldn't allocate memory when creating event");
+        return NULL;
+    } 
 
     event->data = (char*)calloc(strlen(data) +1 , sizeof(char));
     if(!(event->data)){
         free(event);
+        debug_log(LOG_ERROR,"Couldn't allocate memory when creating event");
         return NULL;
     }
 
     strcpy(event->data, data);
-
+    
     if(cmdNum > 0){
         event->commands = calloc(cmdNum,sizeof(CommandCode));
         if(!(event->commands)){
             free(event->data);
             free(event);
+            debug_log(LOG_ERROR,"Couldn't allocate memory when creating event");
             return NULL;
         }
         for (i = 0; i < cmdNum; i++)
@@ -61,8 +67,10 @@ Event *event_create(Id id, EventType type, CommandCode *commands, int cmdNum, ch
         
     }
     else{
-        event->commands = NULL;
+        (event->commands) = NULL;
     }
+
+    if(event == NULL) debug_log(LOG_WARNING, "How did we get here?");
 
     event->cmdNum = cmdNum;
     event->type = type;
@@ -98,7 +106,60 @@ EventType event_type_from_str(char *string){
     return NO_EVENT;
 }
 
-/*----------EVENT MANAGER----------*/
+bool event_is_cmd_valid(Event *event, Command *cmd){
+    int i, cmdCount;
+    CommandCode code;
+    CommandCode *eventCodes = NULL;
+
+    if(!event || !cmd) return NULL;
+
+    cmdCount = event_get_cmd_count(event);
+    code = command_get_code(cmd);
+    eventCodes = event_get_commands(event);
+    for (i = 0; i < cmdCount; i++)
+    {
+        if(code == eventCodes[i]){
+            return true;
+        }
+    }
+    return false;
+}
+
+/*-----------EVENT GETTERS---------*/
+
+EventType event_get_type(Event *event){
+    if(!event) return NO_EVENT;
+    return event->type;
+}
+
+Id event_get_id(Event *event){
+    if(!event) return NO_ID;
+    return event->id;
+}
+
+CommandCode *event_get_commands(Event *event){
+    if(!event) return NULL;
+    return event->commands;
+}
+
+int event_get_cmd_count(Event *event){
+    if(!event) return -1;
+    return event->cmdNum;
+}
+
+bool event_get_removeOnTrigger(Event *event){
+    if(!event) return false;
+    return event->removeOnTrigger;
+}
+
+char *event_get_aux_data(Event *event){
+    if(!event) return NULL;
+    return event->data;
+}
+
+/* ==============================
+   --------EVENT MANAGER---------
+   ==============================*/
 
 EventManager *event_manager_create(){
     EventManager *manager = NULL;
@@ -129,37 +190,20 @@ Status event_manager_add_event(EventManager *manager, Event *event){
 
     return collection_add(manager->events, (void *)event);
 }
- /*
-void event_manager_trigger_events(EventManager *manager, Game *game){
-    int i;
-    Event *event = NULL;
-    if(!manager || !game) return;
 
-    for (i = 0; i < collection_length(manager->events); i++)
-    {
-        event = (Event *)collection_get_element_at(manager->events, i);
+Status event_manager_remove_event(EventManager *manager, Event *event){
+    if(!manager || !event) return ERROR;
 
-        switch (event->type)
-        {
-            case NO_EVENT:
-                event_trigger_none(game);
-                break;
-            case TEST:
-                event_trigger_test(game);
-                break;
-        
-            default:
-                break;
-        }
-    }
-    
-}*/
-
-/*-------------EVENT ACTIONS------------*/
-/*
-void event_trigger_none(Game *game){
-    debug_log(DEBUG, "No event Assigned");
+    return collection_remove(manager->events, (void *)event);
 }
-void event_trigger_test(Game *game){
-    debug_log(DEBUG, "Test event triggered");
-}*/
+
+long event_manager_get_event_count(EventManager *manager){
+    if(!manager) return -1;
+    return collection_length(manager->events);
+}
+
+Event *event_manager_get_event(EventManager *manager, long index){
+    if(!manager || index < 0) return NULL;
+
+    return (Event*)collection_get_element_at(manager->events, index);
+}

@@ -63,6 +63,14 @@ Status game_reader_load_objects(Game *game, char *filename);
  */
 Status game_reader_load_player(Game *game, char *filename);
 
+/**
+ * @brief Reads the file to load all events
+ * @author Daniel Gómez
+ * 
+ * @param game 
+ * @param filename 
+ * @return Status 
+ */
 Status game_reader_load_events(Game *game, char *filename);
 
 
@@ -414,7 +422,7 @@ Status game_reader_load_events(Game *game, char *filename){
       {
         toks = strtok(NULL, ",|");
         commands[i] = command_get_code_from_str(toks);
-        debug_log(DEBUG, "Event: read command %s", toks);
+        debug_log(DEBUG, "Event: read command %s, command type %d", toks, commands[i]);
       }
       /*Reads if event is destroyed on trigger*/
       toks = strtok(NULL, "|");
@@ -425,7 +433,10 @@ Status game_reader_load_events(Game *game, char *filename){
       debug_log(PRINT,"Read Event: #e:%ld|%d|%d|...|%d|%s", id, type, numTriggers, removeOnTrigger,toks);
 
       event = event_create(id, type, commands, numTriggers, toks, removeOnTrigger);
-      game_add_event(game, event);
+      if(event == NULL)
+        debug_log(LOG_ERROR,"Error creating event when reading from file");
+      if(game_add_event(game, event) == ERROR)
+        debug_log(LOG_ERROR,"Error adding event to event manager");
     }
   }
 

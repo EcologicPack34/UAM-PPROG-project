@@ -72,6 +72,13 @@ Status command_set_code(Command* command, CommandCode code);
  */
 CommandCode command_get_code(Command* command);
 
+/**
+ * @brief Gets the command code for a given string value
+ * @author Daniel Gómez
+ * 
+ * @param string 
+ * @return CommandCode 
+ */
 CommandCode command_get_code_from_str(char *string);
 
 /**
@@ -110,14 +117,5 @@ Status command_get_user_input(Command* command);
  * @return Status
  */
 Status command_get_list(char *destination);
-
-/**
- * @brief sets to empty string each string of the arguments in order to avoid using another argument when calling other commmand
- * 
- * @param command 
- * @return Status 
- */
-Status command_set_arguments_void(Command *command);
-
 
 #endif

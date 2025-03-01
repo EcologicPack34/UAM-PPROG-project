@@ -1,0 +1,126 @@
+
+#include "event_actions.h"
+
+#include "debug_printing.h"
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+/*----------PRIVATE DECLARATION---------*/
+
+/**
+ * @brief Action for NO EVENT
+ * @author Daniel Gómez
+ * 
+ * @param event 
+ * @param game 
+ * @return true 
+ * @return false 
+ */
+bool event_trigger_none(Event *event, Game *game);
+
+/**
+ * @brief Action for Object on Space, it ends the game if the object is in certain space
+ *      aux data info: ...|objectId:spaceId
+ *  
+ * @author Daniel Gómez
+ * 
+ * @param event 
+ * @param game 
+ * @return true 
+ * @return false 
+ */
+bool event_trigger_object_on_space(Event *event, Game *game);
+
+/*---------PUBLIC FUNCTIONS----------*/
+void event_actions_trigger_events(Game *game){
+    int i, eventCount;
+    Event *event = NULL;
+    EventManager *manager = NULL;
+    bool triggered = false;
+
+    if(!game) return;
+
+    manager = game_get_event_manager(game);
+    eventCount = event_manager_get_event_count(manager);
+
+    debug_log(DEBUG, "Checking for event triggers, count %d", eventCount);
+
+    for (i = 0; i < eventCount; i++)
+    {
+        event = event_manager_get_event(manager, i);
+        triggered = false;
+
+        switch (event_get_type(event))
+        {
+            case NO_EVENT:
+                event_trigger_none(event, game);
+                break;
+            case OBJECT_ON_SPACE:
+                triggered = event_trigger_object_on_space(event, game);
+                break;
+        
+            default:
+                break;
+        }
+        if(triggered && event_get_removeOnTrigger(event))
+            event_manager_remove_event(manager, event);
+    }
+    
+}
+
+/*-------------EVENT ACTIONS------------*/
+
+bool event_trigger_none(Event *event, Game *game){
+    debug_log(DEBUG, "No event Assigned");
+    return false;
+}
+bool event_trigger_object_on_space(Event *event, Game *game){
+    char data[WORD_SIZE];
+    char *toks = NULL;
+
+    Id objectId = NO_ID;
+    Id spaceId = NO_ID; 
+
+    Space *space;
+
+    if(!event || !game) return false;
+
+    if(!event_is_cmd_valid(event, game_get_last_command(game))) return false;
+    
+    
+    strcpy(data, event_get_aux_data(event));
+    
+    /*Reads the object*/
+    toks = strtok(data, ":");
+    if(toks == NULL){
+        debug_log(LOG_ERROR, "Invalid number of tag for object_on_space event");
+        return false;
+    }
+    objectId = atoi(toks);
+    
+    /*Reads the space*/
+    toks = strtok(NULL, ":");
+    if(toks == NULL){
+        debug_log(LOG_ERROR, "Invalid number of tag for object_on_space event");
+        return false;
+    }
+    spaceId = atoi(toks);
+    
+    /*Gets the space from game if posible*/
+    space = game_get_space(game, spaceId);
+    if(!space){
+        debug_log(LOG_ERROR, "Invalid space %ld not found for object_on_space event", spaceId);
+        return false;
+    }
+    
+    /*Checks if space contains the given object*/
+    if(inventory_contains_object(space_get_inventory(space), objectId)){
+        game_set_finished(game, true);
+        debug_log(PRINT,"Object On Space Trigger");
+        return true;/*Return true because if found the space is triggered*/
+    }
+
+    return false;/*Return false because event hasnt been triggered*/
+}
