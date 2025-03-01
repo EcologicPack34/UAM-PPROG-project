@@ -27,7 +27,6 @@
 #define INVENTORY_PLAYER_MAX_SIZE 10
 #define INVENTORY_ENTITY_MAX_SIZE 10
 #define INVENTORY_SPACE_MAX_SIZE 10
-#define INSIDE_INVENTORY -2  /*!< Id of the location of an object if it is inside an inventory */
  
 typedef struct _Inventory Inventory;
 
@@ -51,6 +50,8 @@ Inventory *inventory_create(InventoryType type, Id locationid);
  */
 void inventory_destroy(Inventory *inventory);
 
+/*Object GETTERS*/
+
 /**
  * @brief Gets an object from an inventory by its id
  * @author Maksym Polyak
@@ -71,16 +72,6 @@ Object *inventory_get_object_by_id(Inventory *inventory, Id objectid);
 Object *inventory_get_object_at(Inventory *inventory, long index);
 
 /**
- * @brief Checks if an object is in the inventory by id
- * @author Maksym Polyak
- *
- * @param inventory contains the inventory information
- * @param objectid id of the object
- * @return 1 if it is in the inventory or 0 if not(ERROR also is set as 0)
- */
-bool inventory_contains_object(Inventory *inventory, Id objectid);
-
-/**
  * @brief Gets an object from an inventory by its name
  * 
  * @param inventory contains the inventory information
@@ -90,12 +81,55 @@ bool inventory_contains_object(Inventory *inventory, Id objectid);
 Object *inventory_get_object_by_name(Inventory *inventory, char *objectname);
 
 /**
- * @brief Gets the object ** of an inventory
- * 
+ * @brief Gets the collection of an inventory
+ * @author Maksym Polyak
+ *
  * @param inventory inventory where the objects are located
  * @return Collection* or NULL if error
  */
 Collection *inventory_get_collection(Inventory *inventory);
+
+/**
+ * @brief Gets the inventory object list as a string from the inventory
+ * @author Maksym Polyak
+ *
+ * @param inventory inventory where the objects are located
+ * @param objectlist string where the object list is going to be located
+ * @return OK if well or ERROR if error
+ */
+Status inventory_get_object_list(Inventory *inventory, char *objectlist);
+
+/**
+ * @brief Gets a str without \n with the id of the object and its name
+ * @author Maksym Polyak
+ *
+ * @param inventory 
+ * @param objectdescr 
+ * @param index 
+ * @return Status 
+ */
+Status inventory_get_object_str_at(Inventory *inventory, char *objectdescr, int index);
+
+/**
+ * @brief Gets the inventory number of objects
+ * @author Maksym Polyak
+ *
+ * @param inventory inventory where the objects are located
+ * @return long if well or -1 if error
+ */
+long inventory_get_size(Inventory *inventory);
+
+/**
+ * @brief Gets an object by its id on an inventory
+ * @author Maksym Polyak
+ *
+ * @param inventory inventory where the objects are located
+ * @param objectid id of the object
+ * @return Object* if well or NULL if ERROR;
+ */
+Object *inventory_get_object(Inventory *inventory, Id objectid);
+
+/*Inventory set functions*/
 
 /**
  * @brief Adds an object to an inventory
@@ -119,7 +153,8 @@ Status inventory_remove_object(Inventory *inventory, Object *object);
 
 /**
  * @brief Moves an object from inventoryOUT to inventoryIN by the id of the object
- * 
+ * @author Maksym Polyak
+ *
  * @param inventoryOUT inventory from where the object is taken
  * @param inventoryIN inventory where the object is going to be located
  * @param objectid id of the object in inventoryOUT to move
@@ -128,39 +163,13 @@ Status inventory_remove_object(Inventory *inventory, Object *object);
 Status inventory_move_object(Inventory *inventoryOUT, Inventory *inventoryIN, Id objectid);
 
 /**
- * @brief Gets the inventory object list as a string from the inventory
- * 
- * @param inventory inventory where the objects are located
- * @param objectlist string where the object list is going to be located
- * @return OK if well or ERROR if error
- */
-Status inventory_get_object_list(Inventory *inventory, char *objectlist);
-
-/**
- * @brief Gets a str without \n with the id of the object and its name
- * 
- * @param inventory 
- * @param objectdescr 
- * @param index 
- * @return Status 
- */
-Status inventory_get_object_str_at(Inventory *inventory, char *objectdescr, int index);
-
-/**
- * @brief Gets the inventory number of objects
- * 
- * @param inventory inventory where the objects are located
- * @return long if well or -1 if error
- */
-long inventory_get_size(Inventory *inventory);
-
-/**
- * @brief Gets an object by its id on an inventory
- * 
- * @param inventory inventory where the objects are located
+ * @brief Checks if an object is in the inventory by id
+ * @author Maksym Polyak
+ *
+ * @param inventory contains the inventory information
  * @param objectid id of the object
- * @return Object* if well or NULL if ERROR;
+ * @return 1 if it is in the inventory or 0 if not(ERROR also is set as 0)
  */
-Object *inventory_get_object(Inventory *inventory, Id objectid);
+bool inventory_contains_object(Inventory *inventory, Id objectid);
 
 #endif

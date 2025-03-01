@@ -26,7 +26,7 @@ typedef enum {UNKNOWN_ENTITY, PLAYER, NPC} EntityType;
 typedef struct _Entity Entity;
 
 /**
- * Struct that stores combat information about an entity
+ * Struct that stores combat information about an entity - TEMPORAL --> Going to the combat module
  */
 typedef struct{
     double health;             /*!< Health of the entity */
@@ -110,6 +110,7 @@ Status entity_set_entityType(Entity *entity, EntityType entityType);
 
 /**
  * @brief Sets the entity health
+ * @author Maksym Polyak
  * 
  * @param entity contains all the information related to the entity
  * @param health health to be set
@@ -119,6 +120,7 @@ Status entity_set_health(Entity *entity, double health);
 
 /**
  * @brief Sets the base damage
+ * @author Maksym Polyak
  * 
  * @param entity contains all the information related to the entity
  * @param baseDamage base damage to set
@@ -128,6 +130,7 @@ Status entity_set_baseDamage(Entity *entity, double baseDamage);
 
 /**
  * @brief Sets the strength stat
+ * @author Maksym Polyak
  * 
  * @param entity contains all the information related to the entity
  * @param strength strength stat to set
@@ -137,6 +140,7 @@ Status entity_set_strength(Entity *entity, int strength);
 
 /**
  * @brief Sets the defense stat
+ * @author Maksym Polyak
  * 
  * @param entity contains all the information related to the entity
  * @param defense defense stat to set
@@ -146,6 +150,7 @@ Status entity_set_defense(Entity *entity, int defense);
 
 /**
  * @brief Sets the magic level stat
+ * @author Maksym Polyak
  * 
  * @param entity contains all the information related to the entity
  * @param magicLevel magic level stat to set
@@ -203,6 +208,7 @@ EntityType entity_get_entityType(Entity *entity);
 
 /**
  * @brief Gets the entity health
+ * @author Maksym Polyak
  * 
  * @param entity contains all the information related to the entity
  * @return health if well or -1 if wrong
@@ -212,6 +218,7 @@ double entity_get_health(Entity *entity);
 
 /**
  * @brief Gets the entity base damage
+ * @author Maksym Polyak
  * 
  * @param entity contains all the information related to the entity
  * @return baseDamage if well or -1 if wrong
@@ -220,6 +227,7 @@ double entity_get_baseDamage(Entity *entity);
 
 /**
  * @brief Gets the strength stat of the entity
+ * @author Maksym Polyak
  * 
  * @param entity contains all the information related to the entity
  * @return strength stat if well or -1 if wrong
@@ -228,6 +236,7 @@ int entity_get_strength(Entity *entity);
 
 /**
  * @brief Gets the defense stat of the entity
+ * @author Maksym Polyak
  * 
  * @param entity contains all the information related to the entity
  * @return defense stat if well or -1 if wrong
@@ -236,34 +245,11 @@ int entity_get_defense(Entity *entity);
 
 /**
  * @brief Gets the magic Level stat of the entity
+ * @author Maksym Polyak
  * 
  * @param entity contains all the information related to the entity
  * @return magicLevel stat if well or -1 if wrong
  */
 int entity_get_magicLevel(Entity *entity);
-
-
-
-/*Entity PRINTERS*/
-
-/**
- * @brief NON IMPLEMENTED - Prints the entity status
- * @author Maksym Polyak
- *
- * @param entity contains all the information related to the entity
- */
-/*
-void entity_print_status(Entity *entity);
-*/
-
-/**
- * @brief NON IMPLEMENTED - Prints the entity inventory
- * @author Maksym Polyak
- *
- * @param entity contains all the information related to the entity
- */
-/*
-void entity_print_inventory(Entity *entity);
-*/
 
 #endif

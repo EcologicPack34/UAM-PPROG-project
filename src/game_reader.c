@@ -56,6 +56,7 @@ Status game_reader_load_objects(Game *game, char *filename);
 
 /**
  * @brief Reads the filename to load the player information
+ * @author Maksym Polyak
  * 
  * @param game struct that saves all information related to the game
  * @param filename string that stores the data file name
