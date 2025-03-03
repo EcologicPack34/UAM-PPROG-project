@@ -224,7 +224,9 @@ Status command_get_user_input(Command* command) {
     /*Tries to read all posible arguments*/
     for (i = 0; i < MAX_CMD_ARGS_NUM; i++)
     {
-      wordCount++;
+      /*Ignores blank spaces*/
+      while(originalInput[wordCount] == ' ' && wordCount + 1 < inputLength) wordCount++;
+
       counter = 0;
       if(originalInput[wordCount] == '\n' || originalInput[wordCount] == '\00' || wordCount == inputLength)
         break;

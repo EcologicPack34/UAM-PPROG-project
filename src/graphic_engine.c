@@ -76,7 +76,7 @@ void graphic_engine_paint_game(Graphic_engine *ge, Game *game){
 
   char obj = '\0';
   char locked = '\0';
-  char str[WORD_SIZE];
+  char str[WORD_SIZE], straux[WORD_SIZE] = "\00";
   CommandCode last_cmd = UNKNOWN;
   extern char *cmd_to_str[N_CMD][N_CMDT];
   int inventorysize, i;
@@ -242,6 +242,10 @@ void graphic_engine_paint_game(Graphic_engine *ge, Game *game){
   /* Paint in the feedback area */
   last_cmd = command_get_code(game_get_last_command(game));
   sprintf(str, " %s (%s)", cmd_to_str[last_cmd - NO_CMD][CMDL], cmd_to_str[last_cmd - NO_CMD][CMDS]);
+  for(i = 0; i < MAX_CMD_ARGS_NUM; i++){
+    sprintf(straux, " %s", *(command_get_arguments(game_get_last_command(game)) + i));
+    strcat(str, straux);
+  }
   screen_area_puts(ge->feedback, str);
  
   /* Dump to the terminal */
