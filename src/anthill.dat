@@ -2,7 +2,7 @@ Formato Space: #s:ID|Nombre|northLink|eastLink|southLink|westLink
 Formato Link: #l:ID|Space1|Space2|adjacent|locked|unlockingObjectID
 Formato Object: #o:ID|Nombre|LocationID|InventoryType
 Formato Player: #p:ID|Nombre|LocationID|Vida|DanoBase|Fuerza|Defensa|NivelMagia
-Formato Event: #e:Id|Type|cmdTriggersNum| cmdName1 , ...|removeOnTrigger|tagvalue1:tagvalue2,...
+Formato Event: #e:Id|Type|cmdTriggersNum|cmdName1 , ...|removeOnTrigger|tagvalue1:tagvalue2,...
 
 InventoryType = {UNKNOWN_INVENTORY == 0, PLAYER_INVENTORY == 1, NPC_INVENTORY == 2, SPACE_INVENTORY == 3}
 
