@@ -2,10 +2,10 @@ CC = gcc
 
 CFLAGS = -Wall -pedantic
 SRC = collector.c command.c debug_printing.c game_actions.c game_loop.c game.c graphic_engine.c space.c object.c player.c game_reader.c entity.c \
- link.c inventory.c collection.c event_manager.c event_actions.c
+ link.c inventory.c collection.c event_manager.c event_actions.c npc.c
 
 OBJ = collector.o command.o debug_printing.o game_actions.o game_loop.o game.o graphic_engine.o space.o object.o player.o libscreen.a entity.o \
- game_reader.o link.o inventory.o collection.o event_manager.o event_actions.o
+ game_reader.o link.o inventory.o collection.o event_manager.o event_actions.o npc.o
 
 EXE = anthill
 EXED = anthilldebug
@@ -82,6 +82,9 @@ event_actions.o: event_actions.c event_actions.h event_manager.h \
  command.h types.h game.h link.h entity.h inventory.h object.h \
  collection.h space.h player.h debug_printing.h
 	$(CC) $(CFLAGS) -c event_actions.c
+
+npc.o: npc.c entity.h inventory.h types.h object.h collection.h npc.h
+	$(CC) $(CFLAGS) -c npc.c
 
 .PHONY:	clean compile run
 clean:

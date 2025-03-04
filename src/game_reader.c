@@ -81,7 +81,9 @@ Status game_reader_load_events(Game *game, char *filename);
 Status game_reader_create_from_file(Game **game, char *filename){
   if (game_create(game) == ERROR){
     debug_log(LOG_ERROR, "Error creating game at: game_reader_create_from_file(Game*, char*) in game_reader.c");
-    return ERROR;
+    printf("%c[2J", 27);
+    printf("Fatal error. Check the log for details\n");
+    abort();
   }
 
   if(game_reader_load_player(*game, filename) == ERROR){
