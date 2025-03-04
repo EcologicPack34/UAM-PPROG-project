@@ -16,6 +16,7 @@ APROBADO - take + drop --> Gestión de inventario del player (COMENTAR LA PARTE 
 
 APROBADO - Sistema de eventos para manejar el fin del juego(temporalmente) --> luego se modificará para otras cosas
 
+APROBADO - Al leer objetos con take, que intente leer por O(ID) si no lo encuentra lo interpreta como nombre y lo busca
 
 APROBADO - Modulo NPC basado en Entity --> Gestiona NPCs (Aliados y enemigos)
 APROBADO - Modificar Player --> Equipamiento
