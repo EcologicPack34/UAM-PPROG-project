@@ -116,6 +116,10 @@ Status game_reader_create_from_file(Game **game, char *filename){
     debug_log(LOG_ERROR, "Error loading events at: game_reader_create_from_file(Game*, char*) in game_reader.c");
     return ERROR;
   }
+  if (game_reader_load_npcs(*game, filename) == ERROR){
+    debug_log(LOG_ERROR, "Error loading npcs at: game_reader_create_from_file(Game*, char*) in game_reader.c");
+    return ERROR;
+  }
 
   return OK;
 }
