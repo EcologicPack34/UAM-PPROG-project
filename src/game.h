@@ -287,4 +287,14 @@ Status game_add_player(Game *game, Player *player);
  */
 Status game_add_event(Game *game, Event *event);
 
+/**
+ * @brief Adds an NPC struct to the game struct
+ * @author Maksym Polyak
+ * 
+ * @param game 
+ * @param npc 
+ * @return Status 
+ */
+Status game_add_npc(Game *game, NPC *npc);
+
 #endif

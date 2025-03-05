@@ -218,6 +218,8 @@ void graphic_engine_paint_game(Graphic_engine *ge, Game *game){
     inventory_get_object_str_at(spaceInventory, str, i);
     screen_area_puts(ge->descript, str);
   }
+
+  /*SI QUEREMOS AÑADIR PARA VER LOS NPCS A LA DERECHA HAY QUE LOCALIZARLOS EN SPACE PARA ACCEDER A ELLOS*/
   
   
   /*if (((obj_loc = game_get_object_location(game)) != NO_ID) && (obj_loc != INSIDE_INVENTORY)) { TEMPORARILY UNAVAILABLE DUE TO OBJECT REWORK*/

@@ -74,6 +74,16 @@ Status game_reader_load_player(Game *game, char *filename);
  */
 Status game_reader_load_events(Game *game, char *filename);
 
+/**
+ * @brief Reads the file to load all npcs
+ * @author Maksym Polyak
+ * 
+ * @param game 
+ * @param filename 
+ * @return Status 
+ */
+Status game_reader_load_npcs(Game *game, char *filename);
+
 
 /*
 * Public functions implementation
@@ -452,4 +462,76 @@ Status game_reader_load_events(Game *game, char *filename){
 
   return status;
 
+}
+
+Status game_reader_load_npcs(Game *game, char *filename){
+  FILE *file = NULL;
+  NPC *npc = NULL;
+  char line[WORD_SIZE] = "";
+  char name[WORD_SIZE] = "";
+  char *toks = NULL;
+  double health, baseDamage;
+  int strength, defense, magicLevel;
+  long npcid, startinglocation;
+  NPC_status statusnpc;
+
+  Status status = OK;
+
+  if (!filename) {
+    debug_log(LOG_ERROR, "Missing file name at: game_reader_load_npcs(Game*, char*) in game_reader.c");
+    return ERROR;
+  }
+
+  file = fopen(filename, "r");
+  if (file == NULL) {
+    debug_log(LOG_ERROR, "Error in file at: game_reader_load_npcs(Game*, char*) in game_reader.c");
+    return ERROR;
+  }
+
+
+  /*Gets each line of the data file, uses strtok to shred it and stores it in static memory*/
+  while (fgets(line, WORD_SIZE, file)) {
+    if (strncmp("#n:", line, 3) == 0) {
+      toks = strtok(line + 3, "|");
+      npcid = atol(toks);
+      toks = strtok(NULL, "|");
+      strcpy(name, toks);
+      toks = strtok(NULL, "|");
+      startinglocation = atol(toks);
+      toks = strtok(NULL, "|");
+      statusnpc = (NPC_status)atoi(toks);
+      toks = strtok(NULL, "|");
+      health = strtod(toks, NULL);
+      toks = strtok(NULL, "|");
+      baseDamage = strtod(toks, NULL);
+      toks = strtok(NULL, "|");
+      strength = atoi(toks);
+      toks = strtok(NULL, "|");
+      defense = atoi(toks);
+      toks = strtok(NULL, "|");
+      magicLevel = atoi(toks);
+      
+
+      debug_log(PRINT,"Read NPC: #n:%ld|%s|%ld|%d|%lf|%lf|%d|%d|%d", npcid, name, startinglocation, (int)statusnpc, health, baseDamage, strength, defense, magicLevel);
+
+      /*Creates an NPC with npc_create then saves it on the game with game_add_npc*/
+      npc = npc_create(status, name, npcid, startinglocation, health, baseDamage, strength, defense, magicLevel);
+      if (npc != NULL) {
+        if(game_add_npc(game, npc) == ERROR){
+          npc_destroy(npc);
+          status = ERROR;
+        }
+      }
+    }
+  }
+
+
+  if (ferror(file)) {
+    status = ERROR;
+    debug_log(LOG_ERROR, "Error in file at: game_reader_load_npc(Game*, char*) in game_reader.c");
+  }
+
+  fclose(file);
+
+  return status;
 }

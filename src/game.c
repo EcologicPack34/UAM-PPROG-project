@@ -10,8 +10,8 @@
  * @copyright GNU Public License
  */
 
-#include "debug_printing.h"
 #include "game.h"
+#include "debug_printing.h"
 #include "collection.h"
 #include "npc.h"
 
@@ -79,7 +79,7 @@ Status game_create(Game **game) {
   (*game)->objects = collection_create(COLLECTION_INITIAL_SIZE, false, true, object_isEqual, object_print);
   if(!((*game)->objects)) debug_log(LOG_ERROR,"Error initializing collection of objects");
   (*game)->npcs = collection_create(COLLECTION_INITIAL_SIZE, false, true, npc_cmp, NULL); /*TEMPORAL PRINT*/
-  if(!((*game)->objects)) debug_log(LOG_ERROR,"Error initializing collection of npcs");
+  if(!((*game)->npcs)) debug_log(LOG_ERROR,"Error initializing collection of npcs");
   (*game)->last_cmd = command_create();
   if(!((*game)->last_cmd)) debug_log(LOG_ERROR,"Error creating command");
   (*game)->finished = false;
@@ -291,4 +291,17 @@ Status game_add_player(Game *game, Player *player){
 Status game_add_event(Game *game, Event * event){
   if(!game || !event) return ERROR;
   return event_manager_add_event(game->event_manager, event);
+}
+
+Status game_add_npc(Game *game, NPC *npc){
+  Entity *ent = NULL;
+  
+  if(!game || !npc) return ERROR;
+  
+  if(collection_add(game_get_npcs(game), npc))
+    return ERROR;
+
+  ent = npc_get_entity(npc);
+  debug_log(PRINT,"Game Added NPC: ID: %ld, name: %s, objectlocation: %ld", entity_get_id(ent), entity_get_name(ent), entity_get_location(ent));
+  return OK;
 }

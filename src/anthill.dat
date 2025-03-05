@@ -2,9 +2,11 @@ Formato Space: #s:ID|Nombre|northLink|eastLink|southLink|westLink
 Formato Link: #l:ID|Space1|Space2|adjacent|locked|unlockingObjectID
 Formato Object: #o:ID|Nombre|LocationID|InventoryType
 Formato Player: #p:ID|Nombre|LocationID|Vida|DanoBase|Fuerza|Defensa|NivelMagia
+Formato NPC: #n:ID|Nombre|LocationID|Status|Vida|DanoBase|Fuerza|Defensa|NivelMagia"
 Formato Event: #e:Id|Type|cmdTriggersNum|cmdName1 , ...|removeOnTrigger|tagvalue1:tagvalue2,...
 
 InventoryType = {UNKNOWN_INVENTORY == 0, PLAYER_INVENTORY == 1, NPC_INVENTORY == 2, SPACE_INVENTORY == 3}
+NPC_status = {UNKNOWN_STATUS == 0, NEUTRAL == 1, ALLY == 2, ENEMY == 3}
 
 #p:1|Hero|11|10|2|1|1|1
 
@@ -46,3 +48,5 @@ InventoryType = {UNKNOWN_INVENTORY == 0, PLAYER_INVENTORY == 1, NPC_INVENTORY ==
 
 #e:1|object_on_space|2|tk,dr|0|1:13
 #e:2|object_on_space|2|tk,dr|0|2:14
+
+#n:1|NPCTEST|11|1|1|1|1|1|1"
