@@ -464,7 +464,7 @@ Status game_reader_load_events(Game *game, char *filename){
 
 }
 
-Status game_reader_load_npcs(Game *game, char *filename){
+Status game_reader_load_npcs(Game *game, char *filename){ /*NEEEDS FIX --> CORE DUMPED*/
   FILE *file = NULL;
   NPC *npc = NULL;
   char line[WORD_SIZE] = "";
@@ -488,7 +488,6 @@ Status game_reader_load_npcs(Game *game, char *filename){
     return ERROR;
   }
 
-
   /*Gets each line of the data file, uses strtok to shred it and stores it in static memory*/
   while (fgets(line, WORD_SIZE, file)) {
     if (strncmp("#n:", line, 3) == 0) {
@@ -511,9 +510,7 @@ Status game_reader_load_npcs(Game *game, char *filename){
       toks = strtok(NULL, "|");
       magicLevel = atoi(toks);
       
-
       debug_log(PRINT,"Read NPC: #n:%ld|%s|%ld|%d|%lf|%lf|%d|%d|%d", npcid, name, startinglocation, (int)statusnpc, health, baseDamage, strength, defense, magicLevel);
-
       /*Creates an NPC with npc_create then saves it on the game with game_add_npc*/
       npc = npc_create(status, name, npcid, startinglocation, health, baseDamage, strength, defense, magicLevel);
       if (npc != NULL) {
