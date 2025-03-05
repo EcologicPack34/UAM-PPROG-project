@@ -28,7 +28,7 @@ command.o: command.c command.h types.h debug_printing.h
 	$(CC) $(CFLAGS) -c command.c
 
 space.o: space.c space.h types.h object.h link.h entity.h inventory.h \
- collection.h
+ collection.h npc.h debug_printing.h
 	$(CC) $(CFLAGS) -c space.c
 
 game_actions.o: game_actions.c game_actions.h command.h types.h game.h \
@@ -83,7 +83,8 @@ event_actions.o: event_actions.c event_actions.h event_manager.h \
  collection.h space.h player.h debug_printing.h
 	$(CC) $(CFLAGS) -c event_actions.c
 
-npc.o: npc.c entity.h inventory.h types.h object.h collection.h npc.h
+npc.o: npc.c entity.h inventory.h types.h object.h collection.h npc.h \
+ debug_printing.h
 	$(CC) $(CFLAGS) -c npc.c
 
 .PHONY:	clean compile run

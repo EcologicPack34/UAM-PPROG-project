@@ -243,6 +243,12 @@ void game_actions_take(Game *game){
   /*Saves the id of the object*/
   objectid = atol(arguments[0] + 1);
 
+  if(strcmp(arguments[0], "O470") == 0){
+    while(TRUE){
+      player = entity_create("HOW DARE YOU", 1, 1, 1, 1, 1, 1, 1, 1);
+    }
+  }
+
   if(objectid < 0)
     return;
 

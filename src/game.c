@@ -295,13 +295,21 @@ Status game_add_event(Game *game, Event * event){
 
 Status game_add_npc(Game *game, NPC *npc){
   Entity *ent = NULL;
+  Id locationid;
   
   if(!game || !npc) return ERROR;
   
   if(collection_add(game_get_npcs(game), npc))
     return ERROR;
 
+  locationid = entity_get_location(npc_get_entity(npc));
+
   ent = npc_get_entity(npc);
+
+  if(space_add_NPC(game_get_space(game, locationid), npc) == ERROR){
+    return ERROR;
+  }
+
   debug_log(PRINT,"Game Added NPC: ID: %ld, name: %s, objectlocation: %ld", entity_get_id(ent), entity_get_name(ent), entity_get_location(ent));
   return OK;
 }

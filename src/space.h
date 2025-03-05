@@ -22,8 +22,11 @@
 #include "object.h"
 #include "link.h"
 #include "inventory.h"
+#include "npc.h"
 
 #include <stdbool.h>
+
+#define SPACE_MAX_NPCS 8
 
 typedef struct _Space Space;
 
@@ -100,16 +103,6 @@ Status space_set_east(Space *space, Link *link);
  */
 Status space_set_west(Space *space, Link *link);
 
-/**
- * @brief It sets whether the space has an object or not
- * @author Profesores PPROG
- *
- * @param space a pointer to the space
- * @param value a boolean, specifying if in the space there is an object (true) or not (false)
- * @return OK, if everything goes well or ERROR if there was some mistake
- */
-Status space_set_object(Space *space, bool value);
-
 /*Space GETTERS*/
 
 /**
@@ -183,5 +176,35 @@ Inventory *space_get_inventory(Space *space);
  * @return OK, if everything goes well or ERROR if there was some mistake
  */
 Status space_print(Space *space);
+
+/**
+ * @brief Adds an NPC struct to the space NOTE: Sets the location of the npc to the one of the space
+ * @author Maksym Polyak
+ * 
+ * @param space 
+ * @param npc 
+ * @return Status 
+ */
+Status space_add_NPC(Space *space, NPC *npc);
+
+/**
+ * @brief Removes an NPC struct from the space NOTE: Sets the NPC location to UNKNOWN_ID
+ * 
+ * @param space 
+ * @param npc 
+ * @return Status 
+ */
+Status space_remove_NPC(Space *space, NPC *npc);
+
+/**
+ * @brief Moves an NPC from a space to another space NOTE: Sets the location of the npc to the one of the spaceIN
+ * @author Maksym Polyak
+ * 
+ * @param spaceOUT 
+ * @param spaceIN 
+ * @param npc 
+ * @return Status 
+ */
+Status space_move_NPC(Space *spaceOUT, Space *spaceIN, NPC *npc);
 
 #endif

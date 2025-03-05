@@ -24,15 +24,75 @@
  * This struct stores all the information of a space.
  */
 struct _Space {
-  Id id;                    /*!< Id number of the space, it must be unique */
-  char name[WORD_SIZE + 1]; /*!< Name of the space */
-  Inventory *inventory;
-  Link *north;                 /*!< Id of the space at the north */
-  Link *south;                 /*!< Id of the space at the south */
-  Link *east;                  /*!< Id of the space at the east */
-  Link *west;                  /*!< Id of the space at the west */
-  bool object;              /*!< Whether the space has an object or not */
+  Id id;                        /*!< Id number of the space, it must be unique */
+  char name[WORD_SIZE + 1];     /*!< Name of the space */
+
+  Link *north;                  /*!< Id of the space at the north */
+  Link *south;                  /*!< Id of the space at the south */
+  Link *east;                   /*!< Id of the space at the east */
+  Link *west;                   /*!< Id of the space at the west */
+  
+  Inventory *inventory;         /*!< Inventory of the space*/
+  
+  NPC **NPCs;                    /*!< Array with the NPCs on the space, not organized*/
+  int n_npcs;                   /*!< int with the number of NPCs on the space*/
 };
+
+/*Space private functions*/
+
+/*GETTERS*/
+
+/**
+ * @brief Gets the number of npcs located on a space
+ * @author Maksym Polyak
+ * 
+ * @param space 
+ * @return int or -1 if error
+ */
+int space_get_n_npcs(Space *space);
+
+/**
+ * @brief Gets the NPCs array of the space
+ * @author Maksym Polyak
+ * 
+ * @param space 
+ * @return NPC** or NULL if errors
+ */
+NPC **space_get_NPCs(Space *space);
+
+/*SETTERS*/
+
+/**
+ * @brief Sets the number of npcs located on a space
+ * @author Maksym Polyak
+ * 
+ * @param space 
+ * @param num
+ * @return Status
+ */
+Status space_set_n_npcs(Space *space, int num);
+
+/*PRIVATE IMPLEMENTATION*/
+
+int space_get_n_npcs(Space *space){
+  if(!space) return -1;
+
+  return space->n_npcs;
+}
+
+NPC **space_get_NPCs(Space *space){
+  if(!space) return NULL;
+
+  return space->NPCs;
+}
+
+Status space_set_n_npcs(Space *space, int num){
+  if(!space) return ERROR;
+
+  space->n_npcs = num;
+  
+  return OK;
+}
 
 /*Space public functions*/
 
@@ -52,6 +112,7 @@ Space* space_create(Id id) {
   newSpace->name[0] = '\0';
   newSpace->inventory = inventory_create(SPACE_INVENTORY, id);
   if(!newSpace->inventory){
+    debug_log(LOG_ERROR, "space_create, inventory_create dynamic memory error at space: id:%ld", id);
     free(newSpace);
     return NULL;
   }
@@ -59,7 +120,15 @@ Space* space_create(Id id) {
   newSpace->south = NULL;
   newSpace->east = NULL;
   newSpace->west = NULL;
-  newSpace->object = false;
+
+  newSpace->n_npcs = 0;
+  newSpace->NPCs = (NPC **)calloc(SPACE_MAX_NPCS, sizeof(NPC *));
+  if(!newSpace->NPCs){
+    debug_log(LOG_ERROR, "space_create, NPC array dynamic memory error at space: id:", id);
+    inventory_destroy(newSpace->inventory);
+    free(newSpace);
+    return NULL;
+  }
 
   return newSpace;
 }
@@ -70,6 +139,7 @@ Status space_destroy(Space* space) {
   }
 
   inventory_destroy(space->inventory);
+  free(space->NPCs); /*Dynamic memory from NPCs is controlled by the main*/
 
   free(space);
   space = NULL;
@@ -135,14 +205,6 @@ Status space_set_west(Space* space, Link* link) {
   return OK;
 }
 
-Status space_set_object(Space* space, bool value) {
-  if (!space) {
-    return ERROR;
-  }
-  space->object = value;
-  return OK;
-}
-
 /*Space GETTERS*/
 
 const char* space_get_name(Space* space) {
@@ -184,13 +246,6 @@ Link* space_get_west(Space* space) {
   return space->west;
 }
 
-bool space_get_object(Space* space) {
-  if (!space) {
-    return false;
-  }
-  return space->object;
-}
-
 Status space_print(Space* space) {
   Id idaux = NO_ID;
 
@@ -228,12 +283,84 @@ Status space_print(Space* space) {
     fprintf(stdout, "---> No west link.\n");
   }
 
-  /* 3. Print if there is an object in the space or not */
-  if (space_get_object(space)) {
-    fprintf(stdout, "---> Object in the space.\n");
-  } else {
-    fprintf(stdout, "---> No object in the space.\n");
+  return OK;
+}
+
+Status space_add_NPC(Space *space, NPC *npc){
+  int n_npcs, i;
+  NPC **npcArray = NULL;
+  Entity *entity = NULL;
+  
+  if(!space || !npc)
+    return ERROR;
+
+  n_npcs = space_get_n_npcs(space);
+  if(n_npcs == SPACE_MAX_NPCS){
+    debug_log(LOG_ERROR, "space_add_NPC couldn't add NPC because space is full of NPCs on space with id:", space_get_id(space));
+    return ERROR;
   }
 
+  npcArray = space_get_NPCs(space);
+  for(i = 0; i < n_npcs; i++){
+    if(npcArray[i] != NULL){
+      npcArray[i] = npc;
+      space_set_n_npcs(space, n_npcs + 1);
+      return OK;
+    }
+  }
+
+  entity = npc_get_entity(npc);
+
+  entity_set_location(entity, space_get_id(space));
+
+  return ERROR;
+}
+
+Status space_remove_NPC(Space *space, NPC *npc){
+  int n_npcs, i;
+  NPC **npcArray = NULL;
+  Entity *entity = NULL;
+  
+  if(!space || !npc)
+    return ERROR;
+
+  n_npcs = space_get_n_npcs(space);
+  if(n_npcs == 0){
+    debug_log(LOG_ERROR, "space_remove_NPC couldn't remove NPC because the space does not have NPCs on space with id:", space_get_id(space));
+    return ERROR;
+  }
+
+  npcArray = space_get_NPCs(space);
+  for(i = 0; i < SPACE_MAX_NPCS; i++){
+    if(npcArray[i] == npc){
+      npcArray[i] = NULL;
+      space_set_n_npcs(space, n_npcs - 1);
+      return OK;
+    }
+  }
+
+  entity = npc_get_entity(npc);
+
+  entity_set_location(entity, UNKNOWN_ENTITY);
+
+  return ERROR;
+}
+
+Status space_move_NPC(Space *spaceOUT, Space *spaceIN, NPC *npc){
+  if(!spaceOUT || !spaceIN || !npc)
+    return ERROR;
+
+  if(space_remove_NPC(spaceOUT, npc) == ERROR){
+    debug_log(LOG_ERROR, "space_move_NPC couldn't move NPC because space_remove_NPC failed, on space with id:", space_get_id(spaceOUT));
+    return ERROR;
+  }
+
+  if(space_add_NPC(spaceIN, npc) == ERROR){
+    debug_log(LOG_ERROR, "space_move_NPC couldn't move NPC because space_add_NPC failed, on space with id:", space_get_id(spaceOUT));
+    debug_log(LOG_ERROR, "NPC was lost on space_move_NPC on NPC with id: %ld", entity_get_id(npc_get_entity(npc)));
+    return ERROR;
+  }
+
+  debug_log(PRINT, "space_move_NPC moved the NPC with id: %ld from the space of id: %ld to the space of id: %ld", entity_get_id(npc_get_entity(npc)),space_get_id(spaceOUT), space_get_id(spaceIN));
   return OK;
 }
