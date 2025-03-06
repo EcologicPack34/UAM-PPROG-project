@@ -13,6 +13,8 @@
 #define NPC_H
 
 #include <stdio.h>
+
+#include "entity.h"
 #include "types.h"
 #include "debug_printing.h"
 

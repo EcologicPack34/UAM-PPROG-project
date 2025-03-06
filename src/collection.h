@@ -87,12 +87,23 @@ Status collection_remove_at(Collection *collection, long index);
 
 /**
  * @brief Gets the element at a given index
+ * @author Daniel Gómez
  * 
  * @param collection 
  * @param index 
  * @return NULL if something went wrong, pointer to element if correct
  */
 void *collection_get_element_at(Collection *collection, long index);
+
+/**
+ * @brief Tries to find a element inside the collection
+ * @author Daniel Gómez
+ * 
+ * @param collection 
+ * @param element 
+ * @return pointer to element if found, NULL if not contained in collection
+ */
+void *collection_find(Collection *collection, void *element);
 
 /**
  * @brief Checks if the collection contains a certain element

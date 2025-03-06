@@ -105,7 +105,7 @@ debug:
 
 runv:
 	make debug
-	valgrind --leak-check=full ./anthilldebug anthill.dat
+	valgrind --leak-check=full --track-origins=yes ./anthilldebug anthill.dat
 	
 # $@ devuelve lo que hay a la izquierda de los :, $^ devuelve todas las dependencias
 

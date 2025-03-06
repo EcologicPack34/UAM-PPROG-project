@@ -8,17 +8,19 @@
  * @copyright Copyright (c) 2025
  * 
 */
+#include "npc.h"
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "entity.h"
-#include "npc.h"
+#include <stdbool.h>
+
 
 
 
 
 struct _NPC{
     Entity *entity;
+    bool followPlayer;
 
     NPC_status status;
 };
@@ -39,7 +41,7 @@ NPC *npc_create(NPC_status status, char *name, Id id, Id location, double health
     if(!name)
         return NULL;
 
-    npc = (NPC *)malloc(sizeof(NPC));
+    npc = (NPC *)calloc(1,sizeof(NPC));
     if(!npc){
         debug_log(LOG_ERROR, "npc_create dynamic memory error at npc struct on npc: id: %ld locationid: %d", id, location);
         return NULL;
@@ -49,19 +51,17 @@ NPC *npc_create(NPC_status status, char *name, Id id, Id location, double health
     npc->entity = entity_create(name, id, location, NPC_INVENTORY, health, baseDamage, strength, defense, magicLevel);
     if(npc->entity == NULL){
         debug_log(LOG_ERROR, "npc_create dynamic memory error at entity_create on npc: id: %ld locationid: %d", id, location);
+        free(npc);
         return NULL;
     }
 
     return npc;
 }
 
-void npc_destroy(void *npc){
-    NPC *auxent = NULL;
-    
+void npc_destroy(void *npc){ 
     if(npc){
-        auxent = (NPC *)auxent;
-        entity_destroy(auxent->entity);
-        free(auxent);
+        entity_destroy(((NPC *)npc)->entity);
+        free(npc);
     }
 }
 

@@ -132,18 +132,18 @@ void game_loop_run(Game *game, Graphic_engine *gengine){
 
   while ((command_get_code(last_cmd) != EXIT) )
   {
-    /*Triggers event with last command actions*/
-    event_actions_trigger_events(game);
-
     /*Paints graphics on screen*/
     graphic_engine_paint_game(gengine, game);
-
+    
     /*Checks if game finished before getting new input*/
     if(game_get_finished(game) == true) break;
-
+    
     /*Gets new input and updates game*/
     command_get_user_input(last_cmd);
     game_actions_update(game, last_cmd);
+    
+    /*Triggers event with last command actions*/
+    event_actions_trigger_events(game);
   }
 }
 

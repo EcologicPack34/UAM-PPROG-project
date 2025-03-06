@@ -29,7 +29,6 @@
  */
 struct _Inventory {
     Collection *objects;                /*!< Collection with unique items and fixed space */
-    int objectcount;                    /*!< Total number of objects on the inventory */
     InventoryType inventoryType;        /*!< Inventory type of the inventory */
     Id id;                              /*!< Id with the inventory location */
 };
@@ -45,7 +44,7 @@ struct _Inventory {
  * @param inventory struct with all the information related to the inventory
  * @return object count (int) if well or -1 if there was an error
  */
-int inventory_get_object_count(Inventory *inventory);
+long inventory_get_object_count(Inventory *inventory);
 
 /**
  * @brief Gets the inventory type
@@ -72,15 +71,6 @@ Id inventory_get_location_id(Inventory *inventory);
 long inventory_get_size_by_type(InventoryType type);
 
 /**
- * @brief Sets the number of objects in the inventory
- * 
- * @param inventory struct with all the information related to the inventory
- * @param object_count number of objects to set in the inventory
- * @return OK if well or ERROR if error
- */
-Status inventory_set_object_count(Inventory *inventory, int object_count);
-
-/**
  * @brief Sets an inventory on the position index of the inventory object array
  * NOTE object can be null
  * 
@@ -91,11 +81,11 @@ Status inventory_set_object_count(Inventory *inventory, int object_count);
  */
 Status inventory_set_object_at(Inventory *inventory, Object *object, int index);
 
-int inventory_get_object_count(Inventory *inventory){
+long inventory_get_object_count(Inventory *inventory){
     if(!inventory)
         return -1;
     
-    return inventory->objectcount;
+    return collection_length(inventory->objects);
 }
 
 InventoryType inventory_get_type(Inventory *inventory){
@@ -132,15 +122,6 @@ long inventory_get_size_by_type(InventoryType type){
     }  
 
     return size;
-}
-
-Status inventory_set_object_count(Inventory *inventory, int object_count){
-    if(!inventory)
-        return ERROR;
-    
-    inventory->objectcount = object_count;
-
-    return OK;
 }
 
 Status inventory_set_object_at(Inventory *inventory, Object *object, int index){
@@ -195,12 +176,13 @@ void inventory_destroy(Inventory *inventory){
 
 Object *inventory_get_object_by_id(Inventory *inventory, Id objectid){
     Object *object = NULL;
-    int i, size;
+    long i, size;
     
     if(!inventory)
         return NULL;
 
-    size = (int)inventory_get_size_by_type(inventory_get_type(inventory));
+    size = inventory_get_size_by_type(inventory_get_type(inventory));
+    if(size <= 0) return NULL;
     /*Searches by id in all the positions of the inventory array*/
     for(i = 0; i < size; i++){
         object = inventory_get_object_at(inventory, i);
@@ -309,8 +291,6 @@ Status inventory_add_object(Inventory *inventory, Object *object){
 
     object_set_type(object, inventory_get_type(inventory));
     object_set_location(object, inventory_get_location_id(inventory));
-
-    inventory_set_object_count(inventory, inventory_get_object_count(inventory) + 1);
 
     return OK;
 }

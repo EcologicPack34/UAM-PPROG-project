@@ -83,7 +83,7 @@ bool event_trigger_object_on_space(Event *event, Game *game){
     Id objectId = NO_ID;
     Id spaceId = NO_ID; 
 
-    Space *space;
+    Space *space = NULL;
 
     if(!event || !game) return false;
 

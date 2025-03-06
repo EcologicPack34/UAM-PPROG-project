@@ -107,7 +107,9 @@ Status game_destroy(Game *game) {
   collection_free_elements(game_get_objects(game), object_destroy);
   collection_destroy(game_get_objects(game));
 
-  collection_free_elements(game_get_npcs(game), npc_destroy);
+  if(collection_free_elements(game_get_npcs(game), npc_destroy) == ERROR){
+    printf("Error liberando colleccion de npcs");
+  }
   collection_destroy(game_get_npcs(game));
 
   command_destroy(game->last_cmd);
@@ -299,12 +301,12 @@ Status game_add_npc(Game *game, NPC *npc){
   
   if(!game || !npc) return ERROR;
   
-  if(collection_add(game_get_npcs(game), npc))
+  if(collection_add(game->npcs, npc) == ERROR)
     return ERROR;
-
-  locationid = entity_get_location(npc_get_entity(npc));
-
+    
   ent = npc_get_entity(npc);
+  locationid = entity_get_location(ent);
+
 
   if(space_add_NPC(game_get_space(game, locationid), npc) == ERROR){
     return ERROR;

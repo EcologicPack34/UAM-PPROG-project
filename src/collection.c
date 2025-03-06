@@ -104,7 +104,7 @@ Collection *collection_create(long initialSize, bool fixedLength, bool uniqueEle
     } 
         
 
-    collection->list = (void**)malloc(initialSize * sizeof(void*));
+    collection->list = (void**)calloc(initialSize, sizeof(void*));
     if(collection->list == NULL){
         debug_log(LOG_ERROR, "Error creating collection: Couldn't allocate memory for list, list size: %ld", initialSize);
         free(collection);
@@ -203,6 +203,15 @@ int collection_contains(Collection *collection, void *element){
         }
     }
     return -1;
+}
+
+void *collection_find(Collection *collection, void *element){
+    int index;
+    if(!collection || !element) return NULL;
+
+    index = collection_contains(collection, element);
+    if(index == -1) return NULL;
+    return collection_get_element_at(collection, index);
 }
 
 long collection_length(Collection *collection){

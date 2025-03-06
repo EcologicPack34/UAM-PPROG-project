@@ -116,6 +116,11 @@ Status game_reader_create_from_file(Game **game, char *filename){
     debug_log(LOG_ERROR, "Error loading events at: game_reader_create_from_file(Game*, char*) in game_reader.c");
     return ERROR;
   }
+  if (game_reader_load_npcs(*game, filename) == ERROR){
+    debug_log(LOG_ERROR, "Error loading npcs at: game_reader_create_from_file(Game*, char*) in game_reader.c");
+    return ERROR;
+  }
+
 
   return OK;
 }
@@ -494,20 +499,52 @@ Status game_reader_load_npcs(Game *game, char *filename){ /*NEEEDS FIX --> CORE 
       toks = strtok(line + 3, "|");
       npcid = atol(toks);
       toks = strtok(NULL, "|");
+      if(!toks){
+        printf("toks is null");
+        return ERROR;
+      }
       strcpy(name, toks);
       toks = strtok(NULL, "|");
+      if(!toks){
+        printf("toks is null");
+        return ERROR;
+      }
       startinglocation = atol(toks);
       toks = strtok(NULL, "|");
+      if(!toks){
+        printf("toks is null");
+        return ERROR;
+      }
       statusnpc = (NPC_status)atoi(toks);
       toks = strtok(NULL, "|");
+      if(!toks){
+        printf("toks is null");
+        return ERROR;
+      }
       health = strtod(toks, NULL);
       toks = strtok(NULL, "|");
+      if(!toks){
+        printf("toks is null");
+        return ERROR;
+      }
       baseDamage = strtod(toks, NULL);
       toks = strtok(NULL, "|");
+      if(!toks){
+        printf("toks is null");
+        return ERROR;
+      }
       strength = atoi(toks);
       toks = strtok(NULL, "|");
+      if(!toks){
+        printf("toks is null");
+        return ERROR;
+      }
       defense = atoi(toks);
       toks = strtok(NULL, "|");
+      if(!toks){
+        printf("toks is null");
+        return ERROR;
+      }   
       magicLevel = atoi(toks);
       
       debug_log(PRINT,"Read NPC: #n:%ld|%s|%ld|%d|%lf|%lf|%d|%d|%d", npcid, name, startinglocation, (int)statusnpc, health, baseDamage, strength, defense, magicLevel);
@@ -515,6 +552,7 @@ Status game_reader_load_npcs(Game *game, char *filename){ /*NEEEDS FIX --> CORE 
       npc = npc_create(status, name, npcid, startinglocation, health, baseDamage, strength, defense, magicLevel);
       if (npc != NULL) {
         if(game_add_npc(game, npc) == ERROR){
+          printf("npc creation wrong");
           npc_destroy(npc);
           status = ERROR;
         }
