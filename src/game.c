@@ -244,9 +244,15 @@ Status game_set_state(Game *game, GameState state){
 
 Status game_spatial_map(Game *game){
   Queue *queue = NULL;
+  bool failed = false;
 
   Link *north = NULL, *east = NULL, *south = NULL, *west = NULL;
   Id auxId = NO_ID;
+
+  Vector2 n = {0 ,1};
+  Vector2 e = {1,0};
+  Vector2 s = {0,-1};
+  Vector2 w = {-1,0};
 
   struct SpaceInfo{
     Space *space;
@@ -257,6 +263,8 @@ Status game_spatial_map(Game *game){
   struct SpaceInfo *infoAux = NULL;
 
   if(!game) return ERROR;
+
+
 
   queue = queue_create();
 
@@ -284,15 +292,102 @@ Status game_spatial_map(Game *game){
 
     if(north){
       auxId = link_get_oposite_space(north, space_get_id(info->space));
+      
       if(link_is_adjacent(north)){
-        //añadir al queue el espacio adjascente y modificar su posicion
+        infoAux = calloc(1, sizeof(struct SpaceInfo));
+        if(!infoAux){
+          failed = true;
+          break;
+        }
+
+        infoAux->pos = info->pos;
+        vector2_add(&(infoAux->pos), n);
+        infoAux->space = game_get_space(game, auxId);
+
+        if(!space_get_isMapped(infoAux->space)){
+          space_set_isMapped(infoAux->space,true);
+          space_set_position(infoAux->space, infoAux->pos.x, infoAux->pos.y);
+          queue_push(queue, (void *)infoAux);
+        }
+
+      }
+    }
+    if(east){
+      auxId = link_get_oposite_space(east, space_get_id(info->space));
+      
+      if(link_is_adjacent(east)){
+        infoAux = calloc(1, sizeof(struct SpaceInfo));
+        if(!infoAux){
+          failed = true;
+          break;
+        }
+
+        infoAux->pos = info->pos;
+        vector2_add(&(infoAux->pos), e);
+        infoAux->space = game_get_space(game, auxId);
+
+        if(!space_get_isMapped(infoAux->space)){
+          space_set_isMapped(infoAux->space,true);
+          space_set_position(infoAux->space, infoAux->pos.x, infoAux->pos.y);
+          queue_push(queue, (void *)infoAux);
+        }
+      }
+    }
+    if(south){
+      auxId = link_get_oposite_space(south, space_get_id(info->space));
+      
+      if(link_is_adjacent(south)){
+        infoAux = calloc(1, sizeof(struct SpaceInfo));
+        if(!infoAux){
+          failed = true;
+          break;
+        }
+
+        infoAux->pos = info->pos;
+        vector2_add(&(infoAux->pos), s);
+        infoAux->space = game_get_space(game, auxId);
+
+        if(!space_get_isMapped(infoAux->space)){
+          space_set_isMapped(infoAux->space,true);
+          space_set_position(infoAux->space, infoAux->pos.x, infoAux->pos.y);
+          queue_push(queue, (void *)infoAux);
+        }
+      }
+    }
+    if(west){
+      auxId = link_get_oposite_space(west, space_get_id(info->space));
+      
+      if(link_is_adjacent(west)){
+        infoAux = calloc(1, sizeof(struct SpaceInfo));
+        if(!infoAux){
+          failed = true;
+          break;
+        }
+
+        infoAux->pos = info->pos;
+        vector2_add(&(infoAux->pos), w);
+        infoAux->space = game_get_space(game, auxId);
+
+        if(!space_get_isMapped(infoAux->space)){
+          space_set_isMapped(infoAux->space,true);
+          space_set_position(infoAux->space, infoAux->pos.x, infoAux->pos.y);
+          queue_push(queue, (void *)infoAux);
+        }
       }
     }
 
-
+    
+    free(info);
   }
-
+  if(failed){
+    while(queue_isEmpty(queue) == false){
+      free(queue_pop(queue));
+    }
+    queue_destroy(queue);
+    return ERROR;
+  }
   
+  queue_destroy(queue);
   return OK;
 }
 

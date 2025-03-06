@@ -106,9 +106,13 @@ Status space_set_west(Space *space, Link *link);
 
 Status space_set_position(Space *space, float x, float y);
 
+Status space_set_isMapped(Space *space, bool status);
+
 /*Space GETTERS*/
 
 Vector2 *space_get_position(Space *space);
+
+bool space_get_isMapped(Space *space);
 
 /**
  * @brief It gets the id of a space

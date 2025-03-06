@@ -121,6 +121,10 @@ Status game_reader_create_from_file(Game **game, char *filename){
     return ERROR;
   }
 
+  if(game_spatial_map(*game) == ERROR){
+    debug_log(LOG_ERROR,"Error maping spatialy spaces");
+    return ERROR;
+  }
 
   return OK;
 }

@@ -36,6 +36,7 @@ struct _Space {
   Link *west;                   /*!< Id of the space at the west */
   
   Vector2 position;
+  bool mapped;
 
   Inventory *inventory;         /*!< Inventory of the space*/
   
@@ -186,7 +187,18 @@ Status space_set_position(Space *space, float x, float y){
   return OK;
 }
 
+Status space_set_isMapped(Space *space, bool status){
+  if(!space) return ERROR;
+  space->mapped = status;
+  return OK;
+}
+
 /*Space GETTERS*/
+
+bool space_get_isMapped(Space *space){
+  if(!space) return true;
+  return space->mapped;
+}
 
 Vector2 *space_get_position(Space *space){
   if(!space) return NULL;
