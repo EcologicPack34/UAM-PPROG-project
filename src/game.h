@@ -237,6 +237,8 @@ Status game_set_state(Game *game, GameState state);
 
 /*----------OTHERS----------*/
 
+Status game_spatial_map(Game *game);
+
 /**
  * @brief Adds the space received to the array of spaces on game
  * @author Profesores PPROG

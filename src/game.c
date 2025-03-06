@@ -14,6 +14,8 @@
 #include "debug_printing.h"
 #include "collection.h"
 #include "npc.h"
+#include "vector2.h"
+#include "queue.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -239,6 +241,45 @@ Status game_set_state(Game *game, GameState state){
 /*
 * Other functions that are not getters or setters
 */
+
+Status game_spatial_map(Game *game){
+  Queue *queue = NULL;
+  
+  struct SpaceInfo{
+    Space *space;
+    Vector2 pos;
+  };
+
+  struct SpaceInfo *info = NULL;
+  struct SpaceInfo *infoAux = NULL;
+
+  if(!game) return ERROR;
+
+  queue = queue_create();
+
+  info = calloc(1, sizeof(struct SpaceInfo));
+  if(!info){
+    queue_destroy(queue);
+    return ERROR;
+  }
+
+  info->pos.x = 0;
+  info->pos.y = 0;
+  info->space = game->spaces[0];
+
+  queue_push(queue, (void *)info);
+
+  while(!queue_isEmpty(queue)){
+    info = (struct SpaceInfo *)queue_pop(queue);
+
+
+
+  }
+
+  
+  return OK;
+}
+
 
 Status game_add_space(Game *game, Space *space) {
   if(game == NULL) return ERROR;
