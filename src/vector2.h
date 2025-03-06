@@ -22,4 +22,6 @@ void vector2_mult(Vector2 *v, float value);
 
 int vector2_dot(Vector2 v1, Vector2 v2);
 
+int vector2_isEqual(void *v1, void *v2);
+
 #endif

@@ -182,6 +182,22 @@ Id game_get_space_id_at(Game *game, int position) {
   return space_get_id(game->spaces[position]);
 }
 
+Space *game_get_space_by_position(Game *game, Vector2 pos){
+  int i;
+  Space *space = NULL;
+  
+  if(!game) return NULL;
+
+  for (i = 0; i < game->n_spaces; i++)
+  {
+    space = game->spaces[i];
+    if(vector2_isEqual(&pos, space_get_position(space)) == 0){
+      return space;
+    }
+  }
+  return NULL;
+}
+
 int game_get_n_spaces(Game *game) {
   if(!game) return -1;
   return game->n_spaces;

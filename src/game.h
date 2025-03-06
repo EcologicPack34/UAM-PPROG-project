@@ -82,6 +82,8 @@ char* game_to_string(Game * game);
  */
 Space *game_get_space(Game *game, Id id);
 
+Space *game_get_space_by_position(Game *game, Vector2 pos);
+
 /**
  * @brief Checks the game->spaces[position] and returns the ID of that position on the array
  * @author Profesores PPROG
