@@ -119,6 +119,16 @@ Id link_get_space1(Link *link);
 Id link_get_space2(Link *link);
 
 /**
+ * @brief Gets the id of the oposite side of the link if posible
+ * @author Daniel Gómez
+ * 
+ * @param link 
+ * @param currentSpace 
+ * @return Id 
+ */
+Id link_get_oposite_space(Link *link, Id currentSpace);
+
+/**
  * @brief Gets the state of adjacency between the spaces
  * @author Daniel Gómez
  * 

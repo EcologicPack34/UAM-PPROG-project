@@ -74,6 +74,16 @@ Status game_reader_load_player(Game *game, char *filename);
  */
 Status game_reader_load_events(Game *game, char *filename);
 
+/**
+ * @brief Reads the file to load all npcs
+ * @author Maksym Polyak
+ * 
+ * @param game 
+ * @param filename 
+ * @return Status 
+ */
+Status game_reader_load_npcs(Game *game, char *filename);
+
 
 /*
 * Public functions implementation
@@ -81,7 +91,9 @@ Status game_reader_load_events(Game *game, char *filename);
 Status game_reader_create_from_file(Game **game, char *filename){
   if (game_create(game) == ERROR){
     debug_log(LOG_ERROR, "Error creating game at: game_reader_create_from_file(Game*, char*) in game_reader.c");
-    return ERROR;
+    printf("%c[2J", 27);
+    printf("Fatal error. Check the log for details\n");
+    abort();
   }
 
   if(game_reader_load_player(*game, filename) == ERROR){
@@ -104,6 +116,11 @@ Status game_reader_create_from_file(Game **game, char *filename){
     debug_log(LOG_ERROR, "Error loading events at: game_reader_create_from_file(Game*, char*) in game_reader.c");
     return ERROR;
   }
+  if (game_reader_load_npcs(*game, filename) == ERROR){
+    debug_log(LOG_ERROR, "Error loading npcs at: game_reader_create_from_file(Game*, char*) in game_reader.c");
+    return ERROR;
+  }
+
 
   return OK;
 }
@@ -450,4 +467,106 @@ Status game_reader_load_events(Game *game, char *filename){
 
   return status;
 
+}
+
+Status game_reader_load_npcs(Game *game, char *filename){ /*NEEEDS FIX --> CORE DUMPED*/
+  FILE *file = NULL;
+  NPC *npc = NULL;
+  char line[WORD_SIZE] = "";
+  char name[WORD_SIZE] = "";
+  char *toks = NULL;
+  double health, baseDamage;
+  int strength, defense, magicLevel;
+  long npcid, startinglocation;
+  NPC_status statusnpc;
+
+  Status status = OK;
+
+  if (!filename) {
+    debug_log(LOG_ERROR, "Missing file name at: game_reader_load_npcs(Game*, char*) in game_reader.c");
+    return ERROR;
+  }
+
+  file = fopen(filename, "r");
+  if (file == NULL) {
+    debug_log(LOG_ERROR, "Error in file at: game_reader_load_npcs(Game*, char*) in game_reader.c");
+    return ERROR;
+  }
+
+  /*Gets each line of the data file, uses strtok to shred it and stores it in static memory*/
+  while (fgets(line, WORD_SIZE, file)) {
+    if (strncmp("#n:", line, 3) == 0) {
+      toks = strtok(line + 3, "|");
+      npcid = atol(toks);
+      toks = strtok(NULL, "|");
+      if(!toks){
+        printf("toks is null");
+        return ERROR;
+      }
+      strcpy(name, toks);
+      toks = strtok(NULL, "|");
+      if(!toks){
+        printf("toks is null");
+        return ERROR;
+      }
+      startinglocation = atol(toks);
+      toks = strtok(NULL, "|");
+      if(!toks){
+        printf("toks is null");
+        return ERROR;
+      }
+      statusnpc = (NPC_status)atoi(toks);
+      toks = strtok(NULL, "|");
+      if(!toks){
+        printf("toks is null");
+        return ERROR;
+      }
+      health = strtod(toks, NULL);
+      toks = strtok(NULL, "|");
+      if(!toks){
+        printf("toks is null");
+        return ERROR;
+      }
+      baseDamage = strtod(toks, NULL);
+      toks = strtok(NULL, "|");
+      if(!toks){
+        printf("toks is null");
+        return ERROR;
+      }
+      strength = atoi(toks);
+      toks = strtok(NULL, "|");
+      if(!toks){
+        printf("toks is null");
+        return ERROR;
+      }
+      defense = atoi(toks);
+      toks = strtok(NULL, "|");
+      if(!toks){
+        printf("toks is null");
+        return ERROR;
+      }   
+      magicLevel = atoi(toks);
+      
+      debug_log(PRINT,"Read NPC: #n:%ld|%s|%ld|%d|%lf|%lf|%d|%d|%d", npcid, name, startinglocation, (int)statusnpc, health, baseDamage, strength, defense, magicLevel);
+      /*Creates an NPC with npc_create then saves it on the game with game_add_npc*/
+      npc = npc_create(status, name, npcid, startinglocation, health, baseDamage, strength, defense, magicLevel);
+      if (npc != NULL) {
+        if(game_add_npc(game, npc) == ERROR){
+          printf("npc creation wrong");
+          npc_destroy(npc);
+          status = ERROR;
+        }
+      }
+    }
+  }
+
+
+  if (ferror(file)) {
+    status = ERROR;
+    debug_log(LOG_ERROR, "Error in file at: game_reader_load_npc(Game*, char*) in game_reader.c");
+  }
+
+  fclose(file);
+
+  return status;
 }

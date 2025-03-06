@@ -21,7 +21,7 @@
 
 #include "inventory.h"
 
-typedef enum {UNKNOWN_ENTITY, PLAYER, NPC} EntityType;
+typedef enum {UNKNOWN_ENTITY, PLAYER_TYPE, NPC_TYPE} EntityType;
 
 typedef struct _Entity Entity;
 

@@ -163,6 +163,17 @@ Id link_get_space2(Link *link){
     return link->space2;
 }
 
+Id link_get_oposite_space(Link *link, Id currentSpace){
+    if(!link || currentSpace <= UNDEFINED_ID) return NO_ID;
+
+    if(currentSpace == link->space1){
+        return link->space2;
+    }else if(currentSpace == link->space2){
+        return link->space1;
+    }
+    return NO_ID;
+}
+
 bool link_is_adjacent(Link *link){
     if(link == NULL){
         return false;

@@ -10,23 +10,23 @@
  * @copyright GNU Public License
  */
 
-#include "debug_printing.h"
 #include "game.h"
+#include "debug_printing.h"
 #include "collection.h"
+#include "npc.h"
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-#define NOMBRE_PLAYER "Heroe" /*!< Nombre del player */
-#define PLAYER_BASE_ID 1      /*!< Id del player */
-#define OBJECT_NAME "Grain"   /*!< Nombre del objeto principal */
+#define COLLECTION_INITIAL_SIZE 10  /*!< Collection initial size*/
 
 
 struct _Game {
   /*Entity related*/
   Player *player;              /*!< Contains all the information related to the player */
   Collection *objects;         /*!< Contains all the information related to the object */
+  Collection *npcs;            /*!< Contains all the information related to the NPCs*/
 
   /*Space related*/
   Space *spaces[MAX_SPACES];   /*!< Array with all the spaces of the map */
@@ -67,7 +67,6 @@ Link *game_get_link_at(Game *game, long index){
 
 Status game_create(Game **game) {
   int i;
-
   *game = (Game*)calloc(1,sizeof(Game));
   if(!(*game)) return ERROR;
 
@@ -77,9 +76,12 @@ Status game_create(Game **game) {
 
   (*game)->n_spaces = 0;
   (*game)->player = NULL; /*Player creation is controlled by game_reader*/
-  /*Creates the object with the first id not taken by the spaces*/
-  (*game)->objects = collection_create(10, false, true, object_isEqual, object_print);
+  (*game)->objects = collection_create(COLLECTION_INITIAL_SIZE, false, true, object_isEqual, object_print);
+  if(!((*game)->objects)) debug_log(LOG_ERROR,"Error initializing collection of objects");
+  (*game)->npcs = collection_create(COLLECTION_INITIAL_SIZE, false, true, npc_cmp, NULL); /*TEMPORAL PRINT*/
+  if(!((*game)->npcs)) debug_log(LOG_ERROR,"Error initializing collection of npcs");
   (*game)->last_cmd = command_create();
+  if(!((*game)->last_cmd)) debug_log(LOG_ERROR,"Error creating command");
   (*game)->finished = false;
   (*game)->n_links = 0;
   (*game)->current_state = DEFAULT;
@@ -104,6 +106,11 @@ Status game_destroy(Game *game) {
   
   collection_free_elements(game_get_objects(game), object_destroy);
   collection_destroy(game_get_objects(game));
+
+  if(collection_free_elements(game_get_npcs(game), npc_destroy) == ERROR){
+    printf("Error liberando colleccion de npcs");
+  }
+  collection_destroy(game_get_npcs(game));
 
   command_destroy(game->last_cmd);
   event_manager_destroy(game->event_manager);
@@ -198,6 +205,11 @@ EventManager *game_get_event_manager(Game *game){
   return game->event_manager;
 }
 
+Collection *game_get_npcs(Game *game){
+  if(!game) return NULL;
+  return game->npcs;
+}
+
 /*-----------SETTERS-----------*/
 
 Status game_set_last_command(Game *game, Command *command) {
@@ -281,4 +293,25 @@ Status game_add_player(Game *game, Player *player){
 Status game_add_event(Game *game, Event * event){
   if(!game || !event) return ERROR;
   return event_manager_add_event(game->event_manager, event);
+}
+
+Status game_add_npc(Game *game, NPC *npc){
+  Entity *ent = NULL;
+  Id locationid;
+  
+  if(!game || !npc) return ERROR;
+  
+  if(collection_add(game->npcs, npc) == ERROR)
+    return ERROR;
+    
+  ent = npc_get_entity(npc);
+  locationid = entity_get_location(ent);
+
+
+  if(space_add_NPC(game_get_space(game, locationid), npc) == ERROR){
+    return ERROR;
+  }
+
+  debug_log(PRINT,"Game Added NPC: ID: %ld, name: %s, objectlocation: %ld", entity_get_id(ent), entity_get_name(ent), entity_get_location(ent));
+  return OK;
 }

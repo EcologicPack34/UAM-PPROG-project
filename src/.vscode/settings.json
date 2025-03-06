@@ -4,6 +4,9 @@
         "type_traits": "c",
         "collection.h": "c",
         "string.h": "c",
-        "stdlib.h": "c"
+        "stdlib.h": "c",
+        "stdio.h": "c",
+        "entity.h": "c",
+        "npc.h": "c"
     }
 }

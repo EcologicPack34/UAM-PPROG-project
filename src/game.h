@@ -23,6 +23,7 @@
 #include "player.h"
 #include "collection.h"
 #include "event_manager.h"
+#include "npc.h"
 
 #include <stdbool.h>
 
@@ -172,7 +173,24 @@ Link *game_get_link_by_id(Game *game, Id id);
  */
 GameState game_get_state(Game *game);
 
+/**
+ * @brief Gets the event manager from game
+ * @author Daniel Gómez
+ * 
+ * @param game 
+ * @return EventManager* 
+ */
 EventManager *game_get_event_manager(Game *game);
+
+/**
+ * @brief Gets the npcs collection from game
+ * 
+ * @param game 
+ * @return Collection* or NULL if error
+ */
+Collection *game_get_npcs(Game *game);
+
+
 
 /*----------SETTERS----------*/
 
@@ -268,5 +286,15 @@ Status game_add_player(Game *game, Player *player);
  * @return Status 
  */
 Status game_add_event(Game *game, Event *event);
+
+/**
+ * @brief Adds an NPC struct to the game struct
+ * @author Maksym Polyak
+ * 
+ * @param game 
+ * @param npc 
+ * @return Status 
+ */
+Status game_add_npc(Game *game, NPC *npc);
 
 #endif
