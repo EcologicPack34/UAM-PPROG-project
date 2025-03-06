@@ -15,6 +15,7 @@
 #include "space.h"
 
 #include "collection.h"
+#include "vector2.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -34,6 +35,8 @@ struct _Space {
   Link *east;                   /*!< Id of the space at the east */
   Link *west;                   /*!< Id of the space at the west */
   
+  Vector2 position;
+
   Inventory *inventory;         /*!< Inventory of the space*/
   
   Collection *npcs;             /*!<  Collection of npcs in the given space*/
@@ -176,7 +179,19 @@ Status space_set_west(Space* space, Link* link) {
   return OK;
 }
 
+Status space_set_position(Space *space, float x, float y){
+  if(!space) return ERROR;
+  space->position.x = x;
+  space->position.y = y;
+  return OK;
+}
+
 /*Space GETTERS*/
+
+Vector2 *space_get_position(Space *space){
+  if(!space) return NULL;
+  return &(space->position);
+}
 
 const char* space_get_name(Space* space) {
   if (!space) {

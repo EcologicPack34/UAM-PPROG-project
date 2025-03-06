@@ -23,6 +23,7 @@
 #include "link.h"
 #include "inventory.h"
 #include "npc.h"
+#include "vector2.h"
 
 #include <stdbool.h>
 
@@ -103,7 +104,11 @@ Status space_set_east(Space *space, Link *link);
  */
 Status space_set_west(Space *space, Link *link);
 
+Status space_set_position(Space *space, float x, float y);
+
 /*Space GETTERS*/
+
+Vector2 *space_get_position(Space *space);
 
 /**
  * @brief It gets the id of a space

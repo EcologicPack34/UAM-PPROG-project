@@ -6,7 +6,6 @@
  * @date 2025-03-06
  * 
  * @copyright GNU Public License
- * 
  */
 
 #include "types.h"

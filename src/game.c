@@ -244,7 +244,10 @@ Status game_set_state(Game *game, GameState state){
 
 Status game_spatial_map(Game *game){
   Queue *queue = NULL;
-  
+
+  Link *north = NULL, *east = NULL, *south = NULL, *west = NULL;
+  Id auxId = NO_ID;
+
   struct SpaceInfo{
     Space *space;
     Vector2 pos;
@@ -267,11 +270,24 @@ Status game_spatial_map(Game *game){
   info->pos.y = 0;
   info->space = game->spaces[0];
 
+  //asignar posicion inicial
+
   queue_push(queue, (void *)info);
 
   while(!queue_isEmpty(queue)){
     info = (struct SpaceInfo *)queue_pop(queue);
 
+    north = space_get_north(info->space);
+    east = space_get_east(info->space);
+    south = space_get_south(info->space);
+    west = space_get_west(info->space);
+
+    if(north){
+      auxId = link_get_oposite_space(north, space_get_id(info->space));
+      if(link_is_adjacent(north)){
+        //añadir al queue el espacio adjascente y modificar su posicion
+      }
+    }
 
 
   }
