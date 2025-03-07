@@ -8,3 +8,16 @@
  * @copyright Copyright (c) 2025
  * 
  */
+
+#include "combat.h"
+#include <stdio.h>
+#include <stdlib.h>
+
+struct _Combat{
+    Collection *allies;
+    Collection *allies_stats;
+    Collection *enemies;
+    Collection *allies_stats;
+
+    Queue *turns;
+}
