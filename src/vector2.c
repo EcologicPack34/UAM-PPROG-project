@@ -29,3 +29,10 @@ int vector2_isEqual(void *v1, void *v2){
     if(vt1->x == vt2->x && vt1->y == vt2->y) return 0;
     return 1;
 }
+
+void vector2_copy(Vector2 *v1, Vector2 *v2){
+    if(!v1 || !v2) return;
+
+    v1->x = v2->x;
+    v1->y = v2->y;
+}

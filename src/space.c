@@ -37,6 +37,7 @@ struct _Space {
   
   Vector2 position;
   bool mapped;
+  Space *neighbours[DIRECTION_NUMBER];
 
   Inventory *inventory;         /*!< Inventory of the space*/
   
@@ -62,14 +63,13 @@ Space* space_create(Id id) {
   /* Error control */
   if (id == NO_ID) return NULL;
 
-  newSpace = (Space*)malloc(sizeof(Space));
+  newSpace = (Space*)calloc(1,sizeof(Space));
   if (newSpace == NULL) {
     return NULL;
   }
 
   /* Initialization of an empty space*/
   newSpace->id = id;
-  newSpace->name[0] = '\0';
 
   newSpace->inventory = inventory_create(SPACE_INVENTORY, id);
   if(!newSpace->inventory){
@@ -177,8 +177,18 @@ Status space_set_isMapped(Space *space, bool status){
   space->mapped = status;
   return OK;
 }
+Status space_set_neighbour(Space *space, Space *neighbour, Direction direction){
+  if(!space) return ERROR;
+  space->neighbours[direction] = neighbour;
+  return OK;
+}
 
 /*Space GETTERS*/
+
+Space *space_get_neighbour(Space *space, Direction direction){
+  if(!space) return NULL;
+  return space->neighbours[direction];
+}
 
 bool space_get_isMapped(Space *space){
   if(!space) return true;

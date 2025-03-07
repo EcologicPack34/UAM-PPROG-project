@@ -104,15 +104,68 @@ Status space_set_east(Space *space, Link *link);
  */
 Status space_set_west(Space *space, Link *link);
 
+/**
+ * @brief Sets the position of a given space to a vector of coordenates (x,y)
+ * @author Daniel Gómez
+ * 
+ * @param space 
+ * @param x 
+ * @param y 
+ * @return Status 
+ */
 Status space_set_position(Space *space, float x, float y);
 
+/**
+ * @brief Sets if the spaces has been mapped spatialy or not
+ * @author Daniel Gómez
+ * 
+ * @param space 
+ * @param status 
+ * @return Status 
+ */
 Status space_set_isMapped(Space *space, bool status);
+
+/**
+ * @brief Sets the neighbour in a given direction of a given spac
+ * @author Daniel Gómez
+ * 
+ * @param space 
+ * @param neighbour 
+ * @param direction 
+ * @return Status 
+ */
+Status space_set_neighbour(Space *space, Space *neighbour, Direction direction);
 
 /*Space GETTERS*/
 
+/**
+ * @brief Gets the pointer to the vector2 storing the position of the space
+ * @author Daniel Gómez
+ * 
+ * @param space 
+ * @return Vector2* 
+ */
 Vector2 *space_get_position(Space *space);
 
+/**
+ * @brief Gets if the spaces has been mapped or not
+ * @author Daniel Gómez
+ * 
+ * @param space 
+ * @return true 
+ * @return false 
+ */
 bool space_get_isMapped(Space *space);
+
+/**
+ * @brief Gets a reference to the neighbour in a certain direction
+ * @author Daniel Gómez
+ * 
+ * @param space 
+ * @param direction 
+ * @return Pointer to neighbour if exist, NULL if not
+ */
+Space *space_get_neighbour(Space *space, Direction direction);
 
 /**
  * @brief It gets the id of a space

@@ -73,7 +73,7 @@ char* game_to_string(Game * game);
 /*----------GETTERS----------*/
 
 /**
- * @brief 
+ * @brief Gets a spaces from game by its id
  * @author Profesores PPROG
  *
  * @param game struct that saves all information related to the game
@@ -82,6 +82,14 @@ char* game_to_string(Game * game);
  */
 Space *game_get_space(Game *game, Id id);
 
+/**
+ * @brief Gets a space from the game by it's spatial position
+ * @author Daniel Gómez
+ * 
+ * @param game 
+ * @param pos 
+ * @return Space* 
+ */
 Space *game_get_space_by_position(Game *game, Vector2 pos);
 
 /**
@@ -239,6 +247,14 @@ Status game_set_state(Game *game, GameState state);
 
 /*----------OTHERS----------*/
 
+/**
+ * @brief Assigns a position to all the spaces based on the first space added to the game
+ *          Requires that the first spaces is adjascent to all the other ones, if not it wont work as intended
+ * @author Daniel Gómez
+ * 
+ * @param game 
+ * @return Ok if everything went ok, ERROR if couldn't execute all
+ */
 Status game_spatial_map(Game *game);
 
 /**
