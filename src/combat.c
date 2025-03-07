@@ -13,11 +13,21 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-struct _Combat{
-    Collection *allies;
-    Collection *allies_stats;
-    Collection *enemies;
-    Collection *allies_stats;
+#define NPC_MAX_ALLIES 3
+#define NPC_MAX_ENEMIES 4
 
-    Queue *turns;
-}
+typedef struct {
+    Entity_Stats stats;             /*!< Copy of the stats in order to buff/debuff and not modify the original stats*/
+    Entity *entity;                 /*!< Entity from which the stats are saved*/
+}Stats;
+
+struct _Combat{
+    Stats player_stats;         /*!< Stats of the player*/
+    Stats *allies_stats;        /*!< Stats of the allies*/
+    int allies_count;           /*!< Number of allies*/
+    Stats *enemies_stats;       /*!< Stats of the enemies*/
+    int enemies_count;          /*!< Number of enemies*/
+
+    Queue *turns;               /*!< Queue with the order of the turns*/
+    Entity *actual_entity;      /*!< Entity with the actual turn*/
+};
