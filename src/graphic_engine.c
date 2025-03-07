@@ -223,7 +223,7 @@ void graphic_engine_paint_game(Graphic_engine *ge, Game *game){
   strcpy(str, "NPCs:");
   screen_area_puts(ge->descript, str);
   for(i = 0; i < size && i < 5; i++){
-    npc_get_str_descr(space_get_NPC_at(space_act, i), str);
+    npc_get_str_descr(space_get_NPC_at(space_act, i), str, i + 1);
     screen_area_puts(ge->descript, str);
   }
 

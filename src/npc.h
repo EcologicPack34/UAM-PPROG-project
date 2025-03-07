@@ -130,13 +130,14 @@ int npc_cmp(void *npc1, void *npc2);
 void npc_print(void *npc);
 
 /**
- * @brief Gets a string without \ n with the information of an NPC on str
+ * @brief Gets a string without \ n with the information of an NPC on str, str starts with (index).
  * 
  * @param npc 
  * @param str 
+ * @param index
  * @return Status 
  */
-Status npc_get_str_descr(NPC *npc, char *str);
+Status npc_get_str_descr(NPC *npc, char *str, int index);
 
 
 #endif

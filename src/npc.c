@@ -149,14 +149,14 @@ void npc_print(void *npc){
     printf("Id: %ld | Name: %s", entity_get_id(ent), entity_get_name(ent));
 }
 
-Status npc_get_str_descr(NPC *npc, char *str){
+Status npc_get_str_descr(NPC *npc, char *str, int index){
     Entity *ent = NULL;
     
     if(!npc || !str)
         return ERROR;
 
     ent = npc_get_entity(npc);
-    sprintf(str, "Id: %ld | Name: %s", entity_get_id(ent), entity_get_name(ent));
+    sprintf(str, "%d. Id: %ld | Name: %s", index, entity_get_id(ent), entity_get_name(ent));
 
     return OK;
 }
