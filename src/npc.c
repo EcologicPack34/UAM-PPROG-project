@@ -22,6 +22,8 @@ struct _NPC{
     Entity *entity;
     bool followPlayer;
 
+    char message[WORD_SIZE];
+
     NPC_status status;
 };
 
@@ -35,7 +37,7 @@ struct _NPC{
 * PUBLIC INTERFACE IMPLEMENTATION
 */
 
-NPC *npc_create(NPC_status status, char *name, Id id, Id location, double health, double baseDamage, int strength, int defense, int magicLevel){
+NPC *npc_create(NPC_status status, char *message, char *name, Id id, Id location, double health, double baseDamage, int strength, int defense, int magicLevel){
     NPC *npc = NULL;
 
     if(!name)
@@ -47,6 +49,7 @@ NPC *npc_create(NPC_status status, char *name, Id id, Id location, double health
         return NULL;
     }
 
+    strcpy(npc->message, message);
     npc->status = status;
     npc->entity = entity_create(name, id, location, NPC_INVENTORY, health, baseDamage, strength, defense, magicLevel);
     if(npc->entity == NULL){
@@ -81,6 +84,13 @@ NPC_status npc_get_status(NPC *npc){
     return npc->status;
 }
 
+char *npc_get_message(NPC *npc){
+    if(!npc)
+        return NULL;
+
+    return npc->message;
+}
+
 /*NPC SETTERS*/
 
 Status npc_set_status(NPC *npc, NPC_status status){
@@ -88,6 +98,15 @@ Status npc_set_status(NPC *npc, NPC_status status){
         return ERROR;
 
     npc->status = status;
+
+    return OK;
+}
+
+Status npc_set_message(NPC *npc, char *message){
+    if(!npc || !message)
+        return ERROR;
+
+    strcpy(npc->message, message);
 
     return OK;
 }
@@ -119,18 +138,15 @@ int npc_cmp(void *npc1, void *npc2){
     return -2;
 }
 
-int npc_print(FILE *pf, NPC *npc){
-    int charnum;
+void npc_print(void *npc){
     Entity *ent = NULL;
     
-    if(!pf || !npc)
-        return -1;
+    if(!npc)
+        return;
 
-    ent = npc_get_entity(npc);
+    ent = npc_get_entity((NPC *)npc);
 
-    charnum = fprintf(pf, "Id: %ld | Name: %s", entity_get_id(ent), entity_get_name(ent));
-    
-    return charnum;
+    printf("Id: %ld | Name: %s", entity_get_id(ent), entity_get_name(ent));
 }
 
 Status npc_get_str_descr(NPC *npc, char *str){

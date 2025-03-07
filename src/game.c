@@ -78,7 +78,7 @@ Status game_create(Game **game) {
   (*game)->player = NULL; /*Player creation is controlled by game_reader*/
   (*game)->objects = collection_create(COLLECTION_INITIAL_SIZE, false, true, object_isEqual, object_print);
   if(!((*game)->objects)) debug_log(LOG_ERROR,"Error initializing collection of objects");
-  (*game)->npcs = collection_create(COLLECTION_INITIAL_SIZE, false, true, npc_cmp, NULL); /*TEMPORAL PRINT*/
+  (*game)->npcs = collection_create(COLLECTION_INITIAL_SIZE, false, true, npc_cmp, npc_print); /*TEMPORAL PRINT*/
   if(!((*game)->npcs)) debug_log(LOG_ERROR,"Error initializing collection of npcs");
   (*game)->last_cmd = command_create();
   if(!((*game)->last_cmd)) debug_log(LOG_ERROR,"Error creating command");

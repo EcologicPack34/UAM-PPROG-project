@@ -41,6 +41,8 @@ void game_actions_take(Game *game);
 
 void game_actions_drop(Game *game);
 
+void game_actions_chat(Game *game);
+
 /**
    Game actions implementation
 */
@@ -82,6 +84,10 @@ Status game_actions_update(Game *game, Command *command) {
     
     case DROP:
       game_actions_drop(game);
+      break;
+
+    case CHAT:
+      game_actions_chat(game);
       break;
 
     default:
@@ -284,4 +290,30 @@ void game_actions_drop(Game *game){
   spaceInventory = space_get_inventory(game_get_space(game, game_get_player_location(game)));
 
   inventory_move_object(playerInventory, spaceInventory, object_get_id(object));
+}
+
+/**
+ * @brief Shows on screen the message of the npc on the first argument if found
+ * 
+ * @param game 
+ */
+void game_actions_chat(Game *game){
+  char **arguments = NULL;
+  Space *space = NULL;
+  NPC *npc = NULL;
+
+  if(!game)
+    return;
+
+
+  arguments = command_get_arguments(game_get_last_command(game));
+
+  space = game_get_space(game, game_get_player_location(game));
+
+  npc = space_get_NPC_by_name(space, arguments[0]);
+
+  if(npc == NULL) //ESTO ES NULL POR ALGUNA RAZON
+    return;
+
+  printf("%s", npc_get_message(npc)); /* TEMPORAL IMPLEMENTATION TILL WE WORK OUT DIALOGUES */
 }

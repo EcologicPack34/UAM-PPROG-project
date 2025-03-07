@@ -43,26 +43,11 @@ struct _Space {
 
 /*GETTERS*/
 
-/**
- * @brief Gets the number of npcs located on a space
- * @author Maksym Polyak
- * 
- * @param space 
- * @return int or -1 if error
- */
-int space_get_npc_count(Space *space);
-
 
 /*SETTERS*/
 
 
 /*PRIVATE IMPLEMENTATION*/
-
-int space_get_npc_count(Space *space){
-  if(!space) return -1;
-
-  return collection_length(space->npcs);
-}
 
 
 /*Space public functions*/
@@ -93,7 +78,7 @@ Space* space_create(Id id) {
   newSpace->east = NULL;
   newSpace->west = NULL;
 
-  newSpace->npcs = collection_create(SPACE_MAX_NPCS, true, true, npc_cmp, NULL);
+  newSpace->npcs = collection_create(SPACE_MAX_NPCS, true, true, npc_cmp, npc_print);
   if(!(newSpace->npcs)){
     debug_log(LOG_ERROR, "space_create, couldn't create memory for npc collection, id:%ld", id);
     inventory_destroy(newSpace->inventory);
@@ -217,6 +202,12 @@ Link* space_get_west(Space* space) {
   return space->west;
 }
 
+int space_get_npc_count(Space *space){
+  if(!space) return -1;
+
+  return collection_length(space->npcs);
+}
+
 Status space_print(Space* space) {
   Id idaux = NO_ID;
 
@@ -312,4 +303,30 @@ Status space_move_NPC(Space *spaceOUT, Space *spaceIN, NPC *npc){
 
   debug_log(PRINT, "space_move_NPC moved the NPC with id: %ld from the space of id: %ld to the space of id: %ld", entity_get_id(npc_get_entity(npc)),spaceOUT->id, spaceIN->id);
   return OK;
+}
+
+NPC *space_get_NPC_at(Space *space, int index){
+  if(!space)
+    return NULL;
+
+  return collection_get_element_at(space->npcs, index);
+}
+
+NPC *space_get_NPC_by_name(Space *space, char *name){
+  NPC *npc = NULL;
+  int i, size;
+
+  if(!space || !name)
+    return NULL;
+
+  size = space_get_npc_count(space);
+  for(i = 0; i < size; i++){
+    npc = collection_get_element_at(space->npcs, i);
+
+    if(strcpy(entity_get_name(npc_get_entity(npc)), name) == 0){
+      return npc;
+    }
+  }
+
+  return NULL;
 }

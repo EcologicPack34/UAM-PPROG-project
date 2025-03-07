@@ -168,6 +168,15 @@ Link *space_get_west(Space *space);
 Inventory *space_get_inventory(Space *space);
 
 /**
+ * @brief Gets the number of npcs located on a space
+ * @author Maksym Polyak
+ * 
+ * @param space 
+ * @return int or -1 if error
+ */
+int space_get_npc_count(Space *space);
+
+/**
  * @brief It prints the space information
  * @author Profesores PPROG
  *
@@ -206,5 +215,23 @@ Status space_remove_NPC(Space *space, NPC *npc);
  * @return Status 
  */
 Status space_move_NPC(Space *spaceOUT, Space *spaceIN, NPC *npc);
+
+/**
+ * @brief Gets an NPC on a space in the index
+ * 
+ * @param space 
+ * @param index 
+ * @return NPC* or NULL if error
+ */
+NPC *space_get_NPC_at(Space *space, int index);
+
+/** 
+ * @brief Gets an NPC by its name on a space
+ * 
+ * @param space 
+ * @param name
+ * @return NPC* or NULL if error
+ */
+NPC *space_get_NPC_by_name(Space *space, char *name);
 
 #endif
