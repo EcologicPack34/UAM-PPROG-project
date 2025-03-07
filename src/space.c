@@ -323,7 +323,7 @@ NPC *space_get_NPC_by_name(Space *space, char *name){
   for(i = 0; i < size; i++){
     npc = collection_get_element_at(space->npcs, i);
 
-    if(strcpy(entity_get_name(npc_get_entity(npc)), name) == 0){
+    if(strcmp(entity_get_name(npc_get_entity(npc)), name) == 0){
       return npc;
     }
   }
