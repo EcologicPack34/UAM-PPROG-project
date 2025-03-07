@@ -181,7 +181,7 @@ Object *inventory_get_object_by_id(Inventory *inventory, Id objectid){
     if(!inventory)
         return NULL;
 
-    size = inventory_get_size_by_type(inventory_get_type(inventory));
+    size = (int)inventory_get_size(inventory);
     if(size <= 0) return NULL;
     /*Searches by id in all the positions of the inventory array*/
     for(i = 0; i < size; i++){
@@ -202,7 +202,7 @@ Object *inventory_get_object_by_name(Inventory *inventory, char *objectname){
     if(!inventory || !objectname)
         return NULL;
 
-    size = (int)inventory_get_size_by_type(inventory_get_type(inventory));
+    size = (int)inventory_get_size(inventory);
     for(i = 0; i < size; i++){
         object = inventory_get_object_at(inventory, i);
         if(strcmp(objectname, object_get_name(object)) == 0)
@@ -226,7 +226,7 @@ Status inventory_get_object_list(Inventory *inventory, char *objectlist){
     if(!inventory || !objectlist)
         return ERROR;
 
-    size = (int)inventory_get_size_by_type(inventory_get_type(inventory));
+    size = (int)inventory_get_size(inventory);
     for(i = 0, num = 1; i < size; i++){
         if((tempobject = inventory_get_object_at(inventory, i)) != NULL){
             sprintf(objectlist, "%d. Id: %ld | Name: %s\n", num++, object_get_id(tempobject), object_get_name(tempobject));

@@ -13,6 +13,7 @@
 #define NPC_H
 
 #include <stdio.h>
+#include <string.h>
 
 #include "entity.h"
 #include "types.h"
@@ -38,6 +39,7 @@ typedef struct _NPC NPC;
  * @author Maksym Polyak
  * 
  * @param status status with the player: NPC_status
+ * @param message message of the NPC on start
  * @param name name of the NPC
  * @param id id of the NPC
  * @param location id of the space where the NPC is located
@@ -48,7 +50,7 @@ typedef struct _NPC NPC;
  * @param magicLevel magic level stat of the NPC
  * @return NPC* or NULL if error
  */
-NPC *npc_create(NPC_status status, char *name, Id id, Id location, double health, double baseDamage, int strength, int defense, int magicLevel);
+NPC *npc_create(NPC_status status, char *message, char *name, Id id, Id location, double health, double baseDamage, int strength, int defense, int magicLevel);
 
 /**
  * @brief Frees all the memory related to an npc
@@ -78,6 +80,15 @@ Entity *npc_get_entity(NPC *npc);
  */
 NPC_status npc_get_status(NPC *npc);
 
+/**
+ * @brief Gets the char * with the message of the NPC
+ * @author Maksym Polyak
+ * 
+ * @param npc 
+ * @return char* or NULL if error
+ */
+char *npc_get_message(NPC *npc);
+
 /*NPC SETTERS*/
 
 /**
@@ -91,6 +102,16 @@ NPC_status npc_get_status(NPC *npc);
 Status npc_set_status(NPC *npc, NPC_status status);
 
 /**
+ * @brief Sets the message of the NPC to the one received as an input
+ * @author Maksym Polyak
+ * 
+ * @param npc 
+ * @param message 
+ * @return Status 
+ */
+Status npc_set_message(NPC *npc, char *message);
+
+/**
  * @brief Compares two npcs
  * @author Maksym Polyak
  * 
@@ -99,6 +120,24 @@ Status npc_set_status(NPC *npc, NPC_status status);
  * @return int = 0 if their id is equal, 1 if the id of npc1 is greater, -1 if the id of npc2 is greater or -2 if there was an error
  */
 int npc_cmp(void *npc1, void *npc2);
+
+/**
+ * @brief Prints on screen the NPC information
+ * @author Maksym Polyak
+ * 
+ * @param npc 
+ */
+void npc_print(void *npc);
+
+/**
+ * @brief Gets a string without \ n with the information of an NPC on str, str starts with (index).
+ * 
+ * @param npc 
+ * @param str 
+ * @param index
+ * @return Status 
+ */
+Status npc_get_str_descr(NPC *npc, char *str, int index);
 
 
 #endif

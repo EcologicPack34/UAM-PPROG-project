@@ -79,7 +79,7 @@ void graphic_engine_paint_game(Graphic_engine *ge, Game *game){
   char str[WORD_SIZE], straux[WORD_SIZE] = "\00";
   CommandCode last_cmd = UNKNOWN;
   extern char *cmd_to_str[N_CMD][N_CMDT];
-  int inventorysize, i;
+  int inventorysize, i, size;
 
   /* Paint the in the map area */
   screen_area_clear(ge->map);
@@ -219,7 +219,14 @@ void graphic_engine_paint_game(Graphic_engine *ge, Game *game){
     screen_area_puts(ge->descript, str);
   }
 
-  /*SI QUEREMOS AÑADIR PARA VER LOS NPCS A LA DERECHA HAY QUE LOCALIZARLOS EN SPACE PARA ACCEDER A ELLOS*/
+  size = space_get_npc_count(space_act);
+  strcpy(str, "NPCs:");
+  screen_area_puts(ge->descript, str);
+  for(i = 0; i < size && i < 5; i++){
+    npc_get_str_descr(space_get_NPC_at(space_act, i), str, i + 1);
+    screen_area_puts(ge->descript, str);
+  }
+
   
   
   /*if (((obj_loc = game_get_object_location(game)) != NO_ID) && (obj_loc != INSIDE_INVENTORY)) { TEMPORARILY UNAVAILABLE DUE TO OBJECT REWORK*/

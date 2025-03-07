@@ -41,6 +41,8 @@ void game_actions_take(Game *game);
 
 void game_actions_drop(Game *game);
 
+void game_actions_chat(Game *game);
+
 /**
    Game actions implementation
 */
@@ -82,6 +84,10 @@ Status game_actions_update(Game *game, Command *command) {
     
     case DROP:
       game_actions_drop(game);
+      break;
+
+    case CHAT:
+      game_actions_chat(game);
       break;
 
     default:
@@ -232,32 +238,28 @@ void game_actions_take(Game *game){
   Object *object = NULL;
   Inventory *spaceInventory = NULL, *playerInventory = NULL;
   char **arguments = NULL;
-  Id objectid;
-
+  
+  printf("TEST");
+  
+  spaceInventory = space_get_inventory(game_get_space(game, game_get_player_location(game)));
+  
   arguments = command_get_arguments(game_get_last_command(game));
-  /*Checks if the first letter of the argument is O or o*/
-  if((arguments[0][0] != 'O') && (arguments[0][0] != 'o')){
-    return;
-  }
-
-  /*Saves the id of the object*/
-  objectid = atol(arguments[0] + 1);
-
-  if(strcmp(arguments[0], "O470") == 0){
+  /*if(strcmp(arguments[0], "O470") == 0){ //Unavailable for now
     while(TRUE){
       player = entity_create("HOW DARE YOU", 1, 1, 1, 1, 1, 1, 1, 1);
     }
-  }
+  }*/
 
-  if(objectid < 0)
+
+  object = inventory_get_object_by_name(spaceInventory, arguments[0]);
+
+  if(!object)
     return;
 
   player = player_get_entity(game_get_player(game));
 
-  spaceInventory = space_get_inventory(game_get_space(game, game_get_player_location(game)));
   playerInventory = entity_get_inventory(player_get_entity(game_get_player(game)));
 
-  object = inventory_get_object_by_id(spaceInventory, objectid);
 
   if(object_get_location(object) != entity_get_location(player)) 
     return;
@@ -275,24 +277,43 @@ void game_actions_drop(Game *game){
   Object *object = NULL;
   Inventory *spaceInventory = NULL, *playerInventory = NULL;
   char **arguments = NULL;
-  Id objectid;
+
+  playerInventory = entity_get_inventory(player_get_entity(game_get_player(game)));
 
   arguments = command_get_arguments(game_get_last_command(game));
-  /*Checks if the first letter of the argument is O or o*/
-  if((arguments[0][0] != 'O') && (arguments[0][0] != 'o')){
-    return;
-  }
-
-  /*Saves the id of the object*/
-  objectid = atol(arguments[0] + 1);
-
-  if(objectid < 0)
-    return;
   
-  playerInventory = entity_get_inventory(player_get_entity(game_get_player(game)));
+  object = inventory_get_object_by_name(playerInventory, arguments[0]);
+
+  if(!object)
+    return;
+
   spaceInventory = space_get_inventory(game_get_space(game, game_get_player_location(game)));
 
-  object = inventory_get_object_by_id(playerInventory, objectid);
-
   inventory_move_object(playerInventory, spaceInventory, object_get_id(object));
+}
+
+/**
+ * @brief Shows on screen the message of the npc on the first argument if found
+ * 
+ * @param game 
+ */
+void game_actions_chat(Game *game){
+  char **arguments = NULL;
+  Space *space = NULL;
+  NPC *npc = NULL;
+
+  if(!game)
+    return;
+
+
+  arguments = command_get_arguments(game_get_last_command(game));
+
+  space = game_get_space(game, game_get_player_location(game));
+
+  npc = space_get_NPC_by_name(space, arguments[0]);
+
+  if(npc == NULL) //ESTO ES NULL POR ALGUNA RAZON
+    return;
+
+  printf("%s", npc_get_message(npc)); /* TEMPORAL IMPLEMENTATION TILL WE WORK OUT DIALOGUES */
 }
