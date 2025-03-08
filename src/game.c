@@ -336,11 +336,10 @@ Status game_spatial_map(Game *game){
         vector2_add(&(infoAux->pos), n);
         infoAux->space = game_get_space(game, auxId);
         
-        /*Checks if spaces has already beign processed, if not mark it, set position and neigbour and add to queue*/
+        /*Checks if spaces has already beign processed, if not mark it, set position and add to queue*/
         if(!space_get_isMapped(infoAux->space)){
           space_set_isMapped(infoAux->space,true);
           space_set_position(infoAux->space, infoAux->pos.x, infoAux->pos.y);
-          space_set_neighbour(info->space, infoAux->space, N);
           queue_push(queue, (void *)infoAux);
         }else{
           /*If spaces already mapped it frees memory*/
@@ -368,7 +367,6 @@ Status game_spatial_map(Game *game){
         if(!space_get_isMapped(infoAux->space)){
           space_set_isMapped(infoAux->space,true);
           space_set_position(infoAux->space, infoAux->pos.x, infoAux->pos.y);
-          space_set_neighbour(info->space, infoAux->space, E);
           queue_push(queue, (void *)infoAux);
         }else{
           free(infoAux);
@@ -393,7 +391,6 @@ Status game_spatial_map(Game *game){
         if(!space_get_isMapped(infoAux->space)){
           space_set_isMapped(infoAux->space,true);
           space_set_position(infoAux->space, infoAux->pos.x, infoAux->pos.y);
-          space_set_neighbour(info->space, infoAux->space, S);
           queue_push(queue, (void *)infoAux);
         }else{
           free(infoAux);
@@ -418,7 +415,6 @@ Status game_spatial_map(Game *game){
         if(!space_get_isMapped(infoAux->space)){
           space_set_isMapped(infoAux->space,true);
           space_set_position(infoAux->space, infoAux->pos.x, infoAux->pos.y);
-          space_set_neighbour(info->space, infoAux->space, W);
           queue_push(queue, (void *)infoAux);
         }else{
           free(infoAux);
@@ -444,7 +440,6 @@ Status game_spatial_map(Game *game){
   for (i = 0; i < game->n_spaces; i++)
   {
     auxSpace = game->spaces[i];
-    printf("Space %ld, pos: %f %f\n", space_get_id(auxSpace), space_get_position(auxSpace)->x, space_get_position(auxSpace)->y);
     /*North*/
     vector2_copy(&auxVector, space_get_position(auxSpace));
     vector2_add(&auxVector, n);
@@ -473,7 +468,7 @@ Status game_spatial_map(Game *game){
     vector2_copy(&auxVector, space_get_position(auxSpace));
     vector2_add(&auxVector, e);
     space_set_neighbour(auxSpace, game_get_space_by_position(game, auxVector), E);
-    /*WEST*/
+    /*West*/
     vector2_copy(&auxVector, space_get_position(auxSpace));
     vector2_add(&auxVector, w);
     space_set_neighbour(auxSpace, game_get_space_by_position(game, auxVector), W);

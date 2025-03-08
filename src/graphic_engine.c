@@ -36,7 +36,9 @@ struct _Graphic_engine {
   Area *map, *descript, *banner, *help, *feedback;
 };
 
-void graphic_engine_paint_space(Game *game, Space *space, char map[SPACE_HEIGHT + 1][MAP_WIDTH + 33], char spaceStr[SPACE_HEIGHT + 1][SPACE_WIDTH+10]);
+void graphic_engine_paint_space(Game *game, Space *space, Direction direction,char map[SPACE_HEIGHT + 1][MAP_WIDTH + 33], char spaceStr[SPACE_HEIGHT + 1][SPACE_WIDTH+10]);
+
+void graphic_engine_paint_map(Graphic_engine *ge, Game *game);
 
 Graphic_engine *graphic_engine_create() {
   static Graphic_engine *ge = NULL;
@@ -269,38 +271,76 @@ void graphic_engine_paint_game_v1(Graphic_engine *ge, Game *game){
   printf("input:> ");
 }
 
-void graphic_engine_paint_game(Graphic_engine *ge, Game *game){
-  Space *currentSpace = NULL;
-  Space *directionSpace = NULL;
-  GameState gameState;
 
-  char str[WORD_SIZE];
-  char space[SPACE_HEIGHT + 1][SPACE_WIDTH+10];
-  char map[SPACE_HEIGHT + 1][MAP_WIDTH + 33];
+void graphic_engine_paint_game(Graphic_engine *ge, Game *game){
+  GameState gameState;
+  char str[WORD_SIZE], straux[WORD_SIZE];
+  CommandCode last_cmd = UNKNOWN;
+  extern char *cmd_to_str[N_CMD][N_CMDT];
 
   int i;
 
+  gameState = game_get_state(game);
   if(!game || !ge) return;
 
+  if(gameState == DEFAULT){
+    graphic_engine_paint_map(ge, game);
+
+  }
+
+  /* Paint in the banner area */
+  screen_area_puts(ge->banner, "    The anthill game ");
+
+  /*Paint command help*/
+  screen_area_clear(ge->help);
+  sprintf(str, " The commands you can use are:");
+  screen_area_puts(ge->help, str);
+  command_get_list(str);
+  screen_area_puts(ge->help, str);
+
+  /*Paints commands*/
+  last_cmd = command_get_code(game_get_last_command(game));
+  sprintf(str, " %s (%s)", cmd_to_str[last_cmd - NO_CMD][CMDL], cmd_to_str[last_cmd - NO_CMD][CMDS]);
+  for(i = 0; i < MAX_CMD_ARGS_NUM; i++){
+    sprintf(straux, " %s", *(command_get_arguments(game_get_last_command(game)) + i));
+    strcat(str, straux);
+  }
+  screen_area_puts(ge->feedback, str);
+
+  screen_paint();
+  printf("input:> ");
+  return;
+}
+
+void graphic_engine_paint_map(Graphic_engine *ge, Game *game){
+  Space *currentSpace = NULL;
+  Space *directionSpace = NULL;
+  char space[SPACE_HEIGHT + 1][SPACE_WIDTH+10];
+  char map[SPACE_HEIGHT + 1][MAP_WIDTH + 33];
+  char str[WORD_SIZE];
+
+  Inventory *spaceInventory = NULL, *playerInventory = NULL;
+  int inventorysize, size;
+  int i;
   
-  strcpy(space[0], "+------%c%c%c-----+");
-  strcpy(space[1], "|              |");
-  strcpy(space[2], "|              |");
-  strcpy(space[3], "%c              %c");
-  strcpy(space[4], "%c              %c");
-  strcpy(space[5], "%c              %c");
-  strcpy(space[6], "|              |");
-  strcpy(space[7], "|              |");
-  strcpy(space[8], "+------%c%c%c-----+");
+  strcpy(space[0], "+------%c%c%c------+");
+  strcpy(space[1], "|               |");
+  strcpy(space[2], "|               |");
+  strcpy(space[3], "%c               %c");
+  strcpy(space[4], "%c               %c");
+  strcpy(space[5], "%c               %c");
+  strcpy(space[6], "|               |");
+  strcpy(space[7], "|               |");
+  strcpy(space[8], "+------%c%c%c------+");
   
   
   screen_area_clear(ge->map);
   
-  gameState = game_get_state(game);
-  
   currentSpace = game_get_space(game, game_get_player_location(game));
   if(!currentSpace) return;
   
+  /*Introduces a blanck line at top for simetry*/
+  screen_area_puts(ge->map, " ");
   
   /*Prints top spaces*/
   for (i = 0; i < SPACE_HEIGHT; i++)
@@ -308,11 +348,11 @@ void graphic_engine_paint_game(Graphic_engine *ge, Game *game){
     map[i][0] = '\00';
   }
   directionSpace = space_get_neighbour(currentSpace, NW);
-  graphic_engine_paint_space(game, directionSpace, map, space);
+  graphic_engine_paint_space(game, directionSpace, NW,map, space);
   directionSpace = space_get_neighbour(currentSpace, N);
-  graphic_engine_paint_space(game, directionSpace, map, space);
+  graphic_engine_paint_space(game, directionSpace, N, map, space);
   directionSpace = space_get_neighbour(currentSpace, NE);
-  graphic_engine_paint_space(game, directionSpace, map, space);
+  graphic_engine_paint_space(game, directionSpace, NE, map, space);
   
   for(i = 0; i < SPACE_HEIGHT; i++){
     screen_area_puts(ge->map, map[i]);
@@ -324,10 +364,10 @@ void graphic_engine_paint_game(Graphic_engine *ge, Game *game){
     map[i][0] = '\00';
   }
   directionSpace = space_get_neighbour(currentSpace, W);
-  graphic_engine_paint_space(game, directionSpace, map, space);
-  graphic_engine_paint_space(game, currentSpace, map, space);
+  graphic_engine_paint_space(game, directionSpace, W,map, space);
+  graphic_engine_paint_space(game, currentSpace, NO_DIR, map, space);
   directionSpace = space_get_neighbour(currentSpace, E);
-  graphic_engine_paint_space(game, directionSpace, map, space);
+  graphic_engine_paint_space(game, directionSpace, E, map, space);
   for(i = 0; i < SPACE_HEIGHT; i++){
     screen_area_puts(ge->map, map[i]);
   }
@@ -338,48 +378,79 @@ void graphic_engine_paint_game(Graphic_engine *ge, Game *game){
     map[i][0] = '\00';
   }
   directionSpace = space_get_neighbour(currentSpace, SW);
-  graphic_engine_paint_space(game, directionSpace, map, space);
+  graphic_engine_paint_space(game, directionSpace, SW, map, space);
   directionSpace = space_get_neighbour(currentSpace, S);
-  graphic_engine_paint_space(game, directionSpace, map, space);
+  graphic_engine_paint_space(game, directionSpace, S, map, space);
   directionSpace = space_get_neighbour(currentSpace, SE);
-  graphic_engine_paint_space(game, directionSpace, map, space);
+  graphic_engine_paint_space(game, directionSpace, SE, map, space);
   for(i = 0; i < SPACE_HEIGHT; i++){
     screen_area_puts(ge->map, map[i]);
   }
 
+  /* Paint in the description area */
+  screen_area_clear(ge->descript);
 
-  screen_paint();
-  return;
+  playerInventory = entity_get_inventory(player_get_entity(game_get_player(game)));
+  inventorysize = inventory_get_size(playerInventory);
+  spaceInventory = space_get_inventory(currentSpace);
+
+  strcpy(str, "Player inventory:");
+  screen_area_puts(ge->descript, str);
+  for(i = 0; i < inventorysize && i < 5; i++){
+    inventory_get_object_str_at(playerInventory, str, i);
+    screen_area_puts(ge->descript, str);
+  }
+
+  inventorysize = inventory_get_size(spaceInventory);
+  strcpy(str, "Space inventory:");
+  screen_area_puts(ge->descript, str);
+  for(i = 0; i < inventorysize && i < 5; i++){
+    inventory_get_object_str_at(spaceInventory, str, i);
+    screen_area_puts(ge->descript, str);
+  }
+
+  size = space_get_npc_count(currentSpace);
+  strcpy(str, "NPCs:");
+  screen_area_puts(ge->descript, str);
+  for(i = 0; i < size && i < 5; i++){
+    npc_get_str_descr(space_get_NPC_at(currentSpace, i), str, i + 1);
+    screen_area_puts(ge->descript, str);
+  }
+
 }
 
-void graphic_engine_paint_space(Game *game, Space *space, char map[SPACE_HEIGHT + 1][MAP_WIDTH + 33], char spaceStr[SPACE_HEIGHT + 1][SPACE_WIDTH+10]){
+void graphic_engine_paint_space(Game *game, Space *space, Direction direction,char map[SPACE_HEIGHT + 1][MAP_WIDTH + 33], char spaceStr[SPACE_HEIGHT + 1][SPACE_WIDTH+10]){
   int i;
   char str[WORD_SIZE];
-  
+  Link *link1 = NULL, *link2 = NULL;
+
+
   if(space){
 
-    Vector2 *pos = space_get_position(space);
-    printf("Printing %f %f\n", pos->x, pos->y);
 
-    sprintf(str, spaceStr[0], '-', '-', '-');
+    
+    link1 = space_get_north(space);
+    sprintf(str, spaceStr[0], (link1) ? '|' : '-', (link1) ? ' ' : '-', (link1) ? '|' : '-');
     strcat(map[0],str);
 
     strcat(map[1],spaceStr[1]);
     strcat(map[2],spaceStr[2]);
 
-    sprintf(str, spaceStr[3], '|', '|');
+    link1 = space_get_east(space);
+    link2 = space_get_west(space);
+    sprintf(str, spaceStr[3], (link2) ? '-' : '|', (link1) ? '-' : '|');
     strcat(map[3],str);
-    sprintf(str, spaceStr[4], '|', '|');
+    sprintf(str, spaceStr[4], (link2) ? ' ' : '|', (link1) ? ' ' : '|');
     strcat(map[4],str);
-    sprintf(str, spaceStr[5], '|', '|');
+    sprintf(str, spaceStr[5], (link2) ? '-' : '|', (link1) ? '-' : '|');
     strcat(map[5],str);
 
 
     strcat(map[6],spaceStr[6]);
     strcat(map[7],spaceStr[7]);
 
-
-    sprintf(str, spaceStr[8], '-', '-', '-');
+    link1 = space_get_south(space);
+    sprintf(str, spaceStr[8], (link1) ? '|' : '-', (link1) ? ' ' : '-', (link1) ? '|' : '-');
     strcat(map[8],str);
   }else{
     for (i = 0; i < SPACE_HEIGHT; i++)

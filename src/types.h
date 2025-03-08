@@ -22,7 +22,7 @@ typedef enum { FALSE, TRUE } Bool; /*!< Bool variable that admits TRUE or FALSE 
 
 typedef enum { ERROR, OK } Status; /*!< Status enum that admits ERROR or OK */
 
-typedef enum { N, NE, E, SE, S , SW, W , NW} Direction; /*!< Directions of the map: North, South, East, West */
+typedef enum { N, NE, E, SE, S , SW, W , NW, NO_DIR} Direction; /*!< Directions of the map: North, South, East, West */
 
 typedef enum {UNKNOWN_INVENTORY, PLAYER_INVENTORY, NPC_INVENTORY, SPACE_INVENTORY} InventoryType; /*!< Enum describing the different types of inventory*/
 
