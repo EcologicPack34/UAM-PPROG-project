@@ -97,7 +97,7 @@ Collection *inventory_get_collection(Inventory *inventory);
  * @param objectlist string where the object list is going to be located
  * @return OK if well or ERROR if error
  */
-Status inventory_get_object_list(Inventory *inventory, char *objectlist);
+Status inventory_get_object_list(Inventory *inventory, char *objectlist, int mode, int length);
 
 /**
  * @brief Gets a str without \n with the id of the object and its name

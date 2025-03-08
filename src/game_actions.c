@@ -25,23 +25,23 @@
    Private functions
 */
 
-void game_actions_unknown(Game *game);
+Status game_actions_unknown(Game *game);
 
-void game_actions_exit(Game *game);
+Status game_actions_exit(Game *game);
 
-void game_actions_south(Game *game);
+Status game_actions_south(Game *game);
 
-void game_actions_north(Game *game);
+Status game_actions_north(Game *game);
 
-void game_actions_east(Game *game);
+Status game_actions_east(Game *game);
 
-void game_actions_west(Game *game);
+Status game_actions_west(Game *game);
 
-void game_actions_take(Game *game);
+Status game_actions_take(Game *game);
 
-void game_actions_drop(Game *game);
+Status game_actions_drop(Game *game);
 
-void game_actions_chat(Game *game);
+Status game_actions_chat(Game *game);
 
 /**
    Game actions implementation
@@ -49,6 +49,7 @@ void game_actions_chat(Game *game);
 
 Status game_actions_update(Game *game, Command *command) {
   CommandCode cmd;
+  Status status = ERROR;
 
   if(!game || !command) return ERROR;
 
@@ -58,41 +59,43 @@ Status game_actions_update(Game *game, Command *command) {
 
   switch (cmd) {
     case UNKNOWN:
-      game_actions_unknown(game);
+      status = game_actions_unknown(game);
       break;
 
     case EXIT:
-      game_actions_exit(game);
+      status = game_actions_exit(game);
       break;
 
     case SOUTH:
-      game_actions_south(game);
+      status = game_actions_south(game);
       break;
 
     case NORTH:
-      game_actions_north(game);
+      status = game_actions_north(game);
       break;
     case EAST:
-      game_actions_east(game);
+      status = game_actions_east(game);
       break;
     case WEST:
-      game_actions_west(game);
+      status = game_actions_west(game);
       break;
     case TAKE:
-      game_actions_take(game);
+      status = game_actions_take(game);
       break;
     
     case DROP:
-      game_actions_drop(game);
+      status = game_actions_drop(game);
       break;
 
     case CHAT:
-      game_actions_chat(game);
+      status = game_actions_chat(game);
       break;
 
     default:
       break;
   }
+
+  command_set_status(command, status);
 
   return OK;
 }
@@ -107,7 +110,7 @@ Status game_actions_update(Game *game, Command *command) {
  *
  * @param game struct that saves all information related to the game
  */
-void game_actions_unknown(Game *game) {}
+Status game_actions_unknown(Game *game) { return OK;}
 
 /**
  * @brief No functionality
@@ -115,7 +118,7 @@ void game_actions_unknown(Game *game) {}
  *
  * @param game struct that saves all information related to the game
  */
-void game_actions_exit(Game *game) {}
+Status game_actions_exit(Game *game) { return OK;}
 
 /**
  * @brief Retrieves the south ID, checks if it exists, then changes player location to south
@@ -123,25 +126,25 @@ void game_actions_exit(Game *game) {}
  *
  * @param game struct that saves all information related to the game
  */
-void game_actions_south(Game *game) {
+Status game_actions_south(Game *game) {
   Id space_id = NO_ID;
   Link *link = NULL;
   Entity *entity = NULL;
 
   space_id = game_get_player_location(game);
   if (space_id == NO_ID) {
-    return;
+    return ERROR;
   }
 
   link = space_get_south(game_get_space(game, space_id));
-  if(link == NULL) return;
+  if(link == NULL) return ERROR;
 
   entity = player_get_entity(game_get_player(game));
-  if(entity == NULL) return;
+  if(entity == NULL) return ERROR;
 
   link_move_entity(link, entity);
 
-  return;
+  return OK;
 }
 
 /**
@@ -150,25 +153,25 @@ void game_actions_south(Game *game) {
  *
  * @param game struct that saves all information related to the game
  */
-void game_actions_north(Game *game) {
+Status game_actions_north(Game *game) {
   Id space_id = NO_ID;
   Link *link = NULL;
   Entity *entity = NULL;
 
   space_id = game_get_player_location(game);
   if (space_id == NO_ID) {
-    return;
+    return ERROR;
   }
 
   link = space_get_north(game_get_space(game, space_id));
-  if(link == NULL) return;
+  if(link == NULL) return ERROR;
 
   entity = player_get_entity(game_get_player(game));
-  if(entity == NULL) return;
+  if(entity == NULL) return ERROR;
 
   link_move_entity(link, entity);
 
-  return;
+  return OK;
 }
 
 /**
@@ -177,25 +180,25 @@ void game_actions_north(Game *game) {
  *
  * @param game struct that saves all information related to the game
  */
-void game_actions_east(Game *game) {
+Status game_actions_east(Game *game) {
   Id space_id = NO_ID;
   Link *link = NULL;
   Entity *entity = NULL;
 
   space_id = game_get_player_location(game);
   if (space_id == NO_ID) {
-    return;
+    return ERROR;
   }
 
   link = space_get_east(game_get_space(game, space_id));
-  if(link == NULL) return;
+  if(link == NULL) return ERROR;
 
   entity = player_get_entity(game_get_player(game));
-  if(entity == NULL) return;
+  if(entity == NULL) return ERROR;
 
   link_move_entity(link, entity);
 
-  return;
+  return OK;
 }
 
 /**
@@ -204,25 +207,25 @@ void game_actions_east(Game *game) {
  *
  * @param game struct that saves all information related to the game
  */
-void game_actions_west(Game *game) {
+Status game_actions_west(Game *game) {
   Id space_id = NO_ID;
   Link *link = NULL;
   Entity *entity = NULL;
 
   space_id = game_get_player_location(game);
   if (space_id == NO_ID) {
-    return;
+    return ERROR;
   }
 
   link = space_get_west(game_get_space(game, space_id));
-  if(link == NULL) return;
+  if(link == NULL) return ERROR;
 
   entity = player_get_entity(game_get_player(game));
-  if(entity == NULL) return;
+  if(entity == NULL) return ERROR;
 
   link_move_entity(link, entity);
 
-  return;
+  return OK;
 }
 
 
@@ -233,7 +236,7 @@ void game_actions_west(Game *game) {
  *
  * @param game struct that saves all information related to the game
  */
-void game_actions_take(Game *game){
+Status game_actions_take(Game *game){
   Entity *player = NULL;
   Object *object = NULL;
   Inventory *spaceInventory = NULL, *playerInventory = NULL;
@@ -254,7 +257,7 @@ void game_actions_take(Game *game){
   object = inventory_get_object_by_name(spaceInventory, arguments[0]);
 
   if(!object)
-    return;
+    return ERROR;
 
   player = player_get_entity(game_get_player(game));
 
@@ -262,9 +265,10 @@ void game_actions_take(Game *game){
 
 
   if(object_get_location(object) != entity_get_location(player)) 
-    return;
+    return ERROR;
 
   inventory_move_object(spaceInventory, playerInventory, object_get_id(object));
+  return OK;
 }
 
 /**
@@ -273,7 +277,7 @@ void game_actions_take(Game *game){
  *
  * @param game struct that saves all information related to the game
  */
-void game_actions_drop(Game *game){
+Status game_actions_drop(Game *game){
   Object *object = NULL;
   Inventory *spaceInventory = NULL, *playerInventory = NULL;
   char **arguments = NULL;
@@ -285,11 +289,12 @@ void game_actions_drop(Game *game){
   object = inventory_get_object_by_name(playerInventory, arguments[0]);
 
   if(!object)
-    return;
+    return ERROR;
 
   spaceInventory = space_get_inventory(game_get_space(game, game_get_player_location(game)));
 
   inventory_move_object(playerInventory, spaceInventory, object_get_id(object));
+  return OK;
 }
 
 /**
@@ -297,13 +302,13 @@ void game_actions_drop(Game *game){
  * 
  * @param game 
  */
-void game_actions_chat(Game *game){
+Status game_actions_chat(Game *game){
   char **arguments = NULL;
   Space *space = NULL;
   NPC *npc = NULL;
 
   if(!game)
-    return;
+    return ERROR;
 
 
   arguments = command_get_arguments(game_get_last_command(game));
@@ -313,7 +318,9 @@ void game_actions_chat(Game *game){
   npc = space_get_NPC_by_name(space, arguments[0]);
 
   if(npc == NULL) //ESTO ES NULL POR ALGUNA RAZON
-    return;
+    return ERROR;
 
   printf("%s", npc_get_message(npc)); /* TEMPORAL IMPLEMENTATION TILL WE WORK OUT DIALOGUES */
+
+  return OK;
 }

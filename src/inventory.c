@@ -219,18 +219,33 @@ Collection *inventory_get_collection(Inventory *inventory){
     return inventory->objects;
 }
 
-Status inventory_get_object_list(Inventory *inventory, char *objectlist){
+Status inventory_get_object_list(Inventory *inventory, char *objectlist, int mode, int length){
     int num, i, size;
-    Object *tempobject = NULL;
+    Object *object = NULL;
     
     if(!inventory || !objectlist)
         return ERROR;
 
+    objectlist[0] = '\00';
     size = (int)inventory_get_size(inventory);
     for(i = 0, num = 1; i < size; i++){
-        if((tempobject = inventory_get_object_at(inventory, i)) != NULL){
-            sprintf(objectlist, "%d. Id: %ld | Name: %s\n", num++, object_get_id(tempobject), object_get_name(tempobject));
+        if((object = inventory_get_object_at(inventory, i)) != NULL){
+            if(mode == 0)
+                sprintf(objectlist, "%d. Id: %ld | Name: %s\n", num++, object_get_id(object), object_get_name(object));
+            else{
+                strcat(objectlist, object_get_name(object));
+                if(i + 1 != size){
+                    strcat(objectlist, ", ");
+                }
+            }
         }
+    }
+
+    if(mode != 0){
+        objectlist[length - 3] = '.';
+        objectlist[length - 2] = '.';
+        objectlist[length - 1] = '.';
+        objectlist[length] = '\00';
     }
 
     return OK;

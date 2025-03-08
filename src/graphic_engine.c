@@ -110,6 +110,7 @@ void graphic_engine_paint_game(Graphic_engine *ge, Game *game){
     sprintf(straux, " %s", *(command_get_arguments(game_get_last_command(game)) + i));
     strcat(str, straux);
   }
+  strcat(str, (command_get_status(game_get_last_command(game)) == OK) ? " : OK" : " : ERROR");
   screen_area_puts(ge->feedback, str);
 
   screen_paint();
@@ -129,13 +130,13 @@ void graphic_engine_paint_map(Graphic_engine *ge, Game *game){
   int i;
   
   strcpy(space[0], "+------%c%c%c------+");
-  strcpy(space[1], "|               |");
+  strcpy(space[1], "|           %4ld|");
   strcpy(space[2], "|               |");
   strcpy(space[3], "%c               %c");
   strcpy(space[4], "%c               %c");
   strcpy(space[5], "%c               %c");
   strcpy(space[6], "|               |");
-  strcpy(space[7], "|               |");
+  strcpy(space[7], "|%-15s|");
   strcpy(space[8], "+------%c%c%c------+");
   
   
@@ -243,6 +244,7 @@ void graphic_engine_paint_map(Graphic_engine *ge, Game *game){
 void graphic_engine_paint_space(Game *game, Space *space, Direction direction,char map[SPACE_HEIGHT + 1][MAP_WIDTH + 33], char spaceStr[SPACE_HEIGHT + 1][SPACE_WIDTH+10]){
   int i;
   char str[WORD_SIZE];
+  char strAux[WORD_SIZE];
   Link *link1 = NULL, *link2 = NULL;
 
 
@@ -252,7 +254,8 @@ void graphic_engine_paint_space(Game *game, Space *space, Direction direction,ch
     sprintf(str, spaceStr[0], (link1) ? '|' : '-', (link1) ? ' ' : '-', (link1) ? '|' : '-');
     strcat(map[0],str);
 
-    strcat(map[1],spaceStr[1]);
+    sprintf(str, spaceStr[1], space_get_id(space));
+    strcat(map[1],str);
     strcat(map[2],spaceStr[2]);
 
     link1 = space_get_east(space);
@@ -266,7 +269,10 @@ void graphic_engine_paint_space(Game *game, Space *space, Direction direction,ch
 
 
     strcat(map[6],spaceStr[6]);
-    strcat(map[7],spaceStr[7]);
+
+    inventory_get_object_list(space_get_inventory(space), strAux, 1, SPACE_WIDTH - 2);
+    sprintf(str, spaceStr[7], strAux);
+    strcat(map[7],str);
 
     link1 = space_get_south(space);
     sprintf(str, spaceStr[8], (link1) ? '|' : '-', (link1) ? ' ' : '-', (link1) ? '|' : '-');
