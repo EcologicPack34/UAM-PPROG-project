@@ -312,7 +312,6 @@ Status game_spatial_map(Game *game){
   /*Cycles through queue adding neighbour spaces and mapping them*/
   while(!queue_isEmpty(queue)){
     info = (struct SpaceInfo *)queue_pop(queue);
-    printf("%f, %f, isMapped = %d\n", info->pos.x, info->pos.y, space_get_isMapped(info->space));
 
     north = space_get_north(info->space);
     east = space_get_east(info->space);
@@ -445,7 +444,11 @@ Status game_spatial_map(Game *game){
   for (i = 0; i < game->n_spaces; i++)
   {
     auxSpace = game->spaces[i];
-    
+    printf("Space %ld, pos: %f %f\n", space_get_id(auxSpace), space_get_position(auxSpace)->x, space_get_position(auxSpace)->y);
+    /*North*/
+    vector2_copy(&auxVector, space_get_position(auxSpace));
+    vector2_add(&auxVector, n);
+    space_set_neighbour(auxSpace, game_get_space_by_position(game, auxVector), N);
     /*North West*/
     vector2_copy(&auxVector, space_get_position(auxSpace));
     vector2_add(&auxVector, nw);
@@ -462,6 +465,18 @@ Status game_spatial_map(Game *game){
     vector2_copy(&auxVector, space_get_position(auxSpace));
     vector2_add(&auxVector, se);
     space_set_neighbour(auxSpace, game_get_space_by_position(game, auxVector), SE);
+    /*South*/
+    vector2_copy(&auxVector, space_get_position(auxSpace));
+    vector2_add(&auxVector, s);
+    space_set_neighbour(auxSpace, game_get_space_by_position(game, auxVector), S);
+    /*East*/
+    vector2_copy(&auxVector, space_get_position(auxSpace));
+    vector2_add(&auxVector, e);
+    space_set_neighbour(auxSpace, game_get_space_by_position(game, auxVector), E);
+    /*WEST*/
+    vector2_copy(&auxVector, space_get_position(auxSpace));
+    vector2_add(&auxVector, w);
+    space_set_neighbour(auxSpace, game_get_space_by_position(game, auxVector), W);
   }
   
   return OK;

@@ -90,6 +90,15 @@ void *queue_pop(Queue *q){
     return element;
 }
 
+void *queue_front(Queue *q){
+    if(!q) return NULL;
+    return q->firstNode->element;
+}
+
+void *queue_rear(Queue *q){
+    if(!q) return NULL;
+    return q->lastNode->element;
+}
 
 long queue_size(Queue *q){
     if(!q) return -1;

@@ -21,17 +21,22 @@
 #include "types.h"
 #include "collection.h"
 
-#define WIDTH_MAP 49   /*!< Total width of the map */
-#define WIDTH_DESCRIPTION 40   /*!< Total width of the description 29 default*/
-#define WIDTH_BANNER 23   /*!< Total width of the banner */
-#define HEIGHT_MAP 13  /*!< Total height of the map */
-#define HEIGHT_HELP_BANNER 1   /*!< Total height of the banner */
-#define HEIGHT_HELP 3   /*!< Total height of the help */
-#define HEIGHT_FDB 3   /*!< Total height of the cmd history */
+#define MAP_WIDTH 53
+#define MAP_HEIGHT 29
+#define DESCRIPT_WIDTH 27
+#define HELP_BANNER_HEIGHT 1
+#define HELP_BANNER_WIDTH 23
+#define HELP_HEIGHT 3
+#define CMD_HISTORY_HEIGHT 3
+
+#define SPACE_HEIGHT 9
+#define SPACE_WIDTH 17
 
 struct _Graphic_engine {
   Area *map, *descript, *banner, *help, *feedback;
 };
+
+void graphic_engine_paint_space(Game *game, Space *space, char map[SPACE_HEIGHT + 1][MAP_WIDTH + 33], char spaceStr[SPACE_HEIGHT + 1][SPACE_WIDTH+10]);
 
 Graphic_engine *graphic_engine_create() {
   static Graphic_engine *ge = NULL;
@@ -40,17 +45,19 @@ Graphic_engine *graphic_engine_create() {
     return ge;
   }
   /*Initializes screen and graphics engine*/
-  screen_init(HEIGHT_MAP + HEIGHT_HELP_BANNER + HEIGHT_HELP + HEIGHT_FDB + 4, WIDTH_MAP + WIDTH_DESCRIPTION + 3);
+  screen_init(MAP_HEIGHT + HELP_BANNER_HEIGHT + HELP_HEIGHT + CMD_HISTORY_HEIGHT + 4, MAP_WIDTH + DESCRIPT_WIDTH + 3);
+  
+  
   ge = (Graphic_engine *)malloc(sizeof(Graphic_engine));
   if (ge == NULL) {
     return NULL;
   }
   /*Initializes each area of the display*/
-  ge->map = screen_area_init(1, 1, WIDTH_MAP, HEIGHT_MAP);
-  ge->descript = screen_area_init(WIDTH_MAP + 2, 1, WIDTH_DESCRIPTION, HEIGHT_MAP);
-  ge->banner = screen_area_init((int)((WIDTH_MAP + WIDTH_DESCRIPTION + 1 - WIDTH_BANNER) / 2), HEIGHT_MAP + 2, WIDTH_BANNER, HEIGHT_HELP_BANNER);
-  ge->help = screen_area_init(1, HEIGHT_MAP + HEIGHT_HELP_BANNER + 2, WIDTH_MAP + WIDTH_DESCRIPTION + 1, HEIGHT_HELP);
-  ge->feedback = screen_area_init(1, HEIGHT_MAP + HEIGHT_HELP_BANNER + HEIGHT_HELP + 3, WIDTH_MAP + WIDTH_DESCRIPTION + 1, HEIGHT_FDB);
+  ge->map = screen_area_init(1,1, MAP_WIDTH, MAP_HEIGHT);
+  ge->descript = screen_area_init(1 + MAP_WIDTH + 1, 1, DESCRIPT_WIDTH, MAP_HEIGHT);
+  ge->banner = screen_area_init((int)((MAP_WIDTH + DESCRIPT_WIDTH + 1 - HELP_BANNER_WIDTH)/2) , MAP_HEIGHT + 2 , HELP_BANNER_WIDTH, HELP_BANNER_HEIGHT);
+  ge->help = screen_area_init(1, MAP_HEIGHT + 1 + 1  + HELP_BANNER_HEIGHT, MAP_WIDTH + DESCRIPT_WIDTH + 1, HELP_HEIGHT);
+  ge->feedback = screen_area_init(1, MAP_HEIGHT + 1 + 1+ HELP_BANNER_HEIGHT + 1 + HELP_HEIGHT, MAP_WIDTH + DESCRIPT_WIDTH + 1, CMD_HISTORY_HEIGHT);
 
   return ge;
 }
@@ -68,7 +75,7 @@ void graphic_engine_destroy(Graphic_engine *ge) {
   free(ge);
 }
 
-void graphic_engine_paint_game(Graphic_engine *ge, Game *game){
+void graphic_engine_paint_game_v1(Graphic_engine *ge, Game *game){
   Id id_act = NO_ID;
   Space *space_act = NULL;
   Link *south = NULL, *north = NULL, *east = NULL, *west = NULL;
@@ -262,91 +269,122 @@ void graphic_engine_paint_game(Graphic_engine *ge, Game *game){
   printf("input:> ");
 }
 
-/*
-void graphic_engine_paint_game(Graphic_engine *ge, Game *game) {
-  Id id_act = NO_ID, id_back = NO_ID, id_next = NO_ID, obj_loc = NO_ID;
-  Space *space_act = NULL;
-  char obj = '\0';
-  char str[WORD_SIZE];
-  CommandCode last_cmd = UNKNOWN;
-  extern char *cmd_to_str[N_CMD][N_CMDT];
+void graphic_engine_paint_game(Graphic_engine *ge, Game *game){
+  Space *currentSpace = NULL;
+  Space *directionSpace = NULL;
+  GameState gameState;
 
+  char str[WORD_SIZE];
+  char space[SPACE_HEIGHT + 1][SPACE_WIDTH+10];
+  char map[SPACE_HEIGHT + 1][MAP_WIDTH + 33];
+
+  int i;
+
+  if(!game || !ge) return;
+
+  
+  strcpy(space[0], "+------%c%c%c-----+");
+  strcpy(space[1], "|              |");
+  strcpy(space[2], "|              |");
+  strcpy(space[3], "%c              %c");
+  strcpy(space[4], "%c              %c");
+  strcpy(space[5], "%c              %c");
+  strcpy(space[6], "|              |");
+  strcpy(space[7], "|              |");
+  strcpy(space[8], "+------%c%c%c-----+");
+  
   
   screen_area_clear(ge->map);
-  if ((id_act = game_get_player_location(game)) != NO_ID) {
-    space_act = game_get_space(game, id_act);
-    id_back = space_get_north(space_act);
-    id_next = space_get_south(space_act);
-
-    if (game_get_object_location(game) == id_back)
-      obj = '*';
-    else
-      obj = ' ';
-
-    if (id_back != NO_ID) {
-      sprintf(str, "  |         %2d|", (int)id_back);
-      screen_area_puts(ge->map, str);
-      sprintf(str, "  |     %c     |", obj);
-      screen_area_puts(ge->map, str);
-      sprintf(str, "  +-----------+");
-      screen_area_puts(ge->map, str);
-      sprintf(str, "        ^");
-      screen_area_puts(ge->map, str);
-    }
-
-    if (game_get_object_location(game) == id_act)
-      obj = '*';
-    else
-      obj = ' ';
-
-    if (id_act != NO_ID) {
-      sprintf(str, "  +-----------+");
-      screen_area_puts(ge->map, str);
-      sprintf(str, "  | m0^     %2d|", (int)id_act);
-      screen_area_puts(ge->map, str);
-      sprintf(str, "  |     %c     |", obj);
-      screen_area_puts(ge->map, str);
-      sprintf(str, "  +-----------+");
-      screen_area_puts(ge->map, str);
-    }
-
-    if (game_get_object_location(game) == id_next)
-      obj = '*';
-    else
-      obj = ' ';
-
-    if (id_next != NO_ID) {
-      sprintf(str, "        v");
-      screen_area_puts(ge->map, str);
-      sprintf(str, "  +-----------+");
-      screen_area_puts(ge->map, str);
-      sprintf(str, "  |         %2d|", (int)id_next);
-      screen_area_puts(ge->map, str);
-      sprintf(str, "  |     %c     |", obj);
-      screen_area_puts(ge->map, str);
-    }
-  }
-
   
-  screen_area_clear(ge->descript);
-  if ((obj_loc = game_get_object_location(game)) != NO_ID) {
-    sprintf(str, "  Object location:%d", (int)obj_loc);
-    screen_area_puts(ge->descript, str);
+  gameState = game_get_state(game);
+  
+  currentSpace = game_get_space(game, game_get_player_location(game));
+  if(!currentSpace) return;
+  
+  
+  /*Prints top spaces*/
+  for (i = 0; i < SPACE_HEIGHT; i++)
+  {
+    map[i][0] = '\00';
+  }
+  directionSpace = space_get_neighbour(currentSpace, NW);
+  graphic_engine_paint_space(game, directionSpace, map, space);
+  directionSpace = space_get_neighbour(currentSpace, N);
+  graphic_engine_paint_space(game, directionSpace, map, space);
+  directionSpace = space_get_neighbour(currentSpace, NE);
+  graphic_engine_paint_space(game, directionSpace, map, space);
+  
+  for(i = 0; i < SPACE_HEIGHT; i++){
+    screen_area_puts(ge->map, map[i]);
   }
 
-  screen_area_puts(ge->banner, "    The anthill game ");
+  /*Prints Middle spaces*/
+  for (i = 0; i < SPACE_HEIGHT; i++)
+  {
+    map[i][0] = '\00';
+  }
+  directionSpace = space_get_neighbour(currentSpace, W);
+  graphic_engine_paint_space(game, directionSpace, map, space);
+  graphic_engine_paint_space(game, currentSpace, map, space);
+  directionSpace = space_get_neighbour(currentSpace, E);
+  graphic_engine_paint_space(game, directionSpace, map, space);
+  for(i = 0; i < SPACE_HEIGHT; i++){
+    screen_area_puts(ge->map, map[i]);
+  }
 
-  screen_area_clear(ge->help);
-  sprintf(str, " The commands you can use are:");
-  screen_area_puts(ge->help, str);
-  command_get_list(str);
-  screen_area_puts(ge->help, str);
+  /*Prints Bottom spaces*/
+  for (i = 0; i < SPACE_HEIGHT; i++)
+  {
+    map[i][0] = '\00';
+  }
+  directionSpace = space_get_neighbour(currentSpace, SW);
+  graphic_engine_paint_space(game, directionSpace, map, space);
+  directionSpace = space_get_neighbour(currentSpace, S);
+  graphic_engine_paint_space(game, directionSpace, map, space);
+  directionSpace = space_get_neighbour(currentSpace, SE);
+  graphic_engine_paint_space(game, directionSpace, map, space);
+  for(i = 0; i < SPACE_HEIGHT; i++){
+    screen_area_puts(ge->map, map[i]);
+  }
 
-  last_cmd = command_get_code(game_get_last_command(game));
-  sprintf(str, " %s (%s)", cmd_to_str[last_cmd - NO_CMD][CMDL], cmd_to_str[last_cmd - NO_CMD][CMDS]);
-  screen_area_puts(ge->feedback, str);
- 
+
   screen_paint();
-  printf("input:> ");
-}*/
+  return;
+}
 
+void graphic_engine_paint_space(Game *game, Space *space, char map[SPACE_HEIGHT + 1][MAP_WIDTH + 33], char spaceStr[SPACE_HEIGHT + 1][SPACE_WIDTH+10]){
+  int i;
+  char str[WORD_SIZE];
+  
+  if(space){
+
+    Vector2 *pos = space_get_position(space);
+    printf("Printing %f %f\n", pos->x, pos->y);
+
+    sprintf(str, spaceStr[0], '-', '-', '-');
+    strcat(map[0],str);
+
+    strcat(map[1],spaceStr[1]);
+    strcat(map[2],spaceStr[2]);
+
+    sprintf(str, spaceStr[3], '|', '|');
+    strcat(map[3],str);
+    sprintf(str, spaceStr[4], '|', '|');
+    strcat(map[4],str);
+    sprintf(str, spaceStr[5], '|', '|');
+    strcat(map[5],str);
+
+
+    strcat(map[6],spaceStr[6]);
+    strcat(map[7],spaceStr[7]);
+
+
+    sprintf(str, spaceStr[8], '-', '-', '-');
+    strcat(map[8],str);
+  }else{
+    for (i = 0; i < SPACE_HEIGHT; i++)
+    {
+      strcat(map[i], "                ");
+    }
+  }
+}

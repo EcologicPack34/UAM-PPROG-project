@@ -29,14 +29,63 @@ Queue *queue_create();
 /**
  * @brief Frees all the memory used by queue
  *          DOESN'T FREE MEMORY USED BY ELEMENTS STORE IN QUEUE
+ * @author Daniel Gómez
  * @param q pointer to queue
  */
 void queue_destroy(Queue *q);
 
+/**
+ * @brief Tries to add an element to the queue
+ * @author Daniel Gómez
+ * 
+ * @param q pointer to queue
+ * @param element pointer to element
+ * @return Ok if added, ERROR if not 
+ */
 Status queue_push(Queue *q, void *element);
 
+/**
+ * @brief Retrieves an element from the queue
+ * @author Daniel Gómez
+ * 
+ * @param q pointer to queue
+ * @return Pointer to element, NULL if something went wrong
+ */
 void *queue_pop(Queue *q);
 
+/**
+ * @brief Gets the first element of the queue without extracting it
+ * @author Daniel Gómez
+ * 
+ * @param q 
+ * @return void* 
+ */
+void *queue_front(Queue *q);
+
+/**
+ * @brief Gets the last element of the queue without extracting it
+ * @author Daniel Gómez
+ * 
+ * @param q 
+ * @return void* 
+ */
+void *queue_rear(Queue *q);
+
+/**
+ * @brief Returns the size of the queue
+ * @author Daniel Gómez
+ * 
+ * @param q 
+ * @return size, -1 if wrong
+ */
 long queue_size(Queue *q);
 
+/**
+ * @brief Returns if the queue has elements in it or not
+ * @author Daniel Gómez
+ * 
+ * @param q 
+ * @return true 
+ * @return false 
+ */
 bool queue_isEmpty(Queue *q);
