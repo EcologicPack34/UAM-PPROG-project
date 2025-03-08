@@ -64,6 +64,16 @@ Status command_destroy(Command* command);
 Status command_set_code(Command* command, CommandCode code);
 
 /**
+ * @brief Sets the status of a given command
+ * @author Daniel Gómez
+ * 
+ * @param command 
+ * @param status 
+ * @return Status 
+ */
+Status command_set_status(Command *command, Status status);
+
+/**
  * @brief Gets the command name
  * @author Profesores PPROG
  *
@@ -108,6 +118,14 @@ char **command_get_arguments(Command * command);
  */
 Status command_get_user_input(Command* command);
 
+/**
+ * @brief Gets the status of a given Command
+ * @author Daniel Gómez
+ * 
+ * @param command 
+ * @return Status 
+ */
+Status command_get_status(Command *command);
 
 /**
  * @brief makes a string of the current commands and copies it to a given string

@@ -23,7 +23,7 @@
 
 #define MAP_WIDTH 53
 #define MAP_HEIGHT 29
-#define DESCRIPT_WIDTH 27
+#define DESCRIPT_WIDTH 30
 #define HELP_BANNER_HEIGHT 1
 #define HELP_BANNER_WIDTH 23
 #define HELP_HEIGHT 3
@@ -76,201 +76,6 @@ void graphic_engine_destroy(Graphic_engine *ge) {
   screen_destroy();
   free(ge);
 }
-
-void graphic_engine_paint_game_v1(Graphic_engine *ge, Game *game){
-  Id id_act = NO_ID;
-  Space *space_act = NULL;
-  Link *south = NULL, *north = NULL, *east = NULL, *west = NULL;
-  Inventory *spaceInventory = NULL, *playerInventory = NULL;
-
-  char obj = '\0';
-  char locked = '\0';
-  char str[WORD_SIZE], straux[WORD_SIZE] = "\00";
-  CommandCode last_cmd = UNKNOWN;
-  extern char *cmd_to_str[N_CMD][N_CMDT];
-  int inventorysize, i, size;
-
-  /* Paint the in the map area */
-  screen_area_clear(ge->map);
-
-  id_act = game_get_player_location(game);
-  if(id_act != NO_ID){
-    space_act = game_get_space(game, id_act);
-
-    north = space_get_north(space_act);
-    south = space_get_south(space_act);
-    west = space_get_west(space_act);
-    east = space_get_east(space_act);
-
-    /* prints space to north*/
-    if(north != NULL){
-
-      if(link_is_locked(north))
-        locked = '-';
-      else
-        locked = ' ';
-
-      sprintf(str, "                 | %c |     ", locked);
-      screen_area_puts(ge->map, str);
-      sprintf(str, "                 |   |     ");
-      screen_area_puts(ge->map, str);
-      sprintf(str, "                   ^      ");
-      screen_area_puts(ge->map, str);
-    }
-    else{/*Print 3 empty lines so the rendering doesnt move in case there's nothing to the north*/
-      sprintf(str, " ");
-      screen_area_puts(ge->map, str);
-      sprintf(str, " ");
-      screen_area_puts(ge->map, str);
-      sprintf(str, " ");
-      screen_area_puts(ge->map, str);
-    }
-
-    /*Prints current space*/
-    /*Gets the actual spaceinventory */
-    spaceInventory = space_get_inventory(game_get_space(game, id_act));
-    if (inventory_get_size(spaceInventory) >= 1) /* TEMPORAL IMPLEMENTATION TO SEE IF AT LEAST THERE IS AN OBJECT OR NOT*/
-      obj = '*';
-    else
-      obj = ' ';
-
-    if (id_act != NO_ID) {
-
-      sprintf(str,"             +-----------+             ");
-      screen_area_puts(ge->map, str);
-
-      if(west != NULL){
-        if(east != NULL){/*west and east*/
-          sprintf(str,"       ----- | m0^   %4d| -----", (int)id_act);
-          screen_area_puts(ge->map, str);
-          sprintf(str,"         %c  <|     %c     |>  %c ", (link_is_locked(west)) ? '|': ' ', obj, (link_is_locked(east)) ? '|': ' ');
-          screen_area_puts(ge->map, str);
-          sprintf(str,"       ----- |           | -----");
-          screen_area_puts(ge->map, str);
-        }
-        else{/*west and not east*/
-          sprintf(str,"       ----- | m0^   %4d|", (int)id_act);
-          screen_area_puts(ge->map, str);
-          sprintf(str,"         %c  <|     %c     |", (link_is_locked(west)) ? '|': ' ', obj);
-          screen_area_puts(ge->map, str);
-          sprintf(str,"       ----- |           |");
-          screen_area_puts(ge->map, str);
-        }
-      }
-      else{
-        if(east != NULL){/*not west and east*/
-          sprintf(str,"             | m0^   %4d| -----", (int)id_act);
-          screen_area_puts(ge->map, str);
-          sprintf(str,"             |     %c     |>  %c ", obj, (link_is_locked(east)) ? '|': ' ');
-          screen_area_puts(ge->map, str);
-          sprintf(str,"             |           | -----");
-          screen_area_puts(ge->map, str);
-        }else{/*not west and not east*/
-          sprintf(str,"             | m0^   %4d|", (int)id_act);
-          screen_area_puts(ge->map, str);
-          sprintf(str,"             |     %c     |", obj);
-          screen_area_puts(ge->map, str);
-          sprintf(str,"             |           |");
-          screen_area_puts(ge->map, str);
-        }
-      }
-
-      sprintf(str,"             +-----------+             ");
-      screen_area_puts(ge->map, str);
-
-
-      /*sprintf(str, "  +-----------+");
-      screen_area_puts(ge->map, str);
-      sprintf(str, "  | m0^     %2d|", (int)id_act);
-      screen_area_puts(ge->map, str);
-      sprintf(str, "  |     %c     |", obj);
-      screen_area_puts(ge->map, str);
-      sprintf(str, "  |           |");
-      screen_area_puts(ge->map, str);
-      sprintf(str, "  +-----------+");
-      screen_area_puts(ge->map, str);*/
-    }
-
-    /*Prints space to south */
-    if(south != NULL){
-
-      if(link_is_locked(south))
-        locked = '-';
-      else
-        locked = ' ';
-
-      sprintf(str, "                   v      ");
-      screen_area_puts(ge->map, str);
-      sprintf(str, "                 |   |     ");
-      screen_area_puts(ge->map, str);
-      sprintf(str, "                 | %c |     ", locked);
-      screen_area_puts(ge->map, str);
-    }
-  }
-  /* Paint in the description area */
-  screen_area_clear(ge->descript);
-
-  playerInventory = entity_get_inventory(player_get_entity(game_get_player(game)));
-  inventorysize = inventory_get_size(playerInventory);
-
-  strcpy(str, "Player inventory:");
-  screen_area_puts(ge->descript, str);
-  for(i = 0; i < inventorysize && i < 5; i++){
-    inventory_get_object_str_at(playerInventory, str, i);
-    screen_area_puts(ge->descript, str);
-  }
-
-  inventorysize = inventory_get_size(spaceInventory);
-  strcpy(str, "Space inventory:");
-  screen_area_puts(ge->descript, str);
-  for(i = 0; i < inventorysize && i < 5; i++){
-    inventory_get_object_str_at(spaceInventory, str, i);
-    screen_area_puts(ge->descript, str);
-  }
-
-  size = space_get_npc_count(space_act);
-  strcpy(str, "NPCs:");
-  screen_area_puts(ge->descript, str);
-  for(i = 0; i < size && i < 5; i++){
-    npc_get_str_descr(space_get_NPC_at(space_act, i), str, i + 1);
-    screen_area_puts(ge->descript, str);
-  }
-
-  
-  
-  /*if (((obj_loc = game_get_object_location(game)) != NO_ID) && (obj_loc != INSIDE_INVENTORY)) { TEMPORARILY UNAVAILABLE DUE TO OBJECT REWORK*/
-  /*
-    sprintf(str, "  Object location:%d", (int)obj_loc);
-    screen_area_puts(ge->descript, str);
-  } else if(obj_loc == INSIDE_INVENTORY){
-    sprintf(str, "  Object location: Player");
-    screen_area_puts(ge->descript, str);
-  }*/
- 
-  /* Paint in the banner area */
-  screen_area_puts(ge->banner, "    The anthill game ");
- 
-   /* Paint in the help area */
-  screen_area_clear(ge->help);
-  sprintf(str, " The commands you can use are:");
-  screen_area_puts(ge->help, str);
-  command_get_list(str);
-  screen_area_puts(ge->help, str);
- 
-  /* Paint in the feedback area */
-  last_cmd = command_get_code(game_get_last_command(game));
-  sprintf(str, " %s (%s)", cmd_to_str[last_cmd - NO_CMD][CMDL], cmd_to_str[last_cmd - NO_CMD][CMDS]);
-  for(i = 0; i < MAX_CMD_ARGS_NUM; i++){
-    sprintf(straux, " %s", *(command_get_arguments(game_get_last_command(game)) + i));
-    strcat(str, straux);
-  }
-  screen_area_puts(ge->feedback, str);
- 
-  /* Dump to the terminal */
-  screen_paint();
-  printf("input:> ");
-}
-
 
 void graphic_engine_paint_game(Graphic_engine *ge, Game *game){
   GameState gameState;
@@ -347,10 +152,13 @@ void graphic_engine_paint_map(Graphic_engine *ge, Game *game){
   {
     map[i][0] = '\00';
   }
+
   directionSpace = space_get_neighbour(currentSpace, NW);
   graphic_engine_paint_space(game, directionSpace, NW,map, space);
+
   directionSpace = space_get_neighbour(currentSpace, N);
   graphic_engine_paint_space(game, directionSpace, N, map, space);
+
   directionSpace = space_get_neighbour(currentSpace, NE);
   graphic_engine_paint_space(game, directionSpace, NE, map, space);
   
@@ -365,7 +173,9 @@ void graphic_engine_paint_map(Graphic_engine *ge, Game *game){
   }
   directionSpace = space_get_neighbour(currentSpace, W);
   graphic_engine_paint_space(game, directionSpace, W,map, space);
+  
   graphic_engine_paint_space(game, currentSpace, NO_DIR, map, space);
+
   directionSpace = space_get_neighbour(currentSpace, E);
   graphic_engine_paint_space(game, directionSpace, E, map, space);
   for(i = 0; i < SPACE_HEIGHT; i++){
@@ -379,10 +189,13 @@ void graphic_engine_paint_map(Graphic_engine *ge, Game *game){
   }
   directionSpace = space_get_neighbour(currentSpace, SW);
   graphic_engine_paint_space(game, directionSpace, SW, map, space);
+
   directionSpace = space_get_neighbour(currentSpace, S);
   graphic_engine_paint_space(game, directionSpace, S, map, space);
+
   directionSpace = space_get_neighbour(currentSpace, SE);
   graphic_engine_paint_space(game, directionSpace, SE, map, space);
+  
   for(i = 0; i < SPACE_HEIGHT; i++){
     screen_area_puts(ge->map, map[i]);
   }
@@ -396,17 +209,25 @@ void graphic_engine_paint_map(Graphic_engine *ge, Game *game){
 
   strcpy(str, "Player inventory:");
   screen_area_puts(ge->descript, str);
-  for(i = 0; i < inventorysize && i < 5; i++){
-    inventory_get_object_str_at(playerInventory, str, i);
-    screen_area_puts(ge->descript, str);
+  if(inventorysize == 0){
+    screen_area_puts(ge->descript, "No Objects in Player Inventory");
+  }else{
+    for(i = 0; i < inventorysize && i < 5; i++){
+      inventory_get_object_str_at(playerInventory, str, i);
+      screen_area_puts(ge->descript, str);
+    }
   }
 
   inventorysize = inventory_get_size(spaceInventory);
   strcpy(str, "Space inventory:");
   screen_area_puts(ge->descript, str);
-  for(i = 0; i < inventorysize && i < 5; i++){
-    inventory_get_object_str_at(spaceInventory, str, i);
-    screen_area_puts(ge->descript, str);
+  if(inventorysize == 0){
+    screen_area_puts(ge->descript, "No Objects in Space Inventory");
+  }else{
+    for(i = 0; i < inventorysize && i < 5; i++){
+      inventory_get_object_str_at(spaceInventory, str, i);
+      screen_area_puts(ge->descript, str);
+    }
   }
 
   size = space_get_npc_count(currentSpace);
@@ -426,8 +247,6 @@ void graphic_engine_paint_space(Game *game, Space *space, Direction direction,ch
 
 
   if(space){
-
-
     
     link1 = space_get_north(space);
     sprintf(str, spaceStr[0], (link1) ? '|' : '-', (link1) ? ' ' : '-', (link1) ? '|' : '-');

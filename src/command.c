@@ -35,6 +35,7 @@ struct _Command {
   CommandCode code; /*!< Name of the command */
   int argsCount;
   char *arguments[MAX_CMD_ARGS_NUM];
+  Status cmdStatus;
 };
 
 /*--------------Private Functions---------------*/
@@ -147,6 +148,12 @@ Status command_set_code(Command* command, CommandCode code) {
 
   command->code=code;
 
+  return OK;
+}
+
+Status command_set_status(Command *command, Status status){
+  if(!command) return ERROR;
+  command->cmdStatus = status;
   return OK;
 }
 
@@ -278,4 +285,9 @@ Status command_get_list(char *destination){
   strcpy(destination,aux);
   free(aux);
   return OK;
+}
+
+Status command_get_status(Command *command){
+  if(!command) return ERROR;
+  return command->cmdStatus;
 }
