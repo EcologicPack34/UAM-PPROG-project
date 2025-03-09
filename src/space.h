@@ -28,6 +28,8 @@
 #include <stdbool.h>
 
 #define SPACE_MAX_NPCS 8
+#define SPACE_GRAPHIC_HEIGHT 5
+#define SPACE_GRAPHIC_WIDTH 9
 
 typedef struct _Space Space;
 
@@ -136,7 +138,24 @@ Status space_set_isMapped(Space *space, bool status);
  */
 Status space_set_neighbour(Space *space, Space *neighbour, Direction direction);
 
+/**
+ * @brief Sets the graphic description of a given spaces
+ * 
+ * @param space 
+ * @param desc 
+ * @return Status 
+ */
+Status space_set_graphic_description(Space *space, char *desc, int index);
+
 /*Space GETTERS*/
+
+/**
+ * @brief Gets the reference to the graphic description of a space
+ * 
+ * @param space 
+ * @return char** 
+ */
+char **space_get_graphic_description(Space *space);
 
 /**
  * @brief Gets the pointer to the vector2 storing the position of the space
@@ -295,5 +314,16 @@ NPC *space_get_NPC_at(Space *space, int index);
  * @return NPC* or NULL if error
  */
 NPC *space_get_NPC_by_name(Space *space, char *name);
+
+/**
+ * @brief Gets a list of the npcs in the space with a given length
+ * @author Daniel Gómez
+ * 
+ * @param space 
+ * @param str 
+ * @param length 
+ * @return Status 
+ */
+Status space_get_NPC_list(Space *space, char *str, int length);
 
 #endif

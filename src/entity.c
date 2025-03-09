@@ -19,6 +19,7 @@
 #include <string.h>
 
 #define NO_NAME ""
+#define ENTITY_GRAPHIC_LENGTH 3
 
 /**
  * @brief Entity
@@ -32,6 +33,8 @@ struct _Entity {
     Id id;                    /*!< Unique id of the entity */
     Id location;              /*!< Id of the space where the entity is located*/
     Inventory *inventory;     /*!< entity inventory */
+
+    char gdesc[ENTITY_GRAPHIC_LENGTH + 1];
 
     Entity_Stats stats;       /*!< Entity combat stats */
 };
@@ -163,7 +166,18 @@ Status entity_set_magicLevel(Entity *entity, int magicLevel){
     return OK;
 }
 
+Status entity_set_graphic_description(Entity *entity, char *gdesc){
+    if(!entity || !gdesc) return ERROR;
+    strncpy(entity->gdesc, gdesc, ENTITY_GRAPHIC_LENGTH);
+    return OK;
+}
+
 /*Entity GETTERS*/
+
+char *entity_get_graphic_description(Entity *entity){
+    if(!entity) return NULL;
+    return entity->gdesc;
+}
 
 char *entity_get_name(Entity *entity){
     if(!entity)

@@ -193,12 +193,17 @@ Status game_reader_load_links(Game *game, char *filename){
 
 Status game_reader_load_spaces(Game *game, char *filename) {
   FILE *file = NULL;
+
   char line[WORD_SIZE] = "";
-  char name[WORD_SIZE] = "";
   char *toks = NULL;
+  
+  char name[WORD_SIZE] = "";
   Id id = NO_ID, north = NO_ID, east = NO_ID, south = NO_ID, west = NO_ID;
+  
   Space *space = NULL;
   Status status = OK;
+
+  int i;
 
   if (!filename) {
     debug_log(LOG_ERROR, "Missing file name at: game_reader_load_spaces(Game*, char*) in game_reader.c");
@@ -218,31 +223,46 @@ Status game_reader_load_spaces(Game *game, char *filename) {
     if (strncmp("#s:", line, 3) == 0) {
       toks = strtok(line + 3, "|");
       id = atol(toks);
+      
       toks = strtok(NULL, "|");
       strcpy(name, toks);
+      
       toks = strtok(NULL, "|");
       north = atol(toks);
+      
       toks = strtok(NULL, "|");
       east = atol(toks);
+      
       toks = strtok(NULL, "|");
       south = atol(toks);
+      
       toks = strtok(NULL, "|");
       west = atol(toks);
+      
 
-      debug_log(PRINT,"Read Space: #s:%ld|%s|%ld|%ld|%ld|%ld", id, name, north, east, south, west);
+      debug_log(PRINT,"Read Space: #s:%ld|%s|%ld|%ld|%ld|%ld|gdesc", id, name, north, east, south, west);
 
       /*Creates a space with space_create, and sets the ID on that space
       then saves it on the game with game_add_space*/
       space = space_create(id);
-      if (space != NULL) {
-        space_set_name(space, name);
-        space_set_north(space, game_get_link_by_id(game, north));
-        space_set_east(space, game_get_link_by_id(game, east));
-        space_set_south(space, game_get_link_by_id(game, south));
-        space_set_west(space, game_get_link_by_id(game, west));
-
-        game_add_space(game, space);
+      if (space == NULL) {
+        debug_log(LOG_ERROR, "Error allocating memory for space creation");
+        status = ERROR;
+        break;
       }
+      space_set_name(space, name);
+      space_set_north(space, game_get_link_by_id(game, north));
+      space_set_east(space, game_get_link_by_id(game, east));
+      space_set_south(space, game_get_link_by_id(game, south));
+      space_set_west(space, game_get_link_by_id(game, west));
+
+      for (i = 0; i < SPACE_GRAPHIC_HEIGHT; i++)
+      {
+        toks = strtok(NULL, ";");
+        space_set_graphic_description(space, toks, i);
+      }
+
+      game_add_space(game, space);
     }
   }
 
@@ -354,31 +374,45 @@ Status game_reader_load_player(Game *game, char *filename){
     if (strncmp("#p:", line, 3) == 0) {
       toks = strtok(line + 3, "|");
       playerid = atol(toks);
+      
       toks = strtok(NULL, "|");
       strcpy(name, toks);
+      
       toks = strtok(NULL, "|");
       startinglocation = atol(toks);
+      
       toks = strtok(NULL, "|");
       health = strtod(toks, NULL);
+      
       toks = strtok(NULL, "|");
       baseDamage = strtod(toks, NULL);
+      
       toks = strtok(NULL, "|");
       strength = atoi(toks);
+      
       toks = strtok(NULL, "|");
       defense = atoi(toks);
+      
       toks = strtok(NULL, "|");
       magicLevel = atoi(toks);
       
+      toks = strtok(NULL, "|");
 
-      debug_log(PRINT,"Read Player: #p:%ld|%s|%ld|%lf|%lf|%d|%d|%d", playerid, name, startinglocation, health, baseDamage, strength, defense, magicLevel);
+      debug_log(PRINT,"Read Player: #p:%ld|%s|%ld|%lf|%lf|%d|%d|%d|gdesc", playerid, name, startinglocation, health, baseDamage, strength, defense, magicLevel);
 
       /*Creates a player with player_create then saves it on the game with game_add_player*/
       player = player_create(name, playerid, startinglocation, health, baseDamage, strength, defense, magicLevel);
-      if (player != NULL) {
-        if(game_add_player(game, player) == ERROR){
-          player_destroy(player);
-          status = ERROR;
-        }
+      if (player == NULL){
+        status = ERROR;
+        break;
+      }
+
+      entity_set_graphic_description(player_get_entity(player), toks);
+
+      if (game_add_player(game, player) == ERROR){
+        player_destroy(player);
+        status = ERROR;
+        break;
       }
     }
   }
@@ -561,16 +595,24 @@ Status game_reader_load_npcs(Game *game, char *filename){ /*NEEEDS FIX --> CORE 
         return ERROR;
       }   
       magicLevel = atoi(toks);
+
+      toks = strtok(NULL, "|");
       
-      debug_log(PRINT,"Read NPC: #n:%ld|%s|%s|%ld|%d|%lf|%lf|%d|%d|%d", npcid, message, name, startinglocation, (int)statusnpc, health, baseDamage, strength, defense, magicLevel);
+      debug_log(PRINT,"Read NPC: #n:%ld|%s|%s|%ld|%d|%lf|%lf|%d|%d|%d|gdesc", npcid, message, name, startinglocation, (int)statusnpc, health, baseDamage, strength, defense, magicLevel);
       /*Creates an NPC with npc_create then saves it on the game with game_add_npc*/
       npc = npc_create(status, message, name, npcid, startinglocation, health, baseDamage, strength, defense, magicLevel);
-      if (npc != NULL) {
-        if(game_add_npc(game, npc) == ERROR){
-          printf("npc creation wrong");
-          npc_destroy(npc);
-          status = ERROR;
-        }
+      if (npc == NULL) {
+        status = ERROR;
+        break;
+      }
+
+      entity_set_graphic_description(npc_get_entity(npc), toks);
+
+      if (game_add_npc(game, npc) == ERROR){
+        printf("npc creation wrong");
+        npc_destroy(npc);
+        status = ERROR;
+        break;
       }
     }
   }

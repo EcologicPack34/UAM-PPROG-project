@@ -35,6 +35,8 @@ struct _Space {
   Link *east;                   /*!< Id of the space at the east */
   Link *west;                   /*!< Id of the space at the west */
   
+  char *graphicDescription[SPACE_GRAPHIC_HEIGHT];
+
   Vector2 position;
   bool mapped;
   Space *neighbours[DIRECTION_NUMBER];
@@ -59,6 +61,7 @@ struct _Space {
 
 Space* space_create(Id id) {
   Space* newSpace = NULL;
+  int i;
 
   /* Error control */
   if (id == NO_ID) return NULL;
@@ -71,6 +74,8 @@ Space* space_create(Id id) {
   /* Initialization of an empty space*/
   newSpace->id = id;
 
+  
+  
   newSpace->inventory = inventory_create(SPACE_INVENTORY, id);
   if(!newSpace->inventory){
     debug_log(LOG_ERROR, "space_create, inventory_create dynamic memory error at space: id:%ld", id);
@@ -81,7 +86,7 @@ Space* space_create(Id id) {
   newSpace->south = NULL;
   newSpace->east = NULL;
   newSpace->west = NULL;
-
+  
   newSpace->npcs = collection_create(SPACE_MAX_NPCS, true, true, npc_cmp, npc_print);
   if(!(newSpace->npcs)){
     debug_log(LOG_ERROR, "space_create, couldn't create memory for npc collection, id:%ld", id);
@@ -89,17 +94,36 @@ Space* space_create(Id id) {
     free(newSpace);
     return NULL;
   }
-
+  /*Allocates memory for graphic description*/
+  for (i = 0; i < SPACE_GRAPHIC_HEIGHT; i++)
+  {
+    newSpace->graphicDescription[i] = calloc(SPACE_GRAPHIC_WIDTH + 1, sizeof(char));
+    /*Checks if fails and frees memory*/
+    if(newSpace->graphicDescription[i] == NULL){
+      for (i--; i >= 0; i--){
+        free(newSpace->graphicDescription[i]);
+      }
+      inventory_destroy(newSpace->inventory);
+      collection_destroy(newSpace->npcs);
+      free(newSpace);
+      return NULL;
+    }
+  }
   return newSpace;
 }
 
 Status space_destroy(Space* space) {
+  int i;
   if (!space) {
     return ERROR;
   }
 
   inventory_destroy(space->inventory);
   collection_destroy(space->npcs); /*Dynamic memory from NPCs is controlled by the main*/
+
+  for (i = 0; i < SPACE_GRAPHIC_HEIGHT; i++){
+    free(space->graphicDescription[i]);
+  }
 
   free(space);
   space = NULL;
@@ -183,7 +207,22 @@ Status space_set_neighbour(Space *space, Space *neighbour, Direction direction){
   return OK;
 }
 
+Status space_set_graphic_description(Space *space, char *desc, int index){
+  if(!space || !desc) return ERROR;
+
+  if(index < 0 || index > SPACE_GRAPHIC_HEIGHT) return ERROR;
+  
+  strncpy(space->graphicDescription[index], desc, SPACE_GRAPHIC_WIDTH);
+  space->graphicDescription[index][SPACE_GRAPHIC_WIDTH] = '\00';
+  return OK;
+}
+
 /*Space GETTERS*/
+
+char **space_get_graphic_description(Space *space){
+  if(!space) return NULL;
+  return space->graphicDescription;
+}
 
 Space *space_get_neighbour(Space *space, Direction direction){
   if(!space) return NULL;
@@ -366,4 +405,31 @@ NPC *space_get_NPC_by_name(Space *space, char *name){
   }
 
   return NULL;
+}
+
+Status space_get_NPC_list(Space *space, char *str, int length){
+  NPC *npc = NULL;
+  int i, size;
+  char *aux;
+  
+  if(!space || !str) return ERROR;
+  if(length <= 0) return ERROR;
+  
+  size = space_get_npc_count(space);
+
+  str[0] = '\00';
+  for(i = 0; i < size; i++){
+    npc = collection_get_element_at(space->npcs, i);
+    aux = entity_get_graphic_description(npc_get_entity(npc));
+    strcat(str , aux);
+    if(aux[0] != '\00' && i != size -1){
+      strcat(str, ";");
+    }
+  }
+
+  str[length - 3] = '.';
+  str[length - 2] = '.';
+  str[length - 1] = '.';
+  str[length] = '\00';
+  return OK;
 }

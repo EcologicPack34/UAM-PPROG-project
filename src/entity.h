@@ -158,7 +158,27 @@ Status entity_set_defense(Entity *entity, int defense);
  */
 Status entity_set_magicLevel(Entity *entity, int magicLevel);
 
+/**
+ * @brief Sets the graphic descption of the entity to a given string
+ * @author Daniel Gómez
+ * 
+ * @param entity 
+ * @param gdesc 
+ * @return Status 
+ */
+Status entity_set_graphic_description(Entity *entity, char *gdesc);
+
 /*Entity GETTERS*/
+
+/**
+ * @brief Gets the graphic descption of the entity
+ * @author Daniel Gómez
+ * 
+ * @param entity 
+ * @param gdesc 
+ * @return Reference to description 
+ */
+char *entity_get_graphic_description(Entity *entity);
 
 /**
  * @brief Gets the name of the entity

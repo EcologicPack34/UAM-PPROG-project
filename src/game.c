@@ -440,6 +440,7 @@ Status game_spatial_map(Game *game){
   for (i = 0; i < game->n_spaces; i++)
   {
     auxSpace = game->spaces[i];
+    if(!space_get_isMapped(auxSpace)) continue;
     /*North*/
     vector2_copy(&auxVector, space_get_position(auxSpace));
     vector2_add(&auxVector, n);
