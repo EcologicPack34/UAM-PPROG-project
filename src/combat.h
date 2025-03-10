@@ -15,6 +15,9 @@
 
 #include "collection.h"
 #include "debug_printing.h"
+#include "queue.h"
+#include "entity.h"
+#include "npc.h"
 
 typedef struct _Combat Combat;
 
