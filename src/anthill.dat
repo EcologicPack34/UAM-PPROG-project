@@ -51,6 +51,6 @@ NPC_status = {UNKNOWN_STATUS == 0, NEUTRAL == 1, ALLY == 2, ENEMY == 3}
 #e:1|object_on_space|2|tk,dr|0|1:13
 #e:2|object_on_space|2|tk,dr|0|2:14
 
-#n:1|Hello traveler|NPCTEST|11|1|1|1|1|1|1|^0m"
-#n:2|Hello traveler|NPCTEST|11|1|1|1|1|1|1|^1m"
-#n:3|Hello traveler|NPCTEST|11|1|1|1|1|1|1|^2m"
+#n:1|Hello traveler i'm NPC1|NPC1|11|1|1|1|1|1|1|^0m"
+#n:2|Hello traveler i'm NPC2|NPC2|11|1|1|1|1|1|1|^1m"
+#n:3|Hello traveler i'm NPC3|NPC3|11|1|1|1|1|1|1|^2m"
