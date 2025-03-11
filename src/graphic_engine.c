@@ -189,6 +189,7 @@ void graphic_engine_paint_generalDesc(Graphic_engine *ge, Game *game){
   int i;
 
   char str[WORD_SIZE];
+  char strAux[WORD_SIZE];
   Space *currentSpace;
   
   screen_area_clear(ge->descript);
@@ -212,6 +213,7 @@ void graphic_engine_paint_generalDesc(Graphic_engine *ge, Game *game){
       screen_area_puts(ge->descript, str);
     }
   }
+  screen_area_puts(ge->descript, " ");
   
   /*Paints space inventory info*/
   inventorysize = inventory_get_size(spaceInventory);
@@ -225,15 +227,27 @@ void graphic_engine_paint_generalDesc(Graphic_engine *ge, Game *game){
       screen_area_puts(ge->descript, str);
     }
   }
-  
+  screen_area_puts(ge->descript, " ");
+
   /*Paints space npcs info*/
   size = space_get_npc_count(currentSpace);
   strcpy(str, "NPCs:");
   screen_area_puts(ge->descript, str);
   for(i = 0; i < size && i < 5; i++){
-    npc_get_str_descr(space_get_NPC_at(currentSpace, i), str, i + 1);
+    strcpy(str, "   ");
+    npc_get_str_descr(space_get_NPC_at(currentSpace, i), strAux, i + 1);
+    strcat(str,strAux);
     screen_area_puts(ge->descript, str);
   }
+  screen_area_puts(ge->descript, " ");
+
+  /*Paints game messages*/
+  strcpy(str, "Messages:");
+  while(game_log_hasMessage(game)){
+    game_get_log_message(game, str);
+    screen_area_puts(ge->descript, str);
+  }
+
   
 }
 

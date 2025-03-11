@@ -37,7 +37,8 @@ struct _Game {
   int n_links;
 
   /*Others*/
-  EventManager *event_manager;
+  EventManager *event_manager; /*!< Struct containing the info about the events that can happen*/
+  Queue *screenLog;             /*!< Queue containing a list of messages to print on screen*/
 
   GameState current_state;     /*!< Enum storing the current game state*/
   Command *last_cmd;           /*!< string with the last command */
@@ -79,17 +80,38 @@ Status game_create(Game **game) {
   (*game)->n_spaces = 0;
   (*game)->player = NULL; /*Player creation is controlled by game_reader*/
   (*game)->objects = collection_create(COLLECTION_INITIAL_SIZE, false, true, object_isEqual, object_print);
-  if(!((*game)->objects)) debug_log(LOG_ERROR,"Error initializing collection of objects");
+  if(!((*game)->objects)){
+    debug_log(LOG_ERROR,"Error initializing collection of objects");
+    return ERROR;
+  } 
+  
   (*game)->npcs = collection_create(COLLECTION_INITIAL_SIZE, false, true, npc_cmp, npc_print); /*TEMPORAL PRINT*/
-  if(!((*game)->npcs)) debug_log(LOG_ERROR,"Error initializing collection of npcs");
+  if(!((*game)->npcs)){
+    debug_log(LOG_ERROR,"Error initializing collection of npcs");
+    return ERROR;
+  } 
+  
   (*game)->last_cmd = command_create();
-  if(!((*game)->last_cmd)) debug_log(LOG_ERROR,"Error creating command");
+  if(!((*game)->last_cmd)){
+    debug_log(LOG_ERROR,"Error creating command");
+    return ERROR;
+  }
+  
   (*game)->finished = false;
   (*game)->n_links = 0;
   (*game)->current_state = DEFAULT;
 
   (*game)->event_manager = event_manager_create();
-  if(!((*game)->event_manager)) debug_log(LOG_ERROR,"Error creating event manager");
+  if(!((*game)->event_manager)){
+    debug_log(LOG_ERROR,"Error creating event manager");
+    return ERROR;
+  } 
+
+  (*game)->screenLog = queue_create();
+  if(!((*game)->screenLog)){
+    debug_log(LOG_ERROR,"Error creating event screenLog");
+    return ERROR;
+  } 
 
   return OK;
 }
@@ -553,4 +575,41 @@ Status game_add_npc(Game *game, NPC *npc){
 
   debug_log(PRINT,"Game Added NPC: ID: %ld, name: %s, objectlocation: %ld", entity_get_id(ent), entity_get_name(ent), entity_get_location(ent));
   return OK;
+}
+
+Status game_add_log_message(Game *game, char *message){
+  char *log;
+  
+  if(!game || !message) return ERROR;
+
+  log = calloc(strlen(message) +1, sizeof(char));
+  if(!log) return ERROR;
+
+  strcpy(log, message);
+
+  if(queue_push(game->screenLog, (void *)log) == ERROR){
+    free(log);
+    return ERROR;
+  }
+
+  return OK;
+}
+
+Status game_get_log_message(Game *game, char *str){
+  char *log = NULL;
+  if(!game) return ERROR;
+
+  log = (char *)queue_pop(game->screenLog);
+  if(!log) return ERROR;
+  
+  strcpy(str, log);
+
+  free(log);
+
+  return OK;
+}
+
+bool game_log_hasMessage(Game *game){
+  if(!game) return false;
+  return !queue_isEmpty(game->screenLog);
 }

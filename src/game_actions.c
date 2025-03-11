@@ -247,11 +247,11 @@ Status game_actions_take(Game *game){
   spaceInventory = space_get_inventory(game_get_space(game, game_get_player_location(game)));
   
   arguments = command_get_arguments(game_get_last_command(game));
-  /*if(strcmp(arguments[0], "O470") == 0){ //Unavailable for now
-    while(TRUE){
-      player = entity_create("HOW DARE YOU", 1, 1, 1, 1, 1, 1, 1, 1);
-    }
-  }*/
+  if(strcmp(arguments[0], "O470") == 0){
+    printf("%c[2J", 27);
+    printf("Fatal error. Object O470 is not supported\n");
+    abort();
+  }
 
 
   object = inventory_get_object_by_name(spaceInventory, arguments[0]);
@@ -320,7 +320,7 @@ Status game_actions_chat(Game *game){
   if(npc == NULL) //ESTO ES NULL POR ALGUNA RAZON
     return ERROR;
 
-  printf("%s", npc_get_message(npc)); /* TEMPORAL IMPLEMENTATION TILL WE WORK OUT DIALOGUES */
+  game_add_log_message(game, npc_get_message(npc));
 
   return OK;
 }

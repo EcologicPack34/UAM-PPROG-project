@@ -201,7 +201,6 @@ EventManager *game_get_event_manager(Game *game);
 Collection *game_get_npcs(Game *game);
 
 
-
 /*----------SETTERS----------*/
 
 
@@ -316,5 +315,34 @@ Status game_add_event(Game *game, Event *event);
  * @return Status 
  */
 Status game_add_npc(Game *game, NPC *npc);
+
+/**
+ * @brief Adds a message to the queue. Internaly memory will be allocated to store a copy of message
+ * @author Daniel Gómez
+ * 
+ * @param game 
+ * @param message 
+ * @return Status 
+ */
+Status game_add_log_message(Game *game, char *message);
+
+/**
+ * @brief Gets the first message in the queue and frees its memory
+ * @author Daniel Gómez
+ * 
+ * @param game 
+ * @return char* 
+ */
+Status game_get_log_message(Game *game, char *str);
+
+/**
+ * @brief Returns if there are messages to display or not
+ * @author Daniel Gómez
+ * 
+ * @param game 
+ * @return true 
+ * @return false 
+ */
+bool game_log_hasMessage(Game *game);
 
 #endif
