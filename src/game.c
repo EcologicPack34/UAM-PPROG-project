@@ -16,6 +16,7 @@
 #include "npc.h"
 #include "vector2.h"
 #include "queue.h"
+#include "combat.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -38,6 +39,9 @@ struct _Game {
 
   /*Others*/
   EventManager *event_manager;
+
+  /*Combat*/
+  Combat *combat;
 
   GameState current_state;     /*!< Enum storing the current game state*/
   Command *last_cmd;           /*!< string with the last command */

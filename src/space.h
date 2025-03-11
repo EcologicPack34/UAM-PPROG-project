@@ -27,7 +27,7 @@
 
 #include <stdbool.h>
 
-#define SPACE_MAX_NPCS 8
+#define SPACE_INITIAL_SIZE_NPCS 8
 #define SPACE_GRAPHIC_HEIGHT 5
 #define SPACE_GRAPHIC_WIDTH 9
 

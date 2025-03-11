@@ -87,7 +87,7 @@ Space* space_create(Id id) {
   newSpace->east = NULL;
   newSpace->west = NULL;
   
-  newSpace->npcs = collection_create(SPACE_MAX_NPCS, true, true, npc_cmp, npc_print);
+  newSpace->npcs = collection_create(SPACE_INITIAL_SIZE_NPCS, false, true, npc_cmp, npc_print);
   if(!(newSpace->npcs)){
     debug_log(LOG_ERROR, "space_create, couldn't create memory for npc collection, id:%ld", id);
     inventory_destroy(newSpace->inventory);
@@ -325,19 +325,15 @@ Status space_print(Space* space) {
 }
 
 Status space_add_NPC(Space *space, NPC *npc){
-  int n_npcs;
   Entity *entity = NULL;
   
   if(!space || !npc)
     return ERROR;
 
-  n_npcs = space_get_npc_count(space);
-  if(n_npcs == SPACE_MAX_NPCS){
-    debug_log(LOG_ERROR, "space_add_NPC couldn't add NPC because space is full of NPCs on space with id:", space_get_id(space));
+  if(collection_add(space->npcs, (void *)npc) == ERROR){
+    debug_log(LOG_ERROR,"space_add_NPC: Could not add NPC to space due to fail on collection_add: SpaceID: %ld", space->id);
     return ERROR;
   }
-
-  collection_add(space->npcs, (void *)npc);
 
   entity = npc_get_entity(npc);
 

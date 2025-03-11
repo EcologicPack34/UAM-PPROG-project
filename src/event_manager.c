@@ -11,7 +11,7 @@
 
 #define EVENT_MANAGER_DEFAULT_SIZE 10
 
-char *eventTags[N_EVENTS] = { "" , "object_on_space"};
+char *eventTags[N_EVENTS] = { "" , "object_on_space", "trigger_combat", "player_death"};
 
 struct _Event{
     Id id;

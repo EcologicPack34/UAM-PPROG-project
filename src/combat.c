@@ -13,21 +13,123 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define NPC_MAX_ALLIES 3
-#define NPC_MAX_ENEMIES 4
-
 typedef struct {
     Entity_Stats stats;             /*!< Copy of the stats in order to buff/debuff and not modify the original stats*/
     Entity *entity;                 /*!< Entity from which the stats are saved*/
 }Stats;
 
+typedef struct {
+    Entity_Stats stats;             /*!< Copy of the stats in order to buff/debuff and not modify the original stats*/
+    Entity *entity;                 /*!< Entity from which the stats are saved*/
+}PlayerStats;                       /*Needs to be different for further implementation of equipment and more*/
+
 struct _Combat{
-    Stats player_stats;         /*!< Stats of the player*/
-    Stats *allies_stats;        /*!< Stats of the allies*/
+    PlayerStats player_stats;         /*!< Stats of the player*/
+    Stats allies_stats[NPC_MAX_ALLIES];        /*!< Stats of the allies*/
     int allies_count;           /*!< Number of allies*/
-    Stats *enemies_stats;       /*!< Stats of the enemies*/
+    Stats enemies_stats[NPC_MAX_ENEMIES];       /*!< Stats of the enemies*/
     int enemies_count;          /*!< Number of enemies*/
 
     Queue *turns;               /*!< Queue with the order of the turns*/
     Entity *actual_entity;      /*!< Entity with the actual turn*/
+    Space *space;               /*!< Space where the combat is located*/
 };
+
+
+/*
+    * PRIVATE FUNCTIONS
+*/
+
+/**
+ * @brief Copies the entity stats to a new stats struct for the combat
+ * @author Maksym Polyak
+ * 
+ * @param entity 
+ * @param stats
+ * @return Status
+ */
+Status combat_copy_entity_stats(Entity *entity, Stats *stats);
+
+/**
+ * @brief Copies the player stats and other information to the combat struct
+ * @author Maksym Polyak
+ * 
+ * @param player 
+ * @param stats 
+ * @return Status 
+ */
+Status combat_copy_player(Player *player, PlayerStats *stats);
+
+Status combat_copy_entity_stats(Entity *entity, Stats *stats){
+
+    if(!entity || !stats)    return NULL;
+
+    stats->stats.health = entity_get_health(entity);
+    stats->stats.baseDamage = entity_get_baseDamage(entity);
+    stats->stats.strength = entity_get_strength(entity);
+    stats->stats.defense = entity_get_defense(entity);
+    stats->stats.magicLevel = entity_get_magicLevel(entity);
+
+    stats->entity = entity;
+
+    return OK;
+}
+
+Status combat_copy_player(Player *player, PlayerStats *stats){
+    Entity *ent = NULL;
+
+    if(!player || !stats)
+        return ERROR;
+
+    combat_copy_entity_stats(player_get_entity(player), stats);
+
+    return OK;
+}
+
+
+/*
+    * PUBLIC FUNCTIONS
+*/
+
+Combat *combat_initialize(Space *space, Player *player){
+    Combat *combat = NULL;
+    NPC *npc = NULL;
+    int i, npc_count = 0, npc_allies = 0, npc_enemies = 0;
+
+    if(!space || !player)
+        return NULL;
+
+    combat = (Combat *)calloc(1,sizeof(Combat));
+    if(!combat)
+        return NULL;
+
+    /*Saves the player stats on the combat struct*/
+    combat_copy_player(player, &(combat->player_stats));
+
+    /*Saves the first four enemies and the first three allies on the combat struct*/
+    for(i = 0; i < npc_count; i++){
+        npc = space_get_NPC_at(space, i);
+        if(npc_get_status(npc) == ENEMY && npc_enemies <= 4){
+            combat_copy_entity_stats(npc_get_entity(npc), &(combat->enemies_stats[npc_enemies]));
+            npc_enemies++;
+        }
+        if(npc_get_status(npc) == ALLY && npc_allies <= 3){
+            combat_copy_entity_stats(npc_get_entity(npc), &(combat->allies_stats[npc_allies]));
+            npc_allies++;
+        }
+    }
+
+    combat->turns = queue_create();
+    combat->actual_entity = NULL;
+    combat->space = space;
+
+    return combat;
+}
+
+void combat_end(Combat *combat){
+    if(!combat)
+        return;
+
+    queue_destroy(combat->turns);
+    free(combat);
+}

@@ -15,6 +15,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 
 #include "debug_printing.h"
 
@@ -103,6 +104,8 @@ int main(int argc, char *argv[]){
 
 
 int game_loop_init(Game **game, Graphic_engine **gengine, char *file_name){
+  srand((unsigned) time(NULL));
+
   if (game_reader_create_from_file(game, file_name) == ERROR)
   {
     fprintf(stderr, "Error while initializing game.\n");

@@ -8,6 +8,7 @@
         "stdio.h": "c",
         "entity.h": "c",
         "npc.h": "c",
-        "algorithm": "c"
+        "algorithm": "c",
+        "queue.h": "c"
     }
 }

@@ -242,8 +242,6 @@ Status game_actions_take(Game *game){
   Inventory *spaceInventory = NULL, *playerInventory = NULL;
   char **arguments = NULL;
   
-  printf("TEST");
-  
   spaceInventory = space_get_inventory(game_get_space(game, game_get_player_location(game)));
   
   arguments = command_get_arguments(game_get_last_command(game));

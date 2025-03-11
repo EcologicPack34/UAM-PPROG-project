@@ -18,8 +18,14 @@
 #include "queue.h"
 #include "entity.h"
 #include "npc.h"
+#include "space.h"
+#include "player.h"
 
 typedef struct _Combat Combat;
+
+Combat *combat_initialize(Space *space, Player *player);
+
+void combat_end(Combat *combat);
 
 
 #endif
