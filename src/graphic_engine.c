@@ -247,7 +247,10 @@ void graphic_engine_paint_generalDesc(Graphic_engine *ge, Game *game){
   screen_area_puts(ge->descript, " ");
 
   /*Paints game messages*/
-  strcpy(str, "Messages:");
+  if(game_log_hasMessage(game)){
+    strcpy(str, "Messages:");
+    screen_area_puts(ge->descript, str);
+  }
   while(game_log_hasMessage(game)){
     game_get_log_message(game, str);
     screen_area_puts(ge->descript, str);

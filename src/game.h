@@ -24,6 +24,7 @@
 #include "collection.h"
 #include "event_manager.h"
 #include "npc.h"
+#include "message.h"
 
 #include <stdbool.h>
 
@@ -324,7 +325,7 @@ Status game_add_npc(Game *game, NPC *npc);
  * @param message 
  * @return Status 
  */
-Status game_add_log_message(Game *game, char *message);
+Status game_add_log_message(Game *game, MessageType type,char *message);
 
 /**
  * @brief Gets the first message in the queue and frees its memory

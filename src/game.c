@@ -16,6 +16,7 @@
 #include "npc.h"
 #include "vector2.h"
 #include "queue.h"
+#include "message.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -551,6 +552,7 @@ Status game_add_player(Game *game, Player *player){
 
   return OK;
 }
+
 Status game_add_event(Game *game, Event * event){
   if(!game || !event) return ERROR;
   return event_manager_add_event(game->event_manager, event);
@@ -577,15 +579,13 @@ Status game_add_npc(Game *game, NPC *npc){
   return OK;
 }
 
-Status game_add_log_message(Game *game, char *message){
-  char *log;
+Status game_add_log_message(Game *game, MessageType type,char *message){
+  Message *log;
   
   if(!game || !message) return ERROR;
 
-  log = calloc(strlen(message) +1, sizeof(char));
+  log = message_new(type, message);
   if(!log) return ERROR;
-
-  strcpy(log, message);
 
   if(queue_push(game->screenLog, (void *)log) == ERROR){
     free(log);
@@ -596,13 +596,13 @@ Status game_add_log_message(Game *game, char *message){
 }
 
 Status game_get_log_message(Game *game, char *str){
-  char *log = NULL;
+  Message *log = NULL;
   if(!game) return ERROR;
 
-  log = (char *)queue_pop(game->screenLog);
+  log = (Message *)queue_pop(game->screenLog);
   if(!log) return ERROR;
   
-  strcpy(str, log);
+  message_get_str(log, str);
 
   free(log);
 

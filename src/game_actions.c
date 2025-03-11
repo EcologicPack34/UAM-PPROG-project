@@ -320,7 +320,7 @@ Status game_actions_chat(Game *game){
   if(npc == NULL) //ESTO ES NULL POR ALGUNA RAZON
     return ERROR;
 
-  game_add_log_message(game, npc_get_message(npc));
+  game_add_log_message(game, MESSAGE_NPC,npc_get_message(npc));
 
   return OK;
 }
