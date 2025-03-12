@@ -20,12 +20,38 @@
 #include "npc.h"
 #include "space.h"
 #include "player.h"
+#include "command.h"
 
 typedef struct _Combat Combat;
 
-Combat *combat_initialize(Space *space, Player *player);
+/**
+ * @brief Initializes the combat struct
+ * @author Maksym Polyak
+ * 
+ * @param space 
+ * @param player 
+ * @param code last cmd 
+ * @return Combat* or NULL if ERROR
+ */
+Combat *combat_initialize(Space *space, Player *player, CommandCode code);
 
+/**
+ * @brief Ends the combat and frees all the memory related to it
+ * @author Maksym Polyak
+ * 
+ * @param combat 
+ */
 void combat_end(Combat *combat);
+
+/**
+ * @brief Updates the combat turns
+ * @author Maksym Polyak
+ * 
+ * @param combat 
+ * @param last_cmd 
+ * @return Status 
+ */
+Status combat_update(Combat *combat, Command *last_cmd);
 
 
 #endif

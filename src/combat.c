@@ -24,15 +24,14 @@ typedef struct {
 }PlayerStats;                       /*Needs to be different for further implementation of equipment and more*/
 
 struct _Combat{
-    PlayerStats player_stats;         /*!< Stats of the player*/
-    Stats allies_stats[NPC_MAX_ALLIES];        /*!< Stats of the allies*/
-    int allies_count;           /*!< Number of allies*/
-    Stats enemies_stats[NPC_MAX_ENEMIES];       /*!< Stats of the enemies*/
-    int enemies_count;          /*!< Number of enemies*/
+    PlayerStats player_stats;               /*!< Stats of the player*/
+    Stats allies_stats[NPC_MAX_ALLIES];     /*!< Stats of the allies*/
+    int allies_count;                       /*!< Number of allies*/
+    Stats enemies_stats[NPC_MAX_ENEMIES];   /*!< Stats of the enemies*/
+    int enemies_count;                      /*!< Number of enemies*/
 
-    Queue *turns;               /*!< Queue with the order of the turns*/
-    Entity *actual_entity;      /*!< Entity with the actual turn*/
-    Space *space;               /*!< Space where the combat is located*/
+    bool is_player_turn;                    /*!< Determines who starts, true --> player party, false --> enemy party*/
+    Space *space;                           /*!< Space where the combat is located*/
 };
 
 
@@ -60,6 +59,32 @@ Status combat_copy_entity_stats(Entity *entity, Stats *stats);
  */
 Status combat_copy_player(Player *player, PlayerStats *stats);
 
+/**
+ * @brief Determines the course of action for the player turn
+ * 
+ * @param combat 
+ * @return Status 
+ */
+Status combat_player_turn(Combat *combat);
+
+/**
+ * @brief Determines the course of action for the ally turn in the position index
+ * 
+ * @param combat 
+ * @param index
+ * @return Status 
+ */
+Status combat_ally_turn(Combat *combat, int index);
+
+/**
+ * @brief Determines the course of action for the enemy turn in the position index
+ * 
+ * @param combat 
+ * @param index
+ * @return Status 
+ */
+Status combat_enemy_turn(Combat *combat, int index);
+
 Status combat_copy_entity_stats(Entity *entity, Stats *stats){
 
     if(!entity || !stats)    return NULL;
@@ -86,12 +111,34 @@ Status combat_copy_player(Player *player, PlayerStats *stats){
     return OK;
 }
 
+Status combat_player_turn(Combat *combat){
+
+    if(!combat)
+        return ERROR;
+}
+
+Status combat_ally_turn(Combat *combat, int index){
+
+    if(!combat)
+        return ERROR;
+
+    
+}
+
+Status combat_enemy_turn(Combat *combat, int index){
+
+    if(!combat)
+        return ERROR;
+
+    
+}
+
 
 /*
     * PUBLIC FUNCTIONS
 */
 
-Combat *combat_initialize(Space *space, Player *player){
+Combat *combat_initialize(Space *space, Player *player, CommandCode code){
     Combat *combat = NULL;
     NPC *npc = NULL;
     int i, npc_count = 0, npc_allies = 0, npc_enemies = 0;
@@ -119,8 +166,14 @@ Combat *combat_initialize(Space *space, Player *player){
         }
     }
 
-    combat->turns = queue_create();
-    combat->actual_entity = NULL;
+    /*Initializes turns and the space where the combat is located*/
+
+    if(code == ATTACK){
+        combat->is_player_turn = true;
+    } else {
+        combat->is_player_turn = false;
+    }
+
     combat->space = space;
 
     return combat;
@@ -130,6 +183,12 @@ void combat_end(Combat *combat){
     if(!combat)
         return;
 
-    queue_destroy(combat->turns);
     free(combat);
+}
+
+Status combat_update(Combat *combat, Command *last_cmd){
+    if(!combat || !last_cmd)
+        return ERROR;
+
+    
 }

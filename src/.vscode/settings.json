@@ -9,6 +9,7 @@
         "entity.h": "c",
         "npc.h": "c",
         "algorithm": "c",
-        "queue.h": "c"
+        "queue.h": "c",
+        "space.h": "c"
     }
 }

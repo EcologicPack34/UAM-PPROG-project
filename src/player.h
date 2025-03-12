@@ -29,6 +29,7 @@ typedef struct _Player Player;
  * @param name name of the player
  * @param identity id of the entity
  * @param location id of the space where the player is located
+ * @param maxhealth max health of the entity
  * @param health health of the entity
  * @param baseDamage base damage of the entity
  * @param strength strength of the entity
@@ -36,7 +37,7 @@ typedef struct _Player Player;
  * @param magicLevel magic level of the entity
  * @return player pointer if everything went fine or NULL if there was a mistake
  */
-Player *player_create(char *name, Id identity, Id location, double health, double baseDamage, int strength, int defense, int magicLevel);
+Player *player_create(char *name, Id identity, Id location, double maxhealth, double health, double baseDamage, int strength, int defense, int magicLevel);
 
 /**
  * @brief Frees a player struct

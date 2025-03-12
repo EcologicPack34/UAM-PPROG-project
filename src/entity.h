@@ -29,6 +29,7 @@ typedef struct _Entity Entity;
  * Struct that stores combat information about an entity - TEMPORAL --> Going to the combat module
  */
 typedef struct{
+    double maxhealth;          /*!< Max health of the entity*/
     double health;             /*!< Health of the entity */
     double baseDamage;         /*!< Base damage of the entity */
 
@@ -49,6 +50,7 @@ typedef struct{
  * @param identity id of the entity
  * @param idlocation id of the location of the entity
  * @param inventoryType type of inventory of the entity
+ * @param maxhealth max health of the entity
  * @param health health of the entity
  * @param baseDamage base damage of the entity
  * @param strength strength of the entity
@@ -56,7 +58,7 @@ typedef struct{
  * @param magicLevel magic level of the entity
  * @return Entity pointer if everything goes well or NULL if there was a mistake
  */
-Entity *entity_create(char *name, Id identity, Id idlocation, InventoryType inventoryType, double health, double baseDamage, int strength, int defense, int magicLevel);
+Entity *entity_create(char *name, Id identity, Id idlocation, InventoryType inventoryType, double maxhealth, double health, double baseDamage, int strength, int defense, int magicLevel);
 
 /**
  * @brief Frees a entity
@@ -107,6 +109,16 @@ Status entity_set_id(Entity *entity, Id id);
  * @return OK if everything went well or ERROR if there was a mistake
  */
 Status entity_set_entityType(Entity *entity, EntityType entityType);
+
+/**
+ * @brief Sets an entity max health
+ * @author Maksym Polyak
+ * 
+ * @param entity 
+ * @param maxhealth 
+ * @return Status 
+ */
+Status entity_set_max_health(Entity *entity, double maxhealth);
 
 /**
  * @brief Sets the entity health
@@ -225,6 +237,15 @@ Id entity_get_id(Entity *entity);
  * @return OK if everything went well or ERROR if there was a mistake
  */
 EntityType entity_get_entityType(Entity *entity);
+
+/**
+ * @brief Gets the entity max health
+ * @author Maksym Polyak
+ * 
+ * @param entity contains all the information related to the entity
+ * @return health if well or -1 if wrong
+ */
+double entity_get_max_health(Entity *entity);
 
 /**
  * @brief Gets the entity health

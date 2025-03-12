@@ -18,6 +18,7 @@
 
 #define NPC_MAX_ALLIES 3
 #define NPC_MAX_ENEMIES 4
+#define COMBAT_MAX_ENTITIES 8
 
 typedef long Id;        /*!< Id typedef */
 
