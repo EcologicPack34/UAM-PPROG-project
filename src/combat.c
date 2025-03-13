@@ -32,6 +32,8 @@ struct _Combat{
 
     bool is_player_turn;                    /*!< Determines who starts, true --> player party, false --> enemy party*/
     Space *space;                           /*!< Space where the combat is located*/
+
+    bool endCombat;
 };
 
 
@@ -87,7 +89,7 @@ Status combat_enemy_turn(Combat *combat, int index);
 
 Status combat_copy_entity_stats(Entity *entity, Stats *stats){
 
-    if(!entity || !stats)    return NULL;
+    if(!entity || !stats)    return ERROR;
 
     stats->stats.health = entity_get_health(entity);
     stats->stats.baseDamage = entity_get_baseDamage(entity);
@@ -101,12 +103,20 @@ Status combat_copy_entity_stats(Entity *entity, Stats *stats){
 }
 
 Status combat_copy_player(Player *player, PlayerStats *stats){
-    Entity *ent = NULL;
+    Entity *entity = NULL;
 
     if(!player || !stats)
         return ERROR;
 
-    combat_copy_entity_stats(player_get_entity(player), stats);
+    entity = player_get_entity(player);
+    
+    stats->stats.health = entity_get_health(entity);
+    stats->stats.baseDamage = entity_get_baseDamage(entity);
+    stats->stats.strength = entity_get_strength(entity);
+    stats->stats.defense = entity_get_defense(entity);
+    stats->stats.magicLevel = entity_get_magicLevel(entity);
+
+    stats->entity = entity;
 
     return OK;
 }
@@ -115,6 +125,8 @@ Status combat_player_turn(Combat *combat){
 
     if(!combat)
         return ERROR;
+
+    return OK;
 }
 
 Status combat_ally_turn(Combat *combat, int index){
@@ -122,7 +134,7 @@ Status combat_ally_turn(Combat *combat, int index){
     if(!combat)
         return ERROR;
 
-    
+    return OK;
 }
 
 Status combat_enemy_turn(Combat *combat, int index){
@@ -130,7 +142,7 @@ Status combat_enemy_turn(Combat *combat, int index){
     if(!combat)
         return ERROR;
 
-    
+    return OK;
 }
 
 
@@ -146,12 +158,14 @@ Combat *combat_initialize(Space *space, Player *player, CommandCode code){
     if(!space || !player)
         return NULL;
 
+    
     combat = (Combat *)calloc(1,sizeof(Combat));
-    if(!combat)
-        return NULL;
-
+    if(!combat) return NULL;
     /*Saves the player stats on the combat struct*/
     combat_copy_player(player, &(combat->player_stats));
+    
+
+    npc_count = space_get_npc_count(space);
 
     /*Saves the first four enemies and the first three allies on the combat struct*/
     for(i = 0; i < npc_count; i++){
@@ -165,30 +179,78 @@ Combat *combat_initialize(Space *space, Player *player, CommandCode code){
             npc_allies++;
         }
     }
-
+    
+    combat->enemies_count = npc_enemies;
+    combat->allies_count = npc_allies;
+    
+    if(combat->enemies_count == 0){
+        free(combat);
+        return NULL;
+    }
+    
     /*Initializes turns and the space where the combat is located*/
-
+    
     if(code == ATTACK){
         combat->is_player_turn = true;
     } else {
         combat->is_player_turn = false;
     }
-
+    
     combat->space = space;
+    combat->endCombat = false;
+    
 
     return combat;
 }
 
-void combat_end(Combat *combat){
+void combat_free(Combat *combat){
     if(!combat)
         return;
 
     free(combat);
 }
 
+bool combat_get_isFinished(Combat *combat){
+    if(!combat) return true;
+    return combat->endCombat;
+}
+
 Status combat_update(Combat *combat, Command *last_cmd){
+    int random;
+    int deadEnemies = 0;
+    
     if(!combat || !last_cmd)
         return ERROR;
 
-    
+    random = rand() % 100;
+
+    if(random > 60){
+        for (int i = 0; i < combat->enemies_count; i++)
+        {
+            combat->enemies_stats[i].stats.health -= 1;
+            if(combat->enemies_stats[i].stats.health <= 0){
+                entity_set_health(combat->enemies_stats[i].entity, 0);
+                deadEnemies++;
+            }
+        } 
+    }
+    else{
+        combat->player_stats.stats.health -= 1;
+    }
+
+    if(combat->player_stats.stats.health <= 0){
+        entity_set_health(combat->player_stats.entity, 0);
+        combat->endCombat = true;
+    }
+    printf("%d", deadEnemies);
+    if(deadEnemies == combat->enemies_count){
+        combat->endCombat = true;
+    }
+    return OK;
+}
+
+Status combat_runaway(Combat *combat){
+    if(!combat) return ERROR;
+    combat->endCombat = true;
+    return OK;
 }

@@ -56,6 +56,8 @@ bool event_trigger_combat(Event *event, Game *game);
  */
 bool event_trigger_player_death(Event *event, Game *game);
 
+bool event_trigger_end_combat(Game *game);
+
 /*---------PUBLIC FUNCTIONS----------*/
 void event_actions_trigger_events(Game *game){
     int i, eventCount;
@@ -95,6 +97,8 @@ void event_actions_trigger_events(Game *game){
         if(triggered && event_get_removeOnTrigger(event))
             event_manager_remove_event(manager, event);
     }
+
+    triggered = event_trigger_end_combat(game);
     
 }
 
@@ -104,6 +108,16 @@ bool event_trigger_none(Event *event, Game *game){
     debug_log(DEBUG, "No event Assigned");
     return false;
 }
+
+bool event_trigger_end_combat(Game *game){
+
+    if(combat_get_isFinished(game_get_combat(game))){
+        if(game_combat_end(game) == ERROR) return false;
+        return true;
+    }
+    return false;
+}
+
 bool event_trigger_object_on_space(Event *event, Game *game){
     char data[WORD_SIZE];
     char *toks = NULL;
@@ -160,12 +174,11 @@ bool event_trigger_combat(Event *event, Game *game){
 
     random = rand() % 100;
 
-    printf("%d", random);
     if(random > atoi(event_get_aux_data(event))) return false;
 
     if(!event_is_cmd_valid(event, game_get_last_command(game))) return false;
     debug_log(PRINT,"Combat trigger");
-    game_set_state(game, COMBAT);
+    game_combat_start(game);
     return true;
 }
 bool event_trigger_player_death(Event *event, Game *game){

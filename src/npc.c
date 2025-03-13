@@ -20,7 +20,6 @@
 
 struct _NPC{
     Entity *entity;
-    bool followPlayer;
 
     char message[WORD_SIZE];
 

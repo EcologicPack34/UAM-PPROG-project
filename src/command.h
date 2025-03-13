@@ -21,14 +21,14 @@
 #include "types.h"
 
 #define N_CMDT 2 /*!< Total number of CommandType in the enum */
-#define N_CMD 11  /*!< Total number of CommandCode in the enum */
+#define N_CMD 12  /*!< Total number of CommandCode in the enum */
 
 #define MAX_CMD_ARGS_NUM 5      /*!< Max number of arguments that can be passed to a command*/
 #define MAX_CMD_ARGS_LENGTH 20  /*!< Max length that the arguments of a command can have */
 
 typedef enum { CMDS, CMDL } CommandType; /* CMDS: Command Short | CMDL: Command Long */
 
-typedef enum { NO_CMD = -1, UNKNOWN, EXIT, SOUTH, NORTH, EAST, WEST, TAKE, DROP, CHAT, ATTACK} CommandCode; /* All values that a command can take */
+typedef enum { NO_CMD = -1, UNKNOWN, EXIT, SOUTH, NORTH, EAST, WEST, TAKE, DROP, CHAT, ATTACK, RUN_AWAY} CommandCode; /* All values that a command can take */
 
 /* 
  * Struct that contains all the information of the command

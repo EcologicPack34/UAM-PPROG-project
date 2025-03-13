@@ -86,8 +86,9 @@ void graphic_engine_destroy(Graphic_engine *ge) {
 void graphic_engine_paint_game(Graphic_engine *ge, Game *game){
   GameState gameState;
 
-  gameState = game_get_state(game);
   if(!game || !ge) return;
+  gameState = game_get_state(game);
+  printf("%d", gameState);
 
   if(gameState == DEFAULT){
     graphic_engine_paint_map(ge, game);
@@ -239,6 +240,8 @@ void graphic_engine_paint_generalDesc(Graphic_engine *ge, Game *game){
   strcpy(str, "NPCs:");
   screen_area_puts(ge->descript, str);
   for(i = 0; i < size && i < 5; i++){
+    if(entity_get_health(npc_get_entity(space_get_NPC_at(currentSpace, i))) <= 0) continue;
+
     strcpy(str, "   ");
     npc_get_str_descr(space_get_NPC_at(currentSpace, i), strAux, i + 1);
     strcat(str,strAux);
@@ -288,8 +291,10 @@ void graphic_engine_paint_commandInfo(Graphic_engine *ge, Game *game){
 }
 
 void graphic_engine_paint_combat(Graphic_engine *ge, Game *game){
+  
   screen_area_clear(ge->map);
   screen_area_puts(ge->map, "Combat Mode");
+
 }
 
 void graphic_engine_paint_space(Game *game, Space *space, Direction direction,char map[SPACE_HEIGHT + 1][MAP_WIDTH + 33], char spaceStr[SPACE_HEIGHT + 1][SPACE_WIDTH+10]){

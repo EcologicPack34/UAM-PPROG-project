@@ -10,7 +10,7 @@ Formato Event: #e:Id|Type|cmdTriggersNum|cmdName1 , ...|removeOnTrigger|tagvalue
 InventoryType = {UNKNOWN_INVENTORY == 0, PLAYER_INVENTORY == 1, NPC_INVENTORY == 2, SPACE_INVENTORY == 3}
 NPC_status = {UNKNOWN_STATUS == 0, NEUTRAL == 1, ALLY == 2, ENEMY == 3}
 
-#p:1|Hero|11|10|10|2|1|1|1|mO^
+#p:1|Hero|11|100|100|2|1|1|1|mO^
 
 -#s:11|Entry|-1|-1|1|4
 -#s:12|Corridor1|1|-1|2|-1
@@ -55,4 +55,4 @@ NPC_status = {UNKNOWN_STATUS == 0, NEUTRAL == 1, ALLY == 2, ENEMY == 3}
 
 #n:1|Hello traveler i'm NPC1|NPC1|11|1|1|1|1|1|1|1|^0m"
 #n:2|Hello traveler i'm NPC2|NPC2|11|1|1|1|1|1|1|1|^1m"
-#n:3|Hello traveler i'm NPC3|NPC3|11|1|1|1|1|1|1|1|^2m"
+#n:3|KYS|Enemy1|11|3|10|10|1|1|1|1|^2m"

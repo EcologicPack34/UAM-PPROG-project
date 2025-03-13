@@ -41,7 +41,7 @@ Combat *combat_initialize(Space *space, Player *player, CommandCode code);
  * 
  * @param combat 
  */
-void combat_end(Combat *combat);
+void combat_free(Combat *combat);
 
 /**
  * @brief Updates the combat turns
@@ -52,6 +52,10 @@ void combat_end(Combat *combat);
  * @return Status 
  */
 Status combat_update(Combat *combat, Command *last_cmd);
+
+Status combat_runaway(Combat *combat);
+
+bool combat_get_isFinished(Combat *combat);
 
 
 #endif

@@ -16,6 +16,7 @@
 #include "link.h"
 #include "entity.h"
 #include "collection.h"
+#include "combat.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -43,6 +44,10 @@ Status game_actions_drop(Game *game);
 
 Status game_actions_chat(Game *game);
 
+Status game_actions_attack(Game *game);
+
+Status game_actions_runaway(Game *game);
+
 /**
    Game actions implementation
 */
@@ -57,43 +62,72 @@ Status game_actions_update(Game *game, Command *command) {
 
   cmd = command_get_code(command);
 
-  switch (cmd) {
-    case UNKNOWN:
-      status = game_actions_unknown(game);
-      break;
+  if(game_get_state(game) == DEFAULT){
+    switch (cmd) {
+      case UNKNOWN:
+        status = game_actions_unknown(game);
+        break;
+  
+      case EXIT:
+        status = game_actions_exit(game);
+        break;
+  
+      case SOUTH:
+        status = game_actions_south(game);
+        break;
+  
+      case NORTH:
+        status = game_actions_north(game);
+        break;
+      case EAST:
+        status = game_actions_east(game);
+        break;
+      case WEST:
+        status = game_actions_west(game);
+        break;
+      case TAKE:
+        status = game_actions_take(game);
+        break;
+      
+      case DROP:
+        status = game_actions_drop(game);
+        break;
+  
+      case CHAT:
+        status = game_actions_chat(game);
+        break;
+      
+      case ATTACK:
+        status = game_actions_attack(game);
+        break;
 
-    case EXIT:
-      status = game_actions_exit(game);
-      break;
+      default:
+        break;
+    }
+  }else if(game_get_state(game) == COMBAT){
+    switch (cmd) {
+      case UNKNOWN:
+        status = game_actions_unknown(game);
+        break;
+  
+      case EXIT:
+        status = game_actions_exit(game);
+        break;
+      
+      case ATTACK:
+        status = game_actions_attack(game);
+        break;
+      case RUN_AWAY:
+        status = game_actions_runaway(game);
+        break;
 
-    case SOUTH:
-      status = game_actions_south(game);
-      break;
-
-    case NORTH:
-      status = game_actions_north(game);
-      break;
-    case EAST:
-      status = game_actions_east(game);
-      break;
-    case WEST:
-      status = game_actions_west(game);
-      break;
-    case TAKE:
-      status = game_actions_take(game);
-      break;
-    
-    case DROP:
-      status = game_actions_drop(game);
-      break;
-
-    case CHAT:
-      status = game_actions_chat(game);
-      break;
-
-    default:
-      break;
+      default:
+        break;
+    }
   }
+  
+
+  
 
   command_set_status(command, status);
 
@@ -319,6 +353,37 @@ Status game_actions_chat(Game *game){
     return ERROR;
 
   game_add_log_message(game, MESSAGE_NPC,npc_get_message(npc));
+
+  return OK;
+}
+
+Status game_actions_attack(Game *game){
+  if(!game) return ERROR;
+
+  Combat *combat = NULL;
+
+  combat = game_get_combat(game);
+  if(!combat) game_combat_start(game);
+  combat = game_get_combat(game);
+  if(!combat) return ERROR;
+  
+  combat_update(combat, game_get_last_command(game));
+  printf("hello?");
+
+  printf("combat updated");
+
+  return OK;
+}
+
+Status game_actions_runaway(Game *game){
+  if(!game) return ERROR;
+
+  Combat *combat = NULL;
+
+  combat = game_get_combat(game);
+  if(!combat) return ERROR;
+
+  combat_runaway(combat);
 
   return OK;
 }
