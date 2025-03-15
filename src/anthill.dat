@@ -56,3 +56,5 @@ NPC_status = {UNKNOWN_STATUS == 0, NEUTRAL == 1, ALLY == 2, ENEMY == 3}
 #n:1|Hello traveler i'm NPC1|NPC1|11|1|1|1|1|1|1|1|^0m"
 #n:2|Hello traveler i'm NPC2|NPC2|11|1|1|1|1|1|1|1|^1m"
 #n:3|KYS|Enemy1|11|3|10|10|1|1|1|1|^2m"
+#n:4|KYS|Enemy2|11|3|10|10|1|1|1|1|^3m"
+#n:5|KYS|Enemy3|11|3|10|10|1|1|1|1|^4m"

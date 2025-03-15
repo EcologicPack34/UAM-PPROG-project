@@ -13,15 +13,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-typedef struct {
-    Entity_Stats stats;             /*!< Copy of the stats in order to buff/debuff and not modify the original stats*/
-    Entity *entity;                 /*!< Entity from which the stats are saved*/
-}Stats;
-
-typedef struct {
-    Entity_Stats stats;             /*!< Copy of the stats in order to buff/debuff and not modify the original stats*/
-    Entity *entity;                 /*!< Entity from which the stats are saved*/
-}PlayerStats;                       /*Needs to be different for further implementation of equipment and more*/
 
 struct _Combat{
     PlayerStats player_stats;               /*!< Stats of the player*/
@@ -61,31 +52,21 @@ Status combat_copy_entity_stats(Entity *entity, Stats *stats);
  */
 Status combat_copy_player(Player *player, PlayerStats *stats);
 
-/**
- * @brief Determines the course of action for the player turn
- * 
- * @param combat 
- * @return Status 
- */
-Status combat_player_turn(Combat *combat);
+void combat_finalize(Combat *combat){
+    int i;
+    combat->endCombat = true;
 
-/**
- * @brief Determines the course of action for the ally turn in the position index
- * 
- * @param combat 
- * @param index
- * @return Status 
- */
-Status combat_ally_turn(Combat *combat, int index);
+    entity_set_health(combat->player_stats.entity ,combat->player_stats.stats.health);
+    for (i = 0; i < combat->allies_count; i++)
+    {
+        entity_set_health(combat->allies_stats[i].entity ,combat->allies_stats[i].stats.health);
+    }
+    for (i = 0; i < combat->enemies_count; i++)
+    {
+        entity_set_health(combat->enemies_stats[i].entity ,combat->enemies_stats[i].stats.health);
+    }
 
-/**
- * @brief Determines the course of action for the enemy turn in the position index
- * 
- * @param combat 
- * @param index
- * @return Status 
- */
-Status combat_enemy_turn(Combat *combat, int index);
+}
 
 Status combat_copy_entity_stats(Entity *entity, Stats *stats){
 
@@ -171,10 +152,14 @@ Combat *combat_initialize(Space *space, Player *player, CommandCode code){
     for(i = 0; i < npc_count; i++){
         npc = space_get_NPC_at(space, i);
         if(npc_get_status(npc) == ENEMY && npc_enemies <= 4){
+            if(entity_get_health(npc_get_entity(npc)) <= 0) continue;
+
             combat_copy_entity_stats(npc_get_entity(npc), &(combat->enemies_stats[npc_enemies]));
             npc_enemies++;
         }
         if(npc_get_status(npc) == ALLY && npc_allies <= 3){
+            if(entity_get_health(npc_get_entity(npc)) <= 0) continue;
+            
             combat_copy_entity_stats(npc_get_entity(npc), &(combat->allies_stats[npc_allies]));
             npc_allies++;
         }
@@ -222,7 +207,7 @@ Status combat_update(Combat *combat, Command *last_cmd){
     if(!combat || !last_cmd)
         return ERROR;
 
-    random = rand() % 100;
+    random = rand() % (100 - 0 + 1);
 
     if(random > 60){
         for (int i = 0; i < combat->enemies_count; i++)
@@ -239,18 +224,42 @@ Status combat_update(Combat *combat, Command *last_cmd){
     }
 
     if(combat->player_stats.stats.health <= 0){
-        entity_set_health(combat->player_stats.entity, 0);
-        combat->endCombat = true;
+        combat_finalize(combat);
     }
-    printf("%d", deadEnemies);
     if(deadEnemies == combat->enemies_count){
-        combat->endCombat = true;
+        combat_finalize(combat);
     }
     return OK;
 }
 
 Status combat_runaway(Combat *combat){
     if(!combat) return ERROR;
-    combat->endCombat = true;
+    combat_finalize(combat);
     return OK;
+}
+
+
+int combat_get_enemies_count(Combat *combat){
+    if(!combat) return 0;
+    return combat->enemies_count;
+}
+
+int combat_get_allies_count(Combat *combat){
+    if(!combat) return 0;
+    return combat->allies_count;
+}
+
+Stats *combat_get_enemies_stats(Combat *combat){
+    if(!combat) return NULL;
+    return combat->enemies_stats;
+}
+
+Stats *combat_get_allies_stats(Combat *combat){
+    if(!combat) return NULL;
+    return combat->allies_stats;
+}
+
+PlayerStats *combat_get_player_stats(Combat *combat){
+    if(!combat) return NULL;
+    return &(combat->player_stats);
 }

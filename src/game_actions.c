@@ -361,16 +361,18 @@ Status game_actions_attack(Game *game){
   if(!game) return ERROR;
 
   Combat *combat = NULL;
+  bool initCombat = false;
 
   combat = game_get_combat(game);
-  if(!combat) game_combat_start(game);
+  if(!combat){
+    game_combat_start(game);
+    initCombat = true;
+  } 
   combat = game_get_combat(game);
   if(!combat) return ERROR;
   
-  combat_update(combat, game_get_last_command(game));
-  printf("hello?");
-
-  printf("combat updated");
+  if(!initCombat)
+    combat_update(combat, game_get_last_command(game));
 
   return OK;
 }

@@ -416,6 +416,9 @@ Status space_get_NPC_list(Space *space, char *str, int length){
   str[0] = '\00';
   for(i = 0; i < size; i++){
     npc = collection_get_element_at(space->npcs, i);
+    
+    if(entity_get_health(npc_get_entity(npc)) <= 0) continue;
+
     aux = entity_get_graphic_description(npc_get_entity(npc));
     strcat(str , aux);
     if(aux[0] != '\00' && i != size -1){

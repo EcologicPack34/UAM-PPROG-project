@@ -19,7 +19,7 @@
 #include <string.h>
 
 #define NO_NAME ""
-#define ENTITY_GRAPHIC_LENGTH 3
+
 
 /**
  * @brief Entity

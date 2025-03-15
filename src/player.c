@@ -82,6 +82,18 @@ Entity *player_get_entity(Player *player){
     return player->entity;
 }
 
+Status player_get_str_desc(Player *player, char *str){
+    Entity *ent = NULL;
+    
+    if(!player || !str)
+        return ERROR;
+
+    ent = player_get_entity(player);
+    sprintf(str, "%s (%s): H:%.1lf,L:%ld (%ld)", entity_get_graphic_description(ent), entity_get_name(ent), entity_get_health(ent),entity_get_location(ent), entity_get_id(ent));
+
+    return OK;
+}
+
 /*Player SETTERS*/
 
 void player_print(Player *player){

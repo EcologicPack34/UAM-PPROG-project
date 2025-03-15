@@ -58,6 +58,16 @@ void player_destroy(Player *player);
  */
 Entity *player_get_entity(Player *player);
 
+/**
+ * @brief Gets a string description of player and copies it into str
+ * @author Daniel Gómez
+ * 
+ * @param player 
+ * @param str 
+ * @return Status 
+ */
+Status player_get_str_desc(Player *player, char *str);
+
 /*Player SETTERS*/
 
 /**

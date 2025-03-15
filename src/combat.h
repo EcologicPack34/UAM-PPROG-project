@@ -22,6 +22,16 @@
 #include "player.h"
 #include "command.h"
 
+typedef struct {
+    Entity_Stats stats;             /*!< Copy of the stats in order to buff/debuff and not modify the original stats*/
+    Entity *entity;                 /*!< Entity from which the stats are saved*/
+}Stats;
+
+typedef struct {
+    Entity_Stats stats;             /*!< Copy of the stats in order to buff/debuff and not modify the original stats*/
+    Entity *entity;                 /*!< Entity from which the stats are saved*/
+}PlayerStats;                       /*Needs to be different for further implementation of equipment and more*/
+
 typedef struct _Combat Combat;
 
 /**
@@ -54,6 +64,17 @@ void combat_free(Combat *combat);
 Status combat_update(Combat *combat, Command *last_cmd);
 
 Status combat_runaway(Combat *combat);
+
+
+int combat_get_enemies_count(Combat *combat);
+
+int combat_get_allies_count(Combat *combat);
+
+Stats *combat_get_enemies_stats(Combat *combat);
+
+Stats *combat_get_allies_stats(Combat *combat);
+
+PlayerStats *combat_get_player_stats(Combat *combat);
 
 bool combat_get_isFinished(Combat *combat);
 

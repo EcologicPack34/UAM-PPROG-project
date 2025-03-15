@@ -19,6 +19,8 @@
 #ifndef ENTITY_H
 #define ENTITY_H
 
+#define ENTITY_GRAPHIC_LENGTH 3
+
 #include "inventory.h"
 
 typedef enum {UNKNOWN_ENTITY, PLAYER_TYPE, NPC_TYPE} EntityType;
