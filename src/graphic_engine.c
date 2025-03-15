@@ -312,11 +312,9 @@ void graphic_engine_paint_combat(Graphic_engine *ge, Game *game){
   char strAux[WORD_SIZE] = "";
   char spacing[WORD_SIZE] = "";
   Combat *combat = NULL;
-  Space *currentSpace = NULL;
   int i, j;
   int div;
   int bar;
-  int size;
 
   int heightDiv;
 

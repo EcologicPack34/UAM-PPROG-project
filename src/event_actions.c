@@ -113,6 +113,9 @@ bool event_trigger_end_combat(Game *game){
 
     if(combat_get_isFinished(game_get_combat(game))){
         if(game_combat_end(game) == ERROR) return false;
+
+        game_add_log_message(game, MESSAGE_LOG, "Combat ended");
+
         return true;
     }
     return false;

@@ -145,6 +145,11 @@ Status game_destroy(Game *game) {
 
   command_destroy(game->last_cmd);
   event_manager_destroy(game->event_manager);
+  queue_destroy(game->screenLog);
+
+  if(game->combat){
+    combat_free(game->combat);
+  }
 
   /*Destroys all links */
   linkCount = game_get_n_links(game);

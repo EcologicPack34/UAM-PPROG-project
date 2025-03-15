@@ -159,7 +159,7 @@ Combat *combat_initialize(Space *space, Player *player, CommandCode code){
         }
         if(npc_get_status(npc) == ALLY && npc_allies <= 3){
             if(entity_get_health(npc_get_entity(npc)) <= 0) continue;
-            
+
             combat_copy_entity_stats(npc_get_entity(npc), &(combat->allies_stats[npc_allies]));
             npc_allies++;
         }
@@ -196,7 +196,7 @@ void combat_free(Combat *combat){
 }
 
 bool combat_get_isFinished(Combat *combat){
-    if(!combat) return true;
+    if(!combat) return false;
     return combat->endCombat;
 }
 
