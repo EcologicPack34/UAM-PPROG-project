@@ -16,6 +16,7 @@
 #include "npc.h"
 #include "vector2.h"
 #include "queue.h"
+#include "combat.h"
 #include "message.h"
 
 #include <stdio.h>
@@ -40,6 +41,9 @@ struct _Game {
   /*Others*/
   EventManager *event_manager; /*!< Struct containing the info about the events that can happen*/
   Queue *screenLog;             /*!< Queue containing a list of messages to print on screen*/
+
+  /*Combat*/
+  Combat *combat;
 
   GameState current_state;     /*!< Enum storing the current game state*/
   Command *last_cmd;           /*!< string with the last command */
@@ -113,6 +117,8 @@ Status game_create(Game **game) {
     debug_log(LOG_ERROR,"Error creating event screenLog");
     return ERROR;
   } 
+
+  (*game)->combat = NULL;
 
   return OK;
 }
@@ -612,4 +618,28 @@ Status game_get_log_message(Game *game, char *str){
 bool game_log_hasMessage(Game *game){
   if(!game) return false;
   return !queue_isEmpty(game->screenLog);
+}
+
+Status game_combat_start(Game *game){
+  if(!game) return ERROR;
+
+  game->combat = combat_initialize(game_get_space(game, game_get_player_location(game)), game->player, command_get_code(game->last_cmd));
+  if(!game->combat) return ERROR;
+
+  game->current_state = COMBAT;
+  return OK;
+}
+
+Status game_combat_end(Game *game){
+  if(!game) return ERROR;
+
+  combat_free(game->combat);
+  game->current_state = DEFAULT;
+  game->combat = NULL;
+  return OK;
+}
+
+Combat *game_get_combat(Game *game){
+  if(!game) return NULL;
+  return game->combat;
 }

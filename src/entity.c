@@ -19,7 +19,7 @@
 #include <string.h>
 
 #define NO_NAME ""
-#define ENTITY_GRAPHIC_LENGTH 3
+
 
 /**
  * @brief Entity
@@ -45,7 +45,7 @@ struct _Entity {
  * Entity public implementation
 */
 
-Entity *entity_create(char *name, Id id, Id location, InventoryType inventoryType, double health, double baseDamage, int strength, int defense, int magicLevel){
+Entity *entity_create(char *name, Id id, Id location, InventoryType inventoryType, double maxhealth, double health, double baseDamage, int strength, int defense, int magicLevel){
     Entity *entity = NULL;
 
     if(name == NULL){
@@ -70,6 +70,7 @@ Entity *entity_create(char *name, Id id, Id location, InventoryType inventoryTyp
     entity_set_name(entity, name);
     entity_set_location(entity, location);
     
+    entity_set_max_health(entity, maxhealth);
     entity_set_health(entity, health);
     entity_set_baseDamage(entity, baseDamage);
     entity_set_strength(entity, strength);
@@ -119,6 +120,14 @@ Status entity_set_entityType(Entity *entity, EntityType entityType){
         return ERROR;
     
     entity->entityType = entityType;
+    return OK;
+}
+
+Status entity_set_max_health(Entity *entity, double maxhealth){
+    if(!entity)
+        return ERROR;
+    
+    entity->stats.maxhealth = maxhealth;
     return OK;
 }
 
@@ -212,6 +221,13 @@ EntityType entity_get_entityType(Entity *entity){
         return UNKNOWN_ENTITY;
 
     return entity->entityType;
+}
+
+double entity_get_max_health(Entity *entity){
+    if(!entity)
+        return -1;
+    
+    return entity->stats.maxhealth;
 }
 
 double entity_get_health(Entity *entity){

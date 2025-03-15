@@ -53,13 +53,13 @@ Status player_set_entity(Player *player, Entity *entity){
    Game interface implementation
 */
 
-Player *player_create(char *name, Id identity, Id location, double health, double baseDamage, int strength, int defense, int magicLevel){
+Player *player_create(char *name, Id identity, Id location, double maxhealth, double health, double baseDamage, int strength, int defense, int magicLevel){
     Player *player = NULL;
 
     if(!(player = (Player *)malloc(sizeof(player))))
         return NULL;
     
-    if(player_set_entity(player,entity_create(name, identity, location, PLAYER_INVENTORY, health, baseDamage, strength, defense, magicLevel)) == ERROR)
+    if(player_set_entity(player,entity_create(name, identity, location, PLAYER_INVENTORY, maxhealth, health, baseDamage, strength, defense, magicLevel)) == ERROR)
         return NULL;
     
     return player;
@@ -80,6 +80,18 @@ Entity *player_get_entity(Player *player){
         return NULL;
 
     return player->entity;
+}
+
+Status player_get_str_desc(Player *player, char *str){
+    Entity *ent = NULL;
+    
+    if(!player || !str)
+        return ERROR;
+
+    ent = player_get_entity(player);
+    sprintf(str, "%s (%s): H:%.1lf,L:%ld (%ld)", entity_get_graphic_description(ent), entity_get_name(ent), entity_get_health(ent),entity_get_location(ent), entity_get_id(ent));
+
+    return OK;
 }
 
 /*Player SETTERS*/

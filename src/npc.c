@@ -20,7 +20,6 @@
 
 struct _NPC{
     Entity *entity;
-    bool followPlayer;
 
     char message[WORD_SIZE];
 
@@ -37,7 +36,7 @@ struct _NPC{
 * PUBLIC INTERFACE IMPLEMENTATION
 */
 
-NPC *npc_create(NPC_status status, char *message, char *name, Id id, Id location, double health, double baseDamage, int strength, int defense, int magicLevel){
+NPC *npc_create(NPC_status status, char *message, char *name, Id id, Id location, double maxhealth, double health, double baseDamage, int strength, int defense, int magicLevel){
     NPC *npc = NULL;
 
     if(!name)
@@ -51,7 +50,7 @@ NPC *npc_create(NPC_status status, char *message, char *name, Id id, Id location
 
     strcpy(npc->message, message);
     npc->status = status;
-    npc->entity = entity_create(name, id, location, NPC_INVENTORY, health, baseDamage, strength, defense, magicLevel);
+    npc->entity = entity_create(name, id, location, NPC_INVENTORY, maxhealth, health, baseDamage, strength, defense, magicLevel);
     if(npc->entity == NULL){
         debug_log(LOG_ERROR, "npc_create dynamic memory error at entity_create on npc: id: %ld locationid: %d", id, location);
         free(npc);
@@ -156,7 +155,7 @@ Status npc_get_str_descr(NPC *npc, char *str, int index){
         return ERROR;
 
     ent = npc_get_entity(npc);
-    sprintf(str, "%s (%s): %ld (%ld)", entity_get_graphic_description(ent), entity_get_name(ent), entity_get_location(ent), entity_get_id(ent));
+    sprintf(str, "%s (%s): H:%.1lf,L:%ld (%ld)", entity_get_graphic_description(ent), entity_get_name(ent), entity_get_health(ent),entity_get_location(ent), entity_get_id(ent));
 
     return OK;
 }

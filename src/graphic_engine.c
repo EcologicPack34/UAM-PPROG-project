@@ -23,7 +23,7 @@
 
 #define MAP_WIDTH 53
 #define MAP_HEIGHT 29
-#define DESCRIPT_WIDTH 30
+#define DESCRIPT_WIDTH 40
 #define HELP_BANNER_HEIGHT 1
 #define HELP_BANNER_WIDTH 23
 #define HELP_HEIGHT 3
@@ -31,6 +31,9 @@
 
 #define SPACE_HEIGHT 9
 #define SPACE_WIDTH 17
+
+#define COMBAT_OFFSET 10
+#define HEALTH_BAR_WIDTH 5
 
 struct _Graphic_engine {
   Area *map, *descript, *banner, *help, *feedback;
@@ -86,8 +89,9 @@ void graphic_engine_destroy(Graphic_engine *ge) {
 void graphic_engine_paint_game(Graphic_engine *ge, Game *game){
   GameState gameState;
 
-  gameState = game_get_state(game);
   if(!game || !ge) return;
+  gameState = game_get_state(game);
+  printf("%d", gameState);
 
   if(gameState == DEFAULT){
     graphic_engine_paint_map(ge, game);
@@ -208,13 +212,27 @@ void graphic_engine_paint_generalDesc(Graphic_engine *ge, Game *game){
   spaceInventory = space_get_inventory(currentSpace);
   
   /*Paints player info*/
+  strcpy(str, "Player:");
+  screen_area_puts(ge->descript, str);
+
+  player_get_str_desc(game_get_player(game), strAux);
+  strcpy(str, "   ");
+  strcat(str, strAux);
+  screen_area_puts(ge->descript, str);
+
   strcpy(str, "Player inventory:");
   screen_area_puts(ge->descript, str);
+
   if(inventorysize == 0){
-    screen_area_puts(ge->descript, "No Objects in Player Inventory");
-  }else{
+    screen_area_puts(ge->descript, "    No Objects in Player Inventory");
+  }
+  else{
     for(i = 0; i < inventorysize && i < 5; i++){
-      inventory_get_object_str_at(playerInventory, str, i);
+      inventory_get_object_str_at(playerInventory, strAux, i);
+      
+      strcpy(str,"    ");
+      strcat(str, strAux);
+
       screen_area_puts(ge->descript, str);
     }
   }
@@ -239,6 +257,8 @@ void graphic_engine_paint_generalDesc(Graphic_engine *ge, Game *game){
   strcpy(str, "NPCs:");
   screen_area_puts(ge->descript, str);
   for(i = 0; i < size && i < 5; i++){
+    if(entity_get_health(npc_get_entity(space_get_NPC_at(currentSpace, i))) <= 0) continue;
+
     strcpy(str, "   ");
     npc_get_str_descr(space_get_NPC_at(currentSpace, i), strAux, i + 1);
     strcat(str,strAux);
@@ -288,8 +308,190 @@ void graphic_engine_paint_commandInfo(Graphic_engine *ge, Game *game){
 }
 
 void graphic_engine_paint_combat(Graphic_engine *ge, Game *game){
+  char str[WORD_SIZE] = "";
+  char strAux[WORD_SIZE] = "";
+  char spacing[WORD_SIZE] = "";
+  Combat *combat = NULL;
+  Space *currentSpace = NULL;
+  int i, j;
+  int div;
+  int bar;
+  int size;
+
+  int heightDiv;
+
+  int enemy_count = 0, ally_count = 0;
+  Stats *stats = NULL;
+  PlayerStats *playerStats = NULL;
+
+  heightDiv = (MAP_HEIGHT - 4 + 1)/3;
+
+  combat = game_get_combat(game);
   screen_area_clear(ge->map);
-  screen_area_puts(ge->map, "Combat Mode");
+  if(!combat) return;
+
+  enemy_count = combat_get_enemies_count(combat);
+  ally_count = combat_get_allies_count(combat);
+
+  /*Paints some blanck lines so it isnt at the top*/
+  for (i = 0; i < heightDiv; i++)
+  {
+    screen_area_puts(ge->map, " ");
+  }
+  
+  stats = combat_get_enemies_stats(combat);
+
+  div = (MAP_WIDTH - COMBAT_OFFSET) / (enemy_count + 1);
+  /*spacing for gdesc*/
+  for (i = 0; i < div - (ENTITY_GRAPHIC_LENGTH)/2; i++)
+  {
+    strcat(spacing, " ");
+  }
+
+  /*prints gdesc of enemies*/
+  strcat(str, spacing);
+  if(enemy_count == 1) strcat(str, "  ");
+  strcat(spacing, "  ");/*fixes health bars not centered, i dont know why*/
+  for (i = 0; i < enemy_count; i++)
+  {
+    strcat(str, entity_get_graphic_description(stats[i].entity));
+    if(i != enemy_count -1) strcat(str, spacing);
+  }
+  screen_area_puts(ge->map, str);
+
+  /*spacing for health*/
+  spacing[0] = 0;
+  str[0] = 0;
+  for (i = 0; i < div - (HEALTH_BAR_WIDTH + 1)/2; i++)
+  {
+    strcat(spacing, " ");
+  }
+  strcat(str, spacing);
+  if(enemy_count == 1) strcat(str, "  ");
+  for (i = 0; i < enemy_count; i++)
+  {
+    //sprintf(strAux, "[%.2lf]", stats[i].stats.health);
+    strcat(str, "[");
+    bar = stats[i].stats.health / entity_get_max_health(stats[i].entity) * HEALTH_BAR_WIDTH;
+    for (j = 0; j < HEALTH_BAR_WIDTH; j++)
+    {
+      if(j <= bar) strcat(str, "=");
+      else strcat(str, "_");
+    }
+    strcat(str, "]");
+    
+    if(i != enemy_count -1) strcat(str, spacing);
+  }
+  screen_area_puts(ge->map, str);
+
+  /*paints some more spacing*/
+  for (i = 0; i < heightDiv; i++)
+  {
+    screen_area_puts(ge->map, " ");
+  }
+
+  spacing[0] = 0;
+  str[0] = 0;
+
+  div = (MAP_WIDTH - COMBAT_OFFSET) / (ally_count + 2);
+
+  stats = combat_get_allies_stats(combat);
+  playerStats = combat_get_player_stats(combat);
+
+  for (i = 0; i < div - (ENTITY_GRAPHIC_LENGTH)/2; i++)
+  {
+    strcat(spacing, " ");
+  }
+  strcat(str, spacing);
+  strcat(spacing, "  ");/*fixes health bars not centered, i dont know why*/
+
+  /*prints player gdesc*/
+  if(ally_count == 0) strcat(str, "  ");
+  strcat(str, entity_get_graphic_description(playerStats->entity));
+  strcat(str, spacing);
+
+  /*prints allies desc*/
+  for (i = 0; i < ally_count; i++)
+  {
+    strcat(str, entity_get_graphic_description(stats[i].entity));
+    if(i != enemy_count -1) strcat(str, spacing);
+  }
+  screen_area_puts(ge->map, str);
+
+  /*health bars*/
+  spacing[0] = 0;
+  str[0] = 0;
+  for (i = 0; i < div - (HEALTH_BAR_WIDTH + 1)/2; i++)
+  {
+    strcat(spacing, " ");
+  }
+  strcat(str, spacing);
+  if(ally_count == 0) strcat(str, "  ");
+
+  /*player health bar*/
+  strcat(str, "[");
+  bar = playerStats->stats.health / entity_get_max_health(playerStats->entity) * HEALTH_BAR_WIDTH;
+  for (j = 0; j < HEALTH_BAR_WIDTH; j++)
+  {
+    if(j <= bar) strcat(str, "=");
+    else strcat(str, "_");
+  }
+  strcat(str, "]");
+
+  /*allies health bar*/
+  for (i = 0; i < ally_count; i++)
+  {
+    //sprintf(strAux, "[%.2lf]", stats[i].stats.health);
+    strcat(str, "[");
+    bar = stats[i].stats.health / entity_get_max_health(stats[i].entity) * HEALTH_BAR_WIDTH;
+    for (j = 0; j < HEALTH_BAR_WIDTH; j++)
+    {
+      if(j <= bar) strcat(str, "=");
+      else strcat(str, "_");
+    }
+    strcat(str, "]");
+    
+    if(i != ally_count -1) strcat(str, spacing);
+  }
+  screen_area_puts(ge->map, str);
+
+  /*paints description*/
+  screen_area_clear(ge->descript);
+  strcpy(str, "Player:");
+  screen_area_puts(ge->descript, str);
+
+  strcpy(str, "   ");
+  strcat(str, entity_get_graphic_description(playerStats->entity));
+  sprintf(strAux, ": Health: %.1lf", playerStats->stats.health);
+  strcat(str, strAux);
+  screen_area_puts(ge->descript, str);
+
+  if(ally_count > 0){
+    strcpy(str, "Allies:");
+    screen_area_puts(ge->descript, str);
+    stats = combat_get_allies_stats(combat);
+    for (i = 0; i < ally_count; i++)
+    {
+      strcpy(str, "   ");
+      strcat(str, entity_get_graphic_description(stats[i].entity));
+      sprintf(strAux, ": Health: %.1lf", stats[i].stats.health);
+      strcat(str, strAux);
+      screen_area_puts(ge->descript, str);
+    }
+  }
+  
+  strcpy(str, "Enemies:");
+  screen_area_puts(ge->descript, str);
+  stats = combat_get_enemies_stats(combat);
+  for (i = 0; i < enemy_count; i++)
+  {
+    strcpy(str, "   ");
+    strcat(str, entity_get_graphic_description(stats[i].entity));
+    sprintf(strAux, ": Health: %.1lf", stats[i].stats.health);
+    strcat(str, strAux);
+    screen_area_puts(ge->descript, str);
+  }
+
 }
 
 void graphic_engine_paint_space(Game *game, Space *space, Direction direction,char map[SPACE_HEIGHT + 1][MAP_WIDTH + 33], char spaceStr[SPACE_HEIGHT + 1][SPACE_WIDTH+10]){

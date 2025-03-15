@@ -25,6 +25,7 @@
 #include "event_manager.h"
 #include "npc.h"
 #include "message.h"
+#include "combat.h"
 
 #include <stdbool.h>
 
@@ -345,5 +346,11 @@ Status game_get_log_message(Game *game, char *str);
  * @return false 
  */
 bool game_log_hasMessage(Game *game);
+
+Status game_combat_start(Game *game);
+
+Status game_combat_end(Game *game);
+
+Combat *game_get_combat(Game *game);
 
 #endif

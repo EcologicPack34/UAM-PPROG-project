@@ -33,6 +33,31 @@ bool event_trigger_none(Event *event, Game *game);
  */
 bool event_trigger_object_on_space(Event *event, Game *game);
 
+/**
+ * @brief Triggers Combat mode
+ *      aux data info: ...|probability
+ * @author Daniel Gómez
+ * 
+ * @param event 
+ * @param game 
+ * @return true 
+ * @return false 
+ */
+bool event_trigger_combat(Event *event, Game *game);
+
+/**
+ * @brief Triggers end of game if player is dead
+ * @author Daniel Gómez
+ * 
+ * @param event 
+ * @param game 
+ * @return true 
+ * @return false 
+ */
+bool event_trigger_player_death(Event *event, Game *game);
+
+bool event_trigger_end_combat(Game *game);
+
 /*---------PUBLIC FUNCTIONS----------*/
 void event_actions_trigger_events(Game *game){
     int i, eventCount;
@@ -60,13 +85,20 @@ void event_actions_trigger_events(Game *game){
             case OBJECT_ON_SPACE:
                 triggered = event_trigger_object_on_space(event, game);
                 break;
-        
+            case TRIGGER_COMBAT:
+                triggered = event_trigger_combat(event, game);
+                break;
+            case PLAYER_DEATH:
+                triggered = event_trigger_player_death(event, game);
+                break;
             default:
                 break;
         }
         if(triggered && event_get_removeOnTrigger(event))
             event_manager_remove_event(manager, event);
     }
+
+    triggered = event_trigger_end_combat(game);
     
 }
 
@@ -76,6 +108,16 @@ bool event_trigger_none(Event *event, Game *game){
     debug_log(DEBUG, "No event Assigned");
     return false;
 }
+
+bool event_trigger_end_combat(Game *game){
+
+    if(combat_get_isFinished(game_get_combat(game))){
+        if(game_combat_end(game) == ERROR) return false;
+        return true;
+    }
+    return false;
+}
+
 bool event_trigger_object_on_space(Event *event, Game *game){
     char data[WORD_SIZE];
     char *toks = NULL;
@@ -123,4 +165,31 @@ bool event_trigger_object_on_space(Event *event, Game *game){
     }
 
     return false;/*Return false because event hasnt been triggered*/
+}
+
+bool event_trigger_combat(Event *event, Game *game){
+    int random = 0;
+
+    if(!event || !game) return false;
+
+    random = rand() % 100;
+
+    if(random > atoi(event_get_aux_data(event))) return false;
+
+    if(!event_is_cmd_valid(event, game_get_last_command(game))) return false;
+    debug_log(PRINT,"Combat trigger");
+    game_combat_start(game);
+    return true;
+}
+bool event_trigger_player_death(Event *event, Game *game){
+
+    if(!event || !game) return false;
+
+
+    if(entity_get_health(player_get_entity(game_get_player(game))) <= 0){
+        game_set_finished(game, true);
+        debug_log(PRINT,"Player died, finishing game");
+        return true;
+    }
+    return false;
 }

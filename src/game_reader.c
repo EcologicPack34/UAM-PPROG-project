@@ -350,7 +350,7 @@ Status game_reader_load_player(Game *game, char *filename){
   char line[WORD_SIZE] = "";
   char name[WORD_SIZE] = "";
   char *toks = NULL;
-  double health, baseDamage;
+  double maxhealth, health, baseDamage;
   int strength, defense, magicLevel;
   long playerid, startinglocation;
 
@@ -380,6 +380,9 @@ Status game_reader_load_player(Game *game, char *filename){
       
       toks = strtok(NULL, "|");
       startinglocation = atol(toks);
+
+      toks = strtok(NULL, "|");
+      maxhealth = strtod(toks, NULL);
       
       toks = strtok(NULL, "|");
       health = strtod(toks, NULL);
@@ -398,10 +401,10 @@ Status game_reader_load_player(Game *game, char *filename){
       
       toks = strtok(NULL, "|");
 
-      debug_log(PRINT,"Read Player: #p:%ld|%s|%ld|%lf|%lf|%d|%d|%d|gdesc", playerid, name, startinglocation, health, baseDamage, strength, defense, magicLevel);
+      debug_log(PRINT,"Read Player: #p:%ld|%s|%ld|%lf|%lf|%lf|%d|%d|%d|gdesc", playerid, name, startinglocation, maxhealth, health, baseDamage, strength, defense, magicLevel);
 
       /*Creates a player with player_create then saves it on the game with game_add_player*/
-      player = player_create(name, playerid, startinglocation, health, baseDamage, strength, defense, magicLevel);
+      player = player_create(name, playerid, startinglocation, maxhealth, health, baseDamage, strength, defense, magicLevel);
       if (player == NULL){
         status = ERROR;
         break;
@@ -514,7 +517,7 @@ Status game_reader_load_npcs(Game *game, char *filename){ /*NEEEDS FIX --> CORE 
   char name[WORD_SIZE] = "";
   char *toks = NULL;
   char message[WORD_SIZE];
-  double health, baseDamage;
+  double maxhealth, health, baseDamage;
   int strength, defense, magicLevel;
   long npcid, startinglocation;
   NPC_status statusnpc;
@@ -564,7 +567,13 @@ Status game_reader_load_npcs(Game *game, char *filename){ /*NEEEDS FIX --> CORE 
         printf("toks is null");
         return ERROR;
       }
-      statusnpc = (NPC_status)atoi(toks);
+      statusnpc = atoi(toks) + UNKNOWN_STATUS;
+      toks = strtok(NULL, "|");
+      if(!toks){
+        printf("toks is null");
+        return ERROR;
+      }
+      maxhealth = strtod(toks, NULL);
       toks = strtok(NULL, "|");
       if(!toks){
         printf("toks is null");
@@ -598,16 +607,15 @@ Status game_reader_load_npcs(Game *game, char *filename){ /*NEEEDS FIX --> CORE 
 
       toks = strtok(NULL, "|");
       
-      debug_log(PRINT,"Read NPC: #n:%ld|%s|%s|%ld|%d|%lf|%lf|%d|%d|%d|gdesc", npcid, message, name, startinglocation, (int)statusnpc, health, baseDamage, strength, defense, magicLevel);
+      debug_log(PRINT,"Read NPC: #n:%ld|%s|%s|%ld|%d|%lf|%lf|%lf|%d|%d|%d|gdesc", npcid, message, name, startinglocation, (int)statusnpc, maxhealth, health, baseDamage, strength, defense, magicLevel);
       /*Creates an NPC with npc_create then saves it on the game with game_add_npc*/
-      npc = npc_create(status, message, name, npcid, startinglocation, health, baseDamage, strength, defense, magicLevel);
+      npc = npc_create(statusnpc, message, name, npcid, startinglocation, maxhealth, health, baseDamage, strength, defense, magicLevel);
       if (npc == NULL) {
         status = ERROR;
         break;
       }
 
       entity_set_graphic_description(npc_get_entity(npc), toks);
-
       if (game_add_npc(game, npc) == ERROR){
         printf("npc creation wrong");
         npc_destroy(npc);
