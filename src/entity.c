@@ -48,6 +48,10 @@ struct _Entity {
 Entity *entity_create(char *name, Id id, Id location, InventoryType inventoryType, double maxhealth, double health, double baseDamage, int strength, int defense, int magicLevel){
     Entity *entity = NULL;
 
+    if(health <= 0 || maxhealth <= 0){
+        return NULL;
+    }
+
     if(name == NULL){
         debug_log(LOG_ERROR, "Unasigned string when creating entity");
         return NULL;
@@ -65,6 +69,9 @@ Entity *entity_create(char *name, Id id, Id location, InventoryType inventoryTyp
         return NULL;
     }
 
+    entity_set_graphic_description(entity, "ERR");
+    entity_set_entityType(entity, UNKNOWN_ENTITY);
+
 
     entity_set_id(entity, id);
     entity_set_name(entity, name);
@@ -72,6 +79,7 @@ Entity *entity_create(char *name, Id id, Id location, InventoryType inventoryTyp
     
     entity_set_max_health(entity, maxhealth);
     entity_set_health(entity, health);
+    
     entity_set_baseDamage(entity, baseDamage);
     entity_set_strength(entity, strength);
     entity_set_defense(entity, defense);

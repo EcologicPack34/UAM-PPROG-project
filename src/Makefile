@@ -10,6 +10,9 @@ OBJ = collector.o command.o debug_printing.o game_actions.o game_loop.o game.o g
 EXE = anthill
 EXED = anthilldebug
 
+TEST_OBJ = entity_test.o
+TEST = entity_test
+
 all: (EXE)
 
 (EXE):	$(OBJ)
@@ -101,9 +104,9 @@ combat.o: combat.c combat.h collection.h types.h debug_printing.h queue.h \
  command.h
 	$(CC) $(CFLAGS) -c combat.c
 
-.PHONY:	clean compile run
+.PHONY:	clean compile link run debug runv
 clean:
-	rm -f *.o $(EXE) debug.log $(EXED)
+	rm -f *.o $(EXE) debug.log $(EXED) $(TEST) $(TEST_OBJ)
 
 compile:
 	$(CC) $(CFLAGS) -c $(SRC)
@@ -120,6 +123,13 @@ debug:
 runv:
 	make debug
 	valgrind --leak-check=full --track-origins=yes ./anthilldebug anthill.dat
+
+run_entity_test:
+	make
+	$(CC) $(CFLAGS) -c entity_test.c
+	$(CC) $(CFLAGS) -o entity_test entity_test.o entity.o inventory.o object.o collection.o debug_printing.o
+	./entity_test
+
 	
 # $@ devuelve lo que hay a la izquierda de los :, $^ devuelve todas las dependencias
 
