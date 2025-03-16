@@ -164,7 +164,7 @@ Status collection_remove_at(Collection *collection, long index){
     int i;
     
     if(!collection) return ERROR;
-    if(index > collection->length) return ERROR;
+    if(index > collection->length || index < 0) return ERROR;
 
     collection->list[index] = NULL;
 
@@ -194,7 +194,7 @@ void *collection_get_element_at(Collection *collection, long index){
 
 int collection_contains(Collection *collection, void *element){
     int i;
-    if(!collection || !element) return false;
+    if(!collection || !element) return -1;
 
     for (i = 0; i < collection->length; i++)
     {
