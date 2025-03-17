@@ -361,7 +361,10 @@ Status game_actions_chat(Game *game){
 
   npc = space_get_NPC_by_name(space, arguments[0]);
 
-  if(npc == NULL) //ESTO ES NULL POR ALGUNA RAZON
+  if(npc == NULL)
+    return ERROR;
+
+  if(entity_get_health(npc_get_entity(npc)) <= 0)
     return ERROR;
 
   game_add_log_message(game, MESSAGE_NPC,npc_get_message(npc));
@@ -404,6 +407,7 @@ Status game_actions_attack(Game *game){
 /**
  * @brief Only works in combat game state, this allows for the player to escape from a combat.
  * Right now it doesn't have a chance to fail.
+
  * @author Maksym Polyak && Daniel Gómez
  * 
  * @param game 
