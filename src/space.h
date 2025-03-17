@@ -3,10 +3,18 @@
  *
  * This module regulates the game map by the space ADT, is the base of the movement functionality and other upcoming features.
  * A space is defined by his unique id, but it also contains the name of the space and the ids of the links connected to
- * the north, south, east and west. Also for now, each space has a bool that determines if it has the object or not.
+ * the north, south, east and west.
  *
  * IMPORTANT - All spaces are stored inside the game struct in game.h, the memory of the spaces is tracked by that struct.
- *
+ * 
+ * Every space now has a graphic description in order to print it with the graphic engine, also each
+ * space has been localized by a vector, that allows the graphic engine to print the spaces around it
+ * without looking each time. Any space that isn't connected to the main block of spaces won't show up
+ * on screen.
+ * 
+ * To be able to store items easily in a Space, now each space has an inventory. On the other hand, a
+ * collection with the npcs has also been added to allow the combat module to search for NPCs in a 
+ * designated space.
  *
  * @file space.h
  * @author Original: Profesores PPROG. Modified by: Daniel Gómez
@@ -140,6 +148,7 @@ Status space_set_neighbour(Space *space, Space *neighbour, Direction direction);
 
 /**
  * @brief Sets the graphic description of a given spaces
+ * @author Daniel Gómez
  * 
  * @param space 
  * @param desc 
@@ -151,6 +160,7 @@ Status space_set_graphic_description(Space *space, char *desc, int index);
 
 /**
  * @brief Gets the reference to the graphic description of a space
+ * @author Daniel Gómez
  * 
  * @param space 
  * @return char** 
@@ -191,7 +201,7 @@ Space *space_get_neighbour(Space *space, Direction direction);
  * @author Profesores PPROG
  *
  * @param space a pointer to the space
- * @return the id of space
+ * @return the id of space or NO_ID if error
  */
 Id space_get_id(Space *space);
 
@@ -279,6 +289,7 @@ Status space_add_NPC(Space *space, NPC *npc);
 
 /**
  * @brief Removes an NPC struct from the space NOTE: Sets the NPC location to UNKNOWN_ID
+ * @author Maksym Polyak
  * 
  * @param space 
  * @param npc 
@@ -299,6 +310,7 @@ Status space_move_NPC(Space *spaceOUT, Space *spaceIN, NPC *npc);
 
 /**
  * @brief Gets an NPC on a space in the index
+ * @author Maksym Polyak
  * 
  * @param space 
  * @param index 
@@ -308,6 +320,7 @@ NPC *space_get_NPC_at(Space *space, int index);
 
 /** 
  * @brief Gets an NPC by its name on a space
+ * @author Maksym Polyak
  * 
  * @param space 
  * @param name

@@ -1,7 +1,12 @@
 /**
+ * @brief The NPC module controls the creation and actions of the NPCs on the game, each
+ * NPC is an entity, has a message and a status to determine their behaviour towards the
+ * player.
+ * 
+ * 
+ * 
  * @file npc.h
  * @author Maksym Polyak
- * @brief 
  * @version 0.1
  * @date 2025-03-04
  * 
@@ -132,6 +137,7 @@ void npc_print(void *npc);
 
 /**
  * @brief Gets a string without \ n with the information of an NPC on str, str starts with (index).
+ * @author Maksym Polyak
  * 
  * @param npc 
  * @param str 

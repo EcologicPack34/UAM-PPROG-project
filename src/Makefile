@@ -19,28 +19,33 @@ all: (EXE)
 	$(CC) $(CFLAGS) -o $(EXE) $(OBJ) libscreen.a
 
 game_loop.o: game_loop.c debug_printing.h command.h types.h game.h link.h \
- entity.h inventory.h object.h collection.h space.h player.h \
- game_reader.h game_actions.h graphic_engine.h
+ entity.h inventory.h object.h collection.h space.h npc.h vector2.h \
+ player.h event_manager.h message.h combat.h queue.h game_reader.h \
+ game_actions.h graphic_engine.h event_actions.h
 	$(CC) $(CFLAGS) -c game_loop.c
 
-game.o: game.c debug_printing.h game.h link.h types.h entity.h \
- inventory.h object.h collection.h space.h command.h player.h
+game.o: game.c game.h link.h types.h entity.h inventory.h object.h \
+ collection.h space.h npc.h debug_printing.h vector2.h command.h player.h \
+ event_manager.h message.h combat.h queue.h
 	$(CC) $(CFLAGS) -c game.c
 
 command.o: command.c command.h types.h debug_printing.h
 	$(CC) $(CFLAGS) -c command.c
 
 space.o: space.c space.h types.h object.h link.h entity.h inventory.h \
- collection.h npc.h debug_printing.h
+ collection.h npc.h debug_printing.h vector2.h
 	$(CC) $(CFLAGS) -c space.c
 
-game_actions.o: game_actions.c game_actions.h command.h types.h game.h \
- link.h entity.h inventory.h object.h collection.h space.h player.h
+game_actions.o: game_actions.c game_actions.h game.h link.h types.h \
+ entity.h inventory.h object.h collection.h space.h npc.h \
+ debug_printing.h vector2.h command.h player.h event_manager.h message.h \
+ combat.h queue.h
 	$(CC) $(CFLAGS) -c game_actions.c
 
 graphic_engine.o: graphic_engine.c graphic_engine.h game.h link.h types.h \
- entity.h inventory.h object.h collection.h space.h command.h player.h \
- debug_printing.h libscreen.h
+ entity.h inventory.h object.h collection.h space.h npc.h \
+ debug_printing.h vector2.h command.h player.h event_manager.h message.h \
+ combat.h queue.h libscreen.h
 	$(CC) $(CFLAGS) -c graphic_engine.c
 
 object.o: object.c object.h types.h
@@ -61,8 +66,8 @@ debug_printing.o:	debug_printing.c debug_printing.h
 	$(CC) $(CFLAGS) -c debug_printing.c
 
 game_reader.o: game_reader.c game_reader.h types.h game.h link.h entity.h \
- inventory.h object.h collection.h space.h command.h player.h \
- debug_printing.h
+ inventory.h object.h collection.h space.h npc.h debug_printing.h \
+ vector2.h command.h player.h event_manager.h message.h combat.h queue.h
 	$(CC) $(CFLAGS) -c game_reader.c
 
 link.o: link.c link.h types.h entity.h inventory.h object.h collection.h \
@@ -76,17 +81,17 @@ inventory.o: inventory.c inventory.h types.h object.h collection.h \
 collection.o: collection.c collection.h types.h debug_printing.h
 	$(CC) $(CFLAGS) -c collection.c
 
-event_manager.o: event_manager.c event_manager.h command.h types.h game.h \
- link.h entity.h inventory.h object.h collection.h space.h player.h \
- debug_printing.h
+event_manager.o: event_manager.c event_manager.h command.h types.h \
+ collection.h debug_printing.h
 	$(CC) $(CFLAGS) -c event_manager.c
 
 event_actions.o: event_actions.c event_actions.h event_manager.h \
  command.h types.h game.h link.h entity.h inventory.h object.h \
- collection.h space.h player.h debug_printing.h
+ collection.h space.h npc.h debug_printing.h vector2.h player.h message.h \
+ combat.h queue.h
 	$(CC) $(CFLAGS) -c event_actions.c
 
-npc.o: npc.c entity.h inventory.h types.h object.h collection.h npc.h \
+npc.o: npc.c npc.h entity.h inventory.h types.h object.h collection.h \
  debug_printing.h
 	$(CC) $(CFLAGS) -c npc.c
 
@@ -132,11 +137,18 @@ run_entity_test:
 	$(CC) $(CFLAGS) -c ./test/entity_test.c
 	$(CC) $(CFLAGS) -o ./test/entity_test entity_test.o entity.o inventory.o object.o collection.o debug_printing.o
 	./test/entity_test
+
 run_collection_test:
 	make
 	$(CC) $(CFLAGS) -c ./test/collection_test.c
 	$(CC) $(CFLAGS) -o ./test/collection_test collection_test.o collection.o debug_printing.o
 	./test/collection_test
+
+run_space_test:
+	make
+	$(CC) $(CFLAGS) -c ./test/space_test.c
+	$(CC) $(CFLAGS) -o ./test/space_test space_test.o space.o inventory.o collection.o debug_printing.o object.o link.o npc.o entity.o vector2.o
+	./test/space_test
 	
 # $@ devuelve lo que hay a la izquierda de los :, $^ devuelve todas las dependencias
 

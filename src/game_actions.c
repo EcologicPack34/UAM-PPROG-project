@@ -341,8 +341,10 @@ Status game_actions_drop(Game *game){
 
 /**
  * @brief Shows on screen the message of the npc on the first argument if found
+ * @author Daniel Gómez
  * 
  * @param game 
+ * @return Status 
  */
 Status game_actions_chat(Game *game){
   char **arguments = NULL;
@@ -367,6 +369,18 @@ Status game_actions_chat(Game *game){
   return OK;
 }
 
+/**
+ * @brief if the game state is DEFAULT, it triggers an attack on the NPC enemies located in the space
+ * if they are not found, it doesn't do anything.
+ * 
+ * If the game state is COMBAT, attacks all the enemies with a probability set of 60 % to hurt enemies,
+ * 40 % of the player taking damage
+ * 
+ * @author Maksym Polyak && Daniel Gómez
+ * 
+ * @param game 
+ * @return Status 
+ */
 Status game_actions_attack(Game *game){
   if(!game) return ERROR;
 
@@ -387,6 +401,14 @@ Status game_actions_attack(Game *game){
   return OK;
 }
 
+/**
+ * @brief Only works in combat game state, this allows for the player to escape from a combat.
+ * Right now it doesn't have a chance to fail.
+ * @author Maksym Polyak && Daniel Gómez
+ * 
+ * @param game 
+ * @return Status 
+ */
 Status game_actions_runaway(Game *game){
   if(!game) return ERROR;
 

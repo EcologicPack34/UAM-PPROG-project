@@ -5,6 +5,8 @@
  * take objects and more. For now the player module is just an entity, but further functionality will be added.
  * 
  * The player memory in the game is controlled by the game struct in game.h
+ * 
+ * The player has its own stats, on I3 the idea is to develop an equipment and powers/skills system.
  *
  * @file object.h
  * @author Maksym Polyak

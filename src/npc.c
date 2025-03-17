@@ -14,10 +14,11 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
-
-
-
-
+/**
+ * @brief NPC struct
+ *
+ * This struct stores all the information of an NPC
+ */
 struct _NPC{
     Entity *entity;
 

@@ -5,9 +5,10 @@
  * players and everything that moves. For now, each entity is defined by their type (EntityType),
  * a name, a unique id between entities, a location and an own inventory.
  * 
- * Right now the only entity that exists is the player, but in further iterations, NPCs functionality
- * will be added and this module will change, in the future it will store stats and other information
- * like health, defense, magic... To implement the combat module.
+ * Entity also saves the stats for each entity. The stats struct has not been made an ADT for the
+ * reasons specified on the README.txt
+ * 
+ * Each entity saves its own graphic description for the graphic_engine
  *
  * @file entity.h
  * @author Maksym Polyak

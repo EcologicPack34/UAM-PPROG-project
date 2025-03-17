@@ -13,7 +13,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-
+/**
+ * @brief Struct that holds all the information related to the combat
+ * 
+ */
 struct _Combat{
     PlayerStats player_stats;               /*!< Stats of the player*/
     Stats allies_stats[NPC_MAX_ALLIES];     /*!< Stats of the allies*/
@@ -52,21 +55,14 @@ Status combat_copy_entity_stats(Entity *entity, Stats *stats);
  */
 Status combat_copy_player(Player *player, PlayerStats *stats);
 
-void combat_finalize(Combat *combat){
-    int i;
-    combat->endCombat = true;
-
-    entity_set_health(combat->player_stats.entity ,combat->player_stats.stats.health);
-    for (i = 0; i < combat->allies_count; i++)
-    {
-        entity_set_health(combat->allies_stats[i].entity ,combat->allies_stats[i].stats.health);
-    }
-    for (i = 0; i < combat->enemies_count; i++)
-    {
-        entity_set_health(combat->enemies_stats[i].entity ,combat->enemies_stats[i].stats.health);
-    }
-
-}
+/**
+ * @brief Saves the health of each NPC and player in the combat and sets the combat
+ * bool endCombat to true
+ * @author Daniel Gómez
+ * 
+ * @param combat 
+ */
+void combat_finalize(Combat *combat);
 
 Status combat_copy_entity_stats(Entity *entity, Stats *stats){
 
@@ -102,6 +98,29 @@ Status combat_copy_player(Player *player, PlayerStats *stats){
     return OK;
 }
 
+void combat_finalize(Combat *combat){
+    int i;
+    combat->endCombat = true;
+
+    entity_set_health(combat->player_stats.entity ,combat->player_stats.stats.health);
+    for (i = 0; i < combat->allies_count; i++)
+    {
+        entity_set_health(combat->allies_stats[i].entity ,combat->allies_stats[i].stats.health);
+    }
+    for (i = 0; i < combat->enemies_count; i++)
+    {
+        entity_set_health(combat->enemies_stats[i].entity ,combat->enemies_stats[i].stats.health);
+    }
+
+}
+
+/**
+ * @brief NON - IMPLEMENTED
+ * 
+ * @param combat 
+ * @param index 
+ * @return Status 
+ */
 Status combat_player_turn(Combat *combat){
 
     if(!combat)
@@ -110,6 +129,13 @@ Status combat_player_turn(Combat *combat){
     return OK;
 }
 
+/**
+ * @brief NON - IMPLEMENTED
+ * 
+ * @param combat 
+ * @param index 
+ * @return Status 
+ */
 Status combat_ally_turn(Combat *combat, int index){
 
     if(!combat)
@@ -118,6 +144,13 @@ Status combat_ally_turn(Combat *combat, int index){
     return OK;
 }
 
+/**
+ * @brief NON - IMPLEMENTED
+ * 
+ * @param combat 
+ * @param index 
+ * @return Status 
+ */
 Status combat_enemy_turn(Combat *combat, int index){
 
     if(!combat)
@@ -220,7 +253,7 @@ Status combat_update(Combat *combat, Command *last_cmd){
         } 
     }
     else{
-        combat->player_stats.stats.health -= 1;
+        combat->player_stats.stats.health -= 1*(combat->enemies_count - deadEnemies);
     }
 
     if(combat->player_stats.stats.health <= 0){

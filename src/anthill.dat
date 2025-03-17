@@ -1,14 +1,7 @@
 Formato Space: #s:ID|Nombre|northLink|eastLink|southLink|westLink|gdescLine1;gdescLine2,...
 la longitud de gdescLine esta limitidad por el codigo, es decir, si es mas larga de lo debido se ignorara. Si hay mas lineas de descripcion de lo debido tambien se ignoran
 
-Formato Link: #l:ID|Space1|Space2|adjacent|locked|unlockingObjectID
-Formato Object: #o:ID|Nombre|LocationID|InventoryType
 Formato Player: #p:ID|Nombre|LocationID|VidaMaxima|Vida|DanoBase|Fuerza|Defensa|NivelMagia|gdesc
-Formato NPC: #n:ID|Message|Nombre|LocationID|Status|VidaMaxima|Vida|DanoBase|Fuerza|Defensa|NivelMagia|gdesc"
-Formato Event: #e:Id|Type|cmdTriggersNum|cmdName1 , ...|removeOnTrigger|tagvalue1:tagvalue2,...
-
-InventoryType = {UNKNOWN_INVENTORY == 0, PLAYER_INVENTORY == 1, NPC_INVENTORY == 2, SPACE_INVENTORY == 3}
-NPC_status = {UNKNOWN_STATUS == 0, NEUTRAL == 1, ALLY == 2, ENEMY == 3}
 
 #p:1|Hero|11|100|100|2|1|1|1|mO^
 
@@ -28,6 +21,8 @@ NPC_status = {UNKNOWN_STATUS == 0, NEUTRAL == 1, ALLY == 2, ENEMY == 3}
 #s:127|Corridor7|-1|9|-1|8
 #s:14|Hole|-1|-1|-1|9
 
+Formato Link: #l:ID|Space1|Space2|adjacent|locked|unlockingObjectID
+
 -#l:1|11|12|1|0|0
 -#l:2|12|13|1|0|0
 -#l:3|13|14|1|0|0
@@ -43,18 +38,26 @@ NPC_status = {UNKNOWN_STATUS == 0, NEUTRAL == 1, ALLY == 2, ENEMY == 3}
 #l:8|126|127|1|0|0
 #l:9|127|14|1|0|0
 
+Formato Object: #o:ID|Nombre|LocationID|InventoryType
+InventoryType = {UNKNOWN_INVENTORY == 0, PLAYER_INVENTORY == 1, NPC_INVENTORY == 2, SPACE_INVENTORY == 3}
+
 #o:1|Grain1|11|3
 #o:2|Grain2|11|3
 #o:3|Grain3|121|3
 #o:4|Grain4|122|3
+
+Formato Event: #e:Id|Type|cmdTriggersNum|cmdName1 , ...|removeOnTrigger|tagvalue1:tagvalue2,...
 
 #e:1|object_on_space|2|tk,dr|0|1:13
 #e:2|object_on_space|2|tk,dr|0|2:14
 #e:3|trigger_combat|3|tk,dr,ch|0|20
 #e:4|player_death|0|0| 
 
+Formato NPC: #n:ID|Message|Nombre|LocationID|Status|VidaMaxima|Vida|DanoBase|Fuerza|Defensa|NivelMagia|gdesc"
+NPC_status = {UNKNOWN_STATUS == 0, NEUTRAL == 1, ALLY == 2, ENEMY == 3}
+
 #n:1|Hello traveler i'm NPC1|NPC1|11|1|1|1|1|1|1|1|^0m"
 #n:2|Hello traveler i'm NPC2|NPC2|11|1|1|1|1|1|1|1|^1m"
-#n:3|KYS|Enemy1|11|3|10|10|1|1|1|1|^2m"
-#n:4|KYS|Enemy2|11|3|10|10|1|1|1|1|^3m"
-#n:5|KYS|Enemy3|11|3|10|10|1|1|1|1|^4m"
+#n:3|Die|Enemy1|11|3|10|10|1|1|1|1|^2m"
+#n:4|Die|Enemy2|11|3|10|10|1|1|1|1|^3m"
+#n:5|Die|Enemy3|11|3|10|10|1|1|1|1|^4m"
