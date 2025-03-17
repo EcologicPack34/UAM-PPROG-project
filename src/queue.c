@@ -1,18 +1,19 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#include "queue.h"
+/*
+    Local struct to .c file, contains info to implement linked list
+*/
 typedef struct{
-    void *element;
-    void *nextNode;
+    void *element;      /*!< Element stored*/
+    void *nextNode;     /*!< Pointer to the next node of the list*/
 }_Node;
 
-#include "queue.h"
-
-
 struct _Queue{
-    _Node *firstNode;
-    _Node *lastNode;
-    long size;
+    _Node *firstNode;   /*!< Pointer to the first node of the list*/
+    _Node *lastNode;    /*!< Pointer to the last node of the list*/
+    long size;          /*!< Size of the queue*/
 };
 
 Queue *queue_create(){
