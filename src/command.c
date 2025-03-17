@@ -192,9 +192,12 @@ CommandCode command_get_code_from_str(char *string){
 Status command_get_user_input(Command* command) {
   char originalInput[CMD_LENGTH] = "";
   char input[CMD_LENGTH] = "";
+  char *pAux = NULL;
   char *token = NULL;
   char aux[MAX_CMD_ARGS_LENGTH];
   
+  char *fget = NULL;
+
   int i = UNKNOWN - NO_CMD + 1;
   int wordCount = 0, argsCount = 0, counter;
   int inputLength;
@@ -203,14 +206,29 @@ Status command_get_user_input(Command* command) {
   if (!command) {
     return ERROR;
   }
+
+  fget = fgets(input, CMD_LENGTH, stdin);
+  
+  pAux = input;
+
+  if(fget){
+    while(*pAux == ' ') pAux++;
+
+    if(strcmp(input, "\n") == 0){
+      return OK;
+    }
+  }
   
   command_reset_arguments(command);
-
-  if (fgets(input, CMD_LENGTH, stdin)) {
+  
+  if (fget) {
     
     /*Changes the \n for a 0 and copies to an aux string so it isnt loose when using strtok*/
     //input[strlen(input)-1] = 0;
-    strcpy(originalInput, input);
+    
+    
+    
+    strcpy(originalInput, pAux);
 
     /*Reads which command is executed*/
     token = strtok(input, " \n");

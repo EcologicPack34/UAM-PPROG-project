@@ -65,7 +65,6 @@ Status combat_update(Combat *combat, Command *last_cmd);
 
 Status combat_runaway(Combat *combat);
 
-
 int combat_get_enemies_count(Combat *combat);
 
 int combat_get_allies_count(Combat *combat);
