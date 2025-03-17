@@ -212,6 +212,8 @@ Status space_set_graphic_description(Space *space, char *desc, int index){
 
   if(index < 0 || index > SPACE_GRAPHIC_HEIGHT) return ERROR;
   
+  printf("%s\n", desc);
+
   strncpy(space->graphicDescription[index], desc, SPACE_GRAPHIC_WIDTH);
   space->graphicDescription[index][SPACE_GRAPHIC_WIDTH] = '\00';
   return OK;

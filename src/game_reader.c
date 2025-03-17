@@ -259,7 +259,11 @@ Status game_reader_load_spaces(Game *game, char *filename) {
       for (i = 0; i < SPACE_GRAPHIC_HEIGHT; i++)
       {
         toks = strtok(NULL, ";");
-        space_set_graphic_description(space, toks, i);
+        if(toks){
+          space_set_graphic_description(space, toks, i);
+        }else{
+          space_set_graphic_description(space, " \00", i);
+        }
       }
 
       game_add_space(game, space);
