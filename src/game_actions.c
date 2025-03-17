@@ -275,10 +275,15 @@ Status game_actions_take(Game *game){
   Object *object = NULL;
   Inventory *spaceInventory = NULL, *playerInventory = NULL;
   char **arguments = NULL;
-  
+  Command *cmd = NULL;
+
+  cmd = game_get_last_command(game);
+
+  if(command_get_arguments_count(cmd) != 1) return ERROR;
+
   spaceInventory = space_get_inventory(game_get_space(game, game_get_player_location(game)));
   
-  arguments = command_get_arguments(game_get_last_command(game));
+  arguments = command_get_arguments(cmd);
   if(strcmp(arguments[0], "O470") == 0){
     printf("%c[2J", 27);
     printf("Fatal error. Object O470 is not supported\n");
@@ -313,10 +318,15 @@ Status game_actions_drop(Game *game){
   Object *object = NULL;
   Inventory *spaceInventory = NULL, *playerInventory = NULL;
   char **arguments = NULL;
+  Command *cmd = NULL;
+
+  cmd = game_get_last_command(game);
+
+  if(command_get_arguments_count(cmd) != 1) return ERROR;
 
   playerInventory = entity_get_inventory(player_get_entity(game_get_player(game)));
 
-  arguments = command_get_arguments(game_get_last_command(game));
+  arguments = command_get_arguments(cmd);
   
   object = inventory_get_object_by_name(playerInventory, arguments[0]);
 

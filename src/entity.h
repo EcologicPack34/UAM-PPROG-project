@@ -28,7 +28,7 @@ typedef enum {UNKNOWN_ENTITY, PLAYER_TYPE, NPC_TYPE} EntityType;
 typedef struct _Entity Entity;
 
 /**
- * Struct that stores combat information about an entity - TEMPORAL --> Going to the combat module
+ * Struct that stores combat information about an entity
  */
 typedef struct{
     double maxhealth;          /*!< Max health of the entity*/
