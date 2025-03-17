@@ -347,10 +347,30 @@ Status game_get_log_message(Game *game, char *str);
  */
 bool game_log_hasMessage(Game *game);
 
+/**
+ * @brief Initializes and starts combat(changes game state and creates combat module)
+ * @author Daniel Gómez y Maksym Polyak
+ * 
+ * @param game 
+ * @return Status 
+ */
 Status game_combat_start(Game *game);
 
+/**
+ * @brief Ends combat(changes game state and creates combat module)
+ * @author Daniel Gómez y Maksym Polyak
+ * 
+ * @param game 
+ * @return Status 
+ */
 Status game_combat_end(Game *game);
 
+/**
+ * @brief Returns the combat reference stored in game
+ * 
+ * @param game 
+ * @return Combat* 
+ */
 Combat *game_get_combat(Game *game);
 
 #endif

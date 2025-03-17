@@ -4,12 +4,12 @@
 #include <stdlib.h>
 #include <string.h>
 
-
+/*Array of names for each message type*/
 char msg_type_to_name[MESSAGE_TYPE_COUNT][MAX_MESSAGE_LENGTH] = {"", "Log", "Error", "NPC"};
 
 struct _Message{
-    MessageType type;
-    char message[MAX_MESSAGE_LENGTH];
+    MessageType type;                   /*!<Enum containing the message type*/
+    char message[MAX_MESSAGE_LENGTH];   /*!<String containing the message*/
 };
 
 

@@ -15,7 +15,7 @@
  * @brief Data structure to store 2 dimensional values
  */
 typedef struct{
-    float x, y;
+    float x, y; /*!< Coordenadas del vector*/
 }Vector2;
 
 /**
