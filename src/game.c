@@ -29,6 +29,8 @@
 struct _Game {
   /*Entity related*/
   Player *player;              /*!< Contains all the information related to the player */
+  /*In order to add more players keep this player pointer as the actual_player, then add a player array and every turn change the
+  actual_player pointer to the corresponding player*/
   Collection *objects;         /*!< Contains all the information related to the object */
   Collection *npcs;            /*!< Contains all the information related to the NPCs*/
 

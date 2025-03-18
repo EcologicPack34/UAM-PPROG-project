@@ -30,13 +30,7 @@ Status game_actions_unknown(Game *game);
 
 Status game_actions_exit(Game *game);
 
-Status game_actions_south(Game *game);
-
-Status game_actions_north(Game *game);
-
-Status game_actions_east(Game *game);
-
-Status game_actions_west(Game *game);
+Status game_actions_move(Game *game);
 
 Status game_actions_take(Game *game);
 
@@ -72,18 +66,11 @@ Status game_actions_update(Game *game, Command *command) {
         status = game_actions_exit(game);
         break;
   
-      case SOUTH:
-        status = game_actions_south(game);
-        break;
-  
       case NORTH:
-        status = game_actions_north(game);
-        break;
       case EAST:
-        status = game_actions_east(game);
-        break;
       case WEST:
-        status = game_actions_west(game);
+      case SOUTH:
+        status = game_actions_move(game);
         break;
       case TAKE:
         status = game_actions_take(game);
@@ -160,7 +147,7 @@ Status game_actions_exit(Game *game) { return OK;}
  *
  * @param game struct that saves all information related to the game
  */
-Status game_actions_south(Game *game) {
+Status game_actions_move(Game *game) {
   Id space_id = NO_ID;
   Link *link = NULL;
   Entity *entity = NULL;
@@ -170,35 +157,27 @@ Status game_actions_south(Game *game) {
     return ERROR;
   }
 
-  link = space_get_south(game_get_space(game, space_id));
-  if(link == NULL) return ERROR;
-
-  entity = player_get_entity(game_get_player(game));
-  if(entity == NULL) return ERROR;
-
-  link_move_entity(link, entity);
-
-  return OK;
-}
-
-/**
- * @brief Retrieves the north ID, checks if it exists, then changes player location to north
- * @author Daniel Gómez
- *
- * @param game struct that saves all information related to the game
- */
-Status game_actions_north(Game *game) {
-  Id space_id = NO_ID;
-  Link *link = NULL;
-  Entity *entity = NULL;
-
-  space_id = game_get_player_location(game);
-  if (space_id == NO_ID) {
-    return ERROR;
+  switch(command_get_code(game_get_last_command(game))){
+    case NORTH:
+      link = space_get_north(game_get_space(game, space_id));
+      if(link == NULL) return ERROR;
+      break;
+    case WEST:
+      link = space_get_west(game_get_space(game, space_id));
+      if(link == NULL) return ERROR;
+      break;
+    case EAST:
+      link = space_get_east(game_get_space(game, space_id));
+      if(link == NULL) return ERROR;
+      break;
+    case SOUTH:
+      link = space_get_south(game_get_space(game, space_id));
+      if(link == NULL) return ERROR;
+      break;
+    default:
+      break;
   }
-
-  link = space_get_north(game_get_space(game, space_id));
-  if(link == NULL) return ERROR;
+    
 
   entity = player_get_entity(game_get_player(game));
   if(entity == NULL) return ERROR;
@@ -207,61 +186,6 @@ Status game_actions_north(Game *game) {
 
   return OK;
 }
-
-/**
- * @brief Retrieves the north ID, checks if it exists, then changes player location to east
- * @author Daniel Gómez
- *
- * @param game struct that saves all information related to the game
- */
-Status game_actions_east(Game *game) {
-  Id space_id = NO_ID;
-  Link *link = NULL;
-  Entity *entity = NULL;
-
-  space_id = game_get_player_location(game);
-  if (space_id == NO_ID) {
-    return ERROR;
-  }
-
-  link = space_get_east(game_get_space(game, space_id));
-  if(link == NULL) return ERROR;
-
-  entity = player_get_entity(game_get_player(game));
-  if(entity == NULL) return ERROR;
-
-  link_move_entity(link, entity);
-
-  return OK;
-}
-
-/**
- * @brief Retrieves the north ID, checks if it exists, then changes player location to east
- * @author Daniel Gómez
- *
- * @param game struct that saves all information related to the game
- */
-Status game_actions_west(Game *game) {
-  Id space_id = NO_ID;
-  Link *link = NULL;
-  Entity *entity = NULL;
-
-  space_id = game_get_player_location(game);
-  if (space_id == NO_ID) {
-    return ERROR;
-  }
-
-  link = space_get_west(game_get_space(game, space_id));
-  if(link == NULL) return ERROR;
-
-  entity = player_get_entity(game_get_player(game));
-  if(entity == NULL) return ERROR;
-
-  link_move_entity(link, entity);
-
-  return OK;
-}
-
 
 /**
  * @brief Checks if the object is located on the same space as the player, then leaves it in the player
