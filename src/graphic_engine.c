@@ -91,7 +91,6 @@ void graphic_engine_paint_game(Graphic_engine *ge, Game *game){
 
   if(!game || !ge) return;
   gameState = game_get_state(game);
-  printf("%d", gameState);
 
   if(gameState == DEFAULT){
     graphic_engine_paint_map(ge, game);
