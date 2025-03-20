@@ -1,37 +1,22 @@
-PENDIENTE- usar un void (*update)(Game*, Entity*)para las entidades.
-en la entidad padre, haces Status entity_set_update(&function). function deberá tener el formato void funtion(Game*, Entity*). Para actualizar todas las entidades simplemente iteramos en game y llamamos a update.
-APROBADO - modulo utils : contiene funciones útiles de uso general.
-
-APROBADO / BRANCH SEPARADA - Remodelación de graphic_engine --> OpenGL
-
-APROBADO - Gestion de ID unico por parte de game y set(renombrar a collection) --> de este modo inventory y otros no tienen que encargarse de ello.
-^- Hacer un array dinamico en Game que lleve la cuenta de todos los objetos que hay en el juego, tanto jugador, como espacios.
-
-APROBADO - Implementar funcionalidad de inventario (1 inventario por space) 
-APROBADO - Modificaciones para el sistema de combate --> Hoja de papel
-
-APROBADO - Aplicar collection a objects, inventory
-APROBADO - Game_reader --> Lectura de objetos desde fichero
-APROBADO - take + drop --> Gestión de inventario del player (COMENTAR LA PARTE GRÁFICA PARA IMPLEMENTAR MÁS TARDE)
-
-APROBADO - Sistema de eventos para manejar el fin del juego(temporalmente) --> luego se modificará para otras cosas
-
-APROBADO - Al leer objetos con take, que intente leer por O(ID) si no lo encuentra lo interpreta como nombre y lo busca
-
-APROBADO - Modulo NPC basado en Entity --> Gestiona NPCs (Aliados y enemigos)
-APROBADO - Modificar Player --> Equipamiento
-APROBADO - Añadir sistema de habilidades --> Implementar en Player
-APROBADO - Añadir sistema base de diálogo --> Se cambiará más tarde
-APROBADO - Sistema de combate.
-
-
-
-APROBADO - Hacer un módulo de collection --> Almacene punteros a entity, object, player para gestionar liberacion --> Añadir last_id para trackear la originalidad de las ids
-APROBADO - Array de entitys en game
-APROBADO - Añadir gestión varios jugadores
-APROBADO - Añadir a Game un enum GameState que controle en que estado esta el juego: combate, mapa, etc. Útil para grafics engine.
-
-
+I3 - Modificar lista de comandos en base al juego
+I3 - Comenzar OpenGL
+I3 - Dividir carga de stats en el .dat
+I3 - Implementar diálogos
+I3 - Implementar guardado de juego y lectura de guardado
+I3 - Añadir multiplicidad (los objetos tienen distinto id, pero a la hora de leerlos cuentas el numero de objetos con el mismo nombre --> pociones)
+I3 - Añadir habilidades
+I3 - Añadir funcionalidad de objetos --> (Se llamara desde game actions el use, que usara el objeto y el game para modificar lo que tenga que modificar)
+I3 - Añadir equipamiento
+I3 - Modificar combate - Añadir ataques base, esquivar ataques y con todo lo anterior
+I3 - Añadir modo de loot
+I3 - Implementar diálogo
+I3 - Añadir dinero en jugador
+I3 - Posible tienda de compra objetos
+I3 - Modo debugger/Aaron
+I3 - Sistema de misiones --> Mirar
+I3 - POSIBLE: Niveles de EXP
+I3 - POSIBLE: Generación procedural de mapa
+I3 - Espacios "seguros"
 
 PENDIENTE - Implementación Combate estilo RPG? --> Se puede desarrollar uno sencillo
 PENDIENTE - Creación de objetos con funciones (Ejemplo: Cristal de teletransporte(Te lleva a la zona X))

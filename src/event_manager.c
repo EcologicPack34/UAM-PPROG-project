@@ -113,6 +113,8 @@ bool event_is_cmd_valid(Event *event, Command *cmd){
 
     if(!event || !cmd) return NULL;
 
+    if(event->cmdNum == 0)return true;
+
     if(command_get_status(cmd) == ERROR) return false;
 
     cmdCount = event_get_cmd_count(event);

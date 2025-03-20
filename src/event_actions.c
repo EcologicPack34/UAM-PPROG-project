@@ -56,6 +56,14 @@ bool event_trigger_combat(Event *event, Game *game);
  */
 bool event_trigger_player_death(Event *event, Game *game);
 
+/**
+ * @brief 
+ * @author Daniel Gómez
+ * 
+ * @param game 
+ * @return true 
+ * @return false 
+ */
 bool event_trigger_end_combat(Game *game);
 
 /*---------PUBLIC FUNCTIONS----------*/

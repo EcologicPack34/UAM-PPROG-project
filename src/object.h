@@ -52,7 +52,9 @@ void object_destroy(void *object);
  * @author Maksym Polyak
  *
  * @param object contains the information of an object
- * @return 1 if the two objects are equal, 0 if they are not equal or -1 if there was a mistake
+ * @return 1 if the two objects are not equal.
+ * @return 0 if they are equal.
+ * @return -1 if there was a mistake.
  */
 int object_isEqual(void *object1, void *object2);
 
