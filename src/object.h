@@ -90,12 +90,24 @@ Status object_set_location(Object *object, Id id);
 
 /**
  * @brief Sets the inventorytype inside the object struct
+ * @author Maksym Polyak
  * 
  * @param object contains the information of an object
  * @param type type to set
  * @return Status 
  */
 Status object_set_type(Object *object, InventoryType type);
+
+/**
+ * @brief Sets the description for an object, copies the content from str on the
+ * object description information
+ * @author Maksym Polyak
+ * 
+ * @param object 
+ * @param str 
+ * @return Status 
+ */
+Status object_set_descr(Object *object, char *str);
 
 /*Object GETTERS*/
 
@@ -128,11 +140,21 @@ Id object_get_location(Object *object);
 
 /**
  * @brief Gets the inventorytype where the object is located
+ * @autho Maksym Polyak
  * 
  * @param object object to be evaluated
  * @return InventoryType or 0 if error
  */
 InventoryType object_get_type(Object *object);
+
+/**
+ * @brief Gets the object description pointer
+ * @author Maksym Polyak
+ * 
+ * @param object 
+ * @return char* or NULL if error
+ */
+char *object_get_descr(Object *object);
 
 /**
  * @brief Prints on screen an object

@@ -32,6 +32,8 @@ struct _Object {
   char name[WORD_SIZE];     /*!< Name of the object */
   Id location;              /*!< Id with the location of the object */
   InventoryType type;       /*!< Inventory type where the object is located */
+
+  char descr[WORD_SIZE];    /*!< Description of the object*/
 };
 
 /**
@@ -111,6 +113,15 @@ Status object_set_type(Object *object, InventoryType type){
     return OK;
 }
 
+Status object_set_descr(Object *object, char *str){
+    if(!object || !str)
+        return ERROR;
+
+    strcpy(object->descr, str);
+
+    return OK;
+}
+
 /*Object GETTERS*/
 
 Id object_get_id(Object *object){
@@ -139,6 +150,13 @@ InventoryType object_get_type(Object *object){
         return 0;
 
     return object->type;
+}
+
+char *object_get_descr(Object *object){
+    if(!object)
+        return NULL;
+
+    return object->descr;
 }
 
 void object_print(void *object){
