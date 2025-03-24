@@ -28,9 +28,10 @@
 
 struct _Game {
   /*Entity related*/
-  Player *player;              /*!< Contains all the information related to the player */
-  /*In order to add more players keep this player pointer as the actual_player, then add a player array and every turn change the
-  actual_player pointer to the corresponding player*/
+  Player *activePlayer;              /*!< Contains all the information related to the player */
+  Player *players[MAX_PLAYERS];             /*!< Contains all the players available on the game*/
+  int active_player_index;
+  int n_players;
   Collection *objects;         /*!< Contains all the information related to the object */
   Collection *npcs;            /*!< Contains all the information related to the NPCs*/
 
@@ -85,7 +86,8 @@ Status game_create(Game **game) {
   }
 
   (*game)->n_spaces = 0;
-  (*game)->player = NULL; /*Player creation is controlled by game_reader*/
+  (*game)->activePlayer = NULL; /*Player creation is controlled by game_reader*/
+  (*game)->n_players = 0;
   (*game)->objects = collection_create(COLLECTION_INITIAL_SIZE, false, true, object_isEqual, object_print);
   if(!((*game)->objects)){
     debug_log(LOG_ERROR,"Error initializing collection of objects");
@@ -201,7 +203,7 @@ Space *game_get_space(Game *game, Id id) {
   return NULL;
 }
 
-Player* game_get_player(Game *game) {return game->player; }
+Player* game_get_player(Game *game) {return game->activePlayer; }
 
 Id game_get_player_location(Game *game) {return entity_get_location(player_get_entity(game_get_player(game)));}
 
@@ -558,10 +560,11 @@ Status game_add_object(Game *game, Object *object){
 }
 
 Status game_add_player(Game *game, Player *player){
-  if(!game || !player)
+  if(!game || !player || game->n_players >= MAX_PLAYERS)
     return ERROR;
 
-  game->player = player;
+  game->players[game->n_players] = player;
+  game->n_players += 1;
 
   return OK;
 }
@@ -630,7 +633,7 @@ bool game_log_hasMessage(Game *game){
 Status game_combat_start(Game *game){
   if(!game) return ERROR;
 
-  game->combat = combat_initialize(game_get_space(game, game_get_player_location(game)), game->player, command_get_code(game->last_cmd));
+  game->combat = combat_initialize(game_get_space(game, game_get_player_location(game)), game->activePlayer, command_get_code(game->last_cmd));
   if(!game->combat) return ERROR;
 
   game->current_state = COMBAT;
@@ -649,4 +652,15 @@ Status game_combat_end(Game *game){
 Combat *game_get_combat(Game *game){
   if(!game) return NULL;
   return game->combat;
+}
+
+Status game_switch_player(Game *game, int player){
+  if(!game || player >= game->n_players) return ERROR;
+
+  if(player < 0) game->active_player_index = (game->active_player_index + 1) % game->n_players;
+  else game->active_player_index = player;
+
+  game->activePlayer = game->players[game->active_player_index];
+
+  return OK;
 }

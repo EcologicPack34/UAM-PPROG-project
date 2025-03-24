@@ -31,6 +31,7 @@
 
 #define MAX_SPACES 100          /*!< Maximum number of spaces on the map */
 #define MAX_LINKS 400   /*!< Maximum number of links on the map */
+#define MAX_PLAYERS 4   /*!< Maximum number of players*/
 
 typedef enum {ERROR_STATE ,DEFAULT, COMBAT, INVENTORY, DIALOGUE}GameState;
 
@@ -372,5 +373,15 @@ Status game_combat_end(Game *game);
  * @return Combat* 
  */
 Combat *game_get_combat(Game *game);
+
+/**
+ * @brief Switchs to the indicated player on the array
+ * @author Maksym Polyak
+ * 
+ * @param game 
+ * @param player 
+ * @return Status 
+ */
+Status game_switch_player(Game *game, int player);
 
 #endif

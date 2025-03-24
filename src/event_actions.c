@@ -96,18 +96,17 @@ void event_actions_trigger_events(Game *game){
             case TRIGGER_COMBAT:
                 triggered = event_trigger_combat(event, game);
                 break;
-            case PLAYER_DEATH:
-                triggered = event_trigger_player_death(event, game);
-                break;
             default:
                 break;
         }
         if(triggered && event_get_removeOnTrigger(event))
             event_manager_remove_event(manager, event);
     }
-
-    triggered = event_trigger_end_combat(game);
-    
+    /*Always checked events*/
+    if(game_get_state(game) == COMBAT)
+        triggered = event_trigger_end_combat(game);
+        
+    triggered = event_trigger_player_death(event, game);
 }
 
 /*-------------EVENT ACTIONS------------*/

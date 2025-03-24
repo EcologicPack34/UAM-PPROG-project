@@ -42,6 +42,8 @@ Status game_actions_attack(Game *game);
 
 Status game_actions_runaway(Game *game);
 
+Status game_actions_switch(Game *game);
+
 /**
    Game actions implementation
 */
@@ -86,6 +88,9 @@ Status game_actions_update(Game *game, Command *command) {
       
       case ATTACK:
         status = game_actions_attack(game);
+        break;
+      case SWITCH:
+        status = game_actions_switch(game);
         break;
 
       default:
@@ -348,4 +353,24 @@ Status game_actions_runaway(Game *game){
   combat_runaway(combat);
 
   return OK;
+}
+
+Status game_actions_switch(Game *game){
+  char **arguments = NULL;
+  int player;
+  Command *cmd = NULL;
+
+  if(!game)
+    return ERROR;
+
+  cmd = game_get_last_command(game);
+  
+  if(command_get_arguments_count(cmd) > 1) return ERROR;
+
+  arguments = command_get_arguments(cmd);
+
+  if(command_get_arguments_count(cmd) == 0) player = -1;
+  else player = atoi(arguments[0]);
+
+  return game_switch_player(game, player);
 }

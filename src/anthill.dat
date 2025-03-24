@@ -3,7 +3,10 @@ la longitud de gdescLine esta limitidad por el codigo, es decir, si es mas larga
 
 Formato Player: #p:ID|Nombre|LocationID|VidaMaxima|Vida|DanoBase|Fuerza|Defensa|NivelMagia|gdesc
 
-#p:1|Hero|11|100|100|2|1|1|1|mO^
+#p:1|Hero1|11|100|100|2|1|1|1|mO^
+#p:2|Hero2|14|100|100|2|1|1|1|m1^
+#p:3|Hero3|13|100|100|2|1|1|1|m2^
+#p:4|Hero4|121|100|100|2|1|1|1|m3^
 
 -#s:11|Entry|-1|-1|1|4
 -#s:12|Corridor1|1|-1|2|-1
