@@ -39,13 +39,13 @@ Formato Link: #l:ID|Space1|Space2|adjacent|locked|unlockingObjectID //Recordar a
 #l:9|127|14|1|0|0
 #l:10|14|13|0|0|0
 
-Formato Object: #o:ID|Nombre|LocationID|InventoryType
+Formato Object: #o:ID|Nombre|Descripcion|LocationID|InventoryType
 InventoryType = {UNKNOWN_INVENTORY == 0, PLAYER_INVENTORY == 1, NPC_INVENTORY == 2, SPACE_INVENTORY == 3}
 
-#o:1|Grain1|11|3
-#o:2|Grain2|11|3
-#o:3|Grain3|121|3
-#o:4|Grain4|122|3
+#o:1|Grain1|Grano1|11|3
+#o:2|Grain2|Grano2|11|3
+#o:3|Grain3|Grano3|121|3
+#o:4|Grain4|Grano4|122|3
 
 Formato Event: #e:Id|Type|cmdTriggersNum|cmdName1 , ...|removeOnTrigger|tagvalue1:tagvalue2,...
 

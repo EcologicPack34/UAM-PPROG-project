@@ -284,6 +284,7 @@ Status game_reader_load_objects(Game *game, char *filename){
   FILE *file = NULL;
   char line[WORD_SIZE] = "";
   char name[WORD_SIZE] = "";
+  char description[WORD_SIZE] = "";
   char *toks = NULL;
   long objectid, objectlocation;
   InventoryType objectlocationtype;
@@ -312,14 +313,16 @@ Status game_reader_load_objects(Game *game, char *filename){
       toks = strtok(NULL, "|");
       strcpy(name, toks);
       toks = strtok(NULL, "|");
+      strcpy(description, toks);
+      toks = strtok(NULL, "|");
       objectlocation = atol(toks);
       toks = strtok(NULL, "|");
       objectlocationtype = (InventoryType)atol(toks);
 
-      debug_log(PRINT,"Read Object: #o:%ld|%s|%ld|%ld", objectid, name, objectlocation, objectlocationtype);
+      debug_log(PRINT,"Read Object: #o:%ld|%s|%s|%ld|%ld", objectid, name, description, objectlocation, objectlocationtype);
 
       /*Creates a object with object_create then saves it on the game with game_add_space*/
-      object = object_create(objectid, name, objectlocation, objectlocationtype);
+      object = object_create(objectid, name, description, objectlocation, objectlocationtype);
       if (object != NULL) {
         game_add_object(game, object);
         switch(objectlocationtype){
@@ -514,13 +517,13 @@ Status game_reader_load_events(Game *game, char *filename){
 
 }
 
-Status game_reader_load_npcs(Game *game, char *filename){ /*NEEEDS FIX --> CORE DUMPED*/
+Status game_reader_load_npcs(Game *game, char *filename){
   FILE *file = NULL;
   NPC *npc = NULL;
   char line[WORD_SIZE] = "";
   char name[WORD_SIZE] = "";
   char *toks = NULL;
-  char message[WORD_SIZE];
+  char message[WORD_SIZE] = "";
   double maxhealth, health, baseDamage;
   int strength, defense, magicLevel;
   long npcid, startinglocation;
@@ -556,8 +559,8 @@ Status game_reader_load_npcs(Game *game, char *filename){ /*NEEEDS FIX --> CORE 
       strcpy(message, toks);
       toks = strtok(NULL, "|");
       if(!toks){
-        printf("toks is null");
-        return ERROR;
+	      printf("toks is null");
+	      return ERROR;
       }
       strcpy(name, toks);
       toks = strtok(NULL, "|");

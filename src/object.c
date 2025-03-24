@@ -42,7 +42,7 @@ struct _Object {
 
 
 /*Object public functions*/
-Object *object_create(Id id, char *name, Id location, InventoryType type){
+Object *object_create(Id id, char *name, char *description, Id location, InventoryType type){
     Object *object = NULL;
 
     if(!(object = (Object *)calloc(1,sizeof(Object))))
@@ -51,6 +51,7 @@ Object *object_create(Id id, char *name, Id location, InventoryType type){
     object->id = id;
     object->location = location;
     strcpy(object->name,name);
+    strcpy(object->descr, description);
     
     return object;
 }
