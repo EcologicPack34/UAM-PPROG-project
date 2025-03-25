@@ -1,18 +1,21 @@
-I3 - Modificar lista de comandos en base al juego
-I3 - Comenzar OpenGL
-I3 - Dividir carga de stats en el .dat
-I3 - Implementar diálogos
-I3 - Implementar guardado de juego y lectura de guardado
-I3 - Añadir multiplicidad (los objetos tienen distinto id, pero a la hora de leerlos cuentas el numero de objetos con el mismo nombre --> pociones)
-I3 - Añadir habilidades
-I3 - Añadir funcionalidad de objetos --> (Se llamara desde game actions el use, que usara el objeto y el game para modificar lo que tenga que modificar)
-I3 - Añadir equipamiento
-I3 - Modificar combate - Añadir ataques base, esquivar ataques y con todo lo anterior
-I3 - Añadir modo de loot
-I3 - Implementar diálogo
-I3 - Añadir dinero en jugador
-I3 - Posible tienda de compra objetos
-I3 - Modo debugger/Aaron
+I3 - Dani - Modificar lista de comandos en base al juego
+I3 - Dani y Maks - Comenzar OpenGL
+I3 - Dani - Modificar funcionamiento del log para que cumpla los requisitos de la I3
+I3 - Dani - Añadir fog of war --> HAcer que se descubra, añadir search del inventory
+I3 - Aaron - Dividir carga de stats en el .dat
+I3 - NULL - Versión básica: Implementar diálogos
+I3 - NULL - Implementar guardado de juego y lectura de guardado
+I3 - Sofía - Añadir multiplicidad (los objetos tienen distinto id pero mismo nombre, pero a la hora de mostrar en pantalla sale el numero que hay y no por separado todos).
+I3 - Maksym - Añadir habilidades(seguir formato de eventos)
+I3 - Maksym - Añadir funcionalidad de objetos --> (Se llamara desde game actions el use, que usara el objeto y el game para modificar lo que tenga que modificar)
+I3 - POSPUESTO -Añadir equipamiento
+I3 - Sofía - Modificar combate - Añadir ataques base, esquivar ataques y con todo lo anterior
+I3 - Maksym - Añadir modo de loot (añadir a game reader en objetos añadir, a inventario de npc)
+    Los enemigos tienen una lista, se cogen aleatoriamente un numero de objetos de su inventario y se sueltan al espacio
+    --> Cambiar inventarios para que el inventario de los espacios sea infinito.
+I3 - Sofía-Añadir dinero en jugador (campo de player)
+I3 - POSPUESTO-Posible tienda de compra objetos
+I3 - Aaron -Modo debugger/Aaron
 I3 - Sistema de misiones --> Mirar
 I3 - POSIBLE: Niveles de EXP
 I3 - POSIBLE: Generación procedural de mapa
