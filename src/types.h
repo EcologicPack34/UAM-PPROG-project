@@ -20,6 +20,8 @@
 #define NPC_MAX_ENEMIES 4
 #define COMBAT_MAX_ENTITIES 8
 
+#define MAX_SKILLS_ENTITY 5
+
 typedef long Id;        /*!< Id typedef */
 
 typedef enum { FALSE, TRUE } Bool; /*!< Bool variable that admits TRUE or FALSE */ /*CAN BE REPLACED BY stdbool.h standard library*/

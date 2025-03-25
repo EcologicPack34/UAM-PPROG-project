@@ -26,6 +26,7 @@
 #include "npc.h"
 #include "message.h"
 #include "combat.h"
+#include "skills_manager.h"
 
 #include <stdbool.h>
 
@@ -383,5 +384,43 @@ Combat *game_get_combat(Game *game);
  * @return Status 
  */
 Status game_switch_player(Game *game, int player);
+
+/**
+ * @brief Gets the skill manager struct from the game struct
+ * 
+ * @param game 
+ * @return SkillManager* or NULL if error
+ */
+SkillManager *game_get_skill_manager(Game *game);
+
+/**
+ * @brief Gets a player by its id on game struct
+ * @author Maksym Polyak
+ * 
+ * @param game 
+ * @param id
+ * @return Player* or NULL if error
+ */
+Player *game_get_player_by_id(Game *game, Id id);
+
+/**
+ * @brief Gets a NPC by its id on game struct
+ * @author Maksym Polyak
+ * 
+ * @param game 
+ * @param id
+ * @return NPC* or NULL if error
+ */
+NPC *game_get_NPC_by_id(Game *game, Id id);
+
+/**
+ * @brief Adds the skill to the skill manager and to the related entity
+ * @author Maksym Polyak
+ * 
+ * @param game 
+ * @param skill
+ * @return Status 
+ */
+Status game_add_skill(Game *game, Skill *skill);
 
 #endif

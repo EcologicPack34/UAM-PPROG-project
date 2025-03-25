@@ -12,7 +12,6 @@
 #ifndef EVENT_ACTIONS_H
 #define EVENT_ACTIONS_H
 
-#include "event_manager.h"
 #include "game.h"
 
 /**

@@ -9,6 +9,9 @@
  * @copyright GNU Public License
  */
 
+#ifndef QUEUE_H
+#define QUEUE_H
+
 #include "types.h"
 #include <stdbool.h>
 
@@ -89,3 +92,5 @@ long queue_size(Queue *q);
  * @return false 
  */
 bool queue_isEmpty(Queue *q);
+
+#endif

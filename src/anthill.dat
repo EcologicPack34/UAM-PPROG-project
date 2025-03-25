@@ -65,3 +65,7 @@ NPC_status = {UNKNOWN_STATUS == 0, NEUTRAL == 1, ALLY == 2, ENEMY == 3}
 #n:3|Die|Enemy1|11|3|10|10|1|1|1|1|^2m"
 #n:4|Die|Enemy2|11|3|10|10|1|1|1|1|^3m"
 #n:5|Die|Enemy3|11|3|10|10|1|1|1|1|^4m"
+
+Formato Skill: #sk:Id|Type|Entityid|is_player_skill|cd_count|cd_length|data
+
+#sk:1|2|1|1|0|2|25

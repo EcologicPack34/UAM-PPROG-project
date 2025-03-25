@@ -17,6 +17,7 @@
 #include "entity.h"
 #include "collection.h"
 #include "combat.h"
+#include "skills_manager.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -43,6 +44,8 @@ Status game_actions_attack(Game *game);
 Status game_actions_runaway(Game *game);
 
 Status game_actions_switch(Game *game);
+
+Status game_actions_use_skill(Game *game);
 
 /**
    Game actions implementation
@@ -92,6 +95,9 @@ Status game_actions_update(Game *game, Command *command) {
       case SWITCH:
         status = game_actions_switch(game);
         break;
+      case SKILL:
+        status = game_actions_use_skill(game);
+        break;
 
       default:
         break;
@@ -111,6 +117,9 @@ Status game_actions_update(Game *game, Command *command) {
         break;
       case RUN_AWAY:
         status = game_actions_runaway(game);
+        break;
+      case SKILL:
+        status = game_actions_use_skill(game);
         break;
 
       default:
@@ -373,4 +382,42 @@ Status game_actions_switch(Game *game){
   else player = atoi(arguments[0]);
 
   return game_switch_player(game, player);
+}
+
+/**
+ * @brief Uses the skill received as argument
+ * @author Maksym Polyak
+ * 
+ * @param game 
+ * @return Status 
+ */
+Status game_actions_use_skill(Game *game){
+  char **arguments = NULL;
+  int n_arg;
+  int index;
+  Entity *entity = NULL;
+  Skill *skill = NULL;
+  
+  if(!game) return ERROR;
+
+  n_arg = command_get_arguments_count(game_get_last_command(game));
+  if(n_arg != 1)
+    return ERROR;
+
+  arguments = command_get_arguments(game_get_last_command(game));
+
+  index = atoi(arguments[0]);
+  if(n_arg < 0 || n_arg >= MAX_SKILLS_ENTITY)
+    return ERROR;
+
+  entity = player_get_entity(game_get_player(game));
+
+  skill = entity_get_skill_at(entity, index);
+  if(!skill)
+    return ERROR;
+
+  if(skill_manager_add_skill(game_get_skill_manager(game), skill) == ERROR)
+    return ERROR;
+
+  return OK;
 }
