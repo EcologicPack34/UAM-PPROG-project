@@ -339,4 +339,24 @@ NPC *space_get_NPC_by_name(Space *space, char *name);
  */
 Status space_get_NPC_list(Space *space, char *str, int length);
 
+/**
+ * @brief Sets a space as the bool discovered
+ * @author Maksym Polyak
+ * 
+ * @param space 
+ * @param discovered 
+ * @return Status 
+ */
+Status space_set_discovered(Space *space, bool discovered);
+
+/**
+ * @brief Returns wheter a space has been discovered
+ * @author Maksym Polyak
+ * 
+ * @param space 
+ * @return true if space is discovered
+ * @return false if space is not discovered
+ */
+bool space_is_discovered(Space *space);
+
 #endif

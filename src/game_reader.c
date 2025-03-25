@@ -100,9 +100,6 @@ Status game_reader_create_from_file(Game **game, char *filename){
     debug_log(LOG_ERROR, "Error loading player at: game_reader_create_from_file(Game*, char*) in game_reader.c");
     return ERROR;
   }
-
-  game_switch_player(*game, 0);
-
   if(game_reader_load_links(*game, filename) == ERROR){
     debug_log(LOG_ERROR, "Error loading links at: game_reader_create_from_file(Game*, char*) in game_reader.c");
     return ERROR;
@@ -128,6 +125,10 @@ Status game_reader_create_from_file(Game **game, char *filename){
     debug_log(LOG_ERROR,"Error maping spatialy spaces");
     return ERROR;
   }
+
+  /*Initialization*/
+  /*Sets the actual player as the first one read in the .dat*/
+  game_switch_player(*game, 0);
 
   return OK;
 }

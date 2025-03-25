@@ -29,6 +29,7 @@
 struct _Space {
   Id id;                        /*!< Id number of the space, it must be unique */
   char name[WORD_SIZE + 1];     /*!< Name of the space */
+  bool discovered;              /*!< Sets wheter a space has been discovered by players(true) or not(false)*/
 
   Link *north;                  /*!< Id of the space at the north */
   Link *south;                  /*!< Id of the space at the south */
@@ -433,4 +434,23 @@ Status space_get_NPC_list(Space *space, char *str, int length){
   str[length - 1] = '.';
   str[length] = '\00';
   return OK;
+}
+
+Status space_set_discovered(Space *space, bool discovered){
+  if(!space)
+    return ERROR;
+
+  space->discovered = discovered;
+
+  return OK;
+}
+
+bool space_is_discovered(Space *space){
+  if(!space)
+    return false;
+
+  if(space->discovered == true)
+    return true;
+
+  return false;
 }
