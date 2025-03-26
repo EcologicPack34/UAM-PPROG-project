@@ -701,30 +701,32 @@ Status game_reader_load_skills(Game *game, char *filename){
       toks = strtok(NULL, "|");
       type = skill_type_from_str(toks);
       /*Reads the entityid*/
-      toks = strtok(line, "|");
+      toks = strtok(NULL, "|");
       entityid = atol(toks);
       /*Reads if the skill is from a player*/
       toks = strtok(NULL, "|");
       is_player_skill = atoi(toks);
       /*Reads the cd count*/
-      //toks = strtok(NULL, "|");
-      //cd_count = atoi(toks);
+      toks = strtok(NULL, "|");
+      cd_count = atoi(toks);
       /*Reads the cd length*/
-      //toks = strtok(NULL, "|");
-      //cd_length = atoi(toks);
+      toks = strtok(NULL, "|");
+      cd_length = atoi(toks);
       /*reads data*/
-      //toks = strtok(NULL, "|");
+      toks = strtok(NULL, "|");
       
       //printf("TEST");
       
 
-      //debug_log(PRINT,"Read Event: #e:%ld|%d|%ld|%d|%d|%d|%s", id, type, entityid, is_player_skill, cd_count, cd_length, toks);
+      debug_log(PRINT,"Read Event: #e:%ld|%d|%ld|%d|%d|%d|%s", id, type, entityid, is_player_skill, cd_count, cd_length, toks);
 
-      //skill = skill_create(id, toks, type, entityid, (bool)is_player_skill, cd_count, cd_length);
-      //if(skill == NULL)
-      //  debug_log(LOG_ERROR,"Error creating skill when reading from file");
-      //if(game_add_skill(game, skill) == ERROR)
-      //  debug_log(LOG_ERROR,"Error adding skill to skill manager or entity");
+      skill = skill_create(id, toks, type, entityid, (bool)is_player_skill, cd_count, cd_length);
+
+      //skill = skill_create(1, "20", (SkillType)2, 1, 1, 0, 2);
+      if(skill == NULL)
+        debug_log(LOG_ERROR,"Error creating skill when reading from file");
+      if(game_add_skill(game, skill) == ERROR)
+        debug_log(LOG_ERROR,"Error adding skill to skill manager or entity");
     }
   }
 

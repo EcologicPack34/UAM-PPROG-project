@@ -416,7 +416,7 @@ Status game_actions_use_skill(Game *game){
   if(!skill)
     return ERROR;
 
-  if(skill_manager_add_skill(game_get_skill_manager(game), skill) == ERROR)
+  if(skill_manager_use_skill(game_get_skill_manager(game), skill) == ERROR)
     return ERROR;
 
   return OK;

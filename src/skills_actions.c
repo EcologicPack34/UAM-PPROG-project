@@ -45,6 +45,8 @@ Status skill_heal_self(Skill *skill, Game *game){
     Combat *combat = NULL;
     PlayerStats *stats = NULL;
     char *data = NULL;
+    Player *player = NULL;
+    Entity *entity = NULL;
 
     double health_recovered;
     
@@ -55,10 +57,16 @@ Status skill_heal_self(Skill *skill, Game *game){
 
     health_recovered = atof(data);
 
+
+    //FIX TO HEAL ONLY TO MAX HEALTH - ADD TO COMBAT MODE --> DOES NOT WORK FOR SOME REASON
     if(combat){
         stats = combat_get_player_stats(combat);
 
         stats->stats.health += health_recovered;
+    }else{
+        player = game_get_player(game);
+        entity = player_get_entity(player);
+        entity_set_health(entity, entity_get_health(entity) + health_recovered);
     }
 
     return OK;
