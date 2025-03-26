@@ -58,7 +58,7 @@ Status skill_heal_self(Skill *skill, Game *game){
     health_recovered = atof(data);
 
 
-    //FIX TO HEAL ONLY TO MAX HEALTH - ADD TO COMBAT MODE --> DOES NOT WORK FOR SOME REASON
+    //FIX TO HEAL ONLY TO MAX HEALTH - ADD TO COMBAT MODE
     if(combat){
         stats = combat_get_player_stats(combat);
 
