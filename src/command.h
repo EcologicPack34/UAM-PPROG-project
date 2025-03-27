@@ -74,6 +74,39 @@ Status command_set_code(Command* command, CommandCode code);
 Status command_set_status(Command *command, Status status);
 
 /**
+ * @brief Sets the description of a command
+ * @author Daniel Gómez
+ * 
+ * @param command 
+ * @param cmd 
+ * @param info
+ * @return Status 
+ */
+Status command_set_info(Command *command, CommandCode cmd, char *info);
+
+/**
+ * @brief Adds a command code to a game state valid commands
+ * 
+ * @param command 
+ * @param state 
+ * @param type 
+ * @return Status 
+ */
+Status command_state_add_type(Command * command, GameState state, CommandCode type);
+
+/*-----------GETTERS--------------*/
+
+/**
+ * @brief Gets the pointer to the string containing the info of a command
+ * @author Daniel Gómez
+ * 
+ * @param command 
+ * @param cmd 
+ * @return char* 
+ */
+char *command_get_info(Command *command, CommandCode cmd);
+
+/**
  * @brief Gets the command name
  * @author Profesores PPROG
  *
@@ -135,5 +168,13 @@ Status command_get_status(Command *command);
  * @return Status
  */
 Status command_get_list(char *destination);
+
+/**
+ * @brief Checks if two commands codes are equal
+ * 
+ * @param cmd 
+ * @return int 
+ */
+int command_code_isEqual(void *cmd);
 
 #endif

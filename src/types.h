@@ -20,6 +20,8 @@
 #define NPC_MAX_ENEMIES 4
 #define COMBAT_MAX_ENTITIES 8
 
+#define N_GAME_STATES 5
+
 typedef long Id;        /*!< Id typedef */
 
 typedef enum { FALSE, TRUE } Bool; /*!< Bool variable that admits TRUE or FALSE */ /*CAN BE REPLACED BY stdbool.h standard library*/
@@ -29,5 +31,7 @@ typedef enum { ERROR, OK } Status; /*!< Status enum that admits ERROR or OK */
 typedef enum { N, NE, E, SE, S , SW, W , NW, NO_DIR} Direction; /*!< Directions of the map: North, South, East, West */
 
 typedef enum {UNKNOWN_INVENTORY, PLAYER_INVENTORY, NPC_INVENTORY, SPACE_INVENTORY} InventoryType; /*!< Enum describing the different types of inventory*/
+
+typedef enum {ERROR_STATE ,DEFAULT, COMBAT, INVENTORY, DIALOGUE}GameState; /*!< Enum describing the different game states*/
 
 #endif

@@ -33,8 +33,6 @@
 #define MAX_LINKS 400   /*!< Maximum number of links on the map */
 #define MAX_PLAYERS 4   /*!< Maximum number of players*/
 
-typedef enum {ERROR_STATE ,DEFAULT, COMBAT, INVENTORY, DIALOGUE}GameState;
-
 /**
  * @brief Game struct, defines all the information of the game
  */

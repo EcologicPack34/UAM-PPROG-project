@@ -13,6 +13,7 @@
 #include "command.h"
 
 #include "debug_printing.h"
+#include "collection.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -37,6 +38,9 @@ struct _Command {
   int argsCount;
   char *arguments[MAX_CMD_ARGS_NUM];
   Status cmdStatus;
+
+  char *commandInfo[N_CMD];
+  Collection *stateCommands[N_GAME_STATES]; /*array of collections containing cmd types*/
 };
 
 /*--------------Private Functions---------------*/
@@ -123,6 +127,25 @@ Command* command_create() {
       return NULL;
     }
   }
+
+  for (i = 0; i < N_GAME_STATES; i++)
+  {
+    newCommand->stateCommands[i] = collection_create(5, true, true, command_code_isEqual, NULL);
+    if(!(newCommand->stateCommands[i])){
+      for (i--; i >= 0; i--)
+      {
+        collection_destroy(newCommand->stateCommands[i]);
+      }
+      for (i = 0; i < MAX_CMD_ARGS_NUM; i++)
+      {
+        free(newCommand->arguments[i]); 
+      }
+      free(newCommand);
+      return NULL;
+    }
+  }
+  
+
   /* Initialization of an empty command*/
   newCommand->code = NO_CMD;
 
@@ -135,6 +158,11 @@ Status command_destroy(Command* command) {
     for (i = 0; i < MAX_CMD_ARGS_NUM; i++)
     {
       free(command->arguments[i]);
+    }
+    for (i = 0; i < N_CMD; i++)
+    {
+      if(command->commandInfo[i])
+        free(command->commandInfo[i]);
     }
     free(command);
     return OK;
@@ -158,7 +186,25 @@ Status command_set_status(Command *command, Status status){
   return OK;
 }
 
+Status command_set_info(Command *command, CommandCode cmd, char *info){
+  char *str = NULL;
+  if(!command) return ERROR;
+
+  str = malloc((strlen(info) + 1) * sizeof(char));
+  if(!str) return ERROR;
+  
+  strcpy(str, info);
+
+  command->commandInfo[cmd - UNKNOWN + 1] = str;
+  return OK;
+}
+
 /*----GETTERS----*/
+char *command_get_info(Command *command, CommandCode cmd){
+  if(!command) return NULL;
+  return command->commandInfo[cmd - UNKNOWN +1];
+}
+
 CommandCode command_get_code(Command* command) {
   if (!command) {
     return NO_CMD;
@@ -309,4 +355,9 @@ Status command_get_list(char *destination){
 Status command_get_status(Command *command){
   if(!command) return ERROR;
   return command->cmdStatus;
+}
+
+int command_code_isEqual(void *cmd1, void *cmd2){
+  if(!cmd1 || !cmd2) return -1;
+  return *((CommandCode *)cmd1) == *((CommandCode *)cmd2);
 }

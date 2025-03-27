@@ -84,6 +84,13 @@ Status game_reader_load_events(Game *game, char *filename);
  */
 Status game_reader_load_npcs(Game *game, char *filename);
 
+/**
+ * @brief Loads command info from settings file
+ * 
+ * @param game 
+ * @return Status 
+ */
+Status game_reader_load_commandInfo(Game *game);
 
 /*
 * Public functions implementation
@@ -95,7 +102,14 @@ Status game_reader_create_from_file(Game **game, char *filename){
     printf("Fatal error. Check the log for details\n");
     abort();
   }
+  /*Loads settints*/
+  if(game_reader_load_commandInfo(*game) == ERROR){
+    printf("%c[2J", 27);
+    printf("Fatal error. Check the log for details\n");
+    abort();
+  }
 
+  /*Loads data into the game*/
   if(game_reader_load_player(*game, filename) == ERROR){
     debug_log(LOG_ERROR, "Error loading player at: game_reader_create_from_file(Game*, char*) in game_reader.c");
     return ERROR;
@@ -645,4 +659,31 @@ Status game_reader_load_npcs(Game *game, char *filename){
   fclose(file);
 
   return status;
+}
+
+Status game_reader_load_commandInfo(Game *game){
+  FILE *file = NULL;
+  char line[WORD_SIZE];
+
+  int i;
+
+  file = fopen(SETTINGS_FILE_PATH, "r");
+  if(!file) return ERROR;
+
+  while(fgets(line, WORD_SIZE - 1, file)){
+    if(strncmp(line,"[CmdInfo]", 8) != 0){
+      continue;
+    }
+    for (i = 0; i < N_CMD; i++)
+    {
+      if(!fgets(line, WORD_SIZE -1 , file)) return ERROR;
+
+      if(command_set_info(game_get_last_command(game), i + UNKNOWN + 1, line) == ERROR){
+        return ERROR;
+      }
+      printf("%s", command_get_info(game_get_last_command(game), i + UNKNOWN + 1));
+    }
+    break;
+  }
+  return OK;
 }
