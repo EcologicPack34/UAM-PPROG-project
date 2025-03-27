@@ -26,6 +26,7 @@
 #include "graphic_engine.h"
 #include "collection.h"
 #include "event_actions.h"
+#include "ability_actions.h"
 
 #define DEBUG_FILE_PATH "./debug.log"   /*!< stores the path in which the debug_log will print messages*/
 #define END_LOCATION 13                 /*!< Location where the object has to be located to end the game */
@@ -147,6 +148,8 @@ void game_loop_run(Game *game, Graphic_engine *gengine){
     
     /*Triggers event with last command actions*/
     event_actions_trigger_events(game);
+    /*Uses all the ability added to the queue on ability manager if possible*/
+    ability_action_use_ability(game);
   }
 }
 

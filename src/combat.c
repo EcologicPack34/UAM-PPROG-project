@@ -88,6 +88,7 @@ Status combat_copy_player(Player *player, PlayerStats *stats){
     entity = player_get_entity(player);
     
     stats->stats.health = entity_get_health(entity);
+    stats->stats.maxhealth = entity_get_max_health(entity);
     stats->stats.baseDamage = entity_get_baseDamage(entity);
     stats->stats.strength = entity_get_strength(entity);
     stats->stats.defense = entity_get_defense(entity);
@@ -271,7 +272,6 @@ Status combat_runaway(Combat *combat){
     return OK;
 }
 
-
 int combat_get_enemies_count(Combat *combat){
     if(!combat) return 0;
     return combat->enemies_count;
@@ -282,13 +282,33 @@ int combat_get_allies_count(Combat *combat){
     return combat->allies_count;
 }
 
+Stats *combat_get_enemies_stats_at(Combat *combat, int index){
+    Stats *stats = NULL;
+    
+    if(!combat) return NULL;
+
+    stats = &(combat->enemies_stats[index]);
+    return stats;
+}
+
+Stats *combat_get_allies_stats_at(Combat *combat, int index){
+    Stats *stats = NULL;
+    
+    if(!combat) return NULL;
+
+    stats = &(combat->allies_stats[index]);
+    return stats;
+}
+
 Stats *combat_get_enemies_stats(Combat *combat){
     if(!combat) return NULL;
+
     return combat->enemies_stats;
 }
 
 Stats *combat_get_allies_stats(Combat *combat){
     if(!combat) return NULL;
+
     return combat->allies_stats;
 }
 

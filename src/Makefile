@@ -2,10 +2,11 @@ CC = gcc
 
 CFLAGS = -Wall -pedantic
 SRC = collector.c command.c debug_printing.c game_actions.c game_loop.c game.c graphic_engine.c space.c object.c player.c game_reader.c entity.c \
- link.c inventory.c collection.c event_manager.c event_actions.c npc.c vector2.c queue.c message.c combat.c
+ link.c inventory.c collection.c event_manager.c event_actions.c npc.c vector2.c queue.c message.c combat.c ability_actions.c ability_manager.c
 
 OBJ = collector.o command.o debug_printing.o game_actions.o game_loop.o game.o graphic_engine.o space.o object.o player.o libscreen.a entity.o \
- game_reader.o link.o inventory.o collection.o event_manager.o event_actions.o npc.o vector2.o queue.o message.o combat.o
+ game_reader.o link.o inventory.o collection.o event_manager.o event_actions.o npc.o vector2.o queue.o message.o combat.o \
+ ability_actions.o ability_manager.o
 
 EXE = anthill
 EXED = anthilldebug
@@ -19,14 +20,15 @@ all: (EXE)
 	$(CC) $(CFLAGS) -o $(EXE) $(OBJ) libscreen.a
 
 game_loop.o: game_loop.c debug_printing.h command.h types.h game.h link.h \
- entity.h inventory.h object.h collection.h space.h npc.h vector2.h \
- player.h event_manager.h message.h combat.h queue.h game_reader.h \
- game_actions.h graphic_engine.h event_actions.h
+ entity.h inventory.h object.h collection.h ability_manager.h queue.h \
+ space.h npc.h vector2.h player.h event_manager.h message.h combat.h \
+ game_reader.h game_actions.h graphic_engine.h event_actions.h \
+ ability_actions.h
 	$(CC) $(CFLAGS) -c game_loop.c
 
 game.o: game.c game.h link.h types.h entity.h inventory.h object.h \
- collection.h space.h npc.h debug_printing.h vector2.h command.h player.h \
- event_manager.h message.h combat.h queue.h
+ collection.h ability_manager.h queue.h space.h npc.h debug_printing.h \
+ vector2.h command.h player.h event_manager.h message.h combat.h
 	$(CC) $(CFLAGS) -c game.c
 
 command.o: command.c command.h types.h debug_printing.h
@@ -37,26 +39,26 @@ space.o: space.c space.h types.h object.h link.h entity.h inventory.h \
 	$(CC) $(CFLAGS) -c space.c
 
 game_actions.o: game_actions.c game_actions.h game.h link.h types.h \
- entity.h inventory.h object.h collection.h space.h npc.h \
- debug_printing.h vector2.h command.h player.h event_manager.h message.h \
- combat.h queue.h
+ entity.h inventory.h object.h collection.h ability_manager.h queue.h \
+ space.h npc.h debug_printing.h vector2.h command.h player.h \
+ event_manager.h message.h combat.h ability_manager.c
 	$(CC) $(CFLAGS) -c game_actions.c
 
 graphic_engine.o: graphic_engine.c graphic_engine.h game.h link.h types.h \
- entity.h inventory.h object.h collection.h space.h npc.h \
- debug_printing.h vector2.h command.h player.h event_manager.h message.h \
- combat.h queue.h libscreen.h
+ entity.h inventory.h object.h collection.h ability_manager.h queue.h \
+ space.h npc.h debug_printing.h vector2.h command.h player.h \
+ event_manager.h message.h combat.h libscreen.h
 	$(CC) $(CFLAGS) -c graphic_engine.c
 
 object.o: object.c object.h types.h
 	$(CC) $(CFLAGS) -c object.c
 
 entity.o: entity.c entity.h inventory.h types.h object.h collection.h \
- debug_printing.h
+ ability_manager.h queue.h debug_printing.h
 	$(CC) $(CFLAGS) -c entity.c
 	
 player.o: player.c player.h entity.h inventory.h types.h object.h \
- collection.h
+ collection.h ability_manager.h queue.h
 	$(CC) $(CFLAGS) -c player.c
 
 collector.o:	collector.c collector.h
@@ -66,8 +68,9 @@ debug_printing.o:	debug_printing.c debug_printing.h
 	$(CC) $(CFLAGS) -c debug_printing.c
 
 game_reader.o: game_reader.c game_reader.h types.h game.h link.h entity.h \
- inventory.h object.h collection.h space.h npc.h debug_printing.h \
- vector2.h command.h player.h event_manager.h message.h combat.h queue.h
+ inventory.h object.h collection.h ability_manager.h queue.h space.h npc.h \
+ debug_printing.h vector2.h command.h player.h event_manager.h message.h \
+ combat.h
 	$(CC) $(CFLAGS) -c game_reader.c
 
 link.o: link.c link.h types.h entity.h inventory.h object.h collection.h \
@@ -92,7 +95,7 @@ event_actions.o: event_actions.c event_actions.h event_manager.h \
 	$(CC) $(CFLAGS) -c event_actions.c
 
 npc.o: npc.c npc.h entity.h inventory.h types.h object.h collection.h \
- debug_printing.h
+ ability_manager.h queue.h debug_printing.h
 	$(CC) $(CFLAGS) -c npc.c
 
 queue.o: queue.c queue.h types.h
@@ -105,9 +108,19 @@ message.o: message.c message.h
 	$(CC) $(CFLAGS) -c message.c
 
 combat.o: combat.c combat.h collection.h types.h debug_printing.h queue.h \
- entity.h inventory.h object.h npc.h space.h link.h vector2.h player.h \
- command.h
+ entity.h inventory.h object.h ability_manager.h npc.h space.h link.h \
+ vector2.h player.h command.h
 	$(CC) $(CFLAGS) -c combat.c
+
+ability_manager.o: ability_manager.c ability_manager.h types.h queue.h \
+ collection.h debug_printing.h
+	$(CC) $(CFLAGS) -c ability_manager.c
+
+ability_actions.o: ability_actions.c ability_actions.h ability_manager.h \
+ types.h queue.h game.h link.h entity.h inventory.h object.h collection.h \
+ space.h npc.h debug_printing.h vector2.h command.h player.h \
+ event_manager.h message.h combat.h
+	$(CC) $(CFLAGS) -c ability_actions.c
 
 .PHONY:	clean compile link run debug runv
 clean:

@@ -47,6 +47,8 @@ struct _Game {
 
   /*Combat*/
   Combat *combat;
+  AbilityManager *ability_manager; /*!< Struct containing the info about the ability and their cooldown*/
+  
 
   GameState current_state;     /*!< Enum storing the current game state*/
   Command *last_cmd;           /*!< string with the last command */
@@ -116,6 +118,12 @@ Status game_create(Game **game) {
     return ERROR;
   } 
 
+  (*game)->ability_manager = ability_manager_create();
+  if(!((*game)->ability_manager)){
+    debug_log(LOG_ERROR,"Error creating ability manager");
+    return ERROR;
+  } 
+
   (*game)->screenLog = queue_create();
   if(!((*game)->screenLog)){
     debug_log(LOG_ERROR,"Error creating event screenLog");
@@ -149,6 +157,7 @@ Status game_destroy(Game *game) {
 
   command_destroy(game->last_cmd);
   event_manager_destroy(game->event_manager);
+  ability_manager_destroy(game->ability_manager);
   queue_destroy(game->screenLog);
 
   if(game->combat){
@@ -663,4 +672,73 @@ Status game_switch_player(Game *game, int player){
   game->activePlayer = game->players[game->active_player_index];
 
   return OK;
+}
+
+AbilityManager *game_get_ability_manager(Game *game){
+  if(!game) return NULL;
+
+  return game->ability_manager;
+}
+
+Player *game_get_player_by_id(Game *game, Id id){
+  int i;
+  Player *player = NULL;
+  
+  if(!game) return NULL;
+
+  for(i = 0; i < game->n_players; i++){
+    player = game->players[i];
+    if(entity_get_id(player_get_entity(player)) == id){
+      return player;
+    }
+  }
+
+  return NULL;
+}
+
+NPC *game_get_NPC_by_id(Game *game, Id id){
+  int i, size;
+  NPC *npc = NULL;
+  Collection *collection = NULL;
+  
+  if(!game) return NULL;
+
+  collection = game_get_npcs(game);
+  size = collection_length(collection);
+  for(i = 0; i < size; i++){
+    npc = (NPC *)collection_get_element_at(collection, i);
+    if(entity_get_id(npc_get_entity(npc)) == id){
+      return npc;
+    }
+  }
+
+  return NULL;
+}
+
+Status game_add_ability(Game *game, Ability *ability){
+  Player *player = NULL;
+  NPC *npc = NULL;
+  Entity *entity = NULL;
+  
+  if(!game || !ability) return ERROR;
+
+  ability_manager_add_ability(game_get_ability_manager(game), ability);
+
+  if(ability_get_is_player_ability(ability) == true){
+    player = game_get_player_by_id(game, ability_get_entityid(ability));
+    if(!player)
+      return ERROR;
+
+    entity = player_get_entity(player);
+    return entity_add_ability(entity, ability);
+  } else {
+    npc = game_get_NPC_by_id(game, ability_get_entityid(ability));
+    if(!npc)
+      return ERROR;
+
+    entity = npc_get_entity(npc);
+    return entity_add_ability(entity, ability);
+  }
+
+  return ERROR;
 }
