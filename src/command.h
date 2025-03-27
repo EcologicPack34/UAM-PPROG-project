@@ -28,7 +28,7 @@
 
 typedef enum { CMDS, CMDL } CommandType; /* CMDS: Command Short | CMDL: Command Long */
 
-typedef enum { NO_CMD = -1, UNKNOWN, EXIT, SOUTH, NORTH, EAST, WEST, TAKE, DROP, CHAT, ATTACK, RUN_AWAY, SWITCH, SKILL} CommandCode; /* All values that a command can take */
+typedef enum { NO_CMD = -1, UNKNOWN, EXIT, SOUTH, NORTH, EAST, WEST, TAKE, DROP, CHAT, ATTACK, RUN_AWAY, SWITCH, ABILITY} CommandCode; /* All values that a command can take */
 
 /* 
  * Struct that contains all the information of the command

@@ -27,7 +27,7 @@ char *skillsTags[N_SKILLS] = { "" , "heal_self", "heal_ally"};
 struct _Skill {
   Id id;
   char *data;
-  SkillType type;
+  AbilityType type;
 
   Id entityid;
   bool is_player_skill;
@@ -51,7 +51,7 @@ struct _SkillManager{
   * Public functions
 */
 
-Skill *skill_create(Id id, char *data, SkillType type, Id entityid, bool is_player_skill, int cd_count, int cd_length){
+Skill *skill_create(Id id, char *data, AbilityType type, Id entityid, bool is_player_skill, int cd_count, int cd_length){
   Skill *skill = NULL;
   
   if(!data) return NULL;
@@ -107,7 +107,7 @@ char *skill_get_data(Skill *skill){
   return skill->data;
 }
 
-SkillType skill_get_type(Skill *skill){
+AbilityType skill_get_type(Skill *skill){
   if(!skill) return NO_SKILL;
 
   return skill->type;
@@ -175,7 +175,7 @@ int skills_compare(void * e1, void *e2){
   return ((Skill*)e1)->id - ((Skill*)e2)->id;
 }
 
-SkillType skill_type_from_str(char *string){
+AbilityType skill_type_from_str(char *string){
   int i;
   
   if(!string) return NO_SKILL;

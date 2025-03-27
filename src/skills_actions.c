@@ -41,14 +41,14 @@ Status skill_heal_self(Skill *skill, Game *game);
  */
 Status skill_heal_ally(Skill *skill, Game *game);
 
-Status skill_heal_self(Skill *skill, Game *game){
+Status hability_heal_self(Skill *skill, Game *game){
     Combat *combat = NULL;
     PlayerStats *stats = NULL;
     char *data = NULL;
     Player *player = NULL;
     Entity *entity = NULL;
 
-    double health_recovered;
+    double health_recovered, health, max_health;
     
     if(!skill || !game) return ERROR;
 
@@ -57,16 +57,34 @@ Status skill_heal_self(Skill *skill, Game *game){
 
     health_recovered = atof(data);
 
-
-    //FIX TO HEAL ONLY TO MAX HEALTH - ADD TO COMBAT MODE
-    if(combat){
+    if(game_get_state(game) == COMBAT){
+        combat = game_get_combat(game);
         stats = combat_get_player_stats(combat);
 
+        if(stats->stats.health <= 0)
+            return ERROR;
+
+        if(stats->stats.maxhealth - stats->stats.health <= health_recovered){
+
+            health_recovered = stats->stats.maxhealth - stats->stats.health;
+            if(health_recovered < 0) health_recovered = 0;
+        }
         stats->stats.health += health_recovered;
     }else{
         player = game_get_player(game);
         entity = player_get_entity(player);
-        entity_set_health(entity, entity_get_health(entity) + health_recovered);
+
+        health = entity_get_health(entity);
+        max_health = entity_get_max_health(entity);
+
+        if(health <= 0)
+            return ERROR;
+
+        if(max_health - health <= health_recovered){
+            health_recovered = max_health - health;
+        }
+        entity_set_health(entity, health + health_recovered);
+        
     }
 
     return OK;
@@ -140,7 +158,7 @@ Status skill_action_use_skills(Game *game){
             case NO_SKILL:
                 break;
             case HEAL_SELF:
-                status = skill_heal_self(skill, game);
+                status = hability_heal_self(skill, game);
                 break;
             case HEAL_ALLY:
                 status = skill_heal_ally(skill, game);

@@ -88,6 +88,7 @@ Status combat_copy_player(Player *player, PlayerStats *stats){
     entity = player_get_entity(player);
     
     stats->stats.health = entity_get_health(entity);
+    stats->stats.maxhealth = entity_get_max_health(entity);
     stats->stats.baseDamage = entity_get_baseDamage(entity);
     stats->stats.strength = entity_get_strength(entity);
     stats->stats.defense = entity_get_defense(entity);
@@ -270,7 +271,6 @@ Status combat_runaway(Combat *combat){
     combat_finalize(combat);
     return OK;
 }
-
 
 int combat_get_enemies_count(Combat *combat){
     if(!combat) return 0;

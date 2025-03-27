@@ -95,7 +95,7 @@ Status game_actions_update(Game *game, Command *command) {
       case SWITCH:
         status = game_actions_switch(game);
         break;
-      case SKILL:
+      case ABILITY:
         status = game_actions_use_skill(game);
         break;
 
@@ -118,7 +118,7 @@ Status game_actions_update(Game *game, Command *command) {
       case RUN_AWAY:
         status = game_actions_runaway(game);
         break;
-      case SKILL:
+      case ABILITY:
         status = game_actions_use_skill(game);
         break;
 

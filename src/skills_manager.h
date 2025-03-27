@@ -21,7 +21,7 @@
 /**
  * @brief Enum storing the different types of events 
  */
-typedef enum {NO_SKILL, HEAL_SELF, HEAL_ALLY}SkillType;
+typedef enum {NO_SKILL, HEAL_SELF, HEAL_ALLY}AbilityType;
 
 typedef struct _Skill Skill;
 
@@ -37,7 +37,7 @@ typedef struct _SkillManager SkillManager;
  * @param cd_length 
  * @return Skill* or NULL if error
  */
-Skill *skill_create(Id id, char *data, SkillType type, Id entityid, bool is_player_skill, int cd_count, int cd_length);
+Skill *skill_create(Id id, char *data, AbilityType type, Id entityid, bool is_player_skill, int cd_count, int cd_length);
 
 /**
  * @brief Destroys a skill struct
@@ -71,9 +71,9 @@ char *skill_get_data(Skill *skill);
  * @author Maksym Polyak
  * 
  * @param skill 
- * @return SkillType 
+ * @return AbilityType 
  */
-SkillType skill_get_type(Skill *skill);
+AbilityType skill_get_type(Skill *skill);
 
 /**
  * @brief Gets the length of the current cooldown of the skill
@@ -157,9 +157,9 @@ Status skill_augment_cooldown(Skill *skill);
  * @author Maksym Polyak
  * 
  * @param string 
- * @return SkillType 
+ * @return AbilityType 
  */
-SkillType skill_type_from_str(char *string);
+AbilityType skill_type_from_str(char *string);
 
 /* SKILLS MANAGER */
 

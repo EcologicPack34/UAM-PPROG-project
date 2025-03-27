@@ -668,7 +668,7 @@ Status game_reader_load_skills(Game *game, char *filename){
 
   Skill *skill = NULL;
   Id id = NO_ID;
-  SkillType type = NO_SKILL;
+  AbilityType type = NO_SKILL;
 
   Id entityid;
   int is_player_skill;
@@ -722,7 +722,7 @@ Status game_reader_load_skills(Game *game, char *filename){
 
       skill = skill_create(id, toks, type, entityid, (bool)is_player_skill, cd_count, cd_length);
 
-      //skill = skill_create(1, "20", (SkillType)2, 1, 1, 0, 2);
+      //skill = skill_create(1, "20", (AbilityType)2, 1, 1, 0, 2);
       if(skill == NULL)
         debug_log(LOG_ERROR,"Error creating skill when reading from file");
       if(game_add_skill(game, skill) == ERROR)
