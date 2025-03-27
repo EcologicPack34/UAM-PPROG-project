@@ -66,6 +66,6 @@ NPC_status = {UNKNOWN_STATUS == 0, NEUTRAL == 1, ALLY == 2, ENEMY == 3}
 #n:4|Die|Enemy2|11|3|10|10|1|1|1|1|^3m"
 #n:5|Die|Enemy3|11|3|10|10|1|1|1|1|^4m"
 
-Formato abilitie: #sk:Id|Type|Entityid|is_player_abilitie|cd_count|cd_length|data
+Formato Ability: #sk:Id|Type|Entityid|is_player_ability|cd_count|cd_length|data
 
 #sk:1|heal_self|1|1|0|2|25

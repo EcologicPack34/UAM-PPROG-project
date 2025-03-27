@@ -17,7 +17,7 @@
 #include "entity.h"
 #include "collection.h"
 #include "combat.h"
-#include "skills_manager.h"
+#include "ability_manager.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -45,7 +45,7 @@ Status game_actions_runaway(Game *game);
 
 Status game_actions_switch(Game *game);
 
-Status game_actions_use_skill(Game *game);
+Status game_actions_use_ability(Game *game);
 
 /**
    Game actions implementation
@@ -96,7 +96,7 @@ Status game_actions_update(Game *game, Command *command) {
         status = game_actions_switch(game);
         break;
       case ABILITY:
-        status = game_actions_use_skill(game);
+        status = game_actions_use_ability(game);
         break;
 
       default:
@@ -119,7 +119,7 @@ Status game_actions_update(Game *game, Command *command) {
         status = game_actions_runaway(game);
         break;
       case ABILITY:
-        status = game_actions_use_skill(game);
+        status = game_actions_use_ability(game);
         break;
 
       default:
@@ -385,18 +385,18 @@ Status game_actions_switch(Game *game){
 }
 
 /**
- * @brief Uses the skill received as argument
+ * @brief Uses the ability received as argument
  * @author Maksym Polyak
  * 
  * @param game 
  * @return Status 
  */
-Status game_actions_use_skill(Game *game){
+Status game_actions_use_ability(Game *game){
   char **arguments = NULL;
   int n_arg;
   int index;
   Entity *entity = NULL;
-  Skill *skill = NULL;
+  Ability *ability = NULL;
   
   if(!game) return ERROR;
 
@@ -412,11 +412,11 @@ Status game_actions_use_skill(Game *game){
 
   entity = player_get_entity(game_get_player(game));
 
-  skill = entity_get_skill_at(entity, index);
-  if(!skill)
+  ability = entity_get_ability_at(entity, index);
+  if(!ability)
     return ERROR;
 
-  if(skill_manager_use_skill(game_get_skill_manager(game), skill) == ERROR)
+  if(ability_manager_use_ability(game_get_ability_manager(game), ability) == ERROR)
     return ERROR;
 
   return OK;

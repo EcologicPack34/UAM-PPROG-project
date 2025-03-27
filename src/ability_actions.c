@@ -1,5 +1,5 @@
 /**
- * @file skills_actions.c
+ * @file ability_actions.c
  * @author Maksym Polyak
  * @brief 
  * @version 0.1
@@ -9,7 +9,7 @@
  * 
 */
 
-#include "skills_actions.h"
+#include "ability_actions.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -21,27 +21,32 @@
 */
 
 /**
- * @brief Skill that heals the actual player by the amount determined by the skill data
+ * @brief Ability that heals the actual player by the amount determined by the ability data
  * @author Maksym Polyak
  * 
- * @param skill 
+ * RIGHT NOW ABILITY ACTION DOES UPDATE ALL THE COOLDOWNS AND ABILITIES AT THE END OF THE GAME_LOOP_RUN ITERATION
+ * THAT MEANS THAT WE HAVE TO CHANGE IT SO EVERY ENTITY CAN DECIDE THROUGH THE REAL STATS WHICH ACTION TO USE,
+ * for example if an entity is dead by an ability but the ability has not been activated yet, and an entity tries
+ * to heal it, when the entity tries to heal it is late
+ * 
+ * @param ability 
  * @param game 
  * @return Status 
  */
-Status skill_heal_self(Skill *skill, Game *game);
+Status ability_heal_self(Ability *ability, Game *game);
 
 /**
  * @brief Heals an ally if the entity is an ally of the player or is the player, if not,
  * the enemies in a combat heal another enemy
  * @author Maksym Polyak
  * 
- * @param skill 
+ * @param ability 
  * @param game 
  * @return Status 
  */
-Status skill_heal_ally(Skill *skill, Game *game);
+Status ability_heal_ally(Ability *ability, Game *game);
 
-Status hability_heal_self(Skill *skill, Game *game){
+Status hability_heal_self(Ability *ability, Game *game){
     Combat *combat = NULL;
     PlayerStats *stats = NULL;
     char *data = NULL;
@@ -50,9 +55,12 @@ Status hability_heal_self(Skill *skill, Game *game){
 
     double health_recovered, health, max_health;
     
-    if(!skill || !game) return ERROR;
+    if(!ability || !game) return ERROR;
 
-    data = skill_get_data(skill);
+    if(ability_get_cooldown_count(ability) != 0)
+        return ERROR;
+
+    data = ability_get_data(ability);
     if(!data) return ERROR;
 
     health_recovered = atof(data);
@@ -90,7 +98,7 @@ Status hability_heal_self(Skill *skill, Game *game){
     return OK;
 }
 
-Status skill_heal_ally(Skill *skill, Game *game){
+Status ability_heal_ally(Ability *ability, Game *game){
     Command *command = NULL;
     Combat *combat = NULL;
     Stats *stats = NULL;
@@ -99,14 +107,17 @@ Status skill_heal_ally(Skill *skill, Game *game){
 
     double health_recovered;
     
-    if(!skill || !game) return ERROR;
+    if(!ability || !game) return ERROR;
 
-    data = skill_get_data(skill);
+    if(ability_get_cooldown_count(ability) != 0)
+        return ERROR;
+
+    data = ability_get_data(ability);
     if(!data) return ERROR;
 
     health_recovered = atof(data);
 
-    if(skill_get_is_player_skill(skill) == true){
+    if(ability_get_is_player_ability(ability) == true){
         command = game_get_last_command(game);
         n_arg = command_get_arguments_count(command);
         if(n_arg < 1){
@@ -138,38 +149,42 @@ Status skill_heal_ally(Skill *skill, Game *game){
   * Public functions
 */
 
-Status skill_action_use_skills(Game *game){
-    SkillManager *sm = NULL;
+Status ability_action_use_ability(Game *game){
+    AbilityManager *sm = NULL;
     Queue *queue = NULL;
-    Skill *skill = NULL;
+    Ability *ability = NULL;
     Status status;
     
     if(!game) return ERROR;
 
-    sm = game_get_skill_manager(game);
+    sm = game_get_ability_manager(game);
 
-    queue = skill_manager_get_queue(sm);
+    queue = ability_manager_get_queue(sm);
 
     while(queue_isEmpty(queue) == FALSE){
-        skill = (Skill *)queue_pop(queue);
+        ability = (Ability *)queue_pop(queue);
         status = OK;
 
-        switch(skill_get_type(skill)){
+        switch(ability_get_type(ability)){
             case NO_SKILL:
                 break;
             case HEAL_SELF:
-                status = hability_heal_self(skill, game);
+                status = hability_heal_self(ability, game);
                 break;
             case HEAL_ALLY:
-                status = skill_heal_ally(skill, game);
+                status = ability_heal_ally(ability, game);
                 break;
             default:
                 break;
         }
 
-        if(status == OK)
-            skill_set_cooldown_to_length(skill);
+        if(ability_get_cooldown_count(ability) > 0)
+            ability_reduce_cooldown(ability);
+
+        if(status == OK && ability_get_cooldown_count(ability) == 0 && game_get_state(game) == COMBAT)
+            ability_set_cooldown_to_length(ability);
     }
+    
 
     return OK;
 }

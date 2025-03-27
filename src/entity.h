@@ -23,7 +23,7 @@
 #define ENTITY_GRAPHIC_LENGTH 3
 
 #include "inventory.h"
-#include "skills_manager.h"
+#include "ability_manager.h"
 
 typedef enum {UNKNOWN_ENTITY, PLAYER_TYPE, NPC_TYPE} EntityType;
 
@@ -243,23 +243,23 @@ Id entity_get_id(Entity *entity);
 EntityType entity_get_entityType(Entity *entity);
 
 /**
- * @brief Adds a skill to the entity if it is not full
+ * @brief Adds a ability to the entity if it is not full
  * @author Maksym Polyak
  * 
  * @param entity 
- * @param skill 
+ * @param ability 
  * @return Status 
  */
-Status entity_add_skill(Entity *entity, Skill *skill);
+Status entity_add_ability(Entity *entity, Ability *ability);
 
 /**
- * @brief Gets the skill at the index of the entity
+ * @brief Gets the ability at the index of the entity
  * @author Maksym Polyak
  * 
  * @param entity 
- * @return Skill* 
+ * @return Ability* 
  */
-Skill *entity_get_skill_at(Entity *entity, int index);
+Ability *entity_get_ability_at(Entity *entity, int index);
 
 /**
  * @brief Gets the entity max health

@@ -17,7 +17,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "skills_manager.h"
+#include "ability_manager.h"
 
 #define NO_NAME ""
 
@@ -35,8 +35,8 @@ struct _Entity {
     Id location;              /*!< Id of the space where the entity is located*/
     Inventory *inventory;     /*!< entity inventory */
 
-    Skill **skills; /*!< Skills of the entity*/
-    int n_skills;   /*!< Number of skills the entity has*/
+    Ability **ability; /*!< Abilitys of the entity*/
+    int n_ability;   /*!< Number of ability the entity has*/
 
     char gdesc[ENTITY_GRAPHIC_LENGTH + 1];
 
@@ -73,14 +73,14 @@ Entity *entity_create(char *name, Id id, Id location, InventoryType inventoryTyp
         return NULL;
     }
 
-    /*Skills are not initialized on the entity creation, they are added later*/
-    entity->skills = (Skill **)calloc(MAX_SKILLS_ENTITY, sizeof(Skill *));
-    if((entity->skills) == NULL){
+    /*Abilitys are not initialized on the entity creation, they are added later*/
+    entity->ability = (Ability **)calloc(MAX_SKILLS_ENTITY, sizeof(Ability *));
+    if((entity->ability) == NULL){
         inventory_destroy(entity->inventory);
         free(entity);
         return NULL;
     }
-    entity->n_skills = 0;
+    entity->n_ability = 0;
 
     entity_set_graphic_description(entity, "ERR");
     entity_set_entityType(entity, UNKNOWN_ENTITY);
@@ -246,16 +246,16 @@ EntityType entity_get_entityType(Entity *entity){
     return entity->entityType;
 }
 
-Status entity_add_skill(Entity *entity, Skill *skill){
+Status entity_add_ability(Entity *entity, Ability *ability){
     int i;
     
-    if(!entity || !skill || entity->n_skills > MAX_SKILLS_ENTITY || entity->n_skills < 0) 
+    if(!entity || !ability || entity->n_ability > MAX_SKILLS_ENTITY || entity->n_ability < 0) 
         return ERROR;
 
     for(i = 0; i < MAX_SKILLS_ENTITY; i++){
-        if(entity->skills[i] == NULL){
-            entity->skills[i] = skill;
-            entity->n_skills++;
+        if(entity->ability[i] == NULL){
+            entity->ability[i] = ability;
+            entity->n_ability++;
             return OK;
         }
     }
@@ -263,15 +263,15 @@ Status entity_add_skill(Entity *entity, Skill *skill){
     return OK;
 }
 
-Status entity_remove_skill(Entity *entity, Skill *skill){
+Status entity_remove_ability(Entity *entity, Ability *ability){
     int i;
     
-    if(!entity || !skill || entity->n_skills == 0) 
+    if(!entity || !ability || entity->n_ability == 0) 
         return ERROR;
 
-    for(i = 0; i < entity->n_skills; i++){
-        if(entity->skills[i] == skill){
-            entity->skills[i] = NULL;
+    for(i = 0; i < entity->n_ability; i++){
+        if(entity->ability[i] == ability){
+            entity->ability[i] = NULL;
             return OK;
         }
     }
@@ -279,11 +279,11 @@ Status entity_remove_skill(Entity *entity, Skill *skill){
     return OK;
 }
 
-Skill *entity_get_skill_at(Entity *entity, int index){
+Ability *entity_get_ability_at(Entity *entity, int index){
     if(!entity)
         return NULL;
 
-    return entity->skills[index];
+    return entity->ability[index];
 }
 
 double entity_get_max_health(Entity *entity){

@@ -6,7 +6,7 @@
  * 
  * The player memory in the game is controlled by the game struct in game.h
  * 
- * The player has its own stats, on I3 the idea is to develop an equipment and powers/skills system.
+ * The player has its own stats, on I3 the idea is to develop an equipment and powers/ability system.
  *
  * @file object.h
  * @author Maksym Polyak

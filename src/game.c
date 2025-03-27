@@ -47,7 +47,7 @@ struct _Game {
 
   /*Combat*/
   Combat *combat;
-  SkillManager *skill_manager; /*!< Struct containing the info about the skills and their cooldown*/
+  AbilityManager *ability_manager; /*!< Struct containing the info about the ability and their cooldown*/
   
 
   GameState current_state;     /*!< Enum storing the current game state*/
@@ -118,9 +118,9 @@ Status game_create(Game **game) {
     return ERROR;
   } 
 
-  (*game)->skill_manager = skill_manager_create();
-  if(!((*game)->skill_manager)){
-    debug_log(LOG_ERROR,"Error creating skill manager");
+  (*game)->ability_manager = ability_manager_create();
+  if(!((*game)->ability_manager)){
+    debug_log(LOG_ERROR,"Error creating ability manager");
     return ERROR;
   } 
 
@@ -157,7 +157,7 @@ Status game_destroy(Game *game) {
 
   command_destroy(game->last_cmd);
   event_manager_destroy(game->event_manager);
-  skill_manager_destroy(game->skill_manager);
+  ability_manager_destroy(game->ability_manager);
   queue_destroy(game->screenLog);
 
   if(game->combat){
@@ -674,10 +674,10 @@ Status game_switch_player(Game *game, int player){
   return OK;
 }
 
-SkillManager *game_get_skill_manager(Game *game){
+AbilityManager *game_get_ability_manager(Game *game){
   if(!game) return NULL;
 
-  return game->skill_manager;
+  return game->ability_manager;
 }
 
 Player *game_get_player_by_id(Game *game, Id id){
@@ -715,29 +715,29 @@ NPC *game_get_NPC_by_id(Game *game, Id id){
   return NULL;
 }
 
-Status game_add_skill(Game *game, Skill *skill){
+Status game_add_ability(Game *game, Ability *ability){
   Player *player = NULL;
   NPC *npc = NULL;
   Entity *entity = NULL;
   
-  if(!game || !skill) return ERROR;
+  if(!game || !ability) return ERROR;
 
-  skill_manager_add_skill(game_get_skill_manager(game), skill);
+  ability_manager_add_ability(game_get_ability_manager(game), ability);
 
-  if(skill_get_is_player_skill(skill) == true){
-    player = game_get_player_by_id(game, skill_get_entityid(skill));
+  if(ability_get_is_player_ability(ability) == true){
+    player = game_get_player_by_id(game, ability_get_entityid(ability));
     if(!player)
       return ERROR;
 
     entity = player_get_entity(player);
-    return entity_add_skill(entity, skill);
+    return entity_add_ability(entity, ability);
   } else {
-    npc = game_get_NPC_by_id(game, skill_get_entityid(skill));
+    npc = game_get_NPC_by_id(game, ability_get_entityid(ability));
     if(!npc)
       return ERROR;
 
     entity = npc_get_entity(npc);
-    return entity_add_skill(entity, skill);
+    return entity_add_ability(entity, ability);
   }
 
   return ERROR;
