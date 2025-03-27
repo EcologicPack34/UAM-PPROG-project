@@ -12,3 +12,15 @@
 10
 11
 12
+
+[CmdStateTypes]
+all
+North,South,East,West,Attack,Take,Drop,
+Attack,Run_Away,
+all
+all
+
+
+
+
+

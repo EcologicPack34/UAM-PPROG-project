@@ -130,8 +130,8 @@ Command* command_create() {
 
   for (i = 0; i < N_GAME_STATES; i++)
   {
-    newCommand->stateCommands[i] = collection_create(5, true, true, command_code_isEqual, NULL);
-    if(!(newCommand->stateCommands[i])){
+    newCommand->stateCommands[i] = collection_create(N_CMD, false, false, command_code_isEqual, NULL);
+    if((newCommand->stateCommands[i]) == NULL){
       for (i--; i >= 0; i--)
       {
         collection_destroy(newCommand->stateCommands[i]);
@@ -164,6 +164,13 @@ Status command_destroy(Command* command) {
       if(command->commandInfo[i])
         free(command->commandInfo[i]);
     }
+
+    for (i = 0; i < N_GAME_STATES; i++)
+    {
+      collection_free_elements(command->stateCommands[i], free);
+      collection_destroy(command->stateCommands[i]);
+    }
+    
     free(command);
     return OK;
   }
@@ -195,14 +202,28 @@ Status command_set_info(Command *command, CommandCode cmd, char *info){
   
   strcpy(str, info);
 
-  command->commandInfo[cmd - UNKNOWN + 1] = str;
+  command->commandInfo[cmd - NO_CMD] = str;
   return OK;
+}
+
+Status command_state_add_type(Command * command, GameState state, CommandCode type){
+  CommandCode *code = NULL;
+  
+  if(!command) return ERROR;
+
+  code = (CommandCode *)calloc(1, sizeof(CommandCode));
+  if(!code) return ERROR;
+
+  *code = type;
+
+  printf("%d, %d\n",*code, state-ERROR_STATE);
+  return collection_add(command->stateCommands[state-ERROR_STATE], (void *)code);
 }
 
 /*----GETTERS----*/
 char *command_get_info(Command *command, CommandCode cmd){
   if(!command) return NULL;
-  return command->commandInfo[cmd - UNKNOWN +1];
+  return command->commandInfo[cmd - NO_CMD];
 }
 
 CommandCode command_get_code(Command* command) {
@@ -225,6 +246,9 @@ char **command_get_arguments(Command * command){
 CommandCode command_get_code_from_str(char *string){
   int i = UNKNOWN - NO_CMD + 1;
   CommandCode cmd = UNKNOWN;
+
+  if(!string) return NO_CMD;
+
   while (cmd == UNKNOWN && i < N_CMD) {
     if (!strcasecmp(string, cmd_to_str[i][CMDS]) || !strcasecmp(string, cmd_to_str[i][CMDL])) {
       cmd = i + NO_CMD;
@@ -360,4 +384,18 @@ Status command_get_status(Command *command){
 int command_code_isEqual(void *cmd1, void *cmd2){
   if(!cmd1 || !cmd2) return -1;
   return *((CommandCode *)cmd1) == *((CommandCode *)cmd2);
+}
+bool command_current_type_valid_by_state(Command *command, GameState state){
+  int length, i;
+  if(!command || state == ERROR_STATE) return false;
+
+  length = collection_length(command->stateCommands[state - ERROR_STATE]);
+
+  for (i = 0; i < length; i++)
+  {
+    if(command->code == *((CommandCode *)collection_get_element_at(command->stateCommands[state - ERROR_STATE], i))){
+      return true;
+    }
+  }
+  return false;
 }

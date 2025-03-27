@@ -58,44 +58,54 @@ Status game_actions_update(Game *game, Command *command) {
 
   cmd = command_get_code(command);
 
-  if(game_get_state(game) == DEFAULT){
-    switch (cmd) {
-      case UNKNOWN:
-        status = game_actions_unknown(game);
-        break;
-  
-      case EXIT:
-        status = game_actions_exit(game);
-        break;
-  
-      case NORTH:
-      case EAST:
-      case WEST:
-      case SOUTH:
-        status = game_actions_move(game);
-        break;
-      case TAKE:
-        status = game_actions_take(game);
-        break;
-      
-      case DROP:
-        status = game_actions_drop(game);
-        break;
-  
-      case CHAT:
-        status = game_actions_chat(game);
-        break;
-      
-      case ATTACK:
-        status = game_actions_attack(game);
-        break;
-      case SWITCH:
-        status = game_actions_switch(game);
-        break;
+  if(!command_current_type_valid_by_state(game_get_last_command(game), game_get_state(game))){
+    command_set_status(game_get_last_command(game), ERROR);
+    return ERROR;
+  }
 
-      default:
-        break;
-    }
+  switch (cmd) {
+    case UNKNOWN:
+      status = game_actions_unknown(game);
+      break;
+
+    case EXIT:
+      status = game_actions_exit(game);
+      break;
+
+    case NORTH:
+    case EAST:
+    case WEST:
+    case SOUTH:
+      status = game_actions_move(game);
+      break;
+    case TAKE:
+      status = game_actions_take(game);
+      break;
+    
+    case DROP:
+      status = game_actions_drop(game);
+      break;
+
+    case CHAT:
+      status = game_actions_chat(game);
+      break;
+    
+    case ATTACK:
+      status = game_actions_attack(game);
+      break;
+    case RUN_AWAY:
+      status = game_actions_runaway(game);
+      break;
+    case SWITCH:
+      status = game_actions_switch(game);
+      break;
+
+    default:
+      break;
+  }
+
+  /*if(game_get_state(game) == DEFAULT){
+
   }else if(game_get_state(game) == COMBAT){
     switch (cmd) {
       case UNKNOWN:
@@ -109,14 +119,12 @@ Status game_actions_update(Game *game, Command *command) {
       case ATTACK:
         status = game_actions_attack(game);
         break;
-      case RUN_AWAY:
-        status = game_actions_runaway(game);
-        break;
+;
 
       default:
         break;
     }
-  }
+  }*/
   
 
   

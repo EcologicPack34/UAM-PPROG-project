@@ -19,6 +19,7 @@
 #define COMMAND_H
 
 #include "types.h"
+#include <stdbool.h>
 
 #define N_CMDT 2 /*!< Total number of CommandType in the enum */
 #define N_CMD 13  /*!< Total number of CommandCode in the enum */
@@ -97,6 +98,16 @@ Status command_state_add_type(Command * command, GameState state, CommandCode ty
 /*-----------GETTERS--------------*/
 
 /**
+ * @brief Gets if the current command is valid by checking the game state
+ * 
+ * @param command 
+ * @param state 
+ * @return true 
+ * @return false 
+ */
+bool command_current_type_valid_by_state(Command *command, GameState state);
+
+/**
  * @brief Gets the pointer to the string containing the info of a command
  * @author Daniel Gómez
  * 
@@ -172,9 +183,10 @@ Status command_get_list(char *destination);
 /**
  * @brief Checks if two commands codes are equal
  * 
- * @param cmd 
+ * @param cmd1
+ * @param cmd2
  * @return int 
  */
-int command_code_isEqual(void *cmd);
+int command_code_isEqual(void *cmd1, void *cmd2);
 
 #endif
