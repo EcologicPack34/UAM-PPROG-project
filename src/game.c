@@ -145,7 +145,9 @@ Status game_destroy(Game *game) {
     space_destroy(game->spaces[i]);
   }
 
-  player_destroy(game_get_player(game));
+  for(i = 0; i < game->n_players; i++){
+    player_destroy(game->players[i]);
+  }
   
   collection_free_elements(game_get_objects(game), object_destroy);
   collection_destroy(game_get_objects(game));

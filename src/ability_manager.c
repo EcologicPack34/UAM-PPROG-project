@@ -26,6 +26,7 @@ char *abilityTags[N_SKILLS] = { "" , "heal_self", "heal_ally"};
 
 struct _Ability {
   Id id;
+  char *name;
   char *data;
   AbilityType type;
 
@@ -51,7 +52,7 @@ struct _AbilityManager{
   * Public functions
 */
 
-Ability *ability_create(Id id, char *data, AbilityType type, Id entityid, bool is_player_ability, int cd_count, int cd_length){
+Ability *ability_create(Id id, char *data, char *name, AbilityType type, Id entityid, bool is_player_ability, int cd_count, int cd_length){
   Ability *ability = NULL;
   
   if(!data) return NULL;
@@ -69,6 +70,14 @@ Ability *ability_create(Id id, char *data, AbilityType type, Id entityid, bool i
     return NULL;
   }
 
+  ability->name = (char *)malloc(strlen(name) * sizeof(char) + 1);
+  if(!ability->name){
+    free(ability->data);
+    free(ability);
+    return NULL;
+  }
+
+  strcpy(ability->name, name);
   strcpy(ability->data, data);
 
   ability->entityid = entityid;
@@ -86,6 +95,7 @@ void ability_destroy(void *ability){
   
   if(ability){
     sk = (Ability *)ability;
+    free(sk->name);
     free(sk->data);
     free(sk);
   }
@@ -135,6 +145,12 @@ Id ability_get_entityid(Ability *ability){
   if(!ability) return NO_ID;
 
   return ability->entityid;
+}
+
+char *ability_get_name(Ability *ability){
+  if(!ability) return NULL;
+
+  return ability->name;
 }
 
 Status ability_set_cooldown_to_0(Ability *ability){
@@ -218,6 +234,8 @@ void ability_manager_destroy(AbilityManager *sm){
     collection_free_elements(sm->ability, ability_destroy);
     collection_destroy(sm->ability);
     queue_destroy(sm->queue_ability);
+
+    free(sm);
   }
 }
 

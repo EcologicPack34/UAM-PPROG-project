@@ -33,11 +33,14 @@ typedef struct _AbilityManager AbilityManager;
  * 
  * @param id 
  * @param data 
+ * @param type
+ * @param entityid
+ * @param is_player_ability
  * @param cd_count 
  * @param cd_length 
  * @return Ability* or NULL if error
  */
-Ability *ability_create(Id id, char *data, AbilityType type, Id entityid, bool is_player_ability, int cd_count, int cd_length);
+Ability *ability_create(Id id, char *data, char *name, AbilityType type, Id entityid, bool is_player_ability, int cd_count, int cd_length);
 
 /**
  * @brief Destroys a ability struct
@@ -112,7 +115,14 @@ bool ability_get_is_player_ability(Ability *ability);
  */
 Id ability_get_entityid(Ability *ability);
 
-
+/**
+ * @brief Gets the ability name/description
+ * @author Maksym Polyak
+ * 
+ * @param ability 
+ * @return char* or NULL if error
+ */
+char *ability_get_name(Ability *ability);
 
 /*SETTERS*/
 

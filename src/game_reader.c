@@ -670,6 +670,7 @@ Status game_reader_load_ability(Game *game, char *filename){
   Id id = NO_ID;
   AbilityType type = NO_SKILL;
 
+  char name[WORD_SIZE];
   Id entityid;
   int is_player_ability;
 
@@ -689,7 +690,7 @@ Status game_reader_load_ability(Game *game, char *filename){
   }
 
 
-  /*#sk:Id|Type|Entityid|is_player_ability|cd_count|cd_length|data*/
+  /*#sk:Id|Type|Name|Entityid|is_player_ability|cd_count|cd_length|data*/
   while (fgets(line, WORD_SIZE, file)) {
     if (strncmp("#sk:", line, 4) == 0) {
       /*Reads id*/
@@ -699,6 +700,9 @@ Status game_reader_load_ability(Game *game, char *filename){
       /*Reads type*/
       toks = strtok(NULL, "|");
       type = ability_type_from_str(toks);
+      /*Reads ability name*/
+      toks = strtok(NULL, "|");
+      strcpy(name, toks);
       /*Reads the entityid*/
       toks = strtok(NULL, "|");
       entityid = atol(toks);
@@ -717,9 +721,9 @@ Status game_reader_load_ability(Game *game, char *filename){
       //printf("TEST");
       
 
-      debug_log(PRINT,"Read Skill: #s:%ld|%d|%ld|%d|%d|%d|%s", id, type, entityid, is_player_ability, cd_count, cd_length, toks);
+      debug_log(PRINT,"Read Skill: #s:%ld|%d|%s|%ld|%d|%d|%d|%s", id, type, name, entityid, is_player_ability, cd_count, cd_length, toks);
 
-      ability = ability_create(id, toks, type, entityid, (bool)is_player_ability, cd_count, cd_length);
+      ability = ability_create(id, toks, name, type, entityid, (bool)is_player_ability, cd_count, cd_length);
 
       //ability = ability_create(1, "20", (AbilityType)2, 1, 1, 0, 2);
       if(ability == NULL)

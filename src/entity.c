@@ -107,6 +107,7 @@ void entity_destroy(Entity *entity){
     if(!entity)
         return;
     
+    free(entity->ability);
     inventory_destroy(entity->inventory);
     free(entity);
     entity = NULL;
@@ -272,6 +273,7 @@ Status entity_remove_ability(Entity *entity, Ability *ability){
     for(i = 0; i < entity->n_ability; i++){
         if(entity->ability[i] == ability){
             entity->ability[i] = NULL;
+            entity->n_ability--;
             return OK;
         }
     }
@@ -284,6 +286,20 @@ Ability *entity_get_ability_at(Entity *entity, int index){
         return NULL;
 
     return entity->ability[index];
+}
+
+Ability *entity_get_ability_by_name(Entity *entity, char *name){
+    int i;
+    
+    if(!entity || !name)
+        return NULL;
+
+    for(i = 0; i < entity->n_ability; i++){
+        if(strcpy(ability_get_name(entity->ability[i]), name) == 0)
+            return entity->ability[i];
+    }
+
+    return NULL;
 }
 
 double entity_get_max_health(Entity *entity){
