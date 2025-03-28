@@ -33,12 +33,13 @@ typedef struct _Object Object;
  *
  * @param id id of the object that is created
  * @param name name of the object
+ * @param data data with the effects of the object and if it can be weared
  * @param description description of the object
  * @param location id where the object is located
  * @param type type of inventory where the object is located
  * @return a new object, initialized or NULL if there was a mistake
  */
-Object *object_create(Id id, char *name, char *description, Id location, InventoryType type);
+Object *object_create(Id id, char *name, char *data, char *description, Id location, InventoryType type);
 
 /**
  * @brief It destroys an object

@@ -20,26 +20,26 @@
 
 #include "debug_printing.h"
 
-#define INITIAL_SKILLS_SIZE 5
+#define INITIAL_SKILLS_SIZE 5 /*!< Initial number of abilities on the collection of the ability manager*/
 
-char *abilityTags[N_SKILLS] = { "" , "heal_self", "heal_ally"};
+char *abilityTags[N_SKILLS] = { "" , "heal_self", "heal_ally"}; /*!< Tags related to the type | Same order as AbilityType*/
 
 struct _Ability {
-  Id id;
-  char *name;
-  char *data;
-  AbilityType type;
+  Id id;                  /*!< Id of the ability*/
+  char *name;             /*!< Name of the ability*/
+  char *data;             /*!< Data used to determine values in the ability*/
+  AbilityType type;       /*!< Type of the ability*/
 
-  Id entityid;
-  bool is_player_ability;
+  Id entityid;            /*!< Id of the entity with the ability*/
+  bool is_player_ability; /*!< TRUE if a player has the ability*/
   
-  int cooldown_count;
-  int cooldown_length;
+  int cooldown_count;     /*!< Actual cooldown of the ability*/
+  int cooldown_length;    /*!< Maximum cooldown of the ability*/
 };
 
 struct _AbilityManager{
-  Collection *ability;
-  Queue *queue_ability;
+  Collection *ability;    /*!< Collection where all abilities are stored*/
+  Queue *queue_ability;   /*!< Queue to control ability usage*/
 };
 
 /*

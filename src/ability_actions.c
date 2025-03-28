@@ -46,7 +46,7 @@ Status ability_heal_self(Ability *ability, Game *game);
  */
 Status ability_heal_ally(Ability *ability, Game *game);
 
-Status hability_heal_self(Ability *ability, Game *game){
+Status ability_heal_self(Ability *ability, Game *game){
     Combat *combat = NULL;
     PlayerStats *stats = NULL;
     char *data = NULL;
@@ -169,7 +169,7 @@ Status ability_action_use_ability(Game *game){
             case NO_SKILL:
                 break;
             case HEAL_SELF:
-                status = hability_heal_self(ability, game);
+                status = ability_heal_self(ability, game);
                 break;
             case HEAL_ALLY:
                 status = ability_heal_ally(ability, game);

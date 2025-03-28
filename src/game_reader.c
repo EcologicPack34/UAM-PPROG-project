@@ -302,6 +302,7 @@ Status game_reader_load_objects(Game *game, char *filename){
   FILE *file = NULL;
   char line[WORD_SIZE] = "";
   char name[WORD_SIZE] = "";
+  char data[WORD_SIZE] = "";
   char description[WORD_SIZE] = "";
   char *toks = NULL;
   long objectid, objectlocation;
@@ -331,16 +332,18 @@ Status game_reader_load_objects(Game *game, char *filename){
       toks = strtok(NULL, "|");
       strcpy(name, toks);
       toks = strtok(NULL, "|");
+      strcpy(data, toks);
+      toks = strtok(NULL, "|");
       strcpy(description, toks);
       toks = strtok(NULL, "|");
       objectlocation = atol(toks);
       toks = strtok(NULL, "|");
       objectlocationtype = (InventoryType)atol(toks);
 
-      debug_log(PRINT,"Read Object: #o:%ld|%s|%s|%ld|%ld", objectid, name, description, objectlocation, objectlocationtype);
+      debug_log(PRINT,"Read Object: #o:%ld|%s|%s|%s|%ld|%ld", objectid, name, data, description, objectlocation, objectlocationtype);
 
       /*Creates a object with object_create then saves it on the game with game_add_space*/
-      object = object_create(objectid, name, description, objectlocation, objectlocationtype);
+      object = object_create(objectid, name, data, description, objectlocation, objectlocationtype);
       if (object != NULL) {
         game_add_object(game, object);
         switch(objectlocationtype){

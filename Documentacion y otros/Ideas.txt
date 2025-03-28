@@ -22,6 +22,8 @@ I3 - POSIBLE: Generación procedural de mapa
 I3 - Espacios "seguros"
 
 FIXEAR - Cuando se añada el combate ajustar el uso de cooldowns y el añadir habilidades
+--> También tener cuidado porque usar una skill ahora no salta "turno" asi que el cooldown
+se gasta si spameas sk
 
 PENDIENTE - Implementación Combate estilo RPG? --> Se puede desarrollar uno sencillo
 PENDIENTE - Creación de objetos con funciones (Ejemplo: Cristal de teletransporte(Te lleva a la zona X))

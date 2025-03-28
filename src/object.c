@@ -22,6 +22,8 @@
 #include <string.h>
 #include <stdbool.h>
 
+#define OBJECT_MAX_DATA_SIZE 50
+
 /**
  * @brief Object
  *
@@ -33,6 +35,7 @@ struct _Object {
   Id location;              /*!< Id with the location of the object */
   InventoryType type;       /*!< Inventory type where the object is located */
 
+  char *data;               /*!< Data with the effects of the object and where it can be equipped*/
   char descr[WORD_SIZE];    /*!< Description of the object*/
 };
 
@@ -42,11 +45,17 @@ struct _Object {
 
 
 /*Object public functions*/
-Object *object_create(Id id, char *name, char *description, Id location, InventoryType type){
+Object *object_create(Id id, char *name, char* data, char *description, Id location, InventoryType type){
     Object *object = NULL;
 
     if(!(object = (Object *)calloc(1,sizeof(Object))))
         return NULL;
+
+    object->data = (char *)malloc(OBJECT_MAX_DATA_SIZE * sizeof(char) + 1);
+    if(!object->data){
+        free(object);
+        return NULL;
+    }
     
     object->id = id;
     object->location = location;
@@ -57,10 +66,15 @@ Object *object_create(Id id, char *name, char *description, Id location, Invento
 }
 
 void object_destroy(void *object){
+    Object *e = NULL;
+    
     if(!object)
         return;
 
-    free(object);
+    e = (Object *)object;
+
+    free(e->data);
+    free(e);
 }
 
 int object_isEqual(void *object1, void *object2){
