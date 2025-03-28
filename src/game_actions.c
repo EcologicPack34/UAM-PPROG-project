@@ -47,6 +47,8 @@ Status game_actions_switch(Game *game);
 
 Status game_actions_use_ability(Game *game);
 
+Status game_actions_object_use(Game *game);
+
 /**
    Game actions implementation
 */
@@ -98,6 +100,9 @@ Status game_actions_update(Game *game, Command *command) {
       case ABILITY:
         status = game_actions_use_ability(game);
         break;
+      case OBJECT_USE:
+        status = game_actions_object_use(game);
+        break;
 
       default:
         break;
@@ -120,6 +125,9 @@ Status game_actions_update(Game *game, Command *command) {
         break;
       case ABILITY:
         status = game_actions_use_ability(game);
+        break;
+      case OBJECT_USE:
+        status = game_actions_object_use(game);
         break;
 
       default:
@@ -420,4 +428,24 @@ Status game_actions_use_ability(Game *game){
     return ERROR;
 
   return OK;
+}
+
+Status game_actions_object_use(Game *game){
+  Command *comm = NULL;
+  Object *object = NULL;
+  Entity *entity = NULL;
+  
+  if(!game) return ERROR;
+
+  comm = game_get_last_command(game);
+
+  if(command_get_arguments_count(comm) != 1)
+    return ERROR;
+
+  entity = player_get_entity(game_get_player(game));
+  object = inventory_get_object_by_name(entity_get_inventory(entity), command_get_arguments(comm)[0]);
+
+  // ADD FUNCTION TO REDUCE N_USES ON AN OBJECT AND REMOVE IT IF ITS 0
+
+  return ability_manager_use_ability(game_get_ability_manager(game), object_get_object_effect(object));
 }

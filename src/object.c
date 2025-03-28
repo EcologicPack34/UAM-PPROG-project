@@ -35,6 +35,10 @@ struct _Object {
   Id location;              /*!< Id with the location of the object */
   InventoryType type;       /*!< Inventory type where the object is located */
 
+  Ability *object_effect;   /*!< Ability with the effect of the object --> Assigned on skill read*/
+  int n_uses;               /*!< Number of uses of the ability*/
+  bool is_consumable;       /*!< If an object is consumable then with every use its n_uses is reduced by 1*/
+
   char *data;               /*!< Data with the effects of the object and where it can be equipped*/
   char descr[WORD_SIZE];    /*!< Description of the object*/
 };
@@ -45,7 +49,7 @@ struct _Object {
 
 
 /*Object public functions*/
-Object *object_create(Id id, char *name, char* data, char *description, Id location, InventoryType type){
+Object *object_create(Id id, char *name, char* data, char *description, int n_uses, bool is_consumable, Id location, InventoryType type){
     Object *object = NULL;
 
     if(!(object = (Object *)calloc(1,sizeof(Object))))
@@ -56,6 +60,10 @@ Object *object_create(Id id, char *name, char* data, char *description, Id locat
         free(object);
         return NULL;
     }
+
+    object->object_effect = NULL;
+    object->n_uses = n_uses;
+    object->is_consumable = is_consumable;
     
     object->id = id;
     object->location = location;
@@ -174,6 +182,24 @@ char *object_get_descr(Object *object){
     return object->descr;
 }
 
+bool object_get_is_consumable(Object *object){
+    if(!object) return false;
+
+    return object->is_consumable;
+}
+
+int object_get_n_uses(Object *object){
+    if(!object) return -1;
+
+    return object->n_uses;
+}
+
+Ability *object_get_object_effect(Object *object){
+    if(!object) return NULL;
+
+    return object->object_effect;
+}
+
 void object_print(void *object){
     
     printf("\n\n-------------\n\n");
@@ -183,4 +209,15 @@ void object_print(void *object){
 
     printf("=> Object id: %d\n", (int)object_get_id((Object *)object));
     printf("=> Object name: %s\n", object_get_name((Object *)object));
+}
+
+Status object_add_object_effect(Object *object, Ability *ability){
+    if(!object || !ability) return ERROR;
+
+    if(object->object_effect != NULL)
+        return ERROR;
+
+    object->object_effect = ability;
+
+    return OK;
 }

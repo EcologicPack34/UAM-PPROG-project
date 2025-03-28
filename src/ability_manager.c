@@ -32,6 +32,7 @@ struct _Ability {
 
   Id entityid;            /*!< Id of the entity with the ability*/
   bool is_player_ability; /*!< TRUE if a player has the ability*/
+  bool is_object_use;     /*!< TRUE if an object has the ability*/
   
   int cooldown_count;     /*!< Actual cooldown of the ability*/
   int cooldown_length;    /*!< Maximum cooldown of the ability*/
@@ -52,7 +53,7 @@ struct _AbilityManager{
   * Public functions
 */
 
-Ability *ability_create(Id id, char *data, char *name, AbilityType type, Id entityid, bool is_player_ability, int cd_count, int cd_length){
+Ability *ability_create(Id id, char *data, char *name, AbilityType type, Id entityid, bool is_player_ability, bool is_object_use, int cd_count, int cd_length){
   Ability *ability = NULL;
   
   if(!data) return NULL;
@@ -82,6 +83,7 @@ Ability *ability_create(Id id, char *data, char *name, AbilityType type, Id enti
 
   ability->entityid = entityid;
   ability->is_player_ability = is_player_ability;
+  ability->is_object_use = is_object_use;
   ability->type = type;
   ability->id = id;
   ability->cooldown_count = cd_count;
@@ -140,6 +142,13 @@ bool ability_get_is_player_ability(Ability *ability){
 
   return ability->is_player_ability;
 }
+
+bool ability_get_is_object_use(Ability *ability){
+  if(!ability) return FALSE;
+
+  return ability->is_object_use;
+}
+
 
 Id ability_get_entityid(Ability *ability){
   if(!ability) return NO_ID;

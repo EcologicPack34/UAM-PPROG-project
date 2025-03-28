@@ -409,9 +409,19 @@ Player *game_get_player_by_id(Game *game, Id id);
  * 
  * @param game 
  * @param id
- * @return NPC* or NULL if error
+ * @return NPC* or NULL if error or not found
  */
 NPC *game_get_NPC_by_id(Game *game, Id id);
+
+/**
+ * @brief Gets an object from the object array by its id
+ * @author Maksym Polyak
+ * 
+ * @param game 
+ * @param objectid 
+ * @return Object* or NULL if error or not found
+ */
+Object *game_get_object_by_id(Game *game, Id objectid);
 
 /**
  * @brief Adds the ability to the ability manager and to the related entity

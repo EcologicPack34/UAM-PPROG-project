@@ -309,6 +309,9 @@ Status game_reader_load_objects(Game *game, char *filename){
   InventoryType objectlocationtype;
   Object *object = NULL;
 
+  int is_consumable = 0;
+  int n_uses = 1;
+
   Status status = OK;
 
   if (!filename) {
@@ -336,14 +339,18 @@ Status game_reader_load_objects(Game *game, char *filename){
       toks = strtok(NULL, "|");
       strcpy(description, toks);
       toks = strtok(NULL, "|");
+      is_consumable = atoi(toks);
+      toks = strtok(NULL, "|");
+      n_uses = atoi(toks);
+      toks = strtok(NULL, "|");
       objectlocation = atol(toks);
       toks = strtok(NULL, "|");
       objectlocationtype = (InventoryType)atol(toks);
 
-      debug_log(PRINT,"Read Object: #o:%ld|%s|%s|%s|%ld|%ld", objectid, name, data, description, objectlocation, objectlocationtype);
+      debug_log(PRINT,"Read Object: #o:%ld|%s|%s|%s|%d|%d|%ld|%ld", objectid, name, data, description, is_consumable, n_uses, objectlocation, objectlocationtype);
 
       /*Creates a object with object_create then saves it on the game with game_add_space*/
-      object = object_create(objectid, name, data, description, objectlocation, objectlocationtype);
+      object = object_create(objectid, name, data, description, n_uses, (bool)is_consumable, objectlocation, objectlocationtype);
       if (object != NULL) {
         game_add_object(game, object);
         switch(objectlocationtype){
@@ -676,6 +683,7 @@ Status game_reader_load_ability(Game *game, char *filename){
   char name[WORD_SIZE];
   Id entityid;
   int is_player_ability;
+  int is_object_use;
 
   int cd_count, cd_length;
 
@@ -693,7 +701,7 @@ Status game_reader_load_ability(Game *game, char *filename){
   }
 
 
-  /*#sk:Id|Type|Name|Entityid|is_player_ability|cd_count|cd_length|data*/
+  /*#sk:Id|Type|Name|Entityid|is_player_ability|is_object_use|cd_count|cd_length|data*/
   while (fgets(line, WORD_SIZE, file)) {
     if (strncmp("#sk:", line, 4) == 0) {
       /*Reads id*/
@@ -712,6 +720,9 @@ Status game_reader_load_ability(Game *game, char *filename){
       /*Reads if the ability is from a player*/
       toks = strtok(NULL, "|");
       is_player_ability = atoi(toks);
+      /*Reads if the ability is from an object*/
+      toks = strtok(NULL, "|");
+      is_object_use = atoi(toks);
       /*Reads the cd count*/
       toks = strtok(NULL, "|");
       cd_count = atoi(toks);
@@ -724,13 +735,13 @@ Status game_reader_load_ability(Game *game, char *filename){
       //printf("TEST");
       
 
-      debug_log(PRINT,"Read Skill: #s:%ld|%d|%s|%ld|%d|%d|%d|%s", id, type, name, entityid, is_player_ability, cd_count, cd_length, toks);
+      debug_log(PRINT,"Read Skill: #s:%ld|%d|%s|%ld|%d|%d|%d|%d|%s", id, type, name, entityid, is_player_ability, is_object_use, cd_count, cd_length, toks);
 
-      ability = ability_create(id, toks, name, type, entityid, (bool)is_player_ability, cd_count, cd_length);
+      ability = ability_create(id, toks, name, type, entityid, (bool)is_player_ability, (bool)is_object_use, cd_count, cd_length);
 
-      //ability = ability_create(1, "20", (AbilityType)2, 1, 1, 0, 2);
       if(ability == NULL)
         debug_log(LOG_ERROR,"Error creating ability when reading from file");
+
       if(game_add_ability(game, ability) == ERROR)
         debug_log(LOG_ERROR,"Error adding ability to ability manager or entity");
     }

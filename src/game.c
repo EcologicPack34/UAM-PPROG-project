@@ -717,29 +717,56 @@ NPC *game_get_NPC_by_id(Game *game, Id id){
   return NULL;
 }
 
+Object *game_get_object_by_id(Game *game, Id objectid){
+  Object *object = NULL;
+  Collection *collection = NULL;
+  int i, size;
+  
+  if(!game) return NULL;
+
+  collection = game_get_objects(game);
+  size = collection_length(collection);
+  for(i = 0; i < size; i++){
+    object = collection_get_element_at(collection, i);
+    if(object_get_id(object) == objectid)
+      return object;
+  }
+
+  return NULL;
+}
+
 Status game_add_ability(Game *game, Ability *ability){
   Player *player = NULL;
   NPC *npc = NULL;
   Entity *entity = NULL;
+  Object *object = NULL;
+
+  Id entityid;
   
   if(!game || !ability) return ERROR;
+
+  entityid = ability_get_entityid(ability);
 
   ability_manager_add_ability(game_get_ability_manager(game), ability);
 
   if(ability_get_is_player_ability(ability) == true){
-    player = game_get_player_by_id(game, ability_get_entityid(ability));
+    player = game_get_player_by_id(game, entityid);
     if(!player)
       return ERROR;
 
     entity = player_get_entity(player);
     return entity_add_ability(entity, ability);
-  } else {
-    npc = game_get_NPC_by_id(game, ability_get_entityid(ability));
+  } else if(ability_get_is_object_use(ability) == false) {
+    npc = game_get_NPC_by_id(game, entityid);
     if(!npc)
       return ERROR;
 
     entity = npc_get_entity(npc);
     return entity_add_ability(entity, ability);
+  } else {
+    object = game_get_object_by_id(game, entityid);
+
+    return object_add_object_effect(object, ability);
   }
 
   return ERROR;

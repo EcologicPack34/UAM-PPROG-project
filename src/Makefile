@@ -141,6 +141,10 @@ run:
 debug:
 	$(CC) $(CFLAGS) -g $(SRC) -o $(EXED) libscreen.a
 
+gdb:
+	make debug
+	gdb --tui --silent ./anthilldebug
+
 runv:
 	make debug
 	valgrind --leak-check=full --track-origins=yes ./anthilldebug anthill.dat

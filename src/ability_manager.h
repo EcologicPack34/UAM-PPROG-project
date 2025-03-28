@@ -36,11 +36,12 @@ typedef struct _AbilityManager AbilityManager;
  * @param type
  * @param entityid
  * @param is_player_ability
+ * @param is_object_use
  * @param cd_count 
  * @param cd_length 
  * @return Ability* or NULL if error
  */
-Ability *ability_create(Id id, char *data, char *name, AbilityType type, Id entityid, bool is_player_ability, int cd_count, int cd_length);
+Ability *ability_create(Id id, char *data, char *name, AbilityType type, Id entityid, bool is_player_ability, bool is_object_use, int cd_count, int cd_length);
 
 /**
  * @brief Destroys a ability struct
@@ -104,6 +105,16 @@ int ability_get_cooldown_length(Ability *ability);
  * @return false if players don't have this ability
  */
 bool ability_get_is_player_ability(Ability *ability);
+
+/**
+ * @brief Gets wheter an object has the ability or not
+ * @author Maksym Polyak
+ * 
+ * @param ability 
+ * @return true if an object has the ability
+ * @return false if an object does not have the ability
+ */
+bool ability_get_is_object_use(Ability *ability);
 
 /**
  * @brief Gets the entity id associated to the ability,
