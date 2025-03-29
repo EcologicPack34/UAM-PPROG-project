@@ -42,13 +42,13 @@ Formato Link: #l:ID|Space1|Space2|adjacent|locked|unlockingObjectID //Recordar a
 #l:9|127|14|1|0|0
 #l:10|14|13|0|0|0
 
-Formato Object: #o:ID|Nombre|Descripcion|LocationID|InventoryType
+Formato Object: #o:ID|Nombre|Data|is_consumable|n_uses|Descripcion||LocationID|InventoryType
 InventoryType = {UNKNOWN_INVENTORY == 0, PLAYER_INVENTORY == 1, NPC_INVENTORY == 2, SPACE_INVENTORY == 3}
 
-#o:1|Grain1|Grano1|11|3
-#o:2|Grain2|Grano2|11|3
-#o:3|Grain3|Grano3|121|3
-#o:4|Grain4|Grano4|122|3
+#o:1|Grain1|NONE|0|1|Grano1|11|3
+#o:2|Grain2|NONE|0|1|Grano2|11|3
+#o:3|Grain3|NONE|0|1|Grano3|121|3
+#o:4|Grain4|NONE|0|1|Grano4|122|3
 
 Formato Event: #e:Id|Type|cmdTriggersNum|cmdName1 , ...|removeOnTrigger|tagvalue1:tagvalue2,...
 
@@ -81,3 +81,14 @@ Formato STATS: #st:ID|EntityType|VidaMaxima|Vida|DanoBase|Fuerza|Defensa|NivelMa
 
 
 
+
+#n:1|Hello traveler i'm NPC1|NPC1|11|1|1|1|1|1|1|1|^0m"
+#n:2|Hello traveler i'm NPC2|NPC2|11|1|1|1|1|1|1|1|^1m"
+#n:3|Die|Enemy1|11|3|10|10|1|1|1|1|^2m"
+#n:4|Die|Enemy2|11|3|10|10|1|1|1|1|^3m"
+#n:5|Die|Enemy3|11|3|10|10|1|1|1|1|^4m"
+
+Formato Ability: #sk:Id|Type|Name|Entityid|is_player_ability|is_object_use|cd_count|cd_length|data
+
+#sk:1|heal_self|Heal self 25 HP|1|1|0|0|2|25
+#sk:2|heal_self|Heal self 20 HP|1|0|1|0|0|20

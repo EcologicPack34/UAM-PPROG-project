@@ -17,6 +17,7 @@
 #include "entity.h"
 #include "collection.h"
 #include "combat.h"
+#include "ability_manager.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -43,6 +44,10 @@ Status game_actions_attack(Game *game);
 Status game_actions_runaway(Game *game);
 
 Status game_actions_switch(Game *game);
+
+Status game_actions_use_ability(Game *game);
+
+Status game_actions_object_use(Game *game);
 
 /**
    Game actions implementation
@@ -92,6 +97,12 @@ Status game_actions_update(Game *game, Command *command) {
       case SWITCH:
         status = game_actions_switch(game);
         break;
+      case ABILITY:
+        status = game_actions_use_ability(game);
+        break;
+      case OBJECT_USE:
+        status = game_actions_object_use(game);
+        break;
 
       default:
         break;
@@ -111,6 +122,12 @@ Status game_actions_update(Game *game, Command *command) {
         break;
       case RUN_AWAY:
         status = game_actions_runaway(game);
+        break;
+      case ABILITY:
+        status = game_actions_use_ability(game);
+        break;
+      case OBJECT_USE:
+        status = game_actions_object_use(game);
         break;
 
       default:
@@ -373,4 +390,62 @@ Status game_actions_switch(Game *game){
   else player = atoi(arguments[0]);
 
   return game_switch_player(game, player);
+}
+
+/**
+ * @brief Uses the ability received as argument
+ * @author Maksym Polyak
+ * 
+ * @param game 
+ * @return Status 
+ */
+Status game_actions_use_ability(Game *game){
+  char **arguments = NULL;
+  int n_arg;
+  int index;
+  Entity *entity = NULL;
+  Ability *ability = NULL;
+  
+  if(!game) return ERROR;
+
+  n_arg = command_get_arguments_count(game_get_last_command(game));
+  if(n_arg != 1)
+    return ERROR;
+
+  arguments = command_get_arguments(game_get_last_command(game));
+
+  index = atoi(arguments[0]);
+  if(n_arg < 0 || n_arg >= MAX_SKILLS_ENTITY)
+    return ERROR;
+
+  entity = player_get_entity(game_get_player(game));
+
+  ability = entity_get_ability_at(entity, index);
+  if(!ability)
+    return ERROR;
+
+  if(ability_manager_use_ability(game_get_ability_manager(game), ability) == ERROR)
+    return ERROR;
+
+  return OK;
+}
+
+Status game_actions_object_use(Game *game){
+  Command *comm = NULL;
+  Object *object = NULL;
+  Entity *entity = NULL;
+  
+  if(!game) return ERROR;
+
+  comm = game_get_last_command(game);
+
+  if(command_get_arguments_count(comm) != 1)
+    return ERROR;
+
+  entity = player_get_entity(game_get_player(game));
+  object = inventory_get_object_by_name(entity_get_inventory(entity), command_get_arguments(comm)[0]);
+
+  // ADD FUNCTION TO REDUCE N_USES ON AN OBJECT AND REMOVE IT IF ITS 0
+
+  return ability_manager_use_ability(game_get_ability_manager(game), object_get_object_effect(object));
 }

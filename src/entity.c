@@ -17,6 +17,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "ability_manager.h"
 
 #define NO_NAME ""
 
@@ -33,6 +34,9 @@ struct _Entity {
     Id id;                    /*!< Unique id of the entity */
     Id location;              /*!< Id of the space where the entity is located*/
     Inventory *inventory;     /*!< entity inventory */
+
+    Ability **ability; /*!< Abilitys of the entity*/
+    int n_ability;   /*!< Number of ability the entity has*/
 
     char gdesc[ENTITY_GRAPHIC_LENGTH + 1];
 
@@ -65,8 +69,19 @@ Entity *entity_create(char *name, Id id, Id location, InventoryType inventoryTyp
         return NULL;
     }
 
+    /*Abilitys are not initialized on the entity creation, they are added later*/
+    entity->ability = (Ability **)calloc(MAX_SKILLS_ENTITY, sizeof(Ability *));
+    if((entity->ability) == NULL){
+        inventory_destroy(entity->inventory);
+        free(entity);
+        return NULL;
+    }
+    entity->n_ability = 0;
+
     entity_set_graphic_description(entity, "ERR");
     entity_set_entityType(entity, UNKNOWN_ENTITY);
+
+
 
 
     entity_set_id(entity, id);
@@ -88,6 +103,7 @@ void entity_destroy(Entity *entity){
     if(!entity)
         return;
     
+    free(entity->ability);
     inventory_destroy(entity->inventory);
     free(entity);
     entity = NULL;
@@ -225,6 +241,61 @@ EntityType entity_get_entityType(Entity *entity){
         return UNKNOWN_ENTITY;
 
     return entity->entityType;
+}
+
+Status entity_add_ability(Entity *entity, Ability *ability){
+    int i;
+    
+    if(!entity || !ability || entity->n_ability > MAX_SKILLS_ENTITY || entity->n_ability < 0) 
+        return ERROR;
+
+    for(i = 0; i < MAX_SKILLS_ENTITY; i++){
+        if(entity->ability[i] == NULL){
+            entity->ability[i] = ability;
+            entity->n_ability++;
+            return OK;
+        }
+    }
+
+    return OK;
+}
+
+Status entity_remove_ability(Entity *entity, Ability *ability){
+    int i;
+    
+    if(!entity || !ability || entity->n_ability == 0) 
+        return ERROR;
+
+    for(i = 0; i < entity->n_ability; i++){
+        if(entity->ability[i] == ability){
+            entity->ability[i] = NULL;
+            entity->n_ability--;
+            return OK;
+        }
+    }
+
+    return OK;
+}
+
+Ability *entity_get_ability_at(Entity *entity, int index){
+    if(!entity)
+        return NULL;
+
+    return entity->ability[index];
+}
+
+Ability *entity_get_ability_by_name(Entity *entity, char *name){
+    int i;
+    
+    if(!entity || !name)
+        return NULL;
+
+    for(i = 0; i < entity->n_ability; i++){
+        if(strcpy(ability_get_name(entity->ability[i]), name) == 0)
+            return entity->ability[i];
+    }
+
+    return NULL;
 }
 
 double entity_get_max_health(Entity *entity){

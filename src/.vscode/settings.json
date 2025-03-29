@@ -12,6 +12,11 @@
         "queue.h": "c",
         "space.h": "c",
         "string_view": "c",
-        "test.h": "c"
-    }
+        "test.h": "c",
+        "ability.h": "c",
+        "game.h": "c",
+        "types.h": "c",
+        "debug_printing.h": "c"
+    },
+    "C_Cpp.dimInactiveRegions": false
 }
