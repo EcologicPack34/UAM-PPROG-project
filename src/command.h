@@ -98,6 +98,16 @@ Status command_state_add_type(Command * command, GameState state, CommandCode ty
 /*-----------GETTERS--------------*/
 
 /**
+ * @brief Copies into dest the info of the current command.
+ * @author Daniel Gómez
+ * 
+ * @param cmd 
+ * @param dest 
+ * @return Status 
+ */
+Status command_get_as_string(Command *cmd, char *dest);
+
+/**
  * @brief Gets if the current command is valid by checking the game state
  * 
  * @param command 

@@ -220,6 +220,32 @@ Status command_state_add_type(Command * command, GameState state, CommandCode ty
 }
 
 /*----GETTERS----*/
+
+Status command_get_as_string(Command *cmd, char *dest){
+  int i;
+
+  if(!cmd || !dest) return ERROR;
+
+  for (i = 0; i < N_CMDT; i++)
+  {
+    strcat(dest,cmd_to_str[cmd->code - NO_CMD][i]);
+    if(i < N_CMDT -1){
+      strcat(dest," or ");
+    }
+  }
+  strcat(dest, " ");
+  for (i = 0; i < cmd->argsCount; i++)
+  {
+    strcat(dest, cmd->arguments[i]);
+    if(i < cmd->argsCount){
+      strcat(dest, " ");
+    }
+  }
+  strcat(dest, ": ");
+  strcat(dest, (cmd->cmdStatus == ERROR) ? "Error" : "Ok");
+  return OK;
+}
+
 Status command_get_info(Command *command, CommandCode cmd, char *dest){
   int i;
   
@@ -228,8 +254,9 @@ Status command_get_info(Command *command, CommandCode cmd, char *dest){
   for (i = 0; i < N_CMDT; i++)
   {
     strcat(dest,cmd_to_str[cmd - NO_CMD][i]);
-        if(i < N_CMDT -1)
-          strcat(dest," or ");
+    if(i < N_CMDT -1){
+      strcat(dest," or ");
+    }
   }
   strcat(dest, ": ");
   strcat(dest, command->commandInfo[cmd - NO_CMD]);

@@ -109,7 +109,7 @@ combat.o: combat.c combat.h collection.h types.h debug_printing.h queue.h \
  command.h
 	$(CC) $(CFLAGS) -c combat.c
 
-.PHONY:	clean compile link run debug runv
+.PHONY:	clean compile link run runl debug runv
 clean:
 	@rm -f *.o $(EXE) debug.log $(EXED) $(TEST) $(TEST_OBJ)
 	@cd ./test
@@ -124,6 +124,9 @@ link:
 
 run:
 	./anthill anthill.dat
+
+runl:
+	./anthill anthill.dat -l ./debug.log
 
 debug:
 	$(CC) $(CFLAGS) -g $(SRC) -o $(EXED) libscreen.a

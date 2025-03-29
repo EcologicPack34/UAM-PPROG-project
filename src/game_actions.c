@@ -123,6 +123,9 @@ Status game_actions_help(Game *game);
 Status game_actions_update(Game *game, Command *command) {
   CommandCode cmd;
   Status status = ERROR;
+  char str[WORD_SIZE];
+
+  Entity *player = NULL;
 
   if(!game || !command) return ERROR;
 
@@ -132,6 +135,7 @@ Status game_actions_update(Game *game, Command *command) {
 
   if(!command_current_type_valid_by_state(game_get_last_command(game), game_get_state(game))){
     command_set_status(game_get_last_command(game), ERROR);
+    debug_log(LOG_WARNING, "Introduced command was not valid for current game state (state: %d)", game_get_state(game) - ERROR_STATE);
     return ERROR;
   }
 
@@ -180,6 +184,12 @@ Status game_actions_update(Game *game, Command *command) {
   }
 
   command_set_status(command, status);
+
+  command_get_as_string(game_get_last_command(game), str);
+
+  player = player_get_entity(game_get_player(game));
+
+  debug_log(PRINT,"Executed command: %s; by player %d:%s",str , entity_get_id(player), entity_get_name(player));
 
   return OK;
 }
