@@ -53,15 +53,9 @@ typedef struct{
  * @param identity id of the entity
  * @param idlocation id of the location of the entity
  * @param inventoryType type of inventory of the entity
- * @param maxhealth max health of the entity
- * @param health health of the entity
- * @param baseDamage base damage of the entity
- * @param strength strength of the entity
- * @param defense defense of the entity
- * @param magicLevel magic level of the entity
  * @return Entity pointer if everything goes well or NULL if there was a mistake
  */
-Entity *entity_create(char *name, Id identity, Id idlocation, InventoryType inventoryType, double maxhealth, double health, double baseDamage, int strength, int defense, int magicLevel);
+Entity *entity_create(char *name, Id identity, Id idlocation, InventoryType inventoryType);
 
 /**
  * @brief Frees a entity

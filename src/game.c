@@ -266,6 +266,37 @@ Collection *game_get_npcs(Game *game){
   return game->npcs;
 }
 
+NPC *game_get_npc_by_id(Game *game, Id id){
+  Collection *all_npcs=NULL;
+  long i,size;
+
+  if(!game || (id == NO_ID)) return NULL;
+
+  if((all_npcs = game_get_npcs(game)) == NULL) return NULL;
+
+  size = collection_length(all_npcs);
+
+  for(i=0; i<size; i++){
+    if(entity_get_id(npc_get_entity((NPC *)collection_get_element_at(all_npcs, i))) == id)
+      return (NPC *)collection_get_element_at(all_npcs, i);
+  }
+
+  return NULL;
+}
+
+Player *game_get_player_by_id(Game *game, Id id){
+  long i;
+
+  if(!game || (id == NO_ID)) return NULL;
+
+  for(i=0; i<MAX_PLAYERS; i++){
+    if(entity_get_id(player_get_entity(game->players[i])) == id)
+      return (game->players[i]);
+  }
+
+  return NULL;
+}
+
 /*-----------SETTERS-----------*/
 
 Status game_set_last_command(Game *game, Command *command) {

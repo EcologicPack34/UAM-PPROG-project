@@ -3,10 +3,10 @@ la longitud de gdescLine esta limitidad por el codigo, es decir, si es mas larga
 
 Formato Player: #p:ID|Nombre|LocationID|VidaMaxima|Vida|DanoBase|Fuerza|Defensa|NivelMagia|gdesc
 
-#p:1|Hero1|11|100|100|2|1|1|1|mO^
-#p:2|Hero2|14|100|100|2|1|1|1|m1^
-#p:3|Hero3|13|100|100|2|1|1|1|m2^
-#p:4|Hero4|121|100|100|2|1|1|1|m3^
+#p:1|Hero1|11|mO^
+#p:2|Hero2|14|m1^
+#p:3|Hero3|13|m2^
+#p:4|Hero4|121|m3^
 
 -#s:11|Entry|-1|-1|1|4
 -#s:12|Corridor1|1|-1|2|-1
@@ -57,11 +57,27 @@ Formato Event: #e:Id|Type|cmdTriggersNum|cmdName1 , ...|removeOnTrigger|tagvalue
 #e:3|trigger_combat|3|tk,dr,ch|0|20
 #e:4|player_death|0|0| 
 
-Formato NPC: #n:ID|Message|Nombre|LocationID|Status|VidaMaxima|Vida|DanoBase|Fuerza|Defensa|NivelMagia|gdesc"
+Formato NPC: #n:ID|Message|Nombre|LocationID|Status|gdesc"
 NPC_status = {UNKNOWN_STATUS == 0, NEUTRAL == 1, ALLY == 2, ENEMY == 3}
 
-#n:1|Hello traveler i'm NPC1|NPC1|11|1|1|1|1|1|1|1|^0m"
-#n:2|Hello traveler i'm NPC2|NPC2|11|1|1|1|1|1|1|1|^1m"
-#n:3|Die|Enemy1|11|3|10|10|1|1|1|1|^2m"
-#n:4|Die|Enemy2|11|3|10|10|1|1|1|1|^3m"
-#n:5|Die|Enemy3|11|3|10|10|1|1|1|1|^4m"
+#n:1|Hello traveler i'm NPC1|NPC1|11|1|^0m"
+#n:2|Hello traveler i'm NPC2|NPC2|11|1|^1m"
+#n:3|Die|Enemy1|11|3|^2m"
+#n:4|Die|Enemy2|11|3|^3m"
+#n:5|Die|Enemy3|11|3|^4m"
+
+Formato STATS: #st:ID|EntityType|VidaMaxima|Vida|DanoBase|Fuerza|Defensa|NivelMagia
+
+#st:1|1|100|100|2|1|1|1
+#st:2|1|100|100|2|1|1|1
+#st:3|1|100|100|2|1|1|1
+#st:4|1|100|100|2|1|1|1
+
+#st:1|2|2|5|2|2|2|2|
+#st:2|2|2|5|2|2|2|2|
+#st:3|2|2|5|2|2|2|2|
+#st:4|2|2|5|2|2|2|2|
+#st:5|2|2|5|2|2|2|2|
+
+
+
