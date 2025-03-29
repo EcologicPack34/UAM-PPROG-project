@@ -22,14 +22,14 @@
 #include <stdbool.h>
 
 #define N_CMDT 2 /*!< Total number of CommandType in the enum */
-#define N_CMD 13  /*!< Total number of CommandCode in the enum */
+#define N_CMD 15  /*!< Total number of CommandCode in the enum */
 
 #define MAX_CMD_ARGS_NUM 5      /*!< Max number of arguments that can be passed to a command*/
 #define MAX_CMD_ARGS_LENGTH 20  /*!< Max length that the arguments of a command can have */
 
 typedef enum { CMDS, CMDL } CommandType; /* CMDS: Command Short | CMDL: Command Long */
 
-typedef enum { NO_CMD = -1, UNKNOWN, EXIT, SOUTH, NORTH, EAST, WEST, TAKE, DROP, CHAT, ATTACK, RUN_AWAY, SWITCH} CommandCode; /* All values that a command can take */
+typedef enum { NO_CMD = -1, UNKNOWN, EXIT, SOUTH, NORTH, EAST, WEST, TAKE, DROP, CHAT, ATTACK, RUN_AWAY, SWITCH, HELP, MOVE} CommandCode; /* All values that a command can take */
 
 /* 
  * Struct that contains all the information of the command
@@ -113,9 +113,10 @@ bool command_current_type_valid_by_state(Command *command, GameState state);
  * 
  * @param command 
  * @param cmd 
- * @return char* 
+ * @param dest
+ * @return Status 
  */
-char *command_get_info(Command *command, CommandCode cmd);
+Status command_get_info(Command *command, CommandCode cmd, char *dest);
 
 /**
  * @brief Gets the command name
@@ -178,7 +179,7 @@ Status command_get_status(Command *command);
  * @param destination string to which the information is copied. Requires the user to assing this string a proper length
  * @return Status
  */
-Status command_get_list(char *destination);
+Status command_get_list(Command *command, char *destination, GameState state, bool getAll);
 
 /**
  * @brief Checks if two commands codes are equal

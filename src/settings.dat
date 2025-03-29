@@ -1,22 +1,24 @@
 [CmdInfo]
-0
-1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
+Error code for commands. Doesn't have a use during gameplay. 
+Code for unkown commands.
+Exits the game.
+Moves one space to the south.
+Moves one space to the north.
+Moves one space to the east.
+Moves one space to the west.
+Takes an object to the current space. Needs one argument. Ex: take Object1.
+Drops an object to the current space. Needs one argument. Ex: drop Object1.
+Chats with an NPC in the space. Needs one argument. Ex: chat NPC1.
+If in exploration, it starts combat. In combat mode, attacks enemies. Takes no arguments
+Exits combat.
+Switches current player. Ex: switch (swithches to next player). switch Id (switches to player with given Id)
+Prints all the commands if no arguments. If specified a command, prints its description.
+Generic command for moving. Needs one argument (north, east, south, west). Ex: move north.
 
 [CmdStateTypes]
 all
-North,South,East,West,Attack,Take,Drop,
-Attack,Run_Away,
+Move,North,South,East,West,Attack,Take,Drop,Chat,Exit,Help,
+Attack,Run_Away,Exit,Help,
 all
 all
 

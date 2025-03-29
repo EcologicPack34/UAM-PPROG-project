@@ -26,23 +26,95 @@
    Private functions
 */
 
+/**
+ * @brief Action for Unkown command
+ * @author Profesores PPROG
+ * 
+ * @param game 
+ * @return Status 
+ */
 Status game_actions_unknown(Game *game);
 
+/**
+ * @brief Action for Unkown command
+ * @author Profesores PPROG
+ * 
+ * @param game 
+ * @return Status 
+ */
 Status game_actions_exit(Game *game);
 
+/**
+ * @brief Action for Unkown command
+ * @author Maksym Polyak y Daniel Gómez
+ * 
+ * @param game 
+ * @return Status 
+ */
 Status game_actions_move(Game *game);
 
+/**
+ * @brief Action for taking object
+ * @author Maksym Polyak
+ * 
+ * @param game 
+ * @return Status 
+ */
 Status game_actions_take(Game *game);
 
+/**
+ * @brief Action for droping object
+ * @author Maksym Polyak
+ * 
+ * @param game 
+ * @return Status 
+ */
 Status game_actions_drop(Game *game);
 
+/**
+ * @brief Action for chating with npcs
+ * @author Daniel Gómez
+ * 
+ * @param game 
+ * @return Status 
+ */
 Status game_actions_chat(Game *game);
 
+/**
+ * @brief Action for combat
+ * @author Maksym Polyak y Daniel Gómez
+ * 
+ * @param game 
+ * @return Status 
+ */
 Status game_actions_attack(Game *game);
 
+/**
+ * @brief Action for escaping combat
+ * @author Maksym Polyak y Daniel Gómez
+ * 
+ * @param game 
+ * @return Status 
+ */
 Status game_actions_runaway(Game *game);
 
+/**
+ * @brief Action for switching player command
+ * @author Maksym Polyak
+ * 
+ * @param game 
+ * @return Status 
+ */
 Status game_actions_switch(Game *game);
+
+/**
+ * @brief Action for Help command
+ * @author Daniel
+ * 
+ * @param game 
+ * @return Status 
+ */
+Status game_actions_help(Game *game);
 
 /**
    Game actions implementation
@@ -76,6 +148,7 @@ Status game_actions_update(Game *game, Command *command) {
     case EAST:
     case WEST:
     case SOUTH:
+    case MOVE:
       status = game_actions_move(game);
       break;
     case TAKE:
@@ -99,35 +172,12 @@ Status game_actions_update(Game *game, Command *command) {
     case SWITCH:
       status = game_actions_switch(game);
       break;
-
+    case HELP:
+      status = game_actions_help(game);
+      break;
     default:
       break;
   }
-
-  /*if(game_get_state(game) == DEFAULT){
-
-  }else if(game_get_state(game) == COMBAT){
-    switch (cmd) {
-      case UNKNOWN:
-        status = game_actions_unknown(game);
-        break;
-  
-      case EXIT:
-        status = game_actions_exit(game);
-        break;
-      
-      case ATTACK:
-        status = game_actions_attack(game);
-        break;
-;
-
-      default:
-        break;
-    }
-  }*/
-  
-
-  
 
   command_set_status(command, status);
 
@@ -164,13 +214,27 @@ Status game_actions_move(Game *game) {
   Id space_id = NO_ID;
   Link *link = NULL;
   Entity *entity = NULL;
+  CommandCode code = NO_CMD;
+  Command *cmd = NULL;
 
   space_id = game_get_player_location(game);
   if (space_id == NO_ID) {
     return ERROR;
   }
 
-  switch(command_get_code(game_get_last_command(game))){
+  cmd = game_get_last_command(game);
+
+  if(command_get_code(cmd) == MOVE){
+    if(command_get_arguments_count(cmd) != 1){
+      game_add_log_message(game, MESSAGE_ERROR, "Invalid number of arguments for Move command. Use 'help move' for more info");
+      return ERROR;
+    }
+    code = command_get_code_from_str(command_get_arguments(cmd)[0]);
+  }else{
+    code = command_get_code(cmd);
+  }
+
+  switch(code){
     case NORTH:
       link = space_get_north(game_get_space(game, space_id));
       if(link == NULL) return ERROR;
@@ -188,6 +252,7 @@ Status game_actions_move(Game *game) {
       if(link == NULL) return ERROR;
       break;
     default:
+      game_add_log_message(game, MESSAGE_ERROR, "Invalid direction for move command. Use 'help move' for more info");
       break;
   }
     
@@ -373,7 +438,10 @@ Status game_actions_switch(Game *game){
 
   cmd = game_get_last_command(game);
   
-  if(command_get_arguments_count(cmd) > 1) return ERROR;
+  if(command_get_arguments_count(cmd) > 1){
+    game_add_log_message(game, ERROR, "Invalid number of arguments for switch command. Use 'help switch' for more info");
+    return ERROR;
+  } 
 
   arguments = command_get_arguments(cmd);
 
@@ -381,4 +449,35 @@ Status game_actions_switch(Game *game){
   else player = atoi(arguments[0]);
 
   return game_switch_player(game, player);
+}
+
+Status game_actions_help(Game *game){
+  
+  Command *cmd = NULL;
+  char **args = NULL;
+  int argc = 0;
+  char str[WORD_SIZE];
+  
+  CommandCode code = NO_CMD;
+  
+  if(!game) return ERROR;
+
+  cmd = game_get_last_command(game);
+
+  args = command_get_arguments(cmd);
+  argc = command_get_arguments_count(cmd);
+
+  if(argc == 0){
+    command_get_list(game_get_last_command(game), str, ERROR_STATE, true);
+
+  }else if(argc == 1){
+    code = command_get_code_from_str(args[0]);
+    command_get_info(cmd, code, str);
+
+  }else{
+    game_add_log_message(game, MESSAGE_ERROR, "Invalid number of arguments for command help");
+    return ERROR;
+  }
+
+  return game_add_log_message(game, MESSAGE_LOG ,str);
 }

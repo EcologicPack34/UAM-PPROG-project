@@ -13,6 +13,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 
 #include "game_reader.h"
 #include "debug_printing.h"
@@ -681,8 +682,10 @@ Status game_reader_load_npcs(Game *game, char *filename){
 Status game_reader_load_commandInfo(Game *game){
   FILE *file = NULL;
   char line[WORD_SIZE];
+  char str[WORD_SIZE];
 
-  int i;
+  int i, j;
+  int length;
 
   file = fopen(SETTINGS_FILE_PATH, "r");
   if(!file) return ERROR;
@@ -695,7 +698,15 @@ Status game_reader_load_commandInfo(Game *game){
     {
       if(!fgets(line, WORD_SIZE -1 , file)) return ERROR;
 
-      if(command_set_info(game_get_last_command(game), i + NO_CMD, line) == ERROR){
+      length = strlen(line);
+      for (j = 0; j < length; j++)
+      {
+        if(!isalnum(line[j]) && line[j] != ' ') break;
+        str[j] = line[j];
+      }
+      str[j] = 0;
+
+      if(command_set_info(game_get_last_command(game), i + NO_CMD, str) == ERROR){
         return ERROR;
       }
     }

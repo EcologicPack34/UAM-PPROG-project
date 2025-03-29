@@ -26,7 +26,7 @@
  * @brief Global variable that stores all the commands and their shortucts.
  */
 char *cmd_to_str[N_CMD][N_CMDT] = {{"", "No command"}, {"", "Unknown"}, {"q", "Exit"}, {"s", "South"}, {"w", "North"}, {"d", "East"}, {"a", "West"},{"tk", "Take"}, {"dr", "Drop"},\
- {"ch", "Chat"}, {"at", "Attack"}, {"h", "Run_Away"}, {"sw", "Switch_Player"}};
+ {"ch", "Chat"}, {"at", "Attack"}, {"h", "Run_Away"}, {"sw", "Switch_Player"}, {"hp", "Help"}, {"m", "Move"}};
 
 /**
  * @brief Command
@@ -216,14 +216,25 @@ Status command_state_add_type(Command * command, GameState state, CommandCode ty
 
   *code = type;
 
-  printf("%d, %d\n",*code, state-ERROR_STATE);
   return collection_add(command->stateCommands[state-ERROR_STATE], (void *)code);
 }
 
 /*----GETTERS----*/
-char *command_get_info(Command *command, CommandCode cmd){
-  if(!command) return NULL;
-  return command->commandInfo[cmd - NO_CMD];
+Status command_get_info(Command *command, CommandCode cmd, char *dest){
+  int i;
+  
+  if(!command) return ERROR;
+
+  for (i = 0; i < N_CMDT; i++)
+  {
+    strcat(dest,cmd_to_str[cmd - NO_CMD][i]);
+        if(i < N_CMDT -1)
+          strcat(dest," or ");
+  }
+  strcat(dest, ": ");
+  strcat(dest, command->commandInfo[cmd - NO_CMD]);
+
+  return OK;
 }
 
 CommandCode command_get_code(Command* command) {
@@ -349,26 +360,61 @@ Status command_get_user_input(Command* command) {
     return command_set_code(command, EXIT); 
 }
 
-Status command_get_list(char *destination){
+Status command_get_list(Command *command, char *destination, GameState state, bool getAll){
   char *aux;
   int i,j;
+  int length;
 
-  if(destination == NULL)
-    return ERROR;
+  Collection *codeList = NULL;
+  CommandCode code = NO_CMD;
 
-  aux = (char*)calloc((N_CMD-2)*(N_CMDT) * (CMD_LENGTH) + WORD_SIZE, sizeof(char));
-  if(aux == NULL){
+  if(destination == NULL){
     return ERROR;
   }
-  
-  for (i = 2; i < N_CMD; i++){
-    for (j = 0; j < N_CMDT; j++){
-      strcat(aux,cmd_to_str[i][j]);
-      if(j < N_CMDT -1)
-        strcat(aux," or ");
+
+  if(getAll){
+    aux = (char *)calloc((N_CMD) * (N_CMDT) * (CMD_LENGTH) + WORD_SIZE, sizeof(char));
+    if (aux == NULL){
+      return ERROR;
     }
-    if(i < N_CMD-1)
+
+    for (i = 2; i < N_CMD; i++){
+      for (j = 0; j < N_CMDT; j++){
+        strcat(aux,cmd_to_str[i][j]);
+        if(j < N_CMDT -1)
+          strcat(aux," or ");
+      }
+      if(i < N_CMD-1)
+        strcat(aux,", ");
+    }
+
+    strcpy(destination,aux);
+    free(aux);
+    return OK;
+  }
+
+  codeList = command->stateCommands[state - ERROR_STATE];
+  length = collection_length(codeList);
+
+  aux = (char *)calloc((length) * (N_CMDT) * (CMD_LENGTH) + WORD_SIZE, sizeof(char));
+  if (aux == NULL){
+    return ERROR;
+  }
+
+  for (i = 0; i < length; i++)
+  {
+    code = *((CommandCode *)collection_get_element_at(codeList, i));
+    for (j = 0; j < N_CMDT; j++)
+    {
+      strcat(aux, cmd_to_str[code - NO_CMD][j]);
+      if(j < N_CMDT -1){
+        strcat(aux," or ");
+      }
+
+    }
+    if(i < length-1){
       strcat(aux,", ");
+    }
   }
   
   strcpy(destination,aux);
@@ -383,7 +429,7 @@ Status command_get_status(Command *command){
 
 int command_code_isEqual(void *cmd1, void *cmd2){
   if(!cmd1 || !cmd2) return -1;
-  return *((CommandCode *)cmd1) == *((CommandCode *)cmd2);
+  return *((CommandCode *)cmd1) != *((CommandCode *)cmd2);
 }
 bool command_current_type_valid_by_state(Command *command, GameState state){
   int length, i;

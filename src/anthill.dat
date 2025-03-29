@@ -34,7 +34,7 @@ Formato Link: #l:ID|Space1|Space2|adjacent|locked|unlockingObjectID //Recordar a
 #l:1|11|121|1|0|0
 #l:2|121|122|1|0|0
 #l:3|122|123|1|0|0
-#l:4|123|124|1|0|0
+#l:4|123|124|1|1|0
 #l:5|124|13|1|0|0
 #l:6|122|125|1|0|0
 #l:7|125|126|1|0|0
