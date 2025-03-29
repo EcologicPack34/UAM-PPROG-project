@@ -112,6 +112,7 @@ combat.o: combat.c combat.h collection.h types.h debug_printing.h queue.h \
  vector2.h player.h command.h
 	$(CC) $(CFLAGS) -c combat.c
 
+
 ability_manager.o: ability_manager.c ability_manager.h types.h queue.h \
  collection.h debug_printing.h
 	$(CC) $(CFLAGS) -c ability_manager.c
@@ -121,8 +122,8 @@ ability_actions.o: ability_actions.c ability_actions.h ability_manager.h \
  space.h npc.h debug_printing.h vector2.h command.h player.h \
  event_manager.h message.h combat.h
 	$(CC) $(CFLAGS) -c ability_actions.c
-
-.PHONY:	clean compile link run debug runv
+  
+.PHONY:	clean compile link run runl debug runv gdb
 clean:
 	@rm -f *.o $(EXE) debug.log $(EXED) $(TEST) $(TEST_OBJ)
 	@cd ./test
@@ -137,6 +138,9 @@ link:
 
 run:
 	./anthill anthill.dat
+
+runl:
+	./anthill anthill.dat -l ./debug.log
 
 debug:
 	$(CC) $(CFLAGS) -g $(SRC) -o $(EXED) libscreen.a

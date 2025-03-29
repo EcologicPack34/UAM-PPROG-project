@@ -13,6 +13,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 
 #include "game_reader.h"
 #include "debug_printing.h"
@@ -85,6 +86,24 @@ Status game_reader_load_events(Game *game, char *filename);
 Status game_reader_load_npcs(Game *game, char *filename);
 
 /**
+ * @brief Loads command info from settings file
+ * @author Daniel Gómez
+ * 
+ * @param game 
+ * @return Status 
+ */
+Status game_reader_load_commandInfo(Game *game);
+
+/**
+ * @brief Loads valid commands for each game state
+ * @author Daniel Gómez
+ * 
+ * @param game 
+ * @return Status 
+ */
+Status game_reader_load_commandStateTypes(Game *game);
+
+/**
  * @brief Reads the file to load stats to an entity
  * @author Aaron Charameli Mair
  * 
@@ -115,7 +134,21 @@ Status game_reader_create_from_file(Game **game, char *filename){
     printf("Fatal error. Check the log for details\n");
     abort();
   }
+  /*Loads settints*/
+  
+  if(game_reader_load_commandInfo(*game) == ERROR){
+    printf("%c[2J", 27);
+    printf("Fatal error. Check the log for details\n");
+    abort();
+  }
+  if(game_reader_load_commandStateTypes(*game) == ERROR){
+    printf("%c[2J", 27);
+    printf("Fatal error. Check the log for details\n");
+    abort();
+  }
+  
 
+  /*Loads data into the game*/
   if(game_reader_load_player(*game, filename) == ERROR){
     debug_log(LOG_ERROR, "Error loading player at: game_reader_create_from_file(Game*, char*) in game_reader.c");
     return ERROR;
@@ -836,4 +869,98 @@ Status game_reader_load_ability(Game *game, char *filename){
   fclose(file);
 
   return status;
+}
+
+Status game_reader_load_commandInfo(Game *game){
+  FILE *file = NULL;
+  char line[WORD_SIZE];
+  char str[WORD_SIZE];
+
+  int i, j;
+  int length;
+
+  file = fopen(SETTINGS_FILE_PATH, "r");
+  if(!file) return ERROR;
+
+  while(fgets(line, WORD_SIZE - 1, file)){
+    if(strncmp(line,"[CmdInfo]", 9) != 0){
+      continue;
+    }
+    for (i = 0; i < N_CMD; i++)
+    {
+      if(!fgets(line, WORD_SIZE -1 , file)) return ERROR;
+
+      length = strlen(line);
+      for (j = 0; j < length; j++)
+      {
+        if(!isalnum(line[j]) && line[j] != ' ') break;
+        str[j] = line[j];
+      }
+      str[j] = 0;
+
+      if(command_set_info(game_get_last_command(game), i + NO_CMD, str) == ERROR){
+        return ERROR;
+      }
+    }
+    break;
+  }
+  return OK;
+}
+
+Status game_reader_load_commandStateTypes(Game *game){
+  FILE *file = NULL;
+  char line[WORD_SIZE];
+  char str[WORD_SIZE] = "";
+
+  CommandCode code = NO_CMD;
+
+  int i,j;
+  int curChar = 0;
+  int word = 0;
+  int length;
+
+
+  file = fopen(SETTINGS_FILE_PATH, "r");
+  if(!file) return ERROR;
+
+  while(fgets(line, WORD_SIZE - 1, file)){
+    if(strncmp(line,"[CmdStateTypes]", 15) != 0){
+      continue;
+    }
+    for (i = 0; i < N_GAME_STATES; i++)
+    {
+      if(!fgets(line, WORD_SIZE -1 , file)) return ERROR;
+
+      word = 0;
+      curChar = 0;
+      
+      length = strlen(line);
+      
+      if(strncmp(line, "all", 3) == 0){
+        for ( j = 0; j < N_CMD; j++)
+        {
+          command_state_add_type(game_get_last_command(game), i + ERROR_STATE, j + NO_CMD);
+        }
+      }else{
+        while(curChar <= length){
+          if(line[curChar] == ','){
+            str[word + 1] = '\00';
+            
+
+            code = command_get_code_from_str(str);
+            command_state_add_type(game_get_last_command(game), i + ERROR_STATE, code);
+            
+            memset(str,0, strlen(str));
+            word = 0;
+            curChar++;
+          }
+          str[word] = line[curChar];
+          curChar++;
+          word++;
+        }
+      }
+    }
+    break;
+  }
+  return OK;
 }

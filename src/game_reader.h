@@ -16,6 +16,8 @@
 #include "types.h"
 #include "game.h"
 
+#define SETTINGS_FILE_PATH "./settings.dat"
+
 /**
  * @brief Initializes game, loads the spaces in game and sets the player/object location
  * @author Daniel Gómez Rodríguez and Maksym Polyak

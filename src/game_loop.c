@@ -28,7 +28,6 @@
 #include "event_actions.h"
 #include "ability_actions.h"
 
-#define DEBUG_FILE_PATH "./debug.log"   /*!< stores the path in which the debug_log will print messages*/
 #define END_LOCATION 13                 /*!< Location where the object has to be located to end the game */
 
 /**
@@ -72,7 +71,7 @@ void game_loop_cleanup(Game *game, Graphic_engine *gengine);
 int main(int argc, char *argv[]){
   Game *game = NULL;
   Graphic_engine *gengine = NULL;
-  Debug *debugLog;
+  Debug *debugLog = NULL;
   
   /*Checks if num of arguments if correct, if not stops the programm*/
   if (argc < 2)
@@ -81,9 +80,22 @@ int main(int argc, char *argv[]){
     return 1;
   }
   
-  /*Initialize the global variable for debug*/
-  debugLog = debug_create(DEBUG_FILE_PATH, 1);
-  debug_log(DEBUG, "Debug global variable");
+  if(argc == 3){
+    fprintf(stderr, "Use: %s <game_data_file> -l <log_file_path>\n", argv[0]);
+    return 1;
+  }
+  if(argc == 4){
+    if(strcmp(argv[2], "-l") != 0){
+      fprintf(stderr, "Argument %s is not recognised", argv[2]);
+      return 1;
+    }
+    else{
+      /*Initialize the global variable for debug*/
+      debugLog = debug_create(argv[3], 1);
+      debug_log(DEBUG, "Debug global variable");
+    }
+  }
+
 
   /*Initializes and runs the game */
   if (!game_loop_init(&game, &gengine, argv[1]))
@@ -97,8 +109,10 @@ int main(int argc, char *argv[]){
   }
 
   /*Frees Debug Log memory*/
-  debug_log(PRINT, "Debug global variable destruction");
-  debug_destroy(debugLog);
+  if(debugLog){
+    debug_log(PRINT, "Debug global variable destruction");
+    debug_destroy(debugLog);
+  }
 
   return 0;
 }

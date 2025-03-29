@@ -11,6 +11,8 @@
 #ifndef DEBUG_PRINTING_H
 #define DEBUG_PRINTING_H
 
+#include <stdbool.h>
+
 #define MAX_FILE_PATH_LENGTH 32
 
 /**
@@ -38,7 +40,7 @@ typedef struct _Debug Debug;
  * @param debugFilePath
  * @return Debug*
  */
-Debug *debug_create(char *debugFilePath, short setAsGlobal);
+Debug *debug_create(char *debugFilePath, bool setAsGlobal);
 
 /**
  * @brief Frees all the memory and closes file

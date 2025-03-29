@@ -15,10 +15,10 @@ struct _Debug
     FILE *logFile;                          /*!< Store the pointer to the open file*/
 };
 
-Debug* globalDebug;     /*!< Debug global variable so debug_log doesnt require any Debug* type parameter (Tries to mimic the Singleton behaviour from C#)*/
+Debug* globalDebug = NULL;     /*!< Debug global variable so debug_log doesnt require any Debug* type parameter (Tries to mimic the Singleton behaviour from C#)*/
 
 
-Debug* debug_create(char* debugFilePath, short setAsGlobal)
+Debug* debug_create(char* debugFilePath, bool setAsGlobal)
 {
     Debug *debug = NULL;
     if(debugFilePath == NULL)
@@ -63,6 +63,8 @@ int debug_log(LOG_LEVEL level, char *formatedString, ...)
     struct tm * timeinfo;
 
     char *finalString;
+
+    if(!globalDebug) return 0;
 
     time(&rawtime);
     timeinfo = localtime(&rawtime);

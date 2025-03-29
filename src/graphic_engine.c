@@ -289,7 +289,8 @@ void graphic_engine_paint_commandInfo(Graphic_engine *ge, Game *game){
   screen_area_clear(ge->help);
   sprintf(str, " The commands you can use are:");
   screen_area_puts(ge->help, str);
-  command_get_list(str);
+  /*Gets command list*/
+  command_get_list(game_get_last_command(game), str, game_get_state(game), false);
   screen_area_puts(ge->help, str);
   
   /*Paints commands*/
@@ -489,6 +490,18 @@ void graphic_engine_paint_combat(Graphic_engine *ge, Game *game){
     screen_area_puts(ge->descript, str);
   }
 
+
+  screen_area_puts(ge->descript, " ");
+  screen_area_puts(ge->descript, " ");
+  /*Paints game messages*/
+  if(game_log_hasMessage(game)){
+    strcpy(str, "Messages:");
+    screen_area_puts(ge->descript, str);
+  }
+  while(game_log_hasMessage(game)){
+    game_get_log_message(game, str);
+    screen_area_puts(ge->descript, str);
+  }
 }
 
 void graphic_engine_paint_space(Game *game, Space *space, Direction direction,char map[SPACE_HEIGHT + 1][MAP_WIDTH + 33], char spaceStr[SPACE_HEIGHT + 1][SPACE_WIDTH+10]){

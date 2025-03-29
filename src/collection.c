@@ -228,6 +228,8 @@ Status collection_free_elements(Collection *collection, void (*free_element)(voi
     if(!collection || !free_element) return ERROR;
     if(!(collection->list)) return ERROR;
 
+    if(collection->length == 0) return OK;
+
     for (i = 0; i < collection->length; i++)
     {
         free_element(collection->list[i]);
