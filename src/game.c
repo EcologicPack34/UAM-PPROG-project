@@ -713,6 +713,7 @@ AbilityManager *game_get_ability_manager(Game *game){
   return game->ability_manager;
 }
 
+/*
 Player *game_get_player_by_id(Game *game, Id id){
   int i;
   Player *player = NULL;
@@ -727,7 +728,7 @@ Player *game_get_player_by_id(Game *game, Id id){
   }
 
   return NULL;
-}
+}*/
 
 NPC *game_get_NPC_by_id(Game *game, Id id){
   int i, size;

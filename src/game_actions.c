@@ -108,8 +108,22 @@ Status game_actions_runaway(Game *game);
  */
 Status game_actions_switch(Game *game);
 
+/**
+ * @brief Action for using ability
+ * @author Maksym Polyak
+ * 
+ * @param game 
+ * @return Status 
+ */
 Status game_actions_use_ability(Game *game);
 
+/**
+ * @brief Action for using object if posible
+ * @author Maksym Polyak
+ * 
+ * @param game 
+ * @return Status 
+ */
 Status game_actions_object_use(Game *game);
 
 /**
