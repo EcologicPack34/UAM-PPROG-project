@@ -142,7 +142,7 @@ Status game_actions_help(Game *game);
 Status game_actions_update(Game *game, Command *command) {
   CommandCode cmd;
   Status status = ERROR;
-  char str[WORD_SIZE];
+  char str[WORD_SIZE] = "";
 
   Entity *player = NULL;
 
@@ -214,7 +214,9 @@ Status game_actions_update(Game *game, Command *command) {
 
   player = player_get_entity(game_get_player(game));
 
-  debug_log(PRINT,"Executed command: %s; by player %d:%s",str , entity_get_id(player), entity_get_name(player));
+  if(player){
+    debug_log(PRINT,"Executed command: %s; by player %d:%s",str , entity_get_id(player), entity_get_name(player));
+  }
 
   return OK;
 }

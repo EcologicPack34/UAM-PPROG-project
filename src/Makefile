@@ -151,7 +151,7 @@ gdb:
 
 runv:
 	make debug
-	valgrind --leak-check=full --track-origins=yes ./anthilldebug anthill.dat
+	valgrind --leak-check=full --track-origins=yes --show-leak-kinds=all ./anthilldebug anthill.dat
 
 run_entity_test:
 	make

@@ -646,7 +646,7 @@ Status game_reader_load_npcs(Game *game, char *filename){
         status = ERROR;
         break;
       }
-
+      
       entity_set_graphic_description(npc_get_entity(npc), toks);
       if (game_add_npc(game, npc) == ERROR){
         printf("npc creation wrong");
@@ -888,7 +888,10 @@ Status game_reader_load_commandInfo(Game *game){
     }
     for (i = 0; i < N_CMD; i++)
     {
-      if(!fgets(line, WORD_SIZE -1 , file)) return ERROR;
+      if(!fgets(line, WORD_SIZE -1 , file)){
+        fclose(file);
+        return ERROR;
+      } 
 
       length = strlen(line);
       for (j = 0; j < length; j++)
@@ -899,11 +902,13 @@ Status game_reader_load_commandInfo(Game *game){
       str[j] = 0;
 
       if(command_set_info(game_get_last_command(game), i + NO_CMD, str) == ERROR){
+        fclose(file);
         return ERROR;
       }
     }
     break;
   }
+  fclose(file);
   return OK;
 }
 
@@ -929,7 +934,10 @@ Status game_reader_load_commandStateTypes(Game *game){
     }
     for (i = 0; i < N_GAME_STATES; i++)
     {
-      if(!fgets(line, WORD_SIZE -1 , file)) return ERROR;
+      if(!fgets(line, WORD_SIZE -1 , file)){
+        fclose(file);
+        return ERROR;
+      } 
 
       word = 0;
       curChar = 0;
@@ -962,5 +970,6 @@ Status game_reader_load_commandStateTypes(Game *game){
     }
     break;
   }
+  fclose(file);
   return OK;
 }
