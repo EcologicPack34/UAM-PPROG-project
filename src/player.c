@@ -53,13 +53,14 @@ Status player_set_entity(Player *player, Entity *entity){
    Game interface implementation
 */
 
-Player *player_create(char *name, Id identity, Id location, double maxhealth, double health, double baseDamage, int strength, int defense, int magicLevel){
+Player *player_create(char *name, Id identity, Id location){
     Player *player = NULL;
 
     if(!(player = (Player *)malloc(sizeof(player))))
         return NULL;
     
-    if(player_set_entity(player,entity_create(name, identity, location, PLAYER_INVENTORY, maxhealth, health, baseDamage, strength, defense, magicLevel)) == ERROR)
+    /*by default, all stats are set to lvl 1*/
+    if(player_set_entity(player,entity_create(name, identity, location, PLAYER_INVENTORY)) == ERROR)
         return NULL;
     
     return player;
