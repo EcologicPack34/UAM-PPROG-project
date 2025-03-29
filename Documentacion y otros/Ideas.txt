@@ -8,7 +8,7 @@ I3 - NULL - Implementar guardado de juego y lectura de guardado
 I3 - Sofía - Añadir multiplicidad (los objetos tienen distinto id pero mismo nombre, pero a la hora de mostrar en pantalla sale el numero que hay y no por separado todos).
 I3 - Maksym - Añadir habilidades(seguir formato de eventos)
 I3 - Maksym - Añadir funcionalidad de objetos --> (Se llamara desde game actions el use, que usara el objeto y el game para modificar lo que tenga que modificar)
-I3 - POSPUESTO -Añadir equipamiento
+I3 - Maksym -Añadir equipamiento
 I3 - Sofía - Modificar combate - Añadir ataques base, esquivar ataques y con todo lo anterior
 I3 - Maksym - Añadir modo de loot (añadir a game reader en objetos añadir, a inventario de npc)
     Los enemigos tienen una lista, se cogen aleatoriamente un numero de objetos de su inventario y se sueltan al espacio
@@ -20,6 +20,10 @@ I3 - Sistema de misiones --> Mirar
 I3 - POSIBLE: Niveles de EXP
 I3 - POSIBLE: Generación procedural de mapa
 I3 - Espacios "seguros"
+
+FIXEAR - Cuando se añada el combate ajustar el uso de cooldowns y el añadir habilidades
+--> También tener cuidado porque usar una skill ahora no salta "turno" asi que el cooldown
+se gasta si spameas sk
 
 PENDIENTE - Implementación Combate estilo RPG? --> Se puede desarrollar uno sencillo
 PENDIENTE - Creación de objetos con funciones (Ejemplo: Cristal de teletransporte(Te lleva a la zona X))

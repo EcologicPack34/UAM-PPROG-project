@@ -48,15 +48,10 @@ typedef struct _NPC NPC;
  * @param name name of the NPC
  * @param id id of the NPC
  * @param location id of the space where the NPC is located
- * @param maxhealth max health of the NPC
- * @param health health of the NPC
- * @param baseDamage base damage of the NPC
- * @param strength strength stat of the NPC
- * @param defense defense stat of the NPC
- * @param magicLevel magic level stat of the NPC
+ *
  * @return NPC* or NULL if error
  */
-NPC *npc_create(NPC_status status, char *message, char *name, Id id, Id location, double maxhealth, double health, double baseDamage, int strength, int defense, int magicLevel);
+NPC *npc_create(NPC_status status, char *message, char *name, Id id, Id location);
 
 /**
  * @brief Frees all the memory related to an npc

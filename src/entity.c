@@ -17,6 +17,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "ability_manager.h"
 
 #define NO_NAME ""
 
@@ -34,6 +35,9 @@ struct _Entity {
     Id location;              /*!< Id of the space where the entity is located*/
     Inventory *inventory;     /*!< entity inventory */
 
+    Ability **ability; /*!< Abilitys of the entity*/
+    int n_ability;   /*!< Number of ability the entity has*/
+
     char gdesc[ENTITY_GRAPHIC_LENGTH + 1];
 
     Entity_Stats stats;       /*!< Entity combat stats */
@@ -45,12 +49,8 @@ struct _Entity {
  * Entity public implementation
 */
 
-Entity *entity_create(char *name, Id id, Id location, InventoryType inventoryType, double maxhealth, double health, double baseDamage, int strength, int defense, int magicLevel){
+Entity *entity_create(char *name, Id id, Id location, InventoryType inventoryType){
     Entity *entity = NULL;
-
-    if(health <= 0 || maxhealth <= 0){
-        return NULL;
-    }
 
     if(name == NULL){
         debug_log(LOG_ERROR, "Unasigned string when creating entity");
@@ -69,21 +69,32 @@ Entity *entity_create(char *name, Id id, Id location, InventoryType inventoryTyp
         return NULL;
     }
 
+    /*Abilitys are not initialized on the entity creation, they are added later*/
+    entity->ability = (Ability **)calloc(MAX_SKILLS_ENTITY, sizeof(Ability *));
+    if((entity->ability) == NULL){
+        inventory_destroy(entity->inventory);
+        free(entity);
+        return NULL;
+    }
+    entity->n_ability = 0;
+
     entity_set_graphic_description(entity, "ERR");
     entity_set_entityType(entity, UNKNOWN_ENTITY);
+
+
 
 
     entity_set_id(entity, id);
     entity_set_name(entity, name);
     entity_set_location(entity, location);
     
-    entity_set_max_health(entity, maxhealth);
-    entity_set_health(entity, health);
+    entity_set_max_health(entity, 1);
+    entity_set_health(entity, 1);
     
-    entity_set_baseDamage(entity, baseDamage);
-    entity_set_strength(entity, strength);
-    entity_set_defense(entity, defense);
-    entity_set_magicLevel(entity, magicLevel);
+    entity_set_baseDamage(entity, 1);
+    entity_set_strength(entity, 1);
+    entity_set_defense(entity, 1);
+    entity_set_magicLevel(entity, 1);
 
     return entity;
 }
@@ -92,6 +103,7 @@ void entity_destroy(Entity *entity){
     if(!entity)
         return;
     
+    free(entity->ability);
     inventory_destroy(entity->inventory);
     free(entity);
     entity = NULL;
@@ -229,6 +241,61 @@ EntityType entity_get_entityType(Entity *entity){
         return UNKNOWN_ENTITY;
 
     return entity->entityType;
+}
+
+Status entity_add_ability(Entity *entity, Ability *ability){
+    int i;
+    
+    if(!entity || !ability || entity->n_ability > MAX_SKILLS_ENTITY || entity->n_ability < 0) 
+        return ERROR;
+
+    for(i = 0; i < MAX_SKILLS_ENTITY; i++){
+        if(entity->ability[i] == NULL){
+            entity->ability[i] = ability;
+            entity->n_ability++;
+            return OK;
+        }
+    }
+
+    return OK;
+}
+
+Status entity_remove_ability(Entity *entity, Ability *ability){
+    int i;
+    
+    if(!entity || !ability || entity->n_ability == 0) 
+        return ERROR;
+
+    for(i = 0; i < entity->n_ability; i++){
+        if(entity->ability[i] == ability){
+            entity->ability[i] = NULL;
+            entity->n_ability--;
+            return OK;
+        }
+    }
+
+    return OK;
+}
+
+Ability *entity_get_ability_at(Entity *entity, int index){
+    if(!entity)
+        return NULL;
+
+    return entity->ability[index];
+}
+
+Ability *entity_get_ability_by_name(Entity *entity, char *name){
+    int i;
+    
+    if(!entity || !name)
+        return NULL;
+
+    for(i = 0; i < entity->n_ability; i++){
+        if(strcpy(ability_get_name(entity->ability[i]), name) == 0)
+            return entity->ability[i];
+    }
+
+    return NULL;
 }
 
 double entity_get_max_health(Entity *entity){

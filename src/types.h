@@ -20,7 +20,9 @@
 #define NPC_MAX_ENEMIES 4
 #define COMBAT_MAX_ENTITIES 8
 
+
 #define N_GAME_STATES 5
+#define MAX_SKILLS_ENTITY 5
 
 typedef long Id;        /*!< Id typedef */
 
