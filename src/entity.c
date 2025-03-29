@@ -49,7 +49,7 @@ struct _Entity {
  * Entity public implementation
 */
 
-Entity *entity_create(char *name, Id id, Id location, InventoryType inventoryType){
+Entity *entity_create(char *name, Id identity, Id idlocation, InventoryType inventoryType){
     Entity *entity = NULL;
 
     if(name == NULL){
@@ -63,13 +63,13 @@ Entity *entity_create(char *name, Id id, Id location, InventoryType inventoryTyp
         return NULL;
     }
 
-    entity->inventory = inventory_create(inventoryType, id);
+    entity->inventory = inventory_create(inventoryType, identity);
     if((entity->inventory) == NULL){
         free(entity);
         return NULL;
     }
 
-    /*Abilitys are not initialized on the entity creation, they are added later*/
+    /*Abilities are not initialized on the entity creation, they are added later*/
     entity->ability = (Ability **)calloc(MAX_SKILLS_ENTITY, sizeof(Ability *));
     if((entity->ability) == NULL){
         inventory_destroy(entity->inventory);
@@ -84,9 +84,9 @@ Entity *entity_create(char *name, Id id, Id location, InventoryType inventoryTyp
 
 
 
-    entity_set_id(entity, id);
+    entity_set_id(entity, identity);
     entity_set_name(entity, name);
-    entity_set_location(entity, location);
+    entity_set_location(entity, idlocation);
     
     entity_set_max_health(entity, 1);
     entity_set_health(entity, 1);
