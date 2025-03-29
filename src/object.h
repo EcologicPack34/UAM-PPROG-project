@@ -192,6 +192,15 @@ int object_get_n_uses(Object *object);
 Ability *object_get_object_effect(Object *object);
 
 /**
+ * @brief Gets the string with the information about an object for the game to process
+ * @author Maksym Polyak
+ * 
+ * @param object 
+ * @return char* or NULL if error
+ */
+char *object_get_data(Object *object);
+
+/**
  * @brief Prints on screen an object
  * @author Maksym Polyak
  *

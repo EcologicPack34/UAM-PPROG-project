@@ -200,6 +200,12 @@ Ability *object_get_object_effect(Object *object){
     return object->object_effect;
 }
 
+char *object_get_data(Object *object){
+    if(!object) return NULL;
+
+    return object->data;
+}
+
 void object_print(void *object){
     
     printf("\n\n-------------\n\n");
