@@ -48,17 +48,6 @@ struct _Space {
   Collection *npcs;             /*!<  Collection of npcs in the given space*/
 };
 
-/*Space private functions*/
-
-/*GETTERS*/
-
-
-/*SETTERS*/
-
-
-/*PRIVATE IMPLEMENTATION*/
-
-
 /*Space public functions*/
 
 Space* space_create(Id id) {
@@ -224,7 +213,18 @@ Status space_set_graphic_description(Space *space, char *desc, int index){
   return OK;
 }
 
+Status space_set_isDiscovered(Space *space, bool status){
+  if(!space) return ERROR;
+  space->discovered = status;
+  return OK;
+}
+
 /*Space GETTERS*/
+
+bool space_get_isDiscovered(Space *space){
+  if(!space) return false;
+  return space->discovered;
+}
 
 char **space_get_graphic_description(Space *space){
   if(!space) return NULL;

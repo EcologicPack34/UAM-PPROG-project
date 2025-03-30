@@ -166,7 +166,27 @@ Status space_set_neighbour(Space *space, Space *neighbour, Direction direction);
  */
 Status space_set_graphic_description(Space *space, char *desc, int index);
 
+/**
+ * @brief Sets if the space has been discovered or not.
+ * @author Daniel Gómez
+ * 
+ * @param space 
+ * @param status 
+ * @return Status 
+ */
+Status space_set_isDiscovered(Space *space, bool status);
+
 /*Space GETTERS*/
+
+/**
+ * @brief Gets if a given spaces has been discovered
+ * @author Daniel Gómez
+ * 
+ * @param space 
+ * @return true 
+ * @return false 
+ */
+bool space_get_isDiscovered(Space *space);
 
 /**
  * @brief Gets the reference to the graphic description of a space

@@ -199,12 +199,15 @@ void graphic_engine_paint_generalDesc(Graphic_engine *ge, Game *game){
   char str[WORD_SIZE];
   char strAux[WORD_SIZE];
   Space *currentSpace;
-  
+  bool spaceDiscovered = false;
+
+
   screen_area_clear(ge->descript);
 
   currentSpace = game_get_space(game, game_get_player_location(game));
   if(!currentSpace) return;
   
+  spaceDiscovered = space_get_isDiscovered(currentSpace);
 
   playerInventory = entity_get_inventory(player_get_entity(game_get_player(game)));
   inventorysize = inventory_get_size(playerInventory);
@@ -241,28 +244,39 @@ void graphic_engine_paint_generalDesc(Graphic_engine *ge, Game *game){
   inventorysize = inventory_get_size(spaceInventory);
   strcpy(str, "Space inventory:");
   screen_area_puts(ge->descript, str);
-  if(inventorysize == 0){
-    screen_area_puts(ge->descript, "No Objects in Space Inventory");
+
+  if(!spaceDiscovered){
+    screen_area_puts(ge->descript, "Space hasn't been explored");
   }else{
-    for(i = 0; i < inventorysize && i < 5; i++){
-      inventory_get_object_str_at(spaceInventory, str, i);
-      screen_area_puts(ge->descript, str);
+    if(inventorysize == 0){
+      screen_area_puts(ge->descript, "No Objects in Space Inventory");
+    }else{
+      for(i = 0; i < inventorysize && i < 5; i++){
+        inventory_get_object_str_at(spaceInventory, str, i);
+        screen_area_puts(ge->descript, str);
+      }
     }
   }
+
   screen_area_puts(ge->descript, " ");
 
   /*Paints space npcs info*/
   size = space_get_npc_count(currentSpace);
-  strcpy(str, "NPCs:");
-  screen_area_puts(ge->descript, str);
-  for(i = 0; i < size && i < 5; i++){
-    if(entity_get_health(npc_get_entity(space_get_NPC_at(currentSpace, i))) <= 0) continue;
+  screen_area_puts(ge->descript, "NPCs:");
 
-    strcpy(str, "   ");
-    npc_get_str_descr(space_get_NPC_at(currentSpace, i), strAux, i + 1);
-    strcat(str,strAux);
-    screen_area_puts(ge->descript, str);
+  if(!spaceDiscovered){
+    screen_area_puts(ge->descript, "Space hasn't been explored");
+  }else{
+    for(i = 0; i < size && i < 5; i++){
+      if(entity_get_health(npc_get_entity(space_get_NPC_at(currentSpace, i))) <= 0) continue;
+  
+      strcpy(str, "   ");
+      npc_get_str_descr(space_get_NPC_at(currentSpace, i), strAux, i + 1);
+      strcat(str,strAux);
+      screen_area_puts(ge->descript, str);
+    }
   }
+
   screen_area_puts(ge->descript, " ");
 
   /*Paints game messages*/
@@ -514,9 +528,13 @@ void graphic_engine_paint_space(Game *game, Space *space, Direction direction,ch
 
   char** gdesc = NULL;
 
+  bool spaceDiscovered = false;
+
   if(space){
     
     gdesc = space_get_graphic_description(space);
+    spaceDiscovered = space_get_isDiscovered(space);
+
 
     /*Determines the state of the top conexion*/
     link1 = space_get_north(space);
@@ -532,7 +550,7 @@ void graphic_engine_paint_space(Game *game, Space *space, Direction direction,ch
     /*Prints Id of space + player + npcs*/
     space_get_NPC_list(space, strAux, 6);
     strcpy(player, entity_get_graphic_description(player_get_entity(game_get_player(game))));
-    sprintf(str, spaceStr[1], (direction == NO_DIR) ? player : " ", strAux ,space_get_id(space));
+    sprintf(str, spaceStr[1], (direction == NO_DIR) ? player : " ", (spaceDiscovered == true) ? strAux : " ", space_get_id(space));
     strcat(map[1],str);
 
     sprintf(str, spaceStr[2], gdesc[0]);
@@ -567,7 +585,7 @@ void graphic_engine_paint_space(Game *game, Space *space, Direction direction,ch
 
     /*Prints the list of items in the last row of the space*/
     inventory_get_object_list(space_get_inventory(space), strAux, 1, SPACE_WIDTH - 2);
-    sprintf(str, spaceStr[7], strAux);
+    sprintf(str, spaceStr[7], (spaceDiscovered == true) ? strAux : " ");
     strcat(map[7],str);
 
     /*Determines the state of the top conexion*/

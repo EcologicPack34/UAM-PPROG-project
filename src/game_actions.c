@@ -135,6 +135,16 @@ Status game_actions_object_use(Game *game);
  */
 Status game_actions_help(Game *game);
 
+
+/**
+ * @brief Action for Searching command
+ * @author Daniel
+ * 
+ * @param game 
+ * @return Status 
+ */
+Status game_actions_search(Game *game);
+
 /**
    Game actions implementation
 */
@@ -204,6 +214,8 @@ Status game_actions_update(Game *game, Command *command) {
     case OBJECT_USE:
       status = game_actions_object_use(game);
       break;
+    case SEARCH:
+      status = game_actions_search(game);
     default:
       break;
   }
@@ -575,4 +587,16 @@ Status game_actions_object_use(Game *game){
   // ADD FUNCTION TO REDUCE N_USES ON AN OBJECT AND REMOVE IT IF ITS 0
 
   return ability_manager_use_ability(game_get_ability_manager(game), object_get_object_effect(object));
+}
+
+Status game_actions_search(Game *game){
+  Space *space = NULL;
+  
+  if(!game) return ERROR;
+
+  space = game_get_space(game, game_get_player_location(game));
+  if(space_get_isDiscovered(space)) return ERROR;
+  
+  space_set_discovered(space, true);
+  return OK;
 }
