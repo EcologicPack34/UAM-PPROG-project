@@ -16,6 +16,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "equipment.h"
 
 #define NO_NAME ""
 
@@ -26,6 +27,8 @@
  */
 struct _Player {
     Entity *entity;           /*!< Entity type of the player */
+
+    Equipment *equipment;     /*!< Equipment of the player*/
 };
 
 
@@ -60,8 +63,15 @@ Player *player_create(char *name, Id identity, Id location){
         return NULL;
     
     /*by default, all stats are set to lvl 1*/
-    if(player_set_entity(player,entity_create(name, identity, location, PLAYER_INVENTORY)) == ERROR)
+    if(player_set_entity(player,entity_create(name, identity, location, PLAYER_INVENTORY)) == ERROR){
+        free(player);
         return NULL;
+    }
+
+    if((player->equipment = equipment_create()) == ERROR){
+        entity_destroy(player->entity);
+        free(player);
+    }
     
     return player;
 }
@@ -71,6 +81,7 @@ void player_destroy(Player *player){
         return;
 
     entity_destroy(player_get_entity(player));
+    equipment_destroy(player->equipment);
     free(player);
 }
 
@@ -81,6 +92,13 @@ Entity *player_get_entity(Player *player){
         return NULL;
 
     return player->entity;
+}
+
+Equipment *player_get_equipment(Player *player){
+    if (!player)
+        return NULL;
+
+    return player->equipment;
 }
 
 Status player_get_str_desc(Player *player, char *str){
@@ -112,4 +130,44 @@ void player_print(Player *player){
     printf("=> Player location: %d\n", (int)entity_get_location(entityPlayer));
 }
 
+Status player_equip_piece(Player *player, Object *object){
+    Entity *entity = NULL;
+    Inventory *inventory = NULL;
 
+    if(!player || !object) return ERROR;
+
+    entity = player_get_entity(player);
+    inventory = entity_get_inventory(entity);
+
+    if(inventory_contains_object(inventory, object_get_id(object)) == false)
+        return ERROR;
+
+    if(equipment_add_piece(player->equipment, object) == ERROR)
+        return ERROR;
+
+    inventory_remove_object(inventory, object);
+
+    return OK;
+}
+
+Status player_unequip_piece(Player *player, EquipmentCode code){
+    Entity *entity = NULL;
+    Inventory *inventory = NULL;
+    Object *object = NULL;
+
+    if(!player) return ERROR;
+
+    entity = player_get_entity(player);
+    inventory = entity_get_inventory(entity);
+
+    if(inventory_get_size(inventory) == INVENTORY_PLAYER_MAX_SIZE)
+        return ERROR;
+
+    object = equipment_remove_piece(player->equipment, code);
+    if(object == NULL)
+        return ERROR;
+
+    inventory_add_object(inventory, object);
+
+    return OK;
+}

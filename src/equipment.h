@@ -14,7 +14,11 @@
 #ifndef EQUIPMENT_H
 #define EQUIPMENT_H
 
-typedef enum {EQUIPMENT_ERROR, HELMET, CHEST, ARMS, LEG_ARMOR, SHOES, TWO_HANDED, ONE_HANDED} EquipmentCode;
+#include "object.h"
+#include "entity.h"
+#include "types.h"
+
+typedef enum {EQUIPMENT_ERROR, HELMET, CHEST, ARMS, LEG_ARMOR, SHOES, TWO_HANDED, ONE_HANDED_1, ONE_HANDED_2} EquipmentCode;
 
 typedef struct _Equipment Equipment;
 
@@ -39,6 +43,15 @@ Equipment *equipment_create();
 void equipment_destroy(Equipment *equipment);
 
 /**
+ * @brief Gets the EquipmentCode from a string
+ * @author Maksym Polyak
+ * 
+ * @param data 
+ * @return EquipmentCode 
+ */
+EquipmentCode equipment_code_from_str(char *data);
+
+/**
  * @brief Tries to add an object as a piece if it is compatible
  * @author Maksym Polyak
  * 
@@ -47,5 +60,15 @@ void equipment_destroy(Equipment *equipment);
  * @return Status 
  */
 Status equipment_add_piece(Equipment *equipment, Object *object);
+
+/**
+ * @brief Removes a piece and returns the object
+ * @author Maksym Polyak
+ * 
+ * @param equipment 
+ * @param code 
+ * @return Object* or NULL if error
+ */
+Object *equipment_remove_piece(Equipment *equipment, EquipmentCode code);
 
 #endif
