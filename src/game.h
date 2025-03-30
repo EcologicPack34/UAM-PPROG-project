@@ -90,9 +90,10 @@ Space *game_get_space(Game *game, Id id);
  * 
  * @param game 
  * @param pos 
+ * @param block
  * @return Space* 
  */
-Space *game_get_space_by_position(Game *game, Vector2 pos);
+Space *game_get_space_by_position(Game *game, Vector2 pos, int block);
 
 /**
  * @brief Checks the game->spaces[position] and returns the ID of that position on the array

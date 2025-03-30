@@ -72,7 +72,16 @@ Link *game_get_link_at(Game *game, long index){
   return game->links[index];
 }
 
-
+/**
+ * @brief Maps spatially a block of spaces starting at initSpace
+ * @author Daniel Gómez
+ * 
+ * @param game 
+ * @param initSpace 
+ * @param block 
+ * @return Status 
+ */
+Status game_map_space_block(Game *game, Space *initSpace ,int block);
 
 /**
    Game interface implementation
@@ -231,7 +240,7 @@ Id game_get_space_id_at(Game *game, int position) {
   return space_get_id(game->spaces[position]);
 }
 
-Space *game_get_space_by_position(Game *game, Vector2 pos){
+Space *game_get_space_by_position(Game *game, Vector2 pos, int block){
   int i;
   Space *space = NULL;
   
@@ -240,7 +249,7 @@ Space *game_get_space_by_position(Game *game, Vector2 pos){
   for (i = 0; i < game->n_spaces; i++)
   {
     space = game->spaces[i];
-    if(vector2_isEqual(&pos, space_get_position(space)) == 0){
+    if(vector2_isEqual(&pos, space_get_position(space)) == 0 && space_get_map_block(space) == block){
       return space;
     }
   }
@@ -339,10 +348,29 @@ Status game_set_state(Game *game, GameState state){
 */
 
 Status game_spatial_map(Game *game){
+  int i;
+  int currentBlock = 0;
+
+  if(!game) return ERROR;
+
+  for (i = 0; i < game->n_spaces; i++)
+  {
+    if(!space_get_isMapped(game->spaces[i])){
+      if(game_map_space_block(game, game->spaces[i], currentBlock) == ERROR){
+        return ERROR;
+      }
+      currentBlock++;
+    }
+  }
+  return OK;
+}
+
+Status game_map_space_block(Game *game, Space *initSpace ,int block){
   Queue *queue = NULL;
+  Queue *queueAux = NULL;
   bool failed = false;
 
-  Link *north = NULL, *east = NULL, *south = NULL, *west = NULL;
+  Link *link = NULL;
   Id auxId = NO_ID;
 
   Vector2 n = {0 ,1};
@@ -368,11 +396,12 @@ Status game_spatial_map(Game *game){
   struct SpaceInfo *info = NULL;
   struct SpaceInfo *infoAux = NULL;
 
-  if(!game) return ERROR;
+  if(!initSpace) return ERROR;
 
 
   /*Creates queue*/
   queue = queue_create();
+  queueAux = queue_create();
 
   info = calloc(1, sizeof(struct SpaceInfo));
   if(!info){
@@ -382,127 +411,77 @@ Status game_spatial_map(Game *game){
 
   info->pos.x = 0;
   info->pos.y = 0;
-  info->space = game->spaces[0];
+  info->space = initSpace;
 
   /*Assigns intial values to space 0 in the array of spaces*/
   space_set_isMapped(info->space,true);
+  space_set_map_block(info->space, block);
   space_set_position(info->space, info->pos.x, info->pos.y);
   queue_push(queue, (void *)info);
+  queue_push(queueAux, (void *)(initSpace));
 
   /*Cycles through queue adding neighbour spaces and mapping them*/
-  while(!queue_isEmpty(queue)){
+  while(!queue_isEmpty(queue) && !failed){
     info = (struct SpaceInfo *)queue_pop(queue);
 
-    north = space_get_north(info->space);
-    east = space_get_east(info->space);
-    south = space_get_south(info->space);
-    west = space_get_west(info->space);
-
-    /*Checks if a connexion exist for each direction*/
-    if(north){
-      auxId = link_get_oposite_space(north, space_get_id(info->space));
-      
-      if(link_is_adjacent(north)){
+    for (i = 0; i < 4; i++)
+    {
+      switch (i)
+      {
+        case 0:
+          link = space_get_north(info->space);
+          auxVector = n;
+          break;
+        case 1:
+          link = space_get_east(info->space);
+          auxVector = e;
+          break;
+        case 2:
+          link = space_get_west(info->space);
+          auxVector = w;
+          break;
+        case 3:
+          link = space_get_south(info->space);
+          auxVector = s;
+          break;
+        default:
+          break;
+      }
+      if(link){
+        auxId = link_get_oposite_space(link, space_get_id(info->space));
+  
+        if(!link_is_adjacent(link)){
+          continue;
+        }
         /*Gets memory for auxiliary info for queue*/
         infoAux = calloc(1, sizeof(struct SpaceInfo));
-        if(!infoAux){
+        if (!infoAux){
           /*If failed stops the loop*/
           failed = true;
           break;
         }
-
         /*Sets the new position*/
         infoAux->pos = info->pos;
-        vector2_add(&(infoAux->pos), n);
+        vector2_add(&(infoAux->pos), auxVector);
         infoAux->space = game_get_space(game, auxId);
-        
+
+
         /*Checks if spaces has already beign processed, if not mark it, set position and add to queue*/
         if(!space_get_isMapped(infoAux->space)){
           space_set_isMapped(infoAux->space,true);
+          space_set_map_block(infoAux->space, block);
           space_set_position(infoAux->space, infoAux->pos.x, infoAux->pos.y);
           queue_push(queue, (void *)infoAux);
+          queue_push(queueAux, (void *)(infoAux->space));
         }else{
           /*If spaces already mapped it frees memory*/
           free(infoAux);
-        }
-
-      }
-    }
-    /*Comments from the above block scope applies to the next 3 blocks*/
-    if(east){
-      auxId = link_get_oposite_space(east, space_get_id(info->space));
-      
-      if(link_is_adjacent(east)){
-        infoAux = calloc(1, sizeof(struct SpaceInfo));
-        if(!infoAux){
-          failed = true;
-          break;
-        }
-
-        infoAux->pos = info->pos;
-        vector2_add(&(infoAux->pos), e);
-        infoAux->space = game_get_space(game, auxId);
-
-        
-        if(!space_get_isMapped(infoAux->space)){
-          space_set_isMapped(infoAux->space,true);
-          space_set_position(infoAux->space, infoAux->pos.x, infoAux->pos.y);
-          queue_push(queue, (void *)infoAux);
-        }else{
-          free(infoAux);
+          infoAux = NULL;
         }
       }
     }
-    if(south){
-      auxId = link_get_oposite_space(south, space_get_id(info->space));
-      
-      if(link_is_adjacent(south)){
-        infoAux = calloc(1, sizeof(struct SpaceInfo));
-        if(!infoAux){
-          failed = true;
-          break;
-        }
-
-        infoAux->pos = info->pos;
-        vector2_add(&(infoAux->pos), s);
-        infoAux->space = game_get_space(game, auxId);
-
-        
-        if(!space_get_isMapped(infoAux->space)){
-          space_set_isMapped(infoAux->space,true);
-          space_set_position(infoAux->space, infoAux->pos.x, infoAux->pos.y);
-          queue_push(queue, (void *)infoAux);
-        }else{
-          free(infoAux);
-        }
-      }
-    }
-    if(west){
-      auxId = link_get_oposite_space(west, space_get_id(info->space));
-      
-      if(link_is_adjacent(west)){
-        infoAux = calloc(1, sizeof(struct SpaceInfo));
-        if(!infoAux){
-          failed = true;
-          break;
-        }
-
-        infoAux->pos = info->pos;
-        vector2_add(&(infoAux->pos), w);
-        infoAux->space = game_get_space(game, auxId);
-
-        
-        if(!space_get_isMapped(infoAux->space)){
-          space_set_isMapped(infoAux->space,true);
-          space_set_position(infoAux->space, infoAux->pos.x, infoAux->pos.y);
-          queue_push(queue, (void *)infoAux);
-        }else{
-          free(infoAux);
-        }
-      }
-    }
-
     /*Frees the element we poped from the queue as is no longer needed*/
+    link = NULL;
     free(info);
   }
 
@@ -517,44 +496,44 @@ Status game_spatial_map(Game *game){
   queue_destroy(queue);
   
   /*Sets NW, NE, SW and SE spaces withing the Space struct as they are not considered above*/
-  for (i = 0; i < game->n_spaces; i++)
-  {
-    auxSpace = game->spaces[i];
+  while(!queue_isEmpty(queueAux)){
+    auxSpace = (Space *)queue_pop(queueAux);
     if(!space_get_isMapped(auxSpace)) continue;
     /*North*/
     vector2_copy(&auxVector, space_get_position(auxSpace));
     vector2_add(&auxVector, n);
-    space_set_neighbour(auxSpace, game_get_space_by_position(game, auxVector), N);
+    space_set_neighbour(auxSpace, game_get_space_by_position(game, auxVector, block), N);
     /*North West*/
     vector2_copy(&auxVector, space_get_position(auxSpace));
     vector2_add(&auxVector, nw);
-    space_set_neighbour(auxSpace, game_get_space_by_position(game, auxVector), NW);
+    space_set_neighbour(auxSpace, game_get_space_by_position(game, auxVector, block), NW);
     /*North East*/
     vector2_copy(&auxVector, space_get_position(auxSpace));
     vector2_add(&auxVector, ne);
-    space_set_neighbour(auxSpace, game_get_space_by_position(game, auxVector), NE);
+    space_set_neighbour(auxSpace, game_get_space_by_position(game, auxVector, block), NE);
     /*South West*/
     vector2_copy(&auxVector, space_get_position(auxSpace));
     vector2_add(&auxVector, sw);
-    space_set_neighbour(auxSpace, game_get_space_by_position(game, auxVector), SW);
+    space_set_neighbour(auxSpace, game_get_space_by_position(game, auxVector, block), SW);
     /*South East*/
     vector2_copy(&auxVector, space_get_position(auxSpace));
     vector2_add(&auxVector, se);
-    space_set_neighbour(auxSpace, game_get_space_by_position(game, auxVector), SE);
+    space_set_neighbour(auxSpace, game_get_space_by_position(game, auxVector, block), SE);
     /*South*/
     vector2_copy(&auxVector, space_get_position(auxSpace));
     vector2_add(&auxVector, s);
-    space_set_neighbour(auxSpace, game_get_space_by_position(game, auxVector), S);
+    space_set_neighbour(auxSpace, game_get_space_by_position(game, auxVector, block), S);
     /*East*/
     vector2_copy(&auxVector, space_get_position(auxSpace));
     vector2_add(&auxVector, e);
-    space_set_neighbour(auxSpace, game_get_space_by_position(game, auxVector), E);
+    space_set_neighbour(auxSpace, game_get_space_by_position(game, auxVector, block), E);
     /*West*/
     vector2_copy(&auxVector, space_get_position(auxSpace));
     vector2_add(&auxVector, w);
-    space_set_neighbour(auxSpace, game_get_space_by_position(game, auxVector), W);
+    space_set_neighbour(auxSpace, game_get_space_by_position(game, auxVector, block), W);
   }
-  
+
+  queue_destroy(queueAux);
   return OK;
 }
 

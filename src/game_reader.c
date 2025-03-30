@@ -896,7 +896,7 @@ Status game_reader_load_commandInfo(Game *game){
       length = strlen(line);
       for (j = 0; j < length; j++)
       {
-        if(!isalnum(line[j]) && line[j] != ' ') break;
+        if(!isalnum(line[j]) && line[j] != ' ' && line[j] != ',' && line[j] != '.' && line[j] != ':' && line[j] != '_' && line[j] != '-') break;
         str[j] = line[j];
       }
       str[j] = 0;
