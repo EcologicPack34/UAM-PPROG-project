@@ -56,6 +56,7 @@ Formato Event: #e:Id|Type|cmdTriggersNum|cmdName1 , ...|removeOnTrigger|tagvalue
 #e:2|object_on_space|2|tk,dr|0|2:14
 #e:3|trigger_combat|3|tk,dr,ch|0|20
 #e:4|player_death|0|0| 
+#e:5|trigger_combat|1|sh|0|40
 
 Formato NPC: #n:ID|Message|Nombre|LocationID|Status|gdesc"
 NPC_status = {UNKNOWN_STATUS == 0, NEUTRAL == 1, ALLY == 2, ENEMY == 3}
