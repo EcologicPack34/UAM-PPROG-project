@@ -79,15 +79,6 @@ Formato STATS: #st:ID|EntityType|VidaMaxima|Vida|DanoBase|Fuerza|Defensa|NivelMa
 #st:4|2|2|5|2|2|2|2|
 #st:5|2|2|5|2|2|2|2|
 
-
-
-
-#n:1|Hello traveler i'm NPC1|NPC1|11|1|1|1|1|1|1|1|^0m"
-#n:2|Hello traveler i'm NPC2|NPC2|11|1|1|1|1|1|1|1|^1m"
-#n:3|Die|Enemy1|11|3|10|10|1|1|1|1|^2m"
-#n:4|Die|Enemy2|11|3|10|10|1|1|1|1|^3m"
-#n:5|Die|Enemy3|11|3|10|10|1|1|1|1|^4m"
-
 Formato Ability: #sk:Id|Type|Name|Entityid|is_player_ability|is_object_use|cd_count|cd_length|data
 
 #sk:1|heal_self|Heal self 25 HP|1|1|0|0|2|25
