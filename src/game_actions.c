@@ -584,7 +584,9 @@ Status game_actions_object_use(Game *game){
   entity = player_get_entity(game_get_player(game));
   object = inventory_get_object_by_name(entity_get_inventory(entity), command_get_arguments(comm)[0]);
 
-  // ADD FUNCTION TO REDUCE N_USES ON AN OBJECT AND REMOVE IT IF ITS 0
+  if(object_get_is_consumable(object) == true){
+    inventory_remove_object(entity_get_inventory(entity), object);
+  }
 
   return ability_manager_use_ability(game_get_ability_manager(game), object_get_object_effect(object));
 }
