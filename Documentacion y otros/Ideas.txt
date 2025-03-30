@@ -1,6 +1,6 @@
-I3 - Dani - Modificar lista de comandos en base al juego
+I3 - DONE -Dani - Modificar lista de comandos en base al juego
 I3 - Dani y Maks - Comenzar OpenGL
-I3 - Dani - Modificar funcionamiento del log para que cumpla los requisitos de la I3
+I3 - DONE -Dani - Modificar funcionamiento del log para que cumpla los requisitos de la I3
 I3 - Dani - Añadir fog of war --> HAcer que se descubra, añadir search del inventory
 I3 - Aaron - Dividir carga de stats en el .dat
 I3 - NULL - Versión básica: Implementar diálogos

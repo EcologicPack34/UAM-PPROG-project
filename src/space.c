@@ -40,6 +40,7 @@ struct _Space {
 
   Vector2 position;
   bool mapped;
+  int mapBlock;
   Space *neighbours[DIRECTION_NUMBER];
 
   Inventory *inventory;         /*!< Inventory of the space*/
@@ -202,6 +203,11 @@ Status space_set_isMapped(Space *space, bool status){
   space->mapped = status;
   return OK;
 }
+Status space_set_map_block(Space *space, int block){
+  if(!space) return ERROR;
+  space->mapBlock = block;
+  return OK;
+}
 Status space_set_neighbour(Space *space, Space *neighbour, Direction direction){
   if(!space) return ERROR;
   space->neighbours[direction] = neighbour;
@@ -233,6 +239,11 @@ Space *space_get_neighbour(Space *space, Direction direction){
 bool space_get_isMapped(Space *space){
   if(!space) return true;
   return space->mapped;
+}
+
+int space_get_map_block(Space *space){
+  if(!space) return -1;
+  return space->mapBlock;
 }
 
 Vector2 *space_get_position(Space *space){

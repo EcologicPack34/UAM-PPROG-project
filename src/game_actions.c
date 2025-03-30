@@ -506,7 +506,7 @@ Status game_actions_help(Game *game){
   argc = command_get_arguments_count(cmd);
 
   if(argc == 0){
-    command_get_list(game_get_last_command(game), str, ERROR_STATE, true);
+    command_get_list(cmd, str, ERROR_STATE, true);
 
   }else if(argc == 1){
     code = command_get_code_from_str(args[0]);

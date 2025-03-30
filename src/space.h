@@ -136,6 +136,16 @@ Status space_set_position(Space *space, float x, float y);
 Status space_set_isMapped(Space *space, bool status);
 
 /**
+ * @brief Sets the mapped block to which the space corresponds
+ * @author Daniel Gómez
+ * 
+ * @param space 
+ * @param block 
+ * @return Status 
+ */
+Status space_set_map_block(Space *space, int block);
+
+/**
  * @brief Sets the neighbour in a given direction of a given spac
  * @author Daniel Gómez
  * 
@@ -185,6 +195,15 @@ Vector2 *space_get_position(Space *space);
  * @return false 
  */
 bool space_get_isMapped(Space *space);
+
+/**
+ * @brief Gets the block in which the space has been mapped
+ * @author Daniel Gómez
+ * 
+ * @param space 
+ * @return int 
+ */
+int space_get_map_block(Space *space);
 
 /**
  * @brief Gets a reference to the neighbour in a certain direction
