@@ -17,6 +17,7 @@
 #include "entity.h"
 #include "collection.h"
 #include "combat.h"
+#include "ability_manager.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -26,23 +27,150 @@
    Private functions
 */
 
+/**
+ * @brief Action for Unkown command
+ * @author Profesores PPROG
+ * 
+ * @param game 
+ * @return Status 
+ */
 Status game_actions_unknown(Game *game);
 
+/**
+ * @brief Action for Unkown command
+ * @author Profesores PPROG
+ * 
+ * @param game 
+ * @return Status 
+ */
 Status game_actions_exit(Game *game);
 
+/**
+ * @brief Action for Unkown command
+ * @author Maksym Polyak y Daniel Gómez
+ * 
+ * @param game 
+ * @return Status 
+ */
 Status game_actions_move(Game *game);
 
+/**
+ * @brief Action for taking object
+ * @author Maksym Polyak
+ * 
+ * @param game 
+ * @return Status 
+ */
 Status game_actions_take(Game *game);
 
+/**
+ * @brief Action for droping object
+ * @author Maksym Polyak
+ * 
+ * @param game 
+ * @return Status 
+ */
 Status game_actions_drop(Game *game);
 
+/**
+ * @brief Action for chating with npcs
+ * @author Daniel Gómez
+ * 
+ * @param game 
+ * @return Status 
+ */
 Status game_actions_chat(Game *game);
 
+/**
+ * @brief Action for combat
+ * @author Maksym Polyak y Daniel Gómez
+ * 
+ * @param game 
+ * @return Status 
+ */
 Status game_actions_attack(Game *game);
 
+/**
+ * @brief Action for escaping combat
+ * @author Maksym Polyak y Daniel Gómez
+ * 
+ * @param game 
+ * @return Status 
+ */
 Status game_actions_runaway(Game *game);
 
+/**
+ * @brief Action for switching player command
+ * @author Maksym Polyak and Daniel Gómez
+ * 
+ * @param game 
+ * @return Status 
+ */
 Status game_actions_switch(Game *game);
+
+/**
+ * @brief Action for using ability
+ * @author Maksym Polyak
+ * 
+ * @param game 
+ * @return Status 
+ */
+Status game_actions_use_ability(Game *game);
+
+/**
+ * @brief Action for using object if posible
+ * @author Maksym Polyak
+ * 
+ * @param game 
+ * @return Status 
+ */
+Status game_actions_object_use(Game *game);
+
+/**
+ * @brief Action for Help command
+ * @author Daniel Gómez
+ * 
+ * @param game 
+ * @return Status 
+ */
+Status game_actions_help(Game *game);
+
+
+/**
+ * @brief Action for Searching command
+ * @author Daniel Gómez
+ * 
+ * @param game 
+ * @return Status 
+ */
+Status game_actions_search(Game *game);
+
+/**
+ * @brief Equips a piece of equipment if possible and
+ * removes it from the inventory
+ * 
+ * @param game 
+ * @return Status 
+ */
+Status game_actions_equip(Game *game);
+
+/**
+ * @brief Unequips a piece of equipment and returns
+ * it to the player inventory
+ * 
+ * @param game 
+ * @return Status 
+ */
+Status game_actions_unequip(Game *game);
+
+/**
+ * @brief Action to inspect an object
+ * @author Daniel Gómez
+ * 
+ * @param game 
+ * @return Status 
+ */
+Status game_actions_inspect(Game *game);
 
 /**
    Game actions implementation
@@ -51,6 +179,9 @@ Status game_actions_switch(Game *game);
 Status game_actions_update(Game *game, Command *command) {
   CommandCode cmd;
   Status status = ERROR;
+  char str[WORD_SIZE] = "";
+
+  Entity *player = NULL;
 
   if(!game || !command) return ERROR;
 
@@ -58,70 +189,83 @@ Status game_actions_update(Game *game, Command *command) {
 
   cmd = command_get_code(command);
 
-  if(game_get_state(game) == DEFAULT){
-    switch (cmd) {
-      case UNKNOWN:
-        status = game_actions_unknown(game);
-        break;
-  
-      case EXIT:
-        status = game_actions_exit(game);
-        break;
-  
-      case NORTH:
-      case EAST:
-      case WEST:
-      case SOUTH:
-        status = game_actions_move(game);
-        break;
-      case TAKE:
-        status = game_actions_take(game);
-        break;
-      
-      case DROP:
-        status = game_actions_drop(game);
-        break;
-  
-      case CHAT:
-        status = game_actions_chat(game);
-        break;
-      
-      case ATTACK:
-        status = game_actions_attack(game);
-        break;
-      case SWITCH:
-        status = game_actions_switch(game);
-        break;
-
-      default:
-        break;
-    }
-  }else if(game_get_state(game) == COMBAT){
-    switch (cmd) {
-      case UNKNOWN:
-        status = game_actions_unknown(game);
-        break;
-  
-      case EXIT:
-        status = game_actions_exit(game);
-        break;
-      
-      case ATTACK:
-        status = game_actions_attack(game);
-        break;
-      case RUN_AWAY:
-        status = game_actions_runaway(game);
-        break;
-
-      default:
-        break;
-    }
+  if(!command_current_type_valid_by_state(game_get_last_command(game), game_get_state(game))){
+    command_set_status(game_get_last_command(game), ERROR);
+    debug_log(LOG_WARNING, "Introduced command was not valid for current game state (state: %d)", game_get_state(game) - ERROR_STATE);
+    return ERROR;
   }
-  
 
-  
+  switch (cmd) {
+    case UNKNOWN:
+      status = game_actions_unknown(game);
+      break;
+
+    case EXIT:
+      status = game_actions_exit(game);
+      break;
+
+    case NORTH:
+    case EAST:
+    case WEST:
+    case SOUTH:
+    case MOVE:
+      status = game_actions_move(game);
+      break;
+    case TAKE:
+      status = game_actions_take(game);
+      break;
+    
+    case DROP:
+      status = game_actions_drop(game);
+      break;
+
+    case CHAT:
+      status = game_actions_chat(game);
+      break;
+    
+    case ATTACK:
+      status = game_actions_attack(game);
+      break;
+    case RUN_AWAY:
+      status = game_actions_runaway(game);
+      break;
+    case SWITCH:
+      status = game_actions_switch(game);
+      break;
+    case HELP:
+      status = game_actions_help(game);
+      break;
+    case ABILITY:
+      status = game_actions_use_ability(game);
+      break;
+    case OBJECT_USE:
+      status = game_actions_object_use(game);
+      break;
+    case SEARCH:
+      status = game_actions_search(game);
+      break;
+    case EQUIP:
+      status = game_actions_equip(game);
+      break;
+    case UNEQUIP:
+      status = game_actions_unequip(game);
+      break;
+    case INSPECT:
+      status = game_actions_inspect(game);
+      break;
+    default:
+      break;
+  }
 
   command_set_status(command, status);
+
+  command_get_as_string(game_get_last_command(game), str);
+
+  player = player_get_entity(game_get_player(game));
+
+  if(player){
+    debug_log(PRINT,"Executed command: %s; by player %d:%s",str , entity_get_id(player), entity_get_name(player));
+  }
 
   return OK;
 }
@@ -136,7 +280,9 @@ Status game_actions_update(Game *game, Command *command) {
  *
  * @param game struct that saves all information related to the game
  */
-Status game_actions_unknown(Game *game) { return OK;}
+Status game_actions_unknown(Game *game){ 
+  return OK;
+}
 
 /**
  * @brief No functionality
@@ -144,7 +290,9 @@ Status game_actions_unknown(Game *game) { return OK;}
  *
  * @param game struct that saves all information related to the game
  */
-Status game_actions_exit(Game *game) { return OK;}
+Status game_actions_exit(Game *game){ 
+  return OK;
+}
 
 /**
  * @brief Retrieves the south ID, checks if it exists, then changes player location to south
@@ -156,13 +304,27 @@ Status game_actions_move(Game *game) {
   Id space_id = NO_ID;
   Link *link = NULL;
   Entity *entity = NULL;
+  CommandCode code = NO_CMD;
+  Command *cmd = NULL;
 
   space_id = game_get_player_location(game);
   if (space_id == NO_ID) {
     return ERROR;
   }
 
-  switch(command_get_code(game_get_last_command(game))){
+  cmd = game_get_last_command(game);
+
+  if(command_get_code(cmd) == MOVE){
+    if(command_get_arguments_count(cmd) != 1){
+      game_add_log_message(game, MESSAGE_ERROR, "Invalid number of arguments for Move command. Use 'help move' for more info");
+      return ERROR;
+    }
+    code = command_get_code_from_str(command_get_arguments(cmd)[0]);
+  }else{
+    code = command_get_code(cmd);
+  }
+
+  switch(code){
     case NORTH:
       link = space_get_north(game_get_space(game, space_id));
       if(link == NULL) return ERROR;
@@ -180,6 +342,7 @@ Status game_actions_move(Game *game) {
       if(link == NULL) return ERROR;
       break;
     default:
+      game_add_log_message(game, MESSAGE_ERROR, "Invalid direction for move command. Use 'help move' for more info");
       break;
   }
     
@@ -360,17 +523,198 @@ Status game_actions_switch(Game *game){
   int player;
   Command *cmd = NULL;
 
+  char str[WORD_SIZE] = "";
+  char strAux[WORD_SIZE] = "";
+  int i, n_players;
+  Entity *playerEnt = NULL;
+
   if(!game)
     return ERROR;
 
   cmd = game_get_last_command(game);
   
-  if(command_get_arguments_count(cmd) > 1) return ERROR;
+  if(command_get_arguments_count(cmd) > 1){
+    game_add_log_message(game, ERROR, "Invalid number of arguments for switch command. Use 'help switch' for more info");
+    return ERROR;
+  } 
 
   arguments = command_get_arguments(cmd);
 
+  if(strcmp(arguments[0], "list") == 0){
+    n_players = game_get_n_players(game);
+    for (i = 0; i < n_players; i++)
+    {
+      playerEnt = player_get_entity(game_get_player_at(game, i));
+      strcat(str, "\n");
+      sprintf(strAux, "%d. ID:%ld NAME: %s", i + 1, entity_get_id(playerEnt), entity_get_name(playerEnt));
+      strcat(str, strAux);
+    }
+    return game_add_log_message(game, MESSAGE_PLAYER_LIST, str);
+  }
+
   if(command_get_arguments_count(cmd) == 0) player = -1;
-  else player = atoi(arguments[0]);
+  else player = atoi(arguments[0]) - 1;
 
   return game_switch_player(game, player);
+}
+
+
+Status game_actions_help(Game *game){
+  
+  Command *cmd = NULL;
+  char **args = NULL;
+  int argc = 0;
+  char str[WORD_SIZE] = "";
+  
+  CommandCode code = NO_CMD;
+  
+  if(!game) return ERROR;
+
+  cmd = game_get_last_command(game);
+
+  args = command_get_arguments(cmd);
+  argc = command_get_arguments_count(cmd);
+
+  if(argc == 0){
+    command_get_list(cmd, str, ERROR_STATE, true);
+
+  }else if(argc == 1){
+    code = command_get_code_from_str(args[0]);
+    command_get_info(cmd, code, str);
+
+  }else{
+    game_add_log_message(game, MESSAGE_ERROR, "Invalid number of arguments for command help");
+    return ERROR;
+  }
+
+  return game_add_log_message(game, MESSAGE_HELP ,str);
+}
+/**
+ * @brief Uses the ability received as argument
+ * @author Maksym Polyak
+ * 
+ * @param game 
+ * @return Status 
+ */
+Status game_actions_use_ability(Game *game){
+  char **arguments = NULL;
+  int n_arg;
+  int index;
+  Entity *entity = NULL;
+  Ability *ability = NULL;
+  
+  if(!game) return ERROR;
+
+  n_arg = command_get_arguments_count(game_get_last_command(game));
+  if(n_arg != 1)
+    return ERROR;
+
+  arguments = command_get_arguments(game_get_last_command(game));
+
+  index = atoi(arguments[0]);
+  if(n_arg < 0 || n_arg >= MAX_SKILLS_ENTITY)
+    return ERROR;
+
+  entity = player_get_entity(game_get_player(game));
+
+  ability = entity_get_ability_at(entity, index);
+  if(!ability)
+    return ERROR;
+
+  if(ability_manager_use_ability(game_get_ability_manager(game), ability) == ERROR)
+    return ERROR;
+
+  return OK;
+}
+
+Status game_actions_object_use(Game *game){
+  Command *comm = NULL;
+  Object *object = NULL;
+  Entity *entity = NULL;
+  
+  if(!game) return ERROR;
+
+  comm = game_get_last_command(game);
+
+  if(command_get_arguments_count(comm) != 1)
+    return ERROR;
+
+  entity = player_get_entity(game_get_player(game));
+  object = inventory_get_object_by_name(entity_get_inventory(entity), command_get_arguments(comm)[0]);
+
+  if(object_get_is_consumable(object) == true){
+    inventory_remove_object(entity_get_inventory(entity), object);
+  }
+
+  return ability_manager_use_ability(game_get_ability_manager(game), object_get_object_effect(object));
+}
+
+Status game_actions_search(Game *game){
+  Space *space = NULL;
+  
+  if(!game) return ERROR;
+
+  space = game_get_space(game, game_get_player_location(game));
+  if(space_get_isDiscovered(space)) return ERROR;
+  
+  space_set_discovered(space, true);
+  return OK;
+}
+
+Status game_actions_equip(Game *game){
+  Object *object = NULL;
+  Player *player = NULL;
+  Inventory *inventory = NULL;
+  Command *comm = NULL;
+  
+  if(!game) return ERROR;
+
+  comm = game_get_last_command(game);
+
+  if(command_get_arguments_count(comm) != 1) return ERROR;
+
+  player = game_get_player(game);
+  inventory = entity_get_inventory(player_get_entity(player));
+  object = inventory_get_object_by_name(inventory, command_get_arguments(comm)[0]);
+  if(!object) return ERROR;
+
+  return player_equip_piece(player, object);
+}
+
+
+Status game_actions_unequip(Game *game){
+    Player *player = NULL;
+    Command *comm = NULL;
+    
+    if(!game) return ERROR;
+  
+    comm = game_get_last_command(game);
+  
+    if(command_get_arguments_count(comm) != 1) return ERROR;
+  
+    player = game_get_player(game);
+    
+    if(player_unequip_piece(player, command_get_arguments(comm)[0]) == ERROR) return ERROR;
+
+    return OK;
+}
+
+Status game_actions_inspect(Game *game){
+  Inventory *playerInv = NULL;
+  Object *obj;
+
+  Command *cmd = NULL;
+
+  if(!game) return ERROR;
+
+  cmd = game_get_last_command(game);
+
+  if(command_get_arguments_count(cmd) != 1) return ERROR;
+
+  playerInv = entity_get_inventory(player_get_entity(game_get_player(game)));
+  obj = inventory_get_object_by_name(playerInv, command_get_arguments(cmd)[0]);
+
+  if(!obj) return ERROR;
+
+  return game_add_log_message(game, MESSAGE_INSPECT, object_get_descr(obj));
 }

@@ -6,7 +6,7 @@
  * 
  * The player memory in the game is controlled by the game struct in game.h
  * 
- * The player has its own stats, on I3 the idea is to develop an equipment and powers/skills system.
+ * The player has its own stats, on I3 the idea is to develop an equipment and powers/ability system.
  *
  * @file object.h
  * @author Maksym Polyak
@@ -19,6 +19,7 @@
 #define PLAYER_H
 
 #include "entity.h"
+#include "equipment.h"
 
 typedef struct _Player Player;
 
@@ -31,15 +32,10 @@ typedef struct _Player Player;
  * @param name name of the player
  * @param identity id of the entity
  * @param location id of the space where the player is located
- * @param maxhealth max health of the entity
- * @param health health of the entity
- * @param baseDamage base damage of the entity
- * @param strength strength of the entity
- * @param defense defense of the entity
- * @param magicLevel magic level of the entity
+ * 
  * @return player pointer if everything went fine or NULL if there was a mistake
  */
-Player *player_create(char *name, Id identity, Id location, double maxhealth, double health, double baseDamage, int strength, int defense, int magicLevel);
+Player *player_create(char *name, Id identity, Id location);
 
 /**
  * @brief Frees a player struct
@@ -61,6 +57,32 @@ void player_destroy(Player *player);
 Entity *player_get_entity(Player *player);
 
 /**
+ * @brief Gets the equipment struct from a player
+ * @author Maksym Polyak
+ * 
+ * @param player 
+ * @return Equipment* 
+ */
+Equipment *player_get_equipment(Player *player);
+
+/**
+ * @brief It sets a player's stats
+ * @brief Aaron Charameli Mair
+ * 
+ * @param playerId
+ * @param et The type of entity 
+ * @param maxhealth 
+ * @param health 
+ * @param baseDamage 
+ * @param strength 
+ * @param defense 
+ * @param magicLevel
+ *  
+ * @return Status 
+ */
+Status player_set_stats(Id playerId, EntityType et, double maxhealth, double health, double baseDamage, int strength, int defense, int magicLevel);
+
+/**
  * @brief Gets a string description of player and copies it into str
  * @author Daniel Gómez
  * 
@@ -79,5 +101,25 @@ Status player_get_str_desc(Player *player, char *str);
  * @param player struct with the information of a player
  */
 void player_print(Player *player);
+
+/**
+ * @brief Tries to equip a piece on the player and removes it from the inventory
+ * @author Maksym Polyak
+ * 
+ * @param player 
+ * @param object 
+ * @return Status 
+ */
+Status player_equip_piece(Player *player, Object *object);
+
+/**
+ * @brief Tries to unequip a piece on the player and adds it to the inventory
+ * @author Maksym Polyak
+ * 
+ * @param player 
+ * @param data name of the type of piece that wants to be removed
+ * @return Status 
+ */
+Status player_unequip_piece(Player *player, char *data);
 
 #endif

@@ -100,20 +100,38 @@ int combat_get_enemies_count(Combat *combat);
 int combat_get_allies_count(Combat *combat);
 
 /**
- * @brief Gets the stats pointer of an enemy
+ * @brief Gets the stats pointer of an enemy at the index
  * @author Maksym Polyak && Daniel Gómez
  * 
  * @param combat 
  * @return int or 0 if error;
  */
+Stats *combat_get_enemies_stats_at(Combat *combat, int index);
+
+/**
+ * @brief Gets the stats pointer of all the enemies
+ * @author Maksym Polyak
+ * 
+ * @param combat 
+ * @return Stats* or NULL if error
+ */
 Stats *combat_get_enemies_stats(Combat *combat);
 
 /**
- * @brief Gets the stats pointer of an ally - NON IMPLEMENTED THE FUNCTIONALITY
+ * @brief Gets the stats pointer of an ally at the index
  * @author Maksym Polyak && Daniel Gómez
  * 
  * @param combat 
  * @return int or 0 if error;
+ */
+Stats *combat_get_allies_stats_at(Combat *combat, int index);
+
+/**
+ * @brief Gets the stats pointer of all the allies
+ * @author Maksym Polyak
+ * 
+ * @param combat 
+ * @return Stats* or NULL if error
  */
 Stats *combat_get_allies_stats(Combat *combat);
 

@@ -37,7 +37,7 @@ struct _NPC{
 * PUBLIC INTERFACE IMPLEMENTATION
 */
 
-NPC *npc_create(NPC_status status, char *message, char *name, Id id, Id location, double maxhealth, double health, double baseDamage, int strength, int defense, int magicLevel){
+NPC *npc_create(NPC_status status, char *message, char *name, Id id, Id location){
     NPC *npc = NULL;
 
     if(!name)
@@ -51,7 +51,9 @@ NPC *npc_create(NPC_status status, char *message, char *name, Id id, Id location
 
     strcpy(npc->message, message);
     npc->status = status;
-    npc->entity = entity_create(name, id, location, NPC_INVENTORY, maxhealth, health, baseDamage, strength, defense, magicLevel);
+
+    /*by default, all stats are set to level 1*/
+    npc->entity = entity_create(name, id, location, NPC_INVENTORY);
     if(npc->entity == NULL){
         debug_log(LOG_ERROR, "npc_create dynamic memory error at entity_create on npc: id: %ld locationid: %d", id, location);
         free(npc);

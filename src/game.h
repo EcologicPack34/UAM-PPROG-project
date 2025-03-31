@@ -26,14 +26,14 @@
 #include "npc.h"
 #include "message.h"
 #include "combat.h"
+#include "ability_manager.h"
+#include "libscreen.h"
 
 #include <stdbool.h>
 
 #define MAX_SPACES 100          /*!< Maximum number of spaces on the map */
 #define MAX_LINKS 400   /*!< Maximum number of links on the map */
 #define MAX_PLAYERS 4   /*!< Maximum number of players*/
-
-typedef enum {ERROR_STATE ,DEFAULT, COMBAT, INVENTORY, DIALOGUE}GameState;
 
 /**
  * @brief Game struct, defines all the information of the game
@@ -91,9 +91,10 @@ Space *game_get_space(Game *game, Id id);
  * 
  * @param game 
  * @param pos 
+ * @param block
  * @return Space* 
  */
-Space *game_get_space_by_position(Game *game, Vector2 pos);
+Space *game_get_space_by_position(Game *game, Vector2 pos, int block);
 
 /**
  * @brief Checks the game->spaces[position] and returns the ID of that position on the array
@@ -122,6 +123,32 @@ int game_get_n_spaces(Game *game);
  * @return player pointer from game or NULL if there was a mistake
  */
 Player* game_get_player(Game *game);
+
+/**
+ * @brief Gets the number of players
+ * 
+ * @param game 
+ * @return number of players, -1 if error
+ */
+int game_get_n_players(Game *game);
+
+/**
+ * @brief Gets pointer to player at certain index
+ * @author Daniel Gómez
+ * 
+ * @param game 
+ * @param index 
+ * @return Player* 
+ */
+Player* game_get_player_at(Game *game, int index);
+
+/**
+ * @brief Gets a frame color based on the current player
+ * 
+ * @param game 
+ * @return Frame_color 
+ */
+Frame_color game_get_player_color(Game *game);
 
 /**
  * @brief Gets the collection pointer with the objects of the game struct
@@ -203,6 +230,17 @@ EventManager *game_get_event_manager(Game *game);
  */
 Collection *game_get_npcs(Game *game);
 
+/**
+ * @brief it gets an NPC from it's id in a Game
+ * @author Aaron Charameli Mair
+ * 
+ * @param game 
+ * @param id the NPC's Id
+ * @return NPC* or NULL if error 
+ */
+NPC *game_get_npc_by_id(Game *game, Id id);
+
+Player *game_get_player_by_id(Game *game, Id id);
 
 /*----------SETTERS----------*/
 
@@ -383,5 +421,53 @@ Combat *game_get_combat(Game *game);
  * @return Status 
  */
 Status game_switch_player(Game *game, int player);
+
+/**
+ * @brief Gets the ability manager struct from the game struct
+ * 
+ * @param game 
+ * @return AbilityManager* or NULL if error
+ */
+AbilityManager *game_get_ability_manager(Game *game);
+
+/**
+ * @brief Gets a player by its id on game struct
+ * @author Maksym Polyak
+ * 
+ * @param game 
+ * @param id
+ * @return Player* or NULL if error
+ */
+Player *game_get_player_by_id(Game *game, Id id);
+
+/**
+ * @brief Gets a NPC by its id on game struct
+ * @author Maksym Polyak
+ * 
+ * @param game 
+ * @param id
+ * @return NPC* or NULL if error or not found
+ */
+NPC *game_get_NPC_by_id(Game *game, Id id);
+
+/**
+ * @brief Gets an object from the object array by its id
+ * @author Maksym Polyak
+ * 
+ * @param game 
+ * @param objectid 
+ * @return Object* or NULL if error or not found
+ */
+Object *game_get_object_by_id(Game *game, Id objectid);
+
+/**
+ * @brief Adds the ability to the ability manager and to the related entity
+ * @author Maksym Polyak
+ * 
+ * @param game 
+ * @param ability
+ * @return Status 
+ */
+Status game_add_ability(Game *game, Ability *ability);
 
 #endif

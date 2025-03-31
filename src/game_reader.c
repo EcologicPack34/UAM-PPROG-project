@@ -13,6 +13,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 
 #include "game_reader.h"
 #include "debug_printing.h"
@@ -84,6 +85,44 @@ Status game_reader_load_events(Game *game, char *filename);
  */
 Status game_reader_load_npcs(Game *game, char *filename);
 
+/**
+ * @brief Loads command info from settings file
+ * @author Daniel Gómez
+ * 
+ * @param game 
+ * @return Status 
+ */
+Status game_reader_load_commandInfo(Game *game);
+
+/**
+ * @brief Loads valid commands for each game state
+ * @author Daniel Gómez
+ * 
+ * @param game 
+ * @return Status 
+ */
+Status game_reader_load_commandStateTypes(Game *game);
+
+/**
+ * @brief Reads the file to load stats to an entity
+ * @author Aaron Charameli Mair
+ * 
+ * @param game 
+ * @param filename 
+ * @return Status 
+ */
+Status game_reader_load_stats(Game *game, char *filename);
+
+/**
+ * @brief Reads the file to load all ability
+ * @author Maksym Polyak
+ *
+ * @param game 
+ * @param filename 
+ * @return Status 
+*/
+Status game_reader_load_ability(Game *game, char *filename);
+
 
 /*
 * Public functions implementation
@@ -95,11 +134,28 @@ Status game_reader_create_from_file(Game **game, char *filename){
     printf("Fatal error. Check the log for details\n");
     abort();
   }
+  /*Loads settints*/
+  
+  if(game_reader_load_commandInfo(*game) == ERROR){
+    printf("%c[2J", 27);
+    printf("Fatal error. Check the log for details\n");
+    abort();
+  }
+  if(game_reader_load_commandStateTypes(*game) == ERROR){
+    printf("%c[2J", 27);
+    printf("Fatal error. Check the log for details\n");
+    abort();
+  }
+  
 
+  /*Loads data into the game*/
   if(game_reader_load_player(*game, filename) == ERROR){
     debug_log(LOG_ERROR, "Error loading player at: game_reader_create_from_file(Game*, char*) in game_reader.c");
     return ERROR;
   }
+
+  game_switch_player(*game, 0);
+
   if(game_reader_load_links(*game, filename) == ERROR){
     debug_log(LOG_ERROR, "Error loading links at: game_reader_create_from_file(Game*, char*) in game_reader.c");
     return ERROR;
@@ -118,6 +174,15 @@ Status game_reader_create_from_file(Game **game, char *filename){
   }
   if (game_reader_load_npcs(*game, filename) == ERROR){
     debug_log(LOG_ERROR, "Error loading npcs at: game_reader_create_from_file(Game*, char*) in game_reader.c");
+    return ERROR;
+  }
+  if (game_reader_load_ability(*game, filename) == ERROR){
+    debug_log(LOG_ERROR, "Error loading ability at: game_reader_create_from_file(Game*, char*) in game_reader.c");
+    return ERROR;
+  }
+
+  if(game_reader_load_stats(*game, filename) == ERROR){
+    debug_log(LOG_ERROR, "Error loading stats at: game_reader_create_from_file(Game*, char*) in game_reader.c");
     return ERROR;
   }
 
@@ -288,11 +353,14 @@ Status game_reader_load_objects(Game *game, char *filename){
   FILE *file = NULL;
   char line[WORD_SIZE] = "";
   char name[WORD_SIZE] = "";
+  char data[WORD_SIZE] = "";
   char description[WORD_SIZE] = "";
   char *toks = NULL;
   long objectid, objectlocation;
   InventoryType objectlocationtype;
   Object *object = NULL;
+
+  int is_consumable = 0;
 
   Status status = OK;
 
@@ -314,19 +382,29 @@ Status game_reader_load_objects(Game *game, char *filename){
     if (strncmp("#o:", line, 3) == 0) {
       toks = strtok(line + 3, "|");
       objectid = atol(toks);
+
       toks = strtok(NULL, "|");
       strcpy(name, toks);
+
+      toks = strtok(NULL, "|");
+      strcpy(data, toks);
+
       toks = strtok(NULL, "|");
       strcpy(description, toks);
+
+      toks = strtok(NULL, "|");
+      is_consumable = atoi(toks);
+      
       toks = strtok(NULL, "|");
       objectlocation = atol(toks);
+
       toks = strtok(NULL, "|");
       objectlocationtype = (InventoryType)atol(toks);
 
-      debug_log(PRINT,"Read Object: #o:%ld|%s|%s|%ld|%ld", objectid, name, description, objectlocation, objectlocationtype);
+      debug_log(PRINT,"Read Object: #o:%ld|%s|%s|%s|%d|%ld|%ld", objectid, name, data, description, is_consumable, objectlocation, objectlocationtype);
 
       /*Creates a object with object_create then saves it on the game with game_add_space*/
-      object = object_create(objectid, name, description, objectlocation, objectlocationtype);
+      object = object_create(objectid, name, data, description, is_consumable, objectlocation, objectlocationtype);
       if (object != NULL) {
         game_add_object(game, object);
         switch(objectlocationtype){
@@ -361,8 +439,6 @@ Status game_reader_load_player(Game *game, char *filename){
   char line[WORD_SIZE] = "";
   char name[WORD_SIZE] = "";
   char *toks = NULL;
-  double maxhealth, health, baseDamage;
-  int strength, defense, magicLevel;
   long playerid, startinglocation;
 
   Status status = OK;
@@ -391,31 +467,13 @@ Status game_reader_load_player(Game *game, char *filename){
       
       toks = strtok(NULL, "|");
       startinglocation = atol(toks);
-
-      toks = strtok(NULL, "|");
-      maxhealth = strtod(toks, NULL);
-      
-      toks = strtok(NULL, "|");
-      health = strtod(toks, NULL);
-      
-      toks = strtok(NULL, "|");
-      baseDamage = strtod(toks, NULL);
-      
-      toks = strtok(NULL, "|");
-      strength = atoi(toks);
-      
-      toks = strtok(NULL, "|");
-      defense = atoi(toks);
-      
-      toks = strtok(NULL, "|");
-      magicLevel = atoi(toks);
       
       toks = strtok(NULL, "|");
 
-      debug_log(PRINT,"Read Player: #p:%ld|%s|%ld|%lf|%lf|%lf|%d|%d|%d|gdesc", playerid, name, startinglocation, maxhealth, health, baseDamage, strength, defense, magicLevel);
+      debug_log(PRINT,"Read Player: #p:%ld|%s|%ld|gdesc", playerid, name, startinglocation);
 
       /*Creates a player with player_create then saves it on the game with game_add_player*/
-      player = player_create(name, playerid, startinglocation, maxhealth, health, baseDamage, strength, defense, magicLevel);
+      player = player_create(name, playerid, startinglocation);
       if (player == NULL){
         status = ERROR;
         break;
@@ -528,8 +586,6 @@ Status game_reader_load_npcs(Game *game, char *filename){
   char name[WORD_SIZE] = "";
   char *toks = NULL;
   char message[WORD_SIZE] = "";
-  double maxhealth, health, baseDamage;
-  int strength, defense, magicLevel;
   long npcid, startinglocation;
   NPC_status statusnpc;
 
@@ -584,6 +640,80 @@ Status game_reader_load_npcs(Game *game, char *filename){
         printf("toks is null");
         return ERROR;
       }
+      
+      debug_log(PRINT,"Read NPC: #n:%ld|%s|%s|%ld|%d|gdesc", npcid, message, name, startinglocation, (int)statusnpc);
+      /*Creates an NPC with npc_create then saves it on the game with game_add_npc*/
+      /*by default, lvl 1 stats are set. If .dat containts a stats line for this npc, they will be set afterwards.*/
+      npc = npc_create(statusnpc, message, name, npcid, startinglocation);
+      if (npc == NULL) {
+        status = ERROR;
+        break;
+      }
+      
+      entity_set_graphic_description(npc_get_entity(npc), toks);
+      if (game_add_npc(game, npc) == ERROR){
+        printf("npc creation wrong");
+        npc_destroy(npc);
+        status = ERROR;
+        break;
+      }
+    }
+  }
+
+
+  if (ferror(file)) {
+    status = ERROR;
+    debug_log(LOG_ERROR, "Error in file at: game_reader_load_npc(Game*, char*) in game_reader.c");
+  }
+
+  fclose(file);
+
+  return status;
+}
+
+Status game_reader_load_stats(Game *game, char *filename){
+  FILE *file=NULL;
+  void *entity=NULL;
+  char line[WORD_SIZE] = "";
+  char *toks=NULL;
+  double maxhealth, health, baseDamage;
+  int strength, defense, magicLevel;
+  Id id;
+  EntityType et;
+
+  Status status;
+
+  if (!filename) {
+    debug_log(LOG_ERROR, "Missing file name at: game_reader_load_stats(Game*, char*) in game_reader.c");
+    return ERROR;
+  }
+
+  file = fopen(filename, "r");
+  if (file == NULL) {
+    debug_log(LOG_ERROR, "Error in file at: game_reader_load_stats(Game*, char*) in game_reader.c");
+    return ERROR;
+  }
+
+   /*Gets each line of the data file, uses strtok to shred it and stores it in static memory*/
+  while (fgets(line, WORD_SIZE, file)) {
+    if (strncmp("#st:", line, 4) == 0) {
+      toks = strtok(line + 4, "|");
+      if(!toks){
+        printf("toks is null");
+        return ERROR;
+      }
+      id = atol(toks);
+      toks = strtok(NULL, "|");
+      if(!toks){
+        printf("toks is null");
+        return ERROR;
+      }
+      et = atoi(toks) + UNKNOWN_ENTITY;
+      toks = strtok(NULL, "|");   
+      if(!toks){
+        printf("toks is null");
+        return ERROR;
+      }
       maxhealth = strtod(toks, NULL);
       toks = strtok(NULL, "|");
       if(!toks){
@@ -615,34 +745,234 @@ Status game_reader_load_npcs(Game *game, char *filename){
         return ERROR;
       }   
       magicLevel = atoi(toks);
-
-      toks = strtok(NULL, "|");
       
-      debug_log(PRINT,"Read NPC: #n:%ld|%s|%s|%ld|%d|%lf|%lf|%lf|%d|%d|%d|gdesc", npcid, message, name, startinglocation, (int)statusnpc, maxhealth, health, baseDamage, strength, defense, magicLevel);
-      /*Creates an NPC with npc_create then saves it on the game with game_add_npc*/
-      npc = npc_create(statusnpc, message, name, npcid, startinglocation, maxhealth, health, baseDamage, strength, defense, magicLevel);
-      if (npc == NULL) {
-        status = ERROR;
-        break;
+      /*For the time being, we'll reject negative stats. Can be modified in a future if needed*/
+      if((maxhealth<0) || (health < 0) || (baseDamage<0) || (strength<0) || (defense<0) || (magicLevel<0)){
+        debug_log(LOG_ERROR,"Error when adding stats (negative stats not allowed)");
+        return ERROR;
       }
 
-      entity_set_graphic_description(npc_get_entity(npc), toks);
-      if (game_add_npc(game, npc) == ERROR){
-        printf("npc creation wrong");
-        npc_destroy(npc);
-        status = ERROR;
-        break;
+      if(et == PLAYER_TYPE){
+        entity = player_get_entity(game_get_player_by_id(game, id));
       }
-    }
+      else if(et == NPC_TYPE){
+        entity = npc_get_entity(game_get_npc_by_id(game, id));
+      }
+      else
+        entity = NULL;
+      
+      if(entity){
+        entity_set_max_health(entity, maxhealth);
+        entity_set_health(entity, health);
+        entity_set_baseDamage(entity, baseDamage);
+        entity_set_strength(entity, strength);
+        entity_set_defense(entity, defense);
+        entity_set_magicLevel(entity, magicLevel);
+      }else{
+        fclose(file);
+        return ERROR;
+      }
+    } 
   }
 
 
   if (ferror(file)) {
     status = ERROR;
-    debug_log(LOG_ERROR, "Error in file at: game_reader_load_npc(Game*, char*) in game_reader.c");
+    debug_log(LOG_ERROR, "Error in file at: game_reader_load_stats(Game*, char*) in game_reader.c");
+  }
+  else
+    status = OK;
+
+  fclose(file);
+
+  return status;
+}
+
+Status game_reader_load_ability(Game *game, char *filename){
+  FILE *file = NULL;
+  char line[WORD_SIZE] = "";
+  char *toks = NULL;
+
+  Ability *ability = NULL;
+  Id id = NO_ID;
+  AbilityType type = NO_SKILL;
+
+  char name[WORD_SIZE];
+  Id entityid;
+  int is_player_ability;
+  int is_object_use;
+
+  int cd_count, cd_length;
+
+  Status status = OK;
+
+  if (!filename) {
+    debug_log(LOG_ERROR, "Missing file name at: game_reader_load_ability(Game*, char*) in game_reader.c");
+    return ERROR;
+  }
+
+  file = fopen(filename, "r");
+  if (file == NULL) {
+    debug_log(LOG_ERROR, "Error in file at: game_reader_load_ability(Game*, char*) in game_reader.c");
+    return ERROR;
+  }
+
+
+  /*#sk:Id|Type|Name|Entityid|is_player_ability|is_object_use|cd_count|cd_length|data*/
+  while (fgets(line, WORD_SIZE, file)) {
+    if (strncmp("#sk:", line, 4) == 0) {
+      /*Reads id*/
+      toks = strtok(line, ":");
+      toks = strtok(NULL, "|");
+      id = atol(toks);
+      /*Reads type*/
+      toks = strtok(NULL, "|");
+      type = ability_type_from_str(toks);
+      /*Reads ability name*/
+      toks = strtok(NULL, "|");
+      strcpy(name, toks);
+      /*Reads the entityid*/
+      toks = strtok(NULL, "|");
+      entityid = atol(toks);
+      /*Reads if the ability is from a player*/
+      toks = strtok(NULL, "|");
+      is_player_ability = atoi(toks);
+      /*Reads if the ability is from an object*/
+      toks = strtok(NULL, "|");
+      is_object_use = atoi(toks);
+      /*Reads the cd count*/
+      toks = strtok(NULL, "|");
+      cd_count = atoi(toks);
+      /*Reads the cd length*/
+      toks = strtok(NULL, "|");
+      cd_length = atoi(toks);
+      /*reads data*/
+      toks = strtok(NULL, "|");
+      
+      //printf("TEST");
+      
+
+      debug_log(PRINT,"Read Skill: #s:%ld|%d|%s|%ld|%d|%d|%d|%d|%s", id, type, name, entityid, is_player_ability, is_object_use, cd_count, cd_length, toks);
+
+      ability = ability_create(id, toks, name, type, entityid, (bool)is_player_ability, (bool)is_object_use, cd_count, cd_length);
+
+      if(ability == NULL)
+        debug_log(LOG_ERROR,"Error creating ability when reading from file");
+
+      if(game_add_ability(game, ability) == ERROR)
+        debug_log(LOG_ERROR,"Error adding ability to ability manager or entity");
+    }
+  }
+
+  if (ferror(file)) {
+    status = ERROR;
+    debug_log(LOG_ERROR, "Error in file at: game_reader_load_ability(Game*, char*) in game_reader.c");
   }
 
   fclose(file);
 
   return status;
+}
+
+Status game_reader_load_commandInfo(Game *game){
+  FILE *file = NULL;
+  char line[WORD_SIZE];
+  char str[WORD_SIZE];
+
+  int i, j;
+  int length;
+
+  file = fopen(SETTINGS_FILE_PATH, "r");
+  if(!file) return ERROR;
+
+  while(fgets(line, WORD_SIZE - 1, file)){
+    if(strncmp(line,"[CmdInfo]", 9) != 0){
+      continue;
+    }
+    for (i = 0; i < N_CMD; i++)
+    {
+      if(!fgets(line, WORD_SIZE -1 , file)){
+        fclose(file);
+        return ERROR;
+      } 
+
+      length = strlen(line);
+      for (j = 0; j < length; j++)
+      {
+        if(!isalnum(line[j]) && line[j] != ' ' && line[j] != ',' && line[j] != '.' && line[j] != ':' && line[j] != '_' && line[j] != '-') break;
+        str[j] = line[j];
+      }
+      str[j] = 0;
+
+      if(command_set_info(game_get_last_command(game), i + NO_CMD, str) == ERROR){
+        fclose(file);
+        return ERROR;
+      }
+    }
+    break;
+  }
+  fclose(file);
+  return OK;
+}
+
+Status game_reader_load_commandStateTypes(Game *game){
+  FILE *file = NULL;
+  char line[WORD_SIZE];
+  char str[WORD_SIZE] = "";
+
+  CommandCode code = NO_CMD;
+
+  int i,j;
+  int curChar = 0;
+  int word = 0;
+  int length;
+
+
+  file = fopen(SETTINGS_FILE_PATH, "r");
+  if(!file) return ERROR;
+
+  while(fgets(line, WORD_SIZE - 1, file)){
+    if(strncmp(line,"[CmdStateTypes]", 15) != 0){
+      continue;
+    }
+    for (i = 0; i < N_GAME_STATES; i++)
+    {
+      if(!fgets(line, WORD_SIZE -1 , file)){
+        fclose(file);
+        return ERROR;
+      } 
+
+      word = 0;
+      curChar = 0;
+      
+      length = strlen(line);
+      
+      if(strncmp(line, "all", 3) == 0){
+        for ( j = 0; j < N_CMD; j++)
+        {
+          command_state_add_type(game_get_last_command(game), i + ERROR_STATE, j + NO_CMD);
+        }
+      }else{
+        while(curChar <= length){
+          if(line[curChar] == ','){
+            str[word + 1] = '\00';
+            
+
+            code = command_get_code_from_str(str);
+            command_state_add_type(game_get_last_command(game), i + ERROR_STATE, code);
+            
+            memset(str,0, strlen(str));
+            word = 0;
+            curChar++;
+          }
+          str[word] = line[curChar];
+          curChar++;
+          word++;
+        }
+      }
+    }
+    break;
+  }
+  fclose(file);
+  return OK;
 }

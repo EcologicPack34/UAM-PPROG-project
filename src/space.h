@@ -136,6 +136,16 @@ Status space_set_position(Space *space, float x, float y);
 Status space_set_isMapped(Space *space, bool status);
 
 /**
+ * @brief Sets the mapped block to which the space corresponds
+ * @author Daniel Gómez
+ * 
+ * @param space 
+ * @param block 
+ * @return Status 
+ */
+Status space_set_map_block(Space *space, int block);
+
+/**
  * @brief Sets the neighbour in a given direction of a given spac
  * @author Daniel Gómez
  * 
@@ -156,7 +166,27 @@ Status space_set_neighbour(Space *space, Space *neighbour, Direction direction);
  */
 Status space_set_graphic_description(Space *space, char *desc, int index);
 
+/**
+ * @brief Sets if the space has been discovered or not.
+ * @author Daniel Gómez
+ * 
+ * @param space 
+ * @param status 
+ * @return Status 
+ */
+Status space_set_isDiscovered(Space *space, bool status);
+
 /*Space GETTERS*/
+
+/**
+ * @brief Gets if a given spaces has been discovered
+ * @author Daniel Gómez
+ * 
+ * @param space 
+ * @return true 
+ * @return false 
+ */
+bool space_get_isDiscovered(Space *space);
 
 /**
  * @brief Gets the reference to the graphic description of a space
@@ -185,6 +215,15 @@ Vector2 *space_get_position(Space *space);
  * @return false 
  */
 bool space_get_isMapped(Space *space);
+
+/**
+ * @brief Gets the block in which the space has been mapped
+ * @author Daniel Gómez
+ * 
+ * @param space 
+ * @return int 
+ */
+int space_get_map_block(Space *space);
 
 /**
  * @brief Gets a reference to the neighbour in a certain direction

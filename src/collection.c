@@ -52,7 +52,7 @@ Status collection_add_non_unique(Collection *collection, void *element);
 Status collection_add_unique(Collection *collection, void *element){
     /*We omit error control as it is done in collection_add()*/
 
-    if(collection_contains(collection, element) != -1) return OK;
+    if(collection_contains(collection, element) != -1) return ERROR;
     
     return collection_add_non_unique(collection, element);
 }
@@ -227,6 +227,8 @@ Status collection_free_elements(Collection *collection, void (*free_element)(voi
 
     if(!collection || !free_element) return ERROR;
     if(!(collection->list)) return ERROR;
+
+    if(collection->length == 0) return OK;
 
     for (i = 0; i < collection->length; i++)
     {

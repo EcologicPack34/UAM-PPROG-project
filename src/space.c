@@ -40,23 +40,13 @@ struct _Space {
 
   Vector2 position;
   bool mapped;
+  int mapBlock;
   Space *neighbours[DIRECTION_NUMBER];
 
   Inventory *inventory;         /*!< Inventory of the space*/
   
   Collection *npcs;             /*!<  Collection of npcs in the given space*/
 };
-
-/*Space private functions*/
-
-/*GETTERS*/
-
-
-/*SETTERS*/
-
-
-/*PRIVATE IMPLEMENTATION*/
-
 
 /*Space public functions*/
 
@@ -202,6 +192,11 @@ Status space_set_isMapped(Space *space, bool status){
   space->mapped = status;
   return OK;
 }
+Status space_set_map_block(Space *space, int block){
+  if(!space) return ERROR;
+  space->mapBlock = block;
+  return OK;
+}
 Status space_set_neighbour(Space *space, Space *neighbour, Direction direction){
   if(!space) return ERROR;
   space->neighbours[direction] = neighbour;
@@ -212,15 +207,24 @@ Status space_set_graphic_description(Space *space, char *desc, int index){
   if(!space || !desc) return ERROR;
 
   if(index < 0 || index > SPACE_GRAPHIC_HEIGHT) return ERROR;
-  
-  printf("%s\n", desc);
 
   strncpy(space->graphicDescription[index], desc, SPACE_GRAPHIC_WIDTH);
   space->graphicDescription[index][SPACE_GRAPHIC_WIDTH] = '\00';
   return OK;
 }
 
+Status space_set_isDiscovered(Space *space, bool status){
+  if(!space) return ERROR;
+  space->discovered = status;
+  return OK;
+}
+
 /*Space GETTERS*/
+
+bool space_get_isDiscovered(Space *space){
+  if(!space) return false;
+  return space->discovered;
+}
 
 char **space_get_graphic_description(Space *space){
   if(!space) return NULL;
@@ -235,6 +239,11 @@ Space *space_get_neighbour(Space *space, Direction direction){
 bool space_get_isMapped(Space *space){
   if(!space) return true;
   return space->mapped;
+}
+
+int space_get_map_block(Space *space){
+  if(!space) return -1;
+  return space->mapBlock;
 }
 
 Vector2 *space_get_position(Space *space){

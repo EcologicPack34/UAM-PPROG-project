@@ -23,8 +23,12 @@
 #define ENTITY_GRAPHIC_LENGTH 3
 
 #include "inventory.h"
+#include "ability_manager.h"
+
+#define N_STATS 7
 
 typedef enum {UNKNOWN_ENTITY, PLAYER_TYPE, NPC_TYPE} EntityType;
+typedef enum {NO_STAT, MAX_HEALTH, HEALTH, BASE_DAMAGE, STRENGTH, DEFENSE, MAGIC_LEVEL} StatCode;
 
 typedef struct _Entity Entity;
 
@@ -53,15 +57,9 @@ typedef struct{
  * @param identity id of the entity
  * @param idlocation id of the location of the entity
  * @param inventoryType type of inventory of the entity
- * @param maxhealth max health of the entity
- * @param health health of the entity
- * @param baseDamage base damage of the entity
- * @param strength strength of the entity
- * @param defense defense of the entity
- * @param magicLevel magic level of the entity
  * @return Entity pointer if everything goes well or NULL if there was a mistake
  */
-Entity *entity_create(char *name, Id identity, Id idlocation, InventoryType inventoryType, double maxhealth, double health, double baseDamage, int strength, int defense, int magicLevel);
+Entity *entity_create(char *name, Id identity, Id idlocation, InventoryType inventoryType);
 
 /**
  * @brief Frees a entity
@@ -240,6 +238,25 @@ Id entity_get_id(Entity *entity);
  * @return OK if everything went well or ERROR if there was a mistake
  */
 EntityType entity_get_entityType(Entity *entity);
+
+/**
+ * @brief Adds a ability to the entity if it is not full
+ * @author Maksym Polyak
+ * 
+ * @param entity 
+ * @param ability 
+ * @return Status 
+ */
+Status entity_add_ability(Entity *entity, Ability *ability);
+
+/**
+ * @brief Gets the ability at the index of the entity
+ * @author Maksym Polyak
+ * 
+ * @param entity 
+ * @return Ability* 
+ */
+Ability *entity_get_ability_at(Entity *entity, int index);
 
 /**
  * @brief Gets the entity max health
