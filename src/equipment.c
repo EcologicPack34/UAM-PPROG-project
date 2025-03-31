@@ -260,10 +260,14 @@ Status equipment_add_piece(Equipment *equipment, Object *object){
     return OK;
 }
 
-Object *equipment_remove_piece(Equipment *equipment, EquipmentCode code){
+Object *equipment_remove_piece(Equipment *equipment, char *data){
     Object *retobject = NULL;
+    EquipmentCode code;
     
     if(!equipment) return NULL;
+
+    code = equipment_code_from_str(data);
+    if(code == EQUIPMENT_ERROR) return NULL;
 
     retobject = equipment_unequip_from_code(equipment, code);
 

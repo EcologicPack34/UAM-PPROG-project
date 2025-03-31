@@ -117,9 +117,9 @@ Status player_equip_piece(Player *player, Object *object);
  * @author Maksym Polyak
  * 
  * @param player 
- * @param code 
+ * @param data name of the type of piece that wants to be removed
  * @return Status 
  */
-Status player_unequip_piece(Player *player, EquipmentCode code);
+Status player_unequip_piece(Player *player, char *data);
 
 #endif

@@ -146,6 +146,24 @@ Status game_actions_help(Game *game);
 Status game_actions_search(Game *game);
 
 /**
+ * @brief Equips a piece of equipment if possible and
+ * removes it from the inventory
+ * 
+ * @param game 
+ * @return Status 
+ */
+Status game_actions_equip(Game *game);
+
+/**
+ * @brief Unequips a piece of equipment and returns
+ * it to the player inventory
+ * 
+ * @param game 
+ * @return Status 
+ */
+Status game_actions_unequip(Game *game);
+
+/**
    Game actions implementation
 */
 
@@ -216,6 +234,10 @@ Status game_actions_update(Game *game, Command *command) {
       break;
     case SEARCH:
       status = game_actions_search(game);
+    case EQUIP:
+      status = game_actions_equip(game);
+    case UNEQUIP:
+      status = game_actions_unequip(game);
     default:
       break;
   }
@@ -601,4 +623,42 @@ Status game_actions_search(Game *game){
   
   space_set_discovered(space, true);
   return OK;
+}
+
+Status game_actions_equip(Game *game){
+  Object *object = NULL;
+  Player *player = NULL;
+  Inventory *inventory = NULL;
+  Command *comm = NULL;
+  
+  if(!game) return ERROR;
+
+  comm = game_get_last_command(game);
+
+  if(command_get_arguments_count(comm) != 1) return ERROR;
+
+  player = game_get_player(game);
+  inventory = entity_get_inventory(player_get_entity(player));
+  object = inventory_get_object_by_name(inventory, command_get_arguments(comm)[0]);
+  if(!object) return ERROR;
+
+  return player_equip_piece(player, object);
+}
+
+
+Status game_actions_unequip(Game *game){
+    Player *player = NULL;
+    Command *comm = NULL;
+    
+    if(!game) return ERROR;
+  
+    comm = game_get_last_command(game);
+  
+    if(command_get_arguments_count(comm) != 1) return ERROR;
+  
+    player = game_get_player(game);
+    
+    if(player_unequip_piece(player, command_get_arguments(comm)[0]) == ERROR) return ERROR;
+
+    return OK;
 }

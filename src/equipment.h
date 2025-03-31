@@ -66,9 +66,9 @@ Status equipment_add_piece(Equipment *equipment, Object *object);
  * @author Maksym Polyak
  * 
  * @param equipment 
- * @param code 
+ * @param data
  * @return Object* or NULL if error
  */
-Object *equipment_remove_piece(Equipment *equipment, EquipmentCode code);
+Object *equipment_remove_piece(Equipment *equipment, char *data);
 
 #endif

@@ -150,7 +150,7 @@ Status player_equip_piece(Player *player, Object *object){
     return OK;
 }
 
-Status player_unequip_piece(Player *player, EquipmentCode code){
+Status player_unequip_piece(Player *player, char *data){
     Entity *entity = NULL;
     Inventory *inventory = NULL;
     Object *object = NULL;
@@ -163,7 +163,7 @@ Status player_unequip_piece(Player *player, EquipmentCode code){
     if(inventory_get_size(inventory) == INVENTORY_PLAYER_MAX_SIZE)
         return ERROR;
 
-    object = equipment_remove_piece(player->equipment, code);
+    object = equipment_remove_piece(player->equipment, data);
     if(object == NULL)
         return ERROR;
 
