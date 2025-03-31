@@ -25,7 +25,10 @@
 #include "inventory.h"
 #include "ability_manager.h"
 
+#define N_STATS 7
+
 typedef enum {UNKNOWN_ENTITY, PLAYER_TYPE, NPC_TYPE} EntityType;
+typedef enum {NO_STAT, MAX_HEALTH, HEALTH, BASE_DAMAGE, STRENGTH, DEFENSE, MAGIC_LEVEL} StatCode;
 
 typedef struct _Entity Entity;
 

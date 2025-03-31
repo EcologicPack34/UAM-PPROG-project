@@ -19,6 +19,7 @@
 #define PLAYER_H
 
 #include "entity.h"
+#include "equipment.h"
 
 typedef struct _Player Player;
 
@@ -56,6 +57,15 @@ void player_destroy(Player *player);
 Entity *player_get_entity(Player *player);
 
 /**
+ * @brief Gets the equipment struct from a player
+ * @author Maksym Polyak
+ * 
+ * @param player 
+ * @return Equipment* 
+ */
+Equipment *player_get_equipment(Player *player);
+
+/**
  * @brief It sets a player's stats
  * @brief Aaron Charameli Mair
  * 
@@ -91,5 +101,25 @@ Status player_get_str_desc(Player *player, char *str);
  * @param player struct with the information of a player
  */
 void player_print(Player *player);
+
+/**
+ * @brief Tries to equip a piece on the player and removes it from the inventory
+ * @author Maksym Polyak
+ * 
+ * @param player 
+ * @param object 
+ * @return Status 
+ */
+Status player_equip_piece(Player *player, Object *object);
+
+/**
+ * @brief Tries to unequip a piece on the player and adds it to the inventory
+ * @author Maksym Polyak
+ * 
+ * @param player 
+ * @param data name of the type of piece that wants to be removed
+ * @return Status 
+ */
+Status player_unequip_piece(Player *player, char *data);
 
 #endif

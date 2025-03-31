@@ -2,11 +2,12 @@ CC = gcc
 
 CFLAGS = -Wall -pedantic
 SRC = collector.c command.c debug_printing.c game_actions.c game_loop.c game.c graphic_engine.c space.c object.c player.c game_reader.c entity.c \
- link.c inventory.c collection.c event_manager.c event_actions.c npc.c vector2.c queue.c message.c combat.c ability_actions.c ability_manager.c
+ link.c inventory.c collection.c event_manager.c event_actions.c npc.c vector2.c queue.c message.c combat.c ability_actions.c ability_manager.c \
+ equipment.c
 
 OBJ = collector.o command.o debug_printing.o game_actions.o game_loop.o game.o graphic_engine.o space.o object.o player.o libscreen.a entity.o \
  game_reader.o link.o inventory.o collection.o event_manager.o event_actions.o npc.o vector2.o queue.o message.o combat.o \
- ability_actions.o ability_manager.o
+ ability_actions.o ability_manager.o equipment.o
 
 EXE = anthill
 EXED = anthilldebug
@@ -58,7 +59,7 @@ entity.o: entity.c entity.h inventory.h types.h object.h collection.h \
 	$(CC) $(CFLAGS) -c entity.c
 	
 player.o: player.c player.h entity.h inventory.h types.h object.h \
- collection.h ability_manager.h queue.h
+ ability_manager.h queue.h collection.h equipment.h
 	$(CC) $(CFLAGS) -c player.c
 
 collector.o:	collector.c collector.h
@@ -122,6 +123,10 @@ ability_actions.o: ability_actions.c ability_actions.h ability_manager.h \
  space.h npc.h debug_printing.h vector2.h command.h player.h \
  event_manager.h message.h combat.h
 	$(CC) $(CFLAGS) -c ability_actions.c
+
+equipment.o: equipment.c equipment.h object.h types.h ability_manager.h \
+ queue.h entity.h inventory.h collection.h
+	$(CC) $(CFLAGS) -c equipment.c
   
 .PHONY:	clean compile link run runl debug runv gdb
 clean:
