@@ -319,7 +319,7 @@ void graphic_engine_paint_combat(Graphic_engine *ge, Game *game){
 
   int enemy_count = 0, ally_count = 0;
   Stats *stats = NULL;
-  PlayerStats *playerStats = NULL;
+  Stats *playerStats = NULL;
 
   heightDiv = (MAP_HEIGHT - 4 + 1)/3;
 
@@ -390,7 +390,7 @@ void graphic_engine_paint_combat(Graphic_engine *ge, Game *game){
   spacing[0] = 0;
   str[0] = 0;
 
-  div = (MAP_WIDTH - COMBAT_OFFSET) / (ally_count + 2);
+  div = (MAP_WIDTH - COMBAT_OFFSET) / (ally_count + 1);
 
   stats = combat_get_allies_stats(combat);
   playerStats = combat_get_player_stats(combat);
@@ -408,7 +408,7 @@ void graphic_engine_paint_combat(Graphic_engine *ge, Game *game){
   strcat(str, spacing);
 
   /*prints allies desc*/
-  for (i = 0; i < ally_count; i++)
+  for (i = 1; i < ally_count; i++)
   {
     strcat(str, entity_get_graphic_description(stats[i].entity));
     if(i != enemy_count -1) strcat(str, spacing);
@@ -436,7 +436,7 @@ void graphic_engine_paint_combat(Graphic_engine *ge, Game *game){
   strcat(str, "]");
 
   /*allies health bar*/
-  for (i = 0; i < ally_count; i++)
+  for (i = 1; i < ally_count; i++)
   {
     //sprintf(strAux, "[%.2lf]", stats[i].stats.health);
     strcat(str, "[");
@@ -463,7 +463,7 @@ void graphic_engine_paint_combat(Graphic_engine *ge, Game *game){
   strcat(str, strAux);
   screen_area_puts(ge->descript, str);
 
-  if(ally_count > 0){
+  if(ally_count > 1){
     strcpy(str, "Allies:");
     screen_area_puts(ge->descript, str);
     stats = combat_get_allies_stats(combat);

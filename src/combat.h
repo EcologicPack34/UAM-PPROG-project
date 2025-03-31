@@ -36,10 +36,10 @@ typedef struct {
 }Stats;
 
 /*Struct of the combat module to save the stats of the player, public for the graphic_engine*/
-typedef struct {
-    Entity_Stats stats;             /*!< Copy of the stats in order to buff/debuff and not modify the original stats*/
-    Entity *entity;                 /*!< Entity from which the stats are saved*/
-}PlayerStats;                       /*Needs to be different for further implementation of equipment and more*/
+//typedef struct {
+//    Entity_Stats stats;             /*!< Copy of the stats in order to buff/debuff and not modify the original stats*/
+//    Entity *entity;                 /*!< Entity from which the stats are saved*/
+//}PlayerStats;                       /*Needs to be different for further implementation of equipment and more*/
 
 typedef struct _Combat Combat;
 
@@ -118,15 +118,6 @@ Stats *combat_get_enemies_stats(Combat *combat);
 Stats *combat_get_allies_stats(Combat *combat);
 
 /**
- * @brief Gets the PlayerStats pointer of player
- * @author Maksym Polyak && Daniel Gómez
- * 
- * @param combat 
- * @return int or 0 if error;
- */
-PlayerStats *combat_get_player_stats(Combat *combat);
-
-/**
  * @brief Gets the bool with the information of the combat end
  * @author Maksym Polyak && Daniel Gómez
  * 
@@ -135,5 +126,13 @@ PlayerStats *combat_get_player_stats(Combat *combat);
  */
 bool combat_get_isFinished(Combat *combat);
 
+/**
+ * @brief Gets the player stats
+ * @author Maksym
+ * 
+ * @param combat 
+ * @return Stats* 
+ */
+Stats *combat_get_player_stats(Combat *combat);
 
 #endif
