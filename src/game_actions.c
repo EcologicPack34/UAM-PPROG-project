@@ -482,6 +482,11 @@ Status game_actions_switch(Game *game){
   int player;
   Command *cmd = NULL;
 
+  char str[WORD_SIZE] = "";
+  char strAux[WORD_SIZE] = "";
+  int i, n_players;
+  Entity *playerEnt = NULL;
+
   if(!game)
     return ERROR;
 
@@ -494,8 +499,20 @@ Status game_actions_switch(Game *game){
 
   arguments = command_get_arguments(cmd);
 
+  if(strcmp(arguments[0], "list") == 0){
+    n_players = game_get_n_players(game);
+    for (i = 0; i < n_players; i++)
+    {
+      playerEnt = player_get_entity(game_get_player_at(game, i));
+      strcat(str, "\n");
+      sprintf(strAux, "%d. ID:%ld NAME: %s", i + 1, entity_get_id(playerEnt), entity_get_name(playerEnt));
+      strcat(str, strAux);
+    }
+    return game_add_log_message(game, PLAYER_LIST, str);
+  }
+
   if(command_get_arguments_count(cmd) == 0) player = -1;
-  else player = atoi(arguments[0]);
+  else player = atoi(arguments[0]) - 1;
 
   return game_switch_player(game, player);
 }

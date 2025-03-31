@@ -11,7 +11,7 @@ Drops an object to the current space. Needs one argument. Ex: drop Object1.
 Chats with an NPC in the space. Needs one argument. Ex: chat NPC1.
 If in exploration, it starts combat. In combat mode, attacks enemies. Takes no arguments
 Exits combat.
-Switches current player. Ex: switch (swithches to next player). switch Id (switches to player with given Id)
+Switches current player. Ex: switch list (gets player list). switch (swithches to next player). switch Id (switches to player with given Id)
 Uses an ability. Takes one argument. Ex: ability 1.
 Uses an ability of an object. Takes one argument. Ex: object_use ObjectName.
 Prints all the commands if no arguments. If specified a command, prints its description.

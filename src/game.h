@@ -125,6 +125,14 @@ int game_get_n_spaces(Game *game);
 Player* game_get_player(Game *game);
 
 /**
+ * @brief Gets the number of players
+ * 
+ * @param game 
+ * @return number of players, -1 if error
+ */
+int game_get_n_players(Game *game);
+
+/**
  * @brief Gets pointer to player at certain index
  * @author Daniel Gómez
  * 

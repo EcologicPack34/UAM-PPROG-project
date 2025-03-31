@@ -229,6 +229,10 @@ Player* game_get_player(Game *game){
   return game->activePlayer; 
 }
 
+int game_get_n_players(Game *game){
+  return game->n_players;
+}
+
 Player* game_get_player_at(Game *game, int index){
   if(!game) return NULL;
   if(index < 0 || index >= game->n_players) return NULL;
