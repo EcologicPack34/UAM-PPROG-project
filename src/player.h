@@ -59,8 +59,7 @@ Entity *player_get_entity(Player *player);
  * @brief It sets a player's stats
  * @brief Aaron Charameli Mair
  * 
- * @param playerId
- * @param et The type of entity 
+ * @param p a pointer to Player 
  * @param maxhealth 
  * @param health 
  * @param baseDamage 
@@ -70,7 +69,7 @@ Entity *player_get_entity(Player *player);
  *  
  * @return Status 
  */
-Status player_set_stats(Id playerId, EntityType et, double maxhealth, double health, double baseDamage, int strength, int defense, int magicLevel);
+Status player_set_stats(Player *p, double maxhealth, double health, double baseDamage, int strength, int defense, int magicLevel);
 
 /**
  * @brief Gets a string description of player and copies it into str

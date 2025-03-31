@@ -112,4 +112,8 @@ void player_print(Player *player){
     printf("=> Player location: %d\n", (int)entity_get_location(entityPlayer));
 }
 
+Status player_set_stats(Player *p, double maxhealth, double health, double baseDamage, int strength, int defense, int magicLevel){
+    if(!p) return ERROR;
 
+    return entity_set_stats(p->entity, maxhealth, health, baseDamage, strength, defense, magicLevel);
+}

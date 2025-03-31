@@ -13,6 +13,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#define MAX_LVL 999999
+
 /**
  * @brief Struct that holds all the information related to the combat
  * 
@@ -240,6 +242,11 @@ Status combat_update(Combat *combat, Command *last_cmd){
     
     if(!combat || !last_cmd)
         return ERROR;
+
+    if(command_get_code(last_cmd) == GM){
+        /*stats copy are modified for combat*/
+        return entity_stats_set_all(&combat->player_stats.stats, MAX_LVL, MAX_LVL, MAX_LVL, MAX_LVL, MAX_LVL, MAX_LVL);
+    }
 
     random = rand() % (100 - 0 + 1);
 

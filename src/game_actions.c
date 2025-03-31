@@ -23,6 +23,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#define MAX_LVL 999999      /*<!stats "max lvl" (to be added on godmode)*/
+
 /**
    Private functions
 */
@@ -146,6 +148,15 @@ Status game_actions_help(Game *game);
 Status game_actions_search(Game *game);
 
 /**
+ * @brief 
+ * @author Aaron Charameli Mair
+ * 
+ * @param game 
+ * @return Status 
+ */
+Status game_actions_god_mode(Game *game);
+
+/**
    Game actions implementation
 */
 
@@ -161,6 +172,16 @@ Status game_actions_update(Game *game, Command *command) {
   game_set_last_command(game, command);
 
   cmd = command_get_code(command);
+
+  if(cmd == GM){
+    game_set_godmode(game, TRUE);
+    game_actions_god_mode(game);
+
+    if(game_get_state(game) == COMBAT)
+      combat_update(game_get_combat(game), game_get_last_command(game));
+
+    return command_set_status(command, OK);
+  }
 
   if(!command_current_type_valid_by_state(game_get_last_command(game), game_get_state(game))){
     command_set_status(game_get_last_command(game), ERROR);
@@ -599,4 +620,17 @@ Status game_actions_search(Game *game){
   
   space_set_discovered(space, true);
   return OK;
+}
+
+Status game_actions_god_mode(Game *game){
+  Player *pl=NULL;
+
+  if(!game) return ERROR;
+
+  if(game_get_god_mode(game) == false)
+    return ERROR;
+  
+  pl = game_get_player(game);
+
+  return player_set_stats(pl, MAX_LVL, MAX_LVL, MAX_LVL, MAX_LVL, MAX_LVL, MAX_LVL);
 }
