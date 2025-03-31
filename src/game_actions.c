@@ -508,7 +508,7 @@ Status game_actions_switch(Game *game){
       sprintf(strAux, "%d. ID:%ld NAME: %s", i + 1, entity_get_id(playerEnt), entity_get_name(playerEnt));
       strcat(str, strAux);
     }
-    return game_add_log_message(game, PLAYER_LIST, str);
+    return game_add_log_message(game, MESSAGE_PLAYER_LIST, str);
   }
 
   if(command_get_arguments_count(cmd) == 0) player = -1;
@@ -546,7 +546,7 @@ Status game_actions_help(Game *game){
     return ERROR;
   }
 
-  return game_add_log_message(game, MESSAGE_LOG ,str);
+  return game_add_log_message(game, MESSAGE_HELP ,str);
 }
 /**
  * @brief Uses the ability received as argument
