@@ -17,7 +17,9 @@
         "game.h": "c",
         "types.h": "c",
         "debug_printing.h": "c",
-        "object.h": "c"
+        "object.h": "c",
+        "message.h": "c",
+        "cstdlib": "c"
     },
     "C_Cpp.dimInactiveRegions": false
 }

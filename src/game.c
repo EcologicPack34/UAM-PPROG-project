@@ -32,8 +32,10 @@ struct _Game {
   Player *players[MAX_PLAYERS];             /*!< Contains all the players available on the game*/
   int active_player_index;
   int n_players;
-  Collection *objects;         /*!< Contains all the information related to the object */
+
   Collection *npcs;            /*!< Contains all the information related to the NPCs*/
+  
+  Collection *objects;         /*!< Contains all the information related to the object */
 
   /*Space related*/
   Space *spaces[MAX_SPACES];   /*!< Array with all the spaces of the map */
@@ -223,13 +225,36 @@ Space *game_get_space(Game *game, Id id) {
   return NULL;
 }
 
-Player* game_get_player(Game *game) {return game->activePlayer; }
+Player* game_get_player(Game *game){
+  return game->activePlayer; 
+}
 
-Id game_get_player_location(Game *game) {return entity_get_location(player_get_entity(game_get_player(game)));}
+int game_get_n_players(Game *game){
+  return game->n_players;
+}
 
-Command* game_get_last_command(Game *game) { return game->last_cmd; }
+Player* game_get_player_at(Game *game, int index){
+  if(!game) return NULL;
+  if(index < 0 || index >= game->n_players) return NULL;
 
-bool game_get_finished(Game *game) { return game->finished; }
+  return game->players[index];
+}
+Frame_color game_get_player_color(Game *game){
+  if(!game) return BLUE;
+  return BLUE + game->active_player_index % MAX_PLAYERS;
+}
+
+Id game_get_player_location(Game *game){
+  return entity_get_location(player_get_entity(game_get_player(game)));
+}
+
+Command* game_get_last_command(Game *game){
+ return game->last_cmd; 
+}
+
+bool game_get_finished(Game *game){ 
+  return game->finished;
+}
 
 Id game_get_space_id_at(Game *game, int position) {
   if (position < 0 || position >= game->n_spaces) {
@@ -688,7 +713,6 @@ Status game_switch_player(Game *game, int player){
 
 AbilityManager *game_get_ability_manager(Game *game){
   if(!game) return NULL;
-
   return game->ability_manager;
 }
 
