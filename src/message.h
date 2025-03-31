@@ -11,7 +11,6 @@
 #ifndef MESSAGE_H
 #define MESSAGE_H
 
-#define MAX_MESSAGE_LENGTH 200
 #define MESSAGE_TYPE_COUNT 7
 
 /*Typedef for enum containing the different types of messages*/

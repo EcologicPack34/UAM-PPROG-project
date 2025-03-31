@@ -540,7 +540,7 @@ Status game_actions_help(Game *game){
   Command *cmd = NULL;
   char **args = NULL;
   int argc = 0;
-  char str[WORD_SIZE];
+  char str[WORD_SIZE] = "";
   
   CommandCode code = NO_CMD;
   

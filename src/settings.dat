@@ -17,6 +17,7 @@ Uses an ability of an object. Takes one argument. Ex: object_use ObjectName.
 Prints all the commands if no arguments. If specified a command, prints its description.
 Generic command for moving. Needs one argument (north, east, south, west). Ex: move north.
 Searches in the current space to obtain info about NPCs and objects.
+Inspect an object that is contained in the players inventory. Ex: inspect objectName.
 
 [CmdStateTypes]
 all
