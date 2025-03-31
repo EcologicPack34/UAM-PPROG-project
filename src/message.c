@@ -5,7 +5,7 @@
 #include <string.h>
 
 /*Array of names for each message type*/
-char msg_type_to_name[MESSAGE_TYPE_COUNT][MAX_MESSAGE_LENGTH] = {"", "Log", "Error", "NPC", "Players", "Help"};
+char msg_type_to_name[MESSAGE_TYPE_COUNT][MAX_MESSAGE_LENGTH] = {"", "Log", "Error", "NPC", "Players", "Help", "Inspection"};
 
 struct _Message{
     MessageType type;                   /*!<Enum containing the message type*/

@@ -20,7 +20,7 @@ Searches in the current space to obtain info about NPCs and objects.
 
 [CmdStateTypes]
 all
-Move,North,South,East,West,Attack,Take,Drop,Chat,Exit,Help,Ability,Object_Use,Search,Switch_Player,
+Move,North,South,East,West,Attack,Take,Drop,Chat,Exit,Help,Ability,Object_Use,Search,Switch_Player,Inspect,
 Attack,Run_Away,Exit,Help,Ability,Object_Use,
 all
 all

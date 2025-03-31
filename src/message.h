@@ -12,10 +12,10 @@
 #define MESSAGE_H
 
 #define MAX_MESSAGE_LENGTH 200
-#define MESSAGE_TYPE_COUNT 6
+#define MESSAGE_TYPE_COUNT 7
 
 /*Typedef for enum containing the different types of messages*/
-typedef enum {MESSAGE_EMPTY ,MESSAGE_LOG, MESSAGE_ERROR, MESSAGE_NPC, MESSAGE_PLAYER_LIST, MESSAGE_HELP}MessageType;
+typedef enum {MESSAGE_EMPTY ,MESSAGE_LOG, MESSAGE_ERROR, MESSAGE_NPC, MESSAGE_PLAYER_LIST, MESSAGE_HELP, MESSAGE_INSPECT}MessageType;
 
 /*
     Typedef for Message struct

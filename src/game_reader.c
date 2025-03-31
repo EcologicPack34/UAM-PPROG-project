@@ -383,18 +383,25 @@ Status game_reader_load_objects(Game *game, char *filename){
     if (strncmp("#o:", line, 3) == 0) {
       toks = strtok(line + 3, "|");
       objectid = atol(toks);
+
       toks = strtok(NULL, "|");
       strcpy(name, toks);
+
       toks = strtok(NULL, "|");
       strcpy(data, toks);
-      toks = strtok(NULL, "|");
-      strcpy(description, toks);
+
       toks = strtok(NULL, "|");
       is_consumable = atoi(toks);
+      
       toks = strtok(NULL, "|");
       n_uses = atoi(toks);
+      
+      toks = strtok(NULL, "|");
+      strcpy(description, toks);
+      
       toks = strtok(NULL, "|");
       objectlocation = atol(toks);
+
       toks = strtok(NULL, "|");
       objectlocationtype = (InventoryType)atol(toks);
 

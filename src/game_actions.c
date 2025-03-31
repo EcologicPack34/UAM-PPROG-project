@@ -101,7 +101,7 @@ Status game_actions_runaway(Game *game);
 
 /**
  * @brief Action for switching player command
- * @author Maksym Polyak
+ * @author Maksym Polyak and Daniel Gómez
  * 
  * @param game 
  * @return Status 
@@ -128,7 +128,7 @@ Status game_actions_object_use(Game *game);
 
 /**
  * @brief Action for Help command
- * @author Daniel
+ * @author Daniel Gómez
  * 
  * @param game 
  * @return Status 
@@ -138,12 +138,21 @@ Status game_actions_help(Game *game);
 
 /**
  * @brief Action for Searching command
- * @author Daniel
+ * @author Daniel Gómez
  * 
  * @param game 
  * @return Status 
  */
 Status game_actions_search(Game *game);
+
+/**
+ * @brief Action to inspect an object
+ * @author Daniel Gómez
+ * 
+ * @param game 
+ * @return Status 
+ */
+Status game_actions_inspect(Game *game);
 
 /**
    Game actions implementation
@@ -216,6 +225,10 @@ Status game_actions_update(Game *game, Command *command) {
       break;
     case SEARCH:
       status = game_actions_search(game);
+      break;
+    case INSPECT:
+      status = game_actions_inspect(game);
+      break;
     default:
       break;
   }
@@ -243,7 +256,9 @@ Status game_actions_update(Game *game, Command *command) {
  *
  * @param game struct that saves all information related to the game
  */
-Status game_actions_unknown(Game *game) { return OK;}
+Status game_actions_unknown(Game *game){ 
+  return OK;
+}
 
 /**
  * @brief No functionality
@@ -251,7 +266,9 @@ Status game_actions_unknown(Game *game) { return OK;}
  *
  * @param game struct that saves all information related to the game
  */
-Status game_actions_exit(Game *game) { return OK;}
+Status game_actions_exit(Game *game){ 
+  return OK;
+}
 
 /**
  * @brief Retrieves the south ID, checks if it exists, then changes player location to south
@@ -616,4 +633,24 @@ Status game_actions_search(Game *game){
   
   space_set_discovered(space, true);
   return OK;
+}
+
+Status game_actions_inspect(Game *game){
+  Inventory *playerInv = NULL;
+  Object *obj;
+
+  Command *cmd = NULL;
+
+  if(!game) return ERROR;
+
+  cmd = game_get_last_command(game);
+
+  if(command_get_arguments_count(cmd) != 1) return ERROR;
+
+  playerInv = entity_get_inventory(player_get_entity(game_get_player(game)));
+  obj = inventory_get_object_by_name(playerInv, command_get_arguments(cmd)[0]);
+
+  if(!obj) return ERROR;
+
+  return game_add_log_message(game, MESSAGE_INSPECT, object_get_descr(obj));
 }
