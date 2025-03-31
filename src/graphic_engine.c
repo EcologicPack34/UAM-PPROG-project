@@ -26,7 +26,7 @@
 #define DESCRIPT_WIDTH 40
 #define HELP_BANNER_HEIGHT 1
 #define HELP_BANNER_WIDTH 23
-#define HELP_HEIGHT 3
+#define HELP_HEIGHT 4
 #define CMD_HISTORY_HEIGHT 3
 
 #define SPACE_HEIGHT 9
@@ -317,7 +317,7 @@ void graphic_engine_paint_commandInfo(Graphic_engine *ge, Game *game){
   strcat(str, (command_get_status(game_get_last_command(game)) == OK) ? " : OK" : " : ERROR");
   screen_area_puts(ge->feedback, str);
   
-  screen_paint();
+  screen_paint(game_get_player_color(game));
   printf("input:> ");
 }
 

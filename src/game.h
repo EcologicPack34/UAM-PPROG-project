@@ -27,6 +27,7 @@
 #include "message.h"
 #include "combat.h"
 #include "ability_manager.h"
+#include "libscreen.h"
 
 #include <stdbool.h>
 
@@ -122,6 +123,24 @@ int game_get_n_spaces(Game *game);
  * @return player pointer from game or NULL if there was a mistake
  */
 Player* game_get_player(Game *game);
+
+/**
+ * @brief Gets pointer to player at certain index
+ * @author Daniel Gómez
+ * 
+ * @param game 
+ * @param index 
+ * @return Player* 
+ */
+Player* game_get_player_at(Game *game, int index);
+
+/**
+ * @brief Gets a frame color based on the current player
+ * 
+ * @param game 
+ * @return Frame_color 
+ */
+Frame_color game_get_player_color(Game *game);
 
 /**
  * @brief Gets the collection pointer with the objects of the game struct
