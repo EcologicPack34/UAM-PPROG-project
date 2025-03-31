@@ -390,10 +390,10 @@ Status game_reader_load_objects(Game *game, char *filename){
       strcpy(data, toks);
 
       toks = strtok(NULL, "|");
-      is_consumable = atoi(toks);
-      
-      toks = strtok(NULL, "|");
       strcpy(description, toks);
+
+      toks = strtok(NULL, "|");
+      is_consumable = atoi(toks);
       
       toks = strtok(NULL, "|");
       objectlocation = atol(toks);

@@ -312,7 +312,7 @@ Status equipment_remove_stats(Entity *entity, Equipment *equipment, Object *obje
 
     do{
         toks = strtok(NULL, ":");
-        if(toks == NULL) return ERROR;
+        if(toks == NULL) break;
 
         code = equipment_statcode_from_str(toks);
         if(code == EQUIPMENT_ERROR) return ERROR;
