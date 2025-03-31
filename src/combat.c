@@ -13,10 +13,16 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#define LIGHT_ATTACK 1
+#define STRONG_ATTACK 2
+#define QUICK_ATTACK 0.8
+#define SWIFT_ATTACK 0.8
+
 /**
  * @brief Struct that holds all the information related to the combat
  * 
  */
+
 struct _Combat{
     PlayerStats player_stats;               /*!< Stats of the player*/
     Stats allies_stats[NPC_MAX_ALLIES];     /*!< Stats of the allies*/
@@ -217,7 +223,6 @@ Combat *combat_initialize(Space *space, Player *player, CommandCode code){
     combat->space = space;
     combat->endCombat = false;
     
-
     return combat;
 }
 
@@ -232,15 +237,265 @@ bool combat_get_isFinished(Combat *combat){
     if(!combat) return false;
     return combat->endCombat;
 }
+Status combat_attack_swift(Stats *attacker, Stats *victims, int numVictims) {
+
+    int probFail, i;
+
+    if (!attacker || !victims)
+        return ERROR;
+    //Me imagino que esto se implementará mejor cuando aparezcan las skills
+    probFail = rand()%100;
+    if (probFail > 40)
+        return OK;
+    
+    for (i = 0; i < numVictims; i++)
+    {
+        victims[i].stats.health=victims[i].stats.health-15;
+    }
+    
+    return OK; 
+}
+Status combat_attack_quick(Stats *attacker, Stats *victim){
+
+    int pain = 0, probFail;
+
+    if (!attacker || !victim)
+        return ERROR;
+    //Me imagino que esto se implementará mejor cuando aparezcan las skills
+    probFail = rand()%100;
+    if (probFail > 40)
+        return OK;
+    
+    pain = 7;
+    victim->stats.health=victim->stats.health-pain;
+    return OK; 
+}
+
+Status combat_attack_strong(Stats *attacker, Stats *victim) {
+
+    int pain = 0, probFail;
+
+    if (!attacker || !victim)
+        return ERROR;
+    //Me imagino que esto se implementará mejor cuando aparezcan las skills
+    probFail = rand()%100;
+    if (probFail > 70)
+        return OK;
+    
+    pain = 15;
+    victim->stats.health=victim->stats.health-pain;
+    return OK;    
+}
+
+Status combat_attack_light(Stats *attacker, Stats *victim) {
+
+    int pain = 0, probFail;
+
+    if (!attacker || !victim)
+        return ERROR;
+    //Me imagino que esto se implementará mejor cuando aparezcan las skills
+    probFail = rand()%100;
+    if (probFail > 90)
+        return OK;
+    
+    pain = 2;
+    victim->stats.health=victim->stats.health-pain;
+    return OK;
+}
+
+Status combat_enemies_turn(Combat *cmb) {
+
+    Stats *stAl = NULL, *stEn = NULL;
+    PlayerStats *stPl = NULL;
+    Stats *auxAl = NULL, *auxEn = NULL;
+    int numEn, numAl, i, randomNumAttack, randomNumAll;
+    int yn;
+
+    if (!cmb)
+        return ERROR;
+
+    numEn = combat_get_enemies_count(cmb);
+    numAl = combat_get_enemies_count(cmb);
+    stAl = combat_get_allies_stats(cmb);
+    stEn = combat_get_enemies_stats(cmb);
+    stPl = combat_get_player_stats(cmb);
+
+    for (i = 0; i < numEn; i++)
+    {
+        randomNumAll = rand()%numAl;
+        randomNumAttack = rand()%4;
+        yn = rand()%1;
+
+        if(!(auxEn = (Stats*) malloc(sizeof(Stats)))) return ERROR;
+        auxEn[0] = stEn[i];
+
+        if(!(auxAl = (Stats*) malloc(sizeof(Stats)))) {
+            free(auxEn);
+            return ERROR;
+        }
+        
+        auxAl[0] = stAl[randomNumAll-1];
+
+        switch (randomNumAttack)
+        {
+        case 1:
+            if(yn == 1) stPl->stats.health=stPl->stats.health-2;
+            else combat_attack_light(auxEn, auxAl);
+            break;
+        case 2:
+            if(yn == 1) stPl->stats.health=stPl->stats.health-15;
+            else combat_attack_strong(auxEn, auxAl);
+            break;
+        case 3:
+            if(yn == 1) stPl->stats.health=stPl->stats.health-7;
+            else combat_attack_quick(auxEn, auxAl);
+            break;
+        case 4:
+            combat_attack_swift(auxEn, stEn, numAl);
+            stPl->stats.health=stPl->stats.health-17;
+            break;
+        default:
+            break;
+        }
+    }
+    return OK;
+}
+
+Status combat_allies_turn(Combat *cmb){
+
+    Stats *st = NULL, *stAl = NULL;
+    Stats *aux = NULL, *auxEn = NULL;
+    int numA, numE, i, randomNumAttack, randomNumEnemy;
+
+    if (!cmb)
+        return ERROR;
+    
+    numA = combat_get_allies_count(cmb);
+    st = combat_get_enemies_stats(cmb);
+    stAl = combat_get_allies_stats(cmb);
+    numE = combat_get_enemies_count(cmb);
+
+    for (i = 0; i < numA; i++)
+    {
+        randomNumEnemy = rand()%numE;
+        randomNumAttack = rand()%4;
+        if(!(aux = (Stats*) malloc(sizeof(Stats)))) return ERROR;
+        aux[0] = stAl[i];
+
+        if(!(auxEn = (Stats*) malloc(sizeof(Stats)))){
+            free(aux);
+            return ERROR;
+        }
+        auxEn[0] = st[randomNumEnemy-1];
+
+        switch (randomNumAttack)
+        {
+        case 1:
+            combat_attack_light(aux, auxEn);
+            break;
+        case 2:
+            combat_attack_strong(aux, auxEn);
+            break;
+        case 3:
+            combat_attack_quick(aux, auxEn);
+            break;
+        case 4:
+            combat_attack_swift(aux, st, numE);
+            break;
+
+        default:
+            break;
+        }
+    } 
+    return OK;
+}
+
+Status combat_update_attack(Combat *cmb, Command *last_cmd){
+    int numEnemy, enemy_quantity;
+    char **args = NULL;
+    Stats *stEn = NULL;
+    int prbFail = 0;
+    double playerAttackDamage = 0;
+
+    if (!cmb || !last_cmd)
+        return ERROR;
+        
+    args = command_get_arguments(last_cmd);
+    numEnemy = atoi(args[1]);
+    stEn = combat_get_enemies_stats(cmb);
+
+    if (stEn[numEnemy-1].stats.health == 0)
+    {
+        return ERROR;
+    }
+    
+    prbFail = rand()%100;
+    playerAttackDamage = cmb->player_stats.stats.baseDamage;
+
+    if (strcmp(args[0], "light") == 0)
+    {
+        playerAttackDamage *= (prbFail > 90) ? 0 : LIGHT_ATTACK;
+    }
+    else if (strcmp(args[0], "strong") == 0)
+    {
+        playerAttackDamage *= (prbFail > 70) ? 0 : STRONG_ATTACK;
+    }
+    else if (strcmp(args[0], "quick") == 0)
+    {
+        playerAttackDamage *= (prbFail > 40) ? 0 : QUICK_ATTACK;
+    }
+    else if (strcmp(args[0], "swift") == 0)
+    {
+        playerAttackDamage *= (prbFail > 50) ? 0 : SWIFT_ATTACK;
+    }
+    else{
+        return ERROR;
+    }
+
+    if (cmb->is_player_turn == TRUE)
+    {
+        stEn[numEnemy-1].stats.health =stEn[numEnemy-1].stats.health - playerAttackDamage;
+        combat_allies_turn(cmb);
+        combat_enemies_turn(cmb);
+    }
+    else
+    {
+        combat_enemies_turn(cmb);
+        combat_allies_turn(cmb);
+        stEn[numEnemy-1].stats.health =stEn[numEnemy-1].stats.health-playerAttackDamage;
+    }
+    
+    return OK;
+}
+
+//comando: nombre del ataque, y el número de enemigo, para los aliados es aleatorio y para los enemigos también, del 1 al 4, para los aliados 1 al 3 (guardado en la constante)
+//si el número de enemigos no es adecuado, return ERROR
 
 Status combat_update(Combat *combat, Command *last_cmd){
-    int random;
-    int deadEnemies = 0;
     
     if(!combat || !last_cmd)
         return ERROR;
 
-    random = rand() % (100 - 0 + 1);
+    if(command_get_code(last_cmd) == ATTACK) {
+
+        if(combat_update_attack(combat, last_cmd) == ERROR) return ERROR;
+    }
+
+    if (command_get_code(last_cmd) == RUN_AWAY)
+    {
+        if (combat_runaway(combat) == ERROR) return ERROR;
+        
+    }
+    
+    /*
+        if(lastcmd == ATTACK) status = combat_update_attack();
+        si devuelve error nos salimos con un return error
+        if(lastcmd = ABIlyTY) status = cojmbat_update_ability();
+
+    */
+    
+
+    /*random = rand() % (100 - 0 + 1);
 
     if(random > 60){
         for (int i = 0; i < combat->enemies_count; i++)
@@ -262,6 +517,8 @@ Status combat_update(Combat *combat, Command *last_cmd){
     if(deadEnemies == combat->enemies_count){
         combat_finalize(combat);
     }
+    return OK;*/
+
     return OK;
 }
 
