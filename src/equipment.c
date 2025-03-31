@@ -263,7 +263,7 @@ Status equipment_add_stats(Entity *entity, Equipment *equipment, Object *object)
     char *data = NULL;
     char line[WORD_SIZE];
     char *toks = NULL;
-    EquipmentCode code;
+    StatCode code;
     double value;
 
     if(!entity || !equipment || !object) return ERROR;
@@ -278,10 +278,10 @@ Status equipment_add_stats(Entity *entity, Equipment *equipment, Object *object)
 
     do{
         toks = strtok(NULL, ":");
-        if(toks == NULL) return ERROR;
+        if(toks == NULL) break;
 
         code = equipment_statcode_from_str(toks);
-        if(code == EQUIPMENT_ERROR) return ERROR;
+        if(code == NO_STAT) return ERROR;
 
         if(toks != NULL){
             toks = strtok(NULL, " ");

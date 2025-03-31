@@ -3,7 +3,7 @@
  * @author Maksym Polyak
  * @brief To read a piece of equipment in the data camp of the object struct it has to have
  * a string named WEARABLE {EquipmentCode in string} {Stats affected}
- * Stats affected = max_health:+10 baseDamage:+2
+ * Stats affected = max_health:10 baseDamage:-2 (IF POSITIVE SIGN NOT NEEDED)
  * @version 0.1
  * @date 2025-03-29
  * 
