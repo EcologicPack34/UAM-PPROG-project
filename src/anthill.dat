@@ -51,6 +51,7 @@ InventoryType = {UNKNOWN_INVENTORY == 0, PLAYER_INVENTORY == 1, NPC_INVENTORY ==
 #o:4|Grain4|NONE|Grano4|0|122|3
 #o:5|HealthPotion|NONE|Potion that heals 20 HP|1|11|3
 #o:6|InfiniteHealthPotion|NONE|Potion that heals 20 HP and isn't used|0|11|3
+#o:7|HelmetOfVoid|wearable helmet base_damage:+1 strength:+1|Helmet TEST|0|11|3
 
 Formato Event: #e:Id|Type|cmdTriggersNum|cmdName1 , ...|removeOnTrigger|tagvalue1:tagvalue2,...
 
@@ -60,9 +61,8 @@ Formato Event: #e:Id|Type|cmdTriggersNum|cmdName1 , ...|removeOnTrigger|tagvalue
 #e:4|player_death|0|0| 
 #e:5|trigger_combat|1|sh|0|40
 
-Formato NPC: #n:ID|Message|Nombre|LocationID|Status|gdesc"
-NPC_status = {UNKNOWN_STATUS == 0, NEUTRAL == 1, ALLY == 2, ENEMY == 3}
-
+Formato NPC: #n:ID|Message|Nombre|LocationID|Status|
+#sk:1|heal_self|Heal self 25 HP|1|1|0|0|2|25
 #n:1|Hello traveler i'm NPC1|NPC1|11|1|^0m"
 #n:2|Hello traveler i'm NPC2|NPC2|11|1|^1m"
 #n:3|Die|Enemy1|11|3|^2m"

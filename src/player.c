@@ -142,7 +142,7 @@ Status player_equip_piece(Player *player, Object *object){
     if(inventory_contains_object(inventory, object_get_id(object)) == false)
         return ERROR;
 
-    if(equipment_add_piece(player->equipment, object) == ERROR)
+    if(equipment_add_piece(entity, player->equipment, object) == ERROR)
         return ERROR;
 
     inventory_remove_object(inventory, object);
@@ -163,7 +163,7 @@ Status player_unequip_piece(Player *player, char *data){
     if(inventory_get_size(inventory) == INVENTORY_PLAYER_MAX_SIZE)
         return ERROR;
 
-    object = equipment_remove_piece(player->equipment, data);
+    object = equipment_remove_piece(entity, player->equipment, data);
     if(object == NULL)
         return ERROR;
 

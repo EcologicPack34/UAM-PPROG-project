@@ -18,9 +18,9 @@
 
 #define N_PIECES 9
 
-char *equip_to_str[N_PIECES] = {"","helmet","chest","arms","leg_armor","shoes","two_handed","one_handed"};
+char *equip_to_str[N_PIECES] = {"","helmet","chest","arms","leg_armor","shoes","two_handed","one_handed1","one_handed2"};
 
-char *stat_to_str[N_STATS] = {"","max_health","health","base_Damage","strength","defense","magic_Level"};
+char *stat_to_str[N_STATS] = {"","max_health","health","base_damage","strength","defense","magic_Level"};
 
 
 
@@ -70,6 +70,39 @@ Object *equipment_unequip_from_code(Equipment *equipment, EquipmentCode code);
  * @return StatCode or NO_STAT if error
  */
 StatCode equipment_statcode_from_str(char *data);
+
+/**
+ * @brief Changes the stats of an entity by its parameters
+ * @author Maksym Polyak
+ * 
+ * @param entity 
+ * @param code 
+ * @param value 
+ * @return Status 
+ */
+Status equipment_change_stat_value_by_code(Entity *entity, StatCode code, double value);
+
+/**
+ * @brief Adds the stats of an object to the entity
+ * @author Maksym Polyak
+ * 
+ * @param entity 
+ * @param equipment 
+ * @param object 
+ * @return Status 
+ */
+Status equipment_add_stats(Entity *entity, Equipment *equipment, Object *object);
+
+/**
+ * @brief Removes the stats of an object from the entity
+ * @author Maksym Polyak
+ * 
+ * @param entity 
+ * @param equipment 
+ * @param object 
+ * @return Status 
+ */
+Status equipment_remove_stats(Entity *entity, Equipment *equipment, Object *object);
 
 Status equipment_equip_from_code(Equipment *equipment, EquipmentCode code, Object *object){
     if(!equipment || !object) return ERROR;
@@ -197,6 +230,103 @@ StatCode equipment_statcode_from_str(char *data){
     return NO_STAT;
 }
 
+Status equipment_change_stat_value_by_code(Entity *entity, StatCode code, double value){
+    if(!entity) return ERROR;
+
+    switch(code){
+        case MAX_HEALTH:
+            entity_set_max_health(entity, entity_get_max_health(entity) + value);
+            break;
+        case HEALTH:
+            break;
+        case BASE_DAMAGE:
+            entity_set_baseDamage(entity, entity_get_baseDamage(entity) + value);
+            break;
+        case STRENGTH:
+            entity_set_strength(entity, entity_get_strength(entity) + value);
+            break;
+        case DEFENSE:
+            entity_set_defense(entity, entity_get_defense(entity) + value);
+            break;
+        case MAGIC_LEVEL:
+            entity_set_magicLevel(entity, entity_get_magicLevel(entity) + value);
+            break;
+        
+        default:
+            break;
+    }
+
+    return OK;
+}
+
+Status equipment_add_stats(Entity *entity, Equipment *equipment, Object *object){
+    char *data = NULL;
+    char line[WORD_SIZE];
+    char *toks = NULL;
+    EquipmentCode code;
+    double value;
+
+    if(!entity || !equipment || !object) return ERROR;
+
+    data = object_get_data(object);
+    if(!data) return ERROR;
+
+    strcpy(line, data);
+
+    toks = strtok(line," ");
+    toks = strtok(NULL," ");
+
+    do{
+        toks = strtok(NULL, ":");
+        if(toks == NULL) return ERROR;
+
+        code = equipment_statcode_from_str(toks);
+        if(code == EQUIPMENT_ERROR) return ERROR;
+
+        if(toks != NULL){
+            toks = strtok(NULL, " ");
+            sscanf(toks, "%lf", &value);
+            if(equipment_change_stat_value_by_code(entity, code, value) == ERROR) return ERROR;
+        }
+    }while(toks != NULL);
+
+    return OK;
+}
+
+Status equipment_remove_stats(Entity *entity, Equipment *equipment, Object *object){
+    char *data = NULL;
+    char line[WORD_SIZE];
+    char *toks = NULL;
+    EquipmentCode code;
+    double value;
+
+    if(!entity || !equipment || !object) return ERROR;
+
+    data = object_get_data(object);
+    if(!data) return ERROR;
+
+    strcpy(line, data);
+
+    toks = strtok(line," ");
+    toks = strtok(NULL," ");
+
+    do{
+        toks = strtok(NULL, ":");
+        if(toks == NULL) return ERROR;
+
+        code = equipment_statcode_from_str(toks);
+        if(code == EQUIPMENT_ERROR) return ERROR;
+
+        if(toks != NULL){
+            toks = strtok(NULL, " ");
+            sscanf(toks, "%lf", &value);
+            if(equipment_change_stat_value_by_code(entity, code, -value) == ERROR) return ERROR;
+        }
+    }while(toks != NULL);
+
+    return OK;
+}
+
 /*
     * PUBLIC FUNCTIONS
 */
@@ -231,7 +361,7 @@ EquipmentCode equipment_code_from_str(char *data){
     return EQUIPMENT_ERROR;
 }
 
-Status equipment_add_piece(Equipment *equipment, Object *object){
+Status equipment_add_piece(Entity *entity, Equipment *equipment, Object *object){
     char *data = NULL;
     char line[WORD_SIZE];
     char *toks = NULL;
@@ -257,10 +387,12 @@ Status equipment_add_piece(Equipment *equipment, Object *object){
     if(equipment_equip_from_code(equipment, code, object) == ERROR)
         return ERROR;
 
+    if(equipment_add_stats(entity, equipment, object) == ERROR) return ERROR;
+
     return OK;
 }
 
-Object *equipment_remove_piece(Equipment *equipment, char *data){
+Object *equipment_remove_piece(Entity *entity, Equipment *equipment, char *data){
     Object *retobject = NULL;
     EquipmentCode code;
     
@@ -274,5 +406,10 @@ Object *equipment_remove_piece(Equipment *equipment, char *data){
     if(retobject == NULL)
         return NULL;
 
+    if(equipment_remove_stats(entity, equipment, retobject) == ERROR) return NULL;
+
     return retobject;
 }
+
+
+

@@ -60,6 +60,7 @@ Object *object_create(Id id, char *name, char* data, char *description, bool is_
         free(object);
         return NULL;
     }
+    strcpy(object->data, data);
 
     object->object_effect = NULL;
     object->is_consumable = is_consumable;

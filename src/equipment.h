@@ -55,20 +55,22 @@ EquipmentCode equipment_code_from_str(char *data);
  * @brief Tries to add an object as a piece if it is compatible
  * @author Maksym Polyak
  * 
+ * @param entity
  * @param equipment 
  * @param object 
  * @return Status 
  */
-Status equipment_add_piece(Equipment *equipment, Object *object);
+Status equipment_add_piece(Entity *entity, Equipment *equipment, Object *object);
 
 /**
  * @brief Removes a piece and returns the object
  * @author Maksym Polyak
  * 
+ * @param entity
  * @param equipment 
  * @param data
  * @return Object* or NULL if error
  */
-Object *equipment_remove_piece(Equipment *equipment, char *data);
+Object *equipment_remove_piece(Entity *entity, Equipment *equipment, char *data);
 
 #endif

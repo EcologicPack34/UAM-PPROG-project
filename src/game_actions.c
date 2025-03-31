@@ -234,10 +234,13 @@ Status game_actions_update(Game *game, Command *command) {
       break;
     case SEARCH:
       status = game_actions_search(game);
+      break;
     case EQUIP:
       status = game_actions_equip(game);
+      break;
     case UNEQUIP:
       status = game_actions_unequip(game);
+      break;
     default:
       break;
   }
