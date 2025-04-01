@@ -24,6 +24,7 @@
 #define N_GAME_STATES 5
 #define MAX_SKILLS_ENTITY 5
 
+
 typedef long Id;        /*!< Id typedef */
 
 typedef enum { FALSE, TRUE } Bool; /*!< Bool variable that admits TRUE or FALSE */ /*CAN BE REPLACED BY stdbool.h standard library*/

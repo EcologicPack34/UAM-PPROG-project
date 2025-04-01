@@ -1,18 +1,33 @@
 CC = gcc
 
-INCLUDE = ./include
-LIBRARIES = ./libraries
-OBJECTS = ./object
+INCLUDE = include
+LIBRARIES = libraries
+OBJ_PATH = object
+SRC_PATH = src
+DEP_PATH = dependency
 
-CFLAGS = -Wall -pedantic -I$(INCLUDE) -L$(LIBRARIES)
+#-MMP generates dependencies files for each .c, i.e. it generates a file that makefile checks to see its dependencies when compiling
+#-MP Is used to detect errors if any .h is deleted, but mentioned on a dependency file (.d)
+CFLAGS = -Wall -pedantic -I$(INCLUDE) -MMD -MP
 
-SRC = command.c debug_printing.c game_actions.c game_loop.c game.c graphic_engine.c space.c object.c player.c game_reader.c entity.c \
+#Names of the .c files
+_SRC = command.c debug_printing.c game_actions.c game_loop.c game.c graphic_engine.c space.c object.c player.c game_reader.c entity.c \
  link.c inventory.c collection.c event_manager.c event_actions.c npc.c vector2.c queue.c message.c combat.c ability_actions.c ability_manager.c \
  equipment.c
 
-OBJ = command.o debug_printing.o game_actions.o game_loop.o game.o graphic_engine.o space.o object.o player.o libscreen.a entity.o \
- game_reader.o link.o inventory.o collection.o event_manager.o event_actions.o npc.o vector2.o queue.o message.o combat.o \
- ability_actions.o ability_manager.o equipment.o
+#Adds to the names of .c files the path of the file before
+SRC = $(patsubst %,$(SRC_PATH)/%,$(_SRC))
+
+#changes the .c extension from SRC to .o extension
+_OBJ = $(_SRC:.c=.o)
+
+#Like in SRC, we copy the OBJ_PATH before each object
+OBJ = $(patsubst %,$(OBJ_PATH)/%,$(_OBJ))
+
+#changes the .o extension from OBJ to .d extension to include the dependencies
+DEPENDENCIES = $(OBJ:.o=.d)
+#includes the dependencies so that they are considered when compiling
+-include $(DEPENDENCIES)
 
 EXE = anthill
 EXED = anthilldebug
@@ -20,129 +35,26 @@ EXED = anthilldebug
 TEST_OBJ = entity_test.o collection_test.o
 TEST = entity_test collection_test
 
-all:
-	@cd ./src
-	make exe #no va porque no existe makefile en este directorio
-	@cd ..
 
-exe:	$(OBJ)
-	mv *.o $(OBJECTS)
-	$(CC) $(CFLAGS) -o $(EXE) $(OBJ) -lscreen
+all: $(EXE)
 
-game_loop.o: game_loop.c debug_printing.h command.h types.h game.h link.h \
- entity.h inventory.h object.h collection.h ability_manager.h queue.h \
- space.h npc.h vector2.h player.h event_manager.h message.h combat.h \
- game_reader.h game_actions.h graphic_engine.h event_actions.h \
- ability_actions.h
-	$(CC) $(CFLAGS) -c game_loop.c
+#Rule to link all the objects with libraries
+$(EXE):	$(OBJ)
+	$(CC) $(CFLAGS) -o $(EXE) $(OBJ) -L$(LIBRARIES) -lscreen
 
-game.o: game.c game.h link.h types.h entity.h inventory.h object.h \
- collection.h ability_manager.h queue.h space.h npc.h debug_printing.h \
- vector2.h command.h player.h event_manager.h message.h combat.h
-	$(CC) $(CFLAGS) -c game.c
-
-command.o: command.c command.h types.h debug_printing.h
-	$(CC) $(CFLAGS) -c command.c
-
-space.o: space.c space.h types.h object.h link.h entity.h inventory.h \
- collection.h npc.h debug_printing.h vector2.h
-	$(CC) $(CFLAGS) -c space.c
-
-game_actions.o: game_actions.c game_actions.h game.h link.h types.h \
- entity.h inventory.h object.h collection.h ability_manager.h queue.h \
- space.h npc.h debug_printing.h vector2.h command.h player.h \
- event_manager.h message.h combat.h ability_manager.c
-	$(CC) $(CFLAGS) -c game_actions.c
-
-graphic_engine.o: graphic_engine.c graphic_engine.h game.h link.h types.h \
- entity.h inventory.h object.h collection.h ability_manager.h queue.h \
- space.h npc.h debug_printing.h vector2.h command.h player.h \
- event_manager.h message.h combat.h libscreen.h
-	$(CC) $(CFLAGS) -c graphic_engine.c
-
-object.o: object.c object.h types.h
-	$(CC) $(CFLAGS) -c object.c
-
-entity.o: entity.c entity.h inventory.h types.h object.h collection.h \
- ability_manager.h queue.h debug_printing.h
-	$(CC) $(CFLAGS) -c entity.c
-	
-player.o: player.c player.h entity.h inventory.h types.h object.h \
- ability_manager.h queue.h collection.h equipment.h
-	$(CC) $(CFLAGS) -c player.c
-
-collector.o:	collector.c collector.h
-	$(CC) $(CFLAGS) -c collector.c
-
-debug_printing.o:	debug_printing.c debug_printing.h
-	$(CC) $(CFLAGS) -c debug_printing.c
-
-game_reader.o: game_reader.c game_reader.h types.h game.h link.h entity.h \
- inventory.h object.h collection.h ability_manager.h queue.h space.h npc.h \
- debug_printing.h vector2.h command.h player.h event_manager.h message.h \
- combat.h
-	$(CC) $(CFLAGS) -c game_reader.c
-
-link.o: link.c link.h types.h entity.h inventory.h object.h collection.h \
- debug_printing.h
-	$(CC) $(CFLAGS) -c link.c
-
-inventory.o: inventory.c inventory.h types.h object.h collection.h \
- debug_printing.h
-	$(CC) $(CFLAGS) -c inventory.c
-
-collection.o: collection.c collection.h types.h debug_printing.h
-	$(CC) $(CFLAGS) -c collection.c
-
-event_manager.o: event_manager.c event_manager.h command.h types.h \
- collection.h debug_printing.h
-	$(CC) $(CFLAGS) -c event_manager.c
-
-event_actions.o: event_actions.c event_actions.h event_manager.h \
- command.h types.h game.h link.h entity.h inventory.h object.h \
- collection.h space.h npc.h debug_printing.h vector2.h player.h message.h \
- combat.h queue.h
-	$(CC) $(CFLAGS) -c event_actions.c
-
-npc.o: npc.c npc.h entity.h inventory.h types.h object.h collection.h \
- ability_manager.h queue.h debug_printing.h
-	$(CC) $(CFLAGS) -c npc.c
-
-queue.o: queue.c queue.h types.h
-	$(CC) $(CFLAGS) -c queue.c
-
-vector2.o: vector2.c vector2.h
-	$(CC) $(CFLAGS) -c vector2.c
-
-message.o: message.c message.h
-	$(CC) $(CFLAGS) -c message.c
-
-combat.o: combat.c combat.h collection.h types.h debug_printing.h queue.h \
- entity.h inventory.h object.h ability_manager.h npc.h space.h link.h \
- vector2.h player.h command.h
-	$(CC) $(CFLAGS) -c combat.c
+#Rule to compile each .c file into its .o file
+$(OBJ_PATH)/%.o: $(SRC_PATH)/%.c | $(OBJ_PATH)
+	$(CC) -c -o $@ $< $(CFLAGS)
 
 
-ability_manager.o: ability_manager.c ability_manager.h types.h queue.h \
- collection.h debug_printing.h
-	$(CC) $(CFLAGS) -c ability_manager.c
-
-ability_actions.o: ability_actions.c ability_actions.h ability_manager.h \
- types.h queue.h game.h link.h entity.h inventory.h object.h collection.h \
- space.h npc.h debug_printing.h vector2.h command.h player.h \
- event_manager.h message.h combat.h
-	$(CC) $(CFLAGS) -c ability_actions.c
-
-equipment.o: equipment.c equipment.h object.h types.h ability_manager.h \
- queue.h entity.h inventory.h collection.h
-	$(CC) $(CFLAGS) -c equipment.c
-  
 .PHONY:	clean compile link run runl debug runv gdb
 clean:
-	@rm -f *.o $(EXE) debug.log $(EXED) $(TEST) $(TEST_OBJ)
-	@cd ./test
-	@rm -f debug.log $(TEST)
-	@cd ..
+	cd ./$(OBJ_PATH)
+	rm -f $(OBJ) $(DEPENDENCIES) $(EXE) debug.log $(EXED) $(TEST) $(TEST_OBJ)
+	cd ..
+#	@cd ./test
+#	@rm -f debug.log $(TEST)
+#	@cd ..
 
 compile:
 	$(CC) $(CFLAGS) -c $(SRC)
