@@ -22,7 +22,7 @@ TEST = entity_test collection_test
 
 all:
 	@cd ./src
-	make exe
+	make exe #no va porque no existe makefile en este directorio
 	@cd ..
 
 exe:	$(OBJ)
@@ -70,6 +70,9 @@ entity.o: entity.c entity.h inventory.h types.h object.h collection.h \
 player.o: player.c player.h entity.h inventory.h types.h object.h \
  ability_manager.h queue.h collection.h equipment.h
 	$(CC) $(CFLAGS) -c player.c
+
+collector.o:	collector.c collector.h
+	$(CC) $(CFLAGS) -c collector.c
 
 debug_printing.o:	debug_printing.c debug_printing.h
 	$(CC) $(CFLAGS) -c debug_printing.c
