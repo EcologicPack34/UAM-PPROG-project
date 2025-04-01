@@ -242,6 +242,16 @@ NPC *game_get_npc_by_id(Game *game, Id id);
 
 Player *game_get_player_by_id(Game *game, Id id);
 
+/**
+ * @brief it gets the status of god mode
+ * @author Aaron Charameli Mair
+ * 
+ * @param game 
+ * @return true 
+ * @return false 
+ */
+bool game_get_god_mode(Game *game);
+
 /*----------SETTERS----------*/
 
 
@@ -284,6 +294,16 @@ Status game_set_player_location(Game *game, Id id);
  * @return Status 
  */
 Status game_set_state(Game *game, GameState state);
+
+/**
+ * @brief It sets the value of god mode
+ * @author Aaron Charameli Mair
+ * 
+ * @param game 
+ * @param value 
+ * @return Status 
+ */
+Status game_set_godmode(Game *game, bool value);
 
 /*----------OTHERS----------*/
 

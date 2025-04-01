@@ -181,6 +181,36 @@ Status entity_set_magicLevel(Entity *entity, int magicLevel);
  */
 Status entity_set_graphic_description(Entity *entity, char *gdesc);
 
+/**
+ * @brief This function sets the stats values of an Entity;
+ * 
+ * @param ent 
+ * @param maxhealth 
+ * @param health 
+ * @param baseDamage 
+ * @param strength 
+ * @param defense 
+ * @param magicLevel 
+ * @return Status 
+ */
+Status entity_set_stats(Entity *ent, double maxhealth, double health, double baseDamage, int strength, int defense, int magicLevel);
+
+
+/**
+ * @brief This function sets the values of an EntityStats
+ * @author Aaron Charameli Mair
+ * 
+ * @param es a pointer to the Entitytats to modify
+ * @param maxhealth 
+ * @param health 
+ * @param baseDamage 
+ * @param strength 
+ * @param defense 
+ * @param magicLevel 
+ * @return Status 
+ */
+Status entity_stats_set_all(Entity_Stats *es, double maxhealth, double health, double baseDamage, int strength, int defense, int magicLevel);
+
 /*Entity GETTERS*/
 
 /**
