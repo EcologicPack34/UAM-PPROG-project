@@ -91,7 +91,26 @@ Status player_set_stats(Player *p, double maxhealth, double health, double baseD
  */
 Status player_get_str_desc(Player *player, char *str);
 
+/**
+ * @brief Gets the money quantity of the player
+ * @author Maksym Polyak
+ * 
+ * @param player 
+ * @return Status 
+ */
+int player_get_money(Player *player);
+
 /*Player SETTERS*/
+
+/**
+ * @brief Adds the value_added int to the player money, can be negative
+ * but cant surpass int value or go below 0
+ * 
+ * @param player 
+ * @param value_added 
+ * @return Status 
+ */
+Status player_add_money(Player *player, int value_added);
 
 /**
  * @brief Prints a player struct

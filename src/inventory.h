@@ -172,4 +172,14 @@ Status inventory_move_object(Inventory *inventoryOUT, Inventory *inventoryIN, Id
  */
 bool inventory_contains_object(Inventory *inventory, Id objectid);
 
+/**
+ * @brief Returns the number of objects with such name, and the objects
+ * @author Sofía Calvo
+ *
+ * @param inventory contains the inventory information
+ * @param num id of the object
+ * @return 1 if it is in the inventory or 0 if not(ERROR also is set as 0)
+ */
+//Object *inventory_get_object_and_num_by_name(Inventory *inv, int *num, char *name)
+
 #endif

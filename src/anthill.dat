@@ -52,6 +52,7 @@ InventoryType = {UNKNOWN_INVENTORY == 0, PLAYER_INVENTORY == 1, NPC_INVENTORY ==
 #o:5|HealthPotion|NONE|Potion that heals 20 HP|1|11|3
 #o:6|InfiniteHealthPotion|NONE|Potion that heals 20 HP and isn't used|0|11|3
 #o:7|HTEST|wearable helmet base_damage:1 strength:1 max_health:20|Helmet TEST|0|11|3
+#0:8|MoneyBag|NONE|Bag with 20 coins|0|11|3
 
 Formato Event: #e:Id|Type|cmdTriggersNum|cmdName1 , ...|removeOnTrigger|tagvalue1:tagvalue2,...
 
@@ -87,3 +88,4 @@ Formato Ability: #sk:Id|Type|Name|Entityid|is_player_ability|is_object_use|cd_co
 #sk:1|heal_self|Heal self 25 HP|1|1|0|0|2|25
 #sk:2|heal_self|Heal self 20 HP|5|0|1|0|0|20
 #sk:3|heal_self|Heal self 5 HP|6|0|1|0|2|5
+#sk:4|money_bag|Adds 20 coins|8|0|1|0|0|20

@@ -35,6 +35,10 @@
 #define COMBAT_OFFSET 10
 #define HEALTH_BAR_WIDTH 5
 
+#define MAX_PRINT_PLAYER_INVENTORY 7
+#define MAX_PRINT_INVENTORY 7
+#define MAX_PRINT_SPACE_NPCS 5
+
 struct _Graphic_engine {
   Area *map, *descript, *banner, *help, *feedback;
 };
@@ -298,7 +302,7 @@ void graphic_engine_paint_generalDesc(Graphic_engine *ge, Game *game){
     screen_area_puts(ge->descript, "    No Objects in Player Inventory");
   }
   else{
-    for(i = 0; i < inventorysize && i < 5; i++){
+    for(i = 0; i < inventorysize && i < MAX_PRINT_PLAYER_INVENTORY; i++){
       inventory_get_object_str_at(playerInventory, strAux, i);
       
       strcpy(str,"    ");
@@ -320,7 +324,7 @@ void graphic_engine_paint_generalDesc(Graphic_engine *ge, Game *game){
     if(inventorysize == 0){
       screen_area_puts(ge->descript, "No Objects in Space Inventory");
     }else{
-      for(i = 0; i < inventorysize && i < 5; i++){
+      for(i = 0; i < inventorysize && i < MAX_PRINT_INVENTORY; i++){
         inventory_get_object_str_at(spaceInventory, str, i);
         screen_area_puts(ge->descript, str);
       }
@@ -336,7 +340,7 @@ void graphic_engine_paint_generalDesc(Graphic_engine *ge, Game *game){
   if(!spaceDiscovered){
     screen_area_puts(ge->descript, "Space hasn't been explored");
   }else{
-    for(i = 0; i < size && i < 5; i++){
+    for(i = 0; i < size && i < MAX_PRINT_SPACE_NPCS; i++){
       if(entity_get_health(npc_get_entity(space_get_NPC_at(currentSpace, i))) <= 0) continue;
   
       strcpy(str, "   ");
@@ -404,7 +408,7 @@ void graphic_engine_paint_combat(Graphic_engine *ge, Game *game){
 
   int enemy_count = 0, ally_count = 0;
   Stats *stats = NULL;
-  PlayerStats *playerStats = NULL;
+  Stats *playerStats = NULL;
 
   heightDiv = (MAP_HEIGHT - 4 + 1)/3;
 
@@ -475,7 +479,7 @@ void graphic_engine_paint_combat(Graphic_engine *ge, Game *game){
   spacing[0] = 0;
   str[0] = 0;
 
-  div = (MAP_WIDTH - COMBAT_OFFSET) / (ally_count + 2);
+  div = (MAP_WIDTH - COMBAT_OFFSET) / (ally_count + 1);
 
   stats = combat_get_allies_stats(combat);
   playerStats = combat_get_player_stats(combat);
@@ -493,7 +497,7 @@ void graphic_engine_paint_combat(Graphic_engine *ge, Game *game){
   strcat(str, spacing);
 
   /*prints allies desc*/
-  for (i = 0; i < ally_count; i++)
+  for (i = 1; i < ally_count; i++)
   {
     strcat(str, entity_get_graphic_description(stats[i].entity));
     if(i != enemy_count -1) strcat(str, spacing);
@@ -521,7 +525,7 @@ void graphic_engine_paint_combat(Graphic_engine *ge, Game *game){
   strcat(str, "]");
 
   /*allies health bar*/
-  for (i = 0; i < ally_count; i++)
+  for (i = 1; i < ally_count; i++)
   {
     //sprintf(strAux, "[%.2lf]", stats[i].stats.health);
     strcat(str, "[");
@@ -548,7 +552,7 @@ void graphic_engine_paint_combat(Graphic_engine *ge, Game *game){
   strcat(str, strAux);
   screen_area_puts(ge->descript, str);
 
-  if(ally_count > 0){
+  if(ally_count > 1){
     strcpy(str, "Allies:");
     screen_area_puts(ge->descript, str);
     stats = combat_get_allies_stats(combat);

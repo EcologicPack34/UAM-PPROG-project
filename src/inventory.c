@@ -195,6 +195,30 @@ Object *inventory_get_object_by_id(Inventory *inventory, Id objectid){
 
 /*Inventory GETTERS*/
 
+/*Object *inventory_get_object_and_num_by_name(Inventory *inv, int *num, char *name) {
+
+    int lenght;
+    int i;
+    Object *obj = NULL;
+
+    if (!inv || !name || !num)
+        return NULL;
+    
+    *num = 0;
+    lenght = collection_length(inv->objects);
+
+    for (i = 0; i < lenght; i++)
+    {
+        obj = (Object*)collection_get_element_at(inv->objects, (long)i);
+        if (strcmp(object_get_name(obj), name) == 0)
+        {
+            *num++;
+        } 
+    }
+    return obj;
+}*/
+
+
 Object *inventory_get_object_by_name(Inventory *inventory, char *objectname){
     int i, size;
     Object *object = NULL;

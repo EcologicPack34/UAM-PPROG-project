@@ -16,12 +16,12 @@
 #include "stdbool.h"
 #include "queue.h"
 
-#define N_SKILLS 3 /*!< Number of skills implemented on AbilityType*/
+#define N_SKILLS 4 /*!< Number of skills implemented on AbilityType*/
 
 /**
  * @brief Enum storing the different types of events 
  */
-typedef enum {NO_SKILL, HEAL_SELF, HEAL_ALLY}AbilityType; /*!< Type to determine the effect of an ability*/
+typedef enum {NO_SKILL, HEAL_SELF, HEAL_ALLY, MONEY_BAG}AbilityType; /*!< Type to determine the effect of an ability*/
 
 typedef struct _Ability Ability;
 

@@ -29,6 +29,8 @@ struct _Player {
     Entity *entity;           /*!< Entity type of the player */
 
     Equipment *equipment;     /*!< Equipment of the player*/
+
+    int money;                /*!< Money quantity of the player*/
 };
 
 
@@ -72,6 +74,8 @@ Player *player_create(char *name, Id identity, Id location){
         entity_destroy(player->entity);
         free(player);
     }
+
+    player->money = 0;
     
     return player;
 }
@@ -113,7 +117,24 @@ Status player_get_str_desc(Player *player, char *str){
     return OK;
 }
 
+int player_get_money(Player *player){
+    if(!player) return ERROR;
+
+    return player->money;
+}
+
 /*Player SETTERS*/
+
+Status player_add_money(Player *player, int value_added){
+    if(!player) return ERROR;
+
+    if(player->money + value_added > 0)
+        player->money += value_added;
+    else
+        player->money = 0;
+
+    return OK;
+}
 
 void player_print(Player *player){
     Entity *entityPlayer;
