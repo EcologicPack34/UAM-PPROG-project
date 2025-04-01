@@ -35,6 +35,10 @@
 #define COMBAT_OFFSET 10
 #define HEALTH_BAR_WIDTH 5
 
+#define MAX_PRINT_PLAYER_INVENTORY 7
+#define MAX_PRINT_INVENTORY 7
+#define MAX_PRINT_SPACE_NPCS 5
+
 struct _Graphic_engine {
   Area *map, *descript, *banner, *help, *feedback;
 };
@@ -298,7 +302,7 @@ void graphic_engine_paint_generalDesc(Graphic_engine *ge, Game *game){
     screen_area_puts(ge->descript, "    No Objects in Player Inventory");
   }
   else{
-    for(i = 0; i < inventorysize && i < 5; i++){
+    for(i = 0; i < inventorysize && i < MAX_PRINT_PLAYER_INVENTORY; i++){
       inventory_get_object_str_at(playerInventory, strAux, i);
       
       strcpy(str,"    ");
@@ -320,7 +324,7 @@ void graphic_engine_paint_generalDesc(Graphic_engine *ge, Game *game){
     if(inventorysize == 0){
       screen_area_puts(ge->descript, "No Objects in Space Inventory");
     }else{
-      for(i = 0; i < inventorysize && i < 5; i++){
+      for(i = 0; i < inventorysize && i < MAX_PRINT_INVENTORY; i++){
         inventory_get_object_str_at(spaceInventory, str, i);
         screen_area_puts(ge->descript, str);
       }
@@ -336,7 +340,7 @@ void graphic_engine_paint_generalDesc(Graphic_engine *ge, Game *game){
   if(!spaceDiscovered){
     screen_area_puts(ge->descript, "Space hasn't been explored");
   }else{
-    for(i = 0; i < size && i < 5; i++){
+    for(i = 0; i < size && i < MAX_PRINT_SPACE_NPCS; i++){
       if(entity_get_health(npc_get_entity(space_get_NPC_at(currentSpace, i))) <= 0) continue;
   
       strcpy(str, "   ");

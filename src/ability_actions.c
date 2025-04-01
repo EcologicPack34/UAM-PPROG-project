@@ -46,6 +46,16 @@ Status ability_heal_self(Ability *ability, Game *game);
  */
 Status ability_heal_ally(Ability *ability, Game *game);
 
+/**
+ * @brief Adds an amount of money to the active player
+ * @author Maksym Polyak
+ * 
+ * @param ability 
+ * @param game 
+ * @return Status 
+ */
+Status ability_money_bag(Ability *ability, Game *game);
+
 Status ability_heal_self(Ability *ability, Game *game){
     Combat *combat = NULL;
     PlayerStats *stats = NULL;
@@ -143,6 +153,20 @@ Status ability_heal_ally(Ability *ability, Game *game){
     }
 
     return OK;
+}
+
+Status ability_money_bag(Ability *ability, Game *game){
+    char *data = NULL;
+    int value;
+    
+    if(!ability || !game) return ERROR;
+
+    data = ability_get_data(ability);
+    if(!data) return ERROR;
+
+    sscanf(data, "%d", &value);
+
+    return player_add_money(game_get_player(game), value);
 }
 
 /*
