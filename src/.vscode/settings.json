@@ -13,6 +13,7 @@
         "space.h": "c",
         "string_view": "c",
         "test.h": "c",
+        "inventory.h": "c",
         "ability.h": "c",
         "game.h": "c",
         "types.h": "c",

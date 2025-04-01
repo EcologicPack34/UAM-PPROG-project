@@ -16,7 +16,7 @@
 #define UNDEFINED_ID 0  /*!< Value of a non assigned ID, usefull to not confuse errors with intended behaviour*/
 #define DIRECTION_NUMBER 8
 
-#define NPC_MAX_ALLIES 3
+#define NPC_MAX_ALLIES 4
 #define NPC_MAX_ENEMIES 4
 #define COMBAT_MAX_ENTITIES 8
 

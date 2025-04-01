@@ -58,7 +58,7 @@ Status ability_money_bag(Ability *ability, Game *game);
 
 Status ability_heal_self(Ability *ability, Game *game){
     Combat *combat = NULL;
-    PlayerStats *stats = NULL;
+    Stats *stats = NULL;
     char *data = NULL;
     Player *player = NULL;
     Entity *entity = NULL;
