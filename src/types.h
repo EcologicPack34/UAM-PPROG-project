@@ -34,6 +34,6 @@ typedef enum { N, NE, E, SE, S , SW, W , NW, NO_DIR} Direction; /*!< Directions 
 
 typedef enum {UNKNOWN_INVENTORY, PLAYER_INVENTORY, NPC_INVENTORY, SPACE_INVENTORY} InventoryType; /*!< Enum describing the different types of inventory*/
 
-typedef enum {ERROR_STATE ,DEFAULT, COMBAT, INVENTORY, DIALOGUE}GameState; /*!< Enum describing the different game states*/
+typedef enum {ERROR_STATE ,DEFAULT, COMBAT, INVENTORY, DIALOGUE, DEAD}GameState; /*!< Enum describing the different game states*/
 
 #endif
