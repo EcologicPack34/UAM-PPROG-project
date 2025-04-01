@@ -92,6 +92,14 @@ void graphic_engine_paint_combat(Graphic_engine *ge, Game *game);
 void graphic_engine_paint_generalDesc(Graphic_engine *ge, Game *game);
 
 /**
+ * @brief Paints the death screen when the player dies
+ * @author Sofía Calvo López
+ * 
+ * @param ge 
+ * @param game 
+ */
+void graphic_engine_paint_deathScreen(Graphic_engine *ge, Game *game);
+/**
  * @brief Paints info related to commands in the command area
  * @author Daniel Gómez
  * 
@@ -139,6 +147,12 @@ void graphic_engine_destroy(Graphic_engine *ge) {
 
 
 /*------PUBLIC IMPLEMENTATIONS--------*/
+
+void graphic_engine_paint_deathScreen(Graphic_engine *ge, Game *game) {
+
+  
+
+}
 
 void graphic_engine_paint_game(Graphic_engine *ge, Game *game){
   GameState gameState;
