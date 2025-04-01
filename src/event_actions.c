@@ -105,7 +105,7 @@ void event_actions_trigger_events(Game *game){
     /*Always checked events*/
     if(game_get_state(game) == COMBAT)
         triggered = event_trigger_end_combat(game);
-        
+
     triggered = event_trigger_player_death(event, game);
 }
 

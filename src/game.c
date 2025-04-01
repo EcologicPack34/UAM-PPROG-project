@@ -46,6 +46,7 @@ struct _Game {
   /*Others*/
   EventManager *event_manager; /*!< Struct containing the info about the events that can happen*/
   Queue *screenLog;             /*!< Queue containing a list of messages to print on screen*/
+  bool godmode;                 /*!< bool that determines if god mode is activated*/
 
   /*Combat*/
   Combat *combat;
@@ -119,6 +120,7 @@ Status game_create(Game **game) {
     return ERROR;
   }
   
+  (*game)->godmode = false;
   (*game)->finished = false;
   (*game)->n_links = 0;
   (*game)->current_state = DEFAULT;
@@ -342,6 +344,12 @@ Player *game_get_player_by_id(Game *game, Id id){
   return NULL;
 }
 
+bool game_get_god_mode(Game *game){
+  if(!game) return false;
+
+  return game->godmode;
+}
+
 /*-----------SETTERS-----------*/
 
 Status game_set_last_command(Game *game, Command *command) {
@@ -365,6 +373,12 @@ Status game_set_player_location(Game *game, Id id){
 Status game_set_state(Game *game, GameState state){
   if(!game) return ERROR;
   game->current_state = state;
+  return OK;
+}
+
+Status game_set_godmode(Game *game, bool value){
+  if(!game) return ERROR;
+  game->godmode = value;
   return OK;
 }
 

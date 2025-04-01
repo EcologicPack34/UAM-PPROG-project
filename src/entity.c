@@ -203,6 +203,24 @@ Status entity_set_graphic_description(Entity *entity, char *gdesc){
     return OK;
 }
 
+Status entity_set_stats(Entity *ent, double maxhealth, double health, double baseDamage, int strength, int defense, int magicLevel){
+    if(!ent) return ERROR;
+    return entity_stats_set_all(&ent->stats, maxhealth, health, baseDamage, strength, defense, magicLevel);
+}
+
+Status entity_stats_set_all(Entity_Stats *es, double maxhealth, double health, double baseDamage, int strength, int defense, int magicLevel){
+    if(!es) return ERROR;
+    
+    es->maxhealth = maxhealth;
+    es->health = health;
+    es->baseDamage = baseDamage;
+    es->strength = strength;
+    es->defense = defense;
+    es->magicLevel = magicLevel;
+    
+    return OK;
+}
+
 /*Entity GETTERS*/
 
 char *entity_get_graphic_description(Entity *entity){

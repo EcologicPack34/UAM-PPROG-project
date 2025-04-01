@@ -13,6 +13,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#define MAX_LVL 999999
 /*Damage multipliers for each attack*/
 #define LIGHT_ATTACK 1
 #define STRONG_ATTACK 1.5
@@ -379,6 +380,11 @@ Status combat_update(Combat *combat, Command *last_cmd){
     
     if(!combat || !last_cmd)
         return ERROR;
+
+    if(command_get_code(last_cmd) == GM){
+        /*stats copy are modified for combat*/
+        return entity_stats_set_all(&combat->allies_stats[0].stats, MAX_LVL, MAX_LVL, MAX_LVL, MAX_LVL, MAX_LVL, MAX_LVL);
+    }
 
     if(command_get_code(last_cmd) == ATTACK) {
 
