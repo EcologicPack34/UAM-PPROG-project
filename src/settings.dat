@@ -23,7 +23,7 @@ Inspect an object that is contained in the players inventory. Ex: inspect object
 
 [CmdStateTypes]
 all
-Move,North,South,East,West,Attack,Take,Drop,Chat,Exit,Help,Ability,Object_Use,Search,Equip,Unequip,Inspect,
+Move,North,South,East,West,Attack,Take,Drop,Chat,Exit,Help,Ability,Object_Use,Search,Equip,Unequip,Inspect,sw,
 Attack,Run_Away,Exit,Help,Ability,Object_Use,Inspect,
 all
 all

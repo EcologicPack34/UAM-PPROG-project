@@ -399,7 +399,7 @@ Status game_reader_load_objects(Game *game, char *filename){
       objectlocation = atol(toks);
 
       toks = strtok(NULL, "|");
-      objectlocationtype = (InventoryType)atol(toks);
+      objectlocationtype = atol(toks) + UNKNOWN_INVENTORY;
 
       debug_log(PRINT,"Read Object: #o:%ld|%s|%s|%s|%d|%ld|%ld", objectid, name, data, description, is_consumable, objectlocation, objectlocationtype);
 

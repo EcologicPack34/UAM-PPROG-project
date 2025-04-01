@@ -601,7 +601,7 @@ Status game_add_object(Game *game, Object *object){
   if(collection_add(game_get_objects(game), object) == ERROR)
     return ERROR;
 
-  debug_log(PRINT,"Game Added Object: ID: %ld, name: %s, objectlocation: %ld, inventoryType: %d", object_get_id(object), object_get_name(object), object_get_location(object), (int)object_get_type(object));
+  debug_log(PRINT,"Game Added Object: ID: %ld, name: %s, objectlocation: %ld, inventoryType: %d", object_get_id(object), object_get_name(object), object_get_location(object), object_get_type(object) - UNKNOWN_INVENTORY);
   return OK;
 }
 

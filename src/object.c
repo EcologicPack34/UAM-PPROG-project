@@ -67,6 +67,7 @@ Object *object_create(Id id, char *name, char* data, char *description, bool is_
     
     object->id = id;
     object->location = location;
+    object->type = type;
     strcpy(object->name,name);
     strcpy(object->descr, description);
     
