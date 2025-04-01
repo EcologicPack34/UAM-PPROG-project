@@ -146,8 +146,10 @@ Status entity_set_entityType(Entity *entity, EntityType entityType){
 Status entity_set_max_health(Entity *entity, double maxhealth){
     if(!entity)
         return ERROR;
-    
-    entity->stats.maxhealth = maxhealth;
+    if(entity->stats.health > maxhealth){
+        entity->stats.health = maxhealth;
+    }
+        entity->stats.maxhealth = maxhealth;
     return OK;
 }
 

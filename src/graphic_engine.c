@@ -26,7 +26,7 @@
 #define DESCRIPT_WIDTH 40
 #define HELP_BANNER_HEIGHT 1
 #define HELP_BANNER_WIDTH 23
-#define HELP_HEIGHT 3
+#define HELP_HEIGHT 4
 #define CMD_HISTORY_HEIGHT 3
 
 #define SPACE_HEIGHT 9
@@ -39,14 +39,61 @@ struct _Graphic_engine {
   Area *map, *descript, *banner, *help, *feedback;
 };
 
+/**
+ * @brief Paints a string with newlines in a designated screen area
+ * @author Daniel Gómez
+ * 
+ * @param area 
+ * @param string 
+ */
+void graphic_engine_newline_print(Area *area, char *string);
+
+/**
+ * @brief Paints a space in map area
+ * @author Daniel Gómez
+ * 
+ * @param game 
+ * @param space 
+ * @param direction 
+ * @param map 
+ * @param spaceStr 
+ */
 void graphic_engine_paint_space(Game *game, Space *space, Direction direction,char map[SPACE_HEIGHT + 1][MAP_WIDTH + 33], char spaceStr[SPACE_HEIGHT + 1][SPACE_WIDTH+10]);
 
+/**
+ * @brief Paints map in map area
+ * @author Daniel Gómez
+ * 
+ * @param ge 
+ * @param game 
+ */
 void graphic_engine_paint_map(Graphic_engine *ge, Game *game);
 
+/**
+ * @brief Paints combat during combat mode
+ * @author Daniel Gómez
+ * 
+ * @param ge 
+ * @param game 
+ */
 void graphic_engine_paint_combat(Graphic_engine *ge, Game *game);
 
+/**
+ * @brief Paints a general description of the game in description area
+ * @author Daniel Gómez
+ * 
+ * @param ge 
+ * @param game 
+ */
 void graphic_engine_paint_generalDesc(Graphic_engine *ge, Game *game);
 
+/**
+ * @brief Paints info related to commands in the command area
+ * @author Daniel Gómez
+ * 
+ * @param ge 
+ * @param game 
+ */
 void graphic_engine_paint_commandInfo(Graphic_engine *ge, Game *game);
 
 Graphic_engine *graphic_engine_create() {
@@ -86,12 +133,15 @@ void graphic_engine_destroy(Graphic_engine *ge) {
   free(ge);
 }
 
+
+/*------PUBLIC IMPLEMENTATIONS--------*/
+
 void graphic_engine_paint_game(Graphic_engine *ge, Game *game){
   GameState gameState;
-
+  
   if(!game || !ge) return;
   gameState = game_get_state(game);
-
+  
   if(gameState == DEFAULT){
     graphic_engine_paint_map(ge, game);
     graphic_engine_paint_generalDesc(ge, game);
@@ -99,13 +149,32 @@ void graphic_engine_paint_game(Graphic_engine *ge, Game *game){
   else if(gameState == COMBAT){
     graphic_engine_paint_combat(ge, game);
   }
-
+  
   /* Paint in the banner area */
   screen_area_puts(ge->banner, "    The anthill game ");
+  
 
   graphic_engine_paint_commandInfo(ge, game);
   
   return;
+}
+
+/*--------PRIVATE IMPLENTATIONS--------*/
+
+void graphic_engine_newline_print(Area *area, char *string){
+  char str[WORD_SIZE];
+  char *toks = NULL;
+
+  if(!area || !string) return;
+
+  strcpy(str, string);
+
+  toks = strtok(str,"\n");
+
+  while(toks){
+    screen_area_puts(area, toks);
+    toks = strtok(NULL,"\n");
+  }
 }
 
 void graphic_engine_paint_map(Graphic_engine *ge, Game *game){
@@ -113,7 +182,7 @@ void graphic_engine_paint_map(Graphic_engine *ge, Game *game){
   Space *directionSpace = NULL;
   char space[SPACE_HEIGHT + 1][SPACE_WIDTH+10];
   char map[SPACE_HEIGHT + 1][MAP_WIDTH + 33];
-
+  
   int i;
   
   strcpy(space[0], "+------%c%c%c------+");
@@ -286,7 +355,8 @@ void graphic_engine_paint_generalDesc(Graphic_engine *ge, Game *game){
   }
   while(game_log_hasMessage(game)){
     game_get_log_message(game, str);
-    screen_area_puts(ge->descript, str);
+    //screen_area_puts(ge->descript, str);
+    graphic_engine_newline_print(ge->descript,str);
   }
 
   
@@ -317,7 +387,7 @@ void graphic_engine_paint_commandInfo(Graphic_engine *ge, Game *game){
   strcat(str, (command_get_status(game_get_last_command(game)) == OK) ? " : OK" : " : ERROR");
   screen_area_puts(ge->feedback, str);
   
-  screen_paint();
+  screen_paint(game_get_player_color(game));
   printf("input:> ");
 }
 

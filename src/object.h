@@ -36,13 +36,12 @@ typedef struct _Object Object;
  * @param name name of the object
  * @param data data with the effects of the object and if it can be weared
  * @param description description of the object
- * @param n_uses number of uses of the object
- * @param is_consumable if uses are lowered with each use
+ * @param is_consumable if object is removed after use or not
  * @param location id where the object is located
  * @param type type of inventory where the object is located
  * @return a new object, initialized or NULL if there was a mistake
  */
-Object *object_create(Id id, char *name, char* data, char *description, int n_uses, bool is_consumable, Id location, InventoryType type);
+Object *object_create(Id id, char *name, char* data, char *description, bool is_consumable, Id location, InventoryType type);
 
 /**
  * @brief It destroys an object
@@ -155,15 +154,6 @@ Id object_get_location(Object *object);
 InventoryType object_get_type(Object *object);
 
 /**
- * @brief Gets the object description pointer
- * @author Maksym Polyak
- * 
- * @param object 
- * @return char* or NULL if error
- */
-char *object_get_descr(Object *object);
-
-/**
  * @brief Gets if the object is consumable or not
  * @author Maksym Polyak
  * 
@@ -174,13 +164,13 @@ char *object_get_descr(Object *object);
 bool object_get_is_consumable(Object *object);
 
 /**
- * @brief Gets the number of uses the object has
+ * @brief Gets the object description pointer
  * @author Maksym Polyak
  * 
  * @param object 
- * @return int or -1 if error
+ * @return char* or NULL if error
  */
-int object_get_n_uses(Object *object);
+char *object_get_descr(Object *object);
 
 /**
  * @brief Gets the object ability pointer
@@ -190,6 +180,15 @@ int object_get_n_uses(Object *object);
  * @return Ability* or NULL if error
  */
 Ability *object_get_object_effect(Object *object);
+
+/**
+ * @brief Gets the string with the information about an object for the game to process
+ * @author Maksym Polyak
+ * 
+ * @param object 
+ * @return char* or NULL if error
+ */
+char *object_get_data(Object *object);
 
 /**
  * @brief Prints on screen an object

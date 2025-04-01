@@ -361,7 +361,6 @@ Status game_reader_load_objects(Game *game, char *filename){
   Object *object = NULL;
 
   int is_consumable = 0;
-  int n_uses = 1;
 
   Status status = OK;
 
@@ -383,25 +382,29 @@ Status game_reader_load_objects(Game *game, char *filename){
     if (strncmp("#o:", line, 3) == 0) {
       toks = strtok(line + 3, "|");
       objectid = atol(toks);
+
       toks = strtok(NULL, "|");
       strcpy(name, toks);
+
       toks = strtok(NULL, "|");
       strcpy(data, toks);
+
       toks = strtok(NULL, "|");
       strcpy(description, toks);
+
       toks = strtok(NULL, "|");
       is_consumable = atoi(toks);
-      toks = strtok(NULL, "|");
-      n_uses = atoi(toks);
+      
       toks = strtok(NULL, "|");
       objectlocation = atol(toks);
+
       toks = strtok(NULL, "|");
       objectlocationtype = (InventoryType)atol(toks);
 
-      debug_log(PRINT,"Read Object: #o:%ld|%s|%s|%s|%d|%d|%ld|%ld", objectid, name, data, description, is_consumable, n_uses, objectlocation, objectlocationtype);
+      debug_log(PRINT,"Read Object: #o:%ld|%s|%s|%s|%d|%ld|%ld", objectid, name, data, description, is_consumable, objectlocation, objectlocationtype);
 
       /*Creates a object with object_create then saves it on the game with game_add_space*/
-      object = object_create(objectid, name, data, description, n_uses, (bool)is_consumable, objectlocation, objectlocationtype);
+      object = object_create(objectid, name, data, description, is_consumable, objectlocation, objectlocationtype);
       if (object != NULL) {
         game_add_object(game, object);
         switch(objectlocationtype){
