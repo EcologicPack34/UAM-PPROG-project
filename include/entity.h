@@ -214,6 +214,16 @@ Status entity_stats_set_all(Entity_Stats *es, double maxhealth, double health, d
 /*Entity GETTERS*/
 
 /**
+ * @brief Gets if an entity is dead or not
+ * @author Daniel Gómez
+ * 
+ * @param entity 
+ * @return true 
+ * @return false 
+ */
+bool entity_is_dead(Entity *entity);
+
+/**
  * @brief Gets the graphic descption of the entity
  * @author Daniel Gómez
  * 

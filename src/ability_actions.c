@@ -56,6 +56,8 @@ Status ability_heal_ally(Ability *ability, Game *game);
  */
 Status ability_money_bag(Ability *ability, Game *game);
 
+//Status ability_unlock_link(Ability *ability, Game *game);
+
 Status ability_heal_self(Ability *ability, Game *game){
     Combat *combat = NULL;
     Stats *stats = NULL;
@@ -168,6 +170,42 @@ Status ability_money_bag(Ability *ability, Game *game){
 
     return player_add_money(game_get_player(game), value);
 }
+/*
+Status ability_unlock_link(Ability *ability, Game *game){
+    Link *link = NULL;
+    Space *space = NULL;
+    int i;
+
+    if(!ability || !game) return NULL;
+
+    space = game_get_space(game, game_get_player_location(game));
+
+    for (i = 0; i < 4; i++)
+    {
+        switch (i)
+        {
+        case 0:
+            link = space_get_north(space);
+            break;
+        case 1:
+            link = space_get_east(space);
+            break;
+        case 2:
+            link = space_get_south(space);
+            break;
+        case 3:
+            link = space_get_west(space);
+            break;
+        default:
+            break;
+        }
+
+        if(link_unlock(link, ))
+
+    }
+    
+
+}*/
 
 /*
   * Public functions

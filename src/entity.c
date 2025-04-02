@@ -223,6 +223,11 @@ Status entity_stats_set_all(Entity_Stats *es, double maxhealth, double health, d
 
 /*Entity GETTERS*/
 
+bool entity_is_dead(Entity *entity){
+    if(!entity) return true;
+    return entity->stats.health <= 0;
+}
+
 char *entity_get_graphic_description(Entity *entity){
     if(!entity) return NULL;
     return entity->gdesc;

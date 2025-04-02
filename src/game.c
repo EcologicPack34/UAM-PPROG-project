@@ -715,10 +715,35 @@ Combat *game_get_combat(Game *game){
 }
 
 Status game_switch_player(Game *game, int player){
+  int i;
+  bool alivePlayers = false;
+
   if(!game || player >= game->n_players) return ERROR;
 
-  if(player < 0) game->active_player_index = (game->active_player_index + 1) % game->n_players;
-  else game->active_player_index = player;
+  if(player < 0){
+    /*Sets player to next*/
+    game->active_player_index = (game->active_player_index + 1) % game->n_players;
+    /*cycles through players checking if they are dead, if so, skip to next*/
+    for (i = 0; i < game->n_players; i++)
+    {
+      if(entity_is_dead( player_get_entity(game->players[game->active_player_index] ) ) == false){
+        alivePlayers = true;
+        break;
+      }
+      game->active_player_index = (game->active_player_index + 1) % game->n_players;
+    }
+    if(!alivePlayers){
+      game_add_log_message(game, MESSAGE_ERROR, "Couldn't find a player which is alive");
+      return ERROR;/*Case if every player is dead*/
+    } 
+  } 
+  else{
+    if(entity_is_dead( player_get_entity(game->players[player] ) ) == false){
+      game_add_log_message(game, MESSAGE_ERROR, "Couldn't switch player because it isn't alive");
+      return ERROR;
+    }
+    game->active_player_index = player;
+  } 
 
   game->activePlayer = game->players[game->active_player_index];
 

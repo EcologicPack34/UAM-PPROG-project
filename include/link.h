@@ -168,4 +168,13 @@ Id link_get_unlocking_object(Link *link);
  */
 Status link_move_entity(Link* link, Entity* entity);
 
+/**
+ * @brief Tries to unlock a link using a certain object
+ * 
+ * @param link 
+ * @param obj 
+ * @return Status 
+ */
+Status link_unlock(Link *link, Object *obj);
+
 #endif

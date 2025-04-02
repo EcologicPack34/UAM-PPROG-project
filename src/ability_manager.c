@@ -22,7 +22,7 @@
 
 #define INITIAL_SKILLS_SIZE 5 /*!< Initial number of abilities on the collection of the ability manager*/
 
-char *abilityTags[N_SKILLS] = { "" , "heal_self", "heal_ally", "money_bag"}; /*!< Tags related to the type | Same order as AbilityType*/
+char *abilityTags[N_SKILLS] = { "" , "heal_self", "heal_ally", "money_bag","link_unlock"}; /*!< Tags related to the type | Same order as AbilityType*/
 
 struct _Ability {
   Id id;                  /*!< Id of the ability*/

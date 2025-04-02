@@ -2,8 +2,10 @@
     "C_Cpp.clang_format_style": "Visual Studio",
     "editor.fontFamily": "'Cascadia Code', Consolas, 'Courier New', monospace",
     "files.associations": {
-        "stdlib.h": "c",
-        "stdbool.h": "c",
-        "game.h": "c"
+        "**/src/**/*.c": "c",    // Recognize .c files in src as C
+        "**/include/**/*.h": "c",  // Recognize .h files in include as C headers
+        "stdlib.h": "c",          // Manually associate standard library headers
+        "stdbool.h": "c",         // Manually associate standard library headers
+        "game.h": "c"             // Manually associate your specific header file
     }
 }
