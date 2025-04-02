@@ -738,6 +738,10 @@ Status game_switch_player(Game *game, int player){
     } 
   } 
   else{
+    if(entity_is_dead( player_get_entity(game->players[player] ) ) == true){
+      game_add_log_message(game, MESSAGE_ERROR, "Couldn't switch player because it isn't alive");
+      return ERROR;
+    }
     game->active_player_index = player;
   } 
 
