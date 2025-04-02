@@ -10,6 +10,7 @@
  */
 
 #include "combat.h"
+#include "entity.h"
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -107,10 +108,16 @@ void combat_finalize(Combat *combat){
 }
 
 Status combat_entity_received_damage(Stats *stats, double damage){
+    
     if(!stats) return ERROR;
-
+    if (stats->stats.is_dead == true) return OK;
     stats->stats.health -= damage;
-
+    if (stats->stats.health < 0)
+    {
+       stats->stats.health = 0;
+       stats->stats.is_dead = true;
+    }
+    
     return OK;
 }
 
@@ -190,6 +197,7 @@ Status combat_attack_swift(Stats *attacker, Stats *victims, int numVictims) {
     
     if (!attacker || !victims)
         return ERROR;
+    
     probFail = rand()%100;
     if (probFail > SWIFT_PROB)
         return OK;
@@ -263,7 +271,11 @@ Status combat_enemies_turn(Combat *cmb) {
 
     for (i = 0; i < numEn; i++)
     {
-        randomNumAll = rand()%numAl;
+        do
+        {
+            randomNumAll = rand()%numAl + 1;
+        } while (stAl[randomNumAll-1].stats.is_dead == true);
+        
         randomNumAttack = rand()%numEn + 1;
 
         switch (randomNumAttack)
@@ -302,7 +314,11 @@ Status combat_allies_turn(Combat *cmb){
 
     for (i = 1; i < numA; i++)
     {
-        randomNumEnemy = rand()%numE;
+        do
+        {
+            randomNumEnemy = rand()%numE + 1;
+        } while (stAl[randomNumEnemy-1].stats.is_dead == true);
+
         randomNumAttack = rand()%4 + 1;
 
         switch (randomNumAttack)
@@ -368,7 +384,6 @@ Status combat_update_attack(Combat *cmb, Command *last_cmd){
         combat_enemies_turn(cmb);
     }
 
-    
     return OK;
 }
 
@@ -377,11 +392,49 @@ Status combat_update_attack(Combat *cmb, Command *last_cmd){
 
 Status combat_update(Combat *combat, Command *last_cmd){
     
+    char **test = NULL;
+    int enemyNum;
+    Stats *st = NULL, *check;
+    int counter = 0;
+    int i;
+
     if(!combat || !last_cmd)
         return ERROR;
 
+    /*Check if the player is dead to end the combat*/
+    if (combat->allies_stats[0].stats.is_dead == true)
+    {
+        combat_finalize(combat);
+        return OK;
+    }
+
+    /*Check if all the enemies are dead to end the combat*/
+
+    enemyNum = combat_get_enemies_count(combat);
+    check = combat_get_enemies_stats(combat);
+
+    for ( i = 0; i < enemyNum; i++)
+    {
+        if (check[i].stats.is_dead == true)
+        {
+            counter++;
+        }  
+    }
+    
+    if (counter == enemyNum)
+    {
+        combat_finalize(combat);
+        return OK;
+    } 
+    
     if(command_get_code(last_cmd) == ATTACK) {
 
+        test = command_get_arguments(last_cmd);
+        enemyNum = atoi(test[1]);
+        st = combat_get_enemies_stats_at(combat, enemyNum-1);
+        if ( st[enemyNum-1].stats.is_dead == true)
+            return OK;
+        
         if(combat_update_attack(combat, last_cmd) == ERROR) return ERROR;
     }
 

@@ -150,8 +150,16 @@ void graphic_engine_destroy(Graphic_engine *ge) {
 
 void graphic_engine_paint_deathScreen(Graphic_engine *ge, Game *game) {
 
-  
+  char DEAD[MAX_SPACES] = "YOU HAVE BEEN ANIHILATED";
+  char DEAD2[MAX_SPACES] = "You must really be clumsy...";
 
+  if (!ge || !game)
+    return
+
+  screen_area_clear(ge->map);
+  screen_area_puts(ge->map, DEAD);
+  screen_area_clear(ge->feedback);
+  screen_area_puts(ge->feedback, DEAD2);
 }
 
 void graphic_engine_paint_game(Graphic_engine *ge, Game *game){
@@ -413,6 +421,7 @@ void graphic_engine_paint_combat(Graphic_engine *ge, Game *game){
   char str[WORD_SIZE] = "";
   char strAux[WORD_SIZE] = "";
   char spacing[WORD_SIZE] = "";
+  char dead[WORD_SIZE] = "DEAD";
   Combat *combat = NULL;
   int i, j;
   int div;
@@ -422,6 +431,8 @@ void graphic_engine_paint_combat(Graphic_engine *ge, Game *game){
 
   int enemy_count = 0, ally_count = 0;
   Stats *stats = NULL;
+  Stats *enSt = NULL;
+  Stats *alSt = NULL;
   Stats *playerStats = NULL;
 
   heightDiv = (MAP_HEIGHT - 4 + 1)/3;
@@ -450,11 +461,17 @@ void graphic_engine_paint_combat(Graphic_engine *ge, Game *game){
 
   /*prints gdesc of enemies*/
   strcat(str, spacing);
+  enSt = combat_get_enemies_stats(game_get_combat(game));
   if(enemy_count == 1) strcat(str, "  ");
   strcat(spacing, "  ");/*fixes health bars not centered, i dont know why*/
   for (i = 0; i < enemy_count; i++)
   {
-    strcat(str, entity_get_graphic_description(stats[i].entity));
+    if (stats[i].stats.is_dead == true)
+    {
+      strcat(str, dead);
+    }
+    
+    else{strcat(str, entity_get_graphic_description(stats[i].entity));}
     if(i != enemy_count -1) strcat(str, spacing);
   }
   screen_area_puts(ge->map, str);
@@ -511,8 +528,17 @@ void graphic_engine_paint_combat(Graphic_engine *ge, Game *game){
   strcat(str, spacing);
 
   /*prints allies desc*/
-  for (i = 1; i < ally_count; i++)
-  {
+  alSt = combat_get_allies_stats(game_get_combat(game));
+  for (i = 0; i < ally_count; i++)
+  { 
+    if (alSt[i].stats.is_dead == true)
+    {
+      if (stats[i].stats.is_dead == true)
+      {
+        strcat(str, dead);
+      }
+    }
+    
     strcat(str, entity_get_graphic_description(stats[i].entity));
     if(i != enemy_count -1) strcat(str, spacing);
   }

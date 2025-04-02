@@ -343,3 +343,5 @@ int entity_get_magicLevel(Entity *entity){
     return entity->stats.magicLevel;
 }
 
+void entity_set_deathBool(Entity *entity, bool boolean);
+

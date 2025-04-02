@@ -98,6 +98,9 @@ void event_actions_trigger_events(Game *game){
                 break;
             default:
                 break;
+            case DEAD:
+                triggered = event_trigger_player_death(event, game);
+                break;
         }
         if(triggered && event_get_removeOnTrigger(event))
             event_manager_remove_event(manager, event);
@@ -197,7 +200,7 @@ bool event_trigger_player_death(Event *event, Game *game){
 
 
     if(entity_get_health(player_get_entity(game_get_player(game))) <= 0){
-        game_set_finished(game, true);
+
         debug_log(PRINT,"Player died, finishing game");
         return true;
     }

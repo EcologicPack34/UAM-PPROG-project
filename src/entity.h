@@ -43,6 +43,7 @@ typedef struct{
     int strength;             /*!< Strength stat of the entity */
     int defense;              /*!< Defense stat of the entity */
     int magicLevel;           /*!< magicLevel stat of the entity */
+    bool is_dead;
 }Entity_Stats;
 
 /*
@@ -312,5 +313,13 @@ int entity_get_defense(Entity *entity);
  * @return magicLevel stat if well or -1 if wrong
  */
 int entity_get_magicLevel(Entity *entity);
+
+/**
+ * @brief Allows to set if the entity is dead or not
+ * @author Sofía Calvo
+ * 
+ * @param entity contains all the information related to the entity
+ */
+void entity_set_deathBool(Entity *entity, bool boolean);
 
 #endif
