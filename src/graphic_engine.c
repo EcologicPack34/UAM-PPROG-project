@@ -403,6 +403,7 @@ void graphic_engine_paint_combat(Graphic_engine *ge, Game *game){
   int i, j;
   int div;
   int bar;
+  char hbarChar;
 
   int heightDiv;
 
@@ -459,9 +460,14 @@ void graphic_engine_paint_combat(Graphic_engine *ge, Game *game){
     //sprintf(strAux, "[%.2lf]", stats[i].stats.health);
     strcat(str, "[");
     bar = stats[i].stats.health / entity_get_max_health(stats[i].entity) * HEALTH_BAR_WIDTH;
+    if(bar == 0){
+      hbarChar = '_';
+    }else{
+      hbarChar = '=';
+    }
     for (j = 0; j < HEALTH_BAR_WIDTH; j++)
     {
-      if(j <= bar) strcat(str, "=");
+      if(j <= bar) strncat(str, &hbarChar, 1);
       else strcat(str, "_");
     }
     strcat(str, "]");
@@ -492,7 +498,7 @@ void graphic_engine_paint_combat(Graphic_engine *ge, Game *game){
   strcat(spacing, "  ");/*fixes health bars not centered, i dont know why*/
 
   /*prints player gdesc*/
-  if(ally_count == 0) strcat(str, "  ");
+  if(ally_count == 1) strcat(str, "  ");
   strcat(str, entity_get_graphic_description(playerStats->entity));
   strcat(str, spacing);
 
@@ -512,14 +518,19 @@ void graphic_engine_paint_combat(Graphic_engine *ge, Game *game){
     strcat(spacing, " ");
   }
   strcat(str, spacing);
-  if(ally_count == 0) strcat(str, "  ");
+  if(ally_count == 1) strcat(str, "  ");
 
   /*player health bar*/
   strcat(str, "[");
   bar = playerStats->stats.health / entity_get_max_health(playerStats->entity) * HEALTH_BAR_WIDTH;
+  if(bar == 0){
+    hbarChar = '_';
+  }else{
+    hbarChar = '=';
+  }
   for (j = 0; j < HEALTH_BAR_WIDTH; j++)
   {
-    if(j <= bar) strcat(str, "=");
+    if(j <= bar) strncat(str, &hbarChar, 1);
     else strcat(str, "_");
   }
   strcat(str, "]");
@@ -527,12 +538,18 @@ void graphic_engine_paint_combat(Graphic_engine *ge, Game *game){
   /*allies health bar*/
   for (i = 1; i < ally_count; i++)
   {
+    strcat(str, spacing);
     //sprintf(strAux, "[%.2lf]", stats[i].stats.health);
     strcat(str, "[");
     bar = stats[i].stats.health / entity_get_max_health(stats[i].entity) * HEALTH_BAR_WIDTH;
+    if(bar == 0){
+      hbarChar = '_';
+    }else{
+      hbarChar = '=';
+    }
     for (j = 0; j < HEALTH_BAR_WIDTH; j++)
     {
-      if(j <= bar) strcat(str, "=");
+      if(j <= bar) strncat(str, &hbarChar, 1);
       else strcat(str, "_");
     }
     strcat(str, "]");
@@ -552,11 +569,11 @@ void graphic_engine_paint_combat(Graphic_engine *ge, Game *game){
   strcat(str, strAux);
   screen_area_puts(ge->descript, str);
 
-  if(ally_count > 1){
+  if(ally_count > 2){
     strcpy(str, "Allies:");
     screen_area_puts(ge->descript, str);
     stats = combat_get_allies_stats(combat);
-    for (i = 0; i < ally_count; i++)
+    for (i = 1; i < ally_count; i++)
     {
       strcpy(str, "   ");
       strcat(str, entity_get_graphic_description(stats[i].entity));

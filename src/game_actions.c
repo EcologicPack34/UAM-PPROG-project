@@ -484,6 +484,12 @@ Status game_actions_chat(Game *game){
 
   game_add_log_message(game, MESSAGE_NPC,npc_get_message(npc));
 
+  if(npc_get_is_follower(npc) == true && npc_get_status(npc) == NEUTRAL){
+    npc_set_status(npc, ALLY);
+  }else if(npc_get_is_follower(npc) == true && npc_get_status(npc) == ALLY){
+    npc_set_status(npc, NEUTRAL);
+  }
+
   return OK;
 }
 

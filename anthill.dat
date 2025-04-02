@@ -62,13 +62,13 @@ Formato Event: #e:Id|Type|cmdTriggersNum|cmdName1 , ...|removeOnTrigger|tagvalue
 #e:4|player_death|0|0|
 #e:5|trigger_combat|1|sh|0|40
 
-Formato NPC: #n:ID|Message|Nombre|LocationID|Status|
+Formato NPC: #n:ID|Message|Nombre|LocationID|is_follower|Status|
 #sk:1|heal_self|Heal self 25 HP|1|1|0|0|2|25
-#n:1|Hello traveler i'm NPC1|NPC1|11|1|^0m"
-#n:2|Hello traveler i'm NPC2|NPC2|11|1|^1m"
-#n:3|Die|Enemy1|11|3|^2m"
-#n:4|Die|Enemy2|11|3|^3m"
-#n:5|Die|Enemy3|11|3|^4m"
+#n:1|Hello traveler i'm NPC1|NPC1|11|1|1|^0m"
+#n:2|Hello traveler i'm NPC2|NPC2|11|1|1|^1m"
+#n:3|Die|Enemy1|11|0|3|^2m"
+#n:4|Die|Enemy2|11|0|3|^3m"
+#n:5|Die|Enemy3|11|0|3|^4m"
 
 Formato STATS: #st:ID|EntityType|VidaMaxima|Vida|DanoBase|Fuerza|Defensa|NivelMagia
 
