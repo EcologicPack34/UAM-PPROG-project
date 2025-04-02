@@ -20,6 +20,7 @@
 
 #include "entity.h"
 #include "equipment.h"
+#include "npc.h"
 
 typedef struct _Player Player;
 
@@ -139,5 +140,35 @@ Status player_equip_piece(Player *player, Object *object);
  * @return Status 
  */
 Status player_unequip_piece(Player *player, char *data);
+
+/**
+ * @brief Adds a follower to the player
+ * @author Maksym Polyak
+ * 
+ * @param player 
+ * @param npc 
+ * @return Status 
+ */
+Status player_add_follower(Player *player, NPC *npc);
+
+/**
+ * @brief Removes a follower from the player by a name
+ * @author Maksym Polyak
+ * 
+ * @param player 
+ * @param npc_name 
+ * @return Status 
+ */
+Status player_remove_follower_by_name(Player *player, char *npc_name);
+
+/**
+ * @brief Gets the array with the followers, of max size NPC_MAX_FOLLOWERS
+ * @author Maksym Polyak
+ * 
+ * @param player 
+ * @return Status 
+ */
+NPC **player_get_followers(Player *player);
+
 
 #endif

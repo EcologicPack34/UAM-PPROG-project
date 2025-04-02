@@ -269,8 +269,8 @@ void graphic_engine_paint_generalDesc(Graphic_engine *ge, Game *game){
 
   int i;
 
-  char str[WORD_SIZE];
-  char strAux[WORD_SIZE];
+  char str[WORD_SIZE] = "";
+  char strAux[WORD_SIZE] = "";
   Space *currentSpace;
   bool spaceDiscovered = false;
 
@@ -569,7 +569,7 @@ void graphic_engine_paint_combat(Graphic_engine *ge, Game *game){
   strcat(str, strAux);
   screen_area_puts(ge->descript, str);
 
-  if(ally_count > 2){
+  if(ally_count > 1){
     strcpy(str, "Allies:");
     screen_area_puts(ge->descript, str);
     stats = combat_get_allies_stats(combat);

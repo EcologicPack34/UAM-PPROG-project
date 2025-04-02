@@ -329,6 +329,9 @@ Status game_actions_move(Game *game) {
   Entity *entity = NULL;
   CommandCode code = NO_CMD;
   Command *cmd = NULL;
+  NPC **followers = NULL;
+  Space *actual_space = NULL, *next_space = NULL;
+  int i;
 
   space_id = game_get_player_location(game);
   if (space_id == NO_ID) {
@@ -347,21 +350,23 @@ Status game_actions_move(Game *game) {
     code = command_get_code(cmd);
   }
 
+  actual_space = game_get_space(game, space_id);
+
   switch(code){
     case NORTH:
-      link = space_get_north(game_get_space(game, space_id));
+      link = space_get_north(actual_space);
       if(link == NULL) return ERROR;
       break;
     case WEST:
-      link = space_get_west(game_get_space(game, space_id));
+      link = space_get_west(actual_space);
       if(link == NULL) return ERROR;
       break;
     case EAST:
-      link = space_get_east(game_get_space(game, space_id));
+      link = space_get_east(actual_space);
       if(link == NULL) return ERROR;
       break;
     case SOUTH:
-      link = space_get_south(game_get_space(game, space_id));
+      link = space_get_south(actual_space);
       if(link == NULL) return ERROR;
       break;
     default:
@@ -374,6 +379,18 @@ Status game_actions_move(Game *game) {
   if(entity == NULL) return ERROR;
 
   link_move_entity(link, entity);
+
+  followers = player_get_followers(game_get_player(game));
+  if(!followers) return OK;
+
+  next_space = game_get_space(game, link_get_oposite_space(link, space_id));
+
+  for(i = 0; i < NPC_MAX_FOLLOWERS; i++){
+    if(followers[i] != NULL){
+      entity = npc_get_entity(followers[i]);
+      space_move_NPC(actual_space, next_space, followers[i]);
+    }
+  }
 
   return OK;
 }
@@ -486,8 +503,10 @@ Status game_actions_chat(Game *game){
 
   if(npc_get_is_follower(npc) == true && npc_get_status(npc) == NEUTRAL){
     npc_set_status(npc, ALLY);
+    player_add_follower(game_get_player(game), npc);
   }else if(npc_get_is_follower(npc) == true && npc_get_status(npc) == ALLY){
     npc_set_status(npc, NEUTRAL);
+    player_remove_follower_by_name(game_get_player(game), entity_get_name(npc_get_entity(npc)));
   }
 
   return OK;

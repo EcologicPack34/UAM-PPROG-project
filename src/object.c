@@ -22,7 +22,7 @@
 #include <string.h>
 #include <stdbool.h>
 
-#define OBJECT_MAX_DATA_SIZE 50
+#define OBJECT_MAX_DATA_SIZE 200
 
 /**
  * @brief Object

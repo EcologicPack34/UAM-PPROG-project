@@ -866,8 +866,10 @@ Status game_reader_load_ability(Game *game, char *filename){
       if(ability == NULL)
         debug_log(LOG_ERROR,"Error creating ability when reading from file");
 
-      if(game_add_ability(game, ability) == ERROR)
+      if(game_add_ability(game, ability) == ERROR){
+        //ability_destroy(ability);
         debug_log(LOG_ERROR,"Error adding ability to ability manager or entity");
+      }
     }
   }
 

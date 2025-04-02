@@ -151,7 +151,7 @@ Status game_create(Game **game) {
 
 Status game_destroy(Game *game) {
   int i = 0;
-  int linkCount;
+  int count;
 
   /*Destroys all spaces*/
   for (i = 0; i < game->n_spaces; i++) {
@@ -172,6 +172,7 @@ Status game_destroy(Game *game) {
 
   command_destroy(game->last_cmd);
   event_manager_destroy(game->event_manager);
+  
   ability_manager_destroy(game->ability_manager);
   queue_destroy(game->screenLog);
 
@@ -180,9 +181,9 @@ Status game_destroy(Game *game) {
   }
 
   /*Destroys all links */
-  linkCount = game_get_n_links(game);
+  count = game_get_n_links(game);
 
-  for (i = 0; i < linkCount; i++)
+  for (i = 0; i < count; i++)
   {
     free(game_get_link_at(game,i));
   }
@@ -821,7 +822,7 @@ Status game_add_ability(Game *game, Ability *ability){
 
   entityid = ability_get_entityid(ability);
 
-  ability_manager_add_ability(game_get_ability_manager(game), ability);
+  if(ability_manager_add_ability(game_get_ability_manager(game), ability) == ERROR) return ERROR;
 
   if(ability_get_is_player_ability(ability) == true){
     player = game_get_player_by_id(game, entityid);

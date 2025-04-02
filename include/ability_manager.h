@@ -174,6 +174,17 @@ Status ability_reduce_cooldown(Ability *ability);
 Status ability_augment_cooldown(Ability *ability);
 
 /**
+ * @brief Compares two abilities, returns 0 if they are equal, >0
+ * if e1 > e2 or <0 if e1 < e2 by name
+ * @author Maksym Polyak
+ * 
+ * @param e1 
+ * @param e2 
+ * @return int 
+ */
+int ability_compare(void * e1, void *e2);
+
+/**
  * @brief Gets the ability type from a str using the skilsTags
  * @author Maksym Polyak
  * 

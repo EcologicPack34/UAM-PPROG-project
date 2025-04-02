@@ -106,7 +106,6 @@ void entity_destroy(Entity *entity){
     free(entity->ability);
     inventory_destroy(entity->inventory);
     free(entity);
-    entity = NULL;
 }
 
 /*Entity SETTERS*/
