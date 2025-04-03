@@ -32,6 +32,8 @@ typedef enum { CMDS, CMDL } CommandType; /* CMDS: Command Short | CMDL: Command 
 typedef enum { NO_CMD = -1, UNKNOWN, EXIT, SOUTH, NORTH, EAST, WEST, TAKE, DROP, CHAT, ATTACK, RUN_AWAY, SWITCH, ABILITY, OBJECT_USE, HELP, MOVE, SEARCH, EQUIP, UNEQUIP, INSPECT, GM} CommandCode; /* All values that a command can take */
 
 
+typedef struct _CommandInfo CommandInfo;
+
 /* 
  * Struct that contains all the information of the command
  */
@@ -54,6 +56,24 @@ Command* command_create();
  * @return OK if everything goes well or ERROR if there was some mistake
  */
 Status command_destroy(Command* command);
+
+/**
+ * @brief Creates a struct of command info dynamically
+ * @author Daniel Gómez
+ * 
+ * @return CommandInfo* 
+ */
+CommandInfo *command_info_create();
+
+/**
+ * @brief Destroys a struct of command info
+ * @author Daniel Gómez
+ * 
+ * @param cmdData 
+ * @return Status 
+ */
+Status command_info_destroy(CommandInfo *cmdData);
+
 
 /**
  * @brief changes name of the command on the command struct
@@ -95,6 +115,24 @@ Status command_set_info(Command *command, CommandCode cmd, char *info);
  * @return Status 
  */
 Status command_state_add_type(Command * command, GameState state, CommandCode type);
+
+/**
+ * @brief Sets the data struct which will be used to store data
+ * @author Daniel Gómez
+ * 
+ * @param cmd 
+ * @param data 
+ * @return Status 
+ */
+Status command_set_player_data(Command *cmd, CommandInfo *data);
+
+/**
+ * @brief Updates the data of cmd stored by player
+ * 
+ * @param cmd 
+ * @return Status 
+ */
+Status command_update_player_data(Command *cmd);
 
 /*-----------GETTERS--------------*/
 
