@@ -85,7 +85,7 @@ gdb:
 #To install ddd run $sudo apt install ddd
 ddd:
 	make debug
-	ddd ./anthilldebug
+	ddd --gdb --args ./anthilldebug anthill.dat
 
 #in order for doxygen to work run $sudo apt install doxygen
 #for graphs to work it needs graphviz, to install run $sudo apt install graphviz
