@@ -40,6 +40,9 @@ TEST = entity_test collection_test
 
 all: $(EXE)
 
+$(OBJ_PATH):
+	mkdir -p $(OBJ_PATH)
+
 #Rule to link all the objects with libraries
 $(EXE):	$(OBJ)
 	$(CC) $(CFLAGS) -o $(EXE) $(OBJ) -L$(LIBRARIES) -lscreen

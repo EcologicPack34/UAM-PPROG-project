@@ -31,18 +31,26 @@ char *cmd_to_str[N_CMD][N_CMDT] = {{"", "No command"}, {"", "Unknown"}, {"q", "E
  {"eq", "Equip"}, {"ue", "Unequip"}, {"i", "Inspect"}, {"4444444444444444", "4444444444444444"}};
 
 /**
+* @brief Struct containing the info of a command
+*/
+struct _CommandInfo{
+  CommandCode code; /*!< Name of the command */
+  int argsCount;  /*!< Number of arguments in the command*/
+  char *arguments[MAX_CMD_ARGS_NUM]; /*!< Arguments of the command*/
+  Status cmdStatus; /*!< Status of command*/
+};
+
+/**
  * @brief Command
  *
- * This struct stores all the information related to a command.
+ * This struct stores general information about command
  */
 struct _Command {
-  CommandCode code;                         /*!< Name of the command */
-  int argsCount;                            /*!< Count of arguments received*/
-  char *arguments[MAX_CMD_ARGS_NUM];        /*!< Where arguments are located*/
-  Status cmdStatus;                         /*!< Status of the command*/
+  CommandInfo *cmdData; /*!<Struct that contains info about last command*/
+  CommandInfo *cmdPlayerData; /*!<Struct local to player that contains info about last command*/
 
-  char *commandInfo[N_CMD];                 /*!< Information about command codes*/
-  Collection *stateCommands[N_GAME_STATES]; /*!< Array of collections containing cmd types*/
+  char *commandInfo[N_CMD]; /*!< array of strings containing the info of the commands*/
+  Collection *stateCommands[N_GAME_STATES]; /*!<array of collections containing cmd types*/
 };
 
 /*--------------Private Functions---------------*/
@@ -58,9 +66,11 @@ struct _Command {
 Status command_set_arguments_count(Command *command, int num){
   if(!command) return ERROR;
 
+  if(!(command->cmdData)) return ERROR;
+
   if(num < 0 || num > MAX_CMD_ARGS_NUM) return ERROR;
 
-  command->argsCount = num;
+  command->cmdData->argsCount = num;
   return OK;
 }
 
@@ -75,9 +85,10 @@ Status command_set_arguments_count(Command *command, int num){
  */
 Status command_set_argument_at(Command *command, char args[MAX_CMD_ARGS_LENGTH], int index){
 
+  if(!(command->cmdData)) return ERROR;
   if((!command || !args) && index >= 0 && index < MAX_CMD_ARGS_NUM) return ERROR;
 
-  strcpy(command->arguments[index], args);
+  strcpy(command->cmdData->arguments[index], args);
   
   return OK;
 }
@@ -93,8 +104,8 @@ Status command_reset_arguments(Command *command){
   int i;
   char **arguments = NULL;
 
-  if(!command)
-    return ERROR;
+  if(!command) return ERROR;
+  if(!(command->cmdData)) return ERROR;
 
   arguments = command_get_arguments(command);
 
@@ -117,18 +128,11 @@ Command* command_create() {
   if (newCommand == NULL) {
     return NULL;
   }
-  for (i = 0; i < MAX_CMD_ARGS_NUM; i++)
-  {
-    newCommand->arguments[i] = (char*)calloc(MAX_CMD_ARGS_LENGTH, sizeof(char));
-    /*In case of error we free all the previous memory*/
-    if(newCommand->arguments[i] == NULL){
-      for (i--; i >= 0; i--)
-      {
-        free(newCommand->arguments[i]);
-      }
-      free(newCommand);
-      return NULL;
-    }
+
+  newCommand->cmdData = command_info_create();
+  if(!(newCommand->cmdData)){
+    free(newCommand);
+    return NULL;
   }
 
   for (i = 0; i < N_GAME_STATES; i++)
@@ -139,18 +143,11 @@ Command* command_create() {
       {
         collection_destroy(newCommand->stateCommands[i]);
       }
-      for (i = 0; i < MAX_CMD_ARGS_NUM; i++)
-      {
-        free(newCommand->arguments[i]); 
-      }
+      command_info_destroy(newCommand->cmdData);
       free(newCommand);
       return NULL;
     }
   }
-  
-
-  /* Initialization of an empty command*/
-  newCommand->code = NO_CMD;
 
   return newCommand;
 }
@@ -158,10 +155,6 @@ Command* command_create() {
 Status command_destroy(Command* command) {
   int i;
   if(command){
-    for (i = 0; i < MAX_CMD_ARGS_NUM; i++)
-    {
-      free(command->arguments[i]);
-    }
     for (i = 0; i < N_CMD; i++)
     {
       if(command->commandInfo[i])
@@ -173,26 +166,64 @@ Status command_destroy(Command* command) {
       collection_free_elements(command->stateCommands[i], free);
       collection_destroy(command->stateCommands[i]);
     }
-    
+    command_info_destroy(command->cmdData);
     free(command);
     return OK;
   }
   return ERROR;
 }
+
+CommandInfo *command_info_create(){
+  CommandInfo *cmdData = NULL;
+
+  cmdData = (CommandInfo *)calloc(1, sizeof(CommandInfo));
+  if(!cmdData) return NULL;
+
+  cmdData->cmdStatus = ERROR;
+  cmdData->code = NO_CMD;
+  cmdData->argsCount = 0;
+
+  for (int i = 0; i < MAX_CMD_ARGS_NUM; i++)
+  {
+    cmdData->arguments[i] = calloc(MAX_CMD_ARGS_LENGTH, sizeof(char));
+    if(!(cmdData->arguments[i])){
+      for ( i-- ; i >= 0; i--)
+      {
+        free(cmdData->arguments[i]);
+      }
+      return NULL;
+    }
+  }
+  return cmdData;
+}
+
+Status command_info_destroy(CommandInfo *cmdData){
+  if(cmdData){
+    for (int i = 0; i < MAX_CMD_ARGS_NUM; i++)
+    {
+      if(cmdData->arguments[i]) free(cmdData->arguments[i]);
+    }
+    free(cmdData);
+    return OK;
+  }
+  return ERROR;
+}
+
 /*----SETTERS----*/
 Status command_set_code(Command* command, CommandCode code) {
   if (!command) {
     return ERROR;
   }
-
-  command->code=code;
+  if(!(command->cmdData)) return ERROR;
+  command->cmdData->code=code;
 
   return OK;
 }
 
 Status command_set_status(Command *command, Status status){
   if(!command) return ERROR;
-  command->cmdStatus = status;
+  if(!(command->cmdData)) return ERROR;
+  command->cmdData->cmdStatus = status;
   return OK;
 }
 
@@ -222,30 +253,52 @@ Status command_state_add_type(Command * command, GameState state, CommandCode ty
   return collection_add(command->stateCommands[state-ERROR_STATE], (void *)code);
 }
 
+Status command_set_player_data(Command *cmd, CommandInfo *data){
+  if(!cmd || !data) return ERROR;
+  cmd->cmdPlayerData = data;
+  return OK;
+}
+
+Status command_update_player_data(Command *cmd){
+  if(!cmd) return ERROR;
+  if(!(cmd->cmdPlayerData)) return ERROR;
+
+  cmd->cmdPlayerData->argsCount = cmd->cmdData->argsCount;
+  cmd->cmdPlayerData->cmdStatus = cmd->cmdData->cmdStatus;
+  cmd->cmdPlayerData->code = cmd->cmdData->code;
+
+  for (int i = 0; i < MAX_CMD_ARGS_NUM; i++)
+  {
+    strncpy(cmd->cmdPlayerData->arguments[i], cmd->cmdData->arguments[i], MAX_CMD_ARGS_LENGTH);
+  }
+  return OK;
+}
+
 /*----GETTERS----*/
 
 Status command_get_as_string(Command *cmd, char *dest){
   int i;
 
   if(!cmd || !dest) return ERROR;
+  if(!(cmd->cmdPlayerData)) return ERROR;
 
   for (i = 0; i < N_CMDT; i++)
   {
-    strcat(dest,cmd_to_str[cmd->code - NO_CMD][i]);
+    strcat(dest,cmd_to_str[cmd->cmdPlayerData->code - NO_CMD][i]);
     if(i < N_CMDT -1){
       strcat(dest," or ");
     }
   }
   strcat(dest, " ");
-  for (i = 0; i < cmd->argsCount; i++)
+  for (i = 0; i < cmd->cmdPlayerData->argsCount; i++)
   {
-    strcat(dest, cmd->arguments[i]);
-    if(i < cmd->argsCount){
+    strcat(dest, cmd->cmdPlayerData->arguments[i]);
+    if(i < cmd->cmdPlayerData->argsCount){
       strcat(dest, " ");
     }
   }
   strcat(dest, ": ");
-  strcat(dest, (cmd->cmdStatus == ERROR) ? "Error" : "Ok");
+  strcat(dest, (cmd->cmdPlayerData->cmdStatus == ERROR) ? "Error" : "Ok");
   return OK;
 }
 
@@ -271,17 +324,20 @@ CommandCode command_get_code(Command* command) {
   if (!command) {
     return NO_CMD;
   }
-  return command->code;
+  if(!(command->cmdData)) return NO_CMD;
+  return command->cmdData->code;
 }
 
 int command_get_arguments_count(Command *command){
   if(!command) return -1;
-  return command->argsCount;
+  if(!(command->cmdData)) return -1;
+  return command->cmdData->argsCount;
 }
 
 char **command_get_arguments(Command * command){
   if(!command) return NULL;
-  return command->arguments;
+  if(!(command->cmdData)) return NULL;
+  return command->cmdData->arguments;
 }
 
 CommandCode command_get_code_from_str(char *string){
@@ -317,6 +373,7 @@ Status command_get_user_input(Command* command) {
   if (!command) {
     return ERROR;
   }
+  if(!(command->cmdData)) return ERROR;
 
   fget = fgets(input, CMD_LENGTH, stdin);
   
@@ -454,7 +511,8 @@ Status command_get_list(Command *command, char *destination, GameState state, bo
 
 Status command_get_status(Command *command){
   if(!command) return ERROR;
-  return command->cmdStatus;
+  if(!(command->cmdData)) return ERROR;
+  return command->cmdData->cmdStatus;
 }
 
 int command_code_isEqual(void *cmd1, void *cmd2){
@@ -464,12 +522,13 @@ int command_code_isEqual(void *cmd1, void *cmd2){
 bool command_current_type_valid_by_state(Command *command, GameState state){
   int length, i;
   if(!command || state == ERROR_STATE) return false;
+  if(!(command->cmdData)) return ERROR;
 
   length = collection_length(command->stateCommands[state - ERROR_STATE]);
 
   for (i = 0; i < length; i++)
   {
-    if(command->code == *((CommandCode *)collection_get_element_at(command->stateCommands[state - ERROR_STATE], i))){
+    if(command->cmdData->code == *((CommandCode *)collection_get_element_at(command->stateCommands[state - ERROR_STATE], i))){
       return true;
     }
   }

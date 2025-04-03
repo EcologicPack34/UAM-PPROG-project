@@ -745,8 +745,9 @@ Status game_switch_player(Game *game, int player){
     }
     game->active_player_index = player;
   } 
-
+  
   game->activePlayer = game->players[game->active_player_index];
+  command_set_player_data(game->last_cmd, player_get_cmdData(game->activePlayer));
 
   return OK;
 }

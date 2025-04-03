@@ -18,6 +18,7 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
+#include "command.h"
 #include "entity.h"
 #include "equipment.h"
 #include "npc.h"
@@ -65,6 +66,15 @@ Entity *player_get_entity(Player *player);
  * @return Equipment* 
  */
 Equipment *player_get_equipment(Player *player);
+
+/**
+ * @brief Gets the command data of the player
+ * @author Daniel Gómez
+ * 
+ * @param player 
+ * @return CommandInfo* 
+ */
+CommandInfo *player_get_cmdData(Player *player);
 
 /**
  * @brief It sets a player's stats

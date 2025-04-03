@@ -33,6 +33,8 @@ struct _Player {
     Equipment *equipment;               /*!< Equipment of the player*/
 
     int money;                          /*!< Money quantity of the player*/
+
+    CommandInfo *cmdData;               /*!< Stores the local data of the command in the player*/
 };
 
 
@@ -80,8 +82,16 @@ Player *player_create(char *name, Id identity, Id location){
 
     player->money = 0;
 
-    for(i = 0; i < NPC_MAX_FOLLOWERS; i++)
+    for(i = 0; i < NPC_MAX_FOLLOWERS; i++){
         player->followers[i] = NULL;
+    }
+
+    player->cmdData = command_info_create();
+    if(!(player->cmdData)){
+        entity_destroy(player->entity);
+        equipment_destroy(player->equipment);
+        free(player);
+    }
     
     return player;
 }
@@ -127,6 +137,11 @@ int player_get_money(Player *player){
     if(!player) return ERROR;
 
     return player->money;
+}
+
+CommandInfo *player_get_cmdData(Player *player){
+    if(!player) return NULL;
+    return player->cmdData;
 }
 
 /*Player SETTERS*/

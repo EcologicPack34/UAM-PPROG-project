@@ -197,11 +197,16 @@ Status game_actions_update(Game *game, Command *command) {
   Entity *player = NULL;
 
   if(!game || !command) return ERROR;
-
+  
+  if(command_get_code(command) != SWITCH 
+  || (command_get_code(command) == SWITCH && strncmp("list", command_get_arguments(command)[0], 5) != 0) ){
+    command_update_player_data(command);
+  }
+  
   game_set_last_command(game, command);
 
   cmd = command_get_code(command);
-
+  
   if(cmd == GM){
     game_set_godmode(game, TRUE);
     game_actions_god_mode(game);
@@ -289,6 +294,7 @@ Status game_actions_update(Game *game, Command *command) {
   if(player){
     debug_log(PRINT,"Executed command: %s; by player %d:%s",str , entity_get_id(player), entity_get_name(player));
   }
+
 
   return OK;
 }
