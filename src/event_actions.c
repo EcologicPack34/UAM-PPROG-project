@@ -108,7 +108,7 @@ void event_actions_trigger_events(Game *game){
     /*Always checked events*/
     if(game_get_state(game) == COMBAT)
         triggered = event_trigger_end_combat(game);
-        
+
     triggered = event_trigger_player_death(event, game);
 }
 
@@ -182,6 +182,8 @@ bool event_trigger_object_on_space(Event *event, Game *game){
 
 bool event_trigger_combat(Event *event, Game *game){
     int random = 0;
+    char str[WORD_SIZE] = "";
+    char strAux[WORD_SIZE * 2] = "";
 
     if(!event || !game) return false;
 
@@ -191,6 +193,10 @@ bool event_trigger_combat(Event *event, Game *game){
 
     if(!event_is_cmd_valid(event, game_get_last_command(game))) return false;
     debug_log(PRINT,"Combat trigger");
+    command_get_as_string(game_get_last_command(game), str);
+
+    sprintf(strAux, "You were attack while doing %s", str);
+    game_add_log_message(game, MESSAGE_LOG, strAux);
     game_combat_start(game);
     return true;
 }

@@ -26,11 +26,15 @@
  * This struct stores all the information of a player
  */
 struct _Player {
-    Entity *entity;           /*!< Entity type of the player */
+    Entity *entity;                     /*!< Entity type of the player */
 
-    Equipment *equipment;     /*!< Equipment of the player*/
+    NPC *followers[NPC_MAX_ALLIES - 1]; /*!< Pointer with all the actual followers allies*/
 
-    int money;                /*!< Money quantity of the player*/
+    Equipment *equipment;               /*!< Equipment of the player*/
+
+    int money;                          /*!< Money quantity of the player*/
+
+    CommandInfo *cmdData;               /*!< Stores the local data of the command in the player*/
 };
 
 
@@ -60,8 +64,9 @@ Status player_set_entity(Player *player, Entity *entity){
 
 Player *player_create(char *name, Id identity, Id location){
     Player *player = NULL;
+    int i;
 
-    if(!(player = (Player *)malloc(sizeof(player))))
+    if(!(player = (Player *)malloc(sizeof(Player))))
         return NULL;
     
     /*by default, all stats are set to lvl 1*/
@@ -76,6 +81,17 @@ Player *player_create(char *name, Id identity, Id location){
     }
 
     player->money = 0;
+
+    for(i = 0; i < NPC_MAX_FOLLOWERS; i++){
+        player->followers[i] = NULL;
+    }
+
+    player->cmdData = command_info_create();
+    if(!(player->cmdData)){
+        entity_destroy(player->entity);
+        equipment_destroy(player->equipment);
+        free(player);
+    }
     
     return player;
 }
@@ -123,6 +139,11 @@ int player_get_money(Player *player){
     return player->money;
 }
 
+CommandInfo *player_get_cmdData(Player *player){
+    if(!player) return NULL;
+    return player->cmdData;
+}
+
 /*Player SETTERS*/
 
 Status player_add_money(Player *player, int value_added){
@@ -149,6 +170,12 @@ void player_print(Player *player){
     printf("=> Player id: %d\n", (int)entity_get_id(entityPlayer));
     printf("=> Player name: %s\n", entity_get_name(entityPlayer));
     printf("=> Player location: %d\n", (int)entity_get_location(entityPlayer));
+}
+
+Status player_set_stats(Player *p, double maxhealth, double health, double baseDamage, int strength, int defense, int magicLevel){
+    if(!p) return ERROR;
+
+    return entity_set_stats(p->entity, maxhealth, health, baseDamage, strength, defense, magicLevel);
 }
 
 Status player_equip_piece(Player *player, Object *object){
@@ -191,4 +218,49 @@ Status player_unequip_piece(Player *player, char *data){
     inventory_add_object(inventory, object);
 
     return OK;
+}
+
+Status player_add_follower(Player *player, NPC *npc){
+    int i, index = -1;
+
+    if(!player || !npc) return ERROR;
+
+    /*Checks if its already a follower and saves the first NULL index*/
+    for(i = 0; i < NPC_MAX_FOLLOWERS; i++){
+        if(npc_cmp(npc, player->followers[i]) == 0)
+            return OK;
+        if(player->followers[i] == NULL)
+            index = i;
+    }
+
+    /*If an empty pointer wasn't found then followers are full*/
+    if(index == -1) return ERROR;
+
+    player->followers[index] = npc;
+
+    return OK;
+}
+
+Status player_remove_follower_by_name(Player *player, char *npc_name){
+    int i;
+
+    if(!player || !npc_name) return ERROR;
+
+    /*Searches by name and removes it*/
+    for(i = 0; i < NPC_MAX_FOLLOWERS; i++){
+        if(player->followers[i] != NULL && strcmp(entity_get_name(npc_get_entity(player->followers[i])), npc_name) == 0){
+            player->followers[i] = NULL;
+            return OK;
+        }
+    }
+
+    /*If not found then its removed*/
+    return OK;
+}
+
+NPC **player_get_followers(Player *player){
+    
+    if(!player) return NULL;
+
+    return player->followers;
 }

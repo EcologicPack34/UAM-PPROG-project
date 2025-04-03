@@ -21,16 +21,24 @@
 #include "types.h"
 #include <stdbool.h>
 
-#define N_CMDT 2 /*!< Total number of CommandType in the enum */
-#define N_CMD 21  /*!< Total number of CommandCode in the enum */
+#define N_CMDT 2    /*!< Total number of CommandType in the enum */
+#define N_CMD 22    /*!< Total number of CommandCode in the enum */
 
 #define MAX_CMD_ARGS_NUM 5      /*!< Max number of arguments that can be passed to a command*/
 #define MAX_CMD_ARGS_LENGTH 20  /*!< Max length that the arguments of a command can have */
 
+/**
+ * @brief Enum with the type of expression of a command
+ */
 typedef enum { CMDS, CMDL } CommandType; /* CMDS: Command Short | CMDL: Command Long */
 
-typedef enum { NO_CMD = -1, UNKNOWN, EXIT, SOUTH, NORTH, EAST, WEST, TAKE, DROP, CHAT, ATTACK, RUN_AWAY, SWITCH, ABILITY, OBJECT_USE, HELP, MOVE, SEARCH, EQUIP, UNEQUIP, INSPECT} CommandCode; /* All values that a command can take */
+/**
+ * @brief Enum with the codes of all the commands in the game
+ */
+typedef enum { NO_CMD = -1, UNKNOWN, EXIT, SOUTH, NORTH, EAST, WEST, TAKE, DROP, CHAT, ATTACK, RUN_AWAY, SWITCH, ABILITY, OBJECT_USE, HELP, MOVE, SEARCH, EQUIP, UNEQUIP, INSPECT, GM} CommandCode; /* All values that a command can take */
 
+
+typedef struct _CommandInfo CommandInfo;
 
 /* 
  * Struct that contains all the information of the command
@@ -56,6 +64,24 @@ Command* command_create();
 Status command_destroy(Command* command);
 
 /**
+ * @brief Creates a struct of command info dynamically
+ * @author Daniel Gómez
+ * 
+ * @return CommandInfo* 
+ */
+CommandInfo *command_info_create();
+
+/**
+ * @brief Destroys a struct of command info
+ * @author Daniel Gómez
+ * 
+ * @param cmdData 
+ * @return Status 
+ */
+Status command_info_destroy(CommandInfo *cmdData);
+
+
+/**
  * @brief changes name of the command on the command struct
  * @author Profesores PPROG
  *
@@ -69,8 +95,8 @@ Status command_set_code(Command* command, CommandCode code);
  * @brief Sets the status of a given command
  * @author Daniel Gómez
  * 
- * @param command 
- * @param status 
+ * @param command command to modify
+ * @param status status to set
  * @return Status 
  */
 Status command_set_status(Command *command, Status status);
@@ -79,22 +105,41 @@ Status command_set_status(Command *command, Status status);
  * @brief Sets the description of a command
  * @author Daniel Gómez
  * 
- * @param command 
- * @param cmd 
- * @param info
+ * @param command command to modify
+ * @param cmd command code where info is set
+ * @param info info to set
  * @return Status 
  */
 Status command_set_info(Command *command, CommandCode cmd, char *info);
 
 /**
  * @brief Adds a command code to a game state valid commands
+ * @author Daniel Gómez
  * 
- * @param command 
- * @param state 
- * @param type 
+ * @param command command to modify
+ * @param state state where the command code type is added
+ * @param type command code type to add
  * @return Status 
  */
 Status command_state_add_type(Command * command, GameState state, CommandCode type);
+
+/**
+ * @brief Sets the data struct which will be used to store data
+ * @author Daniel Gómez
+ * 
+ * @param cmd 
+ * @param data 
+ * @return Status 
+ */
+Status command_set_player_data(Command *cmd, CommandInfo *data);
+
+/**
+ * @brief Updates the data of cmd stored by player
+ * 
+ * @param cmd 
+ * @return Status 
+ */
+Status command_update_player_data(Command *cmd);
 
 /*-----------GETTERS--------------*/
 
@@ -102,19 +147,20 @@ Status command_state_add_type(Command * command, GameState state, CommandCode ty
  * @brief Copies into dest the info of the current command.
  * @author Daniel Gómez
  * 
- * @param cmd 
- * @param dest 
+ * @param cmd command where the info is taken
+ * @param dest string where the info is copied
  * @return Status 
  */
 Status command_get_as_string(Command *cmd, char *dest);
 
 /**
  * @brief Gets if the current command is valid by checking the game state
+ * @author Daniel Gómoez
  * 
- * @param command 
- * @param state 
- * @return true 
- * @return false 
+ * @param command command struct
+ * @param state state to check if its valid
+ * @return true if valid
+ * @return false if not valid
  */
 bool command_current_type_valid_by_state(Command *command, GameState state);
 
@@ -122,9 +168,9 @@ bool command_current_type_valid_by_state(Command *command, GameState state);
  * @brief Gets the pointer to the string containing the info of a command
  * @author Daniel Gómez
  * 
- * @param command 
- * @param cmd 
- * @param dest
+ * @param command command struct
+ * @param cmd command code where info is taken
+ * @param dest string where info is copied
  * @return Status 
  */
 Status command_get_info(Command *command, CommandCode cmd, char *dest);
@@ -142,7 +188,7 @@ CommandCode command_get_code(Command* command);
  * @brief Gets the command code for a given string value
  * @author Daniel Gómez
  * 
- * @param string 
+ * @param string string of a type cmd_to_str
  * @return CommandCode 
  */
 CommandCode command_get_code_from_str(char *string);
@@ -151,7 +197,7 @@ CommandCode command_get_code_from_str(char *string);
  * @brief Gets the number of arguments in the command
  * @author Daniel Gómez
  * 
- * @param command 
+ * @param command command struct
  * @return returns the number of arguments or -1 if error
  */
 int command_get_arguments_count(Command *command);
@@ -160,7 +206,7 @@ int command_get_arguments_count(Command *command);
  * @brief Gets the array of command arguments
  * @author Daniel Gómez
  * 
- * @param command 
+ * @param command command struct
  * @return returns the pointer to the array or null if error
  */
 char **command_get_arguments(Command * command);
@@ -178,7 +224,7 @@ Status command_get_user_input(Command* command);
  * @brief Gets the status of a given Command
  * @author Daniel Gómez
  * 
- * @param command 
+ * @param command command struct
  * @return Status 
  */
 Status command_get_status(Command *command);
@@ -195,8 +241,8 @@ Status command_get_list(Command *command, char *destination, GameState state, bo
 /**
  * @brief Checks if two commands codes are equal
  * 
- * @param cmd1
- * @param cmd2
+ * @param cmd1 command code 1
+ * @param cmd2 command code 2
  * @return int 
  */
 int command_code_isEqual(void *cmd1, void *cmd2);

@@ -1,0 +1,25 @@
+{
+    "configurations": [
+        {
+            "name": "Linux",
+            "includePath": [
+                "${workspaceFolder}/include",    // Add your include folder here
+                "${workspaceFolder}/src",        // Add your src folder here
+                "${workspaceFolder}/**"          // Optionally include all subdirectories
+            ],
+            "defines": [],
+            "intelliSenseMode": "gcc-x64",
+            "compilerPath": "/usr/bin/gcc",  // Or path to your compiler
+            "cStandard": "c11",
+            "cppStandard": "c++17",
+            "browse": {
+                "path": [
+                    "${workspaceFolder}/include",  // Browse the include folder
+                    "${workspaceFolder}/src"       // Browse the src folder
+                ],
+                "limitSymbolsToIncludedHeaders": true
+            }
+        }
+    ],
+    "version": 4
+}

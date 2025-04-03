@@ -18,8 +18,10 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
+#include "command.h"
 #include "entity.h"
 #include "equipment.h"
+#include "npc.h"
 
 typedef struct _Player Player;
 
@@ -66,11 +68,19 @@ Entity *player_get_entity(Player *player);
 Equipment *player_get_equipment(Player *player);
 
 /**
+ * @brief Gets the command data of the player
+ * @author Daniel Gómez
+ * 
+ * @param player 
+ * @return CommandInfo* 
+ */
+CommandInfo *player_get_cmdData(Player *player);
+
+/**
  * @brief It sets a player's stats
  * @brief Aaron Charameli Mair
  * 
- * @param playerId
- * @param et The type of entity 
+ * @param p a pointer to Player 
  * @param maxhealth 
  * @param health 
  * @param baseDamage 
@@ -80,7 +90,7 @@ Equipment *player_get_equipment(Player *player);
  *  
  * @return Status 
  */
-Status player_set_stats(Id playerId, EntityType et, double maxhealth, double health, double baseDamage, int strength, int defense, int magicLevel);
+Status player_set_stats(Player *p, double maxhealth, double health, double baseDamage, int strength, int defense, int magicLevel);
 
 /**
  * @brief Gets a string description of player and copies it into str
@@ -140,5 +150,35 @@ Status player_equip_piece(Player *player, Object *object);
  * @return Status 
  */
 Status player_unequip_piece(Player *player, char *data);
+
+/**
+ * @brief Adds a follower to the player
+ * @author Maksym Polyak
+ * 
+ * @param player 
+ * @param npc 
+ * @return Status 
+ */
+Status player_add_follower(Player *player, NPC *npc);
+
+/**
+ * @brief Removes a follower from the player by a name
+ * @author Maksym Polyak
+ * 
+ * @param player 
+ * @param npc_name 
+ * @return Status 
+ */
+Status player_remove_follower_by_name(Player *player, char *npc_name);
+
+/**
+ * @brief Gets the array with the followers, of max size NPC_MAX_FOLLOWERS
+ * @author Maksym Polyak
+ * 
+ * @param player 
+ * @return Status 
+ */
+NPC **player_get_followers(Player *player);
+
 
 #endif

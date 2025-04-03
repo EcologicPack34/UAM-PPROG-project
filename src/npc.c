@@ -24,6 +24,7 @@ struct _NPC{
 
     char message[WORD_SIZE];
 
+    bool can_follow;
     NPC_status status;
 };
 
@@ -37,7 +38,7 @@ struct _NPC{
 * PUBLIC INTERFACE IMPLEMENTATION
 */
 
-NPC *npc_create(NPC_status status, char *message, char *name, Id id, Id location){
+NPC *npc_create(NPC_status status, bool can_follow, char *message, char *name, Id id, Id location){
     NPC *npc = NULL;
 
     if(!name)
@@ -51,6 +52,7 @@ NPC *npc_create(NPC_status status, char *message, char *name, Id id, Id location
 
     strcpy(npc->message, message);
     npc->status = status;
+    npc->can_follow = can_follow;
 
     /*by default, all stats are set to level 1*/
     npc->entity = entity_create(name, id, location, NPC_INVENTORY);
@@ -93,6 +95,12 @@ char *npc_get_message(NPC *npc){
     return npc->message;
 }
 
+bool npc_get_is_follower(NPC *npc){
+    if(!npc) return FALSE;
+
+    return npc->can_follow;
+}
+
 /*NPC SETTERS*/
 
 Status npc_set_status(NPC *npc, NPC_status status){
@@ -109,6 +117,14 @@ Status npc_set_message(NPC *npc, char *message){
         return ERROR;
 
     strcpy(npc->message, message);
+
+    return OK;
+}
+
+Status npc_set_is_follower(NPC *npc, bool can_follow){
+    if(!npc) return ERROR;
+
+    npc->can_follow = can_follow;
 
     return OK;
 }

@@ -22,8 +22,15 @@
 
 #define INITIAL_SKILLS_SIZE 5 /*!< Initial number of abilities on the collection of the ability manager*/
 
-char *abilityTags[N_SKILLS] = { "" , "heal_self", "heal_ally", "money_bag"}; /*!< Tags related to the type | Same order as AbilityType*/
+/**
+ * @brief Tags related to the ability references on the .dat. Uses N_SKILLS as maximum size
+ * @file ability_manager.c
+ */
+char *abilityTags[N_SKILLS] = { "" , "heal_self", "heal_ally", "money_bag","link_unlock"}; /*!< Tags related to the type | Same order as AbilityType*/
 
+/**
+ * @brief Struct that contains all the information related to an ability
+ */
 struct _Ability {
   Id id;                  /*!< Id of the ability*/
   char *name;             /*!< Name of the ability*/
@@ -38,6 +45,9 @@ struct _Ability {
   int cooldown_length;    /*!< Maximum cooldown of the ability*/
 };
 
+/**
+ * @brief Struct that saves all the abilities in the game and a queue to trigger abilities
+ */
 struct _AbilityManager{
   Collection *ability;    /*!< Collection where all abilities are stored*/
   Queue *queue_ability;   /*!< Queue to control ability usage*/

@@ -399,7 +399,7 @@ Status game_reader_load_objects(Game *game, char *filename){
       objectlocation = atol(toks);
 
       toks = strtok(NULL, "|");
-      objectlocationtype = (InventoryType)atol(toks);
+      objectlocationtype = atol(toks) + UNKNOWN_INVENTORY;
 
       debug_log(PRINT,"Read Object: #o:%ld|%s|%s|%s|%d|%ld|%ld", objectid, name, data, description, is_consumable, objectlocation, objectlocationtype);
 
@@ -586,6 +586,7 @@ Status game_reader_load_npcs(Game *game, char *filename){
   char name[WORD_SIZE] = "";
   char *toks = NULL;
   char message[WORD_SIZE] = "";
+  int can_follow;
   long npcid, startinglocation;
   NPC_status statusnpc;
 
@@ -634,6 +635,12 @@ Status game_reader_load_npcs(Game *game, char *filename){
         printf("toks is null");
         return ERROR;
       }
+      can_follow = atoi(toks);
+      toks = strtok(NULL, "|");
+      if(!toks){
+        printf("toks is null");
+        return ERROR;
+      }
       statusnpc = atoi(toks) + UNKNOWN_STATUS;
       toks = strtok(NULL, "|");
       if(!toks){
@@ -641,10 +648,10 @@ Status game_reader_load_npcs(Game *game, char *filename){
         return ERROR;
       }
       
-      debug_log(PRINT,"Read NPC: #n:%ld|%s|%s|%ld|%d|gdesc", npcid, message, name, startinglocation, (int)statusnpc);
+      debug_log(PRINT,"Read NPC: #n:%ld|%s|%s|%ld|%d|%d|gdesc", npcid, message, name, startinglocation, (bool)can_follow, (int)statusnpc);
       /*Creates an NPC with npc_create then saves it on the game with game_add_npc*/
       /*by default, lvl 1 stats are set. If .dat containts a stats line for this npc, they will be set afterwards.*/
-      npc = npc_create(statusnpc, message, name, npcid, startinglocation);
+      npc = npc_create(statusnpc, (bool)can_follow, message, name, npcid, startinglocation);
       if (npc == NULL) {
         status = ERROR;
         break;
@@ -859,8 +866,10 @@ Status game_reader_load_ability(Game *game, char *filename){
       if(ability == NULL)
         debug_log(LOG_ERROR,"Error creating ability when reading from file");
 
-      if(game_add_ability(game, ability) == ERROR)
+      if(game_add_ability(game, ability) == ERROR){
+        //ability_destroy(ability);
         debug_log(LOG_ERROR,"Error adding ability to ability manager or entity");
+      }
     }
   }
 

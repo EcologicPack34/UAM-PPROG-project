@@ -44,6 +44,7 @@ typedef struct _NPC NPC;
  * @author Maksym Polyak
  * 
  * @param status status with the player: NPC_status
+ * @param can_follow determines if the NPC becomes a follower after chat
  * @param message message of the NPC on start
  * @param name name of the NPC
  * @param id id of the NPC
@@ -51,7 +52,7 @@ typedef struct _NPC NPC;
  *
  * @return NPC* or NULL if error
  */
-NPC *npc_create(NPC_status status, char *message, char *name, Id id, Id location);
+NPC *npc_create(NPC_status status, bool can_follow, char *message, char *name, Id id, Id location);
 
 /**
  * @brief Frees all the memory related to an npc
@@ -90,6 +91,16 @@ NPC_status npc_get_status(NPC *npc);
  */
 char *npc_get_message(NPC *npc);
 
+/**
+ * @brief Gets if the NPC can be a follower after chat or not
+ * @author Maksym Polyak
+ * 
+ * @param npc 
+ * @return true 
+ * @return false 
+ */
+bool npc_get_is_follower(NPC *npc);
+
 /*NPC SETTERS*/
 
 /**
@@ -111,6 +122,16 @@ Status npc_set_status(NPC *npc, NPC_status status);
  * @return Status 
  */
 Status npc_set_message(NPC *npc, char *message);
+
+/**
+ * @brief Sets the can_follow bool on npc
+ * @author Maksym Polyak
+ * 
+ * @param npc 
+ * @param can_follow 
+ * @return Status 
+ */
+Status npc_set_is_follower(NPC *npc, bool can_follow);
 
 /**
  * @brief Compares two npcs

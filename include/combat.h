@@ -29,26 +29,25 @@
 #include "player.h"
 #include "command.h"
 
-/*Struct of the combat module to save the stats of an NPC, public for the graphic_engine*/
+/**
+ * @brief Struct of the combat module to save the stats of an NPC, public for the graphic_engine
+ */
 typedef struct {
     Entity_Stats stats;             /*!< Copy of the stats in order to buff/debuff and not modify the original stats*/
     Entity *entity;                 /*!< Entity from which the stats are saved*/
 }Stats;
 
-/*Struct of the combat module to save the stats of the player, public for the graphic_engine*/
-//typedef struct {
-//    Entity_Stats stats;             /*!< Copy of the stats in order to buff/debuff and not modify the original stats*/
-//    Entity *entity;                 /*!< Entity from which the stats are saved*/
-//}PlayerStats;                       /*Needs to be different for further implementation of equipment and more*/
-
+/**
+ * @brief Struct with all the information related to a combat
+ */
 typedef struct _Combat Combat;
 
 /**
  * @brief Initializes the combat struct
  * @author Maksym Polyak
  * 
- * @param space 
- * @param player 
+ * @param space space where the combat is located
+ * @param player player that is involved in the combat
  * @param code last cmd 
  * @return Combat* or NULL if ERROR
  */
@@ -58,16 +57,16 @@ Combat *combat_initialize(Space *space, Player *player, CommandCode code);
  * @brief Ends the combat and frees all the memory related to it
  * @author Maksym Polyak
  * 
- * @param combat 
+ * @param combat combat struct to free
  */
 void combat_free(Combat *combat);
 
 /**
  * @brief Updates the combat turns
- * @author Maksym Polyak
+ * @author Sofía Calvo
  * 
- * @param combat 
- * @param last_cmd 
+ * @param combat combat to update
+ * @param last_cmd last command of the player in the combat
  * @return Status 
  */
 Status combat_update(Combat *combat, Command *last_cmd);
@@ -76,7 +75,7 @@ Status combat_update(Combat *combat, Command *last_cmd);
  * @brief Finalizes the combat and returns the game state to DEFAULT
  * @author Maksym Polyak && Daniel Gómez
  * 
- * @param combat 
+ * @param combat combat to modify
  * @return Status 
  */
 Status combat_runaway(Combat *combat);
@@ -85,7 +84,7 @@ Status combat_runaway(Combat *combat);
  * @brief Gets the number of enemies on the combat
  * @author Maksym Polyak && Daniel Gómez
  * 
- * @param combat 
+ * @param combat combat struct
  * @return int or 0 if error;
  */
 int combat_get_enemies_count(Combat *combat);
@@ -94,7 +93,7 @@ int combat_get_enemies_count(Combat *combat);
  * @brief Gets the number of allies on the combat - NON IMPLEMENTED THE FUNCTIONALITY
  * @author Maksym Polyak && Daniel Gómez
  * 
- * @param combat 
+ * @param combat combat struct
  * @return int or 0 if error;
  */
 int combat_get_allies_count(Combat *combat);
@@ -103,7 +102,8 @@ int combat_get_allies_count(Combat *combat);
  * @brief Gets the stats pointer of an enemy at the index
  * @author Maksym Polyak && Daniel Gómez
  * 
- * @param combat 
+ * @param combat combat struct
+ * @param index index of the enemy
  * @return int or 0 if error;
  */
 Stats *combat_get_enemies_stats_at(Combat *combat, int index);
@@ -112,7 +112,7 @@ Stats *combat_get_enemies_stats_at(Combat *combat, int index);
  * @brief Gets the stats pointer of all the enemies
  * @author Maksym Polyak
  * 
- * @param combat 
+ * @param combat combat struct
  * @return Stats* or NULL if error
  */
 Stats *combat_get_enemies_stats(Combat *combat);
@@ -121,7 +121,8 @@ Stats *combat_get_enemies_stats(Combat *combat);
  * @brief Gets the stats pointer of an ally at the index
  * @author Maksym Polyak && Daniel Gómez
  * 
- * @param combat 
+ * @param combat combat struct
+ * @param index index of the ally
  * @return int or 0 if error;
  */
 Stats *combat_get_allies_stats_at(Combat *combat, int index);
@@ -130,7 +131,7 @@ Stats *combat_get_allies_stats_at(Combat *combat, int index);
  * @brief Gets the stats pointer of all the allies
  * @author Maksym Polyak
  * 
- * @param combat 
+ * @param combat combat struct
  * @return Stats* or NULL if error
  */
 Stats *combat_get_allies_stats(Combat *combat);
@@ -139,7 +140,7 @@ Stats *combat_get_allies_stats(Combat *combat);
  * @brief Gets the bool with the information of the combat end
  * @author Maksym Polyak && Daniel Gómez
  * 
- * @param combat 
+ * @param combat combat struct
  * @return int or 0 if error;
  */
 bool combat_get_isFinished(Combat *combat);
@@ -148,7 +149,7 @@ bool combat_get_isFinished(Combat *combat);
  * @brief Gets the player stats
  * @author Maksym
  * 
- * @param combat 
+ * @param combat combat struct
  * @return Stats* 
  */
 Stats *combat_get_player_stats(Combat *combat);

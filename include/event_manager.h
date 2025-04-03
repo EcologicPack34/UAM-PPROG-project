@@ -15,7 +15,7 @@
 #include "command.h"
 #include "types.h"
 
-#define N_EVENTS 4
+#define N_EVENTS 5
 
 /**
  * @brief Enum storing the different types of events 

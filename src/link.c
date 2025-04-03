@@ -241,3 +241,15 @@ Status link_move_entity(Link *link, Entity *entity){
     return OK;
 }
 
+Status link_unlock(Link *link, Object *obj){
+    
+    if(!link || !obj) return ERROR;
+
+    if(object_get_id(obj) != link->unlockingObject){
+        return ERROR;
+    }
+
+    link->locked = false;
+    link->unlockingObject = UNDEFINED_ID;
+    return OK;
+}

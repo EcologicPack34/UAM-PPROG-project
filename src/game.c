@@ -46,6 +46,7 @@ struct _Game {
   /*Others*/
   EventManager *event_manager; /*!< Struct containing the info about the events that can happen*/
   Queue *screenLog;             /*!< Queue containing a list of messages to print on screen*/
+  bool godmode;                 /*!< bool that determines if god mode is activated*/
 
   /*Combat*/
   Combat *combat;
@@ -119,6 +120,7 @@ Status game_create(Game **game) {
     return ERROR;
   }
   
+  (*game)->godmode = false;
   (*game)->finished = false;
   (*game)->n_links = 0;
   (*game)->current_state = DEFAULT;
@@ -149,7 +151,7 @@ Status game_create(Game **game) {
 
 Status game_destroy(Game *game) {
   int i = 0;
-  int linkCount;
+  int count;
 
   /*Destroys all spaces*/
   for (i = 0; i < game->n_spaces; i++) {
@@ -170,6 +172,7 @@ Status game_destroy(Game *game) {
 
   command_destroy(game->last_cmd);
   event_manager_destroy(game->event_manager);
+  
   ability_manager_destroy(game->ability_manager);
   queue_destroy(game->screenLog);
 
@@ -178,9 +181,9 @@ Status game_destroy(Game *game) {
   }
 
   /*Destroys all links */
-  linkCount = game_get_n_links(game);
+  count = game_get_n_links(game);
 
-  for (i = 0; i < linkCount; i++)
+  for (i = 0; i < count; i++)
   {
     free(game_get_link_at(game,i));
   }
@@ -342,6 +345,12 @@ Player *game_get_player_by_id(Game *game, Id id){
   return NULL;
 }
 
+bool game_get_god_mode(Game *game){
+  if(!game) return false;
+
+  return game->godmode;
+}
+
 /*-----------SETTERS-----------*/
 
 Status game_set_last_command(Game *game, Command *command) {
@@ -365,6 +374,12 @@ Status game_set_player_location(Game *game, Id id){
 Status game_set_state(Game *game, GameState state){
   if(!game) return ERROR;
   game->current_state = state;
+  return OK;
+}
+
+Status game_set_godmode(Game *game, bool value){
+  if(!game) return ERROR;
+  game->godmode = value;
   return OK;
 }
 
@@ -601,7 +616,7 @@ Status game_add_object(Game *game, Object *object){
   if(collection_add(game_get_objects(game), object) == ERROR)
     return ERROR;
 
-  debug_log(PRINT,"Game Added Object: ID: %ld, name: %s, objectlocation: %ld, inventoryType: %d", object_get_id(object), object_get_name(object), object_get_location(object), (int)object_get_type(object));
+  debug_log(PRINT,"Game Added Object: ID: %ld, name: %s, objectlocation: %ld, inventoryType: %d", object_get_id(object), object_get_name(object), object_get_location(object), object_get_type(object) - UNKNOWN_INVENTORY);
   return OK;
 }
 
@@ -701,12 +716,38 @@ Combat *game_get_combat(Game *game){
 }
 
 Status game_switch_player(Game *game, int player){
+  int i;
+  bool alivePlayers = false;
+
   if(!game || player >= game->n_players) return ERROR;
 
-  if(player < 0) game->active_player_index = (game->active_player_index + 1) % game->n_players;
-  else game->active_player_index = player;
-
+  if(player < 0){
+    /*Sets player to next*/
+    game->active_player_index = (game->active_player_index + 1) % game->n_players;
+    /*cycles through players checking if they are dead, if so, skip to next*/
+    for (i = 0; i < game->n_players; i++)
+    {
+      if(entity_is_dead( player_get_entity(game->players[game->active_player_index] ) ) == false){
+        alivePlayers = true;
+        break;
+      }
+      game->active_player_index = (game->active_player_index + 1) % game->n_players;
+    }
+    if(!alivePlayers){
+      game_add_log_message(game, MESSAGE_ERROR, "Couldn't find a player which is alive");
+      return ERROR;/*Case if every player is dead*/
+    } 
+  } 
+  else{
+    if(entity_is_dead( player_get_entity(game->players[player] ) ) == true){
+      game_add_log_message(game, MESSAGE_ERROR, "Couldn't switch player because it isn't alive");
+      return ERROR;
+    }
+    game->active_player_index = player;
+  } 
+  
   game->activePlayer = game->players[game->active_player_index];
+  command_set_player_data(game->last_cmd, player_get_cmdData(game->activePlayer));
 
   return OK;
 }
@@ -782,7 +823,7 @@ Status game_add_ability(Game *game, Ability *ability){
 
   entityid = ability_get_entityid(ability);
 
-  ability_manager_add_ability(game_get_ability_manager(game), ability);
+  if(ability_manager_add_ability(game_get_ability_manager(game), ability) == ERROR) return ERROR;
 
   if(ability_get_is_player_ability(ability) == true){
     player = game_get_player_by_id(game, entityid);
