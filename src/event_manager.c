@@ -13,6 +13,7 @@
 
 char *eventTags[N_EVENTS] = { "" , "object_on_space", "trigger_combat", "player_death"};
 
+/* Event struct to control special interactions or triggers within the game*/
 struct _Event{
     Id id;
     EventType type;

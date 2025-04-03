@@ -24,6 +24,7 @@
 
 /**
  * @brief Global variable that stores all the commands and their shortucts.
+ * @file command.c
  */
 char *cmd_to_str[N_CMD][N_CMDT] = {{"", "No command"}, {"", "Unknown"}, {"q", "Exit"}, {"s", "South"}, {"w", "North"}, {"d", "East"}, {"a", "West"},{"tk", "Take"}, {"dr", "Drop"},\
  {"ch", "Chat"}, {"at", "Attack"}, {"h", "Run_Away"}, {"sw", "Switch_Player"}, {"sk", "Ability"}, {"ou", "Object_Use"}, {"hp", "Help"}, {"m", "Move"}, {"sh","Search"},\
@@ -35,13 +36,13 @@ char *cmd_to_str[N_CMD][N_CMDT] = {{"", "No command"}, {"", "Unknown"}, {"q", "E
  * This struct stores all the information related to a command.
  */
 struct _Command {
-  CommandCode code; /*!< Name of the command */
-  int argsCount;
-  char *arguments[MAX_CMD_ARGS_NUM];
-  Status cmdStatus;
+  CommandCode code;                         /*!< Name of the command */
+  int argsCount;                            /*!< Count of arguments received*/
+  char *arguments[MAX_CMD_ARGS_NUM];        /*!< Where arguments are located*/
+  Status cmdStatus;                         /*!< Status of the command*/
 
-  char *commandInfo[N_CMD];
-  Collection *stateCommands[N_GAME_STATES]; /*array of collections containing cmd types*/
+  char *commandInfo[N_CMD];                 /*!< Information about command codes*/
+  Collection *stateCommands[N_GAME_STATES]; /*!< Array of collections containing cmd types*/
 };
 
 /*--------------Private Functions---------------*/
@@ -50,8 +51,8 @@ struct _Command {
  * @brief Sets the number of readed arguments
  * @author Daniel Gómez
  * 
- * @param command 
- * @param num 
+ * @param command command struct
+ * @param num count to set
  * @return Status 
  */
 Status command_set_arguments_count(Command *command, int num){
@@ -67,9 +68,9 @@ Status command_set_arguments_count(Command *command, int num){
  * @brief Sets the argument to a given string at a given argument
  * @author Daniel Gómez
  * 
- * @param command 
- * @param args 
- * @param index 
+ * @param command command struct
+ * @param args string to set
+ * @param index index of where it is set
  * @return Status 
  */
 Status command_set_argument_at(Command *command, char args[MAX_CMD_ARGS_LENGTH], int index){
@@ -83,8 +84,9 @@ Status command_set_argument_at(Command *command, char args[MAX_CMD_ARGS_LENGTH],
 
 /**
  * @brief Resets the arguments to avoid getting them between commands
+ * @author Daniel Gómez
  * 
- * @param command 
+ * @param command command struct
  * @return Status 
  */
 Status command_reset_arguments(Command *command){

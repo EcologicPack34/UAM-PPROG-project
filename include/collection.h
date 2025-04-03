@@ -21,7 +21,6 @@
 /**
  * @brief Generic compare function type
  */
-
 typedef int (*P_elem_cmp)(void*, void*);
 
 
@@ -35,19 +34,19 @@ typedef struct _Collection Collection;
  * @author Daniel Gómez
  * 
  * @param initialSize Initial allocated size for the list
- * @param fixedLength Whether the collection can be resized or not
- * @param uniqueElements Whether the collection can have repeated elements or not
+ * @param fixed_length Whether the collection can be resized or not
+ * @param unique_elements Whether the collection can have repeated elements or not
  * @param compare_elements Method to compare the elements: return 0 if equal, < 0 if smaller and > 0 if greater
  * @param print_element Method to print elements
  * @return Collection*; NULL if something went wrong
  */
-Collection *collection_create(long initialSize, bool fixedLength, bool uniqueElements, P_elem_cmp elemCmp, void (*print_element)(void *));
+Collection *collection_create(long initialSize, bool fixed_length, bool unique_elements, P_elem_cmp compare_elements, void (*print_element)(void *));
 
 /**
  * @brief Frees the memory of a collection
  * @author Daniel Gómez
  * 
- * @param collection 
+ * @param collection collection to destroy
  */
 void collection_destroy(Collection *collection);
 
@@ -57,8 +56,8 @@ void collection_destroy(Collection *collection);
  * @brief Adds an element to the collection if posible
  * @author Daniel Gómez
  * 
- * @param collection 
- * @param element 
+ * @param collection collection to modifiy
+ * @param element element to add
  * @return Status Ok if everything was done correctly, ERROR if something failed
  */
 Status collection_add(Collection *collection, void *element);
@@ -67,8 +66,8 @@ Status collection_add(Collection *collection, void *element);
  * @brief Removes an element from the collection
  * @author Daniel Gómez
  * 
- * @param collection 
- * @param element 
+ * @param collection collection to modifiy
+ * @param element element to remove
  * @return Status Ok if removed, ERROR if null reference or element not found
  */
 Status collection_remove(Collection *collection, void *element);
@@ -77,8 +76,8 @@ Status collection_remove(Collection *collection, void *element);
  * @brief Removes the element at a given index from the collection
  * @author Daniel Gómez
  * 
- * @param collection 
- * @param index 
+ * @param collection collection to modifiy
+ * @param index index where the object is removed
  * @return Status 
  */
 Status collection_remove_at(Collection *collection, long index);
@@ -89,8 +88,8 @@ Status collection_remove_at(Collection *collection, long index);
  * @brief Gets the element at a given index
  * @author Daniel Gómez
  * 
- * @param collection 
- * @param index 
+ * @param collection collection to modifiy
+ * @param index index where the element is taken
  * @return NULL if something went wrong, pointer to element if correct
  */
 void *collection_get_element_at(Collection *collection, long index);
@@ -99,8 +98,8 @@ void *collection_get_element_at(Collection *collection, long index);
  * @brief Tries to find a element inside the collection
  * @author Daniel Gómez
  * 
- * @param collection 
- * @param element 
+ * @param collection collection to modifiy
+ * @param element element to find
  * @return pointer to element if found, NULL if not contained in collection
  */
 void *collection_find(Collection *collection, void *element);
@@ -109,8 +108,8 @@ void *collection_find(Collection *collection, void *element);
  * @brief Checks if the collection contains a certain element
  * @author Daniel Gómez
  * 
- * @param collection 
- * @param element 
+ * @param collection collection to modifiy
+ * @param element element to find
  * @return -1 if not contained
  * @return the index if contained
  */
@@ -120,7 +119,7 @@ int collection_contains(Collection *collection, void *element);
  * @brief Returns the number of elements in the collection, not to be confused with allocated size
  * @author Daniel Gómez
  * 
- * @param collection 
+ * @param collection collection to modifiy
  * @return long : -1 if null reference, length if correct
  */
 long collection_length(Collection *collection);
@@ -129,9 +128,10 @@ long collection_length(Collection *collection);
 
 /**
  * @brief Frees all the elements of the collection using the given fucntion
+ * @author Daniel Gómez
  * 
- * @param collection 
- * @param free 
+ * @param collection collection to modifiy
+ * @param free_element function pointer that frees the type of elements in the collection
  * @return Status : ERROR if null references, else OK
  */
 Status collection_free_elements(Collection *collection, void (*free_element)(void *));

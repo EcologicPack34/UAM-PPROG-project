@@ -15,13 +15,16 @@
 #include <stdlib.h>
 
 
+/**
+ * @brief Collection to manage a list of objects with special parametrs as fixed_length and UniqueElements
+ */
 struct _Collection{
     void **list;                /*<! Stores the elements of the collections */
     long length;       /*<! Stores the amount of elements in the collection*/
-    long allocatedSize;/*<! Stores the amount of memory used by the collection*/
+    long allocated_size;/*<! Stores the amount of memory used by the collection*/
 
-    bool fixedLength;           /*<! Can the collection increase its allocated size*/
-    bool uniqueElements;        /*<! Can the collection have repeated elements*/
+    bool fixed_length;           /*<! Can the collection increase its allocated size*/
+    bool unique_elements;        /*<! Can the collection have repeated elements*/
 
     P_elem_cmp compare_elements; /*Method to compare elements of the collection: return 0 if equal, < 0 if smaller and > 0 if greater*/
     void (*print_element)(void *element);        /*Method to print an element of the collection*/
@@ -33,8 +36,8 @@ struct _Collection{
  * @brief Adds a unique element to the collection
  * @author Daniel Gómez
  * 
- * @param collection
- * @param element 
+ * @param collection collection to modifiy
+ * @param element element to add checking if its unique
  * @return Status 
  */
 Status collection_add_unique(Collection *collection, void *element);
@@ -43,12 +46,20 @@ Status collection_add_unique(Collection *collection, void *element);
  * @brief Adds a non unique element to the collection
  * @author Daniel Gómez
  * 
- * @param collection 
- * @param element 
+ * @param collection collection to modifiy
+ * @param element element to add without checking if its unique
  * @return Status 
  */
 Status collection_add_non_unique(Collection *collection, void *element);
 
+/**
+ * @brief Adds an element to the collection wether its a unique or non-unique collection
+ * @author Daniel Gómez
+ * 
+ * @param collection collection to modifiy
+ * @param element element to add
+ * @return Status 
+ */
 Status collection_add_unique(Collection *collection, void *element){
     /*We omit error control as it is done in collection_add()*/
 
@@ -57,6 +68,14 @@ Status collection_add_unique(Collection *collection, void *element){
     return collection_add_non_unique(collection, element);
 }
 
+/**
+ * @brief Adds a non unique element to a collection
+ * @author Daniel Gómez
+ * 
+ * @param collection collection to modifiy
+ * @param element element to add
+ * @return Status 
+ */
 Status collection_add_non_unique(Collection *collection, void *element){
     /*We ommit error control as it is done in collection_add()*/
     void **auxp = NULL;
@@ -64,14 +83,14 @@ Status collection_add_non_unique(Collection *collection, void *element){
     bool isFull = false;
 
     /*Control over the size of the list*/
-    if(collection->allocatedSize == collection->length) isFull = true;
-    if(collection->fixedLength && isFull){
+    if(collection->allocated_size == collection->length) isFull = true;
+    if(collection->fixed_length && isFull){
         debug_log(LOG_WARNING, "Couldn't add element to collection: fixed size collection has reached it's maximum size");
         return ERROR;
     }else if(isFull){
         auxp = collection->list;
 
-        auxp = (void**)realloc(auxp, collection->allocatedSize * 2);
+        auxp = (void**)realloc(auxp, collection->allocated_size * 2);
         if(!auxp){
             debug_log(LOG_ERROR,"Couldn't allocate more memory for Collection");
             return ERROR;
@@ -85,7 +104,7 @@ Status collection_add_non_unique(Collection *collection, void *element){
 }
 
 /*----------PUBLIC FUNCTIONS----------*/
-Collection *collection_create(long initialSize, bool fixedLength, bool uniqueElements, P_elem_cmp compare_elements, void (*print_element)(void *)){
+Collection *collection_create(long initialSize, bool fixed_length, bool unique_elements, P_elem_cmp compare_elements, void (*print_element)(void *)){
     Collection *collection = NULL;
     
     if(!compare_elements) return NULL;
@@ -112,10 +131,10 @@ Collection *collection_create(long initialSize, bool fixedLength, bool uniqueEle
     }
     
     collection->length = 0;
-    collection->allocatedSize = initialSize;
+    collection->allocated_size = initialSize;
 
-    collection->fixedLength = fixedLength;
-    collection->uniqueElements = uniqueElements;
+    collection->fixed_length = fixed_length;
+    collection->unique_elements = unique_elements;
 
     collection->compare_elements = compare_elements;
     collection->print_element = print_element;
@@ -136,7 +155,7 @@ void collection_destroy(Collection * collection){
 Status collection_add(Collection *collection, void *element){
     if(!collection || !element) return ERROR;
     
-    if(collection->uniqueElements){
+    if(collection->unique_elements){
         return collection_add_unique(collection, element);
     }
 

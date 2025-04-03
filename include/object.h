@@ -146,7 +146,7 @@ Id object_get_location(Object *object);
 
 /**
  * @brief Gets the inventorytype where the object is located
- * @autho Maksym Polyak
+ * @author Maksym Polyak
  * 
  * @param object object to be evaluated
  * @return InventoryType or 0 if error

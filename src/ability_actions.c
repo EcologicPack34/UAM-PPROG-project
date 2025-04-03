@@ -29,8 +29,8 @@
  * for example if an entity is dead by an ability but the ability has not been activated yet, and an entity tries
  * to heal it, when the entity tries to heal it is late
  * 
- * @param ability 
- * @param game 
+ * @param ability ability with the necessary data for the function to work
+ * @param game game struct
  * @return Status 
  */
 Status ability_heal_self(Ability *ability, Game *game);
@@ -40,8 +40,8 @@ Status ability_heal_self(Ability *ability, Game *game);
  * the enemies in a combat heal another enemy
  * @author Maksym Polyak
  * 
- * @param ability 
- * @param game 
+ * @param ability ability with the necessary data for the function to work
+ * @param game game struct
  * @return Status 
  */
 Status ability_heal_ally(Ability *ability, Game *game);
@@ -50,12 +50,20 @@ Status ability_heal_ally(Ability *ability, Game *game);
  * @brief Adds an amount of money to the active player
  * @author Maksym Polyak
  * 
- * @param ability 
- * @param game 
+ * @param ability ability with the necessary data for the function to work
+ * @param game game struct
  * @return Status 
  */
 Status ability_money_bag(Ability *ability, Game *game);
 
+/**
+ * @brief Unlocks a link related to the ability data
+ * @author Daniel Gómez
+ * 
+ * @param ability 
+ * @param game 
+ * @return Status 
+ */
 //Status ability_unlock_link(Ability *ability, Game *game);
 
 Status ability_heal_self(Ability *ability, Game *game){

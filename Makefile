@@ -30,7 +30,6 @@ OBJ = $(patsubst %,$(OBJ_PATH)/%,$(_OBJ))
 #changes the .o extension from OBJ to .d extension to include the dependencies
 DEPENDENCIES = $(OBJ:.o=.d)
 #includes the dependencies so that they are considered when compiling
--include $(DEPENDENCIES)
 
 EXE = anthill
 EXED = anthilldebug
@@ -46,9 +45,10 @@ $(EXE):	$(OBJ)
 	$(CC) $(CFLAGS) -o $(EXE) $(OBJ) -L$(LIBRARIES) -lscreen
 
 #Rule to compile each .c file into its .o file
-$(OBJ_PATH)/%.o: $(SRC_PATH)/%.c | $(OBJ_PATH)
+$(OBJ_PATH)/%.o: $(SRC_PATH)/%.c $(INCLUDE)/%.h | $(OBJ_PATH)
 	$(CC) -c -o $@ $< $(CFLAGS)
 
+-include $(DEPENDENCIES)
 
 .PHONY:	clean compile link run runl debug runv gdb
 clean:

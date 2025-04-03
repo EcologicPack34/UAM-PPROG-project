@@ -20,7 +20,7 @@
  * @brief Uses the ability on the queue of the ability manager on the game
  * @author Maksym Polyak
  * 
- * @param game 
+ * @param game game struct
  * @return Status 
  */
 Status ability_action_use_ability(Game *game);

@@ -13,26 +13,25 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define MAX_LVL 999999
-/*Damage multipliers for each attack*/
-#define LIGHT_ATTACK 1
-#define STRONG_ATTACK 1.5
-#define QUICK_ATTACK 0.8
-#define SWIFT_ATTACK 0.8
+#define MAX_LVL 999999      /*!< Maximum level the stats should take*/
 
-#define MAX_ATTACKS 4
+/*Damage multipliers for each attack*/
+#define LIGHT_ATTACK 1      /*!< Light attack damage multiplier*/
+#define HEAVY_ATTACK 1.5    /*!< heavy attack damage multiplier*/
+#define QUICK_ATTACK 0.8    /*!< quick attack damage multiplier*/
+#define SWIFT_ATTACK 0.8    /*!< swift attack damage multiplier*/
+
+#define MAX_ATTACKS 4       /*!< Number of attack types that exist*/
 
 /*Probabilites for succcess on an attack*/
-#define LIGHT_PROB 90
-#define STRONG_PROB 70
-#define QUICK_PROB 40
-#define SWIFT_PROB 40
+#define LIGHT_PROB 90       /*!< Probability for a light attack to be succesful*/
+#define HEAVY_PROB 70       /*!< Probability for a heavy attack to be succesful*/
+#define QUICK_PROB 40       /*!< Probability for a quick attack to be succesful*/
+#define SWIFT_PROB 40       /*!< Probability for a swift attack to be succesful*/
 
 /**
- * @brief Struct that holds all the information related to the combat
- * 
+ * @brief Internal struct that holds all the information related to the combat
  */
-
 struct _Combat{
     Stats allies_stats[NPC_MAX_ALLIES];     /*!< Stats of the allies*/
     int allies_count;                       /*!< Number of allies*/
@@ -42,7 +41,7 @@ struct _Combat{
     bool is_player_turn;                    /*!< Determines who starts, true --> player party, false --> enemy party*/
     Space *space;                           /*!< Space where the combat is located*/
 
-    bool endCombat;
+    bool endCombat;                         /*!< if true means combat has ended*/
 };
 
 
@@ -54,8 +53,8 @@ struct _Combat{
  * @brief Copies the entity stats to a new stats struct for the combat
  * @author Maksym Polyak
  * 
- * @param entity 
- * @param stats
+ * @param entity entity where the stats are copied
+ * @param stats stats where the stats are saved
  * @return Status
  */
 Status combat_copy_entity_stats(Entity *entity, Stats *stats);
@@ -65,7 +64,7 @@ Status combat_copy_entity_stats(Entity *entity, Stats *stats);
  * bool endCombat to true
  * @author Daniel Gómez
  * 
- * @param combat 
+ * @param combat combat struct
  */
 void combat_finalize(Combat *combat);
 
@@ -73,11 +72,80 @@ void combat_finalize(Combat *combat);
  * @brief Applies the received damage to the npc
  * @author Maksym Polyak
  * 
- * @param stats 
- * @param damage 
+ * @param stats  stats of the entity that received damage
+ * @param damage value of damage received
  * @return Status 
  */
 Status combat_entity_received_damage(Stats *stats, double damage);
+
+/**
+ * @brief Tries to make a swift(area) attack from the attacker to the victims
+ * @author Sofía Calvo
+ * 
+ * @param attacker stats of the attacker
+ * @param victims stats of victims
+ * @param numVictims number of victims
+ * @return Status 
+ */
+Status combat_attack_swift(Stats *attacker, Stats *victims, int numVictims);
+
+/**
+ * @brief Tries to make a quick attack from the attacker to the victim
+ * @author Sofía Calvo
+ * 
+ * @param attacker stats of the attacker
+ * @param victim stats of the victim
+ * @return Status 
+ */
+Status combat_attack_quick(Stats *attacker, Stats *victim);
+
+/**
+ * @brief Tries to make a strong attack from the attacker to the victim
+ * @author Sofía Calvo
+ * 
+ * @param attacker stats of the attacker
+ * @param victim stats of the victim
+ * @return Status 
+ */
+Status combat_attack_strong(Stats *attacker, Stats *victim);
+
+/**
+ * @brief Tries to make a light attack from the attacker to the victim
+ * @author Sofía Calvo
+ * 
+ * @param attacker stats of the attacker
+ * @param victim stats of the victim
+ * @return Status 
+ */
+Status combat_attack_light(Stats *attacker, Stats *victim);
+
+/**
+ * @brief Manages enemies turn with random attacks to random allies
+ * @author Sofía Calvo
+ * 
+ * @param cmb combat struct
+ * @return Status 
+ */
+Status combat_enemies_turn(Combat *cmb);
+
+/**
+ * @brief Manages allies turn with random attacks to random enemies
+ * @author Sofía Calvo
+ * 
+ * @param cmb combat struct
+ * @return Status 
+ */
+Status combat_allies_turn(Combat *cmb);
+
+/**
+ * @brief Sub function of combat_update that manages player attack type and allies/enemies turn
+ * @author Sofía Calvo
+ * 
+ * @param cmb combat struct
+ * @param last_cmd last command of the player on the combat
+ * @return Status 
+ */
+Status combat_update_attack(Combat *cmb, Command *last_cmd);
 
 Status combat_copy_entity_stats(Entity *entity, Stats *stats){
 
@@ -117,77 +185,6 @@ Status combat_entity_received_damage(Stats *stats, double damage){
     return OK;
 }
 
-/*
-    * PUBLIC FUNCTIONS
-*/
-
-Combat *combat_initialize(Space *space, Player *player, CommandCode code){
-    Combat *combat = NULL;
-    NPC *npc = NULL;
-    int i, npc_count = 0, npc_allies = 1, npc_enemies = 0;
-
-    if(!space || !player)
-        return NULL;
-
-    
-    combat = (Combat *)calloc(1,sizeof(Combat));
-    if(!combat) return NULL;
-    /*Saves the player stats on the combat struct*/
-    combat_copy_entity_stats(player_get_entity(player), &(combat->allies_stats[0]));
-    
-    npc_count = space_get_npc_count(space);
-
-    /*Saves the first four enemies and the first three allies on the combat struct*/
-    for(i = 0; i < npc_count; i++){
-        npc = space_get_NPC_at(space, i);
-        if(npc_get_status(npc) == ENEMY && npc_enemies <= 4){
-            if(entity_get_health(npc_get_entity(npc)) <= 0) continue;
-
-            combat_copy_entity_stats(npc_get_entity(npc), &(combat->enemies_stats[npc_enemies]));
-            npc_enemies++;
-        }
-        if(npc_get_status(npc) == ALLY && npc_allies <= 3){
-            if(entity_get_health(npc_get_entity(npc)) <= 0) continue;
-
-            combat_copy_entity_stats(npc_get_entity(npc), &(combat->allies_stats[npc_allies]));
-            npc_allies++;
-        }
-    }
-    
-    combat->enemies_count = npc_enemies;
-    combat->allies_count = npc_allies;
-    
-    if(combat->enemies_count == 0){
-        free(combat);
-        return NULL;
-    }
-    
-    /*Initializes turns and the space where the combat is located*/
-    
-    if(code == ATTACK){
-        combat->is_player_turn = true;
-    } else {
-        combat->is_player_turn = false;
-    }
-    
-    combat->space = space;
-    combat->endCombat = false;
-    
-    return combat;
-}
-
-void combat_free(Combat *combat){
-    if(!combat)
-        return;
-
-    free(combat);
-}
-
-bool combat_get_isFinished(Combat *combat){
-    if(!combat) return false;
-    return combat->endCombat;
-}
-
 Status combat_attack_swift(Stats *attacker, Stats *victims, int numVictims) {
     int probFail, i;
     
@@ -204,6 +201,7 @@ Status combat_attack_swift(Stats *attacker, Stats *victims, int numVictims) {
     
     return OK; 
 }
+
 Status combat_attack_quick(Stats *attacker, Stats *victim){
 
     int  probFail;
@@ -225,14 +223,14 @@ Status combat_attack_strong(Stats *attacker, Stats *victim) {
     if (!attacker || !victim)
         return ERROR;
     probFail = rand()%100;
-    if (probFail > STRONG_PROB)
+    if (probFail > HEAVY_PROB)
         return OK;
     
-    combat_entity_received_damage(victim, STRONG_ATTACK*(attacker->stats.baseDamage));
+    combat_entity_received_damage(victim, HEAVY_ATTACK*(attacker->stats.baseDamage));
     return OK;    
 }
 
-Status combat_attack_light(Stats *attacker, Stats *victim) {
+Status combat_attack_light(Stats *attacker, Stats *victim){
 
     int probFail;
 
@@ -375,8 +373,76 @@ Status combat_update_attack(Combat *cmb, Command *last_cmd){
     return OK;
 }
 
-//comando: nombre del ataque, y el número de enemigo, para los aliados es aleatorio y para los enemigos también, del 1 al 4, para los aliados 1 al 3 (guardado en la constante)
-//si el número de enemigos no es adecuado, return ERROR
+/*
+    * PUBLIC FUNCTIONS
+*/
+
+Combat *combat_initialize(Space *space, Player *player, CommandCode code){
+    Combat *combat = NULL;
+    NPC *npc = NULL;
+    int i, npc_count = 0, npc_allies = 1, npc_enemies = 0;
+
+    if(!space || !player)
+        return NULL;
+
+    
+    combat = (Combat *)calloc(1,sizeof(Combat));
+    if(!combat) return NULL;
+    /*Saves the player stats on the combat struct*/
+    combat_copy_entity_stats(player_get_entity(player), &(combat->allies_stats[0]));
+    
+    npc_count = space_get_npc_count(space);
+
+    /*Saves the first four enemies and the first three allies on the combat struct*/
+    for(i = 0; i < npc_count; i++){
+        npc = space_get_NPC_at(space, i);
+        if(npc_get_status(npc) == ENEMY && npc_enemies <= 4){
+            if(entity_get_health(npc_get_entity(npc)) <= 0) continue;
+
+            combat_copy_entity_stats(npc_get_entity(npc), &(combat->enemies_stats[npc_enemies]));
+            npc_enemies++;
+        }
+        if(npc_get_status(npc) == ALLY && npc_allies <= 3){
+            if(entity_get_health(npc_get_entity(npc)) <= 0) continue;
+
+            combat_copy_entity_stats(npc_get_entity(npc), &(combat->allies_stats[npc_allies]));
+            npc_allies++;
+        }
+    }
+    
+    combat->enemies_count = npc_enemies;
+    combat->allies_count = npc_allies;
+    
+    if(combat->enemies_count == 0){
+        free(combat);
+        return NULL;
+    }
+    
+    /*Initializes turns and the space where the combat is located*/
+    
+    if(code == ATTACK){
+        combat->is_player_turn = true;
+    } else {
+        combat->is_player_turn = false;
+    }
+    
+    combat->space = space;
+    combat->endCombat = false;
+    
+    return combat;
+}
+
+void combat_free(Combat *combat){
+    if(!combat)
+        return;
+
+    free(combat);
+}
+
+bool combat_get_isFinished(Combat *combat){
+    if(!combat) return false;
+    return combat->endCombat;
+}
 
 Status combat_update(Combat *combat, Command *last_cmd){
     
@@ -396,40 +462,7 @@ Status combat_update(Combat *combat, Command *last_cmd){
     if (command_get_code(last_cmd) == RUN_AWAY)
     {
         if (combat_runaway(combat) == ERROR) return ERROR;
-        
     }
-    
-    /*
-        if(lastcmd == ATTACK) status = combat_update_attack();
-        si devuelve error nos salimos con un return error
-        if(lastcmd = ABIlyTY) status = cojmbat_update_ability();
-
-    */
-    
-
-    /*random = rand() % (100 - 0 + 1);
-
-    if(random > 60){
-        for (int i = 0; i < combat->enemies_count; i++)
-        {
-            combat->enemies_stats[i].stats.health -= 1;
-            if(combat->enemies_stats[i].stats.health <= 0){
-                entity_set_health(combat->enemies_stats[i].entity, 0);
-                deadEnemies++;
-            }
-        } 
-    }
-    else{
-        combat->player_stats.stats.health -= 1*(combat->enemies_count - deadEnemies);
-    }
-
-    if(combat->player_stats.stats.health <= 0){
-        combat_finalize(combat);
-    }
-    if(deadEnemies == combat->enemies_count){
-        combat_finalize(combat);
-    }
-    return OK;*/
 
     return OK;
 }
