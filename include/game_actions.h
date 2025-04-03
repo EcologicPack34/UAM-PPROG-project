@@ -1,4 +1,6 @@
 /**
+ * @file game.h
+ * @author Original: Profesores PPROG. Modified By: Daniel Gómez and Maksym Polyak
  * @brief It defines the game update interface
  *
  * game_actions is the module that controls movement and takes or drops objects. 
@@ -6,8 +8,6 @@
  * functionality of game_actions is to move north and south, exit the game and
  * take or drop an object.
  * 
- * @file game.h
- * @author Original: Profesores PPROG. Modified By: Daniel Gómez and Maksym Polyak
  * @version 0
  * @date 27-01-2025
  * @copyright GNU Public License
@@ -29,7 +29,7 @@
  * @author Profesores PPROG
  *
  * @param game struct that saves all information related to game
- * @param command struct that saves all information related to command
+ * @param cmd struct that saves all information related to command
  * @return OK, if everything goes well or ERROR if there was some mistake
  */
 Status game_actions_update(Game *game, Command *cmd);

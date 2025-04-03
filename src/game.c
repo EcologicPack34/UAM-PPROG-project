@@ -25,46 +25,48 @@
 
 #define COLLECTION_INITIAL_SIZE 10  /*!< Collection initial size*/
 
-
+/**
+ * @brief Struct with all the information of the game, main bridge of main functionalities for the game to work
+ */
 struct _Game {
-  /*Entity related*/
-  Player *activePlayer;              /*!< Contains all the information related to the player */
-  Player *players[MAX_PLAYERS];             /*!< Contains all the players available on the game*/
-  int active_player_index;
-  int n_players;
+  /*Player related*/
+  Player *active_player;              /*!< Contains all the information related to the player */
+  Player *players[MAX_PLAYERS];       /*!< Contains all the players available on the game*/
+  int active_player_index;            /*!< Index of the players array with the active_player*/
+  int n_players;                      /*!< Number of players on the players array*/
 
-  Collection *npcs;            /*!< Contains all the information related to the NPCs*/
-  
-  Collection *objects;         /*!< Contains all the information related to the object */
+  /*Collections*/
+  Collection *npcs;                   /*!< Contains all the information related to the NPCs*/
+  Collection *objects;                /*!< Contains all the information related to the object */
 
   /*Space related*/
-  Space *spaces[MAX_SPACES];   /*!< Array with all the spaces of the map */
-  int n_spaces;                /*!< int with the number of spaces on *spaces */
-  Link *links[MAX_LINKS];     /*!< Array with all the links in the map*/
-  int n_links;
+  Space *spaces[MAX_SPACES];          /*!< Array with all the spaces of the map */
+  int n_spaces;                       /*!< int with the number of spaces on *spaces */
+  Link *links[MAX_LINKS];             /*!< Array with all the links in the map*/
+  int n_links;                        /*!< Number of links on the links array*/
 
   /*Others*/
-  EventManager *event_manager; /*!< Struct containing the info about the events that can happen*/
-  Queue *screenLog;             /*!< Queue containing a list of messages to print on screen*/
-  bool godmode;                 /*!< bool that determines if god mode is activated*/
+  EventManager *event_manager;        /*!< Struct containing the info about the events that can happen*/
+  Queue *screenLog;                   /*!< Queue containing a list of messages to print on screen*/
+  bool godmode;                       /*!< bool that determines if god mode is activated*/
 
   /*Combat*/
-  Combat *combat;
-  AbilityManager *ability_manager; /*!< Struct containing the info about the ability and their cooldown*/
+  Combat *combat;                     /*!< Combat struct, only != NULL if a player is in combat*/
+  AbilityManager *ability_manager;    /*!< Struct containing the info about the ability and their cooldown*/
   
-
-  GameState current_state;     /*!< Enum storing the current game state*/
-  Command *last_cmd;           /*!< string with the last command */
-  bool finished;               /*!< bool that determines if the game has finished*/
+  /*Game state related*/
+  GameState current_state;            /*!< Enum storing the current game state*/
+  Command *last_cmd;                  /*!< string with the last command */
+  bool finished;                      /*!< bool that determines if the game has finished*/
 };
 
 /**
  * @brief Gets the link in a certain position of the game links array
  * @author Daniel Gómez
  * 
- * @param game 
- * @param index 
- * @return Link* 
+ * @param game game struct
+ * @param index index where the link is located
+ * @return Link* or NULL if error
  */
 Link *game_get_link_at(Game *game, long index){
   if(!game) return NULL;
@@ -79,9 +81,9 @@ Link *game_get_link_at(Game *game, long index){
  * @brief Maps spatially a block of spaces starting at initSpace
  * @author Daniel Gómez
  * 
- * @param game 
- * @param initSpace 
- * @param block 
+ * @param game game struct
+ * @param initSpace initial space so start mapping
+ * @param block number of the block that is mapped
  * @return Status 
  */
 Status game_map_space_block(Game *game, Space *initSpace ,int block);
@@ -100,7 +102,7 @@ Status game_create(Game **game) {
   }
 
   (*game)->n_spaces = 0;
-  (*game)->activePlayer = NULL; /*Player creation is controlled by game_reader*/
+  (*game)->active_player = NULL; /*Player creation is controlled by game_reader*/
   (*game)->n_players = 0;
   (*game)->objects = collection_create(COLLECTION_INITIAL_SIZE, false, true, object_isEqual, object_print);
   if(!((*game)->objects)){
@@ -229,7 +231,7 @@ Space *game_get_space(Game *game, Id id) {
 }
 
 Player* game_get_player(Game *game){
-  return game->activePlayer; 
+  return game->active_player; 
 }
 
 int game_get_n_players(Game *game){
@@ -694,7 +696,7 @@ bool game_log_hasMessage(Game *game){
 Status game_combat_start(Game *game){
   if(!game) return ERROR;
 
-  game->combat = combat_initialize(game_get_space(game, game_get_player_location(game)), game->activePlayer, command_get_code(game->last_cmd));
+  game->combat = combat_initialize(game_get_space(game, game_get_player_location(game)), game->active_player, command_get_code(game->last_cmd));
   if(!game->combat) return ERROR;
 
   game->current_state = COMBAT;
@@ -746,8 +748,8 @@ Status game_switch_player(Game *game, int player){
     game->active_player_index = player;
   } 
   
-  game->activePlayer = game->players[game->active_player_index];
-  command_set_player_data(game->last_cmd, player_get_cmdData(game->activePlayer));
+  game->active_player = game->players[game->active_player_index];
+  command_set_player_data(game->last_cmd, player_get_cmdData(game->active_player));
 
   return OK;
 }

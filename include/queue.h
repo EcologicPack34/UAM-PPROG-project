@@ -60,7 +60,7 @@ void *queue_pop(Queue *q);
  * @brief Gets the first element of the queue without extracting it
  * @author Daniel Gómez
  * 
- * @param q 
+ * @param q queue struct
  * @return void* 
  */
 void *queue_front(Queue *q);
@@ -69,7 +69,7 @@ void *queue_front(Queue *q);
  * @brief Gets the last element of the queue without extracting it
  * @author Daniel Gómez
  * 
- * @param q 
+ * @param q queue struct
  * @return void* 
  */
 void *queue_rear(Queue *q);
@@ -78,7 +78,7 @@ void *queue_rear(Queue *q);
  * @brief Returns the size of the queue
  * @author Daniel Gómez
  * 
- * @param q 
+ * @param q queue struct
  * @return size, -1 if wrong
  */
 long queue_size(Queue *q);
@@ -87,7 +87,7 @@ long queue_size(Queue *q);
  * @brief Returns if the queue has elements in it or not
  * @author Daniel Gómez
  * 
- * @param q 
+ * @param q queue struct
  * @return true 
  * @return false 
  */

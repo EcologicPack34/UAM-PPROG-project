@@ -1,0 +1,35 @@
+I3 - DONE -Dani - Modificar lista de comandos en base al juego
+I3 - Dani y Maks - Comenzar OpenGL
+I3 - DONE -Dani - Modificar funcionamiento del log para que cumpla los requisitos de la I3
+I3 - Dani - Añadir fog of war --> HAcer que se descubra, añadir search del inventory
+I3 - Aaron - Dividir carga de stats en el .dat
+I3 - NULL - Versión básica: Implementar diálogos
+I3 - NULL - Implementar guardado de juego y lectura de guardado
+I3 - Sofía - Añadir multiplicidad (los objetos tienen distinto id pero mismo nombre, pero a la hora de mostrar en pantalla sale el numero que hay y no por separado todos).
+I3 - DONE - Maksym - Añadir habilidades(seguir formato de eventos)
+I3 - DONE - Maksym - Añadir funcionalidad de objetos --> (Se llamara desde game actions el use, que usara el objeto y el game para modificar lo que tenga que modificar)
+I3 - DONE - Maksym -Añadir equipamiento
+I3 - Sofía - Modificar combate - Añadir ataques base, esquivar ataques y con todo lo anterior
+I3 - Maksym - Añadir modo de loot (añadir a game reader en objetos añadir, a inventario de npc)
+    Los enemigos tienen una lista, se cogen aleatoriamente un numero de objetos de su inventario y se sueltan al espacio
+    --> Cambiar inventarios para que el inventario de los espacios sea infinito.
+I3 - DONE - Maksym -Añadir dinero en jugador ---> Bolsa de dinero tipo dark souls (campo de player)
+I3 - PENDING --> NEEDS DIALOGUE - Posible tienda de compra objetos
+I3 - Aaron -Modo debugger/Aaron
+I3 - Sistema de misiones --> Mirar
+I3 - Espacios "seguros"
+
+I4 - gamestate con información sobre el jugador --> inventario, habilidades, stats, equipamiento (Comando inventory open para abrir e inventory close)
+I4 - POSIBLE: Niveles de EXP
+I4 - POSIBLE: Generación procedural de mapa
+I4 - Sistema de guardado
+I4 - 
+
+FIXEAR - Cuando se añada el combate ajustar el uso de cooldowns y el añadir habilidades
+--> También tener cuidado porque usar una skill ahora no salta "turno" asi que el cooldown
+se gasta si spameas sk
+
+PENDIENTE - Sistema de guardado de juego
+PENDIENTE - Añadir menu de inicio
+
+

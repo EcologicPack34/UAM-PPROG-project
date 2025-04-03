@@ -1,0 +1,37 @@
+<map id="include/npc.h" name="include/npc.h">
+<area shape="rect" id="Node000001" title="The NPC module controls the creation and actions of the NPCs on the game, each NPC is an entity,..." alt="" coords="151,5,259,31"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,79,72,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="180,33,79,76,77,71,178,28"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="97,79,167,104"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="195,33,156,71,152,67,191,29"/>
+<area shape="rect" id="Node000004" href="$entity_8h.html" title="It defines the entity module interface." alt="" coords="257,79,327,104"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="221,29,269,68,266,72,218,33"/>
+<area shape="rect" id="Node000006" href="$types_8h.html" title="It defines common types for the whole project." alt="" coords="322,445,393,471"/>
+<area shape="poly" id="edge21_Node000001_Node000006" title=" " alt="" coords="208,31,208,163,208,312,211,334,219,354,246,389,282,417,318,437,315,442,279,421,242,393,214,357,206,335,203,313,203,163,203,31"/>
+<area shape="rect" id="Node000012" href="$debug__printing_8h.html" title="Creates a log to make debug easily." alt="" coords="679,152,809,177"/>
+<area shape="poly" id="edge22_Node000001_Node000012" title=" " alt="" coords="249,28,689,146,687,151,247,33"/>
+<area shape="rect" id="Node000005" href="$inventory_8h.html" title="It defines the inventory module interface." alt="" coords="473,152,567,177"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="328,101,471,145,470,151,327,106"/>
+<area shape="poly" id="edge20_Node000004_Node000006" title=" " alt="" coords="290,105,270,161,262,199,259,237,259,312,266,350,284,383,308,412,333,435,329,438,305,416,280,386,261,351,253,313,253,237,257,198,265,160,284,104"/>
+<area shape="rect" id="Node000008" href="$ability__manager_8h.html" title="This module controls player special interactions with the environment, specially in combat throught t..." alt="" coords="344,299,483,324"/>
+<area shape="poly" id="edge19_Node000004_Node000008" title=" " alt="" coords="301,103,402,285,398,288,296,106"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="490,180,451,197,408,223,366,257,349,278,334,300,325,334,327,370,336,404,348,432,343,434,331,406,322,371,320,333,330,298,344,274,362,253,404,219,449,193,487,175"/>
+<area shape="rect" id="Node000007" href="$object_8h.html" title="It defines the object module interface." alt="" coords="483,225,557,251"/>
+<area shape="poly" id="edge6_Node000005_Node000007" title=" " alt="" coords="523,178,523,212,517,212,517,178"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="609,445,692,471"/>
+<area shape="poly" id="edge18_Node000005_Node000009" title=" " alt="" coords="545,175,593,203,654,245,685,272,714,302,739,335,758,371,762,383,760,395,748,414,727,430,702,443,700,438,724,426,744,411,755,393,756,383,754,373,734,338,710,305,681,276,651,249,590,207,542,180"/>
+<area shape="rect" id="Node000011" href="$collection_8h.html" title="ADT that aims to implement a generic list of elements. It contains the behaviour of Set module asked ..." alt="" coords="646,372,743,397"/>
+<area shape="poly" id="edge15_Node000005_Node000011" title=" " alt="" coords="532,176,571,224,679,359,675,363,567,227,528,179"/>
+<area shape="poly" id="edge7_Node000007_Node000006" title=" " alt="" coords="523,251,522,279,517,318,505,361,483,399,467,415,447,429,407,447,405,442,445,424,463,411,479,396,500,358,512,317,517,279,518,251"/>
+<area shape="poly" id="edge8_Node000007_Node000008" title=" " alt="" coords="504,253,444,293,441,289,501,248"/>
+<area shape="poly" id="edge14_Node000007_Node000009" title=" " alt="" coords="529,250,639,432,634,435,525,252"/>
+<area shape="poly" id="edge9_Node000008_Node000006" title=" " alt="" coords="409,325,385,373,366,432,361,431,380,371,404,323"/>
+<area shape="poly" id="edge10_Node000008_Node000009" title=" " alt="" coords="434,322,621,436,619,440,431,326"/>
+<area shape="rect" id="Node000010" href="$queue_8h.html" title="Queue implementation with a linked list THE QUEUE DOESN&#39;T MANAGE THE MEMORY OF THE ELEMENTS IT STORES..." alt="" coords="395,372,469,397"/>
+<area shape="poly" id="edge11_Node000008_Node000010" title=" " alt="" coords="419,324,428,358,423,360,414,325"/>
+<area shape="poly" id="edge12_Node000010_Node000006" title=" " alt="" coords="422,399,381,438,378,434,418,395"/>
+<area shape="poly" id="edge13_Node000010_Node000009" title=" " alt="" coords="468,395,603,438,601,444,466,400"/>
+<area shape="poly" id="edge16_Node000011_Node000006" title=" " alt="" coords="647,399,407,449,406,444,645,394"/>
+<area shape="poly" id="edge17_Node000011_Node000009" title=" " alt="" coords="690,399,667,435,663,432,685,396"/>
+<area shape="poly" id="edge23_Node000012_Node000009" title=" " alt="" coords="762,176,784,196,802,224,821,273,829,314,825,355,802,399,783,420,758,435,706,453,705,448,756,430,779,416,798,396,820,353,824,314,815,274,798,227,780,200,758,179"/>
+</map>

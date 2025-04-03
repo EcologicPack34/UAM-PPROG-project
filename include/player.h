@@ -1,4 +1,6 @@
 /**
+ * @file object.h
+ * @author Maksym Polyak
  * @brief It defines the player module interface
  * 
  * The player is the main character inside the game, the one with the ability to move,
@@ -8,8 +10,6 @@
  * 
  * The player has its own stats, on I3 the idea is to develop an equipment and powers/ability system.
  *
- * @file object.h
- * @author Maksym Polyak
  * @version 0
  * @date 04-02-2025
  * @copyright GNU Public License
@@ -22,7 +22,11 @@
 #include "entity.h"
 #include "equipment.h"
 #include "npc.h"
+#include "types.h"
 
+/**
+ * @brief ADT with all the information of the player
+ */
 typedef struct _Player Player;
 
 /*Player public functions*/
@@ -62,7 +66,7 @@ Entity *player_get_entity(Player *player);
  * @brief Gets the equipment struct from a player
  * @author Maksym Polyak
  * 
- * @param player 
+ * @param player player struct
  * @return Equipment* 
  */
 Equipment *player_get_equipment(Player *player);
@@ -71,7 +75,7 @@ Equipment *player_get_equipment(Player *player);
  * @brief Gets the command data of the player
  * @author Daniel Gómez
  * 
- * @param player 
+ * @param player player struct
  * @return CommandInfo* 
  */
 CommandInfo *player_get_cmdData(Player *player);
@@ -96,8 +100,8 @@ Status player_set_stats(Player *p, double maxhealth, double health, double baseD
  * @brief Gets a string description of player and copies it into str
  * @author Daniel Gómez
  * 
- * @param player 
- * @param str 
+ * @param player player struct
+ * @param str string where the description is saved
  * @return Status 
  */
 Status player_get_str_desc(Player *player, char *str);
@@ -106,7 +110,7 @@ Status player_get_str_desc(Player *player, char *str);
  * @brief Gets the money quantity of the player
  * @author Maksym Polyak
  * 
- * @param player 
+ * @param player player struct
  * @return Status 
  */
 int player_get_money(Player *player);
@@ -117,8 +121,8 @@ int player_get_money(Player *player);
  * @brief Adds the value_added int to the player money, can be negative
  * but cant surpass int value or go below 0
  * 
- * @param player 
- * @param value_added 
+ * @param player player struct
+ * @param value_added quantity of money added (can be negative)
  * @return Status 
  */
 Status player_add_money(Player *player, int value_added);
@@ -135,8 +139,8 @@ void player_print(Player *player);
  * @brief Tries to equip a piece on the player and removes it from the inventory
  * @author Maksym Polyak
  * 
- * @param player 
- * @param object 
+ * @param player player struct
+ * @param object object to equip
  * @return Status 
  */
 Status player_equip_piece(Player *player, Object *object);
@@ -145,7 +149,7 @@ Status player_equip_piece(Player *player, Object *object);
  * @brief Tries to unequip a piece on the player and adds it to the inventory
  * @author Maksym Polyak
  * 
- * @param player 
+ * @param player player struct
  * @param data name of the type of piece that wants to be removed
  * @return Status 
  */
@@ -155,8 +159,8 @@ Status player_unequip_piece(Player *player, char *data);
  * @brief Adds a follower to the player
  * @author Maksym Polyak
  * 
- * @param player 
- * @param npc 
+ * @param player player struct
+ * @param npc npc to add as a follower
  * @return Status 
  */
 Status player_add_follower(Player *player, NPC *npc);
@@ -165,8 +169,8 @@ Status player_add_follower(Player *player, NPC *npc);
  * @brief Removes a follower from the player by a name
  * @author Maksym Polyak
  * 
- * @param player 
- * @param npc_name 
+ * @param player player struct
+ * @param npc_name name of the npc to remove as follower
  * @return Status 
  */
 Status player_remove_follower_by_name(Player *player, char *npc_name);
@@ -175,7 +179,7 @@ Status player_remove_follower_by_name(Player *player, char *npc_name);
  * @brief Gets the array with the followers, of max size NPC_MAX_FOLLOWERS
  * @author Maksym Polyak
  * 
- * @param player 
+ * @param player player struct
  * @return Status 
  */
 NPC **player_get_followers(Player *player);

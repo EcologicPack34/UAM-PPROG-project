@@ -19,14 +19,9 @@
 #include <string.h>
 #include "ability_manager.h"
 
-#define NO_NAME ""
-
 
 /**
- * @brief Entity
- * @author Maksym Polyak
- *
- * This struct stores all the information of an entity
+ * @brief This struct stores all the information of an entity
  */
 struct _Entity {
     EntityType entityType;    /*!< Type of the entity */
@@ -35,15 +30,69 @@ struct _Entity {
     Id location;              /*!< Id of the space where the entity is located*/
     Inventory *inventory;     /*!< entity inventory */
 
-    Ability **ability; /*!< Abilitys of the entity*/
-    int n_ability;   /*!< Number of ability the entity has*/
+    Ability **ability;        /*!< Abilitys of the entity*/
+    int n_ability;            /*!< Number of ability the entity has*/
 
-    char gdesc[ENTITY_GRAPHIC_LENGTH + 1];
+    char gdesc[ENTITY_GRAPHIC_LENGTH + 1]; /*!< Graphic description of the entity*/
 
     Entity_Stats stats;       /*!< Entity combat stats */
 };
 
+/*
+    * PRIVATE FUNCTIONS
+*/
 
+/**
+ * @brief Removes an ability from an entity
+ * @author Maksym Polyak;
+ * 
+ * @param entity entity struct
+ * @param ability to be removed
+ * 
+ * @return Status
+ */
+Status entity_remove_ability(Entity *entity, Ability *ability);
+
+/**
+ * @brief Gets an ability from an entity by its name
+ * @author Maksym Polyak
+ * 
+ * @param entity entity struct
+ * @param name name of the ability
+ * @return Ability* or NULL if error
+ */
+Ability *entity_get_ability_by_name(Entity *entity, char *name);
+
+Ability *entity_get_ability_by_name(Entity *entity, char *name){
+    int i;
+    
+    if(!entity || !name)
+        return NULL;
+
+    for(i = 0; i < entity->n_ability; i++){
+        if(strcpy(ability_get_name(entity->ability[i]), name) == 0)
+            return entity->ability[i];
+    }
+
+    return NULL;
+}
+
+Status entity_remove_ability(Entity *entity, Ability *ability){
+    int i;
+    
+    if(!entity || !ability || entity->n_ability == 0) 
+        return ERROR;
+
+    for(i = 0; i < entity->n_ability; i++){
+        if(entity->ability[i] == ability){
+            entity->ability[i] = NULL;
+            entity->n_ability--;
+            return OK;
+        }
+    }
+
+    return OK;
+}
 
 /*
  * Entity public implementation
@@ -80,9 +129,6 @@ Entity *entity_create(char *name, Id identity, Id idlocation, InventoryType inve
 
     entity_set_graphic_description(entity, "ERR");
     entity_set_entityType(entity, UNKNOWN_ENTITY);
-
-
-
 
     entity_set_id(entity, identity);
     entity_set_name(entity, name);
@@ -284,42 +330,11 @@ Status entity_add_ability(Entity *entity, Ability *ability){
     return OK;
 }
 
-Status entity_remove_ability(Entity *entity, Ability *ability){
-    int i;
-    
-    if(!entity || !ability || entity->n_ability == 0) 
-        return ERROR;
-
-    for(i = 0; i < entity->n_ability; i++){
-        if(entity->ability[i] == ability){
-            entity->ability[i] = NULL;
-            entity->n_ability--;
-            return OK;
-        }
-    }
-
-    return OK;
-}
-
 Ability *entity_get_ability_at(Entity *entity, int index){
     if(!entity)
         return NULL;
 
     return entity->ability[index];
-}
-
-Ability *entity_get_ability_by_name(Entity *entity, char *name){
-    int i;
-    
-    if(!entity || !name)
-        return NULL;
-
-    for(i = 0; i < entity->n_ability; i++){
-        if(strcpy(ability_get_name(entity->ability[i]), name) == 0)
-            return entity->ability[i];
-    }
-
-    return NULL;
 }
 
 double entity_get_max_health(Entity *entity){

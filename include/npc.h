@@ -3,8 +3,6 @@
  * NPC is an entity, has a message and a status to determine their behaviour towards the
  * player.
  * 
- * 
- * 
  * @file npc.h
  * @author Maksym Polyak
  * @version 0.1
@@ -24,14 +22,13 @@
 #include "types.h"
 #include "debug_printing.h"
 
-/*
- *Enum to determine wether an NPC is neutral with the player, is an ally or an enemy 
+/**
+ * @brief Enum to determine wether an NPC is neutral with the player, is an ally or an enemy 
  */
 typedef enum {UNKNOWN_STATUS, NEUTRAL, ALLY, ENEMY}NPC_status;
 
 /**
  * @brief Struct that contains all the entity information related to an NPC, their dialogues and their NPC_status
- * 
  */
 typedef struct _NPC NPC;
 
@@ -86,7 +83,7 @@ NPC_status npc_get_status(NPC *npc);
  * @brief Gets the char * with the message of the NPC
  * @author Maksym Polyak
  * 
- * @param npc 
+ * @param npc npc struct
  * @return char* or NULL if error
  */
 char *npc_get_message(NPC *npc);
@@ -95,11 +92,11 @@ char *npc_get_message(NPC *npc);
  * @brief Gets if the NPC can be a follower after chat or not
  * @author Maksym Polyak
  * 
- * @param npc 
- * @return true 
- * @return false 
+ * @param npc npc struct
+ * @return true if npc can be a follower
+ * @return false if npc cannot be a follower
  */
-bool npc_get_is_follower(NPC *npc);
+bool npc_get_can_follow(NPC *npc);
 
 /*NPC SETTERS*/
 
@@ -117,8 +114,8 @@ Status npc_set_status(NPC *npc, NPC_status status);
  * @brief Sets the message of the NPC to the one received as an input
  * @author Maksym Polyak
  * 
- * @param npc 
- * @param message 
+ * @param npc npc struct
+ * @param message message string to set
  * @return Status 
  */
 Status npc_set_message(NPC *npc, char *message);
@@ -127,8 +124,8 @@ Status npc_set_message(NPC *npc, char *message);
  * @brief Sets the can_follow bool on npc
  * @author Maksym Polyak
  * 
- * @param npc 
- * @param can_follow 
+ * @param npc npc struct
+ * @param can_follow bool 1 if can follow
  * @return Status 
  */
 Status npc_set_is_follower(NPC *npc, bool can_follow);
@@ -137,8 +134,8 @@ Status npc_set_is_follower(NPC *npc, bool can_follow);
  * @brief Compares two npcs
  * @author Maksym Polyak
  * 
- * @param npc1 
- * @param npc2 
+ * @param npc1 npc struct 1
+ * @param npc2 npc struct 2
  * @return int = 0 if their id is equal, 1 if the id of npc1 is greater, -1 if the id of npc2 is greater or -2 if there was an error
  */
 int npc_cmp(void *npc1, void *npc2);
@@ -147,7 +144,7 @@ int npc_cmp(void *npc1, void *npc2);
  * @brief Prints on screen the NPC information
  * @author Maksym Polyak
  * 
- * @param npc 
+ * @param npc npc struct
  */
 void npc_print(void *npc);
 
@@ -155,9 +152,9 @@ void npc_print(void *npc);
  * @brief Gets a string without \ n with the information of an NPC on str, str starts with (index).
  * @author Maksym Polyak
  * 
- * @param npc 
- * @param str 
- * @param index
+ * @param npc npc struct
+ * @param str string where description is saved
+ * @param index index where the NPC is located
  * @return Status 
  */
 Status npc_get_str_descr(NPC *npc, char *str, int index);

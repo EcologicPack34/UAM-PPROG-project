@@ -1,0 +1,486 @@
+\doxysection{include/event\+\_\+manager.h File Reference}
+\hypertarget{event__manager_8h}{}\label{event__manager_8h}\index{include/event\_manager.h@{include/event\_manager.h}}
+
+
+Small module that aims to implement a way to have generic events in game.  
+
+
+{\ttfamily \#include $<$stdbool.\+h$>$}\newline
+{\ttfamily \#include "{}command.\+h"{}}\newline
+{\ttfamily \#include "{}types.\+h"{}}\newline
+Include dependency graph for event\+\_\+manager.\+h\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=228pt]{event__manager_8h__incl}
+\end{center}
+\end{figure}
+This graph shows which files directly or indirectly include this file\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{event__manager_8h__dep__incl}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{event__manager_8h_ad57385a7bbcf00dd1ac27baa3de0b0f8}{N\+\_\+\+EVENTS}}~5
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{event__manager_8h_a87b7b18b53c76855753cac4d69231678}\label{event__manager_8h_a87b7b18b53c76855753cac4d69231678} 
+typedef struct \mbox{\hyperlink{struct__Event}{\+\_\+\+Event}} {\bfseries Event}
+\begin{DoxyCompactList}\small\item\em ADT containing basic info about event. \end{DoxyCompactList}\item 
+\Hypertarget{event__manager_8h_adc4501528731acd69172a60e3f2991c7}\label{event__manager_8h_adc4501528731acd69172a60e3f2991c7} 
+typedef struct \mbox{\hyperlink{struct__EventManager}{\+\_\+\+Event\+Manager}} {\bfseries Event\+Manager}
+\begin{DoxyCompactList}\small\item\em type that stores events \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{event__manager_8h_a2628ea8d12e8b2563c32f05dc7fff6fa}\label{event__manager_8h_a2628ea8d12e8b2563c32f05dc7fff6fa} 
+enum \mbox{\hyperlink{event__manager_8h_a2628ea8d12e8b2563c32f05dc7fff6fa}{Event\+Type}} \{ {\bfseries NO\+\_\+\+EVENT}
+, {\bfseries OBJECT\+\_\+\+ON\+\_\+\+SPACE}
+, {\bfseries TRIGGER\+\_\+\+COMBAT}
+, {\bfseries PLAYER\+\_\+\+DEATH}
+ \}
+\begin{DoxyCompactList}\small\item\em Enum storing the different types of events. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{event__manager_8h_a87b7b18b53c76855753cac4d69231678}{Event}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{event__manager_8h_a0dfdfeb6870eedc863583b7ade407018}{event\+\_\+create}} (\mbox{\hyperlink{types_8h_a845e604fb28f7e3d97549da3448149d3}{Id}} id, \mbox{\hyperlink{event__manager_8h_a2628ea8d12e8b2563c32f05dc7fff6fa}{Event\+Type}} type, \mbox{\hyperlink{command_8h_a805cf38fd2b6d5604bf1f1036b80fde2}{Command\+Code}} \texorpdfstring{$\ast$}{*}commands, int cmd\+Num, char \texorpdfstring{$\ast$}{*}data, bool remove\+On\+Trigger)
+\begin{DoxyCompactList}\small\item\em Event creation. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{event__manager_8h_a7c7f7c518167c1e1d789b7bee9380b49}{event\+\_\+destroy}} (void \texorpdfstring{$\ast$}{*}event)
+\begin{DoxyCompactList}\small\item\em Frees memory used by event. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{event__manager_8h_abe84a1785fa69dbf2e236f363396a30d}{event\+\_\+compare}} (void \texorpdfstring{$\ast$}{*}e1, void \texorpdfstring{$\ast$}{*}e2)
+\begin{DoxyCompactList}\small\item\em Compares 2 events. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{event__manager_8h_a2628ea8d12e8b2563c32f05dc7fff6fa}{Event\+Type}} \mbox{\hyperlink{event__manager_8h_abda3a493f73768ef69659a18e67d5e0f}{event\+\_\+type\+\_\+from\+\_\+str}} (char \texorpdfstring{$\ast$}{*}string)
+\begin{DoxyCompactList}\small\item\em Gets the event type from a string(see event\+\_\+manager.\+c for the valid values) \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{event__manager_8h_a8bb56904cd8759d5cfb6daa33bfbf03d}{event\+\_\+is\+\_\+cmd\+\_\+valid}} (\mbox{\hyperlink{event__manager_8h_a87b7b18b53c76855753cac4d69231678}{Event}} \texorpdfstring{$\ast$}{*}event, \mbox{\hyperlink{command_8h_a7d2935971c252377cb0fc1c8545dc2bc}{Command}} \texorpdfstring{$\ast$}{*}cmd)
+\begin{DoxyCompactList}\small\item\em Checks if a given cmd is within the ones that trigger an event. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{event__manager_8h_a2628ea8d12e8b2563c32f05dc7fff6fa}{Event\+Type}} \mbox{\hyperlink{event__manager_8h_a4be4ee04198e23fc5070dae3b85cef18}{event\+\_\+get\+\_\+type}} (\mbox{\hyperlink{event__manager_8h_a87b7b18b53c76855753cac4d69231678}{Event}} \texorpdfstring{$\ast$}{*}event)
+\begin{DoxyCompactList}\small\item\em Gets the type of an event. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{types_8h_a845e604fb28f7e3d97549da3448149d3}{Id}} \mbox{\hyperlink{event__manager_8h_a571e45dbb1f6c13eda6051b9d524d0ac}{event\+\_\+get\+\_\+id}} (\mbox{\hyperlink{event__manager_8h_a87b7b18b53c76855753cac4d69231678}{Event}} \texorpdfstring{$\ast$}{*}event)
+\begin{DoxyCompactList}\small\item\em Gets the id of an event. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{command_8h_a805cf38fd2b6d5604bf1f1036b80fde2}{Command\+Code}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{event__manager_8h_a258e46244f93646a0e3eac0a6b679669}{event\+\_\+get\+\_\+commands}} (\mbox{\hyperlink{event__manager_8h_a87b7b18b53c76855753cac4d69231678}{Event}} \texorpdfstring{$\ast$}{*}event)
+\begin{DoxyCompactList}\small\item\em Gets the pointer to the list of valid commands. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{event__manager_8h_a0be72f6183c38a655a4cb9338988aa1f}{event\+\_\+get\+\_\+cmd\+\_\+count}} (\mbox{\hyperlink{event__manager_8h_a87b7b18b53c76855753cac4d69231678}{Event}} \texorpdfstring{$\ast$}{*}event)
+\begin{DoxyCompactList}\small\item\em gets the number of valid commands \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{event__manager_8h_ae7734b7d21b11032b6293816a8cd46a7}{event\+\_\+get\+\_\+remove\+On\+Trigger}} (\mbox{\hyperlink{event__manager_8h_a87b7b18b53c76855753cac4d69231678}{Event}} \texorpdfstring{$\ast$}{*}event)
+\begin{DoxyCompactList}\small\item\em gets if the event is removed from manager when triggered \end{DoxyCompactList}\item 
+char \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{event__manager_8h_a4cfc1d8bfc9d8e22a09370334cda0f13}{event\+\_\+get\+\_\+aux\+\_\+data}} (\mbox{\hyperlink{event__manager_8h_a87b7b18b53c76855753cac4d69231678}{Event}} \texorpdfstring{$\ast$}{*}event)
+\begin{DoxyCompactList}\small\item\em Gets pointer to auxiliary data use when a event is triggered. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{event__manager_8h_adc4501528731acd69172a60e3f2991c7}{Event\+Manager}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{event__manager_8h_a7bb41d778765e4635fd26c5802c51617}{event\+\_\+manager\+\_\+create}} ()
+\begin{DoxyCompactList}\small\item\em Creates a event manager. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{event__manager_8h_ad4973b37d89ba97cfd0c755cee728c8e}{event\+\_\+manager\+\_\+destroy}} (void \texorpdfstring{$\ast$}{*}event\+Manager)
+\begin{DoxyCompactList}\small\item\em Frees memory in use by event manager. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} \mbox{\hyperlink{event__manager_8h_a769c68a2550cc54c3c3a32f99af06b91}{event\+\_\+manager\+\_\+add\+\_\+event}} (\mbox{\hyperlink{event__manager_8h_adc4501528731acd69172a60e3f2991c7}{Event\+Manager}} \texorpdfstring{$\ast$}{*}manager, \mbox{\hyperlink{event__manager_8h_a87b7b18b53c76855753cac4d69231678}{Event}} \texorpdfstring{$\ast$}{*}event)
+\begin{DoxyCompactList}\small\item\em Tries to add an event to the manager. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} \mbox{\hyperlink{event__manager_8h_aeaf8c40eea102072e37e5335d99c903f}{event\+\_\+manager\+\_\+remove\+\_\+event}} (\mbox{\hyperlink{event__manager_8h_adc4501528731acd69172a60e3f2991c7}{Event\+Manager}} \texorpdfstring{$\ast$}{*}manager, \mbox{\hyperlink{event__manager_8h_a87b7b18b53c76855753cac4d69231678}{Event}} \texorpdfstring{$\ast$}{*}event)
+\begin{DoxyCompactList}\small\item\em Tries to remove an event form the manager. \end{DoxyCompactList}\item 
+long \mbox{\hyperlink{event__manager_8h_a0dbc7aa0e8b3d5fcfad591bbc3cd0997}{event\+\_\+manager\+\_\+get\+\_\+event\+\_\+count}} (\mbox{\hyperlink{event__manager_8h_adc4501528731acd69172a60e3f2991c7}{Event\+Manager}} \texorpdfstring{$\ast$}{*}manager)
+\begin{DoxyCompactList}\small\item\em Gets the number of events contained by the manager. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{event__manager_8h_a87b7b18b53c76855753cac4d69231678}{Event}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{event__manager_8h_a36c5c44ee5b5c54ccaccf766d7cd699f}{event\+\_\+manager\+\_\+get\+\_\+event}} (\mbox{\hyperlink{event__manager_8h_adc4501528731acd69172a60e3f2991c7}{Event\+Manager}} \texorpdfstring{$\ast$}{*}manager, long index)
+\begin{DoxyCompactList}\small\item\em Gets an event at a certain index. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Small module that aims to implement a way to have generic events in game. 
+
+\begin{DoxyAuthor}{Author}
+Daniel Gómez 
+\end{DoxyAuthor}
+\begin{DoxyVersion}{Version}
+0.\+1 
+\end{DoxyVersion}
+\begin{DoxyDate}{Date}
+2025-\/02-\/27
+\end{DoxyDate}
+\begin{DoxyCopyright}{Copyright}
+Copyright (c) 2025 
+\end{DoxyCopyright}
+
+
+\doxysubsection{Macro Definition Documentation}
+\Hypertarget{event__manager_8h_ad57385a7bbcf00dd1ac27baa3de0b0f8}\label{event__manager_8h_ad57385a7bbcf00dd1ac27baa3de0b0f8} 
+\index{event\_manager.h@{event\_manager.h}!N\_EVENTS@{N\_EVENTS}}
+\index{N\_EVENTS@{N\_EVENTS}!event\_manager.h@{event\_manager.h}}
+\doxysubsubsection{\texorpdfstring{N\_EVENTS}{N\_EVENTS}}
+{\footnotesize\ttfamily \#define N\+\_\+\+EVENTS~5}
+
+Number of events implemented 
+
+\doxysubsection{Function Documentation}
+\Hypertarget{event__manager_8h_abe84a1785fa69dbf2e236f363396a30d}\label{event__manager_8h_abe84a1785fa69dbf2e236f363396a30d} 
+\index{event\_manager.h@{event\_manager.h}!event\_compare@{event\_compare}}
+\index{event\_compare@{event\_compare}!event\_manager.h@{event\_manager.h}}
+\doxysubsubsection{\texorpdfstring{event\_compare()}{event\_compare()}}
+{\footnotesize\ttfamily int event\+\_\+compare (\begin{DoxyParamCaption}\item[{void \texorpdfstring{$\ast$}{*}}]{e1,  }\item[{void \texorpdfstring{$\ast$}{*}}]{e2 }\end{DoxyParamCaption})}
+
+
+
+Compares 2 events. 
+
+\begin{DoxyAuthor}{Author}
+Daniel Gómez
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em e1} & event struct 1 \\
+\hline
+{\em e2} & event struct 1 \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int 
+\end{DoxyReturn}
+\Hypertarget{event__manager_8h_a0dfdfeb6870eedc863583b7ade407018}\label{event__manager_8h_a0dfdfeb6870eedc863583b7ade407018} 
+\index{event\_manager.h@{event\_manager.h}!event\_create@{event\_create}}
+\index{event\_create@{event\_create}!event\_manager.h@{event\_manager.h}}
+\doxysubsubsection{\texorpdfstring{event\_create()}{event\_create()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{event__manager_8h_a87b7b18b53c76855753cac4d69231678}{Event}} \texorpdfstring{$\ast$}{*} event\+\_\+create (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{types_8h_a845e604fb28f7e3d97549da3448149d3}{Id}}}]{id,  }\item[{\mbox{\hyperlink{event__manager_8h_a2628ea8d12e8b2563c32f05dc7fff6fa}{Event\+Type}}}]{type,  }\item[{\mbox{\hyperlink{command_8h_a805cf38fd2b6d5604bf1f1036b80fde2}{Command\+Code}} \texorpdfstring{$\ast$}{*}}]{commands,  }\item[{int}]{cmd\+Num,  }\item[{char \texorpdfstring{$\ast$}{*}}]{data,  }\item[{bool}]{remove\+On\+Trigger }\end{DoxyParamCaption})}
+
+
+
+Event creation. 
+
+\begin{DoxyAuthor}{Author}
+Daniel Gómez
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em id} & id of the event \\
+\hline
+{\em type} & event type \\
+\hline
+{\em commands} & list of commands that are valid \\
+\hline
+{\em cmd\+Num} & number of commands that trigger the event \\
+\hline
+{\em data} & additional data necesary for event triggering \\
+\hline
+{\em remove\+On\+Trigger} & is the event removed from the list on trigger? \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Event\texorpdfstring{$\ast$}{*} 
+\end{DoxyReturn}
+\Hypertarget{event__manager_8h_a7c7f7c518167c1e1d789b7bee9380b49}\label{event__manager_8h_a7c7f7c518167c1e1d789b7bee9380b49} 
+\index{event\_manager.h@{event\_manager.h}!event\_destroy@{event\_destroy}}
+\index{event\_destroy@{event\_destroy}!event\_manager.h@{event\_manager.h}}
+\doxysubsubsection{\texorpdfstring{event\_destroy()}{event\_destroy()}}
+{\footnotesize\ttfamily void event\+\_\+destroy (\begin{DoxyParamCaption}\item[{void \texorpdfstring{$\ast$}{*}}]{event }\end{DoxyParamCaption})}
+
+
+
+Frees memory used by event. 
+
+\begin{DoxyAuthor}{Author}
+Daniel Gómez
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em event} & event struct \\
+\hline
+\end{DoxyParams}
+\Hypertarget{event__manager_8h_a4cfc1d8bfc9d8e22a09370334cda0f13}\label{event__manager_8h_a4cfc1d8bfc9d8e22a09370334cda0f13} 
+\index{event\_manager.h@{event\_manager.h}!event\_get\_aux\_data@{event\_get\_aux\_data}}
+\index{event\_get\_aux\_data@{event\_get\_aux\_data}!event\_manager.h@{event\_manager.h}}
+\doxysubsubsection{\texorpdfstring{event\_get\_aux\_data()}{event\_get\_aux\_data()}}
+{\footnotesize\ttfamily char \texorpdfstring{$\ast$}{*} event\+\_\+get\+\_\+aux\+\_\+data (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{event__manager_8h_a87b7b18b53c76855753cac4d69231678}{Event}} \texorpdfstring{$\ast$}{*}}]{event }\end{DoxyParamCaption})}
+
+
+
+Gets pointer to auxiliary data use when a event is triggered. 
+
+\begin{DoxyAuthor}{Author}
+Daniel Gómez
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em event} & event struct \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+char\texorpdfstring{$\ast$}{*} or NULL if error 
+\end{DoxyReturn}
+\Hypertarget{event__manager_8h_a0be72f6183c38a655a4cb9338988aa1f}\label{event__manager_8h_a0be72f6183c38a655a4cb9338988aa1f} 
+\index{event\_manager.h@{event\_manager.h}!event\_get\_cmd\_count@{event\_get\_cmd\_count}}
+\index{event\_get\_cmd\_count@{event\_get\_cmd\_count}!event\_manager.h@{event\_manager.h}}
+\doxysubsubsection{\texorpdfstring{event\_get\_cmd\_count()}{event\_get\_cmd\_count()}}
+{\footnotesize\ttfamily int event\+\_\+get\+\_\+cmd\+\_\+count (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{event__manager_8h_a87b7b18b53c76855753cac4d69231678}{Event}} \texorpdfstring{$\ast$}{*}}]{event }\end{DoxyParamCaption})}
+
+
+
+gets the number of valid commands 
+
+\begin{DoxyAuthor}{Author}
+Daniel Gómez
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em event} & event struct \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int or -\/1 if error 
+\end{DoxyReturn}
+\Hypertarget{event__manager_8h_a258e46244f93646a0e3eac0a6b679669}\label{event__manager_8h_a258e46244f93646a0e3eac0a6b679669} 
+\index{event\_manager.h@{event\_manager.h}!event\_get\_commands@{event\_get\_commands}}
+\index{event\_get\_commands@{event\_get\_commands}!event\_manager.h@{event\_manager.h}}
+\doxysubsubsection{\texorpdfstring{event\_get\_commands()}{event\_get\_commands()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{command_8h_a805cf38fd2b6d5604bf1f1036b80fde2}{Command\+Code}} \texorpdfstring{$\ast$}{*} event\+\_\+get\+\_\+commands (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{event__manager_8h_a87b7b18b53c76855753cac4d69231678}{Event}} \texorpdfstring{$\ast$}{*}}]{event }\end{DoxyParamCaption})}
+
+
+
+Gets the pointer to the list of valid commands. 
+
+\begin{DoxyAuthor}{Author}
+Daniel Gómez
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em event} & event struct \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Command\+Code\texorpdfstring{$\ast$}{*} or NULL if error 
+\end{DoxyReturn}
+\Hypertarget{event__manager_8h_a571e45dbb1f6c13eda6051b9d524d0ac}\label{event__manager_8h_a571e45dbb1f6c13eda6051b9d524d0ac} 
+\index{event\_manager.h@{event\_manager.h}!event\_get\_id@{event\_get\_id}}
+\index{event\_get\_id@{event\_get\_id}!event\_manager.h@{event\_manager.h}}
+\doxysubsubsection{\texorpdfstring{event\_get\_id()}{event\_get\_id()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{types_8h_a845e604fb28f7e3d97549da3448149d3}{Id}} event\+\_\+get\+\_\+id (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{event__manager_8h_a87b7b18b53c76855753cac4d69231678}{Event}} \texorpdfstring{$\ast$}{*}}]{event }\end{DoxyParamCaption})}
+
+
+
+Gets the id of an event. 
+
+\begin{DoxyAuthor}{Author}
+Daniel Gómez
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em event} & event struct \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Id or NO\+\_\+\+ID if error 
+\end{DoxyReturn}
+\Hypertarget{event__manager_8h_ae7734b7d21b11032b6293816a8cd46a7}\label{event__manager_8h_ae7734b7d21b11032b6293816a8cd46a7} 
+\index{event\_manager.h@{event\_manager.h}!event\_get\_removeOnTrigger@{event\_get\_removeOnTrigger}}
+\index{event\_get\_removeOnTrigger@{event\_get\_removeOnTrigger}!event\_manager.h@{event\_manager.h}}
+\doxysubsubsection{\texorpdfstring{event\_get\_removeOnTrigger()}{event\_get\_removeOnTrigger()}}
+{\footnotesize\ttfamily bool event\+\_\+get\+\_\+remove\+On\+Trigger (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{event__manager_8h_a87b7b18b53c76855753cac4d69231678}{Event}} \texorpdfstring{$\ast$}{*}}]{event }\end{DoxyParamCaption})}
+
+
+
+gets if the event is removed from manager when triggered 
+
+\begin{DoxyAuthor}{Author}
+Daniel Gómez
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em event} & event struct \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true if the event is removed after being triggered 
+
+false if the event isn\textquotesingle{}t removed ater being triggered or error 
+\end{DoxyReturn}
+\Hypertarget{event__manager_8h_a4be4ee04198e23fc5070dae3b85cef18}\label{event__manager_8h_a4be4ee04198e23fc5070dae3b85cef18} 
+\index{event\_manager.h@{event\_manager.h}!event\_get\_type@{event\_get\_type}}
+\index{event\_get\_type@{event\_get\_type}!event\_manager.h@{event\_manager.h}}
+\doxysubsubsection{\texorpdfstring{event\_get\_type()}{event\_get\_type()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{event__manager_8h_a2628ea8d12e8b2563c32f05dc7fff6fa}{Event\+Type}} event\+\_\+get\+\_\+type (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{event__manager_8h_a87b7b18b53c76855753cac4d69231678}{Event}} \texorpdfstring{$\ast$}{*}}]{event }\end{DoxyParamCaption})}
+
+
+
+Gets the type of an event. 
+
+\begin{DoxyAuthor}{Author}
+Daniel Gómez
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em event} & event struct \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Event\+Type 
+\end{DoxyReturn}
+\Hypertarget{event__manager_8h_a8bb56904cd8759d5cfb6daa33bfbf03d}\label{event__manager_8h_a8bb56904cd8759d5cfb6daa33bfbf03d} 
+\index{event\_manager.h@{event\_manager.h}!event\_is\_cmd\_valid@{event\_is\_cmd\_valid}}
+\index{event\_is\_cmd\_valid@{event\_is\_cmd\_valid}!event\_manager.h@{event\_manager.h}}
+\doxysubsubsection{\texorpdfstring{event\_is\_cmd\_valid()}{event\_is\_cmd\_valid()}}
+{\footnotesize\ttfamily bool event\+\_\+is\+\_\+cmd\+\_\+valid (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{event__manager_8h_a87b7b18b53c76855753cac4d69231678}{Event}} \texorpdfstring{$\ast$}{*}}]{event,  }\item[{\mbox{\hyperlink{command_8h_a7d2935971c252377cb0fc1c8545dc2bc}{Command}} \texorpdfstring{$\ast$}{*}}]{cmd }\end{DoxyParamCaption})}
+
+
+
+Checks if a given cmd is within the ones that trigger an event. 
+
+\begin{DoxyAuthor}{Author}
+Daniel Gómez
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em event} & event struct \\
+\hline
+{\em cmd} & command struct \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true if valid 
+
+false if not valid or error 
+\end{DoxyReturn}
+\Hypertarget{event__manager_8h_a769c68a2550cc54c3c3a32f99af06b91}\label{event__manager_8h_a769c68a2550cc54c3c3a32f99af06b91} 
+\index{event\_manager.h@{event\_manager.h}!event\_manager\_add\_event@{event\_manager\_add\_event}}
+\index{event\_manager\_add\_event@{event\_manager\_add\_event}!event\_manager.h@{event\_manager.h}}
+\doxysubsubsection{\texorpdfstring{event\_manager\_add\_event()}{event\_manager\_add\_event()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} event\+\_\+manager\+\_\+add\+\_\+event (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{event__manager_8h_adc4501528731acd69172a60e3f2991c7}{Event\+Manager}} \texorpdfstring{$\ast$}{*}}]{manager,  }\item[{\mbox{\hyperlink{event__manager_8h_a87b7b18b53c76855753cac4d69231678}{Event}} \texorpdfstring{$\ast$}{*}}]{event }\end{DoxyParamCaption})}
+
+
+
+Tries to add an event to the manager. 
+
+\begin{DoxyAuthor}{Author}
+Daniel Gómez
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em manager} & event manager struct \\
+\hline
+{\em event} & event struct to be added \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Status 
+\end{DoxyReturn}
+\Hypertarget{event__manager_8h_a7bb41d778765e4635fd26c5802c51617}\label{event__manager_8h_a7bb41d778765e4635fd26c5802c51617} 
+\index{event\_manager.h@{event\_manager.h}!event\_manager\_create@{event\_manager\_create}}
+\index{event\_manager\_create@{event\_manager\_create}!event\_manager.h@{event\_manager.h}}
+\doxysubsubsection{\texorpdfstring{event\_manager\_create()}{event\_manager\_create()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{event__manager_8h_adc4501528731acd69172a60e3f2991c7}{Event\+Manager}} \texorpdfstring{$\ast$}{*} event\+\_\+manager\+\_\+create (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Creates a event manager. 
+
+\begin{DoxyAuthor}{Author}
+Daniel Gómez
+\end{DoxyAuthor}
+\begin{DoxyReturn}{Returns}
+Event\+Manager\texorpdfstring{$\ast$}{*} 
+\end{DoxyReturn}
+\Hypertarget{event__manager_8h_ad4973b37d89ba97cfd0c755cee728c8e}\label{event__manager_8h_ad4973b37d89ba97cfd0c755cee728c8e} 
+\index{event\_manager.h@{event\_manager.h}!event\_manager\_destroy@{event\_manager\_destroy}}
+\index{event\_manager\_destroy@{event\_manager\_destroy}!event\_manager.h@{event\_manager.h}}
+\doxysubsubsection{\texorpdfstring{event\_manager\_destroy()}{event\_manager\_destroy()}}
+{\footnotesize\ttfamily void event\+\_\+manager\+\_\+destroy (\begin{DoxyParamCaption}\item[{void \texorpdfstring{$\ast$}{*}}]{event\+Manager }\end{DoxyParamCaption})}
+
+
+
+Frees memory in use by event manager. 
+
+\begin{DoxyAuthor}{Author}
+Daniel Gómez
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em event\+Manager} & event manager struct \\
+\hline
+\end{DoxyParams}
+\Hypertarget{event__manager_8h_a36c5c44ee5b5c54ccaccf766d7cd699f}\label{event__manager_8h_a36c5c44ee5b5c54ccaccf766d7cd699f} 
+\index{event\_manager.h@{event\_manager.h}!event\_manager\_get\_event@{event\_manager\_get\_event}}
+\index{event\_manager\_get\_event@{event\_manager\_get\_event}!event\_manager.h@{event\_manager.h}}
+\doxysubsubsection{\texorpdfstring{event\_manager\_get\_event()}{event\_manager\_get\_event()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{event__manager_8h_a87b7b18b53c76855753cac4d69231678}{Event}} \texorpdfstring{$\ast$}{*} event\+\_\+manager\+\_\+get\+\_\+event (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{event__manager_8h_adc4501528731acd69172a60e3f2991c7}{Event\+Manager}} \texorpdfstring{$\ast$}{*}}]{manager,  }\item[{long}]{index }\end{DoxyParamCaption})}
+
+
+
+Gets an event at a certain index. 
+
+\begin{DoxyAuthor}{Author}
+Daniel Gómez
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em manager} & event manager struct \\
+\hline
+{\em index} & index where the event is located \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Event\texorpdfstring{$\ast$}{*} or NULL if not found 
+\end{DoxyReturn}
+\Hypertarget{event__manager_8h_a0dbc7aa0e8b3d5fcfad591bbc3cd0997}\label{event__manager_8h_a0dbc7aa0e8b3d5fcfad591bbc3cd0997} 
+\index{event\_manager.h@{event\_manager.h}!event\_manager\_get\_event\_count@{event\_manager\_get\_event\_count}}
+\index{event\_manager\_get\_event\_count@{event\_manager\_get\_event\_count}!event\_manager.h@{event\_manager.h}}
+\doxysubsubsection{\texorpdfstring{event\_manager\_get\_event\_count()}{event\_manager\_get\_event\_count()}}
+{\footnotesize\ttfamily long event\+\_\+manager\+\_\+get\+\_\+event\+\_\+count (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{event__manager_8h_adc4501528731acd69172a60e3f2991c7}{Event\+Manager}} \texorpdfstring{$\ast$}{*}}]{manager }\end{DoxyParamCaption})}
+
+
+
+Gets the number of events contained by the manager. 
+
+\begin{DoxyAuthor}{Author}
+Daniel Gómez
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em manager} & event manager struct \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+long or -\/1 if error 
+\end{DoxyReturn}
+\Hypertarget{event__manager_8h_aeaf8c40eea102072e37e5335d99c903f}\label{event__manager_8h_aeaf8c40eea102072e37e5335d99c903f} 
+\index{event\_manager.h@{event\_manager.h}!event\_manager\_remove\_event@{event\_manager\_remove\_event}}
+\index{event\_manager\_remove\_event@{event\_manager\_remove\_event}!event\_manager.h@{event\_manager.h}}
+\doxysubsubsection{\texorpdfstring{event\_manager\_remove\_event()}{event\_manager\_remove\_event()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} event\+\_\+manager\+\_\+remove\+\_\+event (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{event__manager_8h_adc4501528731acd69172a60e3f2991c7}{Event\+Manager}} \texorpdfstring{$\ast$}{*}}]{manager,  }\item[{\mbox{\hyperlink{event__manager_8h_a87b7b18b53c76855753cac4d69231678}{Event}} \texorpdfstring{$\ast$}{*}}]{event }\end{DoxyParamCaption})}
+
+
+
+Tries to remove an event form the manager. 
+
+\begin{DoxyAuthor}{Author}
+Daniel Gómez
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em manager} & event manager struct \\
+\hline
+{\em event} & event struct to remove \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Status 
+\end{DoxyReturn}
+\Hypertarget{event__manager_8h_abda3a493f73768ef69659a18e67d5e0f}\label{event__manager_8h_abda3a493f73768ef69659a18e67d5e0f} 
+\index{event\_manager.h@{event\_manager.h}!event\_type\_from\_str@{event\_type\_from\_str}}
+\index{event\_type\_from\_str@{event\_type\_from\_str}!event\_manager.h@{event\_manager.h}}
+\doxysubsubsection{\texorpdfstring{event\_type\_from\_str()}{event\_type\_from\_str()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{event__manager_8h_a2628ea8d12e8b2563c32f05dc7fff6fa}{Event\+Type}} event\+\_\+type\+\_\+from\+\_\+str (\begin{DoxyParamCaption}\item[{char \texorpdfstring{$\ast$}{*}}]{string }\end{DoxyParamCaption})}
+
+
+
+Gets the event type from a string(see event\+\_\+manager.\+c for the valid values) 
+
+\begin{DoxyAuthor}{Author}
+Daniel Gómez
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em string} & string from event\+\_\+to\+\_\+str \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Event\+Type 
+\end{DoxyReturn}

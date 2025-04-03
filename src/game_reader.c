@@ -69,8 +69,8 @@ Status game_reader_load_player(Game *game, char *filename);
  * @brief Reads the file to load all events
  * @author Daniel Gómez
  * 
- * @param game 
- * @param filename 
+ * @param game struct that saves all information related to the game
+ * @param filename string that stores the data file name
  * @return Status 
  */
 Status game_reader_load_events(Game *game, char *filename);
@@ -79,8 +79,8 @@ Status game_reader_load_events(Game *game, char *filename);
  * @brief Reads the file to load all npcs
  * @author Maksym Polyak
  * 
- * @param game 
- * @param filename 
+ * @param game struct that saves all information related to the game
+ * @param filename string that stores the data file name
  * @return Status 
  */
 Status game_reader_load_npcs(Game *game, char *filename);
@@ -89,7 +89,7 @@ Status game_reader_load_npcs(Game *game, char *filename);
  * @brief Loads command info from settings file
  * @author Daniel Gómez
  * 
- * @param game 
+ * @param game struct that saves all information related to the game
  * @return Status 
  */
 Status game_reader_load_commandInfo(Game *game);
@@ -98,7 +98,7 @@ Status game_reader_load_commandInfo(Game *game);
  * @brief Loads valid commands for each game state
  * @author Daniel Gómez
  * 
- * @param game 
+ * @param game struct that saves all information related to the game
  * @return Status 
  */
 Status game_reader_load_commandStateTypes(Game *game);
@@ -107,8 +107,8 @@ Status game_reader_load_commandStateTypes(Game *game);
  * @brief Reads the file to load stats to an entity
  * @author Aaron Charameli Mair
  * 
- * @param game 
- * @param filename 
+ * @param game struct that saves all information related to the game
+ * @param filename string that stores the data file name
  * @return Status 
  */
 Status game_reader_load_stats(Game *game, char *filename);
@@ -117,8 +117,8 @@ Status game_reader_load_stats(Game *game, char *filename);
  * @brief Reads the file to load all ability
  * @author Maksym Polyak
  *
- * @param game 
- * @param filename 
+ * @param game struct that saves all information related to the game
+ * @param filename string that stores the data file name
  * @return Status 
 */
 Status game_reader_load_ability(Game *game, char *filename);

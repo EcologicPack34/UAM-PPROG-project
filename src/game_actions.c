@@ -23,7 +23,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define MAX_LVL 999999      /*<!stats "max lvl" (to be added on godmode)*/
+#define MAX_LVL 999999      /*<! Stats "max lvl" (to be added on godmode)*/
 
 /**
    Private functions
@@ -33,7 +33,7 @@
  * @brief Action for Unkown command
  * @author Profesores PPROG
  * 
- * @param game 
+ * @param game game struct
  * @return Status 
  */
 Status game_actions_unknown(Game *game);
@@ -42,7 +42,7 @@ Status game_actions_unknown(Game *game);
  * @brief Action for Unkown command
  * @author Profesores PPROG
  * 
- * @param game 
+ * @param game game struct
  * @return Status 
  */
 Status game_actions_exit(Game *game);
@@ -51,7 +51,7 @@ Status game_actions_exit(Game *game);
  * @brief Action for Unkown command
  * @author Maksym Polyak y Daniel Gómez
  * 
- * @param game 
+ * @param game game struct
  * @return Status 
  */
 Status game_actions_move(Game *game);
@@ -60,7 +60,7 @@ Status game_actions_move(Game *game);
  * @brief Action for taking object
  * @author Maksym Polyak
  * 
- * @param game 
+ * @param game game struct
  * @return Status 
  */
 Status game_actions_take(Game *game);
@@ -69,7 +69,7 @@ Status game_actions_take(Game *game);
  * @brief Action for droping object
  * @author Maksym Polyak
  * 
- * @param game 
+ * @param game game struct
  * @return Status 
  */
 Status game_actions_drop(Game *game);
@@ -78,7 +78,7 @@ Status game_actions_drop(Game *game);
  * @brief Action for chating with npcs
  * @author Daniel Gómez
  * 
- * @param game 
+ * @param game game struct
  * @return Status 
  */
 Status game_actions_chat(Game *game);
@@ -87,7 +87,7 @@ Status game_actions_chat(Game *game);
  * @brief Action for combat
  * @author Maksym Polyak y Daniel Gómez
  * 
- * @param game 
+ * @param game game struct
  * @return Status 
  */
 Status game_actions_attack(Game *game);
@@ -96,7 +96,7 @@ Status game_actions_attack(Game *game);
  * @brief Action for escaping combat
  * @author Maksym Polyak y Daniel Gómez
  * 
- * @param game 
+ * @param game game struct
  * @return Status 
  */
 Status game_actions_runaway(Game *game);
@@ -105,7 +105,7 @@ Status game_actions_runaway(Game *game);
  * @brief Action for switching player command
  * @author Maksym Polyak and Daniel Gómez
  * 
- * @param game 
+ * @param game game struct
  * @return Status 
  */
 Status game_actions_switch(Game *game);
@@ -114,7 +114,7 @@ Status game_actions_switch(Game *game);
  * @brief Action for using ability
  * @author Maksym Polyak
  * 
- * @param game 
+ * @param game game struct
  * @return Status 
  */
 Status game_actions_use_ability(Game *game);
@@ -123,7 +123,7 @@ Status game_actions_use_ability(Game *game);
  * @brief Action for using object if posible
  * @author Maksym Polyak
  * 
- * @param game 
+ * @param game game struct
  * @return Status 
  */
 Status game_actions_object_use(Game *game);
@@ -132,7 +132,7 @@ Status game_actions_object_use(Game *game);
  * @brief Action for Help command
  * @author Daniel Gómez
  * 
- * @param game 
+ * @param game game struct
  * @return Status 
  */
 Status game_actions_help(Game *game);
@@ -142,7 +142,7 @@ Status game_actions_help(Game *game);
  * @brief Action for Searching command
  * @author Daniel Gómez
  * 
- * @param game 
+ * @param game game struct
  * @return Status 
  */
 Status game_actions_search(Game *game);
@@ -151,7 +151,7 @@ Status game_actions_search(Game *game);
  * @brief Equips a piece of equipment if possible and
  * removes it from the inventory
  * 
- * @param game 
+ * @param game game struct
  * @return Status 
  */
 Status game_actions_equip(Game *game);
@@ -160,7 +160,7 @@ Status game_actions_equip(Game *game);
  * @brief Activates god mode
  * @author Aaron Charameli Mair
  * 
- * @param game 
+ * @param game game struct
  * @return Status 
  */
 Status game_actions_god_mode(Game *game);
@@ -171,7 +171,7 @@ Status game_actions_god_mode(Game *game);
  * @brief Unequips a piece of equipment and returns
  * it to the player inventory
  * 
- * @param game 
+ * @param game game struct
  * @return Status 
  */
 Status game_actions_unequip(Game *game);
@@ -180,7 +180,7 @@ Status game_actions_unequip(Game *game);
  * @brief Action to inspect an object
  * @author Daniel Gómez
  * 
- * @param game 
+ * @param game game struct
  * @return Status 
  */
 Status game_actions_inspect(Game *game);
@@ -208,7 +208,7 @@ Status game_actions_update(Game *game, Command *command) {
   cmd = command_get_code(command);
   
   if(cmd == GM){
-    game_set_godmode(game, TRUE);
+    game_set_godmode(game, true);
     game_actions_god_mode(game);
 
     if(game_get_state(game) == COMBAT)
@@ -481,7 +481,7 @@ Status game_actions_drop(Game *game){
  * @brief Shows on screen the message of the npc on the first argument if found
  * @author Daniel Gómez
  * 
- * @param game 
+ * @param game struct that saves all information related to the game
  * @return Status 
  */
 Status game_actions_chat(Game *game){
@@ -507,10 +507,10 @@ Status game_actions_chat(Game *game){
 
   game_add_log_message(game, MESSAGE_NPC,npc_get_message(npc));
 
-  if(npc_get_is_follower(npc) == true && npc_get_status(npc) == NEUTRAL){
+  if(npc_get_can_follow(npc) == true && npc_get_status(npc) == NEUTRAL){
     npc_set_status(npc, ALLY);
     player_add_follower(game_get_player(game), npc);
-  }else if(npc_get_is_follower(npc) == true && npc_get_status(npc) == ALLY){
+  }else if(npc_get_can_follow(npc) == true && npc_get_status(npc) == ALLY){
     npc_set_status(npc, NEUTRAL);
     player_remove_follower_by_name(game_get_player(game), entity_get_name(npc_get_entity(npc)));
   }
@@ -527,7 +527,7 @@ Status game_actions_chat(Game *game){
  * 
  * @author Maksym Polyak && Daniel Gómez
  * 
- * @param game 
+ * @param game struct that saves all information related to the game
  * @return Status 
  */
 Status game_actions_attack(Game *game){
@@ -556,7 +556,7 @@ Status game_actions_attack(Game *game){
 
  * @author Maksym Polyak && Daniel Gómez
  * 
- * @param game 
+ * @param game struct that saves all information related to the game
  * @return Status 
  */
 Status game_actions_runaway(Game *game){
@@ -647,7 +647,7 @@ Status game_actions_help(Game *game){
  * @brief Uses the ability received as argument
  * @author Maksym Polyak
  * 
- * @param game 
+ * @param game struct that saves all information related to the game
  * @return Status 
  */
 Status game_actions_use_ability(Game *game){

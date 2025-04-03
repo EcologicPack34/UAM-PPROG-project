@@ -20,29 +20,40 @@
 #ifndef ENTITY_H
 #define ENTITY_H
 
-#define ENTITY_GRAPHIC_LENGTH 3
+#define ENTITY_GRAPHIC_LENGTH 3 /*!< Maximum length of an entity graphic description (without \n)*/
 
 #include "inventory.h"
 #include "ability_manager.h"
+#include "types.h"
 
-#define N_STATS 7
+#define N_STATS 7 /*!< Number of stats implemented + NO_STAT*/
 
+/**
+ * @brief enum to identify where the entity is located
+ */
 typedef enum {UNKNOWN_ENTITY, PLAYER_TYPE, NPC_TYPE} EntityType;
+
+/**
+ * @brief enum with all the stats implemented on the game
+ */
 typedef enum {NO_STAT, MAX_HEALTH, HEALTH, BASE_DAMAGE, STRENGTH, DEFENSE, MAGIC_LEVEL} StatCode;
 
+/**
+ * @brief Entity ADT with all the common information to an entity(Players and NPCs common information types)
+ */
 typedef struct _Entity Entity;
 
 /**
  * Struct that stores combat information about an entity
  */
 typedef struct{
-    double maxhealth;          /*!< Max health of the entity*/
-    double health;             /*!< Health of the entity */
-    double baseDamage;         /*!< Base damage of the entity */
+    double maxhealth;           /*!< Max health of the entity*/
+    double health;              /*!< Health of the entity */
+    double baseDamage;          /*!< Base damage of the entity */
 
-    int strength;             /*!< Strength stat of the entity */
-    int defense;              /*!< Defense stat of the entity */
-    int magicLevel;           /*!< magicLevel stat of the entity */
+    int strength;               /*!< Strength stat of the entity */
+    int defense;                /*!< Defense stat of the entity */
+    int magicLevel;             /*!< magicLevel stat of the entity */
 }Entity_Stats;
 
 /*
@@ -115,8 +126,8 @@ Status entity_set_entityType(Entity *entity, EntityType entityType);
  * @brief Sets an entity max health
  * @author Maksym Polyak
  * 
- * @param entity 
- * @param maxhealth 
+ * @param entity contains all the information related to the entity
+ * @param maxhealth max health to be set
  * @return Status 
  */
 Status entity_set_max_health(Entity *entity, double maxhealth);
@@ -175,8 +186,8 @@ Status entity_set_magicLevel(Entity *entity, int magicLevel);
  * @brief Sets the graphic descption of the entity to a given string
  * @author Daniel Gómez
  * 
- * @param entity 
- * @param gdesc 
+ * @param entity contains all the information related to the entity
+ * @param gdesc graphic description to set
  * @return Status 
  */
 Status entity_set_graphic_description(Entity *entity, char *gdesc);
@@ -184,7 +195,7 @@ Status entity_set_graphic_description(Entity *entity, char *gdesc);
 /**
  * @brief This function sets the stats values of an Entity;
  * 
- * @param ent 
+ * @param ent contains all the information related to the entity
  * @param maxhealth 
  * @param health 
  * @param baseDamage 
@@ -200,7 +211,7 @@ Status entity_set_stats(Entity *ent, double maxhealth, double health, double bas
  * @brief This function sets the values of an EntityStats
  * @author Aaron Charameli Mair
  * 
- * @param es a pointer to the Entitytats to modify
+ * @param es a pointer to the Entity_Stats to modify
  * @param maxhealth 
  * @param health 
  * @param baseDamage 
@@ -217,9 +228,9 @@ Status entity_stats_set_all(Entity_Stats *es, double maxhealth, double health, d
  * @brief Gets if an entity is dead or not
  * @author Daniel Gómez
  * 
- * @param entity 
- * @return true 
- * @return false 
+ * @param entity contains all the information related to the entity
+ * @return true if entity is dead, also true if there was an error
+ * @return false if entity is alive
  */
 bool entity_is_dead(Entity *entity);
 
@@ -227,9 +238,8 @@ bool entity_is_dead(Entity *entity);
  * @brief Gets the graphic descption of the entity
  * @author Daniel Gómez
  * 
- * @param entity 
- * @param gdesc 
- * @return Reference to description 
+ * @param entity contains all the information related to the entity
+ * @return Reference to description or NULL if error
  */
 char *entity_get_graphic_description(Entity *entity);
 
@@ -238,7 +248,7 @@ char *entity_get_graphic_description(Entity *entity);
  * @author Maksym Polyak
  *
  * @param entity contains all the information related to the entity
- * @return entity's name or NULL if there was a mistake
+ * @return entity name or NULL if there was a mistake
  */
 char *entity_get_name(Entity *entity);
 
@@ -274,8 +284,7 @@ Id entity_get_id(Entity *entity);
  * @author Maksym Polyak
  *
  * @param entity contains all the information related to the entity
- * @param entityType type of the entity
- * @return OK if everything went well or ERROR if there was a mistake
+ * @return EntityType or UNKNOWN_ENTITY if error
  */
 EntityType entity_get_entityType(Entity *entity);
 
@@ -283,8 +292,8 @@ EntityType entity_get_entityType(Entity *entity);
  * @brief Adds a ability to the entity if it is not full
  * @author Maksym Polyak
  * 
- * @param entity 
- * @param ability 
+ * @param entity contains all the information related to the entity
+ * @param ability ability to add
  * @return Status 
  */
 Status entity_add_ability(Entity *entity, Ability *ability);
@@ -293,8 +302,9 @@ Status entity_add_ability(Entity *entity, Ability *ability);
  * @brief Gets the ability at the index of the entity
  * @author Maksym Polyak
  * 
- * @param entity 
- * @return Ability* 
+ * @param entity contains all the information related to the entity
+ * @param index index of the ability
+ * @return Ability* or NULL if error or not found
  */
 Ability *entity_get_ability_at(Entity *entity, int index);
 

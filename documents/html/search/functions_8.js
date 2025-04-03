@@ -1,0 +1,15 @@
+var searchData=
+[
+  ['npc_5fcmp_0',['npc_cmp',['../npc_8c.html#a43b11863022a5b01447c7a06eb492224',1,'npc_cmp(void *npc1, void *npc2):&#160;npc.c'],['../npc_8h.html#a43b11863022a5b01447c7a06eb492224',1,'npc_cmp(void *npc1, void *npc2):&#160;npc.c']]],
+  ['npc_5fcreate_1',['npc_create',['../npc_8h.html#a3fda1d94b7051886b2151ff201541f4b',1,'npc_create(NPC_status status, bool can_follow, char *message, char *name, Id id, Id location):&#160;npc.c'],['../npc_8c.html#a3fda1d94b7051886b2151ff201541f4b',1,'npc_create(NPC_status status, bool can_follow, char *message, char *name, Id id, Id location):&#160;npc.c']]],
+  ['npc_5fdestroy_2',['npc_destroy',['../npc_8h.html#a90188700ae27ad76751863ccfe486807',1,'npc_destroy(void *npc):&#160;npc.c'],['../npc_8c.html#a90188700ae27ad76751863ccfe486807',1,'npc_destroy(void *npc):&#160;npc.c']]],
+  ['npc_5fget_5fcan_5ffollow_3',['npc_get_can_follow',['../npc_8h.html#aeb45e1deb15713577c5d3f0fac878e39',1,'npc_get_can_follow(NPC *npc):&#160;npc.c'],['../npc_8c.html#aeb45e1deb15713577c5d3f0fac878e39',1,'npc_get_can_follow(NPC *npc):&#160;npc.c']]],
+  ['npc_5fget_5fentity_4',['npc_get_entity',['../npc_8h.html#a4c4eaaea996757be01036eee72091232',1,'npc_get_entity(NPC *npc):&#160;npc.c'],['../npc_8c.html#a4c4eaaea996757be01036eee72091232',1,'npc_get_entity(NPC *npc):&#160;npc.c']]],
+  ['npc_5fget_5fmessage_5',['npc_get_message',['../npc_8h.html#a0f8c72a07f088f4ed441db82da4177d8',1,'npc_get_message(NPC *npc):&#160;npc.c'],['../npc_8c.html#a0f8c72a07f088f4ed441db82da4177d8',1,'npc_get_message(NPC *npc):&#160;npc.c']]],
+  ['npc_5fget_5fstatus_6',['npc_get_status',['../npc_8h.html#a332852606edd5ff11cea5bb1b6e3fe0a',1,'npc_get_status(NPC *npc):&#160;npc.c'],['../npc_8c.html#a332852606edd5ff11cea5bb1b6e3fe0a',1,'npc_get_status(NPC *npc):&#160;npc.c']]],
+  ['npc_5fget_5fstr_5fdescr_7',['npc_get_str_descr',['../npc_8h.html#ac8328328dcef7dbbb6cb711b31911190',1,'npc_get_str_descr(NPC *npc, char *str, int index):&#160;npc.c'],['../npc_8c.html#ac8328328dcef7dbbb6cb711b31911190',1,'npc_get_str_descr(NPC *npc, char *str, int index):&#160;npc.c']]],
+  ['npc_5fprint_8',['npc_print',['../npc_8h.html#a5bee1148a22d0e99e55025229adaba1d',1,'npc_print(void *npc):&#160;npc.c'],['../npc_8c.html#a5bee1148a22d0e99e55025229adaba1d',1,'npc_print(void *npc):&#160;npc.c']]],
+  ['npc_5fset_5fis_5ffollower_9',['npc_set_is_follower',['../npc_8h.html#a1b98da4577adad76d9ebeee98c98058c',1,'npc_set_is_follower(NPC *npc, bool can_follow):&#160;npc.c'],['../npc_8c.html#a1b98da4577adad76d9ebeee98c98058c',1,'npc_set_is_follower(NPC *npc, bool can_follow):&#160;npc.c']]],
+  ['npc_5fset_5fmessage_10',['npc_set_message',['../npc_8h.html#a9ae03b83b9f341ed90df8ca4ae77264a',1,'npc_set_message(NPC *npc, char *message):&#160;npc.c'],['../npc_8c.html#a9ae03b83b9f341ed90df8ca4ae77264a',1,'npc_set_message(NPC *npc, char *message):&#160;npc.c']]],
+  ['npc_5fset_5fstatus_11',['npc_set_status',['../npc_8h.html#ad98f5e6d2aa014694ae52318d138b604',1,'npc_set_status(NPC *npc, NPC_status status):&#160;npc.c'],['../npc_8c.html#ad98f5e6d2aa014694ae52318d138b604',1,'npc_set_status(NPC *npc, NPC_status status):&#160;npc.c']]]
+];

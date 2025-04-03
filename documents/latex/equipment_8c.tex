@@ -1,0 +1,341 @@
+\doxysection{src/equipment.c File Reference}
+\hypertarget{equipment_8c}{}\label{equipment_8c}\index{src/equipment.c@{src/equipment.c}}
+
+
+Controls equipment of a Player module.  
+
+
+{\ttfamily \#include $<$stdio.\+h$>$}\newline
+{\ttfamily \#include $<$stdlib.\+h$>$}\newline
+{\ttfamily \#include $<$string.\+h$>$}\newline
+{\ttfamily \#include "{}equipment.\+h"{}}\newline
+Include dependency graph for equipment.\+c\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{equipment_8c__incl}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{struct__Equipment}{\+\_\+\+Equipment}}
+\begin{DoxyCompactList}\small\item\em Equipment internal struct for the player. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{equipment_8c_a518322e80b2281ae650488975a485832}{N\+\_\+\+PIECES}}~9
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} \mbox{\hyperlink{equipment_8c_a0d8312340ff343d5304977ac016586fe}{equipment\+\_\+equip\+\_\+from\+\_\+code}} (\mbox{\hyperlink{equipment_8h_a273174defa345a369e760f382c74cd8b}{Equipment}} \texorpdfstring{$\ast$}{*}player, \mbox{\hyperlink{equipment_8h_a4b340f199925410634b5a091adde18f0}{Equipment\+Code}} code, \mbox{\hyperlink{object_8h_a7f8bbcda919b65ce67f92fba08e0212f}{Object}} \texorpdfstring{$\ast$}{*}object)
+\begin{DoxyCompactList}\small\item\em Equips a piece by the code received. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{object_8h_a7f8bbcda919b65ce67f92fba08e0212f}{Object}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{equipment_8c_a4c8aaebdb8092b38a8b14a41bab18955}{equipment\+\_\+unequip\+\_\+from\+\_\+code}} (\mbox{\hyperlink{equipment_8h_a273174defa345a369e760f382c74cd8b}{Equipment}} \texorpdfstring{$\ast$}{*}equipment, \mbox{\hyperlink{equipment_8h_a4b340f199925410634b5a091adde18f0}{Equipment\+Code}} code)
+\begin{DoxyCompactList}\small\item\em Unequips a piece by the code received and returns the object removed. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{entity_8h_a350d00d335e2cee61821245bad7b279f}{Stat\+Code}} \mbox{\hyperlink{equipment_8c_a581531fb34881e4065f10c15f5d59daf}{equipment\+\_\+statcode\+\_\+from\+\_\+str}} (char \texorpdfstring{$\ast$}{*}data)
+\begin{DoxyCompactList}\small\item\em Gets the statcode from a string, has to match one of stat\+\_\+to\+\_\+str. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} \mbox{\hyperlink{equipment_8c_a40e96509895cb38bf0e13cad768179de}{equipment\+\_\+change\+\_\+stat\+\_\+value\+\_\+by\+\_\+code}} (\mbox{\hyperlink{entity_8h_a88bccc76704ed1a036c3500da8c42bcc}{Entity}} \texorpdfstring{$\ast$}{*}entity, \mbox{\hyperlink{entity_8h_a350d00d335e2cee61821245bad7b279f}{Stat\+Code}} code, double value)
+\begin{DoxyCompactList}\small\item\em Changes the stats of an entity by its parameters. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} \mbox{\hyperlink{equipment_8c_a16edb58bf0e1d3bb7a1a34b9c7cdb6f2}{equipment\+\_\+add\+\_\+stats}} (\mbox{\hyperlink{entity_8h_a88bccc76704ed1a036c3500da8c42bcc}{Entity}} \texorpdfstring{$\ast$}{*}entity, \mbox{\hyperlink{equipment_8h_a273174defa345a369e760f382c74cd8b}{Equipment}} \texorpdfstring{$\ast$}{*}equipment, \mbox{\hyperlink{object_8h_a7f8bbcda919b65ce67f92fba08e0212f}{Object}} \texorpdfstring{$\ast$}{*}object)
+\begin{DoxyCompactList}\small\item\em Adds the stats of an object to the entity. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} \mbox{\hyperlink{equipment_8c_a8feba33ea520c6576a5ffee3be93f198}{equipment\+\_\+remove\+\_\+stats}} (\mbox{\hyperlink{entity_8h_a88bccc76704ed1a036c3500da8c42bcc}{Entity}} \texorpdfstring{$\ast$}{*}entity, \mbox{\hyperlink{equipment_8h_a273174defa345a369e760f382c74cd8b}{Equipment}} \texorpdfstring{$\ast$}{*}equipment, \mbox{\hyperlink{object_8h_a7f8bbcda919b65ce67f92fba08e0212f}{Object}} \texorpdfstring{$\ast$}{*}object)
+\begin{DoxyCompactList}\small\item\em Removes the stats of an object from the entity. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{equipment_8h_a273174defa345a369e760f382c74cd8b}{Equipment}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{equipment_8c_a7df872e77c16d91a8a74bf754664f727}{equipment\+\_\+create}} ()
+\begin{DoxyCompactList}\small\item\em Creates an equipment struct with everything empty. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{equipment_8c_aaae81ffde589a442792405eacef19a51}{equipment\+\_\+destroy}} (\mbox{\hyperlink{equipment_8h_a273174defa345a369e760f382c74cd8b}{Equipment}} \texorpdfstring{$\ast$}{*}equipment)
+\begin{DoxyCompactList}\small\item\em Frees memory of the struct equipment, not the objects in it. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{equipment_8h_a4b340f199925410634b5a091adde18f0}{Equipment\+Code}} \mbox{\hyperlink{equipment_8c_adb6871df8ccbe7b63eadcc2ba4708816}{equipment\+\_\+code\+\_\+from\+\_\+str}} (char \texorpdfstring{$\ast$}{*}data)
+\begin{DoxyCompactList}\small\item\em Gets the Equipment\+Code from a string. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} \mbox{\hyperlink{equipment_8c_a49cc2d232fe60c4420f791a0901e5fc3}{equipment\+\_\+add\+\_\+piece}} (\mbox{\hyperlink{entity_8h_a88bccc76704ed1a036c3500da8c42bcc}{Entity}} \texorpdfstring{$\ast$}{*}entity, \mbox{\hyperlink{equipment_8h_a273174defa345a369e760f382c74cd8b}{Equipment}} \texorpdfstring{$\ast$}{*}equipment, \mbox{\hyperlink{object_8h_a7f8bbcda919b65ce67f92fba08e0212f}{Object}} \texorpdfstring{$\ast$}{*}object)
+\begin{DoxyCompactList}\small\item\em Tries to add an object as a piece if it is compatible. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{object_8h_a7f8bbcda919b65ce67f92fba08e0212f}{Object}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{equipment_8c_a8889db90a9b1dd824490d2551f47879e}{equipment\+\_\+remove\+\_\+piece}} (\mbox{\hyperlink{entity_8h_a88bccc76704ed1a036c3500da8c42bcc}{Entity}} \texorpdfstring{$\ast$}{*}entity, \mbox{\hyperlink{equipment_8h_a273174defa345a369e760f382c74cd8b}{Equipment}} \texorpdfstring{$\ast$}{*}equipment, char \texorpdfstring{$\ast$}{*}data)
+\begin{DoxyCompactList}\small\item\em Removes a piece and returns the object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{equipment_8c_a6dd71f8188e2dd6b75abec3ee1dcdacb}\label{equipment_8c_a6dd71f8188e2dd6b75abec3ee1dcdacb} 
+char \texorpdfstring{$\ast$}{*} {\bfseries equip\+\_\+to\+\_\+str} \mbox{[}\mbox{\hyperlink{equipment_8c_a518322e80b2281ae650488975a485832}{N\+\_\+\+PIECES}}\mbox{]} = \{"{}"{},"{}helmet"{},"{}chest"{},"{}arms"{},"{}leg\+\_\+armor"{},"{}shoes"{},"{}two\+\_\+handed"{},"{}one\+\_\+handed1"{},"{}one\+\_\+handed2"{}\}
+\begin{DoxyCompactList}\small\item\em Array of strings to save the text references to each piece type. \end{DoxyCompactList}\item 
+\Hypertarget{equipment_8c_ace51bbd4f576bfbf8d3da80910fb07c4}\label{equipment_8c_ace51bbd4f576bfbf8d3da80910fb07c4} 
+char \texorpdfstring{$\ast$}{*} {\bfseries stat\+\_\+to\+\_\+str} \mbox{[}\mbox{\hyperlink{entity_8h_ab6a18f0dce696c13e571a5ed8312a5c0}{N\+\_\+\+STATS}}\mbox{]} = \{"{}"{},"{}max\+\_\+health"{},"{}health"{},"{}base\+\_\+damage"{},"{}strength"{},"{}defense"{},"{}magic\+\_\+\+Level"{}\}
+\begin{DoxyCompactList}\small\item\em Array of strings to save the text references to each stat. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Controls equipment of a Player module. 
+
+\begin{DoxyAuthor}{Author}
+Maksym Polyak 
+\end{DoxyAuthor}
+\begin{DoxyVersion}{Version}
+0.\+1 
+\end{DoxyVersion}
+\begin{DoxyDate}{Date}
+2025-\/03-\/29
+\end{DoxyDate}
+\begin{DoxyCopyright}{Copyright}
+Copyright (c) 2025 
+\end{DoxyCopyright}
+
+
+\doxysubsection{Macro Definition Documentation}
+\Hypertarget{equipment_8c_a518322e80b2281ae650488975a485832}\label{equipment_8c_a518322e80b2281ae650488975a485832} 
+\index{equipment.c@{equipment.c}!N\_PIECES@{N\_PIECES}}
+\index{N\_PIECES@{N\_PIECES}!equipment.c@{equipment.c}}
+\doxysubsubsection{\texorpdfstring{N\_PIECES}{N\_PIECES}}
+{\footnotesize\ttfamily \#define N\+\_\+\+PIECES~9}
+
+Maximum number of types of pieces an object can be + empty type 
+
+\doxysubsection{Function Documentation}
+\Hypertarget{equipment_8c_a49cc2d232fe60c4420f791a0901e5fc3}\label{equipment_8c_a49cc2d232fe60c4420f791a0901e5fc3} 
+\index{equipment.c@{equipment.c}!equipment\_add\_piece@{equipment\_add\_piece}}
+\index{equipment\_add\_piece@{equipment\_add\_piece}!equipment.c@{equipment.c}}
+\doxysubsubsection{\texorpdfstring{equipment\_add\_piece()}{equipment\_add\_piece()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} equipment\+\_\+add\+\_\+piece (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{entity_8h_a88bccc76704ed1a036c3500da8c42bcc}{Entity}} \texorpdfstring{$\ast$}{*}}]{entity,  }\item[{\mbox{\hyperlink{equipment_8h_a273174defa345a369e760f382c74cd8b}{Equipment}} \texorpdfstring{$\ast$}{*}}]{equipment,  }\item[{\mbox{\hyperlink{object_8h_a7f8bbcda919b65ce67f92fba08e0212f}{Object}} \texorpdfstring{$\ast$}{*}}]{object }\end{DoxyParamCaption})}
+
+
+
+Tries to add an object as a piece if it is compatible. 
+
+\begin{DoxyAuthor}{Author}
+Maksym Polyak
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em entity} & entity who has the piece equipped \\
+\hline
+{\em equipment} & equipment struct \\
+\hline
+{\em object} & object to equip \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Status 
+\end{DoxyReturn}
+\Hypertarget{equipment_8c_a16edb58bf0e1d3bb7a1a34b9c7cdb6f2}\label{equipment_8c_a16edb58bf0e1d3bb7a1a34b9c7cdb6f2} 
+\index{equipment.c@{equipment.c}!equipment\_add\_stats@{equipment\_add\_stats}}
+\index{equipment\_add\_stats@{equipment\_add\_stats}!equipment.c@{equipment.c}}
+\doxysubsubsection{\texorpdfstring{equipment\_add\_stats()}{equipment\_add\_stats()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} equipment\+\_\+add\+\_\+stats (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{entity_8h_a88bccc76704ed1a036c3500da8c42bcc}{Entity}} \texorpdfstring{$\ast$}{*}}]{entity,  }\item[{\mbox{\hyperlink{equipment_8h_a273174defa345a369e760f382c74cd8b}{Equipment}} \texorpdfstring{$\ast$}{*}}]{equipment,  }\item[{\mbox{\hyperlink{object_8h_a7f8bbcda919b65ce67f92fba08e0212f}{Object}} \texorpdfstring{$\ast$}{*}}]{object }\end{DoxyParamCaption})}
+
+
+
+Adds the stats of an object to the entity. 
+
+\begin{DoxyAuthor}{Author}
+Maksym Polyak
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em entity} & entity that has the stats of an object added \\
+\hline
+{\em equipment} & equipment struct \\
+\hline
+{\em object} & object from where the stats are taken \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Status 
+\end{DoxyReturn}
+\Hypertarget{equipment_8c_a40e96509895cb38bf0e13cad768179de}\label{equipment_8c_a40e96509895cb38bf0e13cad768179de} 
+\index{equipment.c@{equipment.c}!equipment\_change\_stat\_value\_by\_code@{equipment\_change\_stat\_value\_by\_code}}
+\index{equipment\_change\_stat\_value\_by\_code@{equipment\_change\_stat\_value\_by\_code}!equipment.c@{equipment.c}}
+\doxysubsubsection{\texorpdfstring{equipment\_change\_stat\_value\_by\_code()}{equipment\_change\_stat\_value\_by\_code()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} equipment\+\_\+change\+\_\+stat\+\_\+value\+\_\+by\+\_\+code (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{entity_8h_a88bccc76704ed1a036c3500da8c42bcc}{Entity}} \texorpdfstring{$\ast$}{*}}]{entity,  }\item[{\mbox{\hyperlink{entity_8h_a350d00d335e2cee61821245bad7b279f}{Stat\+Code}}}]{code,  }\item[{double}]{value }\end{DoxyParamCaption})}
+
+
+
+Changes the stats of an entity by its parameters. 
+
+\begin{DoxyAuthor}{Author}
+Maksym Polyak
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em entity} & entity that has the stats adjusted \\
+\hline
+{\em code} & type of stat affected -\/-\/\texorpdfstring{$>$}{>} Stat\+\_\+code \\
+\hline
+{\em value} & double with the value of the stat affected \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Status 
+\end{DoxyReturn}
+\Hypertarget{equipment_8c_adb6871df8ccbe7b63eadcc2ba4708816}\label{equipment_8c_adb6871df8ccbe7b63eadcc2ba4708816} 
+\index{equipment.c@{equipment.c}!equipment\_code\_from\_str@{equipment\_code\_from\_str}}
+\index{equipment\_code\_from\_str@{equipment\_code\_from\_str}!equipment.c@{equipment.c}}
+\doxysubsubsection{\texorpdfstring{equipment\_code\_from\_str()}{equipment\_code\_from\_str()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{equipment_8h_a4b340f199925410634b5a091adde18f0}{Equipment\+Code}} equipment\+\_\+code\+\_\+from\+\_\+str (\begin{DoxyParamCaption}\item[{char \texorpdfstring{$\ast$}{*}}]{data }\end{DoxyParamCaption})}
+
+
+
+Gets the Equipment\+Code from a string. 
+
+\begin{DoxyAuthor}{Author}
+Maksym Polyak
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em data} & string from equip\+\_\+to\+\_\+str \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Equipment\+Code 
+\end{DoxyReturn}
+\Hypertarget{equipment_8c_a7df872e77c16d91a8a74bf754664f727}\label{equipment_8c_a7df872e77c16d91a8a74bf754664f727} 
+\index{equipment.c@{equipment.c}!equipment\_create@{equipment\_create}}
+\index{equipment\_create@{equipment\_create}!equipment.c@{equipment.c}}
+\doxysubsubsection{\texorpdfstring{equipment\_create()}{equipment\_create()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{equipment_8h_a273174defa345a369e760f382c74cd8b}{Equipment}} \texorpdfstring{$\ast$}{*} equipment\+\_\+create (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Creates an equipment struct with everything empty. 
+
+\begin{DoxyAuthor}{Author}
+Maksym Polyak
+\end{DoxyAuthor}
+\begin{DoxyReturn}{Returns}
+Equipment\texorpdfstring{$\ast$}{*} or NULL if error 
+\end{DoxyReturn}
+\Hypertarget{equipment_8c_aaae81ffde589a442792405eacef19a51}\label{equipment_8c_aaae81ffde589a442792405eacef19a51} 
+\index{equipment.c@{equipment.c}!equipment\_destroy@{equipment\_destroy}}
+\index{equipment\_destroy@{equipment\_destroy}!equipment.c@{equipment.c}}
+\doxysubsubsection{\texorpdfstring{equipment\_destroy()}{equipment\_destroy()}}
+{\footnotesize\ttfamily void equipment\+\_\+destroy (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{equipment_8h_a273174defa345a369e760f382c74cd8b}{Equipment}} \texorpdfstring{$\ast$}{*}}]{equipment }\end{DoxyParamCaption})}
+
+
+
+Frees memory of the struct equipment, not the objects in it. 
+
+\begin{DoxyAuthor}{Author}
+Maksym Polyak
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em equipment} & equipment struct \\
+\hline
+\end{DoxyParams}
+\Hypertarget{equipment_8c_a0d8312340ff343d5304977ac016586fe}\label{equipment_8c_a0d8312340ff343d5304977ac016586fe} 
+\index{equipment.c@{equipment.c}!equipment\_equip\_from\_code@{equipment\_equip\_from\_code}}
+\index{equipment\_equip\_from\_code@{equipment\_equip\_from\_code}!equipment.c@{equipment.c}}
+\doxysubsubsection{\texorpdfstring{equipment\_equip\_from\_code()}{equipment\_equip\_from\_code()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} equipment\+\_\+equip\+\_\+from\+\_\+code (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{equipment_8h_a273174defa345a369e760f382c74cd8b}{Equipment}} \texorpdfstring{$\ast$}{*}}]{player,  }\item[{\mbox{\hyperlink{equipment_8h_a4b340f199925410634b5a091adde18f0}{Equipment\+Code}}}]{code,  }\item[{\mbox{\hyperlink{object_8h_a7f8bbcda919b65ce67f92fba08e0212f}{Object}} \texorpdfstring{$\ast$}{*}}]{object }\end{DoxyParamCaption})}
+
+
+
+Equips a piece by the code received. 
+
+\begin{DoxyAuthor}{Author}
+Maksym Polyak
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em player} & equipment ADT where the piece is placed \\
+\hline
+{\em code} & Equipment\+Code to determine which piece is the object \\
+\hline
+{\em object} & object to be equipped \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Status 
+\end{DoxyReturn}
+\Hypertarget{equipment_8c_a8889db90a9b1dd824490d2551f47879e}\label{equipment_8c_a8889db90a9b1dd824490d2551f47879e} 
+\index{equipment.c@{equipment.c}!equipment\_remove\_piece@{equipment\_remove\_piece}}
+\index{equipment\_remove\_piece@{equipment\_remove\_piece}!equipment.c@{equipment.c}}
+\doxysubsubsection{\texorpdfstring{equipment\_remove\_piece()}{equipment\_remove\_piece()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{object_8h_a7f8bbcda919b65ce67f92fba08e0212f}{Object}} \texorpdfstring{$\ast$}{*} equipment\+\_\+remove\+\_\+piece (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{entity_8h_a88bccc76704ed1a036c3500da8c42bcc}{Entity}} \texorpdfstring{$\ast$}{*}}]{entity,  }\item[{\mbox{\hyperlink{equipment_8h_a273174defa345a369e760f382c74cd8b}{Equipment}} \texorpdfstring{$\ast$}{*}}]{equipment,  }\item[{char \texorpdfstring{$\ast$}{*}}]{data }\end{DoxyParamCaption})}
+
+
+
+Removes a piece and returns the object. 
+
+\begin{DoxyAuthor}{Author}
+Maksym Polyak
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em entity} & removes a piece of equipment \\
+\hline
+{\em equipment} & equipment struct \\
+\hline
+{\em data} & string with the name of the piece type from equip\+\_\+to\+\_\+str \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Object\texorpdfstring{$\ast$}{*} or NULL if error 
+\end{DoxyReturn}
+\Hypertarget{equipment_8c_a8feba33ea520c6576a5ffee3be93f198}\label{equipment_8c_a8feba33ea520c6576a5ffee3be93f198} 
+\index{equipment.c@{equipment.c}!equipment\_remove\_stats@{equipment\_remove\_stats}}
+\index{equipment\_remove\_stats@{equipment\_remove\_stats}!equipment.c@{equipment.c}}
+\doxysubsubsection{\texorpdfstring{equipment\_remove\_stats()}{equipment\_remove\_stats()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} equipment\+\_\+remove\+\_\+stats (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{entity_8h_a88bccc76704ed1a036c3500da8c42bcc}{Entity}} \texorpdfstring{$\ast$}{*}}]{entity,  }\item[{\mbox{\hyperlink{equipment_8h_a273174defa345a369e760f382c74cd8b}{Equipment}} \texorpdfstring{$\ast$}{*}}]{equipment,  }\item[{\mbox{\hyperlink{object_8h_a7f8bbcda919b65ce67f92fba08e0212f}{Object}} \texorpdfstring{$\ast$}{*}}]{object }\end{DoxyParamCaption})}
+
+
+
+Removes the stats of an object from the entity. 
+
+\begin{DoxyAuthor}{Author}
+Maksym Polyak
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em entity} & entity that has the stats of an object removed \\
+\hline
+{\em equipment} & equipment struct \\
+\hline
+{\em object} & object from where the stats are taken \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Status 
+\end{DoxyReturn}
+\Hypertarget{equipment_8c_a581531fb34881e4065f10c15f5d59daf}\label{equipment_8c_a581531fb34881e4065f10c15f5d59daf} 
+\index{equipment.c@{equipment.c}!equipment\_statcode\_from\_str@{equipment\_statcode\_from\_str}}
+\index{equipment\_statcode\_from\_str@{equipment\_statcode\_from\_str}!equipment.c@{equipment.c}}
+\doxysubsubsection{\texorpdfstring{equipment\_statcode\_from\_str()}{equipment\_statcode\_from\_str()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{entity_8h_a350d00d335e2cee61821245bad7b279f}{Stat\+Code}} equipment\+\_\+statcode\+\_\+from\+\_\+str (\begin{DoxyParamCaption}\item[{char \texorpdfstring{$\ast$}{*}}]{data }\end{DoxyParamCaption})}
+
+
+
+Gets the statcode from a string, has to match one of stat\+\_\+to\+\_\+str. 
+
+\begin{DoxyAuthor}{Author}
+Maksym Polyak
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em data} & string with the type \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Stat\+Code or NO\+\_\+\+STAT if error 
+\end{DoxyReturn}
+\Hypertarget{equipment_8c_a4c8aaebdb8092b38a8b14a41bab18955}\label{equipment_8c_a4c8aaebdb8092b38a8b14a41bab18955} 
+\index{equipment.c@{equipment.c}!equipment\_unequip\_from\_code@{equipment\_unequip\_from\_code}}
+\index{equipment\_unequip\_from\_code@{equipment\_unequip\_from\_code}!equipment.c@{equipment.c}}
+\doxysubsubsection{\texorpdfstring{equipment\_unequip\_from\_code()}{equipment\_unequip\_from\_code()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{object_8h_a7f8bbcda919b65ce67f92fba08e0212f}{Object}} \texorpdfstring{$\ast$}{*} equipment\+\_\+unequip\+\_\+from\+\_\+code (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{equipment_8h_a273174defa345a369e760f382c74cd8b}{Equipment}} \texorpdfstring{$\ast$}{*}}]{equipment,  }\item[{\mbox{\hyperlink{equipment_8h_a4b340f199925410634b5a091adde18f0}{Equipment\+Code}}}]{code }\end{DoxyParamCaption})}
+
+
+
+Unequips a piece by the code received and returns the object removed. 
+
+\begin{DoxyAuthor}{Author}
+Maksym Polyak
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em equipment} & equipment struct \\
+\hline
+{\em code} & Equipment\+Code to determine piece type \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Object \texorpdfstring{$\ast$}{*} or NULL if error 
+\end{DoxyReturn}

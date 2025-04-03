@@ -1,7 +1,7 @@
 /**
  * @file ability_actions.c
  * @author Maksym Polyak
- * @brief 
+ * @brief Determines game interactions with abilities
  * @version 0.1
  * @date 2025-03-25
  * 
@@ -56,7 +56,7 @@ Status ability_heal_ally(Ability *ability, Game *game);
  */
 Status ability_money_bag(Ability *ability, Game *game);
 
-/**
+/*
  * @brief Unlocks a link related to the ability data
  * @author Daniel Gómez
  * 
@@ -178,8 +178,8 @@ Status ability_money_bag(Ability *ability, Game *game){
 
     return player_add_money(game_get_player(game), value);
 }
-/*
-Status ability_unlock_link(Ability *ability, Game *game){
+
+/*Status ability_unlock_link(Ability *ability, Game *game){
     Link *link = NULL;
     Space *space = NULL;
     int i;
@@ -212,7 +212,7 @@ Status ability_unlock_link(Ability *ability, Game *game){
 
     }
     
-
+    return OK;
 }*/
 
 /*
@@ -231,7 +231,7 @@ Status ability_action_use_ability(Game *game){
 
     queue = ability_manager_get_queue(sm);
 
-    while(queue_isEmpty(queue) == FALSE){
+    while(queue_isEmpty(queue) == false){
         ability = (Ability *)queue_pop(queue);
         status = OK;
 

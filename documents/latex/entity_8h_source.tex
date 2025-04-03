@@ -1,0 +1,102 @@
+\doxysection{entity.\+h}
+\hypertarget{entity_8h_source}{}\label{entity_8h_source}\index{include/entity.h@{include/entity.h}}
+\mbox{\hyperlink{entity_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ }
+\DoxyCodeLine{00020\ \textcolor{preprocessor}{\#ifndef\ ENTITY\_H}}
+\DoxyCodeLine{00021\ \textcolor{preprocessor}{\#define\ ENTITY\_H}}
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00023\ \textcolor{preprocessor}{\#define\ ENTITY\_GRAPHIC\_LENGTH\ 3\ }}
+\DoxyCodeLine{00025\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{inventory_8h}{inventory.h}}"{}}}
+\DoxyCodeLine{00026\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{ability__manager_8h}{ability\_manager.h}}"{}}}
+\DoxyCodeLine{00027\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{types_8h}{types.h}}"{}}}
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00029\ \textcolor{preprocessor}{\#define\ N\_STATS\ 7\ }}
+\DoxyCodeLine{00034\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{enum}\ \{UNKNOWN\_ENTITY,\ PLAYER\_TYPE,\ NPC\_TYPE\}\ \mbox{\hyperlink{entity_8h_ad79a57ed3105eb60d991a1aeb4a9dc44}{EntityType}};}
+\DoxyCodeLine{00035\ }
+\DoxyCodeLine{00039\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{enum}\ \{NO\_STAT,\ MAX\_HEALTH,\ HEALTH,\ BASE\_DAMAGE,\ STRENGTH,\ DEFENSE,\ MAGIC\_LEVEL\}\ \mbox{\hyperlink{entity_8h_a350d00d335e2cee61821245bad7b279f}{StatCode}};}
+\DoxyCodeLine{00040\ }
+\DoxyCodeLine{00044\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct__Entity}{\_Entity}}\ \mbox{\hyperlink{struct__Entity}{Entity}};}
+\DoxyCodeLine{00045\ }
+\DoxyCodeLine{00049\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct}\{}
+\DoxyCodeLine{00050\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{structEntity__Stats_aa9577c4f39110126df622edda06cd475}{maxhealth}};\ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00051\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{structEntity__Stats_a4d1e638c9d4153e14869838823668a66}{health}};\ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00052\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{structEntity__Stats_a7379926f3e579cd4c24a01832923756b}{baseDamage}};\ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00054\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{structEntity__Stats_a4aa8e4b19767381cbbed392cfe5ef378}{strength}};\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00055\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{structEntity__Stats_a021a29352b989c74c9dbb2646cc49cb5}{defense}};\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00056\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{structEntity__Stats_ac91bd5809ecc4600054143d9db968edf}{magicLevel}};\ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00057\ \}\mbox{\hyperlink{structEntity__Stats}{Entity\_Stats}};}
+\DoxyCodeLine{00058\ }
+\DoxyCodeLine{00059\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00060\ \textcolor{comment}{\ *\ Entity\ public\ implementation}}
+\DoxyCodeLine{00061\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00062\ }
+\DoxyCodeLine{00073\ \mbox{\hyperlink{struct__Entity}{Entity}}\ *\mbox{\hyperlink{entity_8h_a9fa3ced2134d94e08e4ee007bf615320}{entity\_create}}(\textcolor{keywordtype}{char}\ *\mbox{\hyperlink{struct__Entity_a5880c0288af02daffda647e0a02e5687}{name}},\ \mbox{\hyperlink{types_8h_a845e604fb28f7e3d97549da3448149d3}{Id}}\ identity,\ \mbox{\hyperlink{types_8h_a845e604fb28f7e3d97549da3448149d3}{Id}}\ idlocation,\ \mbox{\hyperlink{types_8h_a2793ea198e8b328078cf49008fa1d5b1}{InventoryType}}\ inventoryType);}
+\DoxyCodeLine{00074\ }
+\DoxyCodeLine{00081\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{entity_8h_af75da4895f5a6f25196d23f6ac2e9b5b}{entity\_destroy}}(\mbox{\hyperlink{struct__Entity}{Entity}}\ *entity);}
+\DoxyCodeLine{00082\ }
+\DoxyCodeLine{00083\ \textcolor{comment}{/*Entity\ SETTERS*/}}
+\DoxyCodeLine{00084\ }
+\DoxyCodeLine{00093\ \mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}}\ \mbox{\hyperlink{entity_8h_a8092f63a5fc8df8aed6618cf3b064863}{entity\_set\_name}}(\mbox{\hyperlink{struct__Entity}{Entity}}\ *entity,\ \textcolor{keywordtype}{char}\ *\mbox{\hyperlink{struct__Entity_a5880c0288af02daffda647e0a02e5687}{name}});}
+\DoxyCodeLine{00094\ }
+\DoxyCodeLine{00103\ \mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}}\ \mbox{\hyperlink{entity_8h_a6da4418684db0c3f769132556f70ec3f}{entity\_set\_location}}(\mbox{\hyperlink{struct__Entity}{Entity}}\ *entity,\ \mbox{\hyperlink{types_8h_a845e604fb28f7e3d97549da3448149d3}{Id}}\ \textcolor{keywordtype}{id});}
+\DoxyCodeLine{00104\ }
+\DoxyCodeLine{00113\ \mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}}\ \mbox{\hyperlink{entity_8h_a50d48829caae524f0cae5264754b30b2}{entity\_set\_id}}(\mbox{\hyperlink{struct__Entity}{Entity}}\ *entity,\ \mbox{\hyperlink{types_8h_a845e604fb28f7e3d97549da3448149d3}{Id}}\ \textcolor{keywordtype}{id});}
+\DoxyCodeLine{00114\ }
+\DoxyCodeLine{00123\ \mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}}\ \mbox{\hyperlink{entity_8h_a7b4a842f299bd8366f9c3af63b88461d}{entity\_set\_entityType}}(\mbox{\hyperlink{struct__Entity}{Entity}}\ *entity,\ \mbox{\hyperlink{entity_8h_ad79a57ed3105eb60d991a1aeb4a9dc44}{EntityType}}\ \mbox{\hyperlink{struct__Entity_a4997bfd14a80a6c19129c5b2e96a10be}{entityType}});}
+\DoxyCodeLine{00124\ }
+\DoxyCodeLine{00133\ \mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}}\ \mbox{\hyperlink{entity_8h_adfbc906a025574a42c93f6e884238ffb}{entity\_set\_max\_health}}(\mbox{\hyperlink{struct__Entity}{Entity}}\ *entity,\ \textcolor{keywordtype}{double}\ maxhealth);}
+\DoxyCodeLine{00134\ }
+\DoxyCodeLine{00143\ \mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}}\ \mbox{\hyperlink{entity_8h_af3adeb8223bf13480fc43118500b87ab}{entity\_set\_health}}(\mbox{\hyperlink{struct__Entity}{Entity}}\ *entity,\ \textcolor{keywordtype}{double}\ health);}
+\DoxyCodeLine{00144\ }
+\DoxyCodeLine{00153\ \mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}}\ \mbox{\hyperlink{entity_8h_a2a08ad04ed587bf2e5baab8f3f09f4b1}{entity\_set\_baseDamage}}(\mbox{\hyperlink{struct__Entity}{Entity}}\ *entity,\ \textcolor{keywordtype}{double}\ baseDamage);}
+\DoxyCodeLine{00154\ }
+\DoxyCodeLine{00163\ \mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}}\ \mbox{\hyperlink{entity_8h_adb1a1f94079bc0a1fb28a6b29a90113f}{entity\_set\_strength}}(\mbox{\hyperlink{struct__Entity}{Entity}}\ *entity,\ \textcolor{keywordtype}{int}\ strength);}
+\DoxyCodeLine{00164\ }
+\DoxyCodeLine{00173\ \mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}}\ \mbox{\hyperlink{entity_8h_a998cb9f9fe0c910d744338ba9a4653e3}{entity\_set\_defense}}(\mbox{\hyperlink{struct__Entity}{Entity}}\ *entity,\ \textcolor{keywordtype}{int}\ defense);}
+\DoxyCodeLine{00174\ }
+\DoxyCodeLine{00183\ \mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}}\ \mbox{\hyperlink{entity_8h_aa92437ee138bd7f871d77add95c16f1e}{entity\_set\_magicLevel}}(\mbox{\hyperlink{struct__Entity}{Entity}}\ *entity,\ \textcolor{keywordtype}{int}\ magicLevel);}
+\DoxyCodeLine{00184\ }
+\DoxyCodeLine{00193\ \mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}}\ \mbox{\hyperlink{entity_8h_ad7d8def339c7f2baf9146214e8b449bb}{entity\_set\_graphic\_description}}(\mbox{\hyperlink{struct__Entity}{Entity}}\ *entity,\ \textcolor{keywordtype}{char}\ *\mbox{\hyperlink{struct__Entity_ac151b83c9edab2072c89886ec24ce4c5}{gdesc}});}
+\DoxyCodeLine{00194\ }
+\DoxyCodeLine{00207\ \mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}}\ \mbox{\hyperlink{entity_8h_a28f7b91f79e3c84ef9394396bcbe71c6}{entity\_set\_stats}}(\mbox{\hyperlink{struct__Entity}{Entity}}\ *ent,\ \textcolor{keywordtype}{double}\ maxhealth,\ \textcolor{keywordtype}{double}\ health,\ \textcolor{keywordtype}{double}\ baseDamage,\ \textcolor{keywordtype}{int}\ strength,\ \textcolor{keywordtype}{int}\ defense,\ \textcolor{keywordtype}{int}\ magicLevel);}
+\DoxyCodeLine{00208\ }
+\DoxyCodeLine{00209\ }
+\DoxyCodeLine{00223\ \mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}}\ \mbox{\hyperlink{entity_8h_abf9db1d70472d1a2f8f0bd9fe556b40d}{entity\_stats\_set\_all}}(\mbox{\hyperlink{structEntity__Stats}{Entity\_Stats}}\ *es,\ \textcolor{keywordtype}{double}\ maxhealth,\ \textcolor{keywordtype}{double}\ health,\ \textcolor{keywordtype}{double}\ baseDamage,\ \textcolor{keywordtype}{int}\ strength,\ \textcolor{keywordtype}{int}\ defense,\ \textcolor{keywordtype}{int}\ magicLevel);}
+\DoxyCodeLine{00224\ }
+\DoxyCodeLine{00225\ \textcolor{comment}{/*Entity\ GETTERS*/}}
+\DoxyCodeLine{00226\ }
+\DoxyCodeLine{00235\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{entity_8h_a22762ddd12eb7d95c7266e4803b6dfa1}{entity\_is\_dead}}(\mbox{\hyperlink{struct__Entity}{Entity}}\ *entity);}
+\DoxyCodeLine{00236\ }
+\DoxyCodeLine{00244\ \textcolor{keywordtype}{char}\ *\mbox{\hyperlink{entity_8h_a52cdfd38babce5cee59ddfbb95cc84ac}{entity\_get\_graphic\_description}}(\mbox{\hyperlink{struct__Entity}{Entity}}\ *entity);}
+\DoxyCodeLine{00245\ }
+\DoxyCodeLine{00253\ \textcolor{keywordtype}{char}\ *\mbox{\hyperlink{entity_8h_aa7c2e38077c7945d787922751417875a}{entity\_get\_name}}(\mbox{\hyperlink{struct__Entity}{Entity}}\ *entity);}
+\DoxyCodeLine{00254\ }
+\DoxyCodeLine{00262\ \mbox{\hyperlink{types_8h_a845e604fb28f7e3d97549da3448149d3}{Id}}\ \mbox{\hyperlink{entity_8h_a1148a325afd5e80a149e201cd2f08f6e}{entity\_get\_location}}(\mbox{\hyperlink{struct__Entity}{Entity}}\ *entity);}
+\DoxyCodeLine{00263\ }
+\DoxyCodeLine{00271\ \mbox{\hyperlink{struct__Inventory}{Inventory}}\ *\mbox{\hyperlink{entity_8h_afa75d1dd8d80753205a5de92ab0f7e78}{entity\_get\_inventory}}(\mbox{\hyperlink{struct__Entity}{Entity}}\ *entity);}
+\DoxyCodeLine{00272\ }
+\DoxyCodeLine{00280\ \mbox{\hyperlink{types_8h_a845e604fb28f7e3d97549da3448149d3}{Id}}\ \mbox{\hyperlink{entity_8h_a3aa6f6258d7aed332bedd111e0bd5633}{entity\_get\_id}}(\mbox{\hyperlink{struct__Entity}{Entity}}\ *entity);}
+\DoxyCodeLine{00281\ }
+\DoxyCodeLine{00289\ \mbox{\hyperlink{entity_8h_ad79a57ed3105eb60d991a1aeb4a9dc44}{EntityType}}\ \mbox{\hyperlink{entity_8h_ad44bfb864a2b56eeaafbe6b7ca815241}{entity\_get\_entityType}}(\mbox{\hyperlink{struct__Entity}{Entity}}\ *entity);}
+\DoxyCodeLine{00290\ }
+\DoxyCodeLine{00299\ \mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}}\ \mbox{\hyperlink{entity_8h_adac70ec2bf871d13beaa8a6e8371a479}{entity\_add\_ability}}(\mbox{\hyperlink{struct__Entity}{Entity}}\ *entity,\ \mbox{\hyperlink{struct__Ability}{Ability}}\ *\mbox{\hyperlink{struct__Entity_ae6b797dbfa9326f293a67b9a8cd71884}{ability}});}
+\DoxyCodeLine{00300\ }
+\DoxyCodeLine{00309\ \mbox{\hyperlink{struct__Ability}{Ability}}\ *\mbox{\hyperlink{entity_8h_ae32762faee1e00feb3b06416d9bac978}{entity\_get\_ability\_at}}(\mbox{\hyperlink{struct__Entity}{Entity}}\ *entity,\ \textcolor{keywordtype}{int}\ index);}
+\DoxyCodeLine{00310\ }
+\DoxyCodeLine{00318\ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{entity_8h_a099afa74b490ac47a531eef2db93592d}{entity\_get\_max\_health}}(\mbox{\hyperlink{struct__Entity}{Entity}}\ *entity);}
+\DoxyCodeLine{00319\ }
+\DoxyCodeLine{00327\ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{entity_8h_aa050b5a6760add5096414d2ca7471bc4}{entity\_get\_health}}(\mbox{\hyperlink{struct__Entity}{Entity}}\ *entity);}
+\DoxyCodeLine{00328\ }
+\DoxyCodeLine{00329\ }
+\DoxyCodeLine{00337\ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{entity_8h_af061d2d444b75be8ca3dd4d250fa13a6}{entity\_get\_baseDamage}}(\mbox{\hyperlink{struct__Entity}{Entity}}\ *entity);}
+\DoxyCodeLine{00338\ }
+\DoxyCodeLine{00346\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{entity_8h_a61a37e7ccaa31902e4e55c598ac0dcff}{entity\_get\_strength}}(\mbox{\hyperlink{struct__Entity}{Entity}}\ *entity);}
+\DoxyCodeLine{00347\ }
+\DoxyCodeLine{00355\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{entity_8h_a4ac135b2c1320fd6154f7aed528d274e}{entity\_get\_defense}}(\mbox{\hyperlink{struct__Entity}{Entity}}\ *entity);}
+\DoxyCodeLine{00356\ }
+\DoxyCodeLine{00364\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{entity_8h_a4e76edb1ad8495d815c17844d4da0fd2}{entity\_get\_magicLevel}}(\mbox{\hyperlink{struct__Entity}{Entity}}\ *entity);}
+\DoxyCodeLine{00365\ }
+\DoxyCodeLine{00366\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

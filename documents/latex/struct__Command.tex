@@ -1,0 +1,65 @@
+\doxysection{\+\_\+\+Command Struct Reference}
+\hypertarget{struct__Command}{}\label{struct__Command}\index{\_Command@{\_Command}}
+
+
+Command.  
+
+
+
+
+Collaboration diagram for \+\_\+\+Command\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=299pt]{struct__Command__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Data Fields}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{command_8h_a12f42edede7479fc4cbb644f585bdf9b}{Command\+Info}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{struct__Command_a4dc536f2033a24fc68b17b0eb7ebd7e0}{cmd\+Data}}
+\item 
+\mbox{\hyperlink{command_8h_a12f42edede7479fc4cbb644f585bdf9b}{Command\+Info}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{struct__Command_a255057a66f81542bfb39c2c961c8ddc8}{cmd\+Player\+Data}}
+\item 
+char \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{struct__Command_a99bcd1f84873dfbb8b0aabba3455ba42}{command\+Info}} \mbox{[}\mbox{\hyperlink{command_8h_ae180fe89f0ae48ce5c80ffaa18de9271}{N\+\_\+\+CMD}}\mbox{]}
+\item 
+\mbox{\hyperlink{collection_8h_a014d1a8eb67ec9e1605a9f0340e77215}{Collection}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{struct__Command_a32774320732831aa922a762854b2cead}{state\+Commands}} \mbox{[}\mbox{\hyperlink{types_8h_ada3465bdb762bb7c1556be9404efbad7}{N\+\_\+\+GAME\+\_\+\+STATES}}\mbox{]}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Command. 
+
+This struct stores general information about command 
+
+\doxysubsection{Field Documentation}
+\Hypertarget{struct__Command_a4dc536f2033a24fc68b17b0eb7ebd7e0}\label{struct__Command_a4dc536f2033a24fc68b17b0eb7ebd7e0} 
+\index{\_Command@{\_Command}!cmdData@{cmdData}}
+\index{cmdData@{cmdData}!\_Command@{\_Command}}
+\doxysubsubsection{\texorpdfstring{cmdData}{cmdData}}
+{\footnotesize\ttfamily \mbox{\hyperlink{command_8h_a12f42edede7479fc4cbb644f585bdf9b}{Command\+Info}}\texorpdfstring{$\ast$}{*} \+\_\+\+Command\+::cmd\+Data}
+
+Struct that contains info about last command \Hypertarget{struct__Command_a255057a66f81542bfb39c2c961c8ddc8}\label{struct__Command_a255057a66f81542bfb39c2c961c8ddc8} 
+\index{\_Command@{\_Command}!cmdPlayerData@{cmdPlayerData}}
+\index{cmdPlayerData@{cmdPlayerData}!\_Command@{\_Command}}
+\doxysubsubsection{\texorpdfstring{cmdPlayerData}{cmdPlayerData}}
+{\footnotesize\ttfamily \mbox{\hyperlink{command_8h_a12f42edede7479fc4cbb644f585bdf9b}{Command\+Info}}\texorpdfstring{$\ast$}{*} \+\_\+\+Command\+::cmd\+Player\+Data}
+
+Struct local to player that contains info about last command \Hypertarget{struct__Command_a99bcd1f84873dfbb8b0aabba3455ba42}\label{struct__Command_a99bcd1f84873dfbb8b0aabba3455ba42} 
+\index{\_Command@{\_Command}!commandInfo@{commandInfo}}
+\index{commandInfo@{commandInfo}!\_Command@{\_Command}}
+\doxysubsubsection{\texorpdfstring{commandInfo}{commandInfo}}
+{\footnotesize\ttfamily char\texorpdfstring{$\ast$}{*} \+\_\+\+Command\+::command\+Info\mbox{[}\mbox{\hyperlink{command_8h_ae180fe89f0ae48ce5c80ffaa18de9271}{N\+\_\+\+CMD}}\mbox{]}}
+
+array of strings containing the info of the commands \Hypertarget{struct__Command_a32774320732831aa922a762854b2cead}\label{struct__Command_a32774320732831aa922a762854b2cead} 
+\index{\_Command@{\_Command}!stateCommands@{stateCommands}}
+\index{stateCommands@{stateCommands}!\_Command@{\_Command}}
+\doxysubsubsection{\texorpdfstring{stateCommands}{stateCommands}}
+{\footnotesize\ttfamily \mbox{\hyperlink{collection_8h_a014d1a8eb67ec9e1605a9f0340e77215}{Collection}}\texorpdfstring{$\ast$}{*} \+\_\+\+Command\+::state\+Commands\mbox{[}\mbox{\hyperlink{types_8h_ada3465bdb762bb7c1556be9404efbad7}{N\+\_\+\+GAME\+\_\+\+STATES}}\mbox{]}}
+
+array of collections containing cmd types 
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/\mbox{\hyperlink{command_8c}{command.\+c}}\end{DoxyCompactItemize}

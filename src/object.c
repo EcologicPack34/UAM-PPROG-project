@@ -22,12 +22,10 @@
 #include <string.h>
 #include <stdbool.h>
 
-#define OBJECT_MAX_DATA_SIZE 200
+#define OBJECT_MAX_DATA_SIZE 200 /*!< Max data size of an object*/
 
 /**
- * @brief Object
- *
- * This struct stores all the information of an object
+ * @brief ADT that stores all the information of an object
  */
 struct _Object {
   Id id;                    /*!< Id number of the object, it must be unique */
@@ -185,7 +183,7 @@ char *object_get_descr(Object *object){
 
 bool object_get_is_consumable(Object *object){
     if(!object)
-        return TRUE;
+        return false;
         
     return object->is_consumable;
 }

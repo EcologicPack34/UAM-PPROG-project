@@ -22,30 +22,28 @@
 #include <string.h>
 
 /**
- * @brief Space
- *
- * This struct stores all the information of a space.
+ * @brief ADT that stores all the information of a space.
  */
 struct _Space {
-  Id id;                        /*!< Id number of the space, it must be unique */
-  char name[WORD_SIZE + 1];     /*!< Name of the space */
-  bool discovered;              /*!< Sets wheter a space has been discovered by players(true) or not(false)*/
+  Id id;                                /*!< Id number of the space, it must be unique */
+  char name[WORD_SIZE + 1];             /*!< Name of the space */
+  bool discovered;                      /*!< Sets wheter a space has been discovered by players(true) or not(false)*/
 
-  Link *north;                  /*!< Id of the space at the north */
-  Link *south;                  /*!< Id of the space at the south */
-  Link *east;                   /*!< Id of the space at the east */
-  Link *west;                   /*!< Id of the space at the west */
+  Link *north;                          /*!< Id of the space at the north */
+  Link *south;                          /*!< Id of the space at the south */
+  Link *east;                           /*!< Id of the space at the east */
+  Link *west;                           /*!< Id of the space at the west */
   
-  char *graphicDescription[SPACE_GRAPHIC_HEIGHT];
+  char *graphicDescription[SPACE_GRAPHIC_HEIGHT]; /*!< Graphical description of the space*/
 
-  Vector2 position;
-  bool mapped;
-  int mapBlock;
-  Space *neighbours[DIRECTION_NUMBER];
+  Vector2 position;                     /*!< Position vector on the block*/
+  bool mapped;                          /*!< Bool to determine if space is mapped(true) or not*/
+  int mapBlock;                         /*!< Block where the space belongs*/
+  Space *neighbours[DIRECTION_NUMBER];  /*!< Adjacent spaces to the original space*/
 
-  Inventory *inventory;         /*!< Inventory of the space*/
+  Inventory *inventory;                 /*!< Inventory of the space*/
   
-  Collection *npcs;             /*!<  Collection of npcs in the given space*/
+  Collection *npcs;                     /*!< Collection of npcs in the given space*/
 };
 
 /*Space public functions*/

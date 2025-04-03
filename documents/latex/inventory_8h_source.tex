@@ -1,0 +1,58 @@
+\doxysection{inventory.\+h}
+\hypertarget{inventory_8h_source}{}\label{inventory_8h_source}\index{include/inventory.h@{include/inventory.h}}
+\mbox{\hyperlink{inventory_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ }
+\DoxyCodeLine{00018\ \textcolor{preprocessor}{\#ifndef\ INVENTORY\_H}}
+\DoxyCodeLine{00019\ \textcolor{preprocessor}{\#define\ INVENTORY\_H}}
+\DoxyCodeLine{00020\ \ }
+\DoxyCodeLine{00021\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{types_8h}{types.h}}"{}}}
+\DoxyCodeLine{00022\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{object_8h}{object.h}}"{}}}
+\DoxyCodeLine{00023\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{collection_8h}{collection.h}}"{}}}
+\DoxyCodeLine{00024\ \ }
+\DoxyCodeLine{00025\ \textcolor{preprocessor}{\#include\ <stdbool.h>}}
+\DoxyCodeLine{00026\ }
+\DoxyCodeLine{00027\ \textcolor{preprocessor}{\#define\ INVENTORY\_PLAYER\_MAX\_SIZE\ 10\ \ \ \ }}
+\DoxyCodeLine{00028\ \textcolor{preprocessor}{\#define\ INVENTORY\_ENTITY\_MAX\_SIZE\ 10\ \ \ \ }}
+\DoxyCodeLine{00029\ \textcolor{preprocessor}{\#define\ INVENTORY\_SPACE\_MAX\_SIZE\ 50\ \ \ \ \ }}
+\DoxyCodeLine{00034\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct__Inventory}{\_Inventory}}\ \mbox{\hyperlink{struct__Inventory}{Inventory}};}
+\DoxyCodeLine{00035\ }
+\DoxyCodeLine{00036\ \textcolor{comment}{/*Game\ public\ interface\ functions*/}}
+\DoxyCodeLine{00037\ }
+\DoxyCodeLine{00046\ \mbox{\hyperlink{struct__Inventory}{Inventory}}\ *\mbox{\hyperlink{inventory_8h_ad79bb4563c0e0346c1b6b4bedd118e76}{inventory\_create}}(\mbox{\hyperlink{types_8h_a2793ea198e8b328078cf49008fa1d5b1}{InventoryType}}\ type,\ \mbox{\hyperlink{types_8h_a845e604fb28f7e3d97549da3448149d3}{Id}}\ locationid);}
+\DoxyCodeLine{00047\ }
+\DoxyCodeLine{00054\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{inventory_8h_a7d916b13cab6b3d01a2537c07ce94eca}{inventory\_destroy}}(\mbox{\hyperlink{struct__Inventory}{Inventory}}\ *inventory);}
+\DoxyCodeLine{00055\ }
+\DoxyCodeLine{00056\ \textcolor{comment}{/*Object\ GETTERS*/}}
+\DoxyCodeLine{00057\ }
+\DoxyCodeLine{00066\ \mbox{\hyperlink{struct__Object}{Object}}\ *\mbox{\hyperlink{inventory_8h_abe30a7c2d563b039565ec524270ce8b7}{inventory\_get\_object\_by\_id}}(\mbox{\hyperlink{struct__Inventory}{Inventory}}\ *inventory,\ \mbox{\hyperlink{types_8h_a845e604fb28f7e3d97549da3448149d3}{Id}}\ objectid);}
+\DoxyCodeLine{00067\ }
+\DoxyCodeLine{00075\ \mbox{\hyperlink{struct__Object}{Object}}\ *\mbox{\hyperlink{inventory_8h_a7e34a7ef724aeaad122ed033af0ca837}{inventory\_get\_object\_at}}(\mbox{\hyperlink{struct__Inventory}{Inventory}}\ *inventory,\ \textcolor{keywordtype}{long}\ index);}
+\DoxyCodeLine{00076\ }
+\DoxyCodeLine{00084\ \mbox{\hyperlink{struct__Object}{Object}}\ *\mbox{\hyperlink{inventory_8h_a6dbf34aa6e0f9500a2405045689e071c}{inventory\_get\_object\_by\_name}}(\mbox{\hyperlink{struct__Inventory}{Inventory}}\ *inventory,\ \textcolor{keywordtype}{char}\ *objectname);}
+\DoxyCodeLine{00085\ }
+\DoxyCodeLine{00093\ \mbox{\hyperlink{struct__Collection}{Collection}}\ *\mbox{\hyperlink{inventory_8h_a6444c14427191cb82a4f955a8ab1b4b1}{inventory\_get\_collection}}(\mbox{\hyperlink{struct__Inventory}{Inventory}}\ *inventory);}
+\DoxyCodeLine{00094\ }
+\DoxyCodeLine{00105\ \mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}}\ \mbox{\hyperlink{inventory_8h_a65fda0220e855f1568b03b697616c92c}{inventory\_get\_object\_list}}(\mbox{\hyperlink{struct__Inventory}{Inventory}}\ *inventory,\ \textcolor{keywordtype}{char}\ *objectlist,\ \textcolor{keywordtype}{int}\ mode,\ \textcolor{keywordtype}{int}\ length);}
+\DoxyCodeLine{00106\ }
+\DoxyCodeLine{00116\ \mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}}\ \mbox{\hyperlink{inventory_8h_a3a7d45d37c2c0db2008a41e7d8e420a2}{inventory\_get\_object\_str\_at}}(\mbox{\hyperlink{struct__Inventory}{Inventory}}\ *inventory,\ \textcolor{keywordtype}{char}\ *objectdescr,\ \textcolor{keywordtype}{int}\ index);}
+\DoxyCodeLine{00117\ }
+\DoxyCodeLine{00125\ \textcolor{keywordtype}{long}\ \mbox{\hyperlink{inventory_8h_a0895e50963995c42e325cbc7d9d13818}{inventory\_get\_size}}(\mbox{\hyperlink{struct__Inventory}{Inventory}}\ *inventory);}
+\DoxyCodeLine{00126\ }
+\DoxyCodeLine{00135\ \mbox{\hyperlink{struct__Object}{Object}}\ *\mbox{\hyperlink{inventory_8h_a9ab22eccfce140239e7b99a32bf62613}{inventory\_get\_object}}(\mbox{\hyperlink{struct__Inventory}{Inventory}}\ *inventory,\ \mbox{\hyperlink{types_8h_a845e604fb28f7e3d97549da3448149d3}{Id}}\ objectid);}
+\DoxyCodeLine{00136\ }
+\DoxyCodeLine{00137\ \textcolor{comment}{/*Inventory\ set\ functions*/}}
+\DoxyCodeLine{00138\ }
+\DoxyCodeLine{00147\ \mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}}\ \mbox{\hyperlink{inventory_8h_aa46b31ec433c0c38640f9ced49d5f122}{inventory\_add\_object}}(\mbox{\hyperlink{struct__Inventory}{Inventory}}\ *inventory,\ \mbox{\hyperlink{struct__Object}{Object}}\ *\textcolor{keywordtype}{object});}
+\DoxyCodeLine{00148\ }
+\DoxyCodeLine{00157\ \mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}}\ \mbox{\hyperlink{inventory_8h_a8ea2d84a6d83b7ae6609efff09f26690}{inventory\_remove\_object}}(\mbox{\hyperlink{struct__Inventory}{Inventory}}\ *inventory,\ \mbox{\hyperlink{struct__Object}{Object}}\ *\textcolor{keywordtype}{object});}
+\DoxyCodeLine{00158\ }
+\DoxyCodeLine{00168\ \mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}}\ \mbox{\hyperlink{inventory_8h_ad3c167f2a5fc1305c3bf9636c01cc068}{inventory\_move\_object}}(\mbox{\hyperlink{struct__Inventory}{Inventory}}\ *inventoryOUT,\ \mbox{\hyperlink{struct__Inventory}{Inventory}}\ *inventoryIN,\ \mbox{\hyperlink{types_8h_a845e604fb28f7e3d97549da3448149d3}{Id}}\ objectid);}
+\DoxyCodeLine{00169\ }
+\DoxyCodeLine{00178\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{inventory_8h_a4b7f4c729ded5b7601ac8ac2458cdfad}{inventory\_contains\_object}}(\mbox{\hyperlink{struct__Inventory}{Inventory}}\ *inventory,\ \mbox{\hyperlink{types_8h_a845e604fb28f7e3d97549da3448149d3}{Id}}\ objectid);}
+\DoxyCodeLine{00179\ }
+\DoxyCodeLine{00188\ \textcolor{comment}{//Object\ *inventory\_get\_object\_and\_num\_by\_name(Inventory\ *inv,\ int\ *num,\ char\ *name)}}
+\DoxyCodeLine{00189\ }
+\DoxyCodeLine{00190\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

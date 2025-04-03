@@ -1,0 +1,13 @@
+<map id="_Space" name="_Space">
+<area shape="rect" id="Node000001" title="ADT that stores all the information of a space." alt="" coords="129,225,197,251"/>
+<area shape="poly" id="edge3_Node000001_Node000001" title=" " alt="" coords="212,225,220,230,223,238,215,250,198,253,197,247,212,245,218,238,216,233,209,230"/>
+<area shape="rect" id="Node000002" href="$struct__Link.html" title="Link internal struct." alt="" coords="5,93,61,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="42,131,56,166,79,199,103,216,130,226,128,231,101,221,75,203,51,169,37,133"/>
+<area shape="rect" id="Node000003" href="$structVector2.html" title="Data structure to store 2 dimensional values." alt="" coords="86,93,157,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="122,133,123,166,132,200,150,224,146,227,127,203,118,167,116,133"/>
+<area shape="rect" id="Node000004" href="$struct__Inventory.html" title="ADT that stores all the information of an inventory." alt="" coords="264,93,355,119"/>
+<area shape="poly" id="edge4_Node000001_Node000004" title=" " alt="" coords="295,131,264,167,226,203,188,227,185,223,222,199,260,163,291,128"/>
+<area shape="rect" id="Node000005" href="$struct__Collection.html" title="Collection to manage a list of objects with special parametrs as fixed_length and UniqueElements." alt="" coords="179,5,274,31"/>
+<area shape="poly" id="edge6_Node000001_Node000005" title=" " alt="" coords="227,45,215,117,204,160,189,202,175,226,170,224,184,200,199,159,210,116,222,44"/>
+<area shape="poly" id="edge5_Node000004_Node000005" title=" " alt="" coords="249,39,300,91,296,95,245,43"/>
+</map>

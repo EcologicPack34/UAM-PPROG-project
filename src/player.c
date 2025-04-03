@@ -18,8 +18,6 @@
 #include <string.h>
 #include "equipment.h"
 
-#define NO_NAME ""
-
 /**
  * @brief Player
  *
@@ -46,6 +44,7 @@ struct _Player {
  * @author Maksym Polyak
  *
  * @param player struct with the information of a player
+ * @param entity entity of the player
  * @return OK if everything went fine or NULL if there was a mistake
  */
 Status player_set_entity(Player *player, Entity *entity){

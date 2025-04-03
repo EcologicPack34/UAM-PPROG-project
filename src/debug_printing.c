@@ -7,7 +7,6 @@
 
 /**
  * @brief Struct containng Debug datatype info
- * 
  */
 struct _Debug
 {
@@ -15,7 +14,10 @@ struct _Debug
     FILE *logFile;                          /*!< Store the pointer to the open file*/
 };
 
-Debug* globalDebug = NULL;     /*!< Debug global variable so debug_log doesnt require any Debug* type parameter (Tries to mimic the Singleton behaviour from C#)*/
+/**
+ * @brief Debug global variable so debug_log doesnt require any Debug* type parameter (Tries to mimic the Singleton behaviour from C#)
+ */
+Debug* globalDebug = NULL;   
 
 
 Debug* debug_create(char* debugFilePath, bool setAsGlobal)

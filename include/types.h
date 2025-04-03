@@ -11,31 +11,45 @@
 #ifndef TYPES_H
 #define TYPES_H
 
-#define WORD_SIZE 500   /*!< Maximum word size */
-#define NO_ID -1        /*!< ERROR ID value */
-#define UNDEFINED_ID 0  /*!< Value of a non assigned ID, usefull to not confuse errors with intended behaviour*/
-#define DIRECTION_NUMBER 8
+#define NO_NAME ""                  /*!< String that represents an empty name string*/
 
-#define NPC_MAX_FOLLOWERS NPC_MAX_ALLIES - 1
-#define NPC_MAX_ALLIES 4
-#define NPC_MAX_ENEMIES 4
-#define COMBAT_MAX_ENTITIES 8
+#define WORD_SIZE 500               /*!< Maximum word size */
+#define NO_ID -1                    /*!< ERROR ID value */
+#define UNDEFINED_ID 0              /*!< Value of a non assigned ID, usefull to not confuse errors with intended behaviour*/
+#define DIRECTION_NUMBER 8          /*!< Number of directions implemented on the game*/
 
-
-#define N_GAME_STATES 5
-#define MAX_SKILLS_ENTITY 5
+#define NPC_MAX_FOLLOWERS NPC_MAX_ALLIES - 1    /*!< Maximum number of followers*/
+#define NPC_MAX_ALLIES 4            /*!< Maximum number of ally NPCs in a combat and in general(relative to the player)*/
+#define NPC_MAX_ENEMIES 4           /*!< Maximum number of enemy NPCs in a combat*/
+#define COMBAT_MAX_ENTITIES 8       /*!< Maximum number of entities in a combat*/
 
 
-typedef long Id;        /*!< Id typedef */
+#define N_GAME_STATES 5             /*!< Number of game states*/
+#define MAX_SKILLS_ENTITY 5         /*!< Maximum number of skils per entity*/
 
-typedef enum { FALSE, TRUE } Bool; /*!< Bool variable that admits TRUE or FALSE */ /*CAN BE REPLACED BY stdbool.h standard library*/
+/**
+ * @brief Id typedef
+ */
+typedef long Id;
 
-typedef enum { ERROR, OK } Status; /*!< Status enum that admits ERROR or OK */
+/**
+ * @brief Status enum that admits ERROR or OK
+ */
+typedef enum { ERROR, OK } Status;
 
-typedef enum { N, NE, E, SE, S , SW, W , NW, NO_DIR} Direction; /*!< Directions of the map: North, South, East, West */
+/**
+ * @brief Directions of the map: North, South, East, West
+ */
+typedef enum { N, NE, E, SE, S , SW, W , NW, NO_DIR} Direction;
 
-typedef enum {UNKNOWN_INVENTORY, PLAYER_INVENTORY, NPC_INVENTORY, SPACE_INVENTORY} InventoryType; /*!< Enum describing the different types of inventory*/
+/**
+ * @brief Enum describing the different types of inventory
+ */
+typedef enum {UNKNOWN_INVENTORY, PLAYER_INVENTORY, NPC_INVENTORY, SPACE_INVENTORY} InventoryType;
 
-typedef enum {ERROR_STATE ,DEFAULT, COMBAT, INVENTORY, DIALOGUE}GameState; /*!< Enum describing the different game states*/
+/**
+ * @brief Enum describing the different game states
+ */
+typedef enum {ERROR_STATE ,DEFAULT, COMBAT, INVENTORY, DIALOGUE}GameState;
 
 #endif

@@ -1,0 +1,468 @@
+\doxysection{src/link.c File Reference}
+\hypertarget{link_8c}{}\label{link_8c}\index{src/link.c@{src/link.c}}
+
+
+Defines the internal functionality of the links.  
+
+
+{\ttfamily \#include "{}link.\+h"{}}\newline
+{\ttfamily \#include "{}debug\+\_\+printing.\+h"{}}\newline
+{\ttfamily \#include $<$stdio.\+h$>$}\newline
+{\ttfamily \#include $<$stdlib.\+h$>$}\newline
+Include dependency graph for link.\+c\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{link_8c__incl}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{struct__Link}{\+\_\+\+Link}}
+\begin{DoxyCompactList}\small\item\em Link internal struct. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+bool \mbox{\hyperlink{link_8c_a70102fd3150f032b0705dad38e167b81}{link\+\_\+is\+\_\+entity\+\_\+on\+\_\+valid\+\_\+spaces}} (\mbox{\hyperlink{link_8h_ae3b299941e67be6971bfd64a25505eff}{Link}} \texorpdfstring{$\ast$}{*}link, \mbox{\hyperlink{entity_8h_a88bccc76704ed1a036c3500da8c42bcc}{Entity}} \texorpdfstring{$\ast$}{*}entity)
+\begin{DoxyCompactList}\small\item\em Checks if an entity is on one of the spaces connected by the link. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{link_8h_ae3b299941e67be6971bfd64a25505eff}{Link}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{link_8c_a705e86a49cfb10804b781e6612cd72ef}{link\+\_\+create}} (\mbox{\hyperlink{types_8h_a845e604fb28f7e3d97549da3448149d3}{Id}} id, \mbox{\hyperlink{types_8h_a845e604fb28f7e3d97549da3448149d3}{Id}} space1, \mbox{\hyperlink{types_8h_a845e604fb28f7e3d97549da3448149d3}{Id}} space2, bool adjacent, bool locked, \mbox{\hyperlink{types_8h_a845e604fb28f7e3d97549da3448149d3}{Id}} unlocking\+Object)
+\begin{DoxyCompactList}\small\item\em Function to create and initialize a link. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{link_8c_a117e4e5a82b23b805052d1eace34d068}{link\+\_\+destroy}} (\mbox{\hyperlink{link_8h_ae3b299941e67be6971bfd64a25505eff}{Link}} \texorpdfstring{$\ast$}{*}link)
+\begin{DoxyCompactList}\small\item\em frees dynamic memory in use by a link \end{DoxyCompactList}\item 
+\mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} \mbox{\hyperlink{link_8c_a572e6dc57923ee430a8c6121c6bcfc99}{link\+\_\+set\+\_\+id}} (\mbox{\hyperlink{link_8h_ae3b299941e67be6971bfd64a25505eff}{Link}} \texorpdfstring{$\ast$}{*}link, \mbox{\hyperlink{types_8h_a845e604fb28f7e3d97549da3448149d3}{Id}} id)
+\begin{DoxyCompactList}\small\item\em Sets de Id of the link. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} \mbox{\hyperlink{link_8c_a4213401af6ba73e4d64d37a7da116db1}{link\+\_\+set\+\_\+spaces}} (\mbox{\hyperlink{link_8h_ae3b299941e67be6971bfd64a25505eff}{Link}} \texorpdfstring{$\ast$}{*}link, \mbox{\hyperlink{types_8h_a845e604fb28f7e3d97549da3448149d3}{Id}} id1, \mbox{\hyperlink{types_8h_a845e604fb28f7e3d97549da3448149d3}{Id}} id2)
+\begin{DoxyCompactList}\small\item\em Sets the ids of spaces that the link connects. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} \mbox{\hyperlink{link_8c_ac35975e28292fa24d0ed4567e24b87e5}{link\+\_\+set\+\_\+is\+\_\+adjacent}} (\mbox{\hyperlink{link_8h_ae3b299941e67be6971bfd64a25505eff}{Link}} \texorpdfstring{$\ast$}{*}link, bool status)
+\begin{DoxyCompactList}\small\item\em Sets of the spaces connected are adjacent or not. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} \mbox{\hyperlink{link_8c_ac72fccf60d38b065a62a5de49311fa0c}{link\+\_\+set\+\_\+locked}} (\mbox{\hyperlink{link_8h_ae3b299941e67be6971bfd64a25505eff}{Link}} \texorpdfstring{$\ast$}{*}link, bool status)
+\begin{DoxyCompactList}\small\item\em Sets if the link is locked. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} \mbox{\hyperlink{link_8c_a62346a31bc13439f92179549df7e0e10}{link\+\_\+set\+\_\+unlocking\+\_\+object}} (\mbox{\hyperlink{link_8h_ae3b299941e67be6971bfd64a25505eff}{Link}} \texorpdfstring{$\ast$}{*}link, \mbox{\hyperlink{types_8h_a845e604fb28f7e3d97549da3448149d3}{Id}} object)
+\begin{DoxyCompactList}\small\item\em sets the object that unlocks a link \end{DoxyCompactList}\item 
+\mbox{\hyperlink{types_8h_a845e604fb28f7e3d97549da3448149d3}{Id}} \mbox{\hyperlink{link_8c_a2bbd320f995a72b2ea7ea639b1c81892}{link\+\_\+get\+\_\+id}} (\mbox{\hyperlink{link_8h_ae3b299941e67be6971bfd64a25505eff}{Link}} \texorpdfstring{$\ast$}{*}link)
+\begin{DoxyCompactList}\small\item\em Gets the id of a link. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{types_8h_a845e604fb28f7e3d97549da3448149d3}{Id}} \mbox{\hyperlink{link_8c_a7a703edf730484b48e951754f754bd94}{link\+\_\+get\+\_\+space1}} (\mbox{\hyperlink{link_8h_ae3b299941e67be6971bfd64a25505eff}{Link}} \texorpdfstring{$\ast$}{*}link)
+\begin{DoxyCompactList}\small\item\em gets the id one of the spaces that is connected by the link \end{DoxyCompactList}\item 
+\mbox{\hyperlink{types_8h_a845e604fb28f7e3d97549da3448149d3}{Id}} \mbox{\hyperlink{link_8c_afefc169db63bad1b3660ba1d0ee14095}{link\+\_\+get\+\_\+space2}} (\mbox{\hyperlink{link_8h_ae3b299941e67be6971bfd64a25505eff}{Link}} \texorpdfstring{$\ast$}{*}link)
+\begin{DoxyCompactList}\small\item\em gets the id one of the spaces that is connected by the link \end{DoxyCompactList}\item 
+\mbox{\hyperlink{types_8h_a845e604fb28f7e3d97549da3448149d3}{Id}} \mbox{\hyperlink{link_8c_aba9422d9f4a53d52c2115a7c4cdd2879}{link\+\_\+get\+\_\+oposite\+\_\+space}} (\mbox{\hyperlink{link_8h_ae3b299941e67be6971bfd64a25505eff}{Link}} \texorpdfstring{$\ast$}{*}link, \mbox{\hyperlink{types_8h_a845e604fb28f7e3d97549da3448149d3}{Id}} current\+Space)
+\begin{DoxyCompactList}\small\item\em Gets the id of the oposite side of the link if posible. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{link_8c_abf560b98d431362716381eeeecaa69bd}{link\+\_\+is\+\_\+adjacent}} (\mbox{\hyperlink{link_8h_ae3b299941e67be6971bfd64a25505eff}{Link}} \texorpdfstring{$\ast$}{*}link)
+\begin{DoxyCompactList}\small\item\em Gets the state of adjacency between the spaces. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{link_8c_aed1262553153762ea981db833222ae9e}{link\+\_\+is\+\_\+locked}} (\mbox{\hyperlink{link_8h_ae3b299941e67be6971bfd64a25505eff}{Link}} \texorpdfstring{$\ast$}{*}link)
+\begin{DoxyCompactList}\small\item\em gets if the link is locked \end{DoxyCompactList}\item 
+\mbox{\hyperlink{types_8h_a845e604fb28f7e3d97549da3448149d3}{Id}} \mbox{\hyperlink{link_8c_a733f04f6d0fade9f180dc89808d5a90a}{link\+\_\+get\+\_\+unlocking\+\_\+object}} (\mbox{\hyperlink{link_8h_ae3b299941e67be6971bfd64a25505eff}{Link}} \texorpdfstring{$\ast$}{*}link)
+\begin{DoxyCompactList}\small\item\em gets the id of the unlocking object \end{DoxyCompactList}\item 
+\mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} \mbox{\hyperlink{link_8c_a1e62287d0afbad9281c5f9ba95dd9672}{link\+\_\+move\+\_\+entity}} (\mbox{\hyperlink{link_8h_ae3b299941e67be6971bfd64a25505eff}{Link}} \texorpdfstring{$\ast$}{*}link, \mbox{\hyperlink{entity_8h_a88bccc76704ed1a036c3500da8c42bcc}{Entity}} \texorpdfstring{$\ast$}{*}entity)
+\begin{DoxyCompactList}\small\item\em Moves an entity from one end of the link to another if posible. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} \mbox{\hyperlink{link_8c_a10f3e8f389a229f03cb2de6510f87f05}{link\+\_\+unlock}} (\mbox{\hyperlink{link_8h_ae3b299941e67be6971bfd64a25505eff}{Link}} \texorpdfstring{$\ast$}{*}link, \mbox{\hyperlink{object_8h_a7f8bbcda919b65ce67f92fba08e0212f}{Object}} \texorpdfstring{$\ast$}{*}obj)
+\begin{DoxyCompactList}\small\item\em Tries to unlock a link using a certain object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Defines the internal functionality of the links. 
+
+links are defined by an id, two spaces, a bool that regulates if they are locked or not and the id of an object that can unlock them. This makes the game able to create labyrints, teleports and more because two spaces don\textquotesingle{}t need to be near in order for the player to move between them.
+
+\begin{DoxyAuthor}{Author}
+Daniel Gómez Rodríguez 
+\end{DoxyAuthor}
+\begin{DoxyVersion}{Version}
+0.\+1 
+\end{DoxyVersion}
+\begin{DoxyDate}{Date}
+2025-\/02-\/06
+\end{DoxyDate}
+\begin{DoxyCopyright}{Copyright}
+GNU Public License 
+\end{DoxyCopyright}
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{link_8c_a705e86a49cfb10804b781e6612cd72ef}\label{link_8c_a705e86a49cfb10804b781e6612cd72ef} 
+\index{link.c@{link.c}!link\_create@{link\_create}}
+\index{link\_create@{link\_create}!link.c@{link.c}}
+\doxysubsubsection{\texorpdfstring{link\_create()}{link\_create()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{link_8h_ae3b299941e67be6971bfd64a25505eff}{Link}} \texorpdfstring{$\ast$}{*} link\+\_\+create (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{types_8h_a845e604fb28f7e3d97549da3448149d3}{Id}}}]{id,  }\item[{\mbox{\hyperlink{types_8h_a845e604fb28f7e3d97549da3448149d3}{Id}}}]{space1,  }\item[{\mbox{\hyperlink{types_8h_a845e604fb28f7e3d97549da3448149d3}{Id}}}]{space2,  }\item[{bool}]{adjacent,  }\item[{bool}]{locked,  }\item[{\mbox{\hyperlink{types_8h_a845e604fb28f7e3d97549da3448149d3}{Id}}}]{unlocking\+Object }\end{DoxyParamCaption})}
+
+
+
+Function to create and initialize a link. 
+
+\begin{DoxyAuthor}{Author}
+Daniel Gómez
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em id} & id of the link \\
+\hline
+{\em space1} & space connected by link \\
+\hline
+{\em space2} & space connected by link \\
+\hline
+{\em adjacent} & bool true if spaces are adjacent false if not \\
+\hline
+{\em locked} & if the link is blocked and cant be used or not \\
+\hline
+{\em unlocking\+Object} & object required to unlock the link \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Link\texorpdfstring{$\ast$}{*} 
+\end{DoxyReturn}
+\Hypertarget{link_8c_a117e4e5a82b23b805052d1eace34d068}\label{link_8c_a117e4e5a82b23b805052d1eace34d068} 
+\index{link.c@{link.c}!link\_destroy@{link\_destroy}}
+\index{link\_destroy@{link\_destroy}!link.c@{link.c}}
+\doxysubsubsection{\texorpdfstring{link\_destroy()}{link\_destroy()}}
+{\footnotesize\ttfamily void link\+\_\+destroy (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{link_8h_ae3b299941e67be6971bfd64a25505eff}{Link}} \texorpdfstring{$\ast$}{*}}]{link }\end{DoxyParamCaption})}
+
+
+
+frees dynamic memory in use by a link 
+
+\begin{DoxyAuthor}{Author}
+Daniel Gómez
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em link} & link struct \\
+\hline
+\end{DoxyParams}
+\Hypertarget{link_8c_a2bbd320f995a72b2ea7ea639b1c81892}\label{link_8c_a2bbd320f995a72b2ea7ea639b1c81892} 
+\index{link.c@{link.c}!link\_get\_id@{link\_get\_id}}
+\index{link\_get\_id@{link\_get\_id}!link.c@{link.c}}
+\doxysubsubsection{\texorpdfstring{link\_get\_id()}{link\_get\_id()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{types_8h_a845e604fb28f7e3d97549da3448149d3}{Id}} link\+\_\+get\+\_\+id (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{link_8h_ae3b299941e67be6971bfd64a25505eff}{Link}} \texorpdfstring{$\ast$}{*}}]{link }\end{DoxyParamCaption})}
+
+
+
+Gets the id of a link. 
+
+\begin{DoxyAuthor}{Author}
+Daniel Gómez
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em link} & link struct \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Id or NO\+\_\+\+ID if error 
+\end{DoxyReturn}
+\Hypertarget{link_8c_aba9422d9f4a53d52c2115a7c4cdd2879}\label{link_8c_aba9422d9f4a53d52c2115a7c4cdd2879} 
+\index{link.c@{link.c}!link\_get\_oposite\_space@{link\_get\_oposite\_space}}
+\index{link\_get\_oposite\_space@{link\_get\_oposite\_space}!link.c@{link.c}}
+\doxysubsubsection{\texorpdfstring{link\_get\_oposite\_space()}{link\_get\_oposite\_space()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{types_8h_a845e604fb28f7e3d97549da3448149d3}{Id}} link\+\_\+get\+\_\+oposite\+\_\+space (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{link_8h_ae3b299941e67be6971bfd64a25505eff}{Link}} \texorpdfstring{$\ast$}{*}}]{link,  }\item[{\mbox{\hyperlink{types_8h_a845e604fb28f7e3d97549da3448149d3}{Id}}}]{current\+Space }\end{DoxyParamCaption})}
+
+
+
+Gets the id of the oposite side of the link if posible. 
+
+\begin{DoxyAuthor}{Author}
+Daniel Gómez
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em link} & link struct \\
+\hline
+{\em current\+Space} & id of the space to mirror \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Id or NO\+\_\+\+ID if error 
+\end{DoxyReturn}
+\Hypertarget{link_8c_a7a703edf730484b48e951754f754bd94}\label{link_8c_a7a703edf730484b48e951754f754bd94} 
+\index{link.c@{link.c}!link\_get\_space1@{link\_get\_space1}}
+\index{link\_get\_space1@{link\_get\_space1}!link.c@{link.c}}
+\doxysubsubsection{\texorpdfstring{link\_get\_space1()}{link\_get\_space1()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{types_8h_a845e604fb28f7e3d97549da3448149d3}{Id}} link\+\_\+get\+\_\+space1 (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{link_8h_ae3b299941e67be6971bfd64a25505eff}{Link}} \texorpdfstring{$\ast$}{*}}]{link }\end{DoxyParamCaption})}
+
+
+
+gets the id one of the spaces that is connected by the link 
+
+\begin{DoxyAuthor}{Author}
+Daniel Gómez
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em link} & link struct \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Id or NO\+\_\+\+ID if error 
+\end{DoxyReturn}
+\Hypertarget{link_8c_afefc169db63bad1b3660ba1d0ee14095}\label{link_8c_afefc169db63bad1b3660ba1d0ee14095} 
+\index{link.c@{link.c}!link\_get\_space2@{link\_get\_space2}}
+\index{link\_get\_space2@{link\_get\_space2}!link.c@{link.c}}
+\doxysubsubsection{\texorpdfstring{link\_get\_space2()}{link\_get\_space2()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{types_8h_a845e604fb28f7e3d97549da3448149d3}{Id}} link\+\_\+get\+\_\+space2 (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{link_8h_ae3b299941e67be6971bfd64a25505eff}{Link}} \texorpdfstring{$\ast$}{*}}]{link }\end{DoxyParamCaption})}
+
+
+
+gets the id one of the spaces that is connected by the link 
+
+\begin{DoxyAuthor}{Author}
+Daniel Gómez
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em link} & link struct \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Id or NO\+\_\+\+ID if error 
+\end{DoxyReturn}
+\Hypertarget{link_8c_a733f04f6d0fade9f180dc89808d5a90a}\label{link_8c_a733f04f6d0fade9f180dc89808d5a90a} 
+\index{link.c@{link.c}!link\_get\_unlocking\_object@{link\_get\_unlocking\_object}}
+\index{link\_get\_unlocking\_object@{link\_get\_unlocking\_object}!link.c@{link.c}}
+\doxysubsubsection{\texorpdfstring{link\_get\_unlocking\_object()}{link\_get\_unlocking\_object()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{types_8h_a845e604fb28f7e3d97549da3448149d3}{Id}} link\+\_\+get\+\_\+unlocking\+\_\+object (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{link_8h_ae3b299941e67be6971bfd64a25505eff}{Link}} \texorpdfstring{$\ast$}{*}}]{link }\end{DoxyParamCaption})}
+
+
+
+gets the id of the unlocking object 
+
+\begin{DoxyAuthor}{Author}
+Daniel Gómez
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em link} & link struct \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Id or NO\+\_\+\+ID if error 
+\end{DoxyReturn}
+\Hypertarget{link_8c_abf560b98d431362716381eeeecaa69bd}\label{link_8c_abf560b98d431362716381eeeecaa69bd} 
+\index{link.c@{link.c}!link\_is\_adjacent@{link\_is\_adjacent}}
+\index{link\_is\_adjacent@{link\_is\_adjacent}!link.c@{link.c}}
+\doxysubsubsection{\texorpdfstring{link\_is\_adjacent()}{link\_is\_adjacent()}}
+{\footnotesize\ttfamily bool link\+\_\+is\+\_\+adjacent (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{link_8h_ae3b299941e67be6971bfd64a25505eff}{Link}} \texorpdfstring{$\ast$}{*}}]{link }\end{DoxyParamCaption})}
+
+
+
+Gets the state of adjacency between the spaces. 
+
+\begin{DoxyAuthor}{Author}
+Daniel Gómez
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em link} & link struct \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true if spaces are adjacent 
+
+false if spaces are not adjacent 
+\end{DoxyReturn}
+\Hypertarget{link_8c_a70102fd3150f032b0705dad38e167b81}\label{link_8c_a70102fd3150f032b0705dad38e167b81} 
+\index{link.c@{link.c}!link\_is\_entity\_on\_valid\_spaces@{link\_is\_entity\_on\_valid\_spaces}}
+\index{link\_is\_entity\_on\_valid\_spaces@{link\_is\_entity\_on\_valid\_spaces}!link.c@{link.c}}
+\doxysubsubsection{\texorpdfstring{link\_is\_entity\_on\_valid\_spaces()}{link\_is\_entity\_on\_valid\_spaces()}}
+{\footnotesize\ttfamily bool link\+\_\+is\+\_\+entity\+\_\+on\+\_\+valid\+\_\+spaces (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{link_8h_ae3b299941e67be6971bfd64a25505eff}{Link}} \texorpdfstring{$\ast$}{*}}]{link,  }\item[{\mbox{\hyperlink{entity_8h_a88bccc76704ed1a036c3500da8c42bcc}{Entity}} \texorpdfstring{$\ast$}{*}}]{entity }\end{DoxyParamCaption})}
+
+
+
+Checks if an entity is on one of the spaces connected by the link. 
+
+\begin{DoxyAuthor}{Author}
+Daniel Gómez
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em link} & link struct \\
+\hline
+{\em entity} & entity to be checked \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+bool 
+\end{DoxyReturn}
+\Hypertarget{link_8c_aed1262553153762ea981db833222ae9e}\label{link_8c_aed1262553153762ea981db833222ae9e} 
+\index{link.c@{link.c}!link\_is\_locked@{link\_is\_locked}}
+\index{link\_is\_locked@{link\_is\_locked}!link.c@{link.c}}
+\doxysubsubsection{\texorpdfstring{link\_is\_locked()}{link\_is\_locked()}}
+{\footnotesize\ttfamily bool link\+\_\+is\+\_\+locked (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{link_8h_ae3b299941e67be6971bfd64a25505eff}{Link}} \texorpdfstring{$\ast$}{*}}]{link }\end{DoxyParamCaption})}
+
+
+
+gets if the link is locked 
+
+\begin{DoxyAuthor}{Author}
+Daniel Gómez
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em link} & link struct \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true if it is locked 
+
+false if it is not locked 
+\end{DoxyReturn}
+\Hypertarget{link_8c_a1e62287d0afbad9281c5f9ba95dd9672}\label{link_8c_a1e62287d0afbad9281c5f9ba95dd9672} 
+\index{link.c@{link.c}!link\_move\_entity@{link\_move\_entity}}
+\index{link\_move\_entity@{link\_move\_entity}!link.c@{link.c}}
+\doxysubsubsection{\texorpdfstring{link\_move\_entity()}{link\_move\_entity()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} link\+\_\+move\+\_\+entity (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{link_8h_ae3b299941e67be6971bfd64a25505eff}{Link}} \texorpdfstring{$\ast$}{*}}]{link,  }\item[{\mbox{\hyperlink{entity_8h_a88bccc76704ed1a036c3500da8c42bcc}{Entity}} \texorpdfstring{$\ast$}{*}}]{entity }\end{DoxyParamCaption})}
+
+
+
+Moves an entity from one end of the link to another if posible. 
+
+\begin{DoxyAuthor}{Author}
+Daniel Gómez
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em link} & link struct \\
+\hline
+{\em entity} & entity to move \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Status 
+\end{DoxyReturn}
+\Hypertarget{link_8c_a572e6dc57923ee430a8c6121c6bcfc99}\label{link_8c_a572e6dc57923ee430a8c6121c6bcfc99} 
+\index{link.c@{link.c}!link\_set\_id@{link\_set\_id}}
+\index{link\_set\_id@{link\_set\_id}!link.c@{link.c}}
+\doxysubsubsection{\texorpdfstring{link\_set\_id()}{link\_set\_id()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} link\+\_\+set\+\_\+id (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{link_8h_ae3b299941e67be6971bfd64a25505eff}{Link}} \texorpdfstring{$\ast$}{*}}]{link,  }\item[{\mbox{\hyperlink{types_8h_a845e604fb28f7e3d97549da3448149d3}{Id}}}]{id }\end{DoxyParamCaption})}
+
+
+
+Sets de Id of the link. 
+
+\begin{DoxyAuthor}{Author}
+Daniel Gómez
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em link} & link struct \\
+\hline
+{\em id} & id to set \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Status 
+\end{DoxyReturn}
+\Hypertarget{link_8c_ac35975e28292fa24d0ed4567e24b87e5}\label{link_8c_ac35975e28292fa24d0ed4567e24b87e5} 
+\index{link.c@{link.c}!link\_set\_is\_adjacent@{link\_set\_is\_adjacent}}
+\index{link\_set\_is\_adjacent@{link\_set\_is\_adjacent}!link.c@{link.c}}
+\doxysubsubsection{\texorpdfstring{link\_set\_is\_adjacent()}{link\_set\_is\_adjacent()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} link\+\_\+set\+\_\+is\+\_\+adjacent (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{link_8h_ae3b299941e67be6971bfd64a25505eff}{Link}} \texorpdfstring{$\ast$}{*}}]{link,  }\item[{bool}]{status }\end{DoxyParamCaption})}
+
+
+
+Sets of the spaces connected are adjacent or not. 
+
+\begin{DoxyAuthor}{Author}
+Daniel Gómez
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em link} & link struct \\
+\hline
+{\em status} & if it is adjacent(1) or not(0) \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Status 
+\end{DoxyReturn}
+\Hypertarget{link_8c_ac72fccf60d38b065a62a5de49311fa0c}\label{link_8c_ac72fccf60d38b065a62a5de49311fa0c} 
+\index{link.c@{link.c}!link\_set\_locked@{link\_set\_locked}}
+\index{link\_set\_locked@{link\_set\_locked}!link.c@{link.c}}
+\doxysubsubsection{\texorpdfstring{link\_set\_locked()}{link\_set\_locked()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} link\+\_\+set\+\_\+locked (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{link_8h_ae3b299941e67be6971bfd64a25505eff}{Link}} \texorpdfstring{$\ast$}{*}}]{link,  }\item[{bool}]{status }\end{DoxyParamCaption})}
+
+
+
+Sets if the link is locked. 
+
+\begin{DoxyAuthor}{Author}
+Daniel Gómez
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em link} & link struct \\
+\hline
+{\em status} & if it is locked(1) or not(0) \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Status 
+\end{DoxyReturn}
+\Hypertarget{link_8c_a4213401af6ba73e4d64d37a7da116db1}\label{link_8c_a4213401af6ba73e4d64d37a7da116db1} 
+\index{link.c@{link.c}!link\_set\_spaces@{link\_set\_spaces}}
+\index{link\_set\_spaces@{link\_set\_spaces}!link.c@{link.c}}
+\doxysubsubsection{\texorpdfstring{link\_set\_spaces()}{link\_set\_spaces()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} link\+\_\+set\+\_\+spaces (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{link_8h_ae3b299941e67be6971bfd64a25505eff}{Link}} \texorpdfstring{$\ast$}{*}}]{link,  }\item[{\mbox{\hyperlink{types_8h_a845e604fb28f7e3d97549da3448149d3}{Id}}}]{id1,  }\item[{\mbox{\hyperlink{types_8h_a845e604fb28f7e3d97549da3448149d3}{Id}}}]{id2 }\end{DoxyParamCaption})}
+
+
+
+Sets the ids of spaces that the link connects. 
+
+\begin{DoxyAuthor}{Author}
+Daniel Gómez
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em link} & link struct \\
+\hline
+{\em id1} & id of space 1 \\
+\hline
+{\em id2} & id of space 2 \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Status 
+\end{DoxyReturn}
+\Hypertarget{link_8c_a62346a31bc13439f92179549df7e0e10}\label{link_8c_a62346a31bc13439f92179549df7e0e10} 
+\index{link.c@{link.c}!link\_set\_unlocking\_object@{link\_set\_unlocking\_object}}
+\index{link\_set\_unlocking\_object@{link\_set\_unlocking\_object}!link.c@{link.c}}
+\doxysubsubsection{\texorpdfstring{link\_set\_unlocking\_object()}{link\_set\_unlocking\_object()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} link\+\_\+set\+\_\+unlocking\+\_\+object (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{link_8h_ae3b299941e67be6971bfd64a25505eff}{Link}} \texorpdfstring{$\ast$}{*}}]{link,  }\item[{\mbox{\hyperlink{types_8h_a845e604fb28f7e3d97549da3448149d3}{Id}}}]{object }\end{DoxyParamCaption})}
+
+
+
+sets the object that unlocks a link 
+
+\begin{DoxyAuthor}{Author}
+Daniel Gómez
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em link} & link struct \\
+\hline
+{\em object} & object id that unlocks the link \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Status 
+\end{DoxyReturn}
+\Hypertarget{link_8c_a10f3e8f389a229f03cb2de6510f87f05}\label{link_8c_a10f3e8f389a229f03cb2de6510f87f05} 
+\index{link.c@{link.c}!link\_unlock@{link\_unlock}}
+\index{link\_unlock@{link\_unlock}!link.c@{link.c}}
+\doxysubsubsection{\texorpdfstring{link\_unlock()}{link\_unlock()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} link\+\_\+unlock (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{link_8h_ae3b299941e67be6971bfd64a25505eff}{Link}} \texorpdfstring{$\ast$}{*}}]{link,  }\item[{\mbox{\hyperlink{object_8h_a7f8bbcda919b65ce67f92fba08e0212f}{Object}} \texorpdfstring{$\ast$}{*}}]{obj }\end{DoxyParamCaption})}
+
+
+
+Tries to unlock a link using a certain object. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em link} & link struct \\
+\hline
+{\em obj} & object taken to try to unlock \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Status 
+\end{DoxyReturn}

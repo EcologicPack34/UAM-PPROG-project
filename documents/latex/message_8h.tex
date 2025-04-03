@@ -1,0 +1,137 @@
+\doxysection{include/message.h File Reference}
+\hypertarget{message_8h}{}\label{message_8h}\index{include/message.h@{include/message.h}}
+
+
+ADT Containing the information about a game message/log to screen.  
+
+
+This graph shows which files directly or indirectly include this file\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{message_8h__dep__incl}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{message_8h_ad125645b99e48d24b054ad24da3a60b3}{MESSAGE\+\_\+\+TYPE\+\_\+\+COUNT}}~7
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{message_8h_a0d4b40ad42cd010fadd906ee5720ac5e}\label{message_8h_a0d4b40ad42cd010fadd906ee5720ac5e} 
+typedef struct \mbox{\hyperlink{struct__Message}{\+\_\+\+Message}} {\bfseries Message}
+\begin{DoxyCompactList}\small\item\em ADT to carry messages to the graphic engine. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{message_8h_ac6606ebe91c8ac66a2c314c79f5ab013}\label{message_8h_ac6606ebe91c8ac66a2c314c79f5ab013} 
+enum \mbox{\hyperlink{message_8h_ac6606ebe91c8ac66a2c314c79f5ab013}{Message\+Type}} \{ \newline
+{\bfseries MESSAGE\+\_\+\+EMPTY}
+, {\bfseries MESSAGE\+\_\+\+LOG}
+, {\bfseries MESSAGE\+\_\+\+ERROR}
+, {\bfseries MESSAGE\+\_\+\+NPC}
+, \newline
+{\bfseries MESSAGE\+\_\+\+PLAYER\+\_\+\+LIST}
+, {\bfseries MESSAGE\+\_\+\+HELP}
+, {\bfseries MESSAGE\+\_\+\+INSPECT}
+ \}
+\begin{DoxyCompactList}\small\item\em Typedef for enum containing the different types of messages. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{message_8h_a0d4b40ad42cd010fadd906ee5720ac5e}{Message}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{message_8h_a5afd40241a6c466bd0e7787a719587c1}{message\+\_\+new}} (\mbox{\hyperlink{message_8h_ac6606ebe91c8ac66a2c314c79f5ab013}{Message\+Type}} type, char \texorpdfstring{$\ast$}{*}message)
+\begin{DoxyCompactList}\small\item\em Creates a new message by allocating new memory for the string(i.\+e. it makes a copy of the string) \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{message_8h_ab510a78e5ea2f02084e1bc0134892210}{message\+\_\+destroy}} (void \texorpdfstring{$\ast$}{*}message)
+\begin{DoxyCompactList}\small\item\em Frees the memory in use by a message. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{message_8h_add25fba1b2d8191ef131d7e9c22e65a8}{message\+\_\+get\+\_\+str}} (\mbox{\hyperlink{message_8h_a0d4b40ad42cd010fadd906ee5720ac5e}{Message}} \texorpdfstring{$\ast$}{*}message, char \texorpdfstring{$\ast$}{*}dest)
+\begin{DoxyCompactList}\small\item\em Copies the message to a given string. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+ADT Containing the information about a game message/log to screen. 
+
+\begin{DoxyAuthor}{Author}
+Daniel Gómez 
+\end{DoxyAuthor}
+\begin{DoxyVersion}{Version}
+0.\+1 
+\end{DoxyVersion}
+\begin{DoxyDate}{Date}
+2025-\/03-\/11
+\end{DoxyDate}
+\begin{DoxyCopyright}{Copyright}
+GNU Public License 
+\end{DoxyCopyright}
+
+
+\doxysubsection{Macro Definition Documentation}
+\Hypertarget{message_8h_ad125645b99e48d24b054ad24da3a60b3}\label{message_8h_ad125645b99e48d24b054ad24da3a60b3} 
+\index{message.h@{message.h}!MESSAGE\_TYPE\_COUNT@{MESSAGE\_TYPE\_COUNT}}
+\index{MESSAGE\_TYPE\_COUNT@{MESSAGE\_TYPE\_COUNT}!message.h@{message.h}}
+\doxysubsubsection{\texorpdfstring{MESSAGE\_TYPE\_COUNT}{MESSAGE\_TYPE\_COUNT}}
+{\footnotesize\ttfamily \#define MESSAGE\+\_\+\+TYPE\+\_\+\+COUNT~7}
+
+Number of message types implemented 
+
+\doxysubsection{Function Documentation}
+\Hypertarget{message_8h_ab510a78e5ea2f02084e1bc0134892210}\label{message_8h_ab510a78e5ea2f02084e1bc0134892210} 
+\index{message.h@{message.h}!message\_destroy@{message\_destroy}}
+\index{message\_destroy@{message\_destroy}!message.h@{message.h}}
+\doxysubsubsection{\texorpdfstring{message\_destroy()}{message\_destroy()}}
+{\footnotesize\ttfamily void message\+\_\+destroy (\begin{DoxyParamCaption}\item[{void \texorpdfstring{$\ast$}{*}}]{message }\end{DoxyParamCaption})}
+
+
+
+Frees the memory in use by a message. 
+
+\begin{DoxyAuthor}{Author}
+Daniel Gómez
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em message} & message struct \\
+\hline
+\end{DoxyParams}
+\Hypertarget{message_8h_add25fba1b2d8191ef131d7e9c22e65a8}\label{message_8h_add25fba1b2d8191ef131d7e9c22e65a8} 
+\index{message.h@{message.h}!message\_get\_str@{message\_get\_str}}
+\index{message\_get\_str@{message\_get\_str}!message.h@{message.h}}
+\doxysubsubsection{\texorpdfstring{message\_get\_str()}{message\_get\_str()}}
+{\footnotesize\ttfamily void message\+\_\+get\+\_\+str (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{message_8h_a0d4b40ad42cd010fadd906ee5720ac5e}{Message}} \texorpdfstring{$\ast$}{*}}]{message,  }\item[{char \texorpdfstring{$\ast$}{*}}]{dest }\end{DoxyParamCaption})}
+
+
+
+Copies the message to a given string. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em message} & message struct \\
+\hline
+{\em dest} & destination string, must have enough size \\
+\hline
+\end{DoxyParams}
+\Hypertarget{message_8h_a5afd40241a6c466bd0e7787a719587c1}\label{message_8h_a5afd40241a6c466bd0e7787a719587c1} 
+\index{message.h@{message.h}!message\_new@{message\_new}}
+\index{message\_new@{message\_new}!message.h@{message.h}}
+\doxysubsubsection{\texorpdfstring{message\_new()}{message\_new()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{message_8h_a0d4b40ad42cd010fadd906ee5720ac5e}{Message}} \texorpdfstring{$\ast$}{*} message\+\_\+new (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{message_8h_ac6606ebe91c8ac66a2c314c79f5ab013}{Message\+Type}}}]{type,  }\item[{char \texorpdfstring{$\ast$}{*}}]{message }\end{DoxyParamCaption})}
+
+
+
+Creates a new message by allocating new memory for the string(i.\+e. it makes a copy of the string) 
+
+\begin{DoxyAuthor}{Author}
+Daniel Gómez
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em type} & type of the message \\
+\hline
+{\em message} & string with the information \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Message\texorpdfstring{$\ast$}{*} 
+\end{DoxyReturn}

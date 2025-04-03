@@ -1,0 +1,159 @@
+\doxysection{include/vector2.h File Reference}
+\hypertarget{vector2_8h}{}\label{vector2_8h}\index{include/vector2.h@{include/vector2.h}}
+
+
+Vectors to save positions with 2 dimensional values.  
+
+
+This graph shows which files directly or indirectly include this file\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{vector2_8h__dep__incl}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structVector2}{Vector2}}
+\begin{DoxyCompactList}\small\item\em Data structure to store 2 dimensional values. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{vector2_8h_a8edc32b52b5f8b4912080f7a2b40cd49}{vector2\+\_\+add}} (\mbox{\hyperlink{structVector2}{Vector2}} \texorpdfstring{$\ast$}{*}v1, \mbox{\hyperlink{structVector2}{Vector2}} v2)
+\begin{DoxyCompactList}\small\item\em Adds v2 to v1 coordenate by coordenate. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{vector2_8h_af12c4e796583b837245c59d6db671e6c}{vector2\+\_\+mult}} (\mbox{\hyperlink{structVector2}{Vector2}} \texorpdfstring{$\ast$}{*}v, float value)
+\begin{DoxyCompactList}\small\item\em Multiplies each component of v by value. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{vector2_8h_a8865090b879c3234e8321bb700ad4418}{vector2\+\_\+dot}} (\mbox{\hyperlink{structVector2}{Vector2}} v1, \mbox{\hyperlink{structVector2}{Vector2}} v2)
+\begin{DoxyCompactList}\small\item\em Calculates the dot product between 2 vectors. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{vector2_8h_a3a26009c8113b17909253bbc25729aa4}{vector2\+\_\+is\+Equal}} (void \texorpdfstring{$\ast$}{*}v1, void \texorpdfstring{$\ast$}{*}v2)
+\begin{DoxyCompactList}\small\item\em Compares 2 vectores. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{vector2_8h_ab5e4bd7aeaf42ae82df551f82bbe2008}{vector2\+\_\+copy}} (\mbox{\hyperlink{structVector2}{Vector2}} \texorpdfstring{$\ast$}{*}v1, \mbox{\hyperlink{structVector2}{Vector2}} \texorpdfstring{$\ast$}{*}v2)
+\begin{DoxyCompactList}\small\item\em Copies v2 into v1. Both vectors must have been intialized before. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Vectors to save positions with 2 dimensional values. 
+
+\begin{DoxyAuthor}{Author}
+Daniel Gómez 
+\end{DoxyAuthor}
+\begin{DoxyVersion}{Version}
+0.\+1 
+\end{DoxyVersion}
+\begin{DoxyDate}{Date}
+2025-\/03-\/06
+\end{DoxyDate}
+\begin{DoxyCopyright}{Copyright}
+GNU Public License 
+\end{DoxyCopyright}
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{vector2_8h_a8edc32b52b5f8b4912080f7a2b40cd49}\label{vector2_8h_a8edc32b52b5f8b4912080f7a2b40cd49} 
+\index{vector2.h@{vector2.h}!vector2\_add@{vector2\_add}}
+\index{vector2\_add@{vector2\_add}!vector2.h@{vector2.h}}
+\doxysubsubsection{\texorpdfstring{vector2\_add()}{vector2\_add()}}
+{\footnotesize\ttfamily void vector2\+\_\+add (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structVector2}{Vector2}} \texorpdfstring{$\ast$}{*}}]{v1,  }\item[{\mbox{\hyperlink{structVector2}{Vector2}}}]{v2 }\end{DoxyParamCaption})}
+
+
+
+Adds v2 to v1 coordenate by coordenate. 
+
+\begin{DoxyAuthor}{Author}
+Daniel Gómez
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em v1} & \\
+\hline
+{\em v2} & \\
+\hline
+\end{DoxyParams}
+\Hypertarget{vector2_8h_ab5e4bd7aeaf42ae82df551f82bbe2008}\label{vector2_8h_ab5e4bd7aeaf42ae82df551f82bbe2008} 
+\index{vector2.h@{vector2.h}!vector2\_copy@{vector2\_copy}}
+\index{vector2\_copy@{vector2\_copy}!vector2.h@{vector2.h}}
+\doxysubsubsection{\texorpdfstring{vector2\_copy()}{vector2\_copy()}}
+{\footnotesize\ttfamily void vector2\+\_\+copy (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structVector2}{Vector2}} \texorpdfstring{$\ast$}{*}}]{v1,  }\item[{\mbox{\hyperlink{structVector2}{Vector2}} \texorpdfstring{$\ast$}{*}}]{v2 }\end{DoxyParamCaption})}
+
+
+
+Copies v2 into v1. Both vectors must have been intialized before. 
+
+\begin{DoxyAuthor}{Author}
+Daniel Gómez
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em v1} & \\
+\hline
+{\em v2} & \\
+\hline
+\end{DoxyParams}
+\Hypertarget{vector2_8h_a8865090b879c3234e8321bb700ad4418}\label{vector2_8h_a8865090b879c3234e8321bb700ad4418} 
+\index{vector2.h@{vector2.h}!vector2\_dot@{vector2\_dot}}
+\index{vector2\_dot@{vector2\_dot}!vector2.h@{vector2.h}}
+\doxysubsubsection{\texorpdfstring{vector2\_dot()}{vector2\_dot()}}
+{\footnotesize\ttfamily int vector2\+\_\+dot (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structVector2}{Vector2}}}]{v1,  }\item[{\mbox{\hyperlink{structVector2}{Vector2}}}]{v2 }\end{DoxyParamCaption})}
+
+
+
+Calculates the dot product between 2 vectors. 
+
+\begin{DoxyAuthor}{Author}
+Daniel Gómez
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em v1} & \\
+\hline
+{\em v2} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int 
+\end{DoxyReturn}
+\Hypertarget{vector2_8h_a3a26009c8113b17909253bbc25729aa4}\label{vector2_8h_a3a26009c8113b17909253bbc25729aa4} 
+\index{vector2.h@{vector2.h}!vector2\_isEqual@{vector2\_isEqual}}
+\index{vector2\_isEqual@{vector2\_isEqual}!vector2.h@{vector2.h}}
+\doxysubsubsection{\texorpdfstring{vector2\_isEqual()}{vector2\_isEqual()}}
+{\footnotesize\ttfamily int vector2\+\_\+is\+Equal (\begin{DoxyParamCaption}\item[{void \texorpdfstring{$\ast$}{*}}]{v1,  }\item[{void \texorpdfstring{$\ast$}{*}}]{v2 }\end{DoxyParamCaption})}
+
+
+
+Compares 2 vectores. 
+
+\begin{DoxyAuthor}{Author}
+Daniel Gómez
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em v1} & \\
+\hline
+{\em v2} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 if equal, -\/1 if not, -\/2 if error 
+\end{DoxyReturn}
+\Hypertarget{vector2_8h_af12c4e796583b837245c59d6db671e6c}\label{vector2_8h_af12c4e796583b837245c59d6db671e6c} 
+\index{vector2.h@{vector2.h}!vector2\_mult@{vector2\_mult}}
+\index{vector2\_mult@{vector2\_mult}!vector2.h@{vector2.h}}
+\doxysubsubsection{\texorpdfstring{vector2\_mult()}{vector2\_mult()}}
+{\footnotesize\ttfamily void vector2\+\_\+mult (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structVector2}{Vector2}} \texorpdfstring{$\ast$}{*}}]{v,  }\item[{float}]{value }\end{DoxyParamCaption})}
+
+
+
+Multiplies each component of v by value. 
+
+\begin{DoxyAuthor}{Author}
+Daniel Gómez
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em v} & \\
+\hline
+{\em value} & \\
+\hline
+\end{DoxyParams}

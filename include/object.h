@@ -24,6 +24,9 @@
 
 #include <stdbool.h>
 
+/**
+ * @brief ADT that holds all the information related to an object
+ */
 typedef struct _Object Object;
 
 /*Object public functions*/
@@ -55,7 +58,8 @@ void object_destroy(void *object);
  * @brief Compares two objects and returns if their Id is equal or not
  * @author Maksym Polyak
  *
- * @param object contains the information of an object
+ * @param object1 object struct 1
+ * @param object2 object struct 2
  * @return 1 if the two objects are not equal.
  * @return 0 if they are equal.
  * @return -1 if there was a mistake.
@@ -109,8 +113,8 @@ Status object_set_type(Object *object, InventoryType type);
  * object description information
  * @author Maksym Polyak
  * 
- * @param object 
- * @param str 
+ * @param object object struct
+ * @param str description to set
  * @return Status 
  */
 Status object_set_descr(Object *object, char *str);
@@ -157,9 +161,9 @@ InventoryType object_get_type(Object *object);
  * @brief Gets if the object is consumable or not
  * @author Maksym Polyak
  * 
- * @param object 
- * @return true 
- * @return false 
+ * @param object object struct
+ * @return true if consumable
+ * @return false if consumable or error
  */
 bool object_get_is_consumable(Object *object);
 
@@ -167,7 +171,7 @@ bool object_get_is_consumable(Object *object);
  * @brief Gets the object description pointer
  * @author Maksym Polyak
  * 
- * @param object 
+ * @param object object struct
  * @return char* or NULL if error
  */
 char *object_get_descr(Object *object);
@@ -176,7 +180,7 @@ char *object_get_descr(Object *object);
  * @brief Gets the object ability pointer
  * @author Maksym Polyak
  * 
- * @param object 
+ * @param object object struct
  * @return Ability* or NULL if error
  */
 Ability *object_get_object_effect(Object *object);
@@ -185,7 +189,7 @@ Ability *object_get_object_effect(Object *object);
  * @brief Gets the string with the information about an object for the game to process
  * @author Maksym Polyak
  * 
- * @param object 
+ * @param object object struct
  * @return char* or NULL if error
  */
 char *object_get_data(Object *object);
@@ -194,7 +198,7 @@ char *object_get_data(Object *object);
  * @brief Prints on screen an object
  * @author Maksym Polyak
  *
- * @param inventory stores the information of an inventory
+ * @param object stores the information of an object
  */
 void object_print(void *object);
 
@@ -202,8 +206,8 @@ void object_print(void *object);
  * @brief Adds an object effect to the object, if it is already added it doesn't change
  * @author Maksym Polyak
  * 
- * @param object 
- * @param ability 
+ * @param object object struct
+ * @param ability ability struct to add to the object
  * @return Status 
  */
 Status object_add_object_effect(Object *object, Ability *ability);

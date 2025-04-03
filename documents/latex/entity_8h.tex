@@ -1,0 +1,852 @@
+\doxysection{include/entity.h File Reference}
+\hypertarget{entity_8h}{}\label{entity_8h}\index{include/entity.h@{include/entity.h}}
+
+
+It defines the entity module interface.  
+
+
+{\ttfamily \#include "{}inventory.\+h"{}}\newline
+{\ttfamily \#include "{}ability\+\_\+manager.\+h"{}}\newline
+{\ttfamily \#include "{}types.\+h"{}}\newline
+Include dependency graph for entity.\+h\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{entity_8h__incl}
+\end{center}
+\end{figure}
+This graph shows which files directly or indirectly include this file\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{entity_8h__dep__incl}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structEntity__Stats}{Entity\+\_\+\+Stats}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{entity_8h_aef78cab43bad604da55155941ae651ba}{ENTITY\+\_\+\+GRAPHIC\+\_\+\+LENGTH}}~3
+\item 
+\#define \mbox{\hyperlink{entity_8h_ab6a18f0dce696c13e571a5ed8312a5c0}{N\+\_\+\+STATS}}~7
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{entity_8h_a88bccc76704ed1a036c3500da8c42bcc}\label{entity_8h_a88bccc76704ed1a036c3500da8c42bcc} 
+typedef struct \mbox{\hyperlink{struct__Entity}{\+\_\+\+Entity}} {\bfseries Entity}
+\begin{DoxyCompactList}\small\item\em Entity ADT with all the common information to an entity(\+Players and NPCs common information types) \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{entity_8h_ad79a57ed3105eb60d991a1aeb4a9dc44}\label{entity_8h_ad79a57ed3105eb60d991a1aeb4a9dc44} 
+enum \mbox{\hyperlink{entity_8h_ad79a57ed3105eb60d991a1aeb4a9dc44}{Entity\+Type}} \{ {\bfseries UNKNOWN\+\_\+\+ENTITY}
+, {\bfseries PLAYER\+\_\+\+TYPE}
+, {\bfseries NPC\+\_\+\+TYPE}
+ \}
+\begin{DoxyCompactList}\small\item\em enum to identify where the entity is located \end{DoxyCompactList}\item 
+\Hypertarget{entity_8h_a350d00d335e2cee61821245bad7b279f}\label{entity_8h_a350d00d335e2cee61821245bad7b279f} 
+enum \mbox{\hyperlink{entity_8h_a350d00d335e2cee61821245bad7b279f}{Stat\+Code}} \{ \newline
+{\bfseries NO\+\_\+\+STAT}
+, {\bfseries MAX\+\_\+\+HEALTH}
+, {\bfseries HEALTH}
+, {\bfseries BASE\+\_\+\+DAMAGE}
+, \newline
+{\bfseries STRENGTH}
+, {\bfseries DEFENSE}
+, {\bfseries MAGIC\+\_\+\+LEVEL}
+ \}
+\begin{DoxyCompactList}\small\item\em enum with all the stats implemented on the game \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{entity_8h_a88bccc76704ed1a036c3500da8c42bcc}{Entity}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{entity_8h_a9fa3ced2134d94e08e4ee007bf615320}{entity\+\_\+create}} (char \texorpdfstring{$\ast$}{*}name, \mbox{\hyperlink{types_8h_a845e604fb28f7e3d97549da3448149d3}{Id}} identity, \mbox{\hyperlink{types_8h_a845e604fb28f7e3d97549da3448149d3}{Id}} idlocation, \mbox{\hyperlink{types_8h_a2793ea198e8b328078cf49008fa1d5b1}{Inventory\+Type}} inventory\+Type)
+\begin{DoxyCompactList}\small\item\em Creates a entity. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{entity_8h_af75da4895f5a6f25196d23f6ac2e9b5b}{entity\+\_\+destroy}} (\mbox{\hyperlink{entity_8h_a88bccc76704ed1a036c3500da8c42bcc}{Entity}} \texorpdfstring{$\ast$}{*}entity)
+\begin{DoxyCompactList}\small\item\em Frees a entity. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} \mbox{\hyperlink{entity_8h_a8092f63a5fc8df8aed6618cf3b064863}{entity\+\_\+set\+\_\+name}} (\mbox{\hyperlink{entity_8h_a88bccc76704ed1a036c3500da8c42bcc}{Entity}} \texorpdfstring{$\ast$}{*}entity, char \texorpdfstring{$\ast$}{*}name)
+\begin{DoxyCompactList}\small\item\em Sets a entity name with the name argument. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} \mbox{\hyperlink{entity_8h_a6da4418684db0c3f769132556f70ec3f}{entity\+\_\+set\+\_\+location}} (\mbox{\hyperlink{entity_8h_a88bccc76704ed1a036c3500da8c42bcc}{Entity}} \texorpdfstring{$\ast$}{*}entity, \mbox{\hyperlink{types_8h_a845e604fb28f7e3d97549da3448149d3}{Id}} id)
+\begin{DoxyCompactList}\small\item\em Sets a entity location on the map. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} \mbox{\hyperlink{entity_8h_a50d48829caae524f0cae5264754b30b2}{entity\+\_\+set\+\_\+id}} (\mbox{\hyperlink{entity_8h_a88bccc76704ed1a036c3500da8c42bcc}{Entity}} \texorpdfstring{$\ast$}{*}entity, \mbox{\hyperlink{types_8h_a845e604fb28f7e3d97549da3448149d3}{Id}} id)
+\begin{DoxyCompactList}\small\item\em Sets an entity id. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} \mbox{\hyperlink{entity_8h_a7b4a842f299bd8366f9c3af63b88461d}{entity\+\_\+set\+\_\+entity\+Type}} (\mbox{\hyperlink{entity_8h_a88bccc76704ed1a036c3500da8c42bcc}{Entity}} \texorpdfstring{$\ast$}{*}entity, \mbox{\hyperlink{entity_8h_ad79a57ed3105eb60d991a1aeb4a9dc44}{Entity\+Type}} entity\+Type)
+\begin{DoxyCompactList}\small\item\em Sets an entity entity\+Type. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} \mbox{\hyperlink{entity_8h_adfbc906a025574a42c93f6e884238ffb}{entity\+\_\+set\+\_\+max\+\_\+health}} (\mbox{\hyperlink{entity_8h_a88bccc76704ed1a036c3500da8c42bcc}{Entity}} \texorpdfstring{$\ast$}{*}entity, double maxhealth)
+\begin{DoxyCompactList}\small\item\em Sets an entity max health. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} \mbox{\hyperlink{entity_8h_af3adeb8223bf13480fc43118500b87ab}{entity\+\_\+set\+\_\+health}} (\mbox{\hyperlink{entity_8h_a88bccc76704ed1a036c3500da8c42bcc}{Entity}} \texorpdfstring{$\ast$}{*}entity, double health)
+\begin{DoxyCompactList}\small\item\em Sets the entity health. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} \mbox{\hyperlink{entity_8h_a2a08ad04ed587bf2e5baab8f3f09f4b1}{entity\+\_\+set\+\_\+base\+Damage}} (\mbox{\hyperlink{entity_8h_a88bccc76704ed1a036c3500da8c42bcc}{Entity}} \texorpdfstring{$\ast$}{*}entity, double base\+Damage)
+\begin{DoxyCompactList}\small\item\em Sets the base damage. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} \mbox{\hyperlink{entity_8h_adb1a1f94079bc0a1fb28a6b29a90113f}{entity\+\_\+set\+\_\+strength}} (\mbox{\hyperlink{entity_8h_a88bccc76704ed1a036c3500da8c42bcc}{Entity}} \texorpdfstring{$\ast$}{*}entity, int strength)
+\begin{DoxyCompactList}\small\item\em Sets the strength stat. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} \mbox{\hyperlink{entity_8h_a998cb9f9fe0c910d744338ba9a4653e3}{entity\+\_\+set\+\_\+defense}} (\mbox{\hyperlink{entity_8h_a88bccc76704ed1a036c3500da8c42bcc}{Entity}} \texorpdfstring{$\ast$}{*}entity, int defense)
+\begin{DoxyCompactList}\small\item\em Sets the defense stat. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} \mbox{\hyperlink{entity_8h_aa92437ee138bd7f871d77add95c16f1e}{entity\+\_\+set\+\_\+magic\+Level}} (\mbox{\hyperlink{entity_8h_a88bccc76704ed1a036c3500da8c42bcc}{Entity}} \texorpdfstring{$\ast$}{*}entity, int magic\+Level)
+\begin{DoxyCompactList}\small\item\em Sets the magic level stat. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} \mbox{\hyperlink{entity_8h_ad7d8def339c7f2baf9146214e8b449bb}{entity\+\_\+set\+\_\+graphic\+\_\+description}} (\mbox{\hyperlink{entity_8h_a88bccc76704ed1a036c3500da8c42bcc}{Entity}} \texorpdfstring{$\ast$}{*}entity, char \texorpdfstring{$\ast$}{*}gdesc)
+\begin{DoxyCompactList}\small\item\em Sets the graphic descption of the entity to a given string. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} \mbox{\hyperlink{entity_8h_a28f7b91f79e3c84ef9394396bcbe71c6}{entity\+\_\+set\+\_\+stats}} (\mbox{\hyperlink{entity_8h_a88bccc76704ed1a036c3500da8c42bcc}{Entity}} \texorpdfstring{$\ast$}{*}ent, double maxhealth, double health, double base\+Damage, int strength, int defense, int magic\+Level)
+\begin{DoxyCompactList}\small\item\em This function sets the stats values of an Entity;. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} \mbox{\hyperlink{entity_8h_abf9db1d70472d1a2f8f0bd9fe556b40d}{entity\+\_\+stats\+\_\+set\+\_\+all}} (\mbox{\hyperlink{structEntity__Stats}{Entity\+\_\+\+Stats}} \texorpdfstring{$\ast$}{*}es, double maxhealth, double health, double base\+Damage, int strength, int defense, int magic\+Level)
+\begin{DoxyCompactList}\small\item\em This function sets the values of an Entity\+Stats. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{entity_8h_a22762ddd12eb7d95c7266e4803b6dfa1}{entity\+\_\+is\+\_\+dead}} (\mbox{\hyperlink{entity_8h_a88bccc76704ed1a036c3500da8c42bcc}{Entity}} \texorpdfstring{$\ast$}{*}entity)
+\begin{DoxyCompactList}\small\item\em Gets if an entity is dead or not. \end{DoxyCompactList}\item 
+char \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{entity_8h_a52cdfd38babce5cee59ddfbb95cc84ac}{entity\+\_\+get\+\_\+graphic\+\_\+description}} (\mbox{\hyperlink{entity_8h_a88bccc76704ed1a036c3500da8c42bcc}{Entity}} \texorpdfstring{$\ast$}{*}entity)
+\begin{DoxyCompactList}\small\item\em Gets the graphic descption of the entity. \end{DoxyCompactList}\item 
+char \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{entity_8h_aa7c2e38077c7945d787922751417875a}{entity\+\_\+get\+\_\+name}} (\mbox{\hyperlink{entity_8h_a88bccc76704ed1a036c3500da8c42bcc}{Entity}} \texorpdfstring{$\ast$}{*}entity)
+\begin{DoxyCompactList}\small\item\em Gets the name of the entity. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{types_8h_a845e604fb28f7e3d97549da3448149d3}{Id}} \mbox{\hyperlink{entity_8h_a1148a325afd5e80a149e201cd2f08f6e}{entity\+\_\+get\+\_\+location}} (\mbox{\hyperlink{entity_8h_a88bccc76704ed1a036c3500da8c42bcc}{Entity}} \texorpdfstring{$\ast$}{*}entity)
+\begin{DoxyCompactList}\small\item\em Gets the Id of the entity\textquotesingle{}s location space. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{inventory_8h_a2253bf64ac4ce6a9c1d6f39c0b0d32a3}{Inventory}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{entity_8h_afa75d1dd8d80753205a5de92ab0f7e78}{entity\+\_\+get\+\_\+inventory}} (\mbox{\hyperlink{entity_8h_a88bccc76704ed1a036c3500da8c42bcc}{Entity}} \texorpdfstring{$\ast$}{*}entity)
+\begin{DoxyCompactList}\small\item\em Gets the inventory pointer from a entity. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{types_8h_a845e604fb28f7e3d97549da3448149d3}{Id}} \mbox{\hyperlink{entity_8h_a3aa6f6258d7aed332bedd111e0bd5633}{entity\+\_\+get\+\_\+id}} (\mbox{\hyperlink{entity_8h_a88bccc76704ed1a036c3500da8c42bcc}{Entity}} \texorpdfstring{$\ast$}{*}entity)
+\begin{DoxyCompactList}\small\item\em Gets the entity id. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{entity_8h_ad79a57ed3105eb60d991a1aeb4a9dc44}{Entity\+Type}} \mbox{\hyperlink{entity_8h_ad44bfb864a2b56eeaafbe6b7ca815241}{entity\+\_\+get\+\_\+entity\+Type}} (\mbox{\hyperlink{entity_8h_a88bccc76704ed1a036c3500da8c42bcc}{Entity}} \texorpdfstring{$\ast$}{*}entity)
+\begin{DoxyCompactList}\small\item\em Gets an entity entity\+Type. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} \mbox{\hyperlink{entity_8h_adac70ec2bf871d13beaa8a6e8371a479}{entity\+\_\+add\+\_\+ability}} (\mbox{\hyperlink{entity_8h_a88bccc76704ed1a036c3500da8c42bcc}{Entity}} \texorpdfstring{$\ast$}{*}entity, \mbox{\hyperlink{ability__manager_8h_a41710c366455f85aeeed4055e62e0822}{Ability}} \texorpdfstring{$\ast$}{*}ability)
+\begin{DoxyCompactList}\small\item\em Adds a ability to the entity if it is not full. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{ability__manager_8h_a41710c366455f85aeeed4055e62e0822}{Ability}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{entity_8h_ae32762faee1e00feb3b06416d9bac978}{entity\+\_\+get\+\_\+ability\+\_\+at}} (\mbox{\hyperlink{entity_8h_a88bccc76704ed1a036c3500da8c42bcc}{Entity}} \texorpdfstring{$\ast$}{*}entity, int index)
+\begin{DoxyCompactList}\small\item\em Gets the ability at the index of the entity. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{entity_8h_a099afa74b490ac47a531eef2db93592d}{entity\+\_\+get\+\_\+max\+\_\+health}} (\mbox{\hyperlink{entity_8h_a88bccc76704ed1a036c3500da8c42bcc}{Entity}} \texorpdfstring{$\ast$}{*}entity)
+\begin{DoxyCompactList}\small\item\em Gets the entity max health. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{entity_8h_aa050b5a6760add5096414d2ca7471bc4}{entity\+\_\+get\+\_\+health}} (\mbox{\hyperlink{entity_8h_a88bccc76704ed1a036c3500da8c42bcc}{Entity}} \texorpdfstring{$\ast$}{*}entity)
+\begin{DoxyCompactList}\small\item\em Gets the entity health. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{entity_8h_af061d2d444b75be8ca3dd4d250fa13a6}{entity\+\_\+get\+\_\+base\+Damage}} (\mbox{\hyperlink{entity_8h_a88bccc76704ed1a036c3500da8c42bcc}{Entity}} \texorpdfstring{$\ast$}{*}entity)
+\begin{DoxyCompactList}\small\item\em Gets the entity base damage. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{entity_8h_a61a37e7ccaa31902e4e55c598ac0dcff}{entity\+\_\+get\+\_\+strength}} (\mbox{\hyperlink{entity_8h_a88bccc76704ed1a036c3500da8c42bcc}{Entity}} \texorpdfstring{$\ast$}{*}entity)
+\begin{DoxyCompactList}\small\item\em Gets the strength stat of the entity. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{entity_8h_a4ac135b2c1320fd6154f7aed528d274e}{entity\+\_\+get\+\_\+defense}} (\mbox{\hyperlink{entity_8h_a88bccc76704ed1a036c3500da8c42bcc}{Entity}} \texorpdfstring{$\ast$}{*}entity)
+\begin{DoxyCompactList}\small\item\em Gets the defense stat of the entity. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{entity_8h_a4e76edb1ad8495d815c17844d4da0fd2}{entity\+\_\+get\+\_\+magic\+Level}} (\mbox{\hyperlink{entity_8h_a88bccc76704ed1a036c3500da8c42bcc}{Entity}} \texorpdfstring{$\ast$}{*}entity)
+\begin{DoxyCompactList}\small\item\em Gets the magic Level stat of the entity. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+It defines the entity module interface. 
+
+An entity is the base ADT which stores essential information about Non-\/\+Playables Characters, players and everything that moves. For now, each entity is defined by their type (Entity\+Type), a name, a unique id between entities, a location and an own inventory.
+
+Entity also saves the stats for each entity. The stats struct has not been made an ADT for the reasons specified on the README.\+txt
+
+Each entity saves its own graphic description for the graphic\+\_\+engine
+
+\begin{DoxyAuthor}{Author}
+Maksym Polyak 
+\end{DoxyAuthor}
+\begin{DoxyVersion}{Version}
+0 
+\end{DoxyVersion}
+\begin{DoxyDate}{Date}
+06-\/02-\/2025 
+\end{DoxyDate}
+\begin{DoxyCopyright}{Copyright}
+GNU Public License 
+\end{DoxyCopyright}
+
+
+\doxysubsection{Macro Definition Documentation}
+\Hypertarget{entity_8h_aef78cab43bad604da55155941ae651ba}\label{entity_8h_aef78cab43bad604da55155941ae651ba} 
+\index{entity.h@{entity.h}!ENTITY\_GRAPHIC\_LENGTH@{ENTITY\_GRAPHIC\_LENGTH}}
+\index{ENTITY\_GRAPHIC\_LENGTH@{ENTITY\_GRAPHIC\_LENGTH}!entity.h@{entity.h}}
+\doxysubsubsection{\texorpdfstring{ENTITY\_GRAPHIC\_LENGTH}{ENTITY\_GRAPHIC\_LENGTH}}
+{\footnotesize\ttfamily \#define ENTITY\+\_\+\+GRAPHIC\+\_\+\+LENGTH~3}
+
+Maximum length of an entity graphic description (without ~\newline
+) \Hypertarget{entity_8h_ab6a18f0dce696c13e571a5ed8312a5c0}\label{entity_8h_ab6a18f0dce696c13e571a5ed8312a5c0} 
+\index{entity.h@{entity.h}!N\_STATS@{N\_STATS}}
+\index{N\_STATS@{N\_STATS}!entity.h@{entity.h}}
+\doxysubsubsection{\texorpdfstring{N\_STATS}{N\_STATS}}
+{\footnotesize\ttfamily \#define N\+\_\+\+STATS~7}
+
+Number of stats implemented + NO\+\_\+\+STAT 
+
+\doxysubsection{Function Documentation}
+\Hypertarget{entity_8h_adac70ec2bf871d13beaa8a6e8371a479}\label{entity_8h_adac70ec2bf871d13beaa8a6e8371a479} 
+\index{entity.h@{entity.h}!entity\_add\_ability@{entity\_add\_ability}}
+\index{entity\_add\_ability@{entity\_add\_ability}!entity.h@{entity.h}}
+\doxysubsubsection{\texorpdfstring{entity\_add\_ability()}{entity\_add\_ability()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} entity\+\_\+add\+\_\+ability (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{entity_8h_a88bccc76704ed1a036c3500da8c42bcc}{Entity}} \texorpdfstring{$\ast$}{*}}]{entity,  }\item[{\mbox{\hyperlink{ability__manager_8h_a41710c366455f85aeeed4055e62e0822}{Ability}} \texorpdfstring{$\ast$}{*}}]{ability }\end{DoxyParamCaption})}
+
+
+
+Adds a ability to the entity if it is not full. 
+
+\begin{DoxyAuthor}{Author}
+Maksym Polyak
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em entity} & contains all the information related to the entity \\
+\hline
+{\em ability} & ability to add \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Status 
+\end{DoxyReturn}
+\Hypertarget{entity_8h_a9fa3ced2134d94e08e4ee007bf615320}\label{entity_8h_a9fa3ced2134d94e08e4ee007bf615320} 
+\index{entity.h@{entity.h}!entity\_create@{entity\_create}}
+\index{entity\_create@{entity\_create}!entity.h@{entity.h}}
+\doxysubsubsection{\texorpdfstring{entity\_create()}{entity\_create()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{entity_8h_a88bccc76704ed1a036c3500da8c42bcc}{Entity}} \texorpdfstring{$\ast$}{*} entity\+\_\+create (\begin{DoxyParamCaption}\item[{char \texorpdfstring{$\ast$}{*}}]{name,  }\item[{\mbox{\hyperlink{types_8h_a845e604fb28f7e3d97549da3448149d3}{Id}}}]{identity,  }\item[{\mbox{\hyperlink{types_8h_a845e604fb28f7e3d97549da3448149d3}{Id}}}]{idlocation,  }\item[{\mbox{\hyperlink{types_8h_a2793ea198e8b328078cf49008fa1d5b1}{Inventory\+Type}}}]{inventory\+Type }\end{DoxyParamCaption})}
+
+
+
+Creates a entity. 
+
+\begin{DoxyAuthor}{Author}
+Maksym Polyak
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em name} & name of the entity \\
+\hline
+{\em identity} & id of the entity \\
+\hline
+{\em idlocation} & id of the location of the entity \\
+\hline
+{\em inventory\+Type} & type of inventory of the entity \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Entity pointer if everything goes well or NULL if there was a mistake 
+\end{DoxyReturn}
+\Hypertarget{entity_8h_af75da4895f5a6f25196d23f6ac2e9b5b}\label{entity_8h_af75da4895f5a6f25196d23f6ac2e9b5b} 
+\index{entity.h@{entity.h}!entity\_destroy@{entity\_destroy}}
+\index{entity\_destroy@{entity\_destroy}!entity.h@{entity.h}}
+\doxysubsubsection{\texorpdfstring{entity\_destroy()}{entity\_destroy()}}
+{\footnotesize\ttfamily void entity\+\_\+destroy (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{entity_8h_a88bccc76704ed1a036c3500da8c42bcc}{Entity}} \texorpdfstring{$\ast$}{*}}]{entity }\end{DoxyParamCaption})}
+
+
+
+Frees a entity. 
+
+\begin{DoxyAuthor}{Author}
+Maksym Polyak
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em entity} & contains all the information related to the entity \\
+\hline
+\end{DoxyParams}
+\Hypertarget{entity_8h_ae32762faee1e00feb3b06416d9bac978}\label{entity_8h_ae32762faee1e00feb3b06416d9bac978} 
+\index{entity.h@{entity.h}!entity\_get\_ability\_at@{entity\_get\_ability\_at}}
+\index{entity\_get\_ability\_at@{entity\_get\_ability\_at}!entity.h@{entity.h}}
+\doxysubsubsection{\texorpdfstring{entity\_get\_ability\_at()}{entity\_get\_ability\_at()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{ability__manager_8h_a41710c366455f85aeeed4055e62e0822}{Ability}} \texorpdfstring{$\ast$}{*} entity\+\_\+get\+\_\+ability\+\_\+at (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{entity_8h_a88bccc76704ed1a036c3500da8c42bcc}{Entity}} \texorpdfstring{$\ast$}{*}}]{entity,  }\item[{int}]{index }\end{DoxyParamCaption})}
+
+
+
+Gets the ability at the index of the entity. 
+
+\begin{DoxyAuthor}{Author}
+Maksym Polyak
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em entity} & contains all the information related to the entity \\
+\hline
+{\em index} & index of the ability \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Ability\texorpdfstring{$\ast$}{*} or NULL if error or not found 
+\end{DoxyReturn}
+\Hypertarget{entity_8h_af061d2d444b75be8ca3dd4d250fa13a6}\label{entity_8h_af061d2d444b75be8ca3dd4d250fa13a6} 
+\index{entity.h@{entity.h}!entity\_get\_baseDamage@{entity\_get\_baseDamage}}
+\index{entity\_get\_baseDamage@{entity\_get\_baseDamage}!entity.h@{entity.h}}
+\doxysubsubsection{\texorpdfstring{entity\_get\_baseDamage()}{entity\_get\_baseDamage()}}
+{\footnotesize\ttfamily double entity\+\_\+get\+\_\+base\+Damage (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{entity_8h_a88bccc76704ed1a036c3500da8c42bcc}{Entity}} \texorpdfstring{$\ast$}{*}}]{entity }\end{DoxyParamCaption})}
+
+
+
+Gets the entity base damage. 
+
+\begin{DoxyAuthor}{Author}
+Maksym Polyak
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em entity} & contains all the information related to the entity \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+base\+Damage if well or -\/1 if wrong 
+\end{DoxyReturn}
+\Hypertarget{entity_8h_a4ac135b2c1320fd6154f7aed528d274e}\label{entity_8h_a4ac135b2c1320fd6154f7aed528d274e} 
+\index{entity.h@{entity.h}!entity\_get\_defense@{entity\_get\_defense}}
+\index{entity\_get\_defense@{entity\_get\_defense}!entity.h@{entity.h}}
+\doxysubsubsection{\texorpdfstring{entity\_get\_defense()}{entity\_get\_defense()}}
+{\footnotesize\ttfamily int entity\+\_\+get\+\_\+defense (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{entity_8h_a88bccc76704ed1a036c3500da8c42bcc}{Entity}} \texorpdfstring{$\ast$}{*}}]{entity }\end{DoxyParamCaption})}
+
+
+
+Gets the defense stat of the entity. 
+
+\begin{DoxyAuthor}{Author}
+Maksym Polyak
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em entity} & contains all the information related to the entity \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+defense stat if well or -\/1 if wrong 
+\end{DoxyReturn}
+\Hypertarget{entity_8h_ad44bfb864a2b56eeaafbe6b7ca815241}\label{entity_8h_ad44bfb864a2b56eeaafbe6b7ca815241} 
+\index{entity.h@{entity.h}!entity\_get\_entityType@{entity\_get\_entityType}}
+\index{entity\_get\_entityType@{entity\_get\_entityType}!entity.h@{entity.h}}
+\doxysubsubsection{\texorpdfstring{entity\_get\_entityType()}{entity\_get\_entityType()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{entity_8h_ad79a57ed3105eb60d991a1aeb4a9dc44}{Entity\+Type}} entity\+\_\+get\+\_\+entity\+Type (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{entity_8h_a88bccc76704ed1a036c3500da8c42bcc}{Entity}} \texorpdfstring{$\ast$}{*}}]{entity }\end{DoxyParamCaption})}
+
+
+
+Gets an entity entity\+Type. 
+
+\begin{DoxyAuthor}{Author}
+Maksym Polyak
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em entity} & contains all the information related to the entity \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Entity\+Type or UNKNOWN\+\_\+\+ENTITY if error 
+\end{DoxyReturn}
+\Hypertarget{entity_8h_a52cdfd38babce5cee59ddfbb95cc84ac}\label{entity_8h_a52cdfd38babce5cee59ddfbb95cc84ac} 
+\index{entity.h@{entity.h}!entity\_get\_graphic\_description@{entity\_get\_graphic\_description}}
+\index{entity\_get\_graphic\_description@{entity\_get\_graphic\_description}!entity.h@{entity.h}}
+\doxysubsubsection{\texorpdfstring{entity\_get\_graphic\_description()}{entity\_get\_graphic\_description()}}
+{\footnotesize\ttfamily char \texorpdfstring{$\ast$}{*} entity\+\_\+get\+\_\+graphic\+\_\+description (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{entity_8h_a88bccc76704ed1a036c3500da8c42bcc}{Entity}} \texorpdfstring{$\ast$}{*}}]{entity }\end{DoxyParamCaption})}
+
+
+
+Gets the graphic descption of the entity. 
+
+\begin{DoxyAuthor}{Author}
+Daniel Gómez
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em entity} & contains all the information related to the entity \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Reference to description or NULL if error 
+\end{DoxyReturn}
+\Hypertarget{entity_8h_aa050b5a6760add5096414d2ca7471bc4}\label{entity_8h_aa050b5a6760add5096414d2ca7471bc4} 
+\index{entity.h@{entity.h}!entity\_get\_health@{entity\_get\_health}}
+\index{entity\_get\_health@{entity\_get\_health}!entity.h@{entity.h}}
+\doxysubsubsection{\texorpdfstring{entity\_get\_health()}{entity\_get\_health()}}
+{\footnotesize\ttfamily double entity\+\_\+get\+\_\+health (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{entity_8h_a88bccc76704ed1a036c3500da8c42bcc}{Entity}} \texorpdfstring{$\ast$}{*}}]{entity }\end{DoxyParamCaption})}
+
+
+
+Gets the entity health. 
+
+\begin{DoxyAuthor}{Author}
+Maksym Polyak
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em entity} & contains all the information related to the entity \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+health if well or -\/1 if wrong 
+\end{DoxyReturn}
+\Hypertarget{entity_8h_a3aa6f6258d7aed332bedd111e0bd5633}\label{entity_8h_a3aa6f6258d7aed332bedd111e0bd5633} 
+\index{entity.h@{entity.h}!entity\_get\_id@{entity\_get\_id}}
+\index{entity\_get\_id@{entity\_get\_id}!entity.h@{entity.h}}
+\doxysubsubsection{\texorpdfstring{entity\_get\_id()}{entity\_get\_id()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{types_8h_a845e604fb28f7e3d97549da3448149d3}{Id}} entity\+\_\+get\+\_\+id (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{entity_8h_a88bccc76704ed1a036c3500da8c42bcc}{Entity}} \texorpdfstring{$\ast$}{*}}]{entity }\end{DoxyParamCaption})}
+
+
+
+Gets the entity id. 
+
+\begin{DoxyAuthor}{Author}
+Maksym Polyak
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em entity} & contains all the information related to the entity \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+entity id or NULL if there was a mistake 
+\end{DoxyReturn}
+\Hypertarget{entity_8h_afa75d1dd8d80753205a5de92ab0f7e78}\label{entity_8h_afa75d1dd8d80753205a5de92ab0f7e78} 
+\index{entity.h@{entity.h}!entity\_get\_inventory@{entity\_get\_inventory}}
+\index{entity\_get\_inventory@{entity\_get\_inventory}!entity.h@{entity.h}}
+\doxysubsubsection{\texorpdfstring{entity\_get\_inventory()}{entity\_get\_inventory()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{inventory_8h_a2253bf64ac4ce6a9c1d6f39c0b0d32a3}{Inventory}} \texorpdfstring{$\ast$}{*} entity\+\_\+get\+\_\+inventory (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{entity_8h_a88bccc76704ed1a036c3500da8c42bcc}{Entity}} \texorpdfstring{$\ast$}{*}}]{entity }\end{DoxyParamCaption})}
+
+
+
+Gets the inventory pointer from a entity. 
+
+\begin{DoxyAuthor}{Author}
+Maksym Polyak
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em entity} & contains all the information related to the entity \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+inventory pointer or NULL if there was a mistake 
+\end{DoxyReturn}
+\Hypertarget{entity_8h_a1148a325afd5e80a149e201cd2f08f6e}\label{entity_8h_a1148a325afd5e80a149e201cd2f08f6e} 
+\index{entity.h@{entity.h}!entity\_get\_location@{entity\_get\_location}}
+\index{entity\_get\_location@{entity\_get\_location}!entity.h@{entity.h}}
+\doxysubsubsection{\texorpdfstring{entity\_get\_location()}{entity\_get\_location()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{types_8h_a845e604fb28f7e3d97549da3448149d3}{Id}} entity\+\_\+get\+\_\+location (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{entity_8h_a88bccc76704ed1a036c3500da8c42bcc}{Entity}} \texorpdfstring{$\ast$}{*}}]{entity }\end{DoxyParamCaption})}
+
+
+
+Gets the Id of the entity\textquotesingle{}s location space. 
+
+\begin{DoxyAuthor}{Author}
+Maksym Polyak
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em entity} & contains all the information related to the entity \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+entity\textquotesingle{}s location Id or -\/1 if there was a mistake 
+\end{DoxyReturn}
+\Hypertarget{entity_8h_a4e76edb1ad8495d815c17844d4da0fd2}\label{entity_8h_a4e76edb1ad8495d815c17844d4da0fd2} 
+\index{entity.h@{entity.h}!entity\_get\_magicLevel@{entity\_get\_magicLevel}}
+\index{entity\_get\_magicLevel@{entity\_get\_magicLevel}!entity.h@{entity.h}}
+\doxysubsubsection{\texorpdfstring{entity\_get\_magicLevel()}{entity\_get\_magicLevel()}}
+{\footnotesize\ttfamily int entity\+\_\+get\+\_\+magic\+Level (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{entity_8h_a88bccc76704ed1a036c3500da8c42bcc}{Entity}} \texorpdfstring{$\ast$}{*}}]{entity }\end{DoxyParamCaption})}
+
+
+
+Gets the magic Level stat of the entity. 
+
+\begin{DoxyAuthor}{Author}
+Maksym Polyak
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em entity} & contains all the information related to the entity \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+magic\+Level stat if well or -\/1 if wrong 
+\end{DoxyReturn}
+\Hypertarget{entity_8h_a099afa74b490ac47a531eef2db93592d}\label{entity_8h_a099afa74b490ac47a531eef2db93592d} 
+\index{entity.h@{entity.h}!entity\_get\_max\_health@{entity\_get\_max\_health}}
+\index{entity\_get\_max\_health@{entity\_get\_max\_health}!entity.h@{entity.h}}
+\doxysubsubsection{\texorpdfstring{entity\_get\_max\_health()}{entity\_get\_max\_health()}}
+{\footnotesize\ttfamily double entity\+\_\+get\+\_\+max\+\_\+health (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{entity_8h_a88bccc76704ed1a036c3500da8c42bcc}{Entity}} \texorpdfstring{$\ast$}{*}}]{entity }\end{DoxyParamCaption})}
+
+
+
+Gets the entity max health. 
+
+\begin{DoxyAuthor}{Author}
+Maksym Polyak
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em entity} & contains all the information related to the entity \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+health if well or -\/1 if wrong 
+\end{DoxyReturn}
+\Hypertarget{entity_8h_aa7c2e38077c7945d787922751417875a}\label{entity_8h_aa7c2e38077c7945d787922751417875a} 
+\index{entity.h@{entity.h}!entity\_get\_name@{entity\_get\_name}}
+\index{entity\_get\_name@{entity\_get\_name}!entity.h@{entity.h}}
+\doxysubsubsection{\texorpdfstring{entity\_get\_name()}{entity\_get\_name()}}
+{\footnotesize\ttfamily char \texorpdfstring{$\ast$}{*} entity\+\_\+get\+\_\+name (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{entity_8h_a88bccc76704ed1a036c3500da8c42bcc}{Entity}} \texorpdfstring{$\ast$}{*}}]{entity }\end{DoxyParamCaption})}
+
+
+
+Gets the name of the entity. 
+
+\begin{DoxyAuthor}{Author}
+Maksym Polyak
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em entity} & contains all the information related to the entity \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+entity name or NULL if there was a mistake 
+\end{DoxyReturn}
+\Hypertarget{entity_8h_a61a37e7ccaa31902e4e55c598ac0dcff}\label{entity_8h_a61a37e7ccaa31902e4e55c598ac0dcff} 
+\index{entity.h@{entity.h}!entity\_get\_strength@{entity\_get\_strength}}
+\index{entity\_get\_strength@{entity\_get\_strength}!entity.h@{entity.h}}
+\doxysubsubsection{\texorpdfstring{entity\_get\_strength()}{entity\_get\_strength()}}
+{\footnotesize\ttfamily int entity\+\_\+get\+\_\+strength (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{entity_8h_a88bccc76704ed1a036c3500da8c42bcc}{Entity}} \texorpdfstring{$\ast$}{*}}]{entity }\end{DoxyParamCaption})}
+
+
+
+Gets the strength stat of the entity. 
+
+\begin{DoxyAuthor}{Author}
+Maksym Polyak
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em entity} & contains all the information related to the entity \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+strength stat if well or -\/1 if wrong 
+\end{DoxyReturn}
+\Hypertarget{entity_8h_a22762ddd12eb7d95c7266e4803b6dfa1}\label{entity_8h_a22762ddd12eb7d95c7266e4803b6dfa1} 
+\index{entity.h@{entity.h}!entity\_is\_dead@{entity\_is\_dead}}
+\index{entity\_is\_dead@{entity\_is\_dead}!entity.h@{entity.h}}
+\doxysubsubsection{\texorpdfstring{entity\_is\_dead()}{entity\_is\_dead()}}
+{\footnotesize\ttfamily bool entity\+\_\+is\+\_\+dead (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{entity_8h_a88bccc76704ed1a036c3500da8c42bcc}{Entity}} \texorpdfstring{$\ast$}{*}}]{entity }\end{DoxyParamCaption})}
+
+
+
+Gets if an entity is dead or not. 
+
+\begin{DoxyAuthor}{Author}
+Daniel Gómez
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em entity} & contains all the information related to the entity \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true if entity is dead, also true if there was an error 
+
+false if entity is alive 
+\end{DoxyReturn}
+\Hypertarget{entity_8h_a2a08ad04ed587bf2e5baab8f3f09f4b1}\label{entity_8h_a2a08ad04ed587bf2e5baab8f3f09f4b1} 
+\index{entity.h@{entity.h}!entity\_set\_baseDamage@{entity\_set\_baseDamage}}
+\index{entity\_set\_baseDamage@{entity\_set\_baseDamage}!entity.h@{entity.h}}
+\doxysubsubsection{\texorpdfstring{entity\_set\_baseDamage()}{entity\_set\_baseDamage()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} entity\+\_\+set\+\_\+base\+Damage (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{entity_8h_a88bccc76704ed1a036c3500da8c42bcc}{Entity}} \texorpdfstring{$\ast$}{*}}]{entity,  }\item[{double}]{base\+Damage }\end{DoxyParamCaption})}
+
+
+
+Sets the base damage. 
+
+\begin{DoxyAuthor}{Author}
+Maksym Polyak
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em entity} & contains all the information related to the entity \\
+\hline
+{\em base\+Damage} & base damage to set \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Status 
+\end{DoxyReturn}
+\Hypertarget{entity_8h_a998cb9f9fe0c910d744338ba9a4653e3}\label{entity_8h_a998cb9f9fe0c910d744338ba9a4653e3} 
+\index{entity.h@{entity.h}!entity\_set\_defense@{entity\_set\_defense}}
+\index{entity\_set\_defense@{entity\_set\_defense}!entity.h@{entity.h}}
+\doxysubsubsection{\texorpdfstring{entity\_set\_defense()}{entity\_set\_defense()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} entity\+\_\+set\+\_\+defense (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{entity_8h_a88bccc76704ed1a036c3500da8c42bcc}{Entity}} \texorpdfstring{$\ast$}{*}}]{entity,  }\item[{int}]{defense }\end{DoxyParamCaption})}
+
+
+
+Sets the defense stat. 
+
+\begin{DoxyAuthor}{Author}
+Maksym Polyak
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em entity} & contains all the information related to the entity \\
+\hline
+{\em defense} & defense stat to set \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Status 
+\end{DoxyReturn}
+\Hypertarget{entity_8h_a7b4a842f299bd8366f9c3af63b88461d}\label{entity_8h_a7b4a842f299bd8366f9c3af63b88461d} 
+\index{entity.h@{entity.h}!entity\_set\_entityType@{entity\_set\_entityType}}
+\index{entity\_set\_entityType@{entity\_set\_entityType}!entity.h@{entity.h}}
+\doxysubsubsection{\texorpdfstring{entity\_set\_entityType()}{entity\_set\_entityType()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} entity\+\_\+set\+\_\+entity\+Type (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{entity_8h_a88bccc76704ed1a036c3500da8c42bcc}{Entity}} \texorpdfstring{$\ast$}{*}}]{entity,  }\item[{\mbox{\hyperlink{entity_8h_ad79a57ed3105eb60d991a1aeb4a9dc44}{Entity\+Type}}}]{entity\+Type }\end{DoxyParamCaption})}
+
+
+
+Sets an entity entity\+Type. 
+
+\begin{DoxyAuthor}{Author}
+Maksym Polyak
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em entity} & contains all the information related to the entity \\
+\hline
+{\em entity\+Type} & type of the entity \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+OK if everything went well or ERROR if there was a mistake 
+\end{DoxyReturn}
+\Hypertarget{entity_8h_ad7d8def339c7f2baf9146214e8b449bb}\label{entity_8h_ad7d8def339c7f2baf9146214e8b449bb} 
+\index{entity.h@{entity.h}!entity\_set\_graphic\_description@{entity\_set\_graphic\_description}}
+\index{entity\_set\_graphic\_description@{entity\_set\_graphic\_description}!entity.h@{entity.h}}
+\doxysubsubsection{\texorpdfstring{entity\_set\_graphic\_description()}{entity\_set\_graphic\_description()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} entity\+\_\+set\+\_\+graphic\+\_\+description (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{entity_8h_a88bccc76704ed1a036c3500da8c42bcc}{Entity}} \texorpdfstring{$\ast$}{*}}]{entity,  }\item[{char \texorpdfstring{$\ast$}{*}}]{gdesc }\end{DoxyParamCaption})}
+
+
+
+Sets the graphic descption of the entity to a given string. 
+
+\begin{DoxyAuthor}{Author}
+Daniel Gómez
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em entity} & contains all the information related to the entity \\
+\hline
+{\em gdesc} & graphic description to set \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Status 
+\end{DoxyReturn}
+\Hypertarget{entity_8h_af3adeb8223bf13480fc43118500b87ab}\label{entity_8h_af3adeb8223bf13480fc43118500b87ab} 
+\index{entity.h@{entity.h}!entity\_set\_health@{entity\_set\_health}}
+\index{entity\_set\_health@{entity\_set\_health}!entity.h@{entity.h}}
+\doxysubsubsection{\texorpdfstring{entity\_set\_health()}{entity\_set\_health()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} entity\+\_\+set\+\_\+health (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{entity_8h_a88bccc76704ed1a036c3500da8c42bcc}{Entity}} \texorpdfstring{$\ast$}{*}}]{entity,  }\item[{double}]{health }\end{DoxyParamCaption})}
+
+
+
+Sets the entity health. 
+
+\begin{DoxyAuthor}{Author}
+Maksym Polyak
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em entity} & contains all the information related to the entity \\
+\hline
+{\em health} & health to be set \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Status 
+\end{DoxyReturn}
+\Hypertarget{entity_8h_a50d48829caae524f0cae5264754b30b2}\label{entity_8h_a50d48829caae524f0cae5264754b30b2} 
+\index{entity.h@{entity.h}!entity\_set\_id@{entity\_set\_id}}
+\index{entity\_set\_id@{entity\_set\_id}!entity.h@{entity.h}}
+\doxysubsubsection{\texorpdfstring{entity\_set\_id()}{entity\_set\_id()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} entity\+\_\+set\+\_\+id (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{entity_8h_a88bccc76704ed1a036c3500da8c42bcc}{Entity}} \texorpdfstring{$\ast$}{*}}]{entity,  }\item[{\mbox{\hyperlink{types_8h_a845e604fb28f7e3d97549da3448149d3}{Id}}}]{id }\end{DoxyParamCaption})}
+
+
+
+Sets an entity id. 
+
+\begin{DoxyAuthor}{Author}
+Maksym Polyak
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em entity} & contains all the information related to the entity \\
+\hline
+{\em id} & unique id of the entity \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+OK if everything went well or ERROR if there was a mistake 
+\end{DoxyReturn}
+\Hypertarget{entity_8h_a6da4418684db0c3f769132556f70ec3f}\label{entity_8h_a6da4418684db0c3f769132556f70ec3f} 
+\index{entity.h@{entity.h}!entity\_set\_location@{entity\_set\_location}}
+\index{entity\_set\_location@{entity\_set\_location}!entity.h@{entity.h}}
+\doxysubsubsection{\texorpdfstring{entity\_set\_location()}{entity\_set\_location()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} entity\+\_\+set\+\_\+location (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{entity_8h_a88bccc76704ed1a036c3500da8c42bcc}{Entity}} \texorpdfstring{$\ast$}{*}}]{entity,  }\item[{\mbox{\hyperlink{types_8h_a845e604fb28f7e3d97549da3448149d3}{Id}}}]{id }\end{DoxyParamCaption})}
+
+
+
+Sets a entity location on the map. 
+
+\begin{DoxyAuthor}{Author}
+Maksym Polyak
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em entity} & contains all the information related to the entity \\
+\hline
+{\em id} & id where the entity is going to be placed \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+OK if everything went well or ERROR if there was a mistake 
+\end{DoxyReturn}
+\Hypertarget{entity_8h_aa92437ee138bd7f871d77add95c16f1e}\label{entity_8h_aa92437ee138bd7f871d77add95c16f1e} 
+\index{entity.h@{entity.h}!entity\_set\_magicLevel@{entity\_set\_magicLevel}}
+\index{entity\_set\_magicLevel@{entity\_set\_magicLevel}!entity.h@{entity.h}}
+\doxysubsubsection{\texorpdfstring{entity\_set\_magicLevel()}{entity\_set\_magicLevel()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} entity\+\_\+set\+\_\+magic\+Level (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{entity_8h_a88bccc76704ed1a036c3500da8c42bcc}{Entity}} \texorpdfstring{$\ast$}{*}}]{entity,  }\item[{int}]{magic\+Level }\end{DoxyParamCaption})}
+
+
+
+Sets the magic level stat. 
+
+\begin{DoxyAuthor}{Author}
+Maksym Polyak
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em entity} & contains all the information related to the entity \\
+\hline
+{\em magic\+Level} & magic level stat to set \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Status 
+\end{DoxyReturn}
+\Hypertarget{entity_8h_adfbc906a025574a42c93f6e884238ffb}\label{entity_8h_adfbc906a025574a42c93f6e884238ffb} 
+\index{entity.h@{entity.h}!entity\_set\_max\_health@{entity\_set\_max\_health}}
+\index{entity\_set\_max\_health@{entity\_set\_max\_health}!entity.h@{entity.h}}
+\doxysubsubsection{\texorpdfstring{entity\_set\_max\_health()}{entity\_set\_max\_health()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} entity\+\_\+set\+\_\+max\+\_\+health (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{entity_8h_a88bccc76704ed1a036c3500da8c42bcc}{Entity}} \texorpdfstring{$\ast$}{*}}]{entity,  }\item[{double}]{maxhealth }\end{DoxyParamCaption})}
+
+
+
+Sets an entity max health. 
+
+\begin{DoxyAuthor}{Author}
+Maksym Polyak
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em entity} & contains all the information related to the entity \\
+\hline
+{\em maxhealth} & max health to be set \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Status 
+\end{DoxyReturn}
+\Hypertarget{entity_8h_a8092f63a5fc8df8aed6618cf3b064863}\label{entity_8h_a8092f63a5fc8df8aed6618cf3b064863} 
+\index{entity.h@{entity.h}!entity\_set\_name@{entity\_set\_name}}
+\index{entity\_set\_name@{entity\_set\_name}!entity.h@{entity.h}}
+\doxysubsubsection{\texorpdfstring{entity\_set\_name()}{entity\_set\_name()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} entity\+\_\+set\+\_\+name (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{entity_8h_a88bccc76704ed1a036c3500da8c42bcc}{Entity}} \texorpdfstring{$\ast$}{*}}]{entity,  }\item[{char \texorpdfstring{$\ast$}{*}}]{name }\end{DoxyParamCaption})}
+
+
+
+Sets a entity name with the name argument. 
+
+\begin{DoxyAuthor}{Author}
+Maksym Polyak
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em entity} & contains all the information related to the entity \\
+\hline
+{\em name} & name of the entity \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+OK if everything went well or ERROR if there was a mistake 
+\end{DoxyReturn}
+\Hypertarget{entity_8h_a28f7b91f79e3c84ef9394396bcbe71c6}\label{entity_8h_a28f7b91f79e3c84ef9394396bcbe71c6} 
+\index{entity.h@{entity.h}!entity\_set\_stats@{entity\_set\_stats}}
+\index{entity\_set\_stats@{entity\_set\_stats}!entity.h@{entity.h}}
+\doxysubsubsection{\texorpdfstring{entity\_set\_stats()}{entity\_set\_stats()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} entity\+\_\+set\+\_\+stats (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{entity_8h_a88bccc76704ed1a036c3500da8c42bcc}{Entity}} \texorpdfstring{$\ast$}{*}}]{ent,  }\item[{double}]{maxhealth,  }\item[{double}]{health,  }\item[{double}]{base\+Damage,  }\item[{int}]{strength,  }\item[{int}]{defense,  }\item[{int}]{magic\+Level }\end{DoxyParamCaption})}
+
+
+
+This function sets the stats values of an Entity;. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em ent} & contains all the information related to the entity \\
+\hline
+{\em maxhealth} & \\
+\hline
+{\em health} & \\
+\hline
+{\em base\+Damage} & \\
+\hline
+{\em strength} & \\
+\hline
+{\em defense} & \\
+\hline
+{\em magic\+Level} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Status 
+\end{DoxyReturn}
+\Hypertarget{entity_8h_adb1a1f94079bc0a1fb28a6b29a90113f}\label{entity_8h_adb1a1f94079bc0a1fb28a6b29a90113f} 
+\index{entity.h@{entity.h}!entity\_set\_strength@{entity\_set\_strength}}
+\index{entity\_set\_strength@{entity\_set\_strength}!entity.h@{entity.h}}
+\doxysubsubsection{\texorpdfstring{entity\_set\_strength()}{entity\_set\_strength()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} entity\+\_\+set\+\_\+strength (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{entity_8h_a88bccc76704ed1a036c3500da8c42bcc}{Entity}} \texorpdfstring{$\ast$}{*}}]{entity,  }\item[{int}]{strength }\end{DoxyParamCaption})}
+
+
+
+Sets the strength stat. 
+
+\begin{DoxyAuthor}{Author}
+Maksym Polyak
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em entity} & contains all the information related to the entity \\
+\hline
+{\em strength} & strength stat to set \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Status 
+\end{DoxyReturn}
+\Hypertarget{entity_8h_abf9db1d70472d1a2f8f0bd9fe556b40d}\label{entity_8h_abf9db1d70472d1a2f8f0bd9fe556b40d} 
+\index{entity.h@{entity.h}!entity\_stats\_set\_all@{entity\_stats\_set\_all}}
+\index{entity\_stats\_set\_all@{entity\_stats\_set\_all}!entity.h@{entity.h}}
+\doxysubsubsection{\texorpdfstring{entity\_stats\_set\_all()}{entity\_stats\_set\_all()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} entity\+\_\+stats\+\_\+set\+\_\+all (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structEntity__Stats}{Entity\+\_\+\+Stats}} \texorpdfstring{$\ast$}{*}}]{es,  }\item[{double}]{maxhealth,  }\item[{double}]{health,  }\item[{double}]{base\+Damage,  }\item[{int}]{strength,  }\item[{int}]{defense,  }\item[{int}]{magic\+Level }\end{DoxyParamCaption})}
+
+
+
+This function sets the values of an Entity\+Stats. 
+
+\begin{DoxyAuthor}{Author}
+Aaron Charameli Mair
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em es} & a pointer to the \doxylink{structEntity__Stats}{Entity\+\_\+\+Stats} to modify \\
+\hline
+{\em maxhealth} & \\
+\hline
+{\em health} & \\
+\hline
+{\em base\+Damage} & \\
+\hline
+{\em strength} & \\
+\hline
+{\em defense} & \\
+\hline
+{\em magic\+Level} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Status 
+\end{DoxyReturn}

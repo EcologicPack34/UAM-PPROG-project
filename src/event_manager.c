@@ -9,22 +9,30 @@
 #include "collection.h"
 #include "debug_printing.h"
 
-#define EVENT_MANAGER_DEFAULT_SIZE 10
+#define EVENT_MANAGER_DEFAULT_SIZE 10 /*!< Inital size of the event manager*/
 
+/**
+ * @brief Array of strings to relate the event types with their code
+ */
 char *eventTags[N_EVENTS] = { "" , "object_on_space", "trigger_combat", "player_death"};
 
-/* Event struct to control special interactions or triggers within the game*/
+/**
+ * @brief Event struct to control special interactions or triggers within the game
+ */
 struct _Event{
-    Id id;
-    EventType type;
-    CommandCode *commands;
-    int cmdNum;
-    char *data;
-    bool removeOnTrigger;
+    Id id;                  /*!< Id of the event*/
+    EventType type;         /*!< Type of the event*/
+    CommandCode *commands;  /*!< Commands that trigger the event*/
+    int cmdNum;             /*!< Number of commands that trigger the event*/
+    char *data;             /*!< Data of the event*/
+    bool removeOnTrigger;   /*!< Bool true if it is removed on trigger*/
 };
 
+/**
+ * @brief Event manager to control events trigger and save events
+ */
 struct _EventManager{
-    Collection *events;
+    Collection *events;     /*!< Events collection*/
 };
 
 /*----PUBLIC FUNCTIONS------*/
@@ -112,9 +120,9 @@ bool event_is_cmd_valid(Event *event, Command *cmd){
     CommandCode code;
     CommandCode *eventCodes = NULL;
 
-    if(!event || !cmd) return NULL;
+    if(!event || !cmd) return false;
 
-    if(event->cmdNum == 0)return true;
+    if(event->cmdNum == 0) return true;
 
     if(command_get_status(cmd) == ERROR) return false;
 

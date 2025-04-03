@@ -1,0 +1,148 @@
+\doxysection{src/game\+\_\+loop.c File Reference}
+\hypertarget{game__loop_8c}{}\label{game__loop_8c}\index{src/game\_loop.c@{src/game\_loop.c}}
+
+
+It defines the game loop.  
+
+
+{\ttfamily \#include $<$stdio.\+h$>$}\newline
+{\ttfamily \#include $<$stdlib.\+h$>$}\newline
+{\ttfamily \#include $<$time.\+h$>$}\newline
+{\ttfamily \#include "{}debug\+\_\+printing.\+h"{}}\newline
+{\ttfamily \#include "{}command.\+h"{}}\newline
+{\ttfamily \#include "{}game.\+h"{}}\newline
+{\ttfamily \#include "{}game\+\_\+reader.\+h"{}}\newline
+{\ttfamily \#include "{}game\+\_\+actions.\+h"{}}\newline
+{\ttfamily \#include "{}graphic\+\_\+engine.\+h"{}}\newline
+{\ttfamily \#include "{}collection.\+h"{}}\newline
+{\ttfamily \#include "{}event\+\_\+actions.\+h"{}}\newline
+{\ttfamily \#include "{}ability\+\_\+actions.\+h"{}}\newline
+Include dependency graph for game\+\_\+loop.\+c\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{game__loop_8c__incl}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \mbox{\hyperlink{game__loop_8c_a1c78d6052c905d10401d2424b6979772}{game\+\_\+loop\+\_\+init}} (\mbox{\hyperlink{game_8h_a57156d39c530aec3fba3a9dad8c2dc6a}{Game}} \texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}game, \mbox{\hyperlink{graphic__engine_8h_ae1bc5cdbfce93098f066274fdea49af1}{Graphic\+\_\+engine}} \texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}gengine, char \texorpdfstring{$\ast$}{*}file\+\_\+name)
+\begin{DoxyCompactList}\small\item\em Initializes game reading from the data file and starts the graphic engine. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{game__loop_8c_a907352b9ac1bfc9dc3eff7a3a5a5f63b}{game\+\_\+loop\+\_\+run}} (\mbox{\hyperlink{game_8h_a57156d39c530aec3fba3a9dad8c2dc6a}{Game}} \texorpdfstring{$\ast$}{*}game, \mbox{\hyperlink{graphic__engine_8h_ae1bc5cdbfce93098f066274fdea49af1}{Graphic\+\_\+engine}} \texorpdfstring{$\ast$}{*}gengine)
+\begin{DoxyCompactList}\small\item\em Essential function, receives last command, while the command isn\textquotesingle{}t EXIT or the game has not finished, paints the game, receives user input and updates last\+\_\+cmd. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{game__loop_8c_a395965726eadd591bc6c02fed4709a4e}{game\+\_\+loop\+\_\+cleanup}} (\mbox{\hyperlink{game_8h_a57156d39c530aec3fba3a9dad8c2dc6a}{Game}} \texorpdfstring{$\ast$}{*}game, \mbox{\hyperlink{graphic__engine_8h_ae1bc5cdbfce93098f066274fdea49af1}{Graphic\+\_\+engine}} \texorpdfstring{$\ast$}{*}gengine)
+\begin{DoxyCompactList}\small\item\em Frees game memory and destroys graphic engine. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{game__loop_8c_a0ddf1224851353fc92bfbff6f499fa97}{main}} (int argc, char \texorpdfstring{$\ast$}{*}argv\mbox{[}$\,$\mbox{]})
+\begin{DoxyCompactList}\small\item\em Checks the arguments and initializes the game. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+It defines the game loop. 
+
+It is the main module, takes care of how the game starts and ends, but also it controls the main game loops, the ones that update and control the game struct in order for the game to work correctly. It is the highest level module in the proyect.
+
+\begin{DoxyAuthor}{Author}
+Original\+: Profesores PPROG, Modified By\+: Daniel Gómez and Maksym Polyak 
+\end{DoxyAuthor}
+\begin{DoxyVersion}{Version}
+0 
+\end{DoxyVersion}
+\begin{DoxyDate}{Date}
+27-\/01-\/2025 
+\end{DoxyDate}
+\begin{DoxyCopyright}{Copyright}
+GNU Public License 
+\end{DoxyCopyright}
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{game__loop_8c_a395965726eadd591bc6c02fed4709a4e}\label{game__loop_8c_a395965726eadd591bc6c02fed4709a4e} 
+\index{game\_loop.c@{game\_loop.c}!game\_loop\_cleanup@{game\_loop\_cleanup}}
+\index{game\_loop\_cleanup@{game\_loop\_cleanup}!game\_loop.c@{game\_loop.c}}
+\doxysubsubsection{\texorpdfstring{game\_loop\_cleanup()}{game\_loop\_cleanup()}}
+{\footnotesize\ttfamily void game\+\_\+loop\+\_\+cleanup (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{game_8h_a57156d39c530aec3fba3a9dad8c2dc6a}{Game}} \texorpdfstring{$\ast$}{*}}]{game,  }\item[{\mbox{\hyperlink{graphic__engine_8h_ae1bc5cdbfce93098f066274fdea49af1}{Graphic\+\_\+engine}} \texorpdfstring{$\ast$}{*}}]{gengine }\end{DoxyParamCaption})}
+
+
+
+Frees game memory and destroys graphic engine. 
+
+\begin{DoxyAuthor}{Author}
+Original\+: Profesores PPROG, Modified By\+: Maksym Polyak and Daniel Gómez
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em game} & struct that saves all information related to the game \\
+\hline
+{\em gengine} & struct that saves all information related to the graphic engine \\
+\hline
+\end{DoxyParams}
+\Hypertarget{game__loop_8c_a1c78d6052c905d10401d2424b6979772}\label{game__loop_8c_a1c78d6052c905d10401d2424b6979772} 
+\index{game\_loop.c@{game\_loop.c}!game\_loop\_init@{game\_loop\_init}}
+\index{game\_loop\_init@{game\_loop\_init}!game\_loop.c@{game\_loop.c}}
+\doxysubsubsection{\texorpdfstring{game\_loop\_init()}{game\_loop\_init()}}
+{\footnotesize\ttfamily int game\+\_\+loop\+\_\+init (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{game_8h_a57156d39c530aec3fba3a9dad8c2dc6a}{Game}} \texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}}]{game,  }\item[{\mbox{\hyperlink{graphic__engine_8h_ae1bc5cdbfce93098f066274fdea49af1}{Graphic\+\_\+engine}} \texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}}]{gengine,  }\item[{char \texorpdfstring{$\ast$}{*}}]{file\+\_\+name }\end{DoxyParamCaption})}
+
+
+
+Initializes game reading from the data file and starts the graphic engine. 
+
+\begin{DoxyAuthor}{Author}
+Original\+: Profesores PPROG, Modified By\+: Daniel Gómez
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em game} & struct that saves all information related to the game \\
+\hline
+{\em gengine} & struct that saves all information related to the graphic engine \\
+\hline
+{\em file\+\_\+name} & string with the name of the filename with the game information \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 if everything goes well or 1 if there was some mistake 
+\end{DoxyReturn}
+\Hypertarget{game__loop_8c_a907352b9ac1bfc9dc3eff7a3a5a5f63b}\label{game__loop_8c_a907352b9ac1bfc9dc3eff7a3a5a5f63b} 
+\index{game\_loop.c@{game\_loop.c}!game\_loop\_run@{game\_loop\_run}}
+\index{game\_loop\_run@{game\_loop\_run}!game\_loop.c@{game\_loop.c}}
+\doxysubsubsection{\texorpdfstring{game\_loop\_run()}{game\_loop\_run()}}
+{\footnotesize\ttfamily void game\+\_\+loop\+\_\+run (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{game_8h_a57156d39c530aec3fba3a9dad8c2dc6a}{Game}} \texorpdfstring{$\ast$}{*}}]{game,  }\item[{\mbox{\hyperlink{graphic__engine_8h_ae1bc5cdbfce93098f066274fdea49af1}{Graphic\+\_\+engine}} \texorpdfstring{$\ast$}{*}}]{gengine }\end{DoxyParamCaption})}
+
+
+
+Essential function, receives last command, while the command isn\textquotesingle{}t EXIT or the game has not finished, paints the game, receives user input and updates last\+\_\+cmd. 
+
+\begin{DoxyAuthor}{Author}
+Original\+: Profesores PPROG, Modified By\+: Maksym Polyak and Daniel Gómez
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em game} & struct that saves all information related to the game \\
+\hline
+{\em gengine} & struct that saves all information related to the graphic engine \\
+\hline
+\end{DoxyParams}
+\Hypertarget{game__loop_8c_a0ddf1224851353fc92bfbff6f499fa97}\label{game__loop_8c_a0ddf1224851353fc92bfbff6f499fa97} 
+\index{game\_loop.c@{game\_loop.c}!main@{main}}
+\index{main@{main}!game\_loop.c@{game\_loop.c}}
+\doxysubsubsection{\texorpdfstring{main()}{main()}}
+{\footnotesize\ttfamily int main (\begin{DoxyParamCaption}\item[{int}]{argc,  }\item[{char \texorpdfstring{$\ast$}{*}}]{argv\mbox{[}$\,$\mbox{]} }\end{DoxyParamCaption})}
+
+
+
+Checks the arguments and initializes the game. 
+
+\begin{DoxyAuthor}{Author}
+Original\+: Profesores PPROG, Modified By\+: Daniel Gómez
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em argc} & \\
+\hline
+{\em argv} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 if game execution went well or 1 if arguments check failed 
+\end{DoxyReturn}

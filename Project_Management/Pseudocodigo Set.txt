@@ -1,0 +1,45 @@
+function Add():
+Input: Element element, Set set;
+Output: Status;
+
+Bool condition = false;
+
+foreach Element x in set:
+	if isEqual(x, element) then:
+		condition = true
+		break
+	end
+end
+
+if condition == false then:
+	set[set.Length + 1] = element
+	set.Length += 1
+end
+
+return OK
+
+-----------------------------------------------------------
+
+fucntion del():
+Input: Element element, Set set;
+Output: Status
+
+Status st;
+Bool contains = false;
+
+foreach Element x in set:
+	if isEqual(x, element) then:
+		set_remove(element)
+		set.Length -= 1
+		condition = true
+		break
+	end
+end
+
+if condition == true then:
+	st = OK
+else
+	st = ERROR
+end
+
+return st

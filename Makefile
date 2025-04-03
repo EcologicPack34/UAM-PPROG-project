@@ -82,6 +82,16 @@ gdb:
 	make debug
 	gdb --tui --silent ./anthilldebug
 
+#To install ddd run $sudo apt install ddd
+ddd:
+	make debug
+	ddd ./anthilldebug
+
+#in order for doxygen to work run $sudo apt install doxygen
+#for graphs to work it needs graphviz, to install run $sudo apt install graphviz
+doxy:
+	@doxygen Doxyfile
+
 runv:
 	make debug
 	valgrind --leak-check=full --track-origins=yes --show-leak-kinds=all ./anthilldebug anthill.dat

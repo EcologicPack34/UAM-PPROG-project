@@ -19,15 +19,15 @@
  * @brief Collection to manage a list of objects with special parametrs as fixed_length and UniqueElements
  */
 struct _Collection{
-    void **list;                /*<! Stores the elements of the collections */
-    long length;       /*<! Stores the amount of elements in the collection*/
-    long allocated_size;/*<! Stores the amount of memory used by the collection*/
+    void **list;                            /*!< Stores the elements of the collections */
+    long length;                            /*!< Stores the amount of elements in the collection*/
+    long allocated_size;                    /*!< Stores the amount of memory used by the collection*/
 
-    bool fixed_length;           /*<! Can the collection increase its allocated size*/
-    bool unique_elements;        /*<! Can the collection have repeated elements*/
+    bool fixed_length;                      /*!< Can the collection increase its allocated size*/
+    bool unique_elements;                   /*!< Can the collection have repeated elements*/
 
-    P_elem_cmp compare_elements; /*Method to compare elements of the collection: return 0 if equal, < 0 if smaller and > 0 if greater*/
-    void (*print_element)(void *element);        /*Method to print an element of the collection*/
+    P_elem_cmp compare_elements;            /*!< Method to compare elements of the collection: return 0 if equal, < 0 if smaller and > 0 if greater*/
+    void (*print_element)(void *element);   /*!< Method to print an element of the collection*/
 };
 
 /*----------PRIVATE FUNCTIONS-----------*/
@@ -52,14 +52,6 @@ Status collection_add_unique(Collection *collection, void *element);
  */
 Status collection_add_non_unique(Collection *collection, void *element);
 
-/**
- * @brief Adds an element to the collection wether its a unique or non-unique collection
- * @author Daniel Gómez
- * 
- * @param collection collection to modifiy
- * @param element element to add
- * @return Status 
- */
 Status collection_add_unique(Collection *collection, void *element){
     /*We omit error control as it is done in collection_add()*/
 
@@ -68,14 +60,6 @@ Status collection_add_unique(Collection *collection, void *element){
     return collection_add_non_unique(collection, element);
 }
 
-/**
- * @brief Adds a non unique element to a collection
- * @author Daniel Gómez
- * 
- * @param collection collection to modifiy
- * @param element element to add
- * @return Status 
- */
 Status collection_add_non_unique(Collection *collection, void *element){
     /*We ommit error control as it is done in collection_add()*/
     void **auxp = NULL;

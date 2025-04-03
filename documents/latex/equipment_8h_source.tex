@@ -1,0 +1,33 @@
+\doxysection{equipment.\+h}
+\hypertarget{equipment_8h_source}{}\label{equipment_8h_source}\index{include/equipment.h@{include/equipment.h}}
+\mbox{\hyperlink{equipment_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ }
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#ifndef\ EQUIPMENT\_H}}
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#define\ EQUIPMENT\_H}}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{object_8h}{object.h}}"{}}}
+\DoxyCodeLine{00018\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{entity_8h}{entity.h}}"{}}}
+\DoxyCodeLine{00019\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{types_8h}{types.h}}"{}}}
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00024\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{enum}\ \{EQUIPMENT\_ERROR,\ HELMET,\ CHEST,\ ARMS,\ LEG\_ARMOR,\ SHOES,\ TWO\_HANDED,\ ONE\_HANDED\_1,\ ONE\_HANDED\_2\}\ \mbox{\hyperlink{equipment_8h_a4b340f199925410634b5a091adde18f0}{EquipmentCode}};}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00029\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct__Equipment}{\_Equipment}}\ \mbox{\hyperlink{struct__Equipment}{Equipment}};}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00032\ \textcolor{comment}{\ \ \ \ *\ PUBLIC\ FUNCTIONS}}
+\DoxyCodeLine{00033\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00034\ }
+\DoxyCodeLine{00041\ \mbox{\hyperlink{struct__Equipment}{Equipment}}\ *\mbox{\hyperlink{equipment_8h_a7df872e77c16d91a8a74bf754664f727}{equipment\_create}}();}
+\DoxyCodeLine{00042\ }
+\DoxyCodeLine{00049\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{equipment_8h_aaae81ffde589a442792405eacef19a51}{equipment\_destroy}}(\mbox{\hyperlink{struct__Equipment}{Equipment}}\ *equipment);}
+\DoxyCodeLine{00050\ }
+\DoxyCodeLine{00058\ \mbox{\hyperlink{equipment_8h_a4b340f199925410634b5a091adde18f0}{EquipmentCode}}\ \mbox{\hyperlink{equipment_8h_adb6871df8ccbe7b63eadcc2ba4708816}{equipment\_code\_from\_str}}(\textcolor{keywordtype}{char}\ *data);}
+\DoxyCodeLine{00059\ }
+\DoxyCodeLine{00069\ \mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}}\ \mbox{\hyperlink{equipment_8h_a49cc2d232fe60c4420f791a0901e5fc3}{equipment\_add\_piece}}(\mbox{\hyperlink{struct__Entity}{Entity}}\ *entity,\ \mbox{\hyperlink{struct__Equipment}{Equipment}}\ *equipment,\ \mbox{\hyperlink{struct__Object}{Object}}\ *\textcolor{keywordtype}{object});}
+\DoxyCodeLine{00070\ }
+\DoxyCodeLine{00080\ \mbox{\hyperlink{struct__Object}{Object}}\ *\mbox{\hyperlink{equipment_8h_a8889db90a9b1dd824490d2551f47879e}{equipment\_remove\_piece}}(\mbox{\hyperlink{struct__Entity}{Entity}}\ *entity,\ \mbox{\hyperlink{struct__Equipment}{Equipment}}\ *equipment,\ \textcolor{keywordtype}{char}\ *data);}
+\DoxyCodeLine{00081\ }
+\DoxyCodeLine{00082\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

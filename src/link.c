@@ -20,22 +20,33 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+/**
+ * @brief Link internal struct
+ */
 struct _Link{
-    Id id;
-    Id space1;              /*<! One of the spaces connected by a link*/
-    Id space2;              /*<! One of the spaces connected by a link*/
-    bool adjacent;          /*<! Stores if the connected spaces are adjacent or not*/
-    bool locked;            /*<! Stores if the link can be used*/
-    Id unlockingObject;     /*<! Stores id of object used to unlock link*/
+    Id id;                  /*!< id of the link*/
+    Id space1;              /*!< One of the spaces connected by a link*/
+    Id space2;              /*!< One of the spaces connected by a link*/
+    bool adjacent;          /*!< Stores if the connected spaces are adjacent or not*/
+    bool locked;            /*!< Stores if the link can be used*/
+    Id unlockingObject;     /*!< Stores id of object used to unlock link*/
 };
+
+/*
+    * PRIVATE FUNCTIONS
+*/
 
 /**
  * @brief Checks if an entity is on one of the spaces connected by the link
+ * @author Daniel Gómez
  * 
- * @param link 
+ * @param link link struct
  * @param entity entity to be checked
  * @return bool 
  */
+bool link_is_entity_on_valid_spaces(Link *link, Entity *entity);
+
+
 bool link_is_entity_on_valid_spaces(Link *link, Entity *entity){
     Id entityID = entity_get_location(entity);
     
@@ -49,6 +60,10 @@ bool link_is_entity_on_valid_spaces(Link *link, Entity *entity){
     
     return false;
 }
+
+/*
+    * PUBLIC FUNCTIONS
+*/
 
 Link *link_create(Id id,Id space1, Id space2, bool adjacent,bool locked, Id unlockingObject){
     Link *link = NULL;

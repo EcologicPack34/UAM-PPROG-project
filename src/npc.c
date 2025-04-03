@@ -1,7 +1,7 @@
 /**
  * @file npc.c
  * @author Maksym Polyak
- * @brief 
+ * @brief Controls NPC internal functionality
  * @version 0.1
  * @date 2025-03-04
  * 
@@ -15,17 +15,15 @@
 #include <stdbool.h>
 
 /**
- * @brief NPC struct
- *
- * This struct stores all the information of an NPC
+ * @brief ADT that stores all the information of an NPC
  */
 struct _NPC{
-    Entity *entity;
+    Entity *entity;                 /*!< Entity struct of the NPC*/
 
-    char message[WORD_SIZE];
+    char message[WORD_SIZE];        /*!< Message of the NPC for the player*/
 
-    bool can_follow;
-    NPC_status status;
+    bool can_follow;                /*!< Determines if the NPC can follow the player or not*/
+    NPC_status status;              /*!< Determines if the NPC is an ALLY, ENEMY or NEUTRAL towards players*/
 };
 
 /*
@@ -95,8 +93,8 @@ char *npc_get_message(NPC *npc){
     return npc->message;
 }
 
-bool npc_get_is_follower(NPC *npc){
-    if(!npc) return FALSE;
+bool npc_get_can_follow(NPC *npc){
+    if(!npc) return false;
 
     return npc->can_follow;
 }

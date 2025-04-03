@@ -1,0 +1,103 @@
+\doxysection{\+\_\+\+Entity Struct Reference}
+\hypertarget{struct__Entity}{}\label{struct__Entity}\index{\_Entity@{\_Entity}}
+
+
+This struct stores all the information of an entity.  
+
+
+
+
+Collaboration diagram for \+\_\+\+Entity\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=314pt]{struct__Entity__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Data Fields}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{entity_8h_ad79a57ed3105eb60d991a1aeb4a9dc44}{Entity\+Type}} \mbox{\hyperlink{struct__Entity_a4997bfd14a80a6c19129c5b2e96a10be}{entity\+Type}}
+\item 
+char \mbox{\hyperlink{struct__Entity_a5880c0288af02daffda647e0a02e5687}{name}} \mbox{[}\mbox{\hyperlink{types_8h_a92ed8507d1cd2331ad09275c5c4c1c89}{WORD\+\_\+\+SIZE}}+1\mbox{]}
+\item 
+\mbox{\hyperlink{types_8h_a845e604fb28f7e3d97549da3448149d3}{Id}} \mbox{\hyperlink{struct__Entity_a2348e7a5648949bedc17373c9137dc7b}{id}}
+\item 
+\mbox{\hyperlink{types_8h_a845e604fb28f7e3d97549da3448149d3}{Id}} \mbox{\hyperlink{struct__Entity_afa8435cc9591a92d2d480984ed06a8ae}{location}}
+\item 
+\mbox{\hyperlink{inventory_8h_a2253bf64ac4ce6a9c1d6f39c0b0d32a3}{Inventory}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{struct__Entity_ada105e9db882215d97cc997fbff5a230}{inventory}}
+\item 
+\mbox{\hyperlink{ability__manager_8h_a41710c366455f85aeeed4055e62e0822}{Ability}} \texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*} \mbox{\hyperlink{struct__Entity_ae6b797dbfa9326f293a67b9a8cd71884}{ability}}
+\item 
+int \mbox{\hyperlink{struct__Entity_ab4aaf22d3daec63616d17e2fd1b368d9}{n\+\_\+ability}}
+\item 
+char \mbox{\hyperlink{struct__Entity_ac151b83c9edab2072c89886ec24ce4c5}{gdesc}} \mbox{[}\mbox{\hyperlink{entity_8h_aef78cab43bad604da55155941ae651ba}{ENTITY\+\_\+\+GRAPHIC\+\_\+\+LENGTH}}+1\mbox{]}
+\item 
+\mbox{\hyperlink{structEntity__Stats}{Entity\+\_\+\+Stats}} \mbox{\hyperlink{struct__Entity_ac5062a6933bdb9ef288c6952ee4616ed}{stats}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+This struct stores all the information of an entity. 
+
+\doxysubsection{Field Documentation}
+\Hypertarget{struct__Entity_ae6b797dbfa9326f293a67b9a8cd71884}\label{struct__Entity_ae6b797dbfa9326f293a67b9a8cd71884} 
+\index{\_Entity@{\_Entity}!ability@{ability}}
+\index{ability@{ability}!\_Entity@{\_Entity}}
+\doxysubsubsection{\texorpdfstring{ability}{ability}}
+{\footnotesize\ttfamily \mbox{\hyperlink{ability__manager_8h_a41710c366455f85aeeed4055e62e0822}{Ability}}\texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*} \+\_\+\+Entity\+::ability}
+
+Abilitys of the entity \Hypertarget{struct__Entity_a4997bfd14a80a6c19129c5b2e96a10be}\label{struct__Entity_a4997bfd14a80a6c19129c5b2e96a10be} 
+\index{\_Entity@{\_Entity}!entityType@{entityType}}
+\index{entityType@{entityType}!\_Entity@{\_Entity}}
+\doxysubsubsection{\texorpdfstring{entityType}{entityType}}
+{\footnotesize\ttfamily \mbox{\hyperlink{entity_8h_ad79a57ed3105eb60d991a1aeb4a9dc44}{Entity\+Type}} \+\_\+\+Entity\+::entity\+Type}
+
+Type of the entity \Hypertarget{struct__Entity_ac151b83c9edab2072c89886ec24ce4c5}\label{struct__Entity_ac151b83c9edab2072c89886ec24ce4c5} 
+\index{\_Entity@{\_Entity}!gdesc@{gdesc}}
+\index{gdesc@{gdesc}!\_Entity@{\_Entity}}
+\doxysubsubsection{\texorpdfstring{gdesc}{gdesc}}
+{\footnotesize\ttfamily char \+\_\+\+Entity\+::gdesc\mbox{[}\mbox{\hyperlink{entity_8h_aef78cab43bad604da55155941ae651ba}{ENTITY\+\_\+\+GRAPHIC\+\_\+\+LENGTH}}+1\mbox{]}}
+
+Graphic description of the entity \Hypertarget{struct__Entity_a2348e7a5648949bedc17373c9137dc7b}\label{struct__Entity_a2348e7a5648949bedc17373c9137dc7b} 
+\index{\_Entity@{\_Entity}!id@{id}}
+\index{id@{id}!\_Entity@{\_Entity}}
+\doxysubsubsection{\texorpdfstring{id}{id}}
+{\footnotesize\ttfamily \mbox{\hyperlink{types_8h_a845e604fb28f7e3d97549da3448149d3}{Id}} \+\_\+\+Entity\+::id}
+
+Unique id of the entity \Hypertarget{struct__Entity_ada105e9db882215d97cc997fbff5a230}\label{struct__Entity_ada105e9db882215d97cc997fbff5a230} 
+\index{\_Entity@{\_Entity}!inventory@{inventory}}
+\index{inventory@{inventory}!\_Entity@{\_Entity}}
+\doxysubsubsection{\texorpdfstring{inventory}{inventory}}
+{\footnotesize\ttfamily \mbox{\hyperlink{inventory_8h_a2253bf64ac4ce6a9c1d6f39c0b0d32a3}{Inventory}}\texorpdfstring{$\ast$}{*} \+\_\+\+Entity\+::inventory}
+
+entity inventory \Hypertarget{struct__Entity_afa8435cc9591a92d2d480984ed06a8ae}\label{struct__Entity_afa8435cc9591a92d2d480984ed06a8ae} 
+\index{\_Entity@{\_Entity}!location@{location}}
+\index{location@{location}!\_Entity@{\_Entity}}
+\doxysubsubsection{\texorpdfstring{location}{location}}
+{\footnotesize\ttfamily \mbox{\hyperlink{types_8h_a845e604fb28f7e3d97549da3448149d3}{Id}} \+\_\+\+Entity\+::location}
+
+Id of the space where the entity is located \Hypertarget{struct__Entity_ab4aaf22d3daec63616d17e2fd1b368d9}\label{struct__Entity_ab4aaf22d3daec63616d17e2fd1b368d9} 
+\index{\_Entity@{\_Entity}!n\_ability@{n\_ability}}
+\index{n\_ability@{n\_ability}!\_Entity@{\_Entity}}
+\doxysubsubsection{\texorpdfstring{n\_ability}{n\_ability}}
+{\footnotesize\ttfamily int \+\_\+\+Entity\+::n\+\_\+ability}
+
+Number of ability the entity has \Hypertarget{struct__Entity_a5880c0288af02daffda647e0a02e5687}\label{struct__Entity_a5880c0288af02daffda647e0a02e5687} 
+\index{\_Entity@{\_Entity}!name@{name}}
+\index{name@{name}!\_Entity@{\_Entity}}
+\doxysubsubsection{\texorpdfstring{name}{name}}
+{\footnotesize\ttfamily char \+\_\+\+Entity\+::name\mbox{[}\mbox{\hyperlink{types_8h_a92ed8507d1cd2331ad09275c5c4c1c89}{WORD\+\_\+\+SIZE}}+1\mbox{]}}
+
+Name of the entity \Hypertarget{struct__Entity_ac5062a6933bdb9ef288c6952ee4616ed}\label{struct__Entity_ac5062a6933bdb9ef288c6952ee4616ed} 
+\index{\_Entity@{\_Entity}!stats@{stats}}
+\index{stats@{stats}!\_Entity@{\_Entity}}
+\doxysubsubsection{\texorpdfstring{stats}{stats}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structEntity__Stats}{Entity\+\_\+\+Stats}} \+\_\+\+Entity\+::stats}
+
+Entity combat stats 
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/\mbox{\hyperlink{entity_8c}{entity.\+c}}\end{DoxyCompactItemize}

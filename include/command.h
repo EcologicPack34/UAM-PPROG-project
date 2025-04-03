@@ -37,11 +37,13 @@ typedef enum { CMDS, CMDL } CommandType; /* CMDS: Command Short | CMDL: Command 
  */
 typedef enum { NO_CMD = -1, UNKNOWN, EXIT, SOUTH, NORTH, EAST, WEST, TAKE, DROP, CHAT, ATTACK, RUN_AWAY, SWITCH, ABILITY, OBJECT_USE, HELP, MOVE, SEARCH, EQUIP, UNEQUIP, INSPECT, GM} CommandCode; /* All values that a command can take */
 
-
+/**
+ * @brief ADT with player related information
+ */
 typedef struct _CommandInfo CommandInfo;
 
-/* 
- * Struct that contains all the information of the command
+/**
+ * @brief ADT with game related information to command
  */
 typedef struct _Command Command;
 
@@ -75,7 +77,7 @@ CommandInfo *command_info_create();
  * @brief Destroys a struct of command info
  * @author Daniel Gómez
  * 
- * @param cmdData 
+ * @param cmdData command info to destroy
  * @return Status 
  */
 Status command_info_destroy(CommandInfo *cmdData);
@@ -127,8 +129,8 @@ Status command_state_add_type(Command * command, GameState state, CommandCode ty
  * @brief Sets the data struct which will be used to store data
  * @author Daniel Gómez
  * 
- * @param cmd 
- * @param data 
+ * @param cmd command struct
+ * @param data command info
  * @return Status 
  */
 Status command_set_player_data(Command *cmd, CommandInfo *data);
@@ -136,7 +138,7 @@ Status command_set_player_data(Command *cmd, CommandInfo *data);
 /**
  * @brief Updates the data of cmd stored by player
  * 
- * @param cmd 
+ * @param cmd command struct
  * @return Status 
  */
 Status command_update_player_data(Command *cmd);
@@ -230,10 +232,13 @@ Status command_get_user_input(Command* command);
 Status command_get_status(Command *command);
 
 /**
- * @brief makes a string of the current commands and copies it to a given string
+ * @brief Makes a string of the current commands and copies it to a given string
  * @author Daniel Gómez
  * 
+ * @param command command struct
  * @param destination string to which the information is copied. Requires the user to assing this string a proper length
+ * @param state state of the game
+ * @param getAll Wheter it gets all of them or not
  * @return Status
  */
 Status command_get_list(Command *command, char *destination, GameState state, bool getAll);
@@ -241,8 +246,8 @@ Status command_get_list(Command *command, char *destination, GameState state, bo
 /**
  * @brief Checks if two commands codes are equal
  * 
- * @param cmd1 command code 1
- * @param cmd2 command code 2
+ * @param cmd1 command struct 1
+ * @param cmd2 command struct 2
  * @return int 
  */
 int command_code_isEqual(void *cmd1, void *cmd2);
