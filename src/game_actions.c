@@ -199,7 +199,7 @@ Status game_actions_update(Game *game, Command *command) {
   if(!game || !command) return ERROR;
   
   if(command_get_code(command) != SWITCH 
-  || (command_get_code(command) == SWITCH && strncmp("list", command_get_arguments(command)[0], 5) != 0) ){
+  || (command_get_code(command) == SWITCH && strncmp("list", command_get_arguments(command)[0], 5) == 0) ){
     command_update_player_data(command);
   }
   

@@ -56,6 +56,28 @@ struct _Command {
 /*--------------Private Functions---------------*/
 
 /**
+ * @brief Copies data from data2 into data1
+ * @author Daniel Gómez
+ * 
+ * @param data1 
+ * @param data2 
+ * @return Status 
+ */
+Status command_info_copy(CommandInfo *data1, CommandInfo *data2){
+  if(!data1 || !data2) return ERROR;
+
+  data1->argsCount = data2->argsCount;
+  data1->cmdStatus = data2->cmdStatus;
+  data1->code = data2->code;
+
+  for (int i = 0; i < MAX_CMD_ARGS_NUM; i++)
+  {
+    strncpy(data1->arguments[i], data2->arguments[i], MAX_CMD_ARGS_LENGTH);
+  }
+  return OK;
+}
+
+/**
  * @brief Sets the number of readed arguments
  * @author Daniel Gómez
  * 
@@ -383,6 +405,9 @@ Status command_get_user_input(Command* command) {
     while(*pAux == ' ') pAux++;
 
     if(strcmp(input, "\n") == 0){
+      if(command->cmdPlayerData){
+        command_info_copy(command->cmdData, command->cmdPlayerData);
+      }
       return OK;
     }
   }

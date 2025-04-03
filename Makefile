@@ -48,7 +48,7 @@ $(EXE):	$(OBJ)
 	$(CC) $(CFLAGS) -o $(EXE) $(OBJ) -L$(LIBRARIES) -lscreen
 
 #Rule to compile each .c file into its .o file
-$(OBJ_PATH)/%.o: $(SRC_PATH)/%.c $(INCLUDE)/%.h | $(OBJ_PATH)
+$(OBJ_PATH)/%.o: $(SRC_PATH)/%.c | $(OBJ_PATH)
 	$(CC) -c -o $@ $< $(CFLAGS)
 
 -include $(DEPENDENCIES)
