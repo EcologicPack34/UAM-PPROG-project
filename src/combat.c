@@ -20,6 +20,8 @@
 #define QUICK_ATTACK 0.8
 #define SWIFT_ATTACK 0.8
 
+#define MAX_ATTACKS 4
+
 /*Probabilites for succcess on an attack*/
 #define LIGHT_PROB 90
 #define STRONG_PROB 70
@@ -265,7 +267,7 @@ Status combat_enemies_turn(Combat *cmb) {
     for (i = 0; i < numEn; i++)
     {
         randomNumAll = rand()%numAl;
-        randomNumAttack = rand()%numEn + 1;
+        randomNumAttack = rand()%MAX_ATTACKS + 1;
 
         switch (randomNumAttack)
         {
@@ -304,7 +306,7 @@ Status combat_allies_turn(Combat *cmb){
     for (i = 1; i < numA; i++)
     {
         randomNumEnemy = rand()%numE;
-        randomNumAttack = rand()%4 + 1;
+        randomNumAttack = rand()%MAX_ATTACKS + 1;
 
         switch (randomNumAttack)
         {
