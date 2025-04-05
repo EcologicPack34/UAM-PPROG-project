@@ -717,7 +717,7 @@ Combat *game_get_combat(Game *game){
   return game->combat;
 }
 
-Status game_switch_player(Game *game, int player){
+int game_switch_player(Game *game, int player){
   int i;
   bool alivePlayers = false;
 
@@ -737,13 +737,14 @@ Status game_switch_player(Game *game, int player){
     }
     if(!alivePlayers){
       game_add_log_message(game, MESSAGE_ERROR, "Couldn't find a player which is alive");
-      return ERROR;/*Case if every player is dead*/
+      game_set_finished(game, 1);
+      return -2;/*Case if every player is dead*/
     } 
   } 
   else{
     if(entity_is_dead( player_get_entity(game->players[player] ) ) == true){
       game_add_log_message(game, MESSAGE_ERROR, "Couldn't switch player because it isn't alive");
-      return ERROR;
+      return -1;
     }
     game->active_player_index = player;
   } 
@@ -751,7 +752,7 @@ Status game_switch_player(Game *game, int player){
   game->active_player = game->players[game->active_player_index];
   command_set_player_data(game->last_cmd, player_get_cmdData(game->active_player));
 
-  return OK;
+  return 0;
 }
 
 AbilityManager *game_get_ability_manager(Game *game){

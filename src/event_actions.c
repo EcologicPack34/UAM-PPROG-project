@@ -97,9 +97,6 @@ void event_actions_trigger_events(Game *game){
                 break;
             default:
                 break;
-            case DEAD:
-                triggered = event_trigger_player_death(event, game);
-                break;
         }
         if(triggered && event_get_removeOnTrigger(event))
             event_manager_remove_event(manager, event);
@@ -201,13 +198,18 @@ bool event_trigger_combat(Event *event, Game *game){
 }
 bool event_trigger_player_death(Event *event, Game *game){
 
+    Entity *entity = NULL;
+    int i, count = 0;
+    int status = 0;
     if(!event || !game) return false;
 
-
-    if(entity_get_health(player_get_entity(game_get_player(game))) <= 0){
-
-        debug_log(PRINT,"Player died, finishing game");
-        return true;
+    entity = player_get_entity(game_get_player(game));
+    if(entity_get_health(entity) <= 0.0){
+        status = game_switch_player(game, -1);
+        if(status == -2 || status == -1){
+            debug_log(PRINT,"Players died, finishing game");
+            return true;
+        }
     }
     return false;
 }

@@ -150,7 +150,7 @@ Status combat_allies_turn(Combat *cmb);
 Status combat_update_attack(Combat *cmb, Command *last_cmd);
 
 /**
- * @brief Checks the deaths of enemies and the player
+ * @brief Updates the deaths of enemies and the player
  * @author Sofía Calvo
  * 
  * @param cmb combat struct
@@ -467,15 +467,9 @@ bool combat_get_isFinished(Combat *combat){
 
 Status combat_update(Combat *combat, Command *last_cmd){
     
-    char **test = NULL;
-    int enemyNum;
-    Stats *st = NULL, *check;
-    int counter = 0;
-    int i;
-
     if(!combat || !last_cmd)
         return ERROR;
-    /*Check if player is dead to finish the combat*/
+    /*Checks if player is dead to finish the combat*/
 
     if(command_get_code(last_cmd) == GM){
         /*stats copy are modified for combat*/
@@ -551,13 +545,12 @@ Stats *combat_get_player_stats(Combat *combat){
 Status combat_update_deaths(Combat *cmb){
 
     /*Check if all the enemies are dead to end the combat*/
-    int enemyNum, check, i, counter = 0;
+    int enemyNum, i, counter = 0;
 
     if (!cmb)
         return ERROR;
 
     enemyNum = combat_get_enemies_count(cmb);
-    check = combat_get_enemies_stats(cmb);
 
     for (i = 0; i < enemyNum; i++)
     {

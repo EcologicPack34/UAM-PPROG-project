@@ -193,8 +193,6 @@ Status game_actions_update(Game *game, Command *command) {
   CommandCode cmd;
   Status status = ERROR;
   char str[WORD_SIZE] = "";
-  int i = 0;
-  Player *pl = NULL;
   Entity *player = NULL;
 
   if(!game || !command) return ERROR;
@@ -251,22 +249,9 @@ Status game_actions_update(Game *game, Command *command) {
     case CHAT:
       status = game_actions_chat(game);
       break;
-    
+
     case ATTACK:
       status = game_actions_attack(game);
-      pl = game_get_player(game);
-      player = player_get_entity(pl);
-      if (entity_get_health(player) == 0)
-      {
-        do
-        { 
-          pl = game_get_player(game);
-          player = player_get_entity(pl);
-          game_switch_player(game, i);
-          i++;
-
-        } while (entity_get_health(player) == 0); 
-      }
       break;
     case RUN_AWAY:
       status = game_actions_runaway(game);
@@ -623,7 +608,11 @@ Status game_actions_switch(Game *game){
   if(command_get_arguments_count(cmd) == 0) player = -1;
   else player = atoi(arguments[0]) - 1;
 
-  return game_switch_player(game, player);
+  if(game_switch_player(game, player) == -1){
+    return ERROR;
+  }
+
+  return OK;
 }
 
 

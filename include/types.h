@@ -38,14 +38,8 @@ typedef long Id;
 typedef enum { ERROR, OK } Status;
 
 /**
- * @brief Directions of the map: North, South, East, West
- */
-typedef enum { N, NE, E, SE, S , SW, W , NW, NO_DIR} Direction;
-
-/**
  * @brief Enum describing the different types of inventory
  */
-typedef enum {UNKNOWN_INVENTORY, PLAYER_INVENTORY, NPC_INVENTORY, SPACE_INVENTORY} InventoryType;
 
 typedef enum { N, NE, E, SE, S , SW, W , NW, NO_DIR} Direction; /*!< Directions of the map: North, South, East, West */
 
