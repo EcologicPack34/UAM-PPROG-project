@@ -208,7 +208,7 @@ Status game_reader_load_links(Game *game, char *filename){
   char line[WORD_SIZE] = "";
   char *toks = NULL;
 
-  Id id = NO_ID, space1 = NO_ID, space2 = NO_ID, unlockingObject = NO_ID;
+  Id id = NO_ID, space1 = NO_ID, space2 = NO_ID;
   bool locked = false, adjacent = false;
   Link *link = NULL;
   Status status = OK;
@@ -236,13 +236,11 @@ Status game_reader_load_links(Game *game, char *filename){
       adjacent = atol(toks);
       toks = strtok(NULL, "|");
       locked = atol(toks);
-      toks = strtok(NULL, "|");
-      unlockingObject = atol(toks);
 
 
-      debug_log(PRINT,"Read Link: #l:%ld|%ld|%ld|%ld|%ld|%ld", id, space1, space2, adjacent,locked, unlockingObject);
+      debug_log(PRINT,"Read Link: #l:%ld|%ld|%ld|%ld|%ld", id, space1, space2, adjacent,locked);
 
-      link = link_create(id,space1, space2, adjacent,locked, unlockingObject);
+      link = link_create(id,space1, space2, adjacent,locked);
       if(link != NULL){
         game_add_link(game, link);
       }

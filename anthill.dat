@@ -24,25 +24,26 @@ Formato Player: #p:ID|Nombre|LocationID|VidaMaxima|Vida|DanoBase|Fuerza|Defensa|
 #s:127|Corridor7|-1|9|-1|8
 #s:14|Hole|-1|-1|10|9
 
-Formato Link: #l:ID|Space1|Space2|adjacent|locked|unlockingObjectID //Recordar añadir en cada espacio sus links adyacentes
+Formato Link: #l:ID|Space1|Space2|adjacent|locked //Recordar añadir en cada espacio sus links adyacentes
 
 -#l:1|11|12|1|0|0
 -#l:2|12|13|1|0|0
 -#l:3|13|14|1|0|0
 -#l:4|11|13|1|0|0
 
-#l:1|11|121|1|0|0
-#l:2|121|122|1|0|0
-#l:3|122|123|1|0|0
-#l:4|123|124|1|1|0
-#l:5|124|13|1|0|0
-#l:6|122|125|1|0|0
-#l:7|125|126|1|0|0
-#l:8|126|127|1|0|0
-#l:9|127|14|1|0|0
-#l:10|14|13|0|0|0
+#l:1|11|121|1|0
+#l:2|121|122|1|0
+#l:3|122|123|1|0
+#l:4|123|124|1|1
+#l:5|124|13|1|0
+#l:6|122|125|1|0
+#l:7|125|126|1|0
+#l:8|126|127|1|0
+#l:9|127|14|1|0
+#l:10|14|13|0|0
 
-Formato Object: #o:ID|Nombre|Data|Descripcion|is_consumable|LocationID|InventoryType
+Formato Object: #o:ID|Nombre|Data|Descripcion|ability_id|LocationID|InventoryType
+Use ability_id = 0 for no ability
 InventoryType = {UNKNOWN_INVENTORY == 0, PLAYER_INVENTORY == 1, NPC_INVENTORY == 2, SPACE_INVENTORY == 3}
 
 #o:1|Grain1|NONE|Grano1|0|11|3
@@ -52,7 +53,9 @@ InventoryType = {UNKNOWN_INVENTORY == 0, PLAYER_INVENTORY == 1, NPC_INVENTORY ==
 #o:5|HealthPotion|NONE|Potion that heals 20 HP|1|11|3
 #o:6|InfiniteHealthPotion|NONE|Potion that heals 20 HP and isn't used|0|11|3
 #o:7|HTEST|wearable helmet base_damage:1 strength:1 max_health:20|Helmet TEST|0|11|3
-#0:8|MoneyBag|NONE|Bag with 20 coins|0|11|3
+#o:8|MoneyBag|NONE|Bag with 20 coins|0|11|3
+
+#o:9|Key|NONE|Unlocks link between spaces 123 and 124|1|11|3
 
 Formato Event: #e:Id|Type|cmdTriggersNum|cmdName1 , ...|removeOnTrigger|tagvalue1:tagvalue2,...
 
@@ -82,9 +85,10 @@ Formato STATS: #st:ID|EntityType|VidaMaxima|Vida|DanoBase|Fuerza|Defensa|NivelMa
 #st:4|2|2|5|2|2|2|2|
 #st:5|2|2|5|2|2|2|2|
 
-Formato Ability: #sk:Id|Type|Name|Entityid|is_player_ability|is_object_use|cd_count|cd_length|data
+Formato Ability: #sk:Id|Type|Name|Entityid(ObjectId)|is_player_ability|is_object_use|cd_count|cd_length|data
 
 #sk:1|heal_self|Heal self 25 HP|1|1|0|0|2|25
 #sk:2|heal_self|Heal self 20 HP|5|0|1|0|0|20
 #sk:3|heal_self|Heal self 5 HP|6|0|1|0|2|5
 #sk:4|money_bag|Adds 20 coins|8|0|1|0|0|20
+#sk:5|link_unlock|Unlocks link between 123 and 124|9|0|1|1|0|4

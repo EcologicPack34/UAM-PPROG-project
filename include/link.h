@@ -32,10 +32,9 @@ typedef struct _Link Link;
  * @param space2 space connected by link
  * @param adjacent bool true if spaces are adjacent false if not
  * @param locked if the link is blocked and cant be used or not
- * @param unlockingObject object required to unlock the link
  * @return Link* 
  */
-Link * link_create(Id id,Id space1, Id space2, bool adjacent, bool locked, Id unlockingObject);
+Link * link_create(Id id,Id space1, Id space2, bool adjacent, bool locked);
 
 /**
  * @brief frees dynamic memory in use by a link
@@ -85,16 +84,6 @@ Status link_set_is_adjacent(Link *link, bool status);
  * @return Status 
  */
 Status link_set_locked(Link* link, bool status);
-
-/**
- * @brief sets the object that unlocks a link
- * @author Daniel Gómez
- * 
- * @param link link struct
- * @param object object id that unlocks the link
- * @return Status 
- */
-Status link_set_unlocking_object(Link* link, Id object);
 
 /**
  * @brief Gets the id of a link
@@ -154,15 +143,6 @@ bool link_is_adjacent(Link *link);
 bool link_is_locked(Link *link);
 
 /**
- * @brief gets the id of the unlocking object
- * @author Daniel Gómez
- * 
- * @param link link struct
- * @return Id or NO_ID if error
- */
-Id link_get_unlocking_object(Link *link);
-
-/**
  * @brief Moves an entity from one end of the link to another if posible
  * @author Daniel Gómez
  * 
@@ -179,6 +159,6 @@ Status link_move_entity(Link* link, Entity* entity);
  * @param obj object taken to try to unlock
  * @return Status 
  */
-Status link_unlock(Link *link, Object *obj);
+Status link_unlock(Link *link, Entity *player);
 
 #endif
