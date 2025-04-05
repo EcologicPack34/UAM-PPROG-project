@@ -149,6 +149,15 @@ Status combat_allies_turn(Combat *cmb);
  */
 Status combat_update_attack(Combat *cmb, Command *last_cmd);
 
+/**
+ * @brief Checks the deaths of enemies and the player
+ * @author Sofía Calvo
+ * 
+ * @param cmb combat struct
+ * @return Status 
+ */
+Status combat_update_deaths(Combat *cmb);
+
 Status combat_copy_entity_stats(Entity *entity, Stats *stats){
 
     if(!entity || !stats)    return ERROR;
@@ -342,10 +351,14 @@ Status combat_update_attack(Combat *cmb, Command *last_cmd){
 
     if (!cmb || !last_cmd)
         return ERROR;
-        
+
     args = command_get_arguments(last_cmd);
     numEnemy = atoi(args[1]);
-    stEn = combat_get_enemies_stats(cmb);
+    stEn = combat_get_enemies_stats_at(cmb, numEnemy-1);
+
+    if (strcmp(args[0], "swift") != 0 && stEn[numEnemy-1].stats.is_dead == true)
+        return OK;
+        
     enemycount = combat_get_enemies_count(cmb);
 
     if(cmb->is_player_turn == false){
@@ -379,7 +392,6 @@ Status combat_update_attack(Combat *cmb, Command *last_cmd){
     
     return OK;
 }
-
 /*
     * PUBLIC FUNCTIONS
 */
@@ -463,19 +475,14 @@ Status combat_update(Combat *combat, Command *last_cmd){
 
     if(!combat || !last_cmd)
         return ERROR;
-    
+    /*Check if player is dead to finish the combat*/
+
     if(command_get_code(last_cmd) == GM){
         /*stats copy are modified for combat*/
         return entity_stats_set_all(&combat->allies_stats[0].stats, MAX_LVL, MAX_LVL, MAX_LVL, MAX_LVL, MAX_LVL, MAX_LVL);
     }
 
     if(command_get_code(last_cmd) == ATTACK) {
-
-        test = command_get_arguments(last_cmd);
-        enemyNum = atoi(test[1]);
-        st = combat_get_enemies_stats_at(combat, enemyNum-1);
-        if ( st[enemyNum-1].stats.is_dead == true)
-            return OK;
         
         if(combat_update_attack(combat, last_cmd) == ERROR) return ERROR;
     }
@@ -485,32 +492,8 @@ Status combat_update(Combat *combat, Command *last_cmd){
         if (combat_runaway(combat) == ERROR) return ERROR;
     }
 
-     /*Check if the player is dead to end the combat*/
-     if (combat->allies_stats[0].stats.is_dead == true)
-     {   
-         combat_finalize(combat);
-         return OK;
-     }
- 
-     /*Check if all the enemies are dead to end the combat*/
- 
-     enemyNum = combat_get_enemies_count(combat);
-     check = combat_get_enemies_stats(combat);
- 
-     for ( i = 0; i < enemyNum; i++)
-     {
-         if (check[i].stats.is_dead == true)
-         {   
-             counter++;
-         }  
-     }
+    combat_update_deaths(combat);
      
-     if (counter == enemyNum)
-     {
-        combat_finalize(combat);
-        return OK;
-     } 
-
     return OK;
 }
 
@@ -563,4 +546,38 @@ Stats *combat_get_allies_stats(Combat *combat){
 Stats *combat_get_player_stats(Combat *combat){
     if(!combat) return NULL;
     return &(combat->allies_stats[0]);
+}
+
+Status combat_update_deaths(Combat *cmb){
+
+    /*Check if all the enemies are dead to end the combat*/
+    int enemyNum, check, i, counter = 0;
+
+    if (!cmb)
+        return ERROR;
+
+    enemyNum = combat_get_enemies_count(cmb);
+    check = combat_get_enemies_stats(cmb);
+
+    for (i = 0; i < enemyNum; i++)
+    {
+        if (cmb->enemies_stats[i].stats.is_dead == true)
+        {
+            counter++;
+        }
+    }
+
+    if (counter == enemyNum)
+    {
+        combat_finalize(cmb);
+        return OK;
+    }
+
+    if (cmb->allies_stats[0].stats.is_dead == true)
+    {
+        combat_finalize(cmb);
+        return OK;
+    }
+
+    return OK;
 }

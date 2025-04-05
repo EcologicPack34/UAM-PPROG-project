@@ -267,7 +267,6 @@ Status game_actions_update(Game *game, Command *command) {
 
         } while (entity_get_health(player) == 0); 
       }
-      
       break;
     case RUN_AWAY:
       status = game_actions_runaway(game);
