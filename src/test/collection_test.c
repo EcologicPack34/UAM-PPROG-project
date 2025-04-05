@@ -1,8 +1,8 @@
 
-#include "../collection.h"
-#include "../types.h"
+#include "../../include/collection.h"
+#include "../../include/types.h"
 #include "test.h"
-#include "../debug_printing.h"
+#include "../../include/debug_printing.h"
 
 #include <stdlib.h>
 #include <stdio.h>

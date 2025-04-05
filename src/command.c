@@ -250,7 +250,7 @@ Status command_set_status(Command *command, Status status){
 
 Status command_set_info(Command *command, CommandCode cmd, char *info){
   char *str = NULL;
-  if(!command) return ERROR;
+  if(!command || !info) return ERROR;
 
   str = malloc((strlen(info) + 1) * sizeof(char));
   if(!str) return ERROR;
@@ -302,6 +302,9 @@ Status command_get_as_string(Command *cmd, char *dest){
 
   if(!cmd || !dest) return ERROR;
   if(!(cmd->cmdPlayerData)) return ERROR;
+
+  /*North or n arg1 arg2 arg3 : Ok*/
+  /*Take or tk Grain1 : Ok*/
 
   for (i = 0; i < N_CMDT; i++)
   {
