@@ -29,10 +29,10 @@ struct _Space {
   char name[WORD_SIZE + 1];             /*!< Name of the space */
   bool discovered;                      /*!< Sets wheter a space has been discovered by players(true) or not(false)*/
 
-  Link *north;                          /*!< Id of the space at the north */
-  Link *south;                          /*!< Id of the space at the south */
-  Link *east;                           /*!< Id of the space at the east */
-  Link *west;                           /*!< Id of the space at the west */
+  Link *north;                          /*!< pointer of the Link at the north of the space */
+  Link *south;                          /*!< pointer of the Link at the south of the space */
+  Link *east;                           /*!< pointer of the Link at the east of the space  */
+  Link *west;                           /*!< pointer of the Link at the west of the space  */
   
   char *graphicDescription[SPACE_GRAPHIC_HEIGHT]; /*!< Graphical description of the space*/
 

@@ -68,7 +68,7 @@ Link *link_create(Id id,Id space1, Id space2, bool adjacent,bool locked){
     Link *link = NULL;
     
     /*Comprobacion de errores y reserva de memoria */
-    if(space1 == NO_ID && space2 == NO_ID){
+    if(space1 == NO_ID || space2 == NO_ID){
         debug_log(LOG_ERROR, "Error Initializing link: link must have at least 1 space: at link_create(Id,Id, Id, bool, Id) in link.c");
         return NULL;
     }

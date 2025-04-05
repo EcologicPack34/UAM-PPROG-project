@@ -7,6 +7,9 @@
         "stdlib.h": "c",
         "stdbool.h": "c",
         "game.h": "c",
-        "types.h": "c"
+        "types.h": "c",
+        "link.h": "c",
+        "test.h": "c",
+        "debug_printing.h": "c"
     }
 }
