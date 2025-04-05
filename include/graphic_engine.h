@@ -13,7 +13,9 @@
 
 #include "game.h"
 
-
+/**
+ * @brief ADT with all the information related to the graphic engine
+ */
 typedef struct _Graphic_engine Graphic_engine;
 
 /**

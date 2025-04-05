@@ -28,14 +28,13 @@
 #include "event_actions.h"
 #include "ability_actions.h"
 
-#define END_LOCATION 13                 /*!< Location where the object has to be located to end the game */
-
 /**
  * @brief Initializes game reading from the data file and starts the graphic engine
  * @author Original: Profesores PPROG, Modified By: Daniel Gómez
  *
  * @param game struct that saves all information related to the game
  * @param gengine struct that saves all information related to the graphic engine
+ * @param file_name string with the name of the filename with the game information
  * @return 0 if everything goes well or 1 if there was some mistake
  */
 int game_loop_init(Game **game, Graphic_engine **gengine, char *file_name);
@@ -52,7 +51,7 @@ void game_loop_run(Game *game, Graphic_engine *gengine);
 
 /**
  * @brief Frees game memory and destroys graphic engine
- * @author Profesores PPROG
+ * @author Original: Profesores PPROG, Modified By: Maksym Polyak and Daniel Gómez
  *
  * @param game struct that saves all information related to the game
  * @param gengine struct that saves all information related to the graphic engine
@@ -62,7 +61,7 @@ void game_loop_cleanup(Game *game, Graphic_engine *gengine);
 
 /**
  * @brief Checks the arguments and initializes the game.
- * @author Profesores PPROG
+ * @author Original: Profesores PPROG, Modified By: Daniel Gómez
  *
  * @param argc
  * @param argv

@@ -1,0 +1,63 @@
+\doxysection{\+\_\+\+NPC Struct Reference}
+\hypertarget{struct__NPC}{}\label{struct__NPC}\index{\_NPC@{\_NPC}}
+
+
+ADT that stores all the information of an NPC.  
+
+
+
+
+Collaboration diagram for \+\_\+\+NPC\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=314pt]{struct__NPC__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Data Fields}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{entity_8h_a88bccc76704ed1a036c3500da8c42bcc}{Entity}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{struct__NPC_acf0a851e755862ae8aa8457e2e00c6bc}{entity}}
+\item 
+char \mbox{\hyperlink{struct__NPC_acb23e208f888ea9750bdb3c3c24355fa}{message}} \mbox{[}\mbox{\hyperlink{types_8h_a92ed8507d1cd2331ad09275c5c4c1c89}{WORD\+\_\+\+SIZE}}\mbox{]}
+\item 
+bool \mbox{\hyperlink{struct__NPC_af4faad194b1d757e76f1e014950d78cc}{can\+\_\+follow}}
+\item 
+\mbox{\hyperlink{npc_8h_a71b1bede51c452f2811ba0cd6ee4e875}{NPC\+\_\+status}} \mbox{\hyperlink{struct__NPC_aadb6feb2f70238e4e5d324a2af68237e}{status}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+ADT that stores all the information of an NPC. 
+
+\doxysubsection{Field Documentation}
+\Hypertarget{struct__NPC_af4faad194b1d757e76f1e014950d78cc}\label{struct__NPC_af4faad194b1d757e76f1e014950d78cc} 
+\index{\_NPC@{\_NPC}!can\_follow@{can\_follow}}
+\index{can\_follow@{can\_follow}!\_NPC@{\_NPC}}
+\doxysubsubsection{\texorpdfstring{can\_follow}{can\_follow}}
+{\footnotesize\ttfamily bool \+\_\+\+NPC\+::can\+\_\+follow}
+
+Determines if the NPC can follow the player or not \Hypertarget{struct__NPC_acf0a851e755862ae8aa8457e2e00c6bc}\label{struct__NPC_acf0a851e755862ae8aa8457e2e00c6bc} 
+\index{\_NPC@{\_NPC}!entity@{entity}}
+\index{entity@{entity}!\_NPC@{\_NPC}}
+\doxysubsubsection{\texorpdfstring{entity}{entity}}
+{\footnotesize\ttfamily \mbox{\hyperlink{entity_8h_a88bccc76704ed1a036c3500da8c42bcc}{Entity}}\texorpdfstring{$\ast$}{*} \+\_\+\+NPC\+::entity}
+
+Entity struct of the NPC \Hypertarget{struct__NPC_acb23e208f888ea9750bdb3c3c24355fa}\label{struct__NPC_acb23e208f888ea9750bdb3c3c24355fa} 
+\index{\_NPC@{\_NPC}!message@{message}}
+\index{message@{message}!\_NPC@{\_NPC}}
+\doxysubsubsection{\texorpdfstring{message}{message}}
+{\footnotesize\ttfamily char \+\_\+\+NPC\+::message\mbox{[}\mbox{\hyperlink{types_8h_a92ed8507d1cd2331ad09275c5c4c1c89}{WORD\+\_\+\+SIZE}}\mbox{]}}
+
+Message of the NPC for the player \Hypertarget{struct__NPC_aadb6feb2f70238e4e5d324a2af68237e}\label{struct__NPC_aadb6feb2f70238e4e5d324a2af68237e} 
+\index{\_NPC@{\_NPC}!status@{status}}
+\index{status@{status}!\_NPC@{\_NPC}}
+\doxysubsubsection{\texorpdfstring{status}{status}}
+{\footnotesize\ttfamily \mbox{\hyperlink{npc_8h_a71b1bede51c452f2811ba0cd6ee4e875}{NPC\+\_\+status}} \+\_\+\+NPC\+::status}
+
+Determines if the NPC is an ALLY, ENEMY or NEUTRAL towards players 
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/\mbox{\hyperlink{npc_8c}{npc.\+c}}\end{DoxyCompactItemize}

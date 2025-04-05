@@ -1,0 +1,87 @@
+\doxysection{\+\_\+\+Combat Struct Reference}
+\hypertarget{struct__Combat}{}\label{struct__Combat}\index{\_Combat@{\_Combat}}
+
+
+Internal struct that holds all the information related to the combat.  
+
+
+
+
+Collaboration diagram for \+\_\+\+Combat\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{struct__Combat__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Data Fields}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{structStats}{Stats}} \mbox{\hyperlink{struct__Combat_ad076fc3945b3f46441ae2622f108d860}{allies\+\_\+stats}} \mbox{[}\mbox{\hyperlink{types_8h_adb5b966829f7b662438ced2ed97f9f11}{NPC\+\_\+\+MAX\+\_\+\+ALLIES}}\mbox{]}
+\item 
+int \mbox{\hyperlink{struct__Combat_a5c77ccb830278610aaa24097bd7a08fe}{allies\+\_\+count}}
+\item 
+\mbox{\hyperlink{structStats}{Stats}} \mbox{\hyperlink{struct__Combat_af14b0d3bbea2c4e542a4633eb7c23e3d}{enemies\+\_\+stats}} \mbox{[}\mbox{\hyperlink{types_8h_a230853364a30a1ab1fdefb2ac88dc5a0}{NPC\+\_\+\+MAX\+\_\+\+ENEMIES}}\mbox{]}
+\item 
+int \mbox{\hyperlink{struct__Combat_a379b3d309f5a5fea8c532c540f6f8660}{enemies\+\_\+count}}
+\item 
+bool \mbox{\hyperlink{struct__Combat_a8d2f3b9941b24f6f6147db3598779ff2}{is\+\_\+player\+\_\+turn}}
+\item 
+\mbox{\hyperlink{space_8h_a67533ffc2b70463baecc38fb0629bbfc}{Space}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{struct__Combat_a663b413ed42c549a20c4cab9569c36c0}{space}}
+\item 
+bool \mbox{\hyperlink{struct__Combat_a605fd9a8607fd91101e7f6abdbafc651}{end\+Combat}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Internal struct that holds all the information related to the combat. 
+
+\doxysubsection{Field Documentation}
+\Hypertarget{struct__Combat_a5c77ccb830278610aaa24097bd7a08fe}\label{struct__Combat_a5c77ccb830278610aaa24097bd7a08fe} 
+\index{\_Combat@{\_Combat}!allies\_count@{allies\_count}}
+\index{allies\_count@{allies\_count}!\_Combat@{\_Combat}}
+\doxysubsubsection{\texorpdfstring{allies\_count}{allies\_count}}
+{\footnotesize\ttfamily int \+\_\+\+Combat\+::allies\+\_\+count}
+
+Number of allies \Hypertarget{struct__Combat_ad076fc3945b3f46441ae2622f108d860}\label{struct__Combat_ad076fc3945b3f46441ae2622f108d860} 
+\index{\_Combat@{\_Combat}!allies\_stats@{allies\_stats}}
+\index{allies\_stats@{allies\_stats}!\_Combat@{\_Combat}}
+\doxysubsubsection{\texorpdfstring{allies\_stats}{allies\_stats}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structStats}{Stats}} \+\_\+\+Combat\+::allies\+\_\+stats\mbox{[}\mbox{\hyperlink{types_8h_adb5b966829f7b662438ced2ed97f9f11}{NPC\+\_\+\+MAX\+\_\+\+ALLIES}}\mbox{]}}
+
+\doxylink{structStats}{Stats} of the allies \Hypertarget{struct__Combat_a605fd9a8607fd91101e7f6abdbafc651}\label{struct__Combat_a605fd9a8607fd91101e7f6abdbafc651} 
+\index{\_Combat@{\_Combat}!endCombat@{endCombat}}
+\index{endCombat@{endCombat}!\_Combat@{\_Combat}}
+\doxysubsubsection{\texorpdfstring{endCombat}{endCombat}}
+{\footnotesize\ttfamily bool \+\_\+\+Combat\+::end\+Combat}
+
+if true means combat has ended \Hypertarget{struct__Combat_a379b3d309f5a5fea8c532c540f6f8660}\label{struct__Combat_a379b3d309f5a5fea8c532c540f6f8660} 
+\index{\_Combat@{\_Combat}!enemies\_count@{enemies\_count}}
+\index{enemies\_count@{enemies\_count}!\_Combat@{\_Combat}}
+\doxysubsubsection{\texorpdfstring{enemies\_count}{enemies\_count}}
+{\footnotesize\ttfamily int \+\_\+\+Combat\+::enemies\+\_\+count}
+
+Number of enemies \Hypertarget{struct__Combat_af14b0d3bbea2c4e542a4633eb7c23e3d}\label{struct__Combat_af14b0d3bbea2c4e542a4633eb7c23e3d} 
+\index{\_Combat@{\_Combat}!enemies\_stats@{enemies\_stats}}
+\index{enemies\_stats@{enemies\_stats}!\_Combat@{\_Combat}}
+\doxysubsubsection{\texorpdfstring{enemies\_stats}{enemies\_stats}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structStats}{Stats}} \+\_\+\+Combat\+::enemies\+\_\+stats\mbox{[}\mbox{\hyperlink{types_8h_a230853364a30a1ab1fdefb2ac88dc5a0}{NPC\+\_\+\+MAX\+\_\+\+ENEMIES}}\mbox{]}}
+
+\doxylink{structStats}{Stats} of the enemies \Hypertarget{struct__Combat_a8d2f3b9941b24f6f6147db3598779ff2}\label{struct__Combat_a8d2f3b9941b24f6f6147db3598779ff2} 
+\index{\_Combat@{\_Combat}!is\_player\_turn@{is\_player\_turn}}
+\index{is\_player\_turn@{is\_player\_turn}!\_Combat@{\_Combat}}
+\doxysubsubsection{\texorpdfstring{is\_player\_turn}{is\_player\_turn}}
+{\footnotesize\ttfamily bool \+\_\+\+Combat\+::is\+\_\+player\+\_\+turn}
+
+Determines who starts, true -\/-\/\texorpdfstring{$>$}{>} player party, false -\/-\/\texorpdfstring{$>$}{>} enemy party \Hypertarget{struct__Combat_a663b413ed42c549a20c4cab9569c36c0}\label{struct__Combat_a663b413ed42c549a20c4cab9569c36c0} 
+\index{\_Combat@{\_Combat}!space@{space}}
+\index{space@{space}!\_Combat@{\_Combat}}
+\doxysubsubsection{\texorpdfstring{space}{space}}
+{\footnotesize\ttfamily \mbox{\hyperlink{space_8h_a67533ffc2b70463baecc38fb0629bbfc}{Space}}\texorpdfstring{$\ast$}{*} \+\_\+\+Combat\+::space}
+
+Space where the combat is located 
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/\mbox{\hyperlink{combat_8c}{combat.\+c}}\end{DoxyCompactItemize}

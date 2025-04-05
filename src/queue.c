@@ -1,15 +1,31 @@
+/**
+ * @file queue.c
+ * @author Daniel Gómez
+ * @brief queue internal functionality
+ * @version 0.1
+ * @date 2025-04-03
+ * 
+ * @copyright Copyright (c) 2025
+ * 
+ */
+
 #include <stdlib.h>
 #include <stdio.h>
 
 #include "queue.h"
-/*
-    Local struct to .c file, contains info to implement linked list
-*/
+
+
+/**
+ * @brief Local struct to .c file, contains info to implement linked list
+ */
 typedef struct{
     void *element;      /*!< Element stored*/
     void *nextNode;     /*!< Pointer to the next node of the list*/
 }_Node;
 
+/**
+ * @brief Queue internal struct definition
+ */
 struct _Queue{
     _Node *firstNode;   /*!< Pointer to the first node of the list*/
     _Node *lastNode;    /*!< Pointer to the last node of the list*/

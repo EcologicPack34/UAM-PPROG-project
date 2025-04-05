@@ -18,7 +18,7 @@
  * @brief Triggers all the events in the event manager stored in game
  * @author Daniel Gómez
  * 
- * @param game 
+ * @param game game struct
  */
 void event_actions_trigger_events(Game *game);
 

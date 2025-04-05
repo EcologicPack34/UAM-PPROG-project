@@ -1,0 +1,320 @@
+\doxysection{src/game\+\_\+reader.c File Reference}
+\hypertarget{game__reader_8c}{}\label{game__reader_8c}\index{src/game\_reader.c@{src/game\_reader.c}}
+
+
+It defines the game reader public interface.  
+
+
+{\ttfamily \#include $<$stdio.\+h$>$}\newline
+{\ttfamily \#include $<$stdlib.\+h$>$}\newline
+{\ttfamily \#include $<$string.\+h$>$}\newline
+{\ttfamily \#include $<$ctype.\+h$>$}\newline
+{\ttfamily \#include "{}game\+\_\+reader.\+h"{}}\newline
+{\ttfamily \#include "{}debug\+\_\+printing.\+h"{}}\newline
+{\ttfamily \#include "{}game.\+h"{}}\newline
+{\ttfamily \#include "{}space.\+h"{}}\newline
+{\ttfamily \#include "{}event\+\_\+manager.\+h"{}}\newline
+Include dependency graph for game\+\_\+reader.\+c\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{game__reader_8c__incl}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} \mbox{\hyperlink{game__reader_8c_a70e1ab8e805fb12edcb77dcf542cb699}{game\+\_\+reader\+\_\+load\+\_\+spaces}} (\mbox{\hyperlink{game_8h_a57156d39c530aec3fba3a9dad8c2dc6a}{Game}} \texorpdfstring{$\ast$}{*}game, char \texorpdfstring{$\ast$}{*}filename)
+\begin{DoxyCompactList}\small\item\em Reads the filename to save all space and their links. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} \mbox{\hyperlink{game__reader_8c_a00cc7cb1731d6ea69ac880d654ba66e5}{game\+\_\+reader\+\_\+load\+\_\+links}} (\mbox{\hyperlink{game_8h_a57156d39c530aec3fba3a9dad8c2dc6a}{Game}} \texorpdfstring{$\ast$}{*}game, char \texorpdfstring{$\ast$}{*}filename)
+\begin{DoxyCompactList}\small\item\em Reads the filename to save all links between spaces. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} \mbox{\hyperlink{game__reader_8c_a64489ad2551f477b9a2496697bc36fa9}{game\+\_\+reader\+\_\+load\+\_\+objects}} (\mbox{\hyperlink{game_8h_a57156d39c530aec3fba3a9dad8c2dc6a}{Game}} \texorpdfstring{$\ast$}{*}game, char \texorpdfstring{$\ast$}{*}filename)
+\begin{DoxyCompactList}\small\item\em Reads the filename to save all objects. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} \mbox{\hyperlink{game__reader_8c_a73e85dbd0aec644d9ff1f29ff7bbccf3}{game\+\_\+reader\+\_\+load\+\_\+player}} (\mbox{\hyperlink{game_8h_a57156d39c530aec3fba3a9dad8c2dc6a}{Game}} \texorpdfstring{$\ast$}{*}game, char \texorpdfstring{$\ast$}{*}filename)
+\begin{DoxyCompactList}\small\item\em Reads the filename to load the player information. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} \mbox{\hyperlink{game__reader_8c_acafcaec913dfd27c61327f32de80ce0e}{game\+\_\+reader\+\_\+load\+\_\+events}} (\mbox{\hyperlink{game_8h_a57156d39c530aec3fba3a9dad8c2dc6a}{Game}} \texorpdfstring{$\ast$}{*}game, char \texorpdfstring{$\ast$}{*}filename)
+\begin{DoxyCompactList}\small\item\em Reads the file to load all events. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} \mbox{\hyperlink{game__reader_8c_a67ea8d38114d1c5ddd18430cfbda3110}{game\+\_\+reader\+\_\+load\+\_\+npcs}} (\mbox{\hyperlink{game_8h_a57156d39c530aec3fba3a9dad8c2dc6a}{Game}} \texorpdfstring{$\ast$}{*}game, char \texorpdfstring{$\ast$}{*}filename)
+\begin{DoxyCompactList}\small\item\em Reads the file to load all npcs. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} \mbox{\hyperlink{game__reader_8c_a6311cfa6109f7c54944848556b8ded74}{game\+\_\+reader\+\_\+load\+\_\+command\+Info}} (\mbox{\hyperlink{game_8h_a57156d39c530aec3fba3a9dad8c2dc6a}{Game}} \texorpdfstring{$\ast$}{*}game)
+\begin{DoxyCompactList}\small\item\em Loads command info from settings file. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} \mbox{\hyperlink{game__reader_8c_ac7dd75424cdd72d2650e4ae8a8ba8209}{game\+\_\+reader\+\_\+load\+\_\+command\+State\+Types}} (\mbox{\hyperlink{game_8h_a57156d39c530aec3fba3a9dad8c2dc6a}{Game}} \texorpdfstring{$\ast$}{*}game)
+\begin{DoxyCompactList}\small\item\em Loads valid commands for each game state. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} \mbox{\hyperlink{game__reader_8c_a3965b0377980545662a0a0c2bf9eafcc}{game\+\_\+reader\+\_\+load\+\_\+stats}} (\mbox{\hyperlink{game_8h_a57156d39c530aec3fba3a9dad8c2dc6a}{Game}} \texorpdfstring{$\ast$}{*}game, char \texorpdfstring{$\ast$}{*}filename)
+\begin{DoxyCompactList}\small\item\em Reads the file to load stats to an entity. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} \mbox{\hyperlink{game__reader_8c_a80a8f43510dfbec464172ffbd082af8d}{game\+\_\+reader\+\_\+load\+\_\+ability}} (\mbox{\hyperlink{game_8h_a57156d39c530aec3fba3a9dad8c2dc6a}{Game}} \texorpdfstring{$\ast$}{*}game, char \texorpdfstring{$\ast$}{*}filename)
+\begin{DoxyCompactList}\small\item\em Reads the file to load all ability. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} \mbox{\hyperlink{game__reader_8c_a6d8d646137153b769f84d240b2f02955}{game\+\_\+reader\+\_\+create\+\_\+from\+\_\+file}} (\mbox{\hyperlink{game_8h_a57156d39c530aec3fba3a9dad8c2dc6a}{Game}} \texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}game, char \texorpdfstring{$\ast$}{*}filename)
+\begin{DoxyCompactList}\small\item\em Initializes game, loads the spaces in game and sets the player/object location. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+It defines the game reader public interface. 
+
+Defines how data is read by the .dat and saves it on the game struct.
+
+\begin{DoxyAuthor}{Author}
+Daniel Gómez Rodríguez 
+\end{DoxyAuthor}
+\begin{DoxyVersion}{Version}
+0 
+\end{DoxyVersion}
+\begin{DoxyDate}{Date}
+8-\/02-\/2025 
+\end{DoxyDate}
+\begin{DoxyCopyright}{Copyright}
+GNU Public License 
+\end{DoxyCopyright}
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{game__reader_8c_a6d8d646137153b769f84d240b2f02955}\label{game__reader_8c_a6d8d646137153b769f84d240b2f02955} 
+\index{game\_reader.c@{game\_reader.c}!game\_reader\_create\_from\_file@{game\_reader\_create\_from\_file}}
+\index{game\_reader\_create\_from\_file@{game\_reader\_create\_from\_file}!game\_reader.c@{game\_reader.c}}
+\doxysubsubsection{\texorpdfstring{game\_reader\_create\_from\_file()}{game\_reader\_create\_from\_file()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} game\+\_\+reader\+\_\+create\+\_\+from\+\_\+file (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{game_8h_a57156d39c530aec3fba3a9dad8c2dc6a}{Game}} \texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}}]{game,  }\item[{char \texorpdfstring{$\ast$}{*}}]{filename }\end{DoxyParamCaption})}
+
+
+
+Initializes game, loads the spaces in game and sets the player/object location. 
+
+\begin{DoxyAuthor}{Author}
+Daniel Gómez Rodríguez and Maksym Polyak
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em game} & struct that saves all information related to the game \\
+\hline
+{\em filename} & string with the name of the data file \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+OK if everything goes well or ERROR if there was some mistake 
+\end{DoxyReturn}
+\Hypertarget{game__reader_8c_a80a8f43510dfbec464172ffbd082af8d}\label{game__reader_8c_a80a8f43510dfbec464172ffbd082af8d} 
+\index{game\_reader.c@{game\_reader.c}!game\_reader\_load\_ability@{game\_reader\_load\_ability}}
+\index{game\_reader\_load\_ability@{game\_reader\_load\_ability}!game\_reader.c@{game\_reader.c}}
+\doxysubsubsection{\texorpdfstring{game\_reader\_load\_ability()}{game\_reader\_load\_ability()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} game\+\_\+reader\+\_\+load\+\_\+ability (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{game_8h_a57156d39c530aec3fba3a9dad8c2dc6a}{Game}} \texorpdfstring{$\ast$}{*}}]{game,  }\item[{char \texorpdfstring{$\ast$}{*}}]{filename }\end{DoxyParamCaption})}
+
+
+
+Reads the file to load all ability. 
+
+\begin{DoxyAuthor}{Author}
+Maksym Polyak
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em game} & struct that saves all information related to the game \\
+\hline
+{\em filename} & string that stores the data file name \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Status 
+\end{DoxyReturn}
+\Hypertarget{game__reader_8c_a6311cfa6109f7c54944848556b8ded74}\label{game__reader_8c_a6311cfa6109f7c54944848556b8ded74} 
+\index{game\_reader.c@{game\_reader.c}!game\_reader\_load\_commandInfo@{game\_reader\_load\_commandInfo}}
+\index{game\_reader\_load\_commandInfo@{game\_reader\_load\_commandInfo}!game\_reader.c@{game\_reader.c}}
+\doxysubsubsection{\texorpdfstring{game\_reader\_load\_commandInfo()}{game\_reader\_load\_commandInfo()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} game\+\_\+reader\+\_\+load\+\_\+command\+Info (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{game_8h_a57156d39c530aec3fba3a9dad8c2dc6a}{Game}} \texorpdfstring{$\ast$}{*}}]{game }\end{DoxyParamCaption})}
+
+
+
+Loads command info from settings file. 
+
+\begin{DoxyAuthor}{Author}
+Daniel Gómez
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em game} & struct that saves all information related to the game \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Status 
+\end{DoxyReturn}
+\Hypertarget{game__reader_8c_ac7dd75424cdd72d2650e4ae8a8ba8209}\label{game__reader_8c_ac7dd75424cdd72d2650e4ae8a8ba8209} 
+\index{game\_reader.c@{game\_reader.c}!game\_reader\_load\_commandStateTypes@{game\_reader\_load\_commandStateTypes}}
+\index{game\_reader\_load\_commandStateTypes@{game\_reader\_load\_commandStateTypes}!game\_reader.c@{game\_reader.c}}
+\doxysubsubsection{\texorpdfstring{game\_reader\_load\_commandStateTypes()}{game\_reader\_load\_commandStateTypes()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} game\+\_\+reader\+\_\+load\+\_\+command\+State\+Types (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{game_8h_a57156d39c530aec3fba3a9dad8c2dc6a}{Game}} \texorpdfstring{$\ast$}{*}}]{game }\end{DoxyParamCaption})}
+
+
+
+Loads valid commands for each game state. 
+
+\begin{DoxyAuthor}{Author}
+Daniel Gómez
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em game} & struct that saves all information related to the game \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Status 
+\end{DoxyReturn}
+\Hypertarget{game__reader_8c_acafcaec913dfd27c61327f32de80ce0e}\label{game__reader_8c_acafcaec913dfd27c61327f32de80ce0e} 
+\index{game\_reader.c@{game\_reader.c}!game\_reader\_load\_events@{game\_reader\_load\_events}}
+\index{game\_reader\_load\_events@{game\_reader\_load\_events}!game\_reader.c@{game\_reader.c}}
+\doxysubsubsection{\texorpdfstring{game\_reader\_load\_events()}{game\_reader\_load\_events()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} game\+\_\+reader\+\_\+load\+\_\+events (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{game_8h_a57156d39c530aec3fba3a9dad8c2dc6a}{Game}} \texorpdfstring{$\ast$}{*}}]{game,  }\item[{char \texorpdfstring{$\ast$}{*}}]{filename }\end{DoxyParamCaption})}
+
+
+
+Reads the file to load all events. 
+
+\begin{DoxyAuthor}{Author}
+Daniel Gómez
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em game} & struct that saves all information related to the game \\
+\hline
+{\em filename} & string that stores the data file name \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Status 
+\end{DoxyReturn}
+\Hypertarget{game__reader_8c_a00cc7cb1731d6ea69ac880d654ba66e5}\label{game__reader_8c_a00cc7cb1731d6ea69ac880d654ba66e5} 
+\index{game\_reader.c@{game\_reader.c}!game\_reader\_load\_links@{game\_reader\_load\_links}}
+\index{game\_reader\_load\_links@{game\_reader\_load\_links}!game\_reader.c@{game\_reader.c}}
+\doxysubsubsection{\texorpdfstring{game\_reader\_load\_links()}{game\_reader\_load\_links()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} game\+\_\+reader\+\_\+load\+\_\+links (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{game_8h_a57156d39c530aec3fba3a9dad8c2dc6a}{Game}} \texorpdfstring{$\ast$}{*}}]{game,  }\item[{char \texorpdfstring{$\ast$}{*}}]{filename }\end{DoxyParamCaption})}
+
+
+
+Reads the filename to save all links between spaces. 
+
+\begin{DoxyAuthor}{Author}
+Daniel Gómez
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em game} & struct that saves all information related to the game \\
+\hline
+{\em filename} & string that stores the data file name \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+OK if everything goes well or ERROR if there was some error 
+\end{DoxyReturn}
+\Hypertarget{game__reader_8c_a67ea8d38114d1c5ddd18430cfbda3110}\label{game__reader_8c_a67ea8d38114d1c5ddd18430cfbda3110} 
+\index{game\_reader.c@{game\_reader.c}!game\_reader\_load\_npcs@{game\_reader\_load\_npcs}}
+\index{game\_reader\_load\_npcs@{game\_reader\_load\_npcs}!game\_reader.c@{game\_reader.c}}
+\doxysubsubsection{\texorpdfstring{game\_reader\_load\_npcs()}{game\_reader\_load\_npcs()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} game\+\_\+reader\+\_\+load\+\_\+npcs (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{game_8h_a57156d39c530aec3fba3a9dad8c2dc6a}{Game}} \texorpdfstring{$\ast$}{*}}]{game,  }\item[{char \texorpdfstring{$\ast$}{*}}]{filename }\end{DoxyParamCaption})}
+
+
+
+Reads the file to load all npcs. 
+
+\begin{DoxyAuthor}{Author}
+Maksym Polyak
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em game} & struct that saves all information related to the game \\
+\hline
+{\em filename} & string that stores the data file name \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Status 
+\end{DoxyReturn}
+\Hypertarget{game__reader_8c_a64489ad2551f477b9a2496697bc36fa9}\label{game__reader_8c_a64489ad2551f477b9a2496697bc36fa9} 
+\index{game\_reader.c@{game\_reader.c}!game\_reader\_load\_objects@{game\_reader\_load\_objects}}
+\index{game\_reader\_load\_objects@{game\_reader\_load\_objects}!game\_reader.c@{game\_reader.c}}
+\doxysubsubsection{\texorpdfstring{game\_reader\_load\_objects()}{game\_reader\_load\_objects()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} game\+\_\+reader\+\_\+load\+\_\+objects (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{game_8h_a57156d39c530aec3fba3a9dad8c2dc6a}{Game}} \texorpdfstring{$\ast$}{*}}]{game,  }\item[{char \texorpdfstring{$\ast$}{*}}]{filename }\end{DoxyParamCaption})}
+
+
+
+Reads the filename to save all objects. 
+
+\begin{DoxyAuthor}{Author}
+Maksym Polyak
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em game} & struct that saves all information related to the game \\
+\hline
+{\em filename} & string that stores the data file name \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+OK if everything goes well or ERROR if there was some error 
+\end{DoxyReturn}
+\Hypertarget{game__reader_8c_a73e85dbd0aec644d9ff1f29ff7bbccf3}\label{game__reader_8c_a73e85dbd0aec644d9ff1f29ff7bbccf3} 
+\index{game\_reader.c@{game\_reader.c}!game\_reader\_load\_player@{game\_reader\_load\_player}}
+\index{game\_reader\_load\_player@{game\_reader\_load\_player}!game\_reader.c@{game\_reader.c}}
+\doxysubsubsection{\texorpdfstring{game\_reader\_load\_player()}{game\_reader\_load\_player()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} game\+\_\+reader\+\_\+load\+\_\+player (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{game_8h_a57156d39c530aec3fba3a9dad8c2dc6a}{Game}} \texorpdfstring{$\ast$}{*}}]{game,  }\item[{char \texorpdfstring{$\ast$}{*}}]{filename }\end{DoxyParamCaption})}
+
+
+
+Reads the filename to load the player information. 
+
+\begin{DoxyAuthor}{Author}
+Maksym Polyak
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em game} & struct that saves all information related to the game \\
+\hline
+{\em filename} & string that stores the data file name \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+OK if everything goes well or ERROR if there was some error 
+\end{DoxyReturn}
+\Hypertarget{game__reader_8c_a70e1ab8e805fb12edcb77dcf542cb699}\label{game__reader_8c_a70e1ab8e805fb12edcb77dcf542cb699} 
+\index{game\_reader.c@{game\_reader.c}!game\_reader\_load\_spaces@{game\_reader\_load\_spaces}}
+\index{game\_reader\_load\_spaces@{game\_reader\_load\_spaces}!game\_reader.c@{game\_reader.c}}
+\doxysubsubsection{\texorpdfstring{game\_reader\_load\_spaces()}{game\_reader\_load\_spaces()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} game\+\_\+reader\+\_\+load\+\_\+spaces (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{game_8h_a57156d39c530aec3fba3a9dad8c2dc6a}{Game}} \texorpdfstring{$\ast$}{*}}]{game,  }\item[{char \texorpdfstring{$\ast$}{*}}]{filename }\end{DoxyParamCaption})}
+
+
+
+Reads the filename to save all space and their links. 
+
+\begin{DoxyAuthor}{Author}
+Daniel Gómez
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em game} & struct that saves all information related to the game \\
+\hline
+{\em filename} & string that stores the data file name \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+OK if everything goes well or ERROR if there was some error 
+\end{DoxyReturn}
+\Hypertarget{game__reader_8c_a3965b0377980545662a0a0c2bf9eafcc}\label{game__reader_8c_a3965b0377980545662a0a0c2bf9eafcc} 
+\index{game\_reader.c@{game\_reader.c}!game\_reader\_load\_stats@{game\_reader\_load\_stats}}
+\index{game\_reader\_load\_stats@{game\_reader\_load\_stats}!game\_reader.c@{game\_reader.c}}
+\doxysubsubsection{\texorpdfstring{game\_reader\_load\_stats()}{game\_reader\_load\_stats()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} game\+\_\+reader\+\_\+load\+\_\+stats (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{game_8h_a57156d39c530aec3fba3a9dad8c2dc6a}{Game}} \texorpdfstring{$\ast$}{*}}]{game,  }\item[{char \texorpdfstring{$\ast$}{*}}]{filename }\end{DoxyParamCaption})}
+
+
+
+Reads the file to load stats to an entity. 
+
+\begin{DoxyAuthor}{Author}
+Aaron Charameli Mair
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em game} & struct that saves all information related to the game \\
+\hline
+{\em filename} & string that stores the data file name \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Status 
+\end{DoxyReturn}

@@ -1,0 +1,979 @@
+\doxysection{include/space.h File Reference}
+\hypertarget{space_8h}{}\label{space_8h}\index{include/space.h@{include/space.h}}
+
+
+It defines the space module interface.  
+
+
+{\ttfamily \#include "{}types.\+h"{}}\newline
+{\ttfamily \#include "{}object.\+h"{}}\newline
+{\ttfamily \#include "{}link.\+h"{}}\newline
+{\ttfamily \#include "{}inventory.\+h"{}}\newline
+{\ttfamily \#include "{}npc.\+h"{}}\newline
+{\ttfamily \#include "{}vector2.\+h"{}}\newline
+{\ttfamily \#include $<$stdbool.\+h$>$}\newline
+Include dependency graph for space.\+h\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{space_8h__incl}
+\end{center}
+\end{figure}
+This graph shows which files directly or indirectly include this file\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{space_8h__dep__incl}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{space_8h_a04f40019d40dbaa749e749e2291c524d}{SPACE\+\_\+\+INITIAL\+\_\+\+SIZE\+\_\+\+NPCS}}~50
+\item 
+\#define \mbox{\hyperlink{space_8h_abd6144b38bca43059ec8cd24b5ccc8cb}{SPACE\+\_\+\+GRAPHIC\+\_\+\+HEIGHT}}~5
+\item 
+\#define \mbox{\hyperlink{space_8h_aa06204d71323315ed577f0c826fd7ffa}{SPACE\+\_\+\+GRAPHIC\+\_\+\+WIDTH}}~9
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{space_8h_a67533ffc2b70463baecc38fb0629bbfc}\label{space_8h_a67533ffc2b70463baecc38fb0629bbfc} 
+typedef struct \mbox{\hyperlink{struct__Space}{\+\_\+\+Space}} {\bfseries Space}
+\begin{DoxyCompactList}\small\item\em ADT with all the information related to a space. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{space_8h_a67533ffc2b70463baecc38fb0629bbfc}{Space}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{space_8h_ad3a5834be733066e8a7d8586be0ac610}{space\+\_\+create}} (\mbox{\hyperlink{types_8h_a845e604fb28f7e3d97549da3448149d3}{Id}} id)
+\begin{DoxyCompactList}\small\item\em It creates a new space, allocating memory and initializing its members. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} \mbox{\hyperlink{space_8h_a278763d4b530df17823ef9e4f9db2896}{space\+\_\+destroy}} (\mbox{\hyperlink{space_8h_a67533ffc2b70463baecc38fb0629bbfc}{Space}} \texorpdfstring{$\ast$}{*}space)
+\begin{DoxyCompactList}\small\item\em It destroys a space, freeing the allocated memory. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} \mbox{\hyperlink{space_8h_a03ae5d9d7a842346d89e56409c3cb3e1}{space\+\_\+set\+\_\+name}} (\mbox{\hyperlink{space_8h_a67533ffc2b70463baecc38fb0629bbfc}{Space}} \texorpdfstring{$\ast$}{*}space, char \texorpdfstring{$\ast$}{*}name)
+\begin{DoxyCompactList}\small\item\em It sets the name of a space. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} \mbox{\hyperlink{space_8h_ae70f9f8effe9e7ead45dc474516352c4}{space\+\_\+set\+\_\+north}} (\mbox{\hyperlink{space_8h_a67533ffc2b70463baecc38fb0629bbfc}{Space}} \texorpdfstring{$\ast$}{*}space, \mbox{\hyperlink{link_8h_ae3b299941e67be6971bfd64a25505eff}{Link}} \texorpdfstring{$\ast$}{*}link)
+\begin{DoxyCompactList}\small\item\em It sets the id of the space located at the north. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} \mbox{\hyperlink{space_8h_a1526ebff9d18f4819dda6682d61e24ca}{space\+\_\+set\+\_\+south}} (\mbox{\hyperlink{space_8h_a67533ffc2b70463baecc38fb0629bbfc}{Space}} \texorpdfstring{$\ast$}{*}space, \mbox{\hyperlink{link_8h_ae3b299941e67be6971bfd64a25505eff}{Link}} \texorpdfstring{$\ast$}{*}link)
+\begin{DoxyCompactList}\small\item\em It sets the id of the space located at the south. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} \mbox{\hyperlink{space_8h_ac9a9bdec2f2426392cc9ea58c126e842}{space\+\_\+set\+\_\+east}} (\mbox{\hyperlink{space_8h_a67533ffc2b70463baecc38fb0629bbfc}{Space}} \texorpdfstring{$\ast$}{*}space, \mbox{\hyperlink{link_8h_ae3b299941e67be6971bfd64a25505eff}{Link}} \texorpdfstring{$\ast$}{*}link)
+\begin{DoxyCompactList}\small\item\em It sets the id of the space located at the east. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} \mbox{\hyperlink{space_8h_a5d0876653eb47600742d08b944a7126b}{space\+\_\+set\+\_\+west}} (\mbox{\hyperlink{space_8h_a67533ffc2b70463baecc38fb0629bbfc}{Space}} \texorpdfstring{$\ast$}{*}space, \mbox{\hyperlink{link_8h_ae3b299941e67be6971bfd64a25505eff}{Link}} \texorpdfstring{$\ast$}{*}link)
+\begin{DoxyCompactList}\small\item\em It sets the id of the space located at the west. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} \mbox{\hyperlink{space_8h_a0a523702b23c5b2f3c34f3e25a8034c8}{space\+\_\+set\+\_\+position}} (\mbox{\hyperlink{space_8h_a67533ffc2b70463baecc38fb0629bbfc}{Space}} \texorpdfstring{$\ast$}{*}space, float x, float y)
+\begin{DoxyCompactList}\small\item\em Sets the position of a given space to a vector of coordenates (x,y) \end{DoxyCompactList}\item 
+\mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} \mbox{\hyperlink{space_8h_a699375887d0764d31a407328a73e561a}{space\+\_\+set\+\_\+is\+Mapped}} (\mbox{\hyperlink{space_8h_a67533ffc2b70463baecc38fb0629bbfc}{Space}} \texorpdfstring{$\ast$}{*}space, bool status)
+\begin{DoxyCompactList}\small\item\em Sets if the spaces has been mapped spatialy or not. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} \mbox{\hyperlink{space_8h_a29c97d2f269c515bba23857a5eb37c02}{space\+\_\+set\+\_\+map\+\_\+block}} (\mbox{\hyperlink{space_8h_a67533ffc2b70463baecc38fb0629bbfc}{Space}} \texorpdfstring{$\ast$}{*}space, int block)
+\begin{DoxyCompactList}\small\item\em Sets the mapped block to which the space corresponds. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} \mbox{\hyperlink{space_8h_ac6cb7a756931ce2b9e3931b169c6245e}{space\+\_\+set\+\_\+neighbour}} (\mbox{\hyperlink{space_8h_a67533ffc2b70463baecc38fb0629bbfc}{Space}} \texorpdfstring{$\ast$}{*}space, \mbox{\hyperlink{space_8h_a67533ffc2b70463baecc38fb0629bbfc}{Space}} \texorpdfstring{$\ast$}{*}neighbour, \mbox{\hyperlink{types_8h_a224b9163917ac32fc95a60d8c1eec3aa}{Direction}} direction)
+\begin{DoxyCompactList}\small\item\em Sets the neighbour in a given direction of a given spac. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} \mbox{\hyperlink{space_8h_a191c2eafec8139230f60bfe5cd230e3e}{space\+\_\+set\+\_\+graphic\+\_\+description}} (\mbox{\hyperlink{space_8h_a67533ffc2b70463baecc38fb0629bbfc}{Space}} \texorpdfstring{$\ast$}{*}space, char \texorpdfstring{$\ast$}{*}desc, int index)
+\begin{DoxyCompactList}\small\item\em Sets the graphic description of a given spaces. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} \mbox{\hyperlink{space_8h_a75b3806f79926434f7a2876a347bcaf6}{space\+\_\+set\+\_\+is\+Discovered}} (\mbox{\hyperlink{space_8h_a67533ffc2b70463baecc38fb0629bbfc}{Space}} \texorpdfstring{$\ast$}{*}space, bool status)
+\begin{DoxyCompactList}\small\item\em Sets if the space has been discovered or not. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{space_8h_aaecc70fd35c07421f6392e5c190bc5cd}{space\+\_\+get\+\_\+is\+Discovered}} (\mbox{\hyperlink{space_8h_a67533ffc2b70463baecc38fb0629bbfc}{Space}} \texorpdfstring{$\ast$}{*}space)
+\begin{DoxyCompactList}\small\item\em Gets if a given spaces has been discovered. \end{DoxyCompactList}\item 
+char \texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*} \mbox{\hyperlink{space_8h_a3017b2cbdda014012b70bee0c0e933ea}{space\+\_\+get\+\_\+graphic\+\_\+description}} (\mbox{\hyperlink{space_8h_a67533ffc2b70463baecc38fb0629bbfc}{Space}} \texorpdfstring{$\ast$}{*}space)
+\begin{DoxyCompactList}\small\item\em Gets the reference to the graphic description of a space. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structVector2}{Vector2}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{space_8h_ad72b57cd6916b1a96254bc6db9f1cfab}{space\+\_\+get\+\_\+position}} (\mbox{\hyperlink{space_8h_a67533ffc2b70463baecc38fb0629bbfc}{Space}} \texorpdfstring{$\ast$}{*}space)
+\begin{DoxyCompactList}\small\item\em Gets the pointer to the vector2 storing the position of the space. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{space_8h_a064150fc986f381d42b4ee1495deabb9}{space\+\_\+get\+\_\+is\+Mapped}} (\mbox{\hyperlink{space_8h_a67533ffc2b70463baecc38fb0629bbfc}{Space}} \texorpdfstring{$\ast$}{*}space)
+\begin{DoxyCompactList}\small\item\em Gets if the spaces has been mapped or not. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{space_8h_a8f9f57e303fb586eb44ebf17b2acf6e5}{space\+\_\+get\+\_\+map\+\_\+block}} (\mbox{\hyperlink{space_8h_a67533ffc2b70463baecc38fb0629bbfc}{Space}} \texorpdfstring{$\ast$}{*}space)
+\begin{DoxyCompactList}\small\item\em Gets the block in which the space has been mapped. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{space_8h_a67533ffc2b70463baecc38fb0629bbfc}{Space}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{space_8h_a11b646c08bf5bda128129defc263ff7f}{space\+\_\+get\+\_\+neighbour}} (\mbox{\hyperlink{space_8h_a67533ffc2b70463baecc38fb0629bbfc}{Space}} \texorpdfstring{$\ast$}{*}space, \mbox{\hyperlink{types_8h_a224b9163917ac32fc95a60d8c1eec3aa}{Direction}} direction)
+\begin{DoxyCompactList}\small\item\em Gets a reference to the neighbour in a certain direction. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{types_8h_a845e604fb28f7e3d97549da3448149d3}{Id}} \mbox{\hyperlink{space_8h_ac8ddfd0d8692fd852ee49698c446cb50}{space\+\_\+get\+\_\+id}} (\mbox{\hyperlink{space_8h_a67533ffc2b70463baecc38fb0629bbfc}{Space}} \texorpdfstring{$\ast$}{*}space)
+\begin{DoxyCompactList}\small\item\em It gets the id of a space. \end{DoxyCompactList}\item 
+const char \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{space_8h_ae2006c76eb167f71c7fd7614e0edd37a}{space\+\_\+get\+\_\+name}} (\mbox{\hyperlink{space_8h_a67533ffc2b70463baecc38fb0629bbfc}{Space}} \texorpdfstring{$\ast$}{*}space)
+\begin{DoxyCompactList}\small\item\em It gets the name of a space. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{link_8h_ae3b299941e67be6971bfd64a25505eff}{Link}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{space_8h_ab8886004b7d0b540b6e35a8c6a17ad6f}{space\+\_\+get\+\_\+north}} (\mbox{\hyperlink{space_8h_a67533ffc2b70463baecc38fb0629bbfc}{Space}} \texorpdfstring{$\ast$}{*}space)
+\begin{DoxyCompactList}\small\item\em It gets the link of the space located at the north. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{link_8h_ae3b299941e67be6971bfd64a25505eff}{Link}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{space_8h_a5904fe72a862bf2d63432810b486208b}{space\+\_\+get\+\_\+south}} (\mbox{\hyperlink{space_8h_a67533ffc2b70463baecc38fb0629bbfc}{Space}} \texorpdfstring{$\ast$}{*}space)
+\begin{DoxyCompactList}\small\item\em It gets the link of the space located at the south. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{link_8h_ae3b299941e67be6971bfd64a25505eff}{Link}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{space_8h_aac2e3af0a69f4bc5bcacb3a802872ba1}{space\+\_\+get\+\_\+east}} (\mbox{\hyperlink{space_8h_a67533ffc2b70463baecc38fb0629bbfc}{Space}} \texorpdfstring{$\ast$}{*}space)
+\begin{DoxyCompactList}\small\item\em It gets the link of the space located at the east. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{link_8h_ae3b299941e67be6971bfd64a25505eff}{Link}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{space_8h_af5679ca81b2e2c035ab96a0b23a7f4e2}{space\+\_\+get\+\_\+west}} (\mbox{\hyperlink{space_8h_a67533ffc2b70463baecc38fb0629bbfc}{Space}} \texorpdfstring{$\ast$}{*}space)
+\begin{DoxyCompactList}\small\item\em It gets the link of the space located at the west. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{inventory_8h_a2253bf64ac4ce6a9c1d6f39c0b0d32a3}{Inventory}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{space_8h_a7be5545e4445f702f25b79a82ce5dcdf}{space\+\_\+get\+\_\+inventory}} (\mbox{\hyperlink{space_8h_a67533ffc2b70463baecc38fb0629bbfc}{Space}} \texorpdfstring{$\ast$}{*}space)
+\begin{DoxyCompactList}\small\item\em Gets the inventory pointer of a space struct. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{space_8h_ae093fd0f4296bf76ac18c5a24c4e2bbe}{space\+\_\+get\+\_\+npc\+\_\+count}} (\mbox{\hyperlink{space_8h_a67533ffc2b70463baecc38fb0629bbfc}{Space}} \texorpdfstring{$\ast$}{*}space)
+\begin{DoxyCompactList}\small\item\em Gets the number of npcs located on a space. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} \mbox{\hyperlink{space_8h_a013d3166ac751f717612c5b0d6510c2c}{space\+\_\+print}} (\mbox{\hyperlink{space_8h_a67533ffc2b70463baecc38fb0629bbfc}{Space}} \texorpdfstring{$\ast$}{*}space)
+\begin{DoxyCompactList}\small\item\em It prints the space information. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} \mbox{\hyperlink{space_8h_aef3027c7fb8d1083f4a8d8ec073f5355}{space\+\_\+add\+\_\+\+NPC}} (\mbox{\hyperlink{space_8h_a67533ffc2b70463baecc38fb0629bbfc}{Space}} \texorpdfstring{$\ast$}{*}space, \mbox{\hyperlink{npc_8h_a39909c657c1a61d1470271e3029ab7cb}{NPC}} \texorpdfstring{$\ast$}{*}npc)
+\begin{DoxyCompactList}\small\item\em Adds an NPC struct to the space NOTE\+: Sets the location of the npc to the one of the space. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} \mbox{\hyperlink{space_8h_a9a43685a98fe2cbd4a105a3b76de30a5}{space\+\_\+remove\+\_\+\+NPC}} (\mbox{\hyperlink{space_8h_a67533ffc2b70463baecc38fb0629bbfc}{Space}} \texorpdfstring{$\ast$}{*}space, \mbox{\hyperlink{npc_8h_a39909c657c1a61d1470271e3029ab7cb}{NPC}} \texorpdfstring{$\ast$}{*}npc)
+\begin{DoxyCompactList}\small\item\em Removes an NPC struct from the space NOTE\+: Sets the NPC location to UNKNOWN\+\_\+\+ID. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} \mbox{\hyperlink{space_8h_ae7cabc00b2123ffe080f0c39574f758e}{space\+\_\+move\+\_\+\+NPC}} (\mbox{\hyperlink{space_8h_a67533ffc2b70463baecc38fb0629bbfc}{Space}} \texorpdfstring{$\ast$}{*}space\+OUT, \mbox{\hyperlink{space_8h_a67533ffc2b70463baecc38fb0629bbfc}{Space}} \texorpdfstring{$\ast$}{*}space\+IN, \mbox{\hyperlink{npc_8h_a39909c657c1a61d1470271e3029ab7cb}{NPC}} \texorpdfstring{$\ast$}{*}npc)
+\begin{DoxyCompactList}\small\item\em Moves an NPC from a space to another space NOTE\+: Sets the location of the npc to the one of the space\+IN. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{npc_8h_a39909c657c1a61d1470271e3029ab7cb}{NPC}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{space_8h_ab9cd22ecd1f21c9b8e61459118e8735f}{space\+\_\+get\+\_\+\+NPC\+\_\+at}} (\mbox{\hyperlink{space_8h_a67533ffc2b70463baecc38fb0629bbfc}{Space}} \texorpdfstring{$\ast$}{*}space, int index)
+\begin{DoxyCompactList}\small\item\em Gets an NPC on a space in the index. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{npc_8h_a39909c657c1a61d1470271e3029ab7cb}{NPC}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{space_8h_a73254c9f9d5386619832d7f5392d240a}{space\+\_\+get\+\_\+\+NPC\+\_\+by\+\_\+name}} (\mbox{\hyperlink{space_8h_a67533ffc2b70463baecc38fb0629bbfc}{Space}} \texorpdfstring{$\ast$}{*}space, char \texorpdfstring{$\ast$}{*}name)
+\begin{DoxyCompactList}\small\item\em Gets an NPC by its name on a space. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} \mbox{\hyperlink{space_8h_affc7bf876b7d0e43e3d5c28d58de134d}{space\+\_\+get\+\_\+\+NPC\+\_\+list}} (\mbox{\hyperlink{space_8h_a67533ffc2b70463baecc38fb0629bbfc}{Space}} \texorpdfstring{$\ast$}{*}space, char \texorpdfstring{$\ast$}{*}str, int length)
+\begin{DoxyCompactList}\small\item\em Gets a list of the npcs in the space with a given length. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} \mbox{\hyperlink{space_8h_a08cecfbab162a5fdcbd2e8e41e7cbce4}{space\+\_\+set\+\_\+discovered}} (\mbox{\hyperlink{space_8h_a67533ffc2b70463baecc38fb0629bbfc}{Space}} \texorpdfstring{$\ast$}{*}space, bool discovered)
+\begin{DoxyCompactList}\small\item\em Sets a space as the bool discovered. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{space_8h_a3646e7d8e3f37e65121e5c062821004e}{space\+\_\+is\+\_\+discovered}} (\mbox{\hyperlink{space_8h_a67533ffc2b70463baecc38fb0629bbfc}{Space}} \texorpdfstring{$\ast$}{*}space)
+\begin{DoxyCompactList}\small\item\em Returns wheter a space has been discovered. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+It defines the space module interface. 
+
+This module regulates the game map by the space ADT, is the base of the movement functionality and other upcoming features. A space is defined by his unique id, but it also contains the name of the space and the ids of the links connected to the north, south, east and west.
+
+IMPORTANT -\/ All spaces are stored inside the game struct in \doxylink{game_8h}{game.\+h}, the memory of the spaces is tracked by that struct.
+
+Every space now has a graphic description in order to print it with the graphic engine, also each space has been localized by a vector, that allows the graphic engine to print the spaces around it without looking each time. Any space that isn\textquotesingle{}t connected to the main block of spaces won\textquotesingle{}t show up on screen.
+
+To be able to store items easily in a Space, now each space has an inventory. On the other hand, a collection with the npcs has also been added to allow the combat module to search for NPCs in a designated space.
+
+\begin{DoxyAuthor}{Author}
+Original\+: Profesores PPROG. Modified by\+: Daniel Gómez 
+\end{DoxyAuthor}
+\begin{DoxyVersion}{Version}
+0 
+\end{DoxyVersion}
+\begin{DoxyDate}{Date}
+27-\/01-\/2025 
+\end{DoxyDate}
+\begin{DoxyCopyright}{Copyright}
+GNU Public License 
+\end{DoxyCopyright}
+
+
+\doxysubsection{Macro Definition Documentation}
+\Hypertarget{space_8h_abd6144b38bca43059ec8cd24b5ccc8cb}\label{space_8h_abd6144b38bca43059ec8cd24b5ccc8cb} 
+\index{space.h@{space.h}!SPACE\_GRAPHIC\_HEIGHT@{SPACE\_GRAPHIC\_HEIGHT}}
+\index{SPACE\_GRAPHIC\_HEIGHT@{SPACE\_GRAPHIC\_HEIGHT}!space.h@{space.h}}
+\doxysubsubsection{\texorpdfstring{SPACE\_GRAPHIC\_HEIGHT}{SPACE\_GRAPHIC\_HEIGHT}}
+{\footnotesize\ttfamily \#define SPACE\+\_\+\+GRAPHIC\+\_\+\+HEIGHT~5}
+
+Height of a space graphical description \Hypertarget{space_8h_aa06204d71323315ed577f0c826fd7ffa}\label{space_8h_aa06204d71323315ed577f0c826fd7ffa} 
+\index{space.h@{space.h}!SPACE\_GRAPHIC\_WIDTH@{SPACE\_GRAPHIC\_WIDTH}}
+\index{SPACE\_GRAPHIC\_WIDTH@{SPACE\_GRAPHIC\_WIDTH}!space.h@{space.h}}
+\doxysubsubsection{\texorpdfstring{SPACE\_GRAPHIC\_WIDTH}{SPACE\_GRAPHIC\_WIDTH}}
+{\footnotesize\ttfamily \#define SPACE\+\_\+\+GRAPHIC\+\_\+\+WIDTH~9}
+
+Width of a space graphical description \Hypertarget{space_8h_a04f40019d40dbaa749e749e2291c524d}\label{space_8h_a04f40019d40dbaa749e749e2291c524d} 
+\index{space.h@{space.h}!SPACE\_INITIAL\_SIZE\_NPCS@{SPACE\_INITIAL\_SIZE\_NPCS}}
+\index{SPACE\_INITIAL\_SIZE\_NPCS@{SPACE\_INITIAL\_SIZE\_NPCS}!space.h@{space.h}}
+\doxysubsubsection{\texorpdfstring{SPACE\_INITIAL\_SIZE\_NPCS}{SPACE\_INITIAL\_SIZE\_NPCS}}
+{\footnotesize\ttfamily \#define SPACE\+\_\+\+INITIAL\+\_\+\+SIZE\+\_\+\+NPCS~50}
+
+Maximum number of NPCs the space can hold 
+
+\doxysubsection{Function Documentation}
+\Hypertarget{space_8h_aef3027c7fb8d1083f4a8d8ec073f5355}\label{space_8h_aef3027c7fb8d1083f4a8d8ec073f5355} 
+\index{space.h@{space.h}!space\_add\_NPC@{space\_add\_NPC}}
+\index{space\_add\_NPC@{space\_add\_NPC}!space.h@{space.h}}
+\doxysubsubsection{\texorpdfstring{space\_add\_NPC()}{space\_add\_NPC()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} space\+\_\+add\+\_\+\+NPC (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{space_8h_a67533ffc2b70463baecc38fb0629bbfc}{Space}} \texorpdfstring{$\ast$}{*}}]{space,  }\item[{\mbox{\hyperlink{npc_8h_a39909c657c1a61d1470271e3029ab7cb}{NPC}} \texorpdfstring{$\ast$}{*}}]{npc }\end{DoxyParamCaption})}
+
+
+
+Adds an NPC struct to the space NOTE\+: Sets the location of the npc to the one of the space. 
+
+\begin{DoxyAuthor}{Author}
+Maksym Polyak
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em space} & space struct \\
+\hline
+{\em npc} & npc struct to add \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Status 
+\end{DoxyReturn}
+\Hypertarget{space_8h_ad3a5834be733066e8a7d8586be0ac610}\label{space_8h_ad3a5834be733066e8a7d8586be0ac610} 
+\index{space.h@{space.h}!space\_create@{space\_create}}
+\index{space\_create@{space\_create}!space.h@{space.h}}
+\doxysubsubsection{\texorpdfstring{space\_create()}{space\_create()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{space_8h_a67533ffc2b70463baecc38fb0629bbfc}{Space}} \texorpdfstring{$\ast$}{*} space\+\_\+create (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{types_8h_a845e604fb28f7e3d97549da3448149d3}{Id}}}]{id }\end{DoxyParamCaption})}
+
+
+
+It creates a new space, allocating memory and initializing its members. 
+
+\begin{DoxyAuthor}{Author}
+Profesores PPROG
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em id} & the identification number for the new space \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+a new space, initialized 
+\end{DoxyReturn}
+\Hypertarget{space_8h_a278763d4b530df17823ef9e4f9db2896}\label{space_8h_a278763d4b530df17823ef9e4f9db2896} 
+\index{space.h@{space.h}!space\_destroy@{space\_destroy}}
+\index{space\_destroy@{space\_destroy}!space.h@{space.h}}
+\doxysubsubsection{\texorpdfstring{space\_destroy()}{space\_destroy()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} space\+\_\+destroy (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{space_8h_a67533ffc2b70463baecc38fb0629bbfc}{Space}} \texorpdfstring{$\ast$}{*}}]{space }\end{DoxyParamCaption})}
+
+
+
+It destroys a space, freeing the allocated memory. 
+
+\begin{DoxyAuthor}{Author}
+Profesores PPROG
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em space} & a pointer to the space that must be destroyed \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+OK, if everything goes well or ERROR if there was some mistake 
+\end{DoxyReturn}
+\Hypertarget{space_8h_aac2e3af0a69f4bc5bcacb3a802872ba1}\label{space_8h_aac2e3af0a69f4bc5bcacb3a802872ba1} 
+\index{space.h@{space.h}!space\_get\_east@{space\_get\_east}}
+\index{space\_get\_east@{space\_get\_east}!space.h@{space.h}}
+\doxysubsubsection{\texorpdfstring{space\_get\_east()}{space\_get\_east()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{link_8h_ae3b299941e67be6971bfd64a25505eff}{Link}} \texorpdfstring{$\ast$}{*} space\+\_\+get\+\_\+east (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{space_8h_a67533ffc2b70463baecc38fb0629bbfc}{Space}} \texorpdfstring{$\ast$}{*}}]{space }\end{DoxyParamCaption})}
+
+
+
+It gets the link of the space located at the east. 
+
+\begin{DoxyAuthor}{Author}
+Profesores PPROG
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em space} & a pointer to the space \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+reference of the link in the position 
+\end{DoxyReturn}
+\Hypertarget{space_8h_a3017b2cbdda014012b70bee0c0e933ea}\label{space_8h_a3017b2cbdda014012b70bee0c0e933ea} 
+\index{space.h@{space.h}!space\_get\_graphic\_description@{space\_get\_graphic\_description}}
+\index{space\_get\_graphic\_description@{space\_get\_graphic\_description}!space.h@{space.h}}
+\doxysubsubsection{\texorpdfstring{space\_get\_graphic\_description()}{space\_get\_graphic\_description()}}
+{\footnotesize\ttfamily char \texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*} space\+\_\+get\+\_\+graphic\+\_\+description (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{space_8h_a67533ffc2b70463baecc38fb0629bbfc}{Space}} \texorpdfstring{$\ast$}{*}}]{space }\end{DoxyParamCaption})}
+
+
+
+Gets the reference to the graphic description of a space. 
+
+\begin{DoxyAuthor}{Author}
+Daniel Gómez
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em space} & space struct \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+char\texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*} or NULL if error 
+\end{DoxyReturn}
+\Hypertarget{space_8h_ac8ddfd0d8692fd852ee49698c446cb50}\label{space_8h_ac8ddfd0d8692fd852ee49698c446cb50} 
+\index{space.h@{space.h}!space\_get\_id@{space\_get\_id}}
+\index{space\_get\_id@{space\_get\_id}!space.h@{space.h}}
+\doxysubsubsection{\texorpdfstring{space\_get\_id()}{space\_get\_id()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{types_8h_a845e604fb28f7e3d97549da3448149d3}{Id}} space\+\_\+get\+\_\+id (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{space_8h_a67533ffc2b70463baecc38fb0629bbfc}{Space}} \texorpdfstring{$\ast$}{*}}]{space }\end{DoxyParamCaption})}
+
+
+
+It gets the id of a space. 
+
+\begin{DoxyAuthor}{Author}
+Profesores PPROG
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em space} & a pointer to the space \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the id of space or NO\+\_\+\+ID if error 
+\end{DoxyReturn}
+\Hypertarget{space_8h_a7be5545e4445f702f25b79a82ce5dcdf}\label{space_8h_a7be5545e4445f702f25b79a82ce5dcdf} 
+\index{space.h@{space.h}!space\_get\_inventory@{space\_get\_inventory}}
+\index{space\_get\_inventory@{space\_get\_inventory}!space.h@{space.h}}
+\doxysubsubsection{\texorpdfstring{space\_get\_inventory()}{space\_get\_inventory()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{inventory_8h_a2253bf64ac4ce6a9c1d6f39c0b0d32a3}{Inventory}} \texorpdfstring{$\ast$}{*} space\+\_\+get\+\_\+inventory (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{space_8h_a67533ffc2b70463baecc38fb0629bbfc}{Space}} \texorpdfstring{$\ast$}{*}}]{space }\end{DoxyParamCaption})}
+
+
+
+Gets the inventory pointer of a space struct. 
+
+\begin{DoxyAuthor}{Author}
+Daniel Gómez
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em space} & a pointer to the space \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Inventory\texorpdfstring{$\ast$}{*} or NULL if error 
+\end{DoxyReturn}
+\Hypertarget{space_8h_aaecc70fd35c07421f6392e5c190bc5cd}\label{space_8h_aaecc70fd35c07421f6392e5c190bc5cd} 
+\index{space.h@{space.h}!space\_get\_isDiscovered@{space\_get\_isDiscovered}}
+\index{space\_get\_isDiscovered@{space\_get\_isDiscovered}!space.h@{space.h}}
+\doxysubsubsection{\texorpdfstring{space\_get\_isDiscovered()}{space\_get\_isDiscovered()}}
+{\footnotesize\ttfamily bool space\+\_\+get\+\_\+is\+Discovered (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{space_8h_a67533ffc2b70463baecc38fb0629bbfc}{Space}} \texorpdfstring{$\ast$}{*}}]{space }\end{DoxyParamCaption})}
+
+
+
+Gets if a given spaces has been discovered. 
+
+\begin{DoxyAuthor}{Author}
+Daniel Gómez
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em space} & space struct \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true if discovered 
+
+false if not discovered 
+\end{DoxyReturn}
+\Hypertarget{space_8h_a064150fc986f381d42b4ee1495deabb9}\label{space_8h_a064150fc986f381d42b4ee1495deabb9} 
+\index{space.h@{space.h}!space\_get\_isMapped@{space\_get\_isMapped}}
+\index{space\_get\_isMapped@{space\_get\_isMapped}!space.h@{space.h}}
+\doxysubsubsection{\texorpdfstring{space\_get\_isMapped()}{space\_get\_isMapped()}}
+{\footnotesize\ttfamily bool space\+\_\+get\+\_\+is\+Mapped (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{space_8h_a67533ffc2b70463baecc38fb0629bbfc}{Space}} \texorpdfstring{$\ast$}{*}}]{space }\end{DoxyParamCaption})}
+
+
+
+Gets if the spaces has been mapped or not. 
+
+\begin{DoxyAuthor}{Author}
+Daniel Gómez
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em space} & space struct \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true if mapped 
+
+false if not mapped 
+\end{DoxyReturn}
+\Hypertarget{space_8h_a8f9f57e303fb586eb44ebf17b2acf6e5}\label{space_8h_a8f9f57e303fb586eb44ebf17b2acf6e5} 
+\index{space.h@{space.h}!space\_get\_map\_block@{space\_get\_map\_block}}
+\index{space\_get\_map\_block@{space\_get\_map\_block}!space.h@{space.h}}
+\doxysubsubsection{\texorpdfstring{space\_get\_map\_block()}{space\_get\_map\_block()}}
+{\footnotesize\ttfamily int space\+\_\+get\+\_\+map\+\_\+block (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{space_8h_a67533ffc2b70463baecc38fb0629bbfc}{Space}} \texorpdfstring{$\ast$}{*}}]{space }\end{DoxyParamCaption})}
+
+
+
+Gets the block in which the space has been mapped. 
+
+\begin{DoxyAuthor}{Author}
+Daniel Gómez
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em space} & space struct \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int or -\/1 if error 
+\end{DoxyReturn}
+\Hypertarget{space_8h_ae2006c76eb167f71c7fd7614e0edd37a}\label{space_8h_ae2006c76eb167f71c7fd7614e0edd37a} 
+\index{space.h@{space.h}!space\_get\_name@{space\_get\_name}}
+\index{space\_get\_name@{space\_get\_name}!space.h@{space.h}}
+\doxysubsubsection{\texorpdfstring{space\_get\_name()}{space\_get\_name()}}
+{\footnotesize\ttfamily const char \texorpdfstring{$\ast$}{*} space\+\_\+get\+\_\+name (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{space_8h_a67533ffc2b70463baecc38fb0629bbfc}{Space}} \texorpdfstring{$\ast$}{*}}]{space }\end{DoxyParamCaption})}
+
+
+
+It gets the name of a space. 
+
+\begin{DoxyAuthor}{Author}
+Profesores PPROG
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em space} & a pointer to the space \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+a string with the name of the space 
+\end{DoxyReturn}
+\Hypertarget{space_8h_a11b646c08bf5bda128129defc263ff7f}\label{space_8h_a11b646c08bf5bda128129defc263ff7f} 
+\index{space.h@{space.h}!space\_get\_neighbour@{space\_get\_neighbour}}
+\index{space\_get\_neighbour@{space\_get\_neighbour}!space.h@{space.h}}
+\doxysubsubsection{\texorpdfstring{space\_get\_neighbour()}{space\_get\_neighbour()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{space_8h_a67533ffc2b70463baecc38fb0629bbfc}{Space}} \texorpdfstring{$\ast$}{*} space\+\_\+get\+\_\+neighbour (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{space_8h_a67533ffc2b70463baecc38fb0629bbfc}{Space}} \texorpdfstring{$\ast$}{*}}]{space,  }\item[{\mbox{\hyperlink{types_8h_a224b9163917ac32fc95a60d8c1eec3aa}{Direction}}}]{direction }\end{DoxyParamCaption})}
+
+
+
+Gets a reference to the neighbour in a certain direction. 
+
+\begin{DoxyAuthor}{Author}
+Daniel Gómez
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em space} & space struct \\
+\hline
+{\em direction} & direction to evaluate \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Pointer to neighbour if exist, NULL if not 
+\end{DoxyReturn}
+\Hypertarget{space_8h_ab8886004b7d0b540b6e35a8c6a17ad6f}\label{space_8h_ab8886004b7d0b540b6e35a8c6a17ad6f} 
+\index{space.h@{space.h}!space\_get\_north@{space\_get\_north}}
+\index{space\_get\_north@{space\_get\_north}!space.h@{space.h}}
+\doxysubsubsection{\texorpdfstring{space\_get\_north()}{space\_get\_north()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{link_8h_ae3b299941e67be6971bfd64a25505eff}{Link}} \texorpdfstring{$\ast$}{*} space\+\_\+get\+\_\+north (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{space_8h_a67533ffc2b70463baecc38fb0629bbfc}{Space}} \texorpdfstring{$\ast$}{*}}]{space }\end{DoxyParamCaption})}
+
+
+
+It gets the link of the space located at the north. 
+
+\begin{DoxyAuthor}{Author}
+Profesores PPROG
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em space} & a pointer to the space \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+reference of the link in the position 
+\end{DoxyReturn}
+\Hypertarget{space_8h_ab9cd22ecd1f21c9b8e61459118e8735f}\label{space_8h_ab9cd22ecd1f21c9b8e61459118e8735f} 
+\index{space.h@{space.h}!space\_get\_NPC\_at@{space\_get\_NPC\_at}}
+\index{space\_get\_NPC\_at@{space\_get\_NPC\_at}!space.h@{space.h}}
+\doxysubsubsection{\texorpdfstring{space\_get\_NPC\_at()}{space\_get\_NPC\_at()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{npc_8h_a39909c657c1a61d1470271e3029ab7cb}{NPC}} \texorpdfstring{$\ast$}{*} space\+\_\+get\+\_\+\+NPC\+\_\+at (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{space_8h_a67533ffc2b70463baecc38fb0629bbfc}{Space}} \texorpdfstring{$\ast$}{*}}]{space,  }\item[{int}]{index }\end{DoxyParamCaption})}
+
+
+
+Gets an NPC on a space in the index. 
+
+\begin{DoxyAuthor}{Author}
+Maksym Polyak
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em space} & space struct \\
+\hline
+{\em index} & index of the NPC \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+NPC\texorpdfstring{$\ast$}{*} or NULL if error 
+\end{DoxyReturn}
+\Hypertarget{space_8h_a73254c9f9d5386619832d7f5392d240a}\label{space_8h_a73254c9f9d5386619832d7f5392d240a} 
+\index{space.h@{space.h}!space\_get\_NPC\_by\_name@{space\_get\_NPC\_by\_name}}
+\index{space\_get\_NPC\_by\_name@{space\_get\_NPC\_by\_name}!space.h@{space.h}}
+\doxysubsubsection{\texorpdfstring{space\_get\_NPC\_by\_name()}{space\_get\_NPC\_by\_name()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{npc_8h_a39909c657c1a61d1470271e3029ab7cb}{NPC}} \texorpdfstring{$\ast$}{*} space\+\_\+get\+\_\+\+NPC\+\_\+by\+\_\+name (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{space_8h_a67533ffc2b70463baecc38fb0629bbfc}{Space}} \texorpdfstring{$\ast$}{*}}]{space,  }\item[{char \texorpdfstring{$\ast$}{*}}]{name }\end{DoxyParamCaption})}
+
+
+
+Gets an NPC by its name on a space. 
+
+\begin{DoxyAuthor}{Author}
+Maksym Polyak
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em space} & space struct \\
+\hline
+{\em name} & name of the NPC \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+NPC\texorpdfstring{$\ast$}{*} or NULL if error or not found 
+\end{DoxyReturn}
+\Hypertarget{space_8h_ae093fd0f4296bf76ac18c5a24c4e2bbe}\label{space_8h_ae093fd0f4296bf76ac18c5a24c4e2bbe} 
+\index{space.h@{space.h}!space\_get\_npc\_count@{space\_get\_npc\_count}}
+\index{space\_get\_npc\_count@{space\_get\_npc\_count}!space.h@{space.h}}
+\doxysubsubsection{\texorpdfstring{space\_get\_npc\_count()}{space\_get\_npc\_count()}}
+{\footnotesize\ttfamily int space\+\_\+get\+\_\+npc\+\_\+count (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{space_8h_a67533ffc2b70463baecc38fb0629bbfc}{Space}} \texorpdfstring{$\ast$}{*}}]{space }\end{DoxyParamCaption})}
+
+
+
+Gets the number of npcs located on a space. 
+
+\begin{DoxyAuthor}{Author}
+Maksym Polyak
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em space} & space struct \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int or -\/1 if error 
+\end{DoxyReturn}
+\Hypertarget{space_8h_affc7bf876b7d0e43e3d5c28d58de134d}\label{space_8h_affc7bf876b7d0e43e3d5c28d58de134d} 
+\index{space.h@{space.h}!space\_get\_NPC\_list@{space\_get\_NPC\_list}}
+\index{space\_get\_NPC\_list@{space\_get\_NPC\_list}!space.h@{space.h}}
+\doxysubsubsection{\texorpdfstring{space\_get\_NPC\_list()}{space\_get\_NPC\_list()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} space\+\_\+get\+\_\+\+NPC\+\_\+list (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{space_8h_a67533ffc2b70463baecc38fb0629bbfc}{Space}} \texorpdfstring{$\ast$}{*}}]{space,  }\item[{char \texorpdfstring{$\ast$}{*}}]{str,  }\item[{int}]{length }\end{DoxyParamCaption})}
+
+
+
+Gets a list of the npcs in the space with a given length. 
+
+\begin{DoxyAuthor}{Author}
+Daniel Gómez
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em space} & space struct \\
+\hline
+{\em str} & string where the NPC are saved \\
+\hline
+{\em length} & number of NPCs to save on the list \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Status 
+\end{DoxyReturn}
+\Hypertarget{space_8h_ad72b57cd6916b1a96254bc6db9f1cfab}\label{space_8h_ad72b57cd6916b1a96254bc6db9f1cfab} 
+\index{space.h@{space.h}!space\_get\_position@{space\_get\_position}}
+\index{space\_get\_position@{space\_get\_position}!space.h@{space.h}}
+\doxysubsubsection{\texorpdfstring{space\_get\_position()}{space\_get\_position()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structVector2}{Vector2}} \texorpdfstring{$\ast$}{*} space\+\_\+get\+\_\+position (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{space_8h_a67533ffc2b70463baecc38fb0629bbfc}{Space}} \texorpdfstring{$\ast$}{*}}]{space }\end{DoxyParamCaption})}
+
+
+
+Gets the pointer to the vector2 storing the position of the space. 
+
+\begin{DoxyAuthor}{Author}
+Daniel Gómez
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em space} & space struct \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Vector2\texorpdfstring{$\ast$}{*} or NULL if error 
+\end{DoxyReturn}
+\Hypertarget{space_8h_a5904fe72a862bf2d63432810b486208b}\label{space_8h_a5904fe72a862bf2d63432810b486208b} 
+\index{space.h@{space.h}!space\_get\_south@{space\_get\_south}}
+\index{space\_get\_south@{space\_get\_south}!space.h@{space.h}}
+\doxysubsubsection{\texorpdfstring{space\_get\_south()}{space\_get\_south()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{link_8h_ae3b299941e67be6971bfd64a25505eff}{Link}} \texorpdfstring{$\ast$}{*} space\+\_\+get\+\_\+south (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{space_8h_a67533ffc2b70463baecc38fb0629bbfc}{Space}} \texorpdfstring{$\ast$}{*}}]{space }\end{DoxyParamCaption})}
+
+
+
+It gets the link of the space located at the south. 
+
+\begin{DoxyAuthor}{Author}
+Profesores PPROG
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em space} & a pointer to the space \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+reference of the link in the position 
+\end{DoxyReturn}
+\Hypertarget{space_8h_af5679ca81b2e2c035ab96a0b23a7f4e2}\label{space_8h_af5679ca81b2e2c035ab96a0b23a7f4e2} 
+\index{space.h@{space.h}!space\_get\_west@{space\_get\_west}}
+\index{space\_get\_west@{space\_get\_west}!space.h@{space.h}}
+\doxysubsubsection{\texorpdfstring{space\_get\_west()}{space\_get\_west()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{link_8h_ae3b299941e67be6971bfd64a25505eff}{Link}} \texorpdfstring{$\ast$}{*} space\+\_\+get\+\_\+west (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{space_8h_a67533ffc2b70463baecc38fb0629bbfc}{Space}} \texorpdfstring{$\ast$}{*}}]{space }\end{DoxyParamCaption})}
+
+
+
+It gets the link of the space located at the west. 
+
+\begin{DoxyAuthor}{Author}
+Profesores PPROG
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em space} & a pointer to the space \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+reference of the link in the position 
+\end{DoxyReturn}
+\Hypertarget{space_8h_a3646e7d8e3f37e65121e5c062821004e}\label{space_8h_a3646e7d8e3f37e65121e5c062821004e} 
+\index{space.h@{space.h}!space\_is\_discovered@{space\_is\_discovered}}
+\index{space\_is\_discovered@{space\_is\_discovered}!space.h@{space.h}}
+\doxysubsubsection{\texorpdfstring{space\_is\_discovered()}{space\_is\_discovered()}}
+{\footnotesize\ttfamily bool space\+\_\+is\+\_\+discovered (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{space_8h_a67533ffc2b70463baecc38fb0629bbfc}{Space}} \texorpdfstring{$\ast$}{*}}]{space }\end{DoxyParamCaption})}
+
+
+
+Returns wheter a space has been discovered. 
+
+\begin{DoxyAuthor}{Author}
+Maksym Polyak
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em space} & space struct \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true if space is discovered 
+
+false if space is not discovered 
+\end{DoxyReturn}
+\Hypertarget{space_8h_ae7cabc00b2123ffe080f0c39574f758e}\label{space_8h_ae7cabc00b2123ffe080f0c39574f758e} 
+\index{space.h@{space.h}!space\_move\_NPC@{space\_move\_NPC}}
+\index{space\_move\_NPC@{space\_move\_NPC}!space.h@{space.h}}
+\doxysubsubsection{\texorpdfstring{space\_move\_NPC()}{space\_move\_NPC()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} space\+\_\+move\+\_\+\+NPC (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{space_8h_a67533ffc2b70463baecc38fb0629bbfc}{Space}} \texorpdfstring{$\ast$}{*}}]{space\+OUT,  }\item[{\mbox{\hyperlink{space_8h_a67533ffc2b70463baecc38fb0629bbfc}{Space}} \texorpdfstring{$\ast$}{*}}]{space\+IN,  }\item[{\mbox{\hyperlink{npc_8h_a39909c657c1a61d1470271e3029ab7cb}{NPC}} \texorpdfstring{$\ast$}{*}}]{npc }\end{DoxyParamCaption})}
+
+
+
+Moves an NPC from a space to another space NOTE\+: Sets the location of the npc to the one of the space\+IN. 
+
+\begin{DoxyAuthor}{Author}
+Maksym Polyak
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em space\+OUT} & space where the NPC is taken \\
+\hline
+{\em space\+IN} & space where the NPC is moved \\
+\hline
+{\em npc} & npc to move \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Status 
+\end{DoxyReturn}
+\Hypertarget{space_8h_a013d3166ac751f717612c5b0d6510c2c}\label{space_8h_a013d3166ac751f717612c5b0d6510c2c} 
+\index{space.h@{space.h}!space\_print@{space\_print}}
+\index{space\_print@{space\_print}!space.h@{space.h}}
+\doxysubsubsection{\texorpdfstring{space\_print()}{space\_print()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} space\+\_\+print (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{space_8h_a67533ffc2b70463baecc38fb0629bbfc}{Space}} \texorpdfstring{$\ast$}{*}}]{space }\end{DoxyParamCaption})}
+
+
+
+It prints the space information. 
+
+\begin{DoxyAuthor}{Author}
+Profesores PPROG
+\end{DoxyAuthor}
+This fucntion shows the id and name of the space, the spaces that surrounds it and wheter it has an object or not. 
+\begin{DoxyParams}{Parameters}
+{\em space} & a pointer to the space \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+OK, if everything goes well or ERROR if there was some mistake 
+\end{DoxyReturn}
+\Hypertarget{space_8h_a9a43685a98fe2cbd4a105a3b76de30a5}\label{space_8h_a9a43685a98fe2cbd4a105a3b76de30a5} 
+\index{space.h@{space.h}!space\_remove\_NPC@{space\_remove\_NPC}}
+\index{space\_remove\_NPC@{space\_remove\_NPC}!space.h@{space.h}}
+\doxysubsubsection{\texorpdfstring{space\_remove\_NPC()}{space\_remove\_NPC()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} space\+\_\+remove\+\_\+\+NPC (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{space_8h_a67533ffc2b70463baecc38fb0629bbfc}{Space}} \texorpdfstring{$\ast$}{*}}]{space,  }\item[{\mbox{\hyperlink{npc_8h_a39909c657c1a61d1470271e3029ab7cb}{NPC}} \texorpdfstring{$\ast$}{*}}]{npc }\end{DoxyParamCaption})}
+
+
+
+Removes an NPC struct from the space NOTE\+: Sets the NPC location to UNKNOWN\+\_\+\+ID. 
+
+\begin{DoxyAuthor}{Author}
+Maksym Polyak
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em space} & space struct \\
+\hline
+{\em npc} & npc struct to add \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Status 
+\end{DoxyReturn}
+\Hypertarget{space_8h_a08cecfbab162a5fdcbd2e8e41e7cbce4}\label{space_8h_a08cecfbab162a5fdcbd2e8e41e7cbce4} 
+\index{space.h@{space.h}!space\_set\_discovered@{space\_set\_discovered}}
+\index{space\_set\_discovered@{space\_set\_discovered}!space.h@{space.h}}
+\doxysubsubsection{\texorpdfstring{space\_set\_discovered()}{space\_set\_discovered()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} space\+\_\+set\+\_\+discovered (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{space_8h_a67533ffc2b70463baecc38fb0629bbfc}{Space}} \texorpdfstring{$\ast$}{*}}]{space,  }\item[{bool}]{discovered }\end{DoxyParamCaption})}
+
+
+
+Sets a space as the bool discovered. 
+
+\begin{DoxyAuthor}{Author}
+Maksym Polyak
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em space} & space struct \\
+\hline
+{\em discovered} & bool true if discovered 0 if not discovered \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Status 
+\end{DoxyReturn}
+\Hypertarget{space_8h_ac9a9bdec2f2426392cc9ea58c126e842}\label{space_8h_ac9a9bdec2f2426392cc9ea58c126e842} 
+\index{space.h@{space.h}!space\_set\_east@{space\_set\_east}}
+\index{space\_set\_east@{space\_set\_east}!space.h@{space.h}}
+\doxysubsubsection{\texorpdfstring{space\_set\_east()}{space\_set\_east()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} space\+\_\+set\+\_\+east (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{space_8h_a67533ffc2b70463baecc38fb0629bbfc}{Space}} \texorpdfstring{$\ast$}{*}}]{space,  }\item[{\mbox{\hyperlink{link_8h_ae3b299941e67be6971bfd64a25505eff}{Link}} \texorpdfstring{$\ast$}{*}}]{link }\end{DoxyParamCaption})}
+
+
+
+It sets the id of the space located at the east. 
+
+\begin{DoxyAuthor}{Author}
+Profesores PPROG
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em space} & a pointer to the space \\
+\hline
+{\em link} & reference of the link to the east \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+OK, if everything goes well or ERROR if there was some mistake 
+\end{DoxyReturn}
+\Hypertarget{space_8h_a191c2eafec8139230f60bfe5cd230e3e}\label{space_8h_a191c2eafec8139230f60bfe5cd230e3e} 
+\index{space.h@{space.h}!space\_set\_graphic\_description@{space\_set\_graphic\_description}}
+\index{space\_set\_graphic\_description@{space\_set\_graphic\_description}!space.h@{space.h}}
+\doxysubsubsection{\texorpdfstring{space\_set\_graphic\_description()}{space\_set\_graphic\_description()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} space\+\_\+set\+\_\+graphic\+\_\+description (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{space_8h_a67533ffc2b70463baecc38fb0629bbfc}{Space}} \texorpdfstring{$\ast$}{*}}]{space,  }\item[{char \texorpdfstring{$\ast$}{*}}]{desc,  }\item[{int}]{index }\end{DoxyParamCaption})}
+
+
+
+Sets the graphic description of a given spaces. 
+
+\begin{DoxyAuthor}{Author}
+Daniel Gómez
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em space} & space struct \\
+\hline
+{\em desc} & string where the graphic description is saved \\
+\hline
+{\em index} & index of the space \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Status 
+\end{DoxyReturn}
+\Hypertarget{space_8h_a75b3806f79926434f7a2876a347bcaf6}\label{space_8h_a75b3806f79926434f7a2876a347bcaf6} 
+\index{space.h@{space.h}!space\_set\_isDiscovered@{space\_set\_isDiscovered}}
+\index{space\_set\_isDiscovered@{space\_set\_isDiscovered}!space.h@{space.h}}
+\doxysubsubsection{\texorpdfstring{space\_set\_isDiscovered()}{space\_set\_isDiscovered()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} space\+\_\+set\+\_\+is\+Discovered (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{space_8h_a67533ffc2b70463baecc38fb0629bbfc}{Space}} \texorpdfstring{$\ast$}{*}}]{space,  }\item[{bool}]{status }\end{DoxyParamCaption})}
+
+
+
+Sets if the space has been discovered or not. 
+
+\begin{DoxyAuthor}{Author}
+Daniel Gómez
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em space} & space struct \\
+\hline
+{\em status} & bool true if discovered false if not discovered \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Status 
+\end{DoxyReturn}
+\Hypertarget{space_8h_a699375887d0764d31a407328a73e561a}\label{space_8h_a699375887d0764d31a407328a73e561a} 
+\index{space.h@{space.h}!space\_set\_isMapped@{space\_set\_isMapped}}
+\index{space\_set\_isMapped@{space\_set\_isMapped}!space.h@{space.h}}
+\doxysubsubsection{\texorpdfstring{space\_set\_isMapped()}{space\_set\_isMapped()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} space\+\_\+set\+\_\+is\+Mapped (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{space_8h_a67533ffc2b70463baecc38fb0629bbfc}{Space}} \texorpdfstring{$\ast$}{*}}]{space,  }\item[{bool}]{status }\end{DoxyParamCaption})}
+
+
+
+Sets if the spaces has been mapped spatialy or not. 
+
+\begin{DoxyAuthor}{Author}
+Daniel Gómez
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em space} & space struct \\
+\hline
+{\em status} & bool true if mapped false if not \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Status 
+\end{DoxyReturn}
+\Hypertarget{space_8h_a29c97d2f269c515bba23857a5eb37c02}\label{space_8h_a29c97d2f269c515bba23857a5eb37c02} 
+\index{space.h@{space.h}!space\_set\_map\_block@{space\_set\_map\_block}}
+\index{space\_set\_map\_block@{space\_set\_map\_block}!space.h@{space.h}}
+\doxysubsubsection{\texorpdfstring{space\_set\_map\_block()}{space\_set\_map\_block()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} space\+\_\+set\+\_\+map\+\_\+block (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{space_8h_a67533ffc2b70463baecc38fb0629bbfc}{Space}} \texorpdfstring{$\ast$}{*}}]{space,  }\item[{int}]{block }\end{DoxyParamCaption})}
+
+
+
+Sets the mapped block to which the space corresponds. 
+
+\begin{DoxyAuthor}{Author}
+Daniel Gómez
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em space} & space struct \\
+\hline
+{\em block} & block level to set \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Status 
+\end{DoxyReturn}
+\Hypertarget{space_8h_a03ae5d9d7a842346d89e56409c3cb3e1}\label{space_8h_a03ae5d9d7a842346d89e56409c3cb3e1} 
+\index{space.h@{space.h}!space\_set\_name@{space\_set\_name}}
+\index{space\_set\_name@{space\_set\_name}!space.h@{space.h}}
+\doxysubsubsection{\texorpdfstring{space\_set\_name()}{space\_set\_name()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} space\+\_\+set\+\_\+name (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{space_8h_a67533ffc2b70463baecc38fb0629bbfc}{Space}} \texorpdfstring{$\ast$}{*}}]{space,  }\item[{char \texorpdfstring{$\ast$}{*}}]{name }\end{DoxyParamCaption})}
+
+
+
+It sets the name of a space. 
+
+\begin{DoxyAuthor}{Author}
+Profesores PPROG
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em space} & a pointer to the space \\
+\hline
+{\em name} & a string with the name to store \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+OK, if everything goes well or ERROR if there was some mistake 
+\end{DoxyReturn}
+\Hypertarget{space_8h_ac6cb7a756931ce2b9e3931b169c6245e}\label{space_8h_ac6cb7a756931ce2b9e3931b169c6245e} 
+\index{space.h@{space.h}!space\_set\_neighbour@{space\_set\_neighbour}}
+\index{space\_set\_neighbour@{space\_set\_neighbour}!space.h@{space.h}}
+\doxysubsubsection{\texorpdfstring{space\_set\_neighbour()}{space\_set\_neighbour()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} space\+\_\+set\+\_\+neighbour (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{space_8h_a67533ffc2b70463baecc38fb0629bbfc}{Space}} \texorpdfstring{$\ast$}{*}}]{space,  }\item[{\mbox{\hyperlink{space_8h_a67533ffc2b70463baecc38fb0629bbfc}{Space}} \texorpdfstring{$\ast$}{*}}]{neighbour,  }\item[{\mbox{\hyperlink{types_8h_a224b9163917ac32fc95a60d8c1eec3aa}{Direction}}}]{direction }\end{DoxyParamCaption})}
+
+
+
+Sets the neighbour in a given direction of a given spac. 
+
+\begin{DoxyAuthor}{Author}
+Daniel Gómez
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em space} & space struct \\
+\hline
+{\em neighbour} & neighbour space in given direction \\
+\hline
+{\em direction} & direction to evaluate \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Status 
+\end{DoxyReturn}
+\Hypertarget{space_8h_ae70f9f8effe9e7ead45dc474516352c4}\label{space_8h_ae70f9f8effe9e7ead45dc474516352c4} 
+\index{space.h@{space.h}!space\_set\_north@{space\_set\_north}}
+\index{space\_set\_north@{space\_set\_north}!space.h@{space.h}}
+\doxysubsubsection{\texorpdfstring{space\_set\_north()}{space\_set\_north()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} space\+\_\+set\+\_\+north (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{space_8h_a67533ffc2b70463baecc38fb0629bbfc}{Space}} \texorpdfstring{$\ast$}{*}}]{space,  }\item[{\mbox{\hyperlink{link_8h_ae3b299941e67be6971bfd64a25505eff}{Link}} \texorpdfstring{$\ast$}{*}}]{link }\end{DoxyParamCaption})}
+
+
+
+It sets the id of the space located at the north. 
+
+\begin{DoxyAuthor}{Author}
+Profesores PPROG
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em space} & a pointer to the space \\
+\hline
+{\em link} & reference of the link to the north \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+OK, if everything goes well or ERROR if there was some mistake 
+\end{DoxyReturn}
+\Hypertarget{space_8h_a0a523702b23c5b2f3c34f3e25a8034c8}\label{space_8h_a0a523702b23c5b2f3c34f3e25a8034c8} 
+\index{space.h@{space.h}!space\_set\_position@{space\_set\_position}}
+\index{space\_set\_position@{space\_set\_position}!space.h@{space.h}}
+\doxysubsubsection{\texorpdfstring{space\_set\_position()}{space\_set\_position()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} space\+\_\+set\+\_\+position (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{space_8h_a67533ffc2b70463baecc38fb0629bbfc}{Space}} \texorpdfstring{$\ast$}{*}}]{space,  }\item[{float}]{x,  }\item[{float}]{y }\end{DoxyParamCaption})}
+
+
+
+Sets the position of a given space to a vector of coordenates (x,y) 
+
+\begin{DoxyAuthor}{Author}
+Daniel Gómez
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em space} & space struct \\
+\hline
+{\em x} & float with x coordinate \\
+\hline
+{\em y} & float with y coordinate \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Status 
+\end{DoxyReturn}
+\Hypertarget{space_8h_a1526ebff9d18f4819dda6682d61e24ca}\label{space_8h_a1526ebff9d18f4819dda6682d61e24ca} 
+\index{space.h@{space.h}!space\_set\_south@{space\_set\_south}}
+\index{space\_set\_south@{space\_set\_south}!space.h@{space.h}}
+\doxysubsubsection{\texorpdfstring{space\_set\_south()}{space\_set\_south()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} space\+\_\+set\+\_\+south (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{space_8h_a67533ffc2b70463baecc38fb0629bbfc}{Space}} \texorpdfstring{$\ast$}{*}}]{space,  }\item[{\mbox{\hyperlink{link_8h_ae3b299941e67be6971bfd64a25505eff}{Link}} \texorpdfstring{$\ast$}{*}}]{link }\end{DoxyParamCaption})}
+
+
+
+It sets the id of the space located at the south. 
+
+\begin{DoxyAuthor}{Author}
+Profesores PPROG
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em space} & a pointer to the space \\
+\hline
+{\em link} & reference of the link to the south \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+OK, if everything goes well or ERROR if there was some mistake 
+\end{DoxyReturn}
+\Hypertarget{space_8h_a5d0876653eb47600742d08b944a7126b}\label{space_8h_a5d0876653eb47600742d08b944a7126b} 
+\index{space.h@{space.h}!space\_set\_west@{space\_set\_west}}
+\index{space\_set\_west@{space\_set\_west}!space.h@{space.h}}
+\doxysubsubsection{\texorpdfstring{space\_set\_west()}{space\_set\_west()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} space\+\_\+set\+\_\+west (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{space_8h_a67533ffc2b70463baecc38fb0629bbfc}{Space}} \texorpdfstring{$\ast$}{*}}]{space,  }\item[{\mbox{\hyperlink{link_8h_ae3b299941e67be6971bfd64a25505eff}{Link}} \texorpdfstring{$\ast$}{*}}]{link }\end{DoxyParamCaption})}
+
+
+
+It sets the id of the space located at the west. 
+
+\begin{DoxyAuthor}{Author}
+Profesores PPROG
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em space} & a pointer to the space \\
+\hline
+{\em link} & reference of the link to the west \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+OK, if everything goes well or ERROR if there was some mistake 
+\end{DoxyReturn}

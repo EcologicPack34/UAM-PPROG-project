@@ -18,8 +18,14 @@
 #include "entity.h"
 #include "types.h"
 
+/**
+ * @brief enum to determine which piece of equipment is being treated
+ */
 typedef enum {EQUIPMENT_ERROR, HELMET, CHEST, ARMS, LEG_ARMOR, SHOES, TWO_HANDED, ONE_HANDED_1, ONE_HANDED_2} EquipmentCode;
 
+/**
+ * @brief Equipment ADT that stores all the pieces of equipment of an entity, also modifies their stats
+ */
 typedef struct _Equipment Equipment;
 
 /*
@@ -38,7 +44,7 @@ Equipment *equipment_create();
  * @brief Frees memory of the struct equipment, not the objects in it
  * @author Maksym Polyak
  * 
- * @param equipment 
+ * @param equipment equipment struct
  */
 void equipment_destroy(Equipment *equipment);
 
@@ -46,7 +52,7 @@ void equipment_destroy(Equipment *equipment);
  * @brief Gets the EquipmentCode from a string
  * @author Maksym Polyak
  * 
- * @param data 
+ * @param data string from equip_to_str
  * @return EquipmentCode 
  */
 EquipmentCode equipment_code_from_str(char *data);
@@ -55,9 +61,9 @@ EquipmentCode equipment_code_from_str(char *data);
  * @brief Tries to add an object as a piece if it is compatible
  * @author Maksym Polyak
  * 
- * @param entity
- * @param equipment 
- * @param object 
+ * @param entity entity who has the piece equipped
+ * @param equipment equipment struct
+ * @param object object to equip
  * @return Status 
  */
 Status equipment_add_piece(Entity *entity, Equipment *equipment, Object *object);
@@ -66,9 +72,9 @@ Status equipment_add_piece(Entity *entity, Equipment *equipment, Object *object)
  * @brief Removes a piece and returns the object
  * @author Maksym Polyak
  * 
- * @param entity
- * @param equipment 
- * @param data
+ * @param entity removes a piece of equipment
+ * @param equipment equipment struct
+ * @param data string with the name of the piece type from equip_to_str
  * @return Object* or NULL if error
  */
 Object *equipment_remove_piece(Entity *entity, Equipment *equipment, char *data);

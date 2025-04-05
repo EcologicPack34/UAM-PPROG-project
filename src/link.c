@@ -20,22 +20,32 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+/**
+ * @brief Link internal struct
+ */
 struct _Link{
-    Id id;
-    Id space1;              /*<! One of the spaces connected by a link*/
-    Id space2;              /*<! One of the spaces connected by a link*/
-    bool adjacent;          /*<! Stores if the connected spaces are adjacent or not*/
-    bool locked;            /*<! Stores if the link can be used*/
-    Id unlockingObject;     /*<! Stores id of object used to unlock link*/
+    Id id;                  /*!< id of the link*/
+    Id space1;              /*!< One of the spaces connected by a link*/
+    Id space2;              /*!< One of the spaces connected by a link*/
+    bool adjacent;          /*!< Stores if the connected spaces are adjacent or not*/
+    bool locked;            /*!< Stores if the link can be used*/
 };
+
+/*
+    * PRIVATE FUNCTIONS
+*/
 
 /**
  * @brief Checks if an entity is on one of the spaces connected by the link
+ * @author Daniel Gómez
  * 
- * @param link 
+ * @param link link struct
  * @param entity entity to be checked
  * @return bool 
  */
+bool link_is_entity_on_valid_spaces(Link *link, Entity *entity);
+
+
 bool link_is_entity_on_valid_spaces(Link *link, Entity *entity){
     Id entityID = entity_get_location(entity);
     
@@ -50,22 +60,20 @@ bool link_is_entity_on_valid_spaces(Link *link, Entity *entity){
     return false;
 }
 
-Link *link_create(Id id,Id space1, Id space2, bool adjacent,bool locked, Id unlockingObject){
+/*
+    * PUBLIC FUNCTIONS
+*/
+
+Link *link_create(Id id,Id space1, Id space2, bool adjacent,bool locked){
     Link *link = NULL;
     
     /*Comprobacion de errores y reserva de memoria */
-    if(space1 == NO_ID && space2 == NO_ID){
+    if(space1 == NO_ID || space2 == NO_ID){
         debug_log(LOG_ERROR, "Error Initializing link: link must have at least 1 space: at link_create(Id,Id, Id, bool, Id) in link.c");
         return NULL;
     }
     if(id <= NO_ID){
         debug_log(LOG_WARNING, "No ID assigned to link : at link_create(Id, Id, Id, bool, Id) in link.c");
-        unlockingObject = UNDEFINED_ID;
-    }
-    /*Usar un id no valido para el objecto se considerará como no asignado y no fallará la función*/
-    if(unlockingObject == NO_ID){
-        debug_log(LOG_WARNING, "unlocking object is set to NO_ID, did you mean UNDEFINED_ID? : at link_create(Id, Id, Id, bool, Id) in link.c");
-        unlockingObject = UNDEFINED_ID;
     }
     
     link = (Link*)malloc(sizeof(Link));
@@ -80,7 +88,6 @@ Link *link_create(Id id,Id space1, Id space2, bool adjacent,bool locked, Id unlo
     link_set_spaces(link, space1, space2);
     link_set_is_adjacent(link, adjacent);
     link_set_locked(link, locked);
-    link_set_unlocking_object(link, unlockingObject);
 
     return link;
 }
@@ -131,17 +138,6 @@ Status link_set_locked(Link* link, bool status){
     return OK;
 }
 
-Status link_set_unlocking_object(Link *link, Id object){
-    if(link == NULL){
-        debug_log(LOG_ERROR, "Null Link* argument: at link_set_unlocking_object(Link*, Id) in link.c");
-        return ERROR;
-    }
-
-    link->unlockingObject = object;
-
-    return OK;
-}
-
 Id link_get_id(Link *link){
     if(link == NULL){
         return NO_ID;
@@ -188,12 +184,6 @@ bool link_is_locked(Link *link){
     return link->locked;
 }
 
-Id link_get_unlocking_object(Link *link){
-    if(link == NULL){
-        return NO_ID;
-    }
-    return link->unlockingObject;
-}
 
 Status link_move_entity(Link *link, Entity *entity){
     Id space = entity_get_location(entity);
@@ -241,15 +231,12 @@ Status link_move_entity(Link *link, Entity *entity){
     return OK;
 }
 
-Status link_unlock(Link *link, Object *obj){
+Status link_unlock(Link *link, Entity *player){
+    if(!link || !player) return ERROR;
     
-    if(!link || !obj) return ERROR;
-
-    if(object_get_id(obj) != link->unlockingObject){
+    if(!link_is_entity_on_valid_spaces(link, player)){
         return ERROR;
     }
-
     link->locked = false;
-    link->unlockingObject = UNDEFINED_ID;
     return OK;
 }

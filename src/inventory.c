@@ -23,14 +23,12 @@
 
 
 /**
- * @brief Inventory
- *
- * This struct stores all the information of the player inventory
+ * @brief ADT that stores all the information of an inventory
  */
 struct _Inventory {
     Collection *objects;                /*!< Collection with unique items and fixed space */
     InventoryType inventoryType;        /*!< Inventory type of the inventory */
-    Id id;                              /*!< Id with the inventory location */
+    Id id;                              /*!< Id with the inventory location, if its from an entity, entity id */
 };
 
 
@@ -65,7 +63,7 @@ Id inventory_get_location_id(Inventory *inventory);
 /**
  * @brief Gets the size of inventory a type has defined
  * 
- * @param type 
+ * @param type inventory type to get size
  * @return unsigned long if well or -1 if error
  */
 long inventory_get_size_by_type(InventoryType type);
@@ -151,7 +149,7 @@ Inventory *inventory_create(InventoryType type, Id locationid){
     initialsize = inventory_get_size_by_type(type);
 
     /*Creates a collections with unique objects and fixed length determined by initialsize*/
-    inventory->objects = collection_create(initialsize, TRUE, TRUE, object_isEqual, object_print);
+    inventory->objects = collection_create(initialsize, true, true, object_isEqual, object_print);
     if(!(inventory->objects)){
         debug_log(LOG_ERROR, "inventory_create on collection objects - dynamic memory error at inventory: inventoryType: %d locationid: %d", inventory->inventoryType, inventory->id);
         free(inventory);

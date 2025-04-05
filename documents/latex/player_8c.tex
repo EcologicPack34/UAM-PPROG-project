@@ -1,0 +1,423 @@
+\doxysection{src/player.c File Reference}
+\hypertarget{player_8c}{}\label{player_8c}\index{src/player.c@{src/player.c}}
+
+
+It implements the player module.  
+
+
+{\ttfamily \#include "{}player.\+h"{}}\newline
+{\ttfamily \#include $<$stdio.\+h$>$}\newline
+{\ttfamily \#include $<$stdlib.\+h$>$}\newline
+{\ttfamily \#include $<$string.\+h$>$}\newline
+{\ttfamily \#include "{}equipment.\+h"{}}\newline
+Include dependency graph for player.\+c\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{player_8c__incl}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{struct__Player}{\+\_\+\+Player}}
+\begin{DoxyCompactList}\small\item\em Player. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} \mbox{\hyperlink{player_8c_af962e786bb3ad8256bb483771b161ca9}{player\+\_\+set\+\_\+entity}} (\mbox{\hyperlink{struct__Player}{Player}} \texorpdfstring{$\ast$}{*}player, \mbox{\hyperlink{entity_8h_a88bccc76704ed1a036c3500da8c42bcc}{Entity}} \texorpdfstring{$\ast$}{*}entity)
+\begin{DoxyCompactList}\small\item\em Sets the entity pointer of the player. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{struct__Player}{Player}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{player_8c_a4b3f3cf60ed4ba6d79d9525f6583918d}{player\+\_\+create}} (char \texorpdfstring{$\ast$}{*}name, \mbox{\hyperlink{types_8h_a845e604fb28f7e3d97549da3448149d3}{Id}} identity, \mbox{\hyperlink{types_8h_a845e604fb28f7e3d97549da3448149d3}{Id}} location)
+\begin{DoxyCompactList}\small\item\em Creates a player struct. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{player_8c_a73b5e14b9a3b1d4111ea2713d666bdc9}{player\+\_\+destroy}} (\mbox{\hyperlink{struct__Player}{Player}} \texorpdfstring{$\ast$}{*}player)
+\begin{DoxyCompactList}\small\item\em Frees a player struct. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{entity_8h_a88bccc76704ed1a036c3500da8c42bcc}{Entity}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{player_8c_a0fb355935acf9ba4c0180d7ba1b8e12a}{player\+\_\+get\+\_\+entity}} (\mbox{\hyperlink{struct__Player}{Player}} \texorpdfstring{$\ast$}{*}player)
+\begin{DoxyCompactList}\small\item\em returns the entity of the player \end{DoxyCompactList}\item 
+\mbox{\hyperlink{equipment_8h_a273174defa345a369e760f382c74cd8b}{Equipment}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{player_8c_a19dba97aa913b5eca77d87d7aff7db0a}{player\+\_\+get\+\_\+equipment}} (\mbox{\hyperlink{struct__Player}{Player}} \texorpdfstring{$\ast$}{*}player)
+\begin{DoxyCompactList}\small\item\em Gets the equipment struct from a player. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} \mbox{\hyperlink{player_8c_aef02ed376aba5680ba91a4d1bbc35126}{player\+\_\+get\+\_\+str\+\_\+desc}} (\mbox{\hyperlink{struct__Player}{Player}} \texorpdfstring{$\ast$}{*}player, char \texorpdfstring{$\ast$}{*}str)
+\begin{DoxyCompactList}\small\item\em Gets a string description of player and copies it into str. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{player_8c_a369917e7025ed6a6ec2f2b986f89a666}{player\+\_\+get\+\_\+money}} (\mbox{\hyperlink{struct__Player}{Player}} \texorpdfstring{$\ast$}{*}player)
+\begin{DoxyCompactList}\small\item\em Gets the money quantity of the player. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{command_8h_a12f42edede7479fc4cbb644f585bdf9b}{Command\+Info}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{player_8c_aa024f02cf563ff50f45df56655b8f0db}{player\+\_\+get\+\_\+cmd\+Data}} (\mbox{\hyperlink{struct__Player}{Player}} \texorpdfstring{$\ast$}{*}player)
+\begin{DoxyCompactList}\small\item\em Gets the command data of the player. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} \mbox{\hyperlink{player_8c_ad08b812af081a0e90101ce5e999b818a}{player\+\_\+add\+\_\+money}} (\mbox{\hyperlink{struct__Player}{Player}} \texorpdfstring{$\ast$}{*}player, int value\+\_\+added)
+\begin{DoxyCompactList}\small\item\em Adds the value\+\_\+added int to the player money, can be negative but cant surpass int value or go below 0. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{player_8c_adea557c76f0ef2a609aab20cdfd6aea4}{player\+\_\+print}} (\mbox{\hyperlink{struct__Player}{Player}} \texorpdfstring{$\ast$}{*}player)
+\begin{DoxyCompactList}\small\item\em Prints a player struct. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} \mbox{\hyperlink{player_8c_a5437f5982a9cbb6aa1d82574310610b7}{player\+\_\+set\+\_\+stats}} (\mbox{\hyperlink{struct__Player}{Player}} \texorpdfstring{$\ast$}{*}p, double maxhealth, double health, double base\+Damage, int strength, int defense, int magic\+Level)
+\begin{DoxyCompactList}\small\item\em It sets a player\textquotesingle{}s stats. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} \mbox{\hyperlink{player_8c_a7e0c15a30cb3bef3220cc591b065b3b6}{player\+\_\+equip\+\_\+piece}} (\mbox{\hyperlink{struct__Player}{Player}} \texorpdfstring{$\ast$}{*}player, \mbox{\hyperlink{object_8h_a7f8bbcda919b65ce67f92fba08e0212f}{Object}} \texorpdfstring{$\ast$}{*}object)
+\begin{DoxyCompactList}\small\item\em Tries to equip a piece on the player and removes it from the inventory. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} \mbox{\hyperlink{player_8c_a7964024cfa83bdfd24e0472008509c6e}{player\+\_\+unequip\+\_\+piece}} (\mbox{\hyperlink{struct__Player}{Player}} \texorpdfstring{$\ast$}{*}player, char \texorpdfstring{$\ast$}{*}data)
+\begin{DoxyCompactList}\small\item\em Tries to unequip a piece on the player and adds it to the inventory. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} \mbox{\hyperlink{player_8c_aad5eeebc36dd8a4b4d2e2df075e20e09}{player\+\_\+add\+\_\+follower}} (\mbox{\hyperlink{struct__Player}{Player}} \texorpdfstring{$\ast$}{*}player, \mbox{\hyperlink{npc_8h_a39909c657c1a61d1470271e3029ab7cb}{NPC}} \texorpdfstring{$\ast$}{*}npc)
+\begin{DoxyCompactList}\small\item\em Adds a follower to the player. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} \mbox{\hyperlink{player_8c_a3084c6165e79199c56b661b998c9f233}{player\+\_\+remove\+\_\+follower\+\_\+by\+\_\+name}} (\mbox{\hyperlink{struct__Player}{Player}} \texorpdfstring{$\ast$}{*}player, char \texorpdfstring{$\ast$}{*}npc\+\_\+name)
+\begin{DoxyCompactList}\small\item\em Removes a follower from the player by a name. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{npc_8h_a39909c657c1a61d1470271e3029ab7cb}{NPC}} \texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*} \mbox{\hyperlink{player_8c_aa615981fd289e05b00d5f42b61886e14}{player\+\_\+get\+\_\+followers}} (\mbox{\hyperlink{struct__Player}{Player}} \texorpdfstring{$\ast$}{*}player)
+\begin{DoxyCompactList}\small\item\em Gets the array with the followers, of max size NPC\+\_\+\+MAX\+\_\+\+FOLLOWERS. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+It implements the player module. 
+
+A player ADT for now is just a struct with an entity ADT inside, in the next iterations this module will be improved to add further functionality in game.
+
+\begin{DoxyAuthor}{Author}
+Maksym Polyak 
+\end{DoxyAuthor}
+\begin{DoxyVersion}{Version}
+0 
+\end{DoxyVersion}
+\begin{DoxyDate}{Date}
+04-\/02-\/2025 
+\end{DoxyDate}
+\begin{DoxyCopyright}{Copyright}
+GNU Public License 
+\end{DoxyCopyright}
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{player_8c_aad5eeebc36dd8a4b4d2e2df075e20e09}\label{player_8c_aad5eeebc36dd8a4b4d2e2df075e20e09} 
+\index{player.c@{player.c}!player\_add\_follower@{player\_add\_follower}}
+\index{player\_add\_follower@{player\_add\_follower}!player.c@{player.c}}
+\doxysubsubsection{\texorpdfstring{player\_add\_follower()}{player\_add\_follower()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} player\+\_\+add\+\_\+follower (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct__Player}{Player}} \texorpdfstring{$\ast$}{*}}]{player,  }\item[{\mbox{\hyperlink{npc_8h_a39909c657c1a61d1470271e3029ab7cb}{NPC}} \texorpdfstring{$\ast$}{*}}]{npc }\end{DoxyParamCaption})}
+
+
+
+Adds a follower to the player. 
+
+\begin{DoxyAuthor}{Author}
+Maksym Polyak
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em player} & player struct \\
+\hline
+{\em npc} & npc to add as a follower \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Status 
+\end{DoxyReturn}
+\Hypertarget{player_8c_ad08b812af081a0e90101ce5e999b818a}\label{player_8c_ad08b812af081a0e90101ce5e999b818a} 
+\index{player.c@{player.c}!player\_add\_money@{player\_add\_money}}
+\index{player\_add\_money@{player\_add\_money}!player.c@{player.c}}
+\doxysubsubsection{\texorpdfstring{player\_add\_money()}{player\_add\_money()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} player\+\_\+add\+\_\+money (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct__Player}{Player}} \texorpdfstring{$\ast$}{*}}]{player,  }\item[{int}]{value\+\_\+added }\end{DoxyParamCaption})}
+
+
+
+Adds the value\+\_\+added int to the player money, can be negative but cant surpass int value or go below 0. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em player} & player struct \\
+\hline
+{\em value\+\_\+added} & quantity of money added (can be negative) \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Status 
+\end{DoxyReturn}
+\Hypertarget{player_8c_a4b3f3cf60ed4ba6d79d9525f6583918d}\label{player_8c_a4b3f3cf60ed4ba6d79d9525f6583918d} 
+\index{player.c@{player.c}!player\_create@{player\_create}}
+\index{player\_create@{player\_create}!player.c@{player.c}}
+\doxysubsubsection{\texorpdfstring{player\_create()}{player\_create()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{struct__Player}{Player}} \texorpdfstring{$\ast$}{*} player\+\_\+create (\begin{DoxyParamCaption}\item[{char \texorpdfstring{$\ast$}{*}}]{name,  }\item[{\mbox{\hyperlink{types_8h_a845e604fb28f7e3d97549da3448149d3}{Id}}}]{identity,  }\item[{\mbox{\hyperlink{types_8h_a845e604fb28f7e3d97549da3448149d3}{Id}}}]{location }\end{DoxyParamCaption})}
+
+
+
+Creates a player struct. 
+
+Game interface implementation \Hypertarget{player_8c_a73b5e14b9a3b1d4111ea2713d666bdc9}\label{player_8c_a73b5e14b9a3b1d4111ea2713d666bdc9} 
+\index{player.c@{player.c}!player\_destroy@{player\_destroy}}
+\index{player\_destroy@{player\_destroy}!player.c@{player.c}}
+\doxysubsubsection{\texorpdfstring{player\_destroy()}{player\_destroy()}}
+{\footnotesize\ttfamily void player\+\_\+destroy (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct__Player}{Player}} \texorpdfstring{$\ast$}{*}}]{player }\end{DoxyParamCaption})}
+
+
+
+Frees a player struct. 
+
+\begin{DoxyAuthor}{Author}
+Profesores PPROG
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em player} & struct with the information of a player \\
+\hline
+\end{DoxyParams}
+\Hypertarget{player_8c_a7e0c15a30cb3bef3220cc591b065b3b6}\label{player_8c_a7e0c15a30cb3bef3220cc591b065b3b6} 
+\index{player.c@{player.c}!player\_equip\_piece@{player\_equip\_piece}}
+\index{player\_equip\_piece@{player\_equip\_piece}!player.c@{player.c}}
+\doxysubsubsection{\texorpdfstring{player\_equip\_piece()}{player\_equip\_piece()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} player\+\_\+equip\+\_\+piece (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct__Player}{Player}} \texorpdfstring{$\ast$}{*}}]{player,  }\item[{\mbox{\hyperlink{object_8h_a7f8bbcda919b65ce67f92fba08e0212f}{Object}} \texorpdfstring{$\ast$}{*}}]{object }\end{DoxyParamCaption})}
+
+
+
+Tries to equip a piece on the player and removes it from the inventory. 
+
+\begin{DoxyAuthor}{Author}
+Maksym Polyak
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em player} & player struct \\
+\hline
+{\em object} & object to equip \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Status 
+\end{DoxyReturn}
+\Hypertarget{player_8c_aa024f02cf563ff50f45df56655b8f0db}\label{player_8c_aa024f02cf563ff50f45df56655b8f0db} 
+\index{player.c@{player.c}!player\_get\_cmdData@{player\_get\_cmdData}}
+\index{player\_get\_cmdData@{player\_get\_cmdData}!player.c@{player.c}}
+\doxysubsubsection{\texorpdfstring{player\_get\_cmdData()}{player\_get\_cmdData()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{command_8h_a12f42edede7479fc4cbb644f585bdf9b}{Command\+Info}} \texorpdfstring{$\ast$}{*} player\+\_\+get\+\_\+cmd\+Data (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct__Player}{Player}} \texorpdfstring{$\ast$}{*}}]{player }\end{DoxyParamCaption})}
+
+
+
+Gets the command data of the player. 
+
+\begin{DoxyAuthor}{Author}
+Daniel Gómez
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em player} & player struct \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Command\+Info\texorpdfstring{$\ast$}{*} 
+\end{DoxyReturn}
+\Hypertarget{player_8c_a0fb355935acf9ba4c0180d7ba1b8e12a}\label{player_8c_a0fb355935acf9ba4c0180d7ba1b8e12a} 
+\index{player.c@{player.c}!player\_get\_entity@{player\_get\_entity}}
+\index{player\_get\_entity@{player\_get\_entity}!player.c@{player.c}}
+\doxysubsubsection{\texorpdfstring{player\_get\_entity()}{player\_get\_entity()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{entity_8h_a88bccc76704ed1a036c3500da8c42bcc}{Entity}} \texorpdfstring{$\ast$}{*} player\+\_\+get\+\_\+entity (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct__Player}{Player}} \texorpdfstring{$\ast$}{*}}]{player }\end{DoxyParamCaption})}
+
+
+
+returns the entity of the player 
+
+\begin{DoxyAuthor}{Author}
+Daniel Gómez
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em player} & struct with the information of a player \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Entity\texorpdfstring{$\ast$}{*} 
+\end{DoxyReturn}
+\Hypertarget{player_8c_a19dba97aa913b5eca77d87d7aff7db0a}\label{player_8c_a19dba97aa913b5eca77d87d7aff7db0a} 
+\index{player.c@{player.c}!player\_get\_equipment@{player\_get\_equipment}}
+\index{player\_get\_equipment@{player\_get\_equipment}!player.c@{player.c}}
+\doxysubsubsection{\texorpdfstring{player\_get\_equipment()}{player\_get\_equipment()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{equipment_8h_a273174defa345a369e760f382c74cd8b}{Equipment}} \texorpdfstring{$\ast$}{*} player\+\_\+get\+\_\+equipment (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct__Player}{Player}} \texorpdfstring{$\ast$}{*}}]{player }\end{DoxyParamCaption})}
+
+
+
+Gets the equipment struct from a player. 
+
+\begin{DoxyAuthor}{Author}
+Maksym Polyak
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em player} & player struct \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Equipment\texorpdfstring{$\ast$}{*} 
+\end{DoxyReturn}
+\Hypertarget{player_8c_aa615981fd289e05b00d5f42b61886e14}\label{player_8c_aa615981fd289e05b00d5f42b61886e14} 
+\index{player.c@{player.c}!player\_get\_followers@{player\_get\_followers}}
+\index{player\_get\_followers@{player\_get\_followers}!player.c@{player.c}}
+\doxysubsubsection{\texorpdfstring{player\_get\_followers()}{player\_get\_followers()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{npc_8h_a39909c657c1a61d1470271e3029ab7cb}{NPC}} \texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*} player\+\_\+get\+\_\+followers (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct__Player}{Player}} \texorpdfstring{$\ast$}{*}}]{player }\end{DoxyParamCaption})}
+
+
+
+Gets the array with the followers, of max size NPC\+\_\+\+MAX\+\_\+\+FOLLOWERS. 
+
+\begin{DoxyAuthor}{Author}
+Maksym Polyak
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em player} & player struct \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Status 
+\end{DoxyReturn}
+\Hypertarget{player_8c_a369917e7025ed6a6ec2f2b986f89a666}\label{player_8c_a369917e7025ed6a6ec2f2b986f89a666} 
+\index{player.c@{player.c}!player\_get\_money@{player\_get\_money}}
+\index{player\_get\_money@{player\_get\_money}!player.c@{player.c}}
+\doxysubsubsection{\texorpdfstring{player\_get\_money()}{player\_get\_money()}}
+{\footnotesize\ttfamily int player\+\_\+get\+\_\+money (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct__Player}{Player}} \texorpdfstring{$\ast$}{*}}]{player }\end{DoxyParamCaption})}
+
+
+
+Gets the money quantity of the player. 
+
+\begin{DoxyAuthor}{Author}
+Maksym Polyak
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em player} & player struct \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Status 
+\end{DoxyReturn}
+\Hypertarget{player_8c_aef02ed376aba5680ba91a4d1bbc35126}\label{player_8c_aef02ed376aba5680ba91a4d1bbc35126} 
+\index{player.c@{player.c}!player\_get\_str\_desc@{player\_get\_str\_desc}}
+\index{player\_get\_str\_desc@{player\_get\_str\_desc}!player.c@{player.c}}
+\doxysubsubsection{\texorpdfstring{player\_get\_str\_desc()}{player\_get\_str\_desc()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} player\+\_\+get\+\_\+str\+\_\+desc (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct__Player}{Player}} \texorpdfstring{$\ast$}{*}}]{player,  }\item[{char \texorpdfstring{$\ast$}{*}}]{str }\end{DoxyParamCaption})}
+
+
+
+Gets a string description of player and copies it into str. 
+
+\begin{DoxyAuthor}{Author}
+Daniel Gómez
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em player} & player struct \\
+\hline
+{\em str} & string where the description is saved \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Status 
+\end{DoxyReturn}
+\Hypertarget{player_8c_adea557c76f0ef2a609aab20cdfd6aea4}\label{player_8c_adea557c76f0ef2a609aab20cdfd6aea4} 
+\index{player.c@{player.c}!player\_print@{player\_print}}
+\index{player\_print@{player\_print}!player.c@{player.c}}
+\doxysubsubsection{\texorpdfstring{player\_print()}{player\_print()}}
+{\footnotesize\ttfamily void player\+\_\+print (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct__Player}{Player}} \texorpdfstring{$\ast$}{*}}]{player }\end{DoxyParamCaption})}
+
+
+
+Prints a player struct. 
+
+\begin{DoxyAuthor}{Author}
+Profesores PPROG
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em player} & struct with the information of a player \\
+\hline
+\end{DoxyParams}
+\Hypertarget{player_8c_a3084c6165e79199c56b661b998c9f233}\label{player_8c_a3084c6165e79199c56b661b998c9f233} 
+\index{player.c@{player.c}!player\_remove\_follower\_by\_name@{player\_remove\_follower\_by\_name}}
+\index{player\_remove\_follower\_by\_name@{player\_remove\_follower\_by\_name}!player.c@{player.c}}
+\doxysubsubsection{\texorpdfstring{player\_remove\_follower\_by\_name()}{player\_remove\_follower\_by\_name()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} player\+\_\+remove\+\_\+follower\+\_\+by\+\_\+name (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct__Player}{Player}} \texorpdfstring{$\ast$}{*}}]{player,  }\item[{char \texorpdfstring{$\ast$}{*}}]{npc\+\_\+name }\end{DoxyParamCaption})}
+
+
+
+Removes a follower from the player by a name. 
+
+\begin{DoxyAuthor}{Author}
+Maksym Polyak
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em player} & player struct \\
+\hline
+{\em npc\+\_\+name} & name of the npc to remove as follower \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Status 
+\end{DoxyReturn}
+\Hypertarget{player_8c_af962e786bb3ad8256bb483771b161ca9}\label{player_8c_af962e786bb3ad8256bb483771b161ca9} 
+\index{player.c@{player.c}!player\_set\_entity@{player\_set\_entity}}
+\index{player\_set\_entity@{player\_set\_entity}!player.c@{player.c}}
+\doxysubsubsection{\texorpdfstring{player\_set\_entity()}{player\_set\_entity()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} player\+\_\+set\+\_\+entity (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct__Player}{Player}} \texorpdfstring{$\ast$}{*}}]{player,  }\item[{\mbox{\hyperlink{entity_8h_a88bccc76704ed1a036c3500da8c42bcc}{Entity}} \texorpdfstring{$\ast$}{*}}]{entity }\end{DoxyParamCaption})}
+
+
+
+Sets the entity pointer of the player. 
+
+Private functions \begin{DoxyAuthor}{Author}
+Maksym Polyak
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em player} & struct with the information of a player \\
+\hline
+{\em entity} & entity of the player \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+OK if everything went fine or NULL if there was a mistake 
+\end{DoxyReturn}
+\Hypertarget{player_8c_a5437f5982a9cbb6aa1d82574310610b7}\label{player_8c_a5437f5982a9cbb6aa1d82574310610b7} 
+\index{player.c@{player.c}!player\_set\_stats@{player\_set\_stats}}
+\index{player\_set\_stats@{player\_set\_stats}!player.c@{player.c}}
+\doxysubsubsection{\texorpdfstring{player\_set\_stats()}{player\_set\_stats()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} player\+\_\+set\+\_\+stats (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct__Player}{Player}} \texorpdfstring{$\ast$}{*}}]{p,  }\item[{double}]{maxhealth,  }\item[{double}]{health,  }\item[{double}]{base\+Damage,  }\item[{int}]{strength,  }\item[{int}]{defense,  }\item[{int}]{magic\+Level }\end{DoxyParamCaption})}
+
+
+
+It sets a player\textquotesingle{}s stats. 
+
+Aaron Charameli Mair
+
+
+\begin{DoxyParams}{Parameters}
+{\em p} & a pointer to Player \\
+\hline
+{\em maxhealth} & \\
+\hline
+{\em health} & \\
+\hline
+{\em base\+Damage} & \\
+\hline
+{\em strength} & \\
+\hline
+{\em defense} & \\
+\hline
+{\em magic\+Level} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Status 
+\end{DoxyReturn}
+\Hypertarget{player_8c_a7964024cfa83bdfd24e0472008509c6e}\label{player_8c_a7964024cfa83bdfd24e0472008509c6e} 
+\index{player.c@{player.c}!player\_unequip\_piece@{player\_unequip\_piece}}
+\index{player\_unequip\_piece@{player\_unequip\_piece}!player.c@{player.c}}
+\doxysubsubsection{\texorpdfstring{player\_unequip\_piece()}{player\_unequip\_piece()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} player\+\_\+unequip\+\_\+piece (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct__Player}{Player}} \texorpdfstring{$\ast$}{*}}]{player,  }\item[{char \texorpdfstring{$\ast$}{*}}]{data }\end{DoxyParamCaption})}
+
+
+
+Tries to unequip a piece on the player and adds it to the inventory. 
+
+\begin{DoxyAuthor}{Author}
+Maksym Polyak
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em player} & player struct \\
+\hline
+{\em data} & name of the type of piece that wants to be removed \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Status 
+\end{DoxyReturn}

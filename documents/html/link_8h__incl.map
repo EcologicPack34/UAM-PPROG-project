@@ -1,0 +1,30 @@
+<map id="include/link.h" name="include/link.h">
+<area shape="rect" id="Node000001" title="Header file definin links between spaces." alt="" coords="5,5,115,31"/>
+<area shape="rect" id="Node000002" href="$types_8h.html" title="It defines common types for the whole project." alt="" coords="141,445,211,471"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="58,32,38,88,30,125,27,163,27,312,30,334,37,354,65,389,100,417,136,437,134,442,97,421,61,393,33,357,24,335,21,313,21,163,25,124,33,87,52,30"/>
+<area shape="rect" id="Node000003" href="$entity_8h.html" title="It defines the entity module interface." alt="" coords="75,79,146,104"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="71,29,97,66,92,69,66,33"/>
+<area shape="poly" id="edge19_Node000003_Node000002" title=" " alt="" coords="108,105,89,161,81,199,77,237,77,312,85,350,103,383,127,412,151,435,148,438,123,416,99,386,80,351,72,313,72,237,75,198,84,160,103,104"/>
+<area shape="rect" id="Node000004" href="$inventory_8h.html" title="It defines the inventory module interface." alt="" coords="291,152,386,177"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="147,101,290,145,288,151,146,106"/>
+<area shape="rect" id="Node000006" href="$ability__manager_8h.html" title="This module controls player special interactions with the environment, specially in combat throught t..." alt="" coords="163,299,301,324"/>
+<area shape="poly" id="edge18_Node000003_Node000006" title=" " alt="" coords="120,103,221,285,216,288,115,106"/>
+<area shape="poly" id="edge4_Node000004_Node000002" title=" " alt="" coords="308,180,270,197,226,223,185,257,167,278,153,300,144,334,146,370,155,404,166,432,161,434,150,406,140,371,138,333,148,298,163,274,181,253,223,219,267,193,306,175"/>
+<area shape="rect" id="Node000005" href="$object_8h.html" title="It defines the object module interface." alt="" coords="301,225,376,251"/>
+<area shape="poly" id="edge5_Node000004_Node000005" title=" " alt="" coords="341,178,341,212,336,212,336,178"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="385,445,468,471"/>
+<area shape="poly" id="edge17_Node000004_Node000007" title=" " alt="" coords="363,175,412,203,473,245,504,272,532,302,557,335,577,371,581,387,578,402,569,414,555,425,521,440,483,451,481,446,519,435,553,420,565,410,573,400,575,387,572,373,553,338,528,305,500,276,469,249,409,207,361,180"/>
+<area shape="rect" id="Node000009" href="$collection_8h.html" title="ADT that aims to implement a generic list of elements. It contains the behaviour of Set module asked ..." alt="" coords="465,372,562,397"/>
+<area shape="poly" id="edge14_Node000004_Node000009" title=" " alt="" coords="351,176,390,224,498,359,494,363,386,227,347,179"/>
+<area shape="poly" id="edge6_Node000005_Node000002" title=" " alt="" coords="342,251,341,279,336,318,324,361,302,399,286,415,266,429,226,447,223,442,264,424,282,411,298,396,319,358,331,317,335,279,336,251"/>
+<area shape="poly" id="edge7_Node000005_Node000006" title=" " alt="" coords="323,253,262,293,259,289,320,248"/>
+<area shape="poly" id="edge13_Node000005_Node000007" title=" " alt="" coords="346,250,419,431,414,433,341,252"/>
+<area shape="poly" id="edge8_Node000006_Node000002" title=" " alt="" coords="228,325,204,373,185,432,180,431,199,371,223,323"/>
+<area shape="poly" id="edge9_Node000006_Node000007" title=" " alt="" coords="249,322,402,435,398,439,246,326"/>
+<area shape="rect" id="Node000008" href="$queue_8h.html" title="Queue implementation with a linked list THE QUEUE DOESN&#39;T MANAGE THE MEMORY OF THE ELEMENTS IT STORES..." alt="" coords="213,372,288,397"/>
+<area shape="poly" id="edge10_Node000006_Node000008" title=" " alt="" coords="238,324,247,358,242,360,233,325"/>
+<area shape="poly" id="edge11_Node000008_Node000002" title=" " alt="" coords="241,399,200,438,196,434,237,395"/>
+<area shape="poly" id="edge12_Node000008_Node000007" title=" " alt="" coords="280,395,386,438,384,442,278,400"/>
+<area shape="poly" id="edge15_Node000009_Node000002" title=" " alt="" coords="465,399,226,449,225,444,464,394"/>
+<area shape="poly" id="edge16_Node000009_Node000007" title=" " alt="" coords="501,399,453,439,450,434,498,395"/>
+</map>

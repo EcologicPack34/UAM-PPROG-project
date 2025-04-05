@@ -31,7 +31,7 @@
 
 #include <stdbool.h>
 
-#define MAX_SPACES 100          /*!< Maximum number of spaces on the map */
+#define MAX_SPACES 100  /*!< Maximum number of spaces on the map */
 #define MAX_LINKS 400   /*!< Maximum number of links on the map */
 #define MAX_PLAYERS 4   /*!< Maximum number of players*/
 
@@ -89,9 +89,9 @@ Space *game_get_space(Game *game, Id id);
  * @brief Gets a space from the game by it's spatial position
  * @author Daniel Gómez
  * 
- * @param game 
- * @param pos 
- * @param block
+ * @param game game struct
+ * @param pos vector with the position where the space is located
+ * @param block number of the block to search
  * @return Space* 
  */
 Space *game_get_space_by_position(Game *game, Vector2 pos, int block);
@@ -117,7 +117,7 @@ int game_get_n_spaces(Game *game);
 
 /**
  * @brief Gets the player pointer of the game struct
- * @author maksym Polyak
+ * @author Maksym Polyak
  *
  * @param game struct that saves all information related to the game
  * @return player pointer from game or NULL if there was a mistake
@@ -126,8 +126,9 @@ Player* game_get_player(Game *game);
 
 /**
  * @brief Gets the number of players
+ * @author Maksym Polyak
  * 
- * @param game 
+ * @param game game struct
  * @return number of players, -1 if error
  */
 int game_get_n_players(Game *game);
@@ -136,17 +137,18 @@ int game_get_n_players(Game *game);
  * @brief Gets pointer to player at certain index
  * @author Daniel Gómez
  * 
- * @param game 
- * @param index 
+ * @param game game struct
+ * @param index index where the player is located
  * @return Player* 
  */
 Player* game_get_player_at(Game *game, int index);
 
 /**
  * @brief Gets a frame color based on the current player
+ * @author Daniel Gómez
  * 
- * @param game 
- * @return Frame_color 
+ * @param game game struct
+ * @return Frame_color or BLUE if error
  */
 Frame_color game_get_player_color(Game *game);
 
@@ -190,8 +192,8 @@ Id game_get_player_location(Game *game);
  * @brief Gets the numer of links stored in a game
  * @author Daniel Gómez
  * 
- * @param game 
- * @return long 
+ * @param game game struct
+ * @return long or -1 if error
  */
 long game_get_n_links(Game *game);
 
@@ -199,7 +201,8 @@ long game_get_n_links(Game *game);
  * @brief Trys to get the reference of a link by its Id
  * @author Daniel Gómez
  * 
- * @param game 
+ * @param game game struct
+ * @param id id of the link
  * @return the pointer if found, NULL if not found
  */
 Link *game_get_link_by_id(Game *game, Id id);
@@ -208,8 +211,8 @@ Link *game_get_link_by_id(Game *game, Id id);
  * @brief Gets the current state of the game
  * @author Daniel Gómez
  * 
- * @param game 
- * @return GameState 
+ * @param game game struct
+ * @return GameState or ERROR_STATE if error
  */
 GameState game_get_state(Game *game);
 
@@ -217,15 +220,15 @@ GameState game_get_state(Game *game);
  * @brief Gets the event manager from game
  * @author Daniel Gómez
  * 
- * @param game 
- * @return EventManager* 
+ * @param game game struct
+ * @return EventManager* or NULL if error
  */
 EventManager *game_get_event_manager(Game *game);
 
 /**
  * @brief Gets the npcs collection from game
  * 
- * @param game 
+ * @param game game struct
  * @return Collection* or NULL if error
  */
 Collection *game_get_npcs(Game *game);
@@ -234,7 +237,7 @@ Collection *game_get_npcs(Game *game);
  * @brief it gets an NPC from it's id in a Game
  * @author Aaron Charameli Mair
  * 
- * @param game 
+ * @param game game struct
  * @param id the NPC's Id
  * @return NPC* or NULL if error 
  */
@@ -246,9 +249,9 @@ Player *game_get_player_by_id(Game *game, Id id);
  * @brief it gets the status of god mode
  * @author Aaron Charameli Mair
  * 
- * @param game 
- * @return true 
- * @return false 
+ * @param game game struct
+ * @return true if god mode is active
+ * @return false if god mode is not active or error
  */
 bool game_get_god_mode(Game *game);
 
@@ -289,8 +292,8 @@ Status game_set_player_location(Game *game, Id id);
  * @brief Sets the current game state
  * @author Daniel Gómez
  * 
- * @param game 
- * @param state 
+ * @param game game struct
+ * @param state game state to set
  * @return Status 
  */
 Status game_set_state(Game *game, GameState state);
@@ -299,8 +302,8 @@ Status game_set_state(Game *game, GameState state);
  * @brief It sets the value of god mode
  * @author Aaron Charameli Mair
  * 
- * @param game 
- * @param value 
+ * @param game game struct
+ * @param value value of god mode to set
  * @return Status 
  */
 Status game_set_godmode(Game *game, bool value);
@@ -312,7 +315,7 @@ Status game_set_godmode(Game *game, bool value);
  *          Requires that the first spaces is adjascent to all the other ones, if not it wont work as intended
  * @author Daniel Gómez
  * 
- * @param game 
+ * @param game game struct
  * @return Ok if everything went ok, ERROR if couldn't execute all
  */
 Status game_spatial_map(Game *game);
@@ -331,8 +334,8 @@ Status game_add_space(Game *game, Space *space);
  * @brief Adds the link received to the array of links on game
  * @author Daniel Gómez
  * 
- * @param game 
- * @param link 
+ * @param game game struct
+ * @param link link to add
  * @return Status 
  */
 Status game_add_link(Game *game, Link *link);
@@ -361,8 +364,8 @@ Status game_add_player(Game *game, Player *player);
  * @brief Adds an event to game
  * @author Daniel Gómez
  * 
- * @param game 
- * @param event 
+ * @param game game struct
+ * @param event event to add
  * @return Status 
  */
 Status game_add_event(Game *game, Event *event);
@@ -371,8 +374,8 @@ Status game_add_event(Game *game, Event *event);
  * @brief Adds an NPC struct to the game struct
  * @author Maksym Polyak
  * 
- * @param game 
- * @param npc 
+ * @param game game struct
+ * @param npc npc to add
  * @return Status 
  */
 Status game_add_npc(Game *game, NPC *npc);
@@ -381,8 +384,9 @@ Status game_add_npc(Game *game, NPC *npc);
  * @brief Adds a message to the queue. Internaly memory will be allocated to store a copy of message
  * @author Daniel Gómez
  * 
- * @param game 
- * @param message 
+ * @param game game struct
+ * @param type type of the message to add
+ * @param message message to add to the queue
  * @return Status 
  */
 Status game_add_log_message(Game *game, MessageType type,char *message);
@@ -391,8 +395,9 @@ Status game_add_log_message(Game *game, MessageType type,char *message);
  * @brief Gets the first message in the queue and frees its memory
  * @author Daniel Gómez
  * 
- * @param game 
- * @return char* 
+ * @param game game struct
+ * @param str string where the log message is saved
+ * @return char* or NULL if error
  */
 Status game_get_log_message(Game *game, char *str);
 
@@ -401,8 +406,8 @@ Status game_get_log_message(Game *game, char *str);
  * @author Daniel Gómez
  * 
  * @param game 
- * @return true 
- * @return false 
+ * @return true if log has a message
+ * @return false if it does not have message or error
  */
 bool game_log_hasMessage(Game *game);
 
@@ -410,7 +415,7 @@ bool game_log_hasMessage(Game *game);
  * @brief Initializes and starts combat(changes game state and creates combat module)
  * @author Daniel Gómez y Maksym Polyak
  * 
- * @param game 
+ * @param game game struct
  * @return Status 
  */
 Status game_combat_start(Game *game);
@@ -419,7 +424,7 @@ Status game_combat_start(Game *game);
  * @brief Ends combat(changes game state and creates combat module)
  * @author Daniel Gómez y Maksym Polyak
  * 
- * @param game 
+ * @param game game struct
  * @return Status 
  */
 Status game_combat_end(Game *game);
@@ -427,8 +432,8 @@ Status game_combat_end(Game *game);
 /**
  * @brief Returns the combat reference stored in game
  * 
- * @param game 
- * @return Combat* 
+ * @param game game struct
+ * @return Combat* or NULL if error
  */
 Combat *game_get_combat(Game *game);
 
@@ -436,8 +441,8 @@ Combat *game_get_combat(Game *game);
  * @brief Switchs to the indicated player on the array
  * @author Maksym Polyak
  * 
- * @param game 
- * @param player 
+ * @param game game struct
+ * @param player player index to switch
  * @return Status 
  */
 Status game_switch_player(Game *game, int player);
@@ -445,7 +450,7 @@ Status game_switch_player(Game *game, int player);
 /**
  * @brief Gets the ability manager struct from the game struct
  * 
- * @param game 
+ * @param game game struct
  * @return AbilityManager* or NULL if error
  */
 AbilityManager *game_get_ability_manager(Game *game);
@@ -454,9 +459,9 @@ AbilityManager *game_get_ability_manager(Game *game);
  * @brief Gets a player by its id on game struct
  * @author Maksym Polyak
  * 
- * @param game 
- * @param id
- * @return Player* or NULL if error
+ * @param game game struct
+ * @param id id of the player
+ * @return Player* or NULL if error or not found
  */
 Player *game_get_player_by_id(Game *game, Id id);
 
@@ -464,8 +469,8 @@ Player *game_get_player_by_id(Game *game, Id id);
  * @brief Gets a NPC by its id on game struct
  * @author Maksym Polyak
  * 
- * @param game 
- * @param id
+ * @param game game struct
+ * @param id id of the NPC
  * @return NPC* or NULL if error or not found
  */
 NPC *game_get_NPC_by_id(Game *game, Id id);
@@ -474,8 +479,8 @@ NPC *game_get_NPC_by_id(Game *game, Id id);
  * @brief Gets an object from the object array by its id
  * @author Maksym Polyak
  * 
- * @param game 
- * @param objectid 
+ * @param game game struct
+ * @param objectid id of the object to search
  * @return Object* or NULL if error or not found
  */
 Object *game_get_object_by_id(Game *game, Id objectid);
@@ -484,8 +489,8 @@ Object *game_get_object_by_id(Game *game, Id objectid);
  * @brief Adds the ability to the ability manager and to the related entity
  * @author Maksym Polyak
  * 
- * @param game 
- * @param ability
+ * @param game game struct
+ * @param ability ability to add
  * @return Status 
  */
 Status game_add_ability(Game *game, Ability *ability);

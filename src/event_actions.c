@@ -13,8 +13,8 @@
  * @brief Action for NO EVENT
  * @author Daniel Gómez
  * 
- * @param event 
- * @param game 
+ * @param event event struct
+ * @param game game struct
  * @return true 
  * @return false 
  */
@@ -23,11 +23,10 @@ bool event_trigger_none(Event *event, Game *game);
 /**
  * @brief Action for Object on Space, it ends the game if the object is in certain space
  *      aux data info: ...|objectId:spaceId
- *  
  * @author Daniel Gómez
  * 
- * @param event 
- * @param game 
+ * @param event event struct
+ * @param game game struct
  * @return true 
  * @return false 
  */
@@ -38,8 +37,8 @@ bool event_trigger_object_on_space(Event *event, Game *game);
  *      aux data info: ...|probability
  * @author Daniel Gómez
  * 
- * @param event 
- * @param game 
+ * @param event event struct
+ * @param game game struct
  * @return true 
  * @return false 
  */
@@ -49,8 +48,8 @@ bool event_trigger_combat(Event *event, Game *game);
  * @brief Triggers end of game if player is dead
  * @author Daniel Gómez
  * 
- * @param event 
- * @param game 
+ * @param event event struct
+ * @param game game struct
  * @return true 
  * @return false 
  */
@@ -60,7 +59,7 @@ bool event_trigger_player_death(Event *event, Game *game);
  * @brief 
  * @author Daniel Gómez
  * 
- * @param game 
+ * @param game game struct
  * @return true 
  * @return false 
  */

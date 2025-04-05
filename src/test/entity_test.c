@@ -1,4 +1,4 @@
-#include "../entity.h"
+#include "../../include/entity.h"
 #include "entity_test.h"
 #include "test.h"
 

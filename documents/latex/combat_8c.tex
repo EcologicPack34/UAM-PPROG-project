@@ -1,0 +1,658 @@
+\doxysection{src/combat.c File Reference}
+\hypertarget{combat_8c}{}\label{combat_8c}\index{src/combat.c@{src/combat.c}}
+
+
+This module implements all the functionality from \doxylink{combat_8h}{combat.\+h}.  
+
+
+{\ttfamily \#include "{}combat.\+h"{}}\newline
+{\ttfamily \#include $<$stdio.\+h$>$}\newline
+{\ttfamily \#include $<$stdlib.\+h$>$}\newline
+Include dependency graph for combat.\+c\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{combat_8c__incl}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{struct__Combat}{\+\_\+\+Combat}}
+\begin{DoxyCompactList}\small\item\em Internal struct that holds all the information related to the combat. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{combat_8c_a13a1b5a7a3dc489d0a640407ea45c1ae}{MAX\+\_\+\+LVL}}~999999
+\item 
+\#define \mbox{\hyperlink{combat_8c_a03a1cff222eb805ce2cca3f1b0ce3512}{LIGHT\+\_\+\+ATTACK}}~1
+\item 
+\#define \mbox{\hyperlink{combat_8c_acdf4a08a74fc6451b5bfb743716dde5f}{HEAVY\+\_\+\+ATTACK}}~1.\+5
+\item 
+\#define \mbox{\hyperlink{combat_8c_a4e1a408097f74b2cf42c6573282a12ac}{QUICK\+\_\+\+ATTACK}}~0.\+8
+\item 
+\#define \mbox{\hyperlink{combat_8c_ac57db7072ee3dad9c91f16f4fe084977}{SWIFT\+\_\+\+ATTACK}}~0.\+8
+\item 
+\#define \mbox{\hyperlink{combat_8c_a0c7bd4790a4e4d7d3bb46884620a07cc}{MAX\+\_\+\+ATTACKS}}~4
+\item 
+\#define \mbox{\hyperlink{combat_8c_a2bab1895d13396b72ba61add6372bf75}{LIGHT\+\_\+\+PROB}}~90
+\item 
+\#define \mbox{\hyperlink{combat_8c_aeca1d072bfa106081993a9b838ac1281}{HEAVY\+\_\+\+PROB}}~70
+\item 
+\#define \mbox{\hyperlink{combat_8c_a791e4eab68505d569c205ba2a61fd62b}{QUICK\+\_\+\+PROB}}~40
+\item 
+\#define \mbox{\hyperlink{combat_8c_a3cdc3e4d371c65f862888cfdd48cb205}{SWIFT\+\_\+\+PROB}}~40
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} \mbox{\hyperlink{combat_8c_a62d11ec42ad6e204b1e99794f969dc91}{combat\+\_\+copy\+\_\+entity\+\_\+stats}} (\mbox{\hyperlink{entity_8h_a88bccc76704ed1a036c3500da8c42bcc}{Entity}} \texorpdfstring{$\ast$}{*}entity, \mbox{\hyperlink{structStats}{Stats}} \texorpdfstring{$\ast$}{*}stats)
+\begin{DoxyCompactList}\small\item\em Copies the entity stats to a new stats struct for the combat. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{combat_8c_a34f21d2c3060ab3f8129ec3a28cce5bf}{combat\+\_\+finalize}} (\mbox{\hyperlink{combat_8h_a16d01d005bb588acbeb473c88e3ee0c6}{Combat}} \texorpdfstring{$\ast$}{*}combat)
+\begin{DoxyCompactList}\small\item\em Saves the health of each NPC and player in the combat and sets the combat bool end\+Combat to true. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} \mbox{\hyperlink{combat_8c_a470ba30a382e7aa7d8cf69e0837dbfb0}{combat\+\_\+entity\+\_\+received\+\_\+damage}} (\mbox{\hyperlink{structStats}{Stats}} \texorpdfstring{$\ast$}{*}stats, double damage)
+\begin{DoxyCompactList}\small\item\em Applies the received damage to the npc. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} \mbox{\hyperlink{combat_8c_aa42e67db23492f267286e3785f9145f4}{combat\+\_\+attack\+\_\+swift}} (\mbox{\hyperlink{structStats}{Stats}} \texorpdfstring{$\ast$}{*}attacker, \mbox{\hyperlink{structStats}{Stats}} \texorpdfstring{$\ast$}{*}victims, int num\+Victims)
+\begin{DoxyCompactList}\small\item\em Tries to make a swift(area) attack from the attacker to the victims. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} \mbox{\hyperlink{combat_8c_a8d1394130d8ebb2da119c2c1780cd1e3}{combat\+\_\+attack\+\_\+quick}} (\mbox{\hyperlink{structStats}{Stats}} \texorpdfstring{$\ast$}{*}attacker, \mbox{\hyperlink{structStats}{Stats}} \texorpdfstring{$\ast$}{*}victim)
+\begin{DoxyCompactList}\small\item\em Tries to make a quick attack from the attacker to the victim. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} \mbox{\hyperlink{combat_8c_a80f36e7a64e7e059fc5bbf108e535e66}{combat\+\_\+attack\+\_\+strong}} (\mbox{\hyperlink{structStats}{Stats}} \texorpdfstring{$\ast$}{*}attacker, \mbox{\hyperlink{structStats}{Stats}} \texorpdfstring{$\ast$}{*}victim)
+\begin{DoxyCompactList}\small\item\em Tries to make a strong attack from the attacker to the victim. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} \mbox{\hyperlink{combat_8c_af5ca6b5b4e332c5ff05f2828096db0f2}{combat\+\_\+attack\+\_\+light}} (\mbox{\hyperlink{structStats}{Stats}} \texorpdfstring{$\ast$}{*}attacker, \mbox{\hyperlink{structStats}{Stats}} \texorpdfstring{$\ast$}{*}victim)
+\begin{DoxyCompactList}\small\item\em Tries to make a light attack from the attacker to the victim. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} \mbox{\hyperlink{combat_8c_a4cb2a7f092afbace9301b0ee55c08167}{combat\+\_\+enemies\+\_\+turn}} (\mbox{\hyperlink{combat_8h_a16d01d005bb588acbeb473c88e3ee0c6}{Combat}} \texorpdfstring{$\ast$}{*}cmb)
+\begin{DoxyCompactList}\small\item\em Manages enemies turn with random attacks to random allies. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} \mbox{\hyperlink{combat_8c_a5a707a034eec5541832425ed96855969}{combat\+\_\+allies\+\_\+turn}} (\mbox{\hyperlink{combat_8h_a16d01d005bb588acbeb473c88e3ee0c6}{Combat}} \texorpdfstring{$\ast$}{*}cmb)
+\begin{DoxyCompactList}\small\item\em Manages allies turn with random attacks to random enemies. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} \mbox{\hyperlink{combat_8c_aa029d9467f0a6beafb1e2af1586fbac9}{combat\+\_\+update\+\_\+attack}} (\mbox{\hyperlink{combat_8h_a16d01d005bb588acbeb473c88e3ee0c6}{Combat}} \texorpdfstring{$\ast$}{*}cmb, \mbox{\hyperlink{command_8h_a7d2935971c252377cb0fc1c8545dc2bc}{Command}} \texorpdfstring{$\ast$}{*}last\+\_\+cmd)
+\begin{DoxyCompactList}\small\item\em Sub function of combat\+\_\+update that manages player attack type and allies/enemies turn. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{combat_8h_a16d01d005bb588acbeb473c88e3ee0c6}{Combat}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{combat_8c_a4b6eb730cd8dbf245b711954d05a5a9f}{combat\+\_\+initialize}} (\mbox{\hyperlink{space_8h_a67533ffc2b70463baecc38fb0629bbfc}{Space}} \texorpdfstring{$\ast$}{*}space, \mbox{\hyperlink{struct__Player}{Player}} \texorpdfstring{$\ast$}{*}player, \mbox{\hyperlink{command_8h_a805cf38fd2b6d5604bf1f1036b80fde2}{Command\+Code}} code)
+\begin{DoxyCompactList}\small\item\em Initializes the combat struct. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{combat_8c_a9f879178e2d2f83d7835633c5654ae0c}{combat\+\_\+free}} (\mbox{\hyperlink{combat_8h_a16d01d005bb588acbeb473c88e3ee0c6}{Combat}} \texorpdfstring{$\ast$}{*}combat)
+\begin{DoxyCompactList}\small\item\em Ends the combat and frees all the memory related to it. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{combat_8c_ab2e3bded4bc33528e39ec99d14f9729e}{combat\+\_\+get\+\_\+is\+Finished}} (\mbox{\hyperlink{combat_8h_a16d01d005bb588acbeb473c88e3ee0c6}{Combat}} \texorpdfstring{$\ast$}{*}combat)
+\begin{DoxyCompactList}\small\item\em Gets the bool with the information of the combat end. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} \mbox{\hyperlink{combat_8c_af440fdeeefcc37abdcd78719e71a7365}{combat\+\_\+update}} (\mbox{\hyperlink{combat_8h_a16d01d005bb588acbeb473c88e3ee0c6}{Combat}} \texorpdfstring{$\ast$}{*}combat, \mbox{\hyperlink{command_8h_a7d2935971c252377cb0fc1c8545dc2bc}{Command}} \texorpdfstring{$\ast$}{*}last\+\_\+cmd)
+\begin{DoxyCompactList}\small\item\em Updates the combat turns. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} \mbox{\hyperlink{combat_8c_a9b27f144c1e999990d7d764b3f4b6582}{combat\+\_\+runaway}} (\mbox{\hyperlink{combat_8h_a16d01d005bb588acbeb473c88e3ee0c6}{Combat}} \texorpdfstring{$\ast$}{*}combat)
+\begin{DoxyCompactList}\small\item\em Finalizes the combat and returns the game state to DEFAULT. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{combat_8c_ac28a735cbd940e58ef51b092784ce5ac}{combat\+\_\+get\+\_\+enemies\+\_\+count}} (\mbox{\hyperlink{combat_8h_a16d01d005bb588acbeb473c88e3ee0c6}{Combat}} \texorpdfstring{$\ast$}{*}combat)
+\begin{DoxyCompactList}\small\item\em Gets the number of enemies on the combat. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{combat_8c_ac353dfa3a933f69c013933656b2b6e7f}{combat\+\_\+get\+\_\+allies\+\_\+count}} (\mbox{\hyperlink{combat_8h_a16d01d005bb588acbeb473c88e3ee0c6}{Combat}} \texorpdfstring{$\ast$}{*}combat)
+\begin{DoxyCompactList}\small\item\em Gets the number of allies on the combat -\/ NON IMPLEMENTED THE FUNCTIONALITY. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structStats}{Stats}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{combat_8c_a940bf09ac15a228154bca423b593a710}{combat\+\_\+get\+\_\+enemies\+\_\+stats\+\_\+at}} (\mbox{\hyperlink{combat_8h_a16d01d005bb588acbeb473c88e3ee0c6}{Combat}} \texorpdfstring{$\ast$}{*}combat, int index)
+\begin{DoxyCompactList}\small\item\em Gets the stats pointer of an enemy at the index. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structStats}{Stats}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{combat_8c_ae6e3f5c9988a4411305df9fb654343a9}{combat\+\_\+get\+\_\+allies\+\_\+stats\+\_\+at}} (\mbox{\hyperlink{combat_8h_a16d01d005bb588acbeb473c88e3ee0c6}{Combat}} \texorpdfstring{$\ast$}{*}combat, int index)
+\begin{DoxyCompactList}\small\item\em Gets the stats pointer of an ally at the index. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structStats}{Stats}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{combat_8c_a1aa42aa8c874d502ed4f292b982bf181}{combat\+\_\+get\+\_\+enemies\+\_\+stats}} (\mbox{\hyperlink{combat_8h_a16d01d005bb588acbeb473c88e3ee0c6}{Combat}} \texorpdfstring{$\ast$}{*}combat)
+\begin{DoxyCompactList}\small\item\em Gets the stats pointer of all the enemies. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structStats}{Stats}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{combat_8c_a9fd2cf342da33fecfe9f4b28ef920ae3}{combat\+\_\+get\+\_\+allies\+\_\+stats}} (\mbox{\hyperlink{combat_8h_a16d01d005bb588acbeb473c88e3ee0c6}{Combat}} \texorpdfstring{$\ast$}{*}combat)
+\begin{DoxyCompactList}\small\item\em Gets the stats pointer of all the allies. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structStats}{Stats}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{combat_8c_aeba682f5986824bf2b0787d7c8388938}{combat\+\_\+get\+\_\+player\+\_\+stats}} (\mbox{\hyperlink{combat_8h_a16d01d005bb588acbeb473c88e3ee0c6}{Combat}} \texorpdfstring{$\ast$}{*}combat)
+\begin{DoxyCompactList}\small\item\em Gets the player stats. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+This module implements all the functionality from \doxylink{combat_8h}{combat.\+h}. 
+
+\begin{DoxyAuthor}{Author}
+Maksym Polyak 
+\end{DoxyAuthor}
+\begin{DoxyVersion}{Version}
+0.\+1 
+\end{DoxyVersion}
+\begin{DoxyDate}{Date}
+2025-\/03-\/07
+\end{DoxyDate}
+\begin{DoxyCopyright}{Copyright}
+Copyright (c) 2025 
+\end{DoxyCopyright}
+
+
+\doxysubsection{Macro Definition Documentation}
+\Hypertarget{combat_8c_acdf4a08a74fc6451b5bfb743716dde5f}\label{combat_8c_acdf4a08a74fc6451b5bfb743716dde5f} 
+\index{combat.c@{combat.c}!HEAVY\_ATTACK@{HEAVY\_ATTACK}}
+\index{HEAVY\_ATTACK@{HEAVY\_ATTACK}!combat.c@{combat.c}}
+\doxysubsubsection{\texorpdfstring{HEAVY\_ATTACK}{HEAVY\_ATTACK}}
+{\footnotesize\ttfamily \#define HEAVY\+\_\+\+ATTACK~1.\+5}
+
+heavy attack damage multiplier \Hypertarget{combat_8c_aeca1d072bfa106081993a9b838ac1281}\label{combat_8c_aeca1d072bfa106081993a9b838ac1281} 
+\index{combat.c@{combat.c}!HEAVY\_PROB@{HEAVY\_PROB}}
+\index{HEAVY\_PROB@{HEAVY\_PROB}!combat.c@{combat.c}}
+\doxysubsubsection{\texorpdfstring{HEAVY\_PROB}{HEAVY\_PROB}}
+{\footnotesize\ttfamily \#define HEAVY\+\_\+\+PROB~70}
+
+Probability for a heavy attack to be succesful \Hypertarget{combat_8c_a03a1cff222eb805ce2cca3f1b0ce3512}\label{combat_8c_a03a1cff222eb805ce2cca3f1b0ce3512} 
+\index{combat.c@{combat.c}!LIGHT\_ATTACK@{LIGHT\_ATTACK}}
+\index{LIGHT\_ATTACK@{LIGHT\_ATTACK}!combat.c@{combat.c}}
+\doxysubsubsection{\texorpdfstring{LIGHT\_ATTACK}{LIGHT\_ATTACK}}
+{\footnotesize\ttfamily \#define LIGHT\+\_\+\+ATTACK~1}
+
+Light attack damage multiplier \Hypertarget{combat_8c_a2bab1895d13396b72ba61add6372bf75}\label{combat_8c_a2bab1895d13396b72ba61add6372bf75} 
+\index{combat.c@{combat.c}!LIGHT\_PROB@{LIGHT\_PROB}}
+\index{LIGHT\_PROB@{LIGHT\_PROB}!combat.c@{combat.c}}
+\doxysubsubsection{\texorpdfstring{LIGHT\_PROB}{LIGHT\_PROB}}
+{\footnotesize\ttfamily \#define LIGHT\+\_\+\+PROB~90}
+
+Probability for a light attack to be succesful \Hypertarget{combat_8c_a0c7bd4790a4e4d7d3bb46884620a07cc}\label{combat_8c_a0c7bd4790a4e4d7d3bb46884620a07cc} 
+\index{combat.c@{combat.c}!MAX\_ATTACKS@{MAX\_ATTACKS}}
+\index{MAX\_ATTACKS@{MAX\_ATTACKS}!combat.c@{combat.c}}
+\doxysubsubsection{\texorpdfstring{MAX\_ATTACKS}{MAX\_ATTACKS}}
+{\footnotesize\ttfamily \#define MAX\+\_\+\+ATTACKS~4}
+
+Number of attack types that exist \Hypertarget{combat_8c_a13a1b5a7a3dc489d0a640407ea45c1ae}\label{combat_8c_a13a1b5a7a3dc489d0a640407ea45c1ae} 
+\index{combat.c@{combat.c}!MAX\_LVL@{MAX\_LVL}}
+\index{MAX\_LVL@{MAX\_LVL}!combat.c@{combat.c}}
+\doxysubsubsection{\texorpdfstring{MAX\_LVL}{MAX\_LVL}}
+{\footnotesize\ttfamily \#define MAX\+\_\+\+LVL~999999}
+
+Maximum level the stats should take \Hypertarget{combat_8c_a4e1a408097f74b2cf42c6573282a12ac}\label{combat_8c_a4e1a408097f74b2cf42c6573282a12ac} 
+\index{combat.c@{combat.c}!QUICK\_ATTACK@{QUICK\_ATTACK}}
+\index{QUICK\_ATTACK@{QUICK\_ATTACK}!combat.c@{combat.c}}
+\doxysubsubsection{\texorpdfstring{QUICK\_ATTACK}{QUICK\_ATTACK}}
+{\footnotesize\ttfamily \#define QUICK\+\_\+\+ATTACK~0.\+8}
+
+quick attack damage multiplier \Hypertarget{combat_8c_a791e4eab68505d569c205ba2a61fd62b}\label{combat_8c_a791e4eab68505d569c205ba2a61fd62b} 
+\index{combat.c@{combat.c}!QUICK\_PROB@{QUICK\_PROB}}
+\index{QUICK\_PROB@{QUICK\_PROB}!combat.c@{combat.c}}
+\doxysubsubsection{\texorpdfstring{QUICK\_PROB}{QUICK\_PROB}}
+{\footnotesize\ttfamily \#define QUICK\+\_\+\+PROB~40}
+
+Probability for a quick attack to be succesful \Hypertarget{combat_8c_ac57db7072ee3dad9c91f16f4fe084977}\label{combat_8c_ac57db7072ee3dad9c91f16f4fe084977} 
+\index{combat.c@{combat.c}!SWIFT\_ATTACK@{SWIFT\_ATTACK}}
+\index{SWIFT\_ATTACK@{SWIFT\_ATTACK}!combat.c@{combat.c}}
+\doxysubsubsection{\texorpdfstring{SWIFT\_ATTACK}{SWIFT\_ATTACK}}
+{\footnotesize\ttfamily \#define SWIFT\+\_\+\+ATTACK~0.\+8}
+
+swift attack damage multiplier \Hypertarget{combat_8c_a3cdc3e4d371c65f862888cfdd48cb205}\label{combat_8c_a3cdc3e4d371c65f862888cfdd48cb205} 
+\index{combat.c@{combat.c}!SWIFT\_PROB@{SWIFT\_PROB}}
+\index{SWIFT\_PROB@{SWIFT\_PROB}!combat.c@{combat.c}}
+\doxysubsubsection{\texorpdfstring{SWIFT\_PROB}{SWIFT\_PROB}}
+{\footnotesize\ttfamily \#define SWIFT\+\_\+\+PROB~40}
+
+Probability for a swift attack to be succesful 
+
+\doxysubsection{Function Documentation}
+\Hypertarget{combat_8c_a5a707a034eec5541832425ed96855969}\label{combat_8c_a5a707a034eec5541832425ed96855969} 
+\index{combat.c@{combat.c}!combat\_allies\_turn@{combat\_allies\_turn}}
+\index{combat\_allies\_turn@{combat\_allies\_turn}!combat.c@{combat.c}}
+\doxysubsubsection{\texorpdfstring{combat\_allies\_turn()}{combat\_allies\_turn()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} combat\+\_\+allies\+\_\+turn (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{combat_8h_a16d01d005bb588acbeb473c88e3ee0c6}{Combat}} \texorpdfstring{$\ast$}{*}}]{cmb }\end{DoxyParamCaption})}
+
+
+
+Manages allies turn with random attacks to random enemies. 
+
+\begin{DoxyAuthor}{Author}
+Sofía Calvo
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em cmb} & combat struct \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Status 
+\end{DoxyReturn}
+\Hypertarget{combat_8c_af5ca6b5b4e332c5ff05f2828096db0f2}\label{combat_8c_af5ca6b5b4e332c5ff05f2828096db0f2} 
+\index{combat.c@{combat.c}!combat\_attack\_light@{combat\_attack\_light}}
+\index{combat\_attack\_light@{combat\_attack\_light}!combat.c@{combat.c}}
+\doxysubsubsection{\texorpdfstring{combat\_attack\_light()}{combat\_attack\_light()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} combat\+\_\+attack\+\_\+light (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structStats}{Stats}} \texorpdfstring{$\ast$}{*}}]{attacker,  }\item[{\mbox{\hyperlink{structStats}{Stats}} \texorpdfstring{$\ast$}{*}}]{victim }\end{DoxyParamCaption})}
+
+
+
+Tries to make a light attack from the attacker to the victim. 
+
+\begin{DoxyAuthor}{Author}
+Sofía Calvo
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em attacker} & stats of the attacker \\
+\hline
+{\em victim} & stats of the victim \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Status 
+\end{DoxyReturn}
+\Hypertarget{combat_8c_a8d1394130d8ebb2da119c2c1780cd1e3}\label{combat_8c_a8d1394130d8ebb2da119c2c1780cd1e3} 
+\index{combat.c@{combat.c}!combat\_attack\_quick@{combat\_attack\_quick}}
+\index{combat\_attack\_quick@{combat\_attack\_quick}!combat.c@{combat.c}}
+\doxysubsubsection{\texorpdfstring{combat\_attack\_quick()}{combat\_attack\_quick()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} combat\+\_\+attack\+\_\+quick (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structStats}{Stats}} \texorpdfstring{$\ast$}{*}}]{attacker,  }\item[{\mbox{\hyperlink{structStats}{Stats}} \texorpdfstring{$\ast$}{*}}]{victim }\end{DoxyParamCaption})}
+
+
+
+Tries to make a quick attack from the attacker to the victim. 
+
+\begin{DoxyAuthor}{Author}
+Sofía Calvo
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em attacker} & stats of the attacker \\
+\hline
+{\em victim} & stats of the victim \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Status 
+\end{DoxyReturn}
+\Hypertarget{combat_8c_a80f36e7a64e7e059fc5bbf108e535e66}\label{combat_8c_a80f36e7a64e7e059fc5bbf108e535e66} 
+\index{combat.c@{combat.c}!combat\_attack\_strong@{combat\_attack\_strong}}
+\index{combat\_attack\_strong@{combat\_attack\_strong}!combat.c@{combat.c}}
+\doxysubsubsection{\texorpdfstring{combat\_attack\_strong()}{combat\_attack\_strong()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} combat\+\_\+attack\+\_\+strong (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structStats}{Stats}} \texorpdfstring{$\ast$}{*}}]{attacker,  }\item[{\mbox{\hyperlink{structStats}{Stats}} \texorpdfstring{$\ast$}{*}}]{victim }\end{DoxyParamCaption})}
+
+
+
+Tries to make a strong attack from the attacker to the victim. 
+
+\begin{DoxyAuthor}{Author}
+Sofía Calvo
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em attacker} & stats of the attacker \\
+\hline
+{\em victim} & stats of the victim \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Status 
+\end{DoxyReturn}
+\Hypertarget{combat_8c_aa42e67db23492f267286e3785f9145f4}\label{combat_8c_aa42e67db23492f267286e3785f9145f4} 
+\index{combat.c@{combat.c}!combat\_attack\_swift@{combat\_attack\_swift}}
+\index{combat\_attack\_swift@{combat\_attack\_swift}!combat.c@{combat.c}}
+\doxysubsubsection{\texorpdfstring{combat\_attack\_swift()}{combat\_attack\_swift()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} combat\+\_\+attack\+\_\+swift (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structStats}{Stats}} \texorpdfstring{$\ast$}{*}}]{attacker,  }\item[{\mbox{\hyperlink{structStats}{Stats}} \texorpdfstring{$\ast$}{*}}]{victims,  }\item[{int}]{num\+Victims }\end{DoxyParamCaption})}
+
+
+
+Tries to make a swift(area) attack from the attacker to the victims. 
+
+\begin{DoxyAuthor}{Author}
+Sofía Calvo
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em attacker} & stats of the attacker \\
+\hline
+{\em victims} & stats of victims \\
+\hline
+{\em num\+Victims} & number of victims \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Status 
+\end{DoxyReturn}
+\Hypertarget{combat_8c_a62d11ec42ad6e204b1e99794f969dc91}\label{combat_8c_a62d11ec42ad6e204b1e99794f969dc91} 
+\index{combat.c@{combat.c}!combat\_copy\_entity\_stats@{combat\_copy\_entity\_stats}}
+\index{combat\_copy\_entity\_stats@{combat\_copy\_entity\_stats}!combat.c@{combat.c}}
+\doxysubsubsection{\texorpdfstring{combat\_copy\_entity\_stats()}{combat\_copy\_entity\_stats()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} combat\+\_\+copy\+\_\+entity\+\_\+stats (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{entity_8h_a88bccc76704ed1a036c3500da8c42bcc}{Entity}} \texorpdfstring{$\ast$}{*}}]{entity,  }\item[{\mbox{\hyperlink{structStats}{Stats}} \texorpdfstring{$\ast$}{*}}]{stats }\end{DoxyParamCaption})}
+
+
+
+Copies the entity stats to a new stats struct for the combat. 
+
+\begin{DoxyAuthor}{Author}
+Maksym Polyak
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em entity} & entity where the stats are copied \\
+\hline
+{\em stats} & stats where the stats are saved \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Status 
+\end{DoxyReturn}
+\Hypertarget{combat_8c_a4cb2a7f092afbace9301b0ee55c08167}\label{combat_8c_a4cb2a7f092afbace9301b0ee55c08167} 
+\index{combat.c@{combat.c}!combat\_enemies\_turn@{combat\_enemies\_turn}}
+\index{combat\_enemies\_turn@{combat\_enemies\_turn}!combat.c@{combat.c}}
+\doxysubsubsection{\texorpdfstring{combat\_enemies\_turn()}{combat\_enemies\_turn()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} combat\+\_\+enemies\+\_\+turn (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{combat_8h_a16d01d005bb588acbeb473c88e3ee0c6}{Combat}} \texorpdfstring{$\ast$}{*}}]{cmb }\end{DoxyParamCaption})}
+
+
+
+Manages enemies turn with random attacks to random allies. 
+
+\begin{DoxyAuthor}{Author}
+Sofía Calvo
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em cmb} & combat struct \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Status 
+\end{DoxyReturn}
+\Hypertarget{combat_8c_a470ba30a382e7aa7d8cf69e0837dbfb0}\label{combat_8c_a470ba30a382e7aa7d8cf69e0837dbfb0} 
+\index{combat.c@{combat.c}!combat\_entity\_received\_damage@{combat\_entity\_received\_damage}}
+\index{combat\_entity\_received\_damage@{combat\_entity\_received\_damage}!combat.c@{combat.c}}
+\doxysubsubsection{\texorpdfstring{combat\_entity\_received\_damage()}{combat\_entity\_received\_damage()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} combat\+\_\+entity\+\_\+received\+\_\+damage (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structStats}{Stats}} \texorpdfstring{$\ast$}{*}}]{stats,  }\item[{double}]{damage }\end{DoxyParamCaption})}
+
+
+
+Applies the received damage to the npc. 
+
+\begin{DoxyAuthor}{Author}
+Maksym Polyak
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em stats} & stats of the entity that received damage \\
+\hline
+{\em damage} & value of damage received \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Status 
+\end{DoxyReturn}
+\Hypertarget{combat_8c_a34f21d2c3060ab3f8129ec3a28cce5bf}\label{combat_8c_a34f21d2c3060ab3f8129ec3a28cce5bf} 
+\index{combat.c@{combat.c}!combat\_finalize@{combat\_finalize}}
+\index{combat\_finalize@{combat\_finalize}!combat.c@{combat.c}}
+\doxysubsubsection{\texorpdfstring{combat\_finalize()}{combat\_finalize()}}
+{\footnotesize\ttfamily void combat\+\_\+finalize (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{combat_8h_a16d01d005bb588acbeb473c88e3ee0c6}{Combat}} \texorpdfstring{$\ast$}{*}}]{combat }\end{DoxyParamCaption})}
+
+
+
+Saves the health of each NPC and player in the combat and sets the combat bool end\+Combat to true. 
+
+\begin{DoxyAuthor}{Author}
+Daniel Gómez
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em combat} & combat struct \\
+\hline
+\end{DoxyParams}
+\Hypertarget{combat_8c_a9f879178e2d2f83d7835633c5654ae0c}\label{combat_8c_a9f879178e2d2f83d7835633c5654ae0c} 
+\index{combat.c@{combat.c}!combat\_free@{combat\_free}}
+\index{combat\_free@{combat\_free}!combat.c@{combat.c}}
+\doxysubsubsection{\texorpdfstring{combat\_free()}{combat\_free()}}
+{\footnotesize\ttfamily void combat\+\_\+free (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{combat_8h_a16d01d005bb588acbeb473c88e3ee0c6}{Combat}} \texorpdfstring{$\ast$}{*}}]{combat }\end{DoxyParamCaption})}
+
+
+
+Ends the combat and frees all the memory related to it. 
+
+\begin{DoxyAuthor}{Author}
+Maksym Polyak
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em combat} & combat struct to free \\
+\hline
+\end{DoxyParams}
+\Hypertarget{combat_8c_ac353dfa3a933f69c013933656b2b6e7f}\label{combat_8c_ac353dfa3a933f69c013933656b2b6e7f} 
+\index{combat.c@{combat.c}!combat\_get\_allies\_count@{combat\_get\_allies\_count}}
+\index{combat\_get\_allies\_count@{combat\_get\_allies\_count}!combat.c@{combat.c}}
+\doxysubsubsection{\texorpdfstring{combat\_get\_allies\_count()}{combat\_get\_allies\_count()}}
+{\footnotesize\ttfamily int combat\+\_\+get\+\_\+allies\+\_\+count (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{combat_8h_a16d01d005bb588acbeb473c88e3ee0c6}{Combat}} \texorpdfstring{$\ast$}{*}}]{combat }\end{DoxyParamCaption})}
+
+
+
+Gets the number of allies on the combat -\/ NON IMPLEMENTED THE FUNCTIONALITY. 
+
+\begin{DoxyAuthor}{Author}
+Maksym Polyak \&\& Daniel Gómez
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em combat} & combat struct \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int or 0 if error; 
+\end{DoxyReturn}
+\Hypertarget{combat_8c_a9fd2cf342da33fecfe9f4b28ef920ae3}\label{combat_8c_a9fd2cf342da33fecfe9f4b28ef920ae3} 
+\index{combat.c@{combat.c}!combat\_get\_allies\_stats@{combat\_get\_allies\_stats}}
+\index{combat\_get\_allies\_stats@{combat\_get\_allies\_stats}!combat.c@{combat.c}}
+\doxysubsubsection{\texorpdfstring{combat\_get\_allies\_stats()}{combat\_get\_allies\_stats()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structStats}{Stats}} \texorpdfstring{$\ast$}{*} combat\+\_\+get\+\_\+allies\+\_\+stats (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{combat_8h_a16d01d005bb588acbeb473c88e3ee0c6}{Combat}} \texorpdfstring{$\ast$}{*}}]{combat }\end{DoxyParamCaption})}
+
+
+
+Gets the stats pointer of all the allies. 
+
+\begin{DoxyAuthor}{Author}
+Maksym Polyak
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em combat} & combat struct \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Stats\texorpdfstring{$\ast$}{*} or NULL if error 
+\end{DoxyReturn}
+\Hypertarget{combat_8c_ae6e3f5c9988a4411305df9fb654343a9}\label{combat_8c_ae6e3f5c9988a4411305df9fb654343a9} 
+\index{combat.c@{combat.c}!combat\_get\_allies\_stats\_at@{combat\_get\_allies\_stats\_at}}
+\index{combat\_get\_allies\_stats\_at@{combat\_get\_allies\_stats\_at}!combat.c@{combat.c}}
+\doxysubsubsection{\texorpdfstring{combat\_get\_allies\_stats\_at()}{combat\_get\_allies\_stats\_at()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structStats}{Stats}} \texorpdfstring{$\ast$}{*} combat\+\_\+get\+\_\+allies\+\_\+stats\+\_\+at (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{combat_8h_a16d01d005bb588acbeb473c88e3ee0c6}{Combat}} \texorpdfstring{$\ast$}{*}}]{combat,  }\item[{int}]{index }\end{DoxyParamCaption})}
+
+
+
+Gets the stats pointer of an ally at the index. 
+
+\begin{DoxyAuthor}{Author}
+Maksym Polyak \&\& Daniel Gómez
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em combat} & combat struct \\
+\hline
+{\em index} & index of the ally \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int or 0 if error; 
+\end{DoxyReturn}
+\Hypertarget{combat_8c_ac28a735cbd940e58ef51b092784ce5ac}\label{combat_8c_ac28a735cbd940e58ef51b092784ce5ac} 
+\index{combat.c@{combat.c}!combat\_get\_enemies\_count@{combat\_get\_enemies\_count}}
+\index{combat\_get\_enemies\_count@{combat\_get\_enemies\_count}!combat.c@{combat.c}}
+\doxysubsubsection{\texorpdfstring{combat\_get\_enemies\_count()}{combat\_get\_enemies\_count()}}
+{\footnotesize\ttfamily int combat\+\_\+get\+\_\+enemies\+\_\+count (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{combat_8h_a16d01d005bb588acbeb473c88e3ee0c6}{Combat}} \texorpdfstring{$\ast$}{*}}]{combat }\end{DoxyParamCaption})}
+
+
+
+Gets the number of enemies on the combat. 
+
+\begin{DoxyAuthor}{Author}
+Maksym Polyak \&\& Daniel Gómez
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em combat} & combat struct \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int or 0 if error; 
+\end{DoxyReturn}
+\Hypertarget{combat_8c_a1aa42aa8c874d502ed4f292b982bf181}\label{combat_8c_a1aa42aa8c874d502ed4f292b982bf181} 
+\index{combat.c@{combat.c}!combat\_get\_enemies\_stats@{combat\_get\_enemies\_stats}}
+\index{combat\_get\_enemies\_stats@{combat\_get\_enemies\_stats}!combat.c@{combat.c}}
+\doxysubsubsection{\texorpdfstring{combat\_get\_enemies\_stats()}{combat\_get\_enemies\_stats()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structStats}{Stats}} \texorpdfstring{$\ast$}{*} combat\+\_\+get\+\_\+enemies\+\_\+stats (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{combat_8h_a16d01d005bb588acbeb473c88e3ee0c6}{Combat}} \texorpdfstring{$\ast$}{*}}]{combat }\end{DoxyParamCaption})}
+
+
+
+Gets the stats pointer of all the enemies. 
+
+\begin{DoxyAuthor}{Author}
+Maksym Polyak
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em combat} & combat struct \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Stats\texorpdfstring{$\ast$}{*} or NULL if error 
+\end{DoxyReturn}
+\Hypertarget{combat_8c_a940bf09ac15a228154bca423b593a710}\label{combat_8c_a940bf09ac15a228154bca423b593a710} 
+\index{combat.c@{combat.c}!combat\_get\_enemies\_stats\_at@{combat\_get\_enemies\_stats\_at}}
+\index{combat\_get\_enemies\_stats\_at@{combat\_get\_enemies\_stats\_at}!combat.c@{combat.c}}
+\doxysubsubsection{\texorpdfstring{combat\_get\_enemies\_stats\_at()}{combat\_get\_enemies\_stats\_at()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structStats}{Stats}} \texorpdfstring{$\ast$}{*} combat\+\_\+get\+\_\+enemies\+\_\+stats\+\_\+at (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{combat_8h_a16d01d005bb588acbeb473c88e3ee0c6}{Combat}} \texorpdfstring{$\ast$}{*}}]{combat,  }\item[{int}]{index }\end{DoxyParamCaption})}
+
+
+
+Gets the stats pointer of an enemy at the index. 
+
+\begin{DoxyAuthor}{Author}
+Maksym Polyak \&\& Daniel Gómez
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em combat} & combat struct \\
+\hline
+{\em index} & index of the enemy \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int or 0 if error; 
+\end{DoxyReturn}
+\Hypertarget{combat_8c_ab2e3bded4bc33528e39ec99d14f9729e}\label{combat_8c_ab2e3bded4bc33528e39ec99d14f9729e} 
+\index{combat.c@{combat.c}!combat\_get\_isFinished@{combat\_get\_isFinished}}
+\index{combat\_get\_isFinished@{combat\_get\_isFinished}!combat.c@{combat.c}}
+\doxysubsubsection{\texorpdfstring{combat\_get\_isFinished()}{combat\_get\_isFinished()}}
+{\footnotesize\ttfamily bool combat\+\_\+get\+\_\+is\+Finished (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{combat_8h_a16d01d005bb588acbeb473c88e3ee0c6}{Combat}} \texorpdfstring{$\ast$}{*}}]{combat }\end{DoxyParamCaption})}
+
+
+
+Gets the bool with the information of the combat end. 
+
+\begin{DoxyAuthor}{Author}
+Maksym Polyak \&\& Daniel Gómez
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em combat} & combat struct \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int or 0 if error; 
+\end{DoxyReturn}
+\Hypertarget{combat_8c_aeba682f5986824bf2b0787d7c8388938}\label{combat_8c_aeba682f5986824bf2b0787d7c8388938} 
+\index{combat.c@{combat.c}!combat\_get\_player\_stats@{combat\_get\_player\_stats}}
+\index{combat\_get\_player\_stats@{combat\_get\_player\_stats}!combat.c@{combat.c}}
+\doxysubsubsection{\texorpdfstring{combat\_get\_player\_stats()}{combat\_get\_player\_stats()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structStats}{Stats}} \texorpdfstring{$\ast$}{*} combat\+\_\+get\+\_\+player\+\_\+stats (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{combat_8h_a16d01d005bb588acbeb473c88e3ee0c6}{Combat}} \texorpdfstring{$\ast$}{*}}]{combat }\end{DoxyParamCaption})}
+
+
+
+Gets the player stats. 
+
+\begin{DoxyAuthor}{Author}
+Maksym
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em combat} & combat struct \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Stats\texorpdfstring{$\ast$}{*} 
+\end{DoxyReturn}
+\Hypertarget{combat_8c_a4b6eb730cd8dbf245b711954d05a5a9f}\label{combat_8c_a4b6eb730cd8dbf245b711954d05a5a9f} 
+\index{combat.c@{combat.c}!combat\_initialize@{combat\_initialize}}
+\index{combat\_initialize@{combat\_initialize}!combat.c@{combat.c}}
+\doxysubsubsection{\texorpdfstring{combat\_initialize()}{combat\_initialize()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{combat_8h_a16d01d005bb588acbeb473c88e3ee0c6}{Combat}} \texorpdfstring{$\ast$}{*} combat\+\_\+initialize (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{space_8h_a67533ffc2b70463baecc38fb0629bbfc}{Space}} \texorpdfstring{$\ast$}{*}}]{space,  }\item[{\mbox{\hyperlink{struct__Player}{Player}} \texorpdfstring{$\ast$}{*}}]{player,  }\item[{\mbox{\hyperlink{command_8h_a805cf38fd2b6d5604bf1f1036b80fde2}{Command\+Code}}}]{code }\end{DoxyParamCaption})}
+
+
+
+Initializes the combat struct. 
+
+\begin{DoxyAuthor}{Author}
+Maksym Polyak
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em space} & space where the combat is located \\
+\hline
+{\em player} & player that is involved in the combat \\
+\hline
+{\em code} & last cmd \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Combat\texorpdfstring{$\ast$}{*} or NULL if ERROR 
+\end{DoxyReturn}
+\Hypertarget{combat_8c_a9b27f144c1e999990d7d764b3f4b6582}\label{combat_8c_a9b27f144c1e999990d7d764b3f4b6582} 
+\index{combat.c@{combat.c}!combat\_runaway@{combat\_runaway}}
+\index{combat\_runaway@{combat\_runaway}!combat.c@{combat.c}}
+\doxysubsubsection{\texorpdfstring{combat\_runaway()}{combat\_runaway()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} combat\+\_\+runaway (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{combat_8h_a16d01d005bb588acbeb473c88e3ee0c6}{Combat}} \texorpdfstring{$\ast$}{*}}]{combat }\end{DoxyParamCaption})}
+
+
+
+Finalizes the combat and returns the game state to DEFAULT. 
+
+\begin{DoxyAuthor}{Author}
+Maksym Polyak \&\& Daniel Gómez
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em combat} & combat to modify \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Status 
+\end{DoxyReturn}
+\Hypertarget{combat_8c_af440fdeeefcc37abdcd78719e71a7365}\label{combat_8c_af440fdeeefcc37abdcd78719e71a7365} 
+\index{combat.c@{combat.c}!combat\_update@{combat\_update}}
+\index{combat\_update@{combat\_update}!combat.c@{combat.c}}
+\doxysubsubsection{\texorpdfstring{combat\_update()}{combat\_update()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} combat\+\_\+update (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{combat_8h_a16d01d005bb588acbeb473c88e3ee0c6}{Combat}} \texorpdfstring{$\ast$}{*}}]{combat,  }\item[{\mbox{\hyperlink{command_8h_a7d2935971c252377cb0fc1c8545dc2bc}{Command}} \texorpdfstring{$\ast$}{*}}]{last\+\_\+cmd }\end{DoxyParamCaption})}
+
+
+
+Updates the combat turns. 
+
+\begin{DoxyAuthor}{Author}
+Sofía Calvo
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em combat} & combat to update \\
+\hline
+{\em last\+\_\+cmd} & last command of the player in the combat \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Status 
+\end{DoxyReturn}
+\Hypertarget{combat_8c_aa029d9467f0a6beafb1e2af1586fbac9}\label{combat_8c_aa029d9467f0a6beafb1e2af1586fbac9} 
+\index{combat.c@{combat.c}!combat\_update\_attack@{combat\_update\_attack}}
+\index{combat\_update\_attack@{combat\_update\_attack}!combat.c@{combat.c}}
+\doxysubsubsection{\texorpdfstring{combat\_update\_attack()}{combat\_update\_attack()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} combat\+\_\+update\+\_\+attack (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{combat_8h_a16d01d005bb588acbeb473c88e3ee0c6}{Combat}} \texorpdfstring{$\ast$}{*}}]{cmb,  }\item[{\mbox{\hyperlink{command_8h_a7d2935971c252377cb0fc1c8545dc2bc}{Command}} \texorpdfstring{$\ast$}{*}}]{last\+\_\+cmd }\end{DoxyParamCaption})}
+
+
+
+Sub function of combat\+\_\+update that manages player attack type and allies/enemies turn. 
+
+\begin{DoxyAuthor}{Author}
+Sofía Calvo
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em cmb} & combat struct \\
+\hline
+{\em last\+\_\+cmd} & last command of the player on the combat \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Status 
+\end{DoxyReturn}

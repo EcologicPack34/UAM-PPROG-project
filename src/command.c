@@ -24,7 +24,6 @@
 
 /**
  * @brief Global variable that stores all the commands and their shortucts.
- * @file command.c
  */
 char *cmd_to_str[N_CMD][N_CMDT] = {{"", "No command"}, {"", "Unknown"}, {"q", "Exit"}, {"s", "South"}, {"w", "North"}, {"d", "East"}, {"a", "West"},{"tk", "Take"}, {"dr", "Drop"},\
  {"ch", "Chat"}, {"at", "Attack"}, {"h", "Run_Away"}, {"sw", "Switch_Player"}, {"sk", "Ability"}, {"ou", "Object_Use"}, {"hp", "Help"}, {"m", "Move"}, {"sh","Search"},\
@@ -59,8 +58,8 @@ struct _Command {
  * @brief Copies data from data2 into data1
  * @author Daniel Gómez
  * 
- * @param data1 
- * @param data2 
+ * @param data1 command info 1
+ * @param data2 command info 2
  * @return Status 
  */
 Status command_info_copy(CommandInfo *data1, CommandInfo *data2){
@@ -251,7 +250,7 @@ Status command_set_status(Command *command, Status status){
 
 Status command_set_info(Command *command, CommandCode cmd, char *info){
   char *str = NULL;
-  if(!command) return ERROR;
+  if(!command || !info) return ERROR;
 
   str = malloc((strlen(info) + 1) * sizeof(char));
   if(!str) return ERROR;
@@ -303,6 +302,9 @@ Status command_get_as_string(Command *cmd, char *dest){
 
   if(!cmd || !dest) return ERROR;
   if(!(cmd->cmdPlayerData)) return ERROR;
+
+  /*North or n arg1 arg2 arg3 : Ok*/
+  /*Take or tk Grain1 : Ok*/
 
   for (i = 0; i < N_CMDT; i++)
   {

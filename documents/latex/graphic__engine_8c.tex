@@ -1,0 +1,369 @@
+\doxysection{src/graphic\+\_\+engine.c File Reference}
+\hypertarget{graphic__engine_8c}{}\label{graphic__engine_8c}\index{src/graphic\_engine.c@{src/graphic\_engine.c}}
+
+
+It implements a textual graphic engine.  
+
+
+{\ttfamily \#include "{}graphic\+\_\+engine.\+h"{}}\newline
+{\ttfamily \#include $<$stdio.\+h$>$}\newline
+{\ttfamily \#include $<$stdlib.\+h$>$}\newline
+{\ttfamily \#include $<$string.\+h$>$}\newline
+{\ttfamily \#include "{}debug\+\_\+printing.\+h"{}}\newline
+{\ttfamily \#include "{}command.\+h"{}}\newline
+{\ttfamily \#include "{}libscreen.\+h"{}}\newline
+{\ttfamily \#include "{}space.\+h"{}}\newline
+{\ttfamily \#include "{}types.\+h"{}}\newline
+{\ttfamily \#include "{}collection.\+h"{}}\newline
+Include dependency graph for graphic\+\_\+engine.\+c\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{graphic__engine_8c__incl}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{struct__Graphic__engine}{\+\_\+\+Graphic\+\_\+engine}}
+\begin{DoxyCompactList}\small\item\em Graphic engine internal struct. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{graphic__engine_8c_aa037a6d6a4f04d51c7ec1c9ee9054e76}{MAP\+\_\+\+WIDTH}}~53
+\item 
+\#define \mbox{\hyperlink{graphic__engine_8c_a529d5ebb449edf31d9835d13f4fb9f89}{MAP\+\_\+\+HEIGHT}}~29
+\item 
+\#define \mbox{\hyperlink{graphic__engine_8c_ad126f83ead57753d894db0a254d184cb}{DESCRIPT\+\_\+\+WIDTH}}~40
+\item 
+\#define \mbox{\hyperlink{graphic__engine_8c_a9d9d9b260e259c2ad6a7b5d00007d666}{HELP\+\_\+\+BANNER\+\_\+\+HEIGHT}}~1
+\item 
+\#define \mbox{\hyperlink{graphic__engine_8c_a57f2aa980a986f5dc2c5d3431840b469}{HELP\+\_\+\+BANNER\+\_\+\+WIDTH}}~23
+\item 
+\#define \mbox{\hyperlink{graphic__engine_8c_a1d53be7c21149b9d34249a02561c234d}{HELP\+\_\+\+HEIGHT}}~4
+\item 
+\#define \mbox{\hyperlink{graphic__engine_8c_a3c4adfd58310ee08f0bc26b7857f4b13}{CMD\+\_\+\+HISTORY\+\_\+\+HEIGHT}}~3
+\item 
+\#define \mbox{\hyperlink{graphic__engine_8c_a4f2ba87acac5d2c913f8667535ef9147}{SPACE\+\_\+\+HEIGHT}}~9
+\item 
+\#define \mbox{\hyperlink{graphic__engine_8c_a7a6da9f2ad2d902ecbd75ad680b795d7}{SPACE\+\_\+\+WIDTH}}~17
+\item 
+\#define \mbox{\hyperlink{graphic__engine_8c_afdb84fface223c90be4d9badb70c43d2}{COMBAT\+\_\+\+OFFSET}}~10
+\item 
+\#define \mbox{\hyperlink{graphic__engine_8c_a2ec69f429370ffcef2801adb57361f53}{HEALTH\+\_\+\+BAR\+\_\+\+WIDTH}}~5
+\item 
+\#define \mbox{\hyperlink{graphic__engine_8c_a7fb7a774ad3cdcb5f258eedd460b9ab9}{MAX\+\_\+\+PRINT\+\_\+\+PLAYER\+\_\+\+INVENTORY}}~7
+\item 
+\#define \mbox{\hyperlink{graphic__engine_8c_a12ea79168a049104cc68042118399f3f}{MAX\+\_\+\+PRINT\+\_\+\+INVENTORY}}~7
+\item 
+\#define \mbox{\hyperlink{graphic__engine_8c_ab26474b212c2cddc1555a92a43324816}{MAX\+\_\+\+PRINT\+\_\+\+SPACE\+\_\+\+NPCS}}~5
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{graphic__engine_8c_a695dbe01376bb488247caddd8536b56c}{graphic\+\_\+engine\+\_\+newline\+\_\+print}} (\mbox{\hyperlink{libscreen_8h_acfdfc42f6522d75fa3c16713afde8127}{Area}} \texorpdfstring{$\ast$}{*}area, char \texorpdfstring{$\ast$}{*}string)
+\begin{DoxyCompactList}\small\item\em Paints a string with newlines in a designated screen area. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{graphic__engine_8c_a590a62e6c51170f7ad42a0e8f9673106}{graphic\+\_\+engine\+\_\+paint\+\_\+space}} (\mbox{\hyperlink{game_8h_a57156d39c530aec3fba3a9dad8c2dc6a}{Game}} \texorpdfstring{$\ast$}{*}game, \mbox{\hyperlink{space_8h_a67533ffc2b70463baecc38fb0629bbfc}{Space}} \texorpdfstring{$\ast$}{*}space, \mbox{\hyperlink{types_8h_a224b9163917ac32fc95a60d8c1eec3aa}{Direction}} direction, char map\mbox{[}\mbox{\hyperlink{graphic__engine_8c_a4f2ba87acac5d2c913f8667535ef9147}{SPACE\+\_\+\+HEIGHT}}+1\mbox{]}\mbox{[}\mbox{\hyperlink{graphic__engine_8c_aa037a6d6a4f04d51c7ec1c9ee9054e76}{MAP\+\_\+\+WIDTH}}+33\mbox{]}, char space\+Str\mbox{[}\mbox{\hyperlink{graphic__engine_8c_a4f2ba87acac5d2c913f8667535ef9147}{SPACE\+\_\+\+HEIGHT}}+1\mbox{]}\mbox{[}\mbox{\hyperlink{graphic__engine_8c_a7a6da9f2ad2d902ecbd75ad680b795d7}{SPACE\+\_\+\+WIDTH}}+10\mbox{]})
+\begin{DoxyCompactList}\small\item\em Paints a space in map area. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{graphic__engine_8c_a7bdc604bff6ceb8113111042e99cfbd0}{graphic\+\_\+engine\+\_\+paint\+\_\+map}} (\mbox{\hyperlink{graphic__engine_8h_ae1bc5cdbfce93098f066274fdea49af1}{Graphic\+\_\+engine}} \texorpdfstring{$\ast$}{*}ge, \mbox{\hyperlink{game_8h_a57156d39c530aec3fba3a9dad8c2dc6a}{Game}} \texorpdfstring{$\ast$}{*}game)
+\begin{DoxyCompactList}\small\item\em Paints map in map area. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{graphic__engine_8c_aeae42df97e988f47eb2cbc7a176bf4bf}{graphic\+\_\+engine\+\_\+paint\+\_\+combat}} (\mbox{\hyperlink{graphic__engine_8h_ae1bc5cdbfce93098f066274fdea49af1}{Graphic\+\_\+engine}} \texorpdfstring{$\ast$}{*}ge, \mbox{\hyperlink{game_8h_a57156d39c530aec3fba3a9dad8c2dc6a}{Game}} \texorpdfstring{$\ast$}{*}game)
+\begin{DoxyCompactList}\small\item\em Paints combat during combat mode. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{graphic__engine_8c_af8dcf42a57dd1b9f07b67b59f07765ea}{graphic\+\_\+engine\+\_\+paint\+\_\+general\+Desc}} (\mbox{\hyperlink{graphic__engine_8h_ae1bc5cdbfce93098f066274fdea49af1}{Graphic\+\_\+engine}} \texorpdfstring{$\ast$}{*}ge, \mbox{\hyperlink{game_8h_a57156d39c530aec3fba3a9dad8c2dc6a}{Game}} \texorpdfstring{$\ast$}{*}game)
+\begin{DoxyCompactList}\small\item\em Paints a general description of the game in description area. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{graphic__engine_8c_a0961c7e1e95d69139b95759cc24f747b}{graphic\+\_\+engine\+\_\+paint\+\_\+command\+Info}} (\mbox{\hyperlink{graphic__engine_8h_ae1bc5cdbfce93098f066274fdea49af1}{Graphic\+\_\+engine}} \texorpdfstring{$\ast$}{*}ge, \mbox{\hyperlink{game_8h_a57156d39c530aec3fba3a9dad8c2dc6a}{Game}} \texorpdfstring{$\ast$}{*}game)
+\begin{DoxyCompactList}\small\item\em Paints info related to commands in the command area. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{graphic__engine_8h_ae1bc5cdbfce93098f066274fdea49af1}{Graphic\+\_\+engine}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{graphic__engine_8c_a943c75487b750e5b0aafde34ac739b16}{graphic\+\_\+engine\+\_\+create}} ()
+\begin{DoxyCompactList}\small\item\em Creates the screen areas. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{graphic__engine_8c_a5a5eac4ef2033c5ad71aa6895f362f79}{graphic\+\_\+engine\+\_\+destroy}} (\mbox{\hyperlink{graphic__engine_8h_ae1bc5cdbfce93098f066274fdea49af1}{Graphic\+\_\+engine}} \texorpdfstring{$\ast$}{*}ge)
+\begin{DoxyCompactList}\small\item\em Destroys the graphic\+\_\+engine struct and frees ge. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{graphic__engine_8c_a0e275aa477d5fa59e903da33a2a40a5d}{graphic\+\_\+engine\+\_\+paint\+\_\+game}} (\mbox{\hyperlink{graphic__engine_8h_ae1bc5cdbfce93098f066274fdea49af1}{Graphic\+\_\+engine}} \texorpdfstring{$\ast$}{*}ge, \mbox{\hyperlink{game_8h_a57156d39c530aec3fba3a9dad8c2dc6a}{Game}} \texorpdfstring{$\ast$}{*}game)
+\begin{DoxyCompactList}\small\item\em Prints the map on screen. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+It implements a textual graphic engine. 
+
+\begin{DoxyAuthor}{Author}
+Profesores PPROG 
+\end{DoxyAuthor}
+\begin{DoxyVersion}{Version}
+0 
+\end{DoxyVersion}
+\begin{DoxyDate}{Date}
+27-\/01-\/2025 
+\end{DoxyDate}
+\begin{DoxyCopyright}{Copyright}
+GNU Public License 
+\end{DoxyCopyright}
+
+
+\doxysubsection{Macro Definition Documentation}
+\Hypertarget{graphic__engine_8c_a3c4adfd58310ee08f0bc26b7857f4b13}\label{graphic__engine_8c_a3c4adfd58310ee08f0bc26b7857f4b13} 
+\index{graphic\_engine.c@{graphic\_engine.c}!CMD\_HISTORY\_HEIGHT@{CMD\_HISTORY\_HEIGHT}}
+\index{CMD\_HISTORY\_HEIGHT@{CMD\_HISTORY\_HEIGHT}!graphic\_engine.c@{graphic\_engine.c}}
+\doxysubsubsection{\texorpdfstring{CMD\_HISTORY\_HEIGHT}{CMD\_HISTORY\_HEIGHT}}
+{\footnotesize\ttfamily \#define CMD\+\_\+\+HISTORY\+\_\+\+HEIGHT~3}
+
+Height of the command history \Hypertarget{graphic__engine_8c_afdb84fface223c90be4d9badb70c43d2}\label{graphic__engine_8c_afdb84fface223c90be4d9badb70c43d2} 
+\index{graphic\_engine.c@{graphic\_engine.c}!COMBAT\_OFFSET@{COMBAT\_OFFSET}}
+\index{COMBAT\_OFFSET@{COMBAT\_OFFSET}!graphic\_engine.c@{graphic\_engine.c}}
+\doxysubsubsection{\texorpdfstring{COMBAT\_OFFSET}{COMBAT\_OFFSET}}
+{\footnotesize\ttfamily \#define COMBAT\+\_\+\+OFFSET~10}
+
+Offset needed on combat mode \Hypertarget{graphic__engine_8c_ad126f83ead57753d894db0a254d184cb}\label{graphic__engine_8c_ad126f83ead57753d894db0a254d184cb} 
+\index{graphic\_engine.c@{graphic\_engine.c}!DESCRIPT\_WIDTH@{DESCRIPT\_WIDTH}}
+\index{DESCRIPT\_WIDTH@{DESCRIPT\_WIDTH}!graphic\_engine.c@{graphic\_engine.c}}
+\doxysubsubsection{\texorpdfstring{DESCRIPT\_WIDTH}{DESCRIPT\_WIDTH}}
+{\footnotesize\ttfamily \#define DESCRIPT\+\_\+\+WIDTH~40}
+
+Width of the description part \Hypertarget{graphic__engine_8c_a2ec69f429370ffcef2801adb57361f53}\label{graphic__engine_8c_a2ec69f429370ffcef2801adb57361f53} 
+\index{graphic\_engine.c@{graphic\_engine.c}!HEALTH\_BAR\_WIDTH@{HEALTH\_BAR\_WIDTH}}
+\index{HEALTH\_BAR\_WIDTH@{HEALTH\_BAR\_WIDTH}!graphic\_engine.c@{graphic\_engine.c}}
+\doxysubsubsection{\texorpdfstring{HEALTH\_BAR\_WIDTH}{HEALTH\_BAR\_WIDTH}}
+{\footnotesize\ttfamily \#define HEALTH\+\_\+\+BAR\+\_\+\+WIDTH~5}
+
+Length of the health bar \Hypertarget{graphic__engine_8c_a9d9d9b260e259c2ad6a7b5d00007d666}\label{graphic__engine_8c_a9d9d9b260e259c2ad6a7b5d00007d666} 
+\index{graphic\_engine.c@{graphic\_engine.c}!HELP\_BANNER\_HEIGHT@{HELP\_BANNER\_HEIGHT}}
+\index{HELP\_BANNER\_HEIGHT@{HELP\_BANNER\_HEIGHT}!graphic\_engine.c@{graphic\_engine.c}}
+\doxysubsubsection{\texorpdfstring{HELP\_BANNER\_HEIGHT}{HELP\_BANNER\_HEIGHT}}
+{\footnotesize\ttfamily \#define HELP\+\_\+\+BANNER\+\_\+\+HEIGHT~1}
+
+Height of the help banner part \Hypertarget{graphic__engine_8c_a57f2aa980a986f5dc2c5d3431840b469}\label{graphic__engine_8c_a57f2aa980a986f5dc2c5d3431840b469} 
+\index{graphic\_engine.c@{graphic\_engine.c}!HELP\_BANNER\_WIDTH@{HELP\_BANNER\_WIDTH}}
+\index{HELP\_BANNER\_WIDTH@{HELP\_BANNER\_WIDTH}!graphic\_engine.c@{graphic\_engine.c}}
+\doxysubsubsection{\texorpdfstring{HELP\_BANNER\_WIDTH}{HELP\_BANNER\_WIDTH}}
+{\footnotesize\ttfamily \#define HELP\+\_\+\+BANNER\+\_\+\+WIDTH~23}
+
+Width of the help banner part \Hypertarget{graphic__engine_8c_a1d53be7c21149b9d34249a02561c234d}\label{graphic__engine_8c_a1d53be7c21149b9d34249a02561c234d} 
+\index{graphic\_engine.c@{graphic\_engine.c}!HELP\_HEIGHT@{HELP\_HEIGHT}}
+\index{HELP\_HEIGHT@{HELP\_HEIGHT}!graphic\_engine.c@{graphic\_engine.c}}
+\doxysubsubsection{\texorpdfstring{HELP\_HEIGHT}{HELP\_HEIGHT}}
+{\footnotesize\ttfamily \#define HELP\+\_\+\+HEIGHT~4}
+
+Height of the help banner \Hypertarget{graphic__engine_8c_a529d5ebb449edf31d9835d13f4fb9f89}\label{graphic__engine_8c_a529d5ebb449edf31d9835d13f4fb9f89} 
+\index{graphic\_engine.c@{graphic\_engine.c}!MAP\_HEIGHT@{MAP\_HEIGHT}}
+\index{MAP\_HEIGHT@{MAP\_HEIGHT}!graphic\_engine.c@{graphic\_engine.c}}
+\doxysubsubsection{\texorpdfstring{MAP\_HEIGHT}{MAP\_HEIGHT}}
+{\footnotesize\ttfamily \#define MAP\+\_\+\+HEIGHT~29}
+
+Height of the map part \Hypertarget{graphic__engine_8c_aa037a6d6a4f04d51c7ec1c9ee9054e76}\label{graphic__engine_8c_aa037a6d6a4f04d51c7ec1c9ee9054e76} 
+\index{graphic\_engine.c@{graphic\_engine.c}!MAP\_WIDTH@{MAP\_WIDTH}}
+\index{MAP\_WIDTH@{MAP\_WIDTH}!graphic\_engine.c@{graphic\_engine.c}}
+\doxysubsubsection{\texorpdfstring{MAP\_WIDTH}{MAP\_WIDTH}}
+{\footnotesize\ttfamily \#define MAP\+\_\+\+WIDTH~53}
+
+Width of the map part \Hypertarget{graphic__engine_8c_a12ea79168a049104cc68042118399f3f}\label{graphic__engine_8c_a12ea79168a049104cc68042118399f3f} 
+\index{graphic\_engine.c@{graphic\_engine.c}!MAX\_PRINT\_INVENTORY@{MAX\_PRINT\_INVENTORY}}
+\index{MAX\_PRINT\_INVENTORY@{MAX\_PRINT\_INVENTORY}!graphic\_engine.c@{graphic\_engine.c}}
+\doxysubsubsection{\texorpdfstring{MAX\_PRINT\_INVENTORY}{MAX\_PRINT\_INVENTORY}}
+{\footnotesize\ttfamily \#define MAX\+\_\+\+PRINT\+\_\+\+INVENTORY~7}
+
+Maximum number of items printed from the space inventory \Hypertarget{graphic__engine_8c_a7fb7a774ad3cdcb5f258eedd460b9ab9}\label{graphic__engine_8c_a7fb7a774ad3cdcb5f258eedd460b9ab9} 
+\index{graphic\_engine.c@{graphic\_engine.c}!MAX\_PRINT\_PLAYER\_INVENTORY@{MAX\_PRINT\_PLAYER\_INVENTORY}}
+\index{MAX\_PRINT\_PLAYER\_INVENTORY@{MAX\_PRINT\_PLAYER\_INVENTORY}!graphic\_engine.c@{graphic\_engine.c}}
+\doxysubsubsection{\texorpdfstring{MAX\_PRINT\_PLAYER\_INVENTORY}{MAX\_PRINT\_PLAYER\_INVENTORY}}
+{\footnotesize\ttfamily \#define MAX\+\_\+\+PRINT\+\_\+\+PLAYER\+\_\+\+INVENTORY~7}
+
+Maximum number of items printed from the player inventory \Hypertarget{graphic__engine_8c_ab26474b212c2cddc1555a92a43324816}\label{graphic__engine_8c_ab26474b212c2cddc1555a92a43324816} 
+\index{graphic\_engine.c@{graphic\_engine.c}!MAX\_PRINT\_SPACE\_NPCS@{MAX\_PRINT\_SPACE\_NPCS}}
+\index{MAX\_PRINT\_SPACE\_NPCS@{MAX\_PRINT\_SPACE\_NPCS}!graphic\_engine.c@{graphic\_engine.c}}
+\doxysubsubsection{\texorpdfstring{MAX\_PRINT\_SPACE\_NPCS}{MAX\_PRINT\_SPACE\_NPCS}}
+{\footnotesize\ttfamily \#define MAX\+\_\+\+PRINT\+\_\+\+SPACE\+\_\+\+NPCS~5}
+
+Maximum number of NPCs printed from the space \Hypertarget{graphic__engine_8c_a4f2ba87acac5d2c913f8667535ef9147}\label{graphic__engine_8c_a4f2ba87acac5d2c913f8667535ef9147} 
+\index{graphic\_engine.c@{graphic\_engine.c}!SPACE\_HEIGHT@{SPACE\_HEIGHT}}
+\index{SPACE\_HEIGHT@{SPACE\_HEIGHT}!graphic\_engine.c@{graphic\_engine.c}}
+\doxysubsubsection{\texorpdfstring{SPACE\_HEIGHT}{SPACE\_HEIGHT}}
+{\footnotesize\ttfamily \#define SPACE\+\_\+\+HEIGHT~9}
+
+Height of a space \Hypertarget{graphic__engine_8c_a7a6da9f2ad2d902ecbd75ad680b795d7}\label{graphic__engine_8c_a7a6da9f2ad2d902ecbd75ad680b795d7} 
+\index{graphic\_engine.c@{graphic\_engine.c}!SPACE\_WIDTH@{SPACE\_WIDTH}}
+\index{SPACE\_WIDTH@{SPACE\_WIDTH}!graphic\_engine.c@{graphic\_engine.c}}
+\doxysubsubsection{\texorpdfstring{SPACE\_WIDTH}{SPACE\_WIDTH}}
+{\footnotesize\ttfamily \#define SPACE\+\_\+\+WIDTH~17}
+
+Width of a space 
+
+\doxysubsection{Function Documentation}
+\Hypertarget{graphic__engine_8c_a943c75487b750e5b0aafde34ac739b16}\label{graphic__engine_8c_a943c75487b750e5b0aafde34ac739b16} 
+\index{graphic\_engine.c@{graphic\_engine.c}!graphic\_engine\_create@{graphic\_engine\_create}}
+\index{graphic\_engine\_create@{graphic\_engine\_create}!graphic\_engine.c@{graphic\_engine.c}}
+\doxysubsubsection{\texorpdfstring{graphic\_engine\_create()}{graphic\_engine\_create()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{graphic__engine_8h_ae1bc5cdbfce93098f066274fdea49af1}{Graphic\+\_\+engine}} \texorpdfstring{$\ast$}{*} graphic\+\_\+engine\+\_\+create (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Creates the screen areas. 
+
+\begin{DoxyAuthor}{Author}
+Profesores PPROG
+\end{DoxyAuthor}
+\begin{DoxyReturn}{Returns}
+ge with the screen if it went well or ge = NULL if something went wrong 
+\end{DoxyReturn}
+\Hypertarget{graphic__engine_8c_a5a5eac4ef2033c5ad71aa6895f362f79}\label{graphic__engine_8c_a5a5eac4ef2033c5ad71aa6895f362f79} 
+\index{graphic\_engine.c@{graphic\_engine.c}!graphic\_engine\_destroy@{graphic\_engine\_destroy}}
+\index{graphic\_engine\_destroy@{graphic\_engine\_destroy}!graphic\_engine.c@{graphic\_engine.c}}
+\doxysubsubsection{\texorpdfstring{graphic\_engine\_destroy()}{graphic\_engine\_destroy()}}
+{\footnotesize\ttfamily void graphic\+\_\+engine\+\_\+destroy (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{graphic__engine_8h_ae1bc5cdbfce93098f066274fdea49af1}{Graphic\+\_\+engine}} \texorpdfstring{$\ast$}{*}}]{ge }\end{DoxyParamCaption})}
+
+
+
+Destroys the graphic\+\_\+engine struct and frees ge. 
+
+\begin{DoxyAuthor}{Author}
+Profesores PPROG
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em ge} & pointer that saves all screen output \\
+\hline
+\end{DoxyParams}
+\Hypertarget{graphic__engine_8c_a695dbe01376bb488247caddd8536b56c}\label{graphic__engine_8c_a695dbe01376bb488247caddd8536b56c} 
+\index{graphic\_engine.c@{graphic\_engine.c}!graphic\_engine\_newline\_print@{graphic\_engine\_newline\_print}}
+\index{graphic\_engine\_newline\_print@{graphic\_engine\_newline\_print}!graphic\_engine.c@{graphic\_engine.c}}
+\doxysubsubsection{\texorpdfstring{graphic\_engine\_newline\_print()}{graphic\_engine\_newline\_print()}}
+{\footnotesize\ttfamily void graphic\+\_\+engine\+\_\+newline\+\_\+print (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{libscreen_8h_acfdfc42f6522d75fa3c16713afde8127}{Area}} \texorpdfstring{$\ast$}{*}}]{area,  }\item[{char \texorpdfstring{$\ast$}{*}}]{string }\end{DoxyParamCaption})}
+
+
+
+Paints a string with newlines in a designated screen area. 
+
+\begin{DoxyAuthor}{Author}
+Daniel Gómez
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em area} & where the print is done \\
+\hline
+{\em string} & string to be printed \\
+\hline
+\end{DoxyParams}
+\Hypertarget{graphic__engine_8c_aeae42df97e988f47eb2cbc7a176bf4bf}\label{graphic__engine_8c_aeae42df97e988f47eb2cbc7a176bf4bf} 
+\index{graphic\_engine.c@{graphic\_engine.c}!graphic\_engine\_paint\_combat@{graphic\_engine\_paint\_combat}}
+\index{graphic\_engine\_paint\_combat@{graphic\_engine\_paint\_combat}!graphic\_engine.c@{graphic\_engine.c}}
+\doxysubsubsection{\texorpdfstring{graphic\_engine\_paint\_combat()}{graphic\_engine\_paint\_combat()}}
+{\footnotesize\ttfamily void graphic\+\_\+engine\+\_\+paint\+\_\+combat (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{graphic__engine_8h_ae1bc5cdbfce93098f066274fdea49af1}{Graphic\+\_\+engine}} \texorpdfstring{$\ast$}{*}}]{ge,  }\item[{\mbox{\hyperlink{game_8h_a57156d39c530aec3fba3a9dad8c2dc6a}{Game}} \texorpdfstring{$\ast$}{*}}]{game }\end{DoxyParamCaption})}
+
+
+
+Paints combat during combat mode. 
+
+\begin{DoxyAuthor}{Author}
+Daniel Gómez
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em ge} & graphic engine struct \\
+\hline
+{\em game} & game struct \\
+\hline
+\end{DoxyParams}
+\Hypertarget{graphic__engine_8c_a0961c7e1e95d69139b95759cc24f747b}\label{graphic__engine_8c_a0961c7e1e95d69139b95759cc24f747b} 
+\index{graphic\_engine.c@{graphic\_engine.c}!graphic\_engine\_paint\_commandInfo@{graphic\_engine\_paint\_commandInfo}}
+\index{graphic\_engine\_paint\_commandInfo@{graphic\_engine\_paint\_commandInfo}!graphic\_engine.c@{graphic\_engine.c}}
+\doxysubsubsection{\texorpdfstring{graphic\_engine\_paint\_commandInfo()}{graphic\_engine\_paint\_commandInfo()}}
+{\footnotesize\ttfamily void graphic\+\_\+engine\+\_\+paint\+\_\+command\+Info (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{graphic__engine_8h_ae1bc5cdbfce93098f066274fdea49af1}{Graphic\+\_\+engine}} \texorpdfstring{$\ast$}{*}}]{ge,  }\item[{\mbox{\hyperlink{game_8h_a57156d39c530aec3fba3a9dad8c2dc6a}{Game}} \texorpdfstring{$\ast$}{*}}]{game }\end{DoxyParamCaption})}
+
+
+
+Paints info related to commands in the command area. 
+
+\begin{DoxyAuthor}{Author}
+Daniel Gómez
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em ge} & graphic engine struct \\
+\hline
+{\em game} & game struct \\
+\hline
+\end{DoxyParams}
+\Hypertarget{graphic__engine_8c_a0e275aa477d5fa59e903da33a2a40a5d}\label{graphic__engine_8c_a0e275aa477d5fa59e903da33a2a40a5d} 
+\index{graphic\_engine.c@{graphic\_engine.c}!graphic\_engine\_paint\_game@{graphic\_engine\_paint\_game}}
+\index{graphic\_engine\_paint\_game@{graphic\_engine\_paint\_game}!graphic\_engine.c@{graphic\_engine.c}}
+\doxysubsubsection{\texorpdfstring{graphic\_engine\_paint\_game()}{graphic\_engine\_paint\_game()}}
+{\footnotesize\ttfamily void graphic\+\_\+engine\+\_\+paint\+\_\+game (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{graphic__engine_8h_ae1bc5cdbfce93098f066274fdea49af1}{Graphic\+\_\+engine}} \texorpdfstring{$\ast$}{*}}]{ge,  }\item[{\mbox{\hyperlink{game_8h_a57156d39c530aec3fba3a9dad8c2dc6a}{Game}} \texorpdfstring{$\ast$}{*}}]{game }\end{DoxyParamCaption})}
+
+
+
+Prints the map on screen. 
+
+\begin{DoxyAuthor}{Author}
+Profesores PPROG
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em game} & struct that saves all the information from game \\
+\hline
+{\em ge} & pointer that saves all screen output \\
+\hline
+\end{DoxyParams}
+\Hypertarget{graphic__engine_8c_af8dcf42a57dd1b9f07b67b59f07765ea}\label{graphic__engine_8c_af8dcf42a57dd1b9f07b67b59f07765ea} 
+\index{graphic\_engine.c@{graphic\_engine.c}!graphic\_engine\_paint\_generalDesc@{graphic\_engine\_paint\_generalDesc}}
+\index{graphic\_engine\_paint\_generalDesc@{graphic\_engine\_paint\_generalDesc}!graphic\_engine.c@{graphic\_engine.c}}
+\doxysubsubsection{\texorpdfstring{graphic\_engine\_paint\_generalDesc()}{graphic\_engine\_paint\_generalDesc()}}
+{\footnotesize\ttfamily void graphic\+\_\+engine\+\_\+paint\+\_\+general\+Desc (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{graphic__engine_8h_ae1bc5cdbfce93098f066274fdea49af1}{Graphic\+\_\+engine}} \texorpdfstring{$\ast$}{*}}]{ge,  }\item[{\mbox{\hyperlink{game_8h_a57156d39c530aec3fba3a9dad8c2dc6a}{Game}} \texorpdfstring{$\ast$}{*}}]{game }\end{DoxyParamCaption})}
+
+
+
+Paints a general description of the game in description area. 
+
+\begin{DoxyAuthor}{Author}
+Daniel Gómez
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em ge} & graphic engine struct \\
+\hline
+{\em game} & game struct \\
+\hline
+\end{DoxyParams}
+\Hypertarget{graphic__engine_8c_a7bdc604bff6ceb8113111042e99cfbd0}\label{graphic__engine_8c_a7bdc604bff6ceb8113111042e99cfbd0} 
+\index{graphic\_engine.c@{graphic\_engine.c}!graphic\_engine\_paint\_map@{graphic\_engine\_paint\_map}}
+\index{graphic\_engine\_paint\_map@{graphic\_engine\_paint\_map}!graphic\_engine.c@{graphic\_engine.c}}
+\doxysubsubsection{\texorpdfstring{graphic\_engine\_paint\_map()}{graphic\_engine\_paint\_map()}}
+{\footnotesize\ttfamily void graphic\+\_\+engine\+\_\+paint\+\_\+map (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{graphic__engine_8h_ae1bc5cdbfce93098f066274fdea49af1}{Graphic\+\_\+engine}} \texorpdfstring{$\ast$}{*}}]{ge,  }\item[{\mbox{\hyperlink{game_8h_a57156d39c530aec3fba3a9dad8c2dc6a}{Game}} \texorpdfstring{$\ast$}{*}}]{game }\end{DoxyParamCaption})}
+
+
+
+Paints map in map area. 
+
+\begin{DoxyAuthor}{Author}
+Daniel Gómez
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em ge} & graphic engine struct \\
+\hline
+{\em game} & game struct \\
+\hline
+\end{DoxyParams}
+\Hypertarget{graphic__engine_8c_a590a62e6c51170f7ad42a0e8f9673106}\label{graphic__engine_8c_a590a62e6c51170f7ad42a0e8f9673106} 
+\index{graphic\_engine.c@{graphic\_engine.c}!graphic\_engine\_paint\_space@{graphic\_engine\_paint\_space}}
+\index{graphic\_engine\_paint\_space@{graphic\_engine\_paint\_space}!graphic\_engine.c@{graphic\_engine.c}}
+\doxysubsubsection{\texorpdfstring{graphic\_engine\_paint\_space()}{graphic\_engine\_paint\_space()}}
+{\footnotesize\ttfamily void graphic\+\_\+engine\+\_\+paint\+\_\+space (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{game_8h_a57156d39c530aec3fba3a9dad8c2dc6a}{Game}} \texorpdfstring{$\ast$}{*}}]{game,  }\item[{\mbox{\hyperlink{space_8h_a67533ffc2b70463baecc38fb0629bbfc}{Space}} \texorpdfstring{$\ast$}{*}}]{space,  }\item[{\mbox{\hyperlink{types_8h_a224b9163917ac32fc95a60d8c1eec3aa}{Direction}}}]{direction,  }\item[{char}]{map\mbox{[}\+SPACE\+\_\+\+HEIGHT+1\mbox{]}\mbox{[}\+MAP\+\_\+\+WIDTH+33\mbox{]},  }\item[{char}]{space\+Str\mbox{[}\+SPACE\+\_\+\+HEIGHT+1\mbox{]}\mbox{[}\+SPACE\+\_\+\+WIDTH+10\mbox{]} }\end{DoxyParamCaption})}
+
+
+
+Paints a space in map area. 
+
+\begin{DoxyAuthor}{Author}
+Daniel Gómez
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em game} & game struct \\
+\hline
+{\em space} & space to print \\
+\hline
+{\em direction} & direction where the space is located from the center \\
+\hline
+{\em map} & char array with the map \\
+\hline
+{\em space\+Str} & graphical description of the space \\
+\hline
+\end{DoxyParams}

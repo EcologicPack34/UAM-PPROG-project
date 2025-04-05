@@ -2,10 +2,14 @@
     "C_Cpp.clang_format_style": "Visual Studio",
     "editor.fontFamily": "'Cascadia Code', Consolas, 'Courier New', monospace",
     "files.associations": {
-        "**/src/**/*.c": "c",    // Recognize .c files in src as C
-        "**/include/**/*.h": "c",  // Recognize .h files in include as C headers
-        "stdlib.h": "c",          // Manually associate standard library headers
-        "stdbool.h": "c",         // Manually associate standard library headers
-        "game.h": "c"             // Manually associate your specific header file
+        "**/src/**/*.c": "c",
+        "**/include/**/*.h": "c",
+        "stdlib.h": "c",
+        "stdbool.h": "c",
+        "game.h": "c",
+        "types.h": "c",
+        "link.h": "c",
+        "test.h": "c",
+        "debug_printing.h": "c"
     }
 }

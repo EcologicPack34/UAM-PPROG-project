@@ -82,6 +82,16 @@ gdb:
 	make debug
 	gdb --tui --silent ./anthilldebug
 
+#To install ddd run $sudo apt install ddd
+ddd:
+	make debug
+	ddd --gdb --args ./anthilldebug anthill.dat
+
+#in order for doxygen to work run $sudo apt install doxygen
+#for graphs to work it needs graphviz, to install run $sudo apt install graphviz
+doxy:
+	@doxygen Doxyfile
+
 runv:
 	make debug
 	valgrind --leak-check=full --track-origins=yes --show-leak-kinds=all ./anthilldebug anthill.dat
@@ -102,7 +112,13 @@ run_space_test:
 	make
 	$(CC) $(CFLAGS) -c ./test/space_test.c
 	$(CC) $(CFLAGS) -o ./test/space_test space_test.o space.o inventory.o collection.o debug_printing.o object.o link.o npc.o entity.o vector2.o
-	./test/space_test
+	./test/space_test 
+
+run_link_test:
+	make
+	$(CC) $(CFLAGS) -c ./src/test/link_test.c
+	$(CC) $(CFLAGS) -o link_test link_test.o link.o entity.o inventory.o debug_printing.o
+	./link_test
 	
 # $@ devuelve lo que hay a la izquierda de los :, $^ devuelve todas las dependencias
 

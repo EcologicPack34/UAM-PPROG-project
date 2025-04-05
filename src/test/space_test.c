@@ -1,4 +1,4 @@
-#include "../space.h"
+#include "../../include/space.h"
 #include "space_test.h"
 #include "test.h"
 
@@ -140,7 +140,7 @@ void test2_space_set_north(){
 
     space1 = space_create(1);
     space2 = space_create(2);
-    link = link_create(1, 1, 2, true, false, NO_ID);
+    link = link_create(1, 1, 2, true, false);
 
     PRINT_TEST_RESULT(space_set_north(space1, link) == OK);
 
@@ -162,7 +162,7 @@ void test2_space_set_south(){
 
     space1 = space_create(1);
     space2 = space_create(2);
-    link = link_create(1, 1, 2, true, false, NO_ID);
+    link = link_create(1, 1, 2, true, false);
 
     PRINT_TEST_RESULT(space_set_south(space1, link) == OK);
 
@@ -184,7 +184,7 @@ void test2_space_set_east(){
 
     space1 = space_create(1);
     space2 = space_create(2);
-    link = link_create(1, 1, 2, true, false, NO_ID);
+    link = link_create(1, 1, 2, true, false);
 
     PRINT_TEST_RESULT(space_set_east(space1, link) == OK);
 
@@ -206,7 +206,7 @@ void test2_space_set_west(){
 
     space1 = space_create(1);
     space2 = space_create(2);
-    link = link_create(1, 1, 2, true, false, NO_ID);
+    link = link_create(1, 1, 2, true, false);
 
     PRINT_TEST_RESULT(space_set_west(space1, link) == OK);
 
@@ -400,7 +400,7 @@ void test2_space_get_north(){
 
     space1 = space_create(1);
     space2 = space_create(2);
-    link = link_create(1, 1, 2, true, false, NO_ID);
+    link = link_create(1, 1, 2, true, false);
 
     space_set_north(space1, link);
 
@@ -423,7 +423,7 @@ void test2_space_get_south(){
 
     space1 = space_create(1);
     space2 = space_create(2);
-    link = link_create(1, 1, 2, true, false, NO_ID);
+    link = link_create(1, 1, 2, true, false);
 
     space_set_south(space1, link);
 
@@ -446,7 +446,7 @@ void test2_space_get_east(){
 
     space1 = space_create(1);
     space2 = space_create(2);
-    link = link_create(1, 1, 2, true, false, NO_ID);
+    link = link_create(1, 1, 2, true, false);
 
     space_set_east(space1, link);
 
@@ -469,7 +469,7 @@ void test2_space_get_west(){
 
     space1 = space_create(1);
     space2 = space_create(2);
-    link = link_create(1, 1, 2, true, false, NO_ID);
+    link = link_create(1, 1, 2, true, false);
 
     space_set_west(space1, link);
 
@@ -540,7 +540,7 @@ void test2_space_add_NPC(){
     NPC *npc = NULL;
 
     space = space_create(1);
-    npc = npc_create(1,"TEST", "TEST1", 1, 1, 1, 1, 1, 1, 1, 1);
+    npc = npc_create(1, false, "TEST", "TEST1", 1, 1);
 
     PRINT_TEST_RESULT(space_add_NPC(space, npc) == OK);
 
@@ -560,7 +560,7 @@ void test2_space_remove_NPC(){
     NPC *npc = NULL;
 
     space = space_create(1);
-    npc = npc_create(1,"TEST", "TEST1", 1, 1, 1, 1, 1, 1, 1, 1);
+    npc = npc_create(1, false,"TEST", "TEST1", 1, 1);
     space_add_NPC(space, npc);
 
     PRINT_TEST_RESULT(space_remove_NPC(space, npc) == OK);
@@ -582,7 +582,7 @@ void test2_space_move_NPC(){
 
     space = space_create(1);
     spaceIN = space_create(2);
-    npc = npc_create(1,"TEST", "TEST1", 1, 1, 1, 1, 1, 1, 1, 1);
+    npc = npc_create(1, false, "TEST", "TEST1", 1, 1);
 
     space_add_NPC(space, npc);
 
@@ -604,7 +604,7 @@ void test2_space_get_NPC_at(){
     NPC *npc = NULL;
 
     space = space_create(1);
-    npc = npc_create(1,"TEST", "TEST1", 1, 1, 1, 1, 1, 1, 1, 1);
+    npc = npc_create(1, false, "TEST", "TEST1", 1, 1);
 
     space_add_NPC(space, npc);
 
@@ -625,7 +625,7 @@ void test2_space_get_NPC_by_name(){
     NPC *npc = NULL;
 
     space = space_create(1);
-    npc = npc_create(1,"TEST", "TEST1", 1, 1, 1, 1, 1, 1, 1, 1);
+    npc = npc_create(1, false,"TEST", "TEST1", 1, 1);
 
     space_add_NPC(space, npc);
 
@@ -648,7 +648,7 @@ void test2_space_get_NPC_list(){
     char str[100];
 
     space = space_create(1);
-    npc = npc_create(1,"TEST", "TEST1", 1, 1, 1, 1, 1, 1, 1, 1);
+    npc = npc_create(1, false, "TEST", "TEST1", 1, 1);
 
     space_add_NPC(space, npc);
 

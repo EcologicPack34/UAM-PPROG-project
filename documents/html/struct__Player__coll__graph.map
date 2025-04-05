@@ -1,0 +1,23 @@
+<map id="_Player" name="_Player">
+<area shape="rect" id="Node000001" title="Player." alt="" coords="223,504,293,529"/>
+<area shape="rect" id="Node000002" href="$struct__Entity.html" title="This struct stores all the information of an entity." alt="" coords="139,181,206,207"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="182,219,185,230,193,290,195,337,200,383,215,440,232,475,251,502,246,505,228,477,210,442,194,384,190,338,188,290,179,231,177,221"/>
+<area shape="rect" id="Node000007" href="$struct__NPC.html" title="ADT that stores all the information of an NPC." alt="" coords="93,416,149,441"/>
+<area shape="poly" id="edge7_Node000007_Node000002" title=" " alt="" coords="151,218,142,232,126,283,120,336,120,382,122,415,117,416,114,383,114,335,121,282,137,230,146,215"/>
+<area shape="rect" id="Node000003" href="$struct__Inventory.html" title="ADT that stores all the information of an inventory." alt="" coords="7,93,98,119"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="72,127,102,155,145,179,142,184,99,159,69,131"/>
+<area shape="rect" id="Node000004" href="$struct__Collection.html" title="Collection to manage a list of objects with special parametrs as fixed_length and UniqueElements." alt="" coords="5,5,100,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="55,45,55,93,50,93,50,45"/>
+<area shape="rect" id="Node000005" href="$struct__Ability.html" title="Struct that contains all the information related to an ability." alt="" coords="264,93,335,119"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="272,129,191,183,188,179,269,124"/>
+<area shape="rect" id="Node000009" href="$struct__Object.html" title="ADT that stores all the information of an object." alt="" coords="281,181,352,207"/>
+<area shape="poly" id="edge10_Node000009_Node000005" title=" " alt="" coords="307,132,317,180,312,181,302,133"/>
+<area shape="rect" id="Node000006" href="$structEntity__Stats.html" title=" " alt="" coords="123,93,223,119"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="175,133,175,181,170,181,170,133"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="115,455,114,468,119,478,135,489,161,497,223,509,222,514,160,503,132,494,115,482,109,469,109,455"/>
+<area shape="rect" id="Node000008" href="$struct__Equipment.html" title="Equipment internal struct for the player." alt="" coords="267,416,366,441"/>
+<area shape="poly" id="edge8_Node000001_Node000008" title=" " alt="" coords="303,454,268,505,264,502,299,451"/>
+<area shape="poly" id="edge9_Node000008_Node000009" title=" " alt="" coords="319,221,319,416,314,416,314,221"/>
+<area shape="rect" id="Node000010" href="$struct__CommandInfo.html" title="Struct containing the info of a command." alt="" coords="391,416,512,441"/>
+<area shape="poly" id="edge11_Node000001_Node000010" title=" " alt="" coords="425,452,371,482,295,509,293,504,369,478,423,447"/>
+</map>

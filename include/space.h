@@ -35,10 +35,13 @@
 
 #include <stdbool.h>
 
-#define SPACE_INITIAL_SIZE_NPCS 8
-#define SPACE_GRAPHIC_HEIGHT 5
-#define SPACE_GRAPHIC_WIDTH 9
+#define SPACE_INITIAL_SIZE_NPCS 50      /*!< Maximum number of NPCs the space can hold*/
+#define SPACE_GRAPHIC_HEIGHT 5          /*!< Height of a space graphical description*/
+#define SPACE_GRAPHIC_WIDTH 9           /*!< Width of a space graphical description*/
 
+/**
+ * @brief ADT with all the information related to a space
+ */
 typedef struct _Space Space;
 
 /*Space public functions*/
@@ -118,9 +121,9 @@ Status space_set_west(Space *space, Link *link);
  * @brief Sets the position of a given space to a vector of coordenates (x,y)
  * @author Daniel Gómez
  * 
- * @param space 
- * @param x 
- * @param y 
+ * @param space space struct
+ * @param x float with x coordinate
+ * @param y float with y coordinate
  * @return Status 
  */
 Status space_set_position(Space *space, float x, float y);
@@ -129,8 +132,8 @@ Status space_set_position(Space *space, float x, float y);
  * @brief Sets if the spaces has been mapped spatialy or not
  * @author Daniel Gómez
  * 
- * @param space 
- * @param status 
+ * @param space space struct
+ * @param status bool true if mapped false if not
  * @return Status 
  */
 Status space_set_isMapped(Space *space, bool status);
@@ -139,8 +142,8 @@ Status space_set_isMapped(Space *space, bool status);
  * @brief Sets the mapped block to which the space corresponds
  * @author Daniel Gómez
  * 
- * @param space 
- * @param block 
+ * @param space space struct
+ * @param block block level to set
  * @return Status 
  */
 Status space_set_map_block(Space *space, int block);
@@ -149,9 +152,9 @@ Status space_set_map_block(Space *space, int block);
  * @brief Sets the neighbour in a given direction of a given spac
  * @author Daniel Gómez
  * 
- * @param space 
- * @param neighbour 
- * @param direction 
+ * @param space space struct
+ * @param neighbour neighbour space in given direction
+ * @param direction direction to evaluate
  * @return Status 
  */
 Status space_set_neighbour(Space *space, Space *neighbour, Direction direction);
@@ -160,8 +163,9 @@ Status space_set_neighbour(Space *space, Space *neighbour, Direction direction);
  * @brief Sets the graphic description of a given spaces
  * @author Daniel Gómez
  * 
- * @param space 
- * @param desc 
+ * @param space space struct
+ * @param desc string where the graphic description is saved
+ * @param index index of the space
  * @return Status 
  */
 Status space_set_graphic_description(Space *space, char *desc, int index);
@@ -170,8 +174,8 @@ Status space_set_graphic_description(Space *space, char *desc, int index);
  * @brief Sets if the space has been discovered or not.
  * @author Daniel Gómez
  * 
- * @param space 
- * @param status 
+ * @param space space struct
+ * @param status bool true if discovered false if not discovered
  * @return Status 
  */
 Status space_set_isDiscovered(Space *space, bool status);
@@ -182,9 +186,9 @@ Status space_set_isDiscovered(Space *space, bool status);
  * @brief Gets if a given spaces has been discovered
  * @author Daniel Gómez
  * 
- * @param space 
- * @return true 
- * @return false 
+ * @param space space struct
+ * @return true if discovered
+ * @return false if not discovered
  */
 bool space_get_isDiscovered(Space *space);
 
@@ -192,8 +196,8 @@ bool space_get_isDiscovered(Space *space);
  * @brief Gets the reference to the graphic description of a space
  * @author Daniel Gómez
  * 
- * @param space 
- * @return char** 
+ * @param space space struct
+ * @return char** or NULL if error
  */
 char **space_get_graphic_description(Space *space);
 
@@ -201,8 +205,8 @@ char **space_get_graphic_description(Space *space);
  * @brief Gets the pointer to the vector2 storing the position of the space
  * @author Daniel Gómez
  * 
- * @param space 
- * @return Vector2* 
+ * @param space space struct
+ * @return Vector2* or NULL if error
  */
 Vector2 *space_get_position(Space *space);
 
@@ -210,9 +214,9 @@ Vector2 *space_get_position(Space *space);
  * @brief Gets if the spaces has been mapped or not
  * @author Daniel Gómez
  * 
- * @param space 
- * @return true 
- * @return false 
+ * @param space space struct
+ * @return true if mapped
+ * @return false if not mapped
  */
 bool space_get_isMapped(Space *space);
 
@@ -220,8 +224,8 @@ bool space_get_isMapped(Space *space);
  * @brief Gets the block in which the space has been mapped
  * @author Daniel Gómez
  * 
- * @param space 
- * @return int 
+ * @param space space struct
+ * @return int or -1 if error
  */
 int space_get_map_block(Space *space);
 
@@ -229,8 +233,8 @@ int space_get_map_block(Space *space);
  * @brief Gets a reference to the neighbour in a certain direction
  * @author Daniel Gómez
  * 
- * @param space 
- * @param direction 
+ * @param space space struct
+ * @param direction direction to evaluate
  * @return Pointer to neighbour if exist, NULL if not
  */
 Space *space_get_neighbour(Space *space, Direction direction);
@@ -291,6 +295,7 @@ Link *space_get_west(Space *space);
 
 /**
  * @brief Gets the inventory pointer of a space struct
+ * @author Daniel Gómez
  * 
  * @param space a pointer to the space
  * @return Inventory* or NULL if error
@@ -301,7 +306,7 @@ Inventory *space_get_inventory(Space *space);
  * @brief Gets the number of npcs located on a space
  * @author Maksym Polyak
  * 
- * @param space 
+ * @param space space struct
  * @return int or -1 if error
  */
 int space_get_npc_count(Space *space);
@@ -320,8 +325,8 @@ Status space_print(Space *space);
  * @brief Adds an NPC struct to the space NOTE: Sets the location of the npc to the one of the space
  * @author Maksym Polyak
  * 
- * @param space 
- * @param npc 
+ * @param space space struct
+ * @param npc npc struct to add
  * @return Status 
  */
 Status space_add_NPC(Space *space, NPC *npc);
@@ -330,8 +335,8 @@ Status space_add_NPC(Space *space, NPC *npc);
  * @brief Removes an NPC struct from the space NOTE: Sets the NPC location to UNKNOWN_ID
  * @author Maksym Polyak
  * 
- * @param space 
- * @param npc 
+ * @param space space struct
+ * @param npc npc struct to add
  * @return Status 
  */
 Status space_remove_NPC(Space *space, NPC *npc);
@@ -340,9 +345,9 @@ Status space_remove_NPC(Space *space, NPC *npc);
  * @brief Moves an NPC from a space to another space NOTE: Sets the location of the npc to the one of the spaceIN
  * @author Maksym Polyak
  * 
- * @param spaceOUT 
- * @param spaceIN 
- * @param npc 
+ * @param spaceOUT space where the NPC is taken
+ * @param spaceIN space where the NPC is moved
+ * @param npc npc to move
  * @return Status 
  */
 Status space_move_NPC(Space *spaceOUT, Space *spaceIN, NPC *npc);
@@ -351,8 +356,8 @@ Status space_move_NPC(Space *spaceOUT, Space *spaceIN, NPC *npc);
  * @brief Gets an NPC on a space in the index
  * @author Maksym Polyak
  * 
- * @param space 
- * @param index 
+ * @param space space struct
+ * @param index index of the NPC
  * @return NPC* or NULL if error
  */
 NPC *space_get_NPC_at(Space *space, int index);
@@ -361,9 +366,9 @@ NPC *space_get_NPC_at(Space *space, int index);
  * @brief Gets an NPC by its name on a space
  * @author Maksym Polyak
  * 
- * @param space 
- * @param name
- * @return NPC* or NULL if error
+ * @param space space struct
+ * @param name name of the NPC
+ * @return NPC* or NULL if error or not found
  */
 NPC *space_get_NPC_by_name(Space *space, char *name);
 
@@ -371,9 +376,9 @@ NPC *space_get_NPC_by_name(Space *space, char *name);
  * @brief Gets a list of the npcs in the space with a given length
  * @author Daniel Gómez
  * 
- * @param space 
- * @param str 
- * @param length 
+ * @param space space struct
+ * @param str string where the NPC are saved
+ * @param length number of NPCs to save on the list
  * @return Status 
  */
 Status space_get_NPC_list(Space *space, char *str, int length);
@@ -382,8 +387,8 @@ Status space_get_NPC_list(Space *space, char *str, int length);
  * @brief Sets a space as the bool discovered
  * @author Maksym Polyak
  * 
- * @param space 
- * @param discovered 
+ * @param space space struct
+ * @param discovered bool true if discovered 0 if not discovered
  * @return Status 
  */
 Status space_set_discovered(Space *space, bool discovered);
@@ -392,7 +397,7 @@ Status space_set_discovered(Space *space, bool discovered);
  * @brief Returns wheter a space has been discovered
  * @author Maksym Polyak
  * 
- * @param space 
+ * @param space space struct
  * @return true if space is discovered
  * @return false if space is not discovered
  */

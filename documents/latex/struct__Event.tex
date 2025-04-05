@@ -1,0 +1,69 @@
+\doxysection{\+\_\+\+Event Struct Reference}
+\hypertarget{struct__Event}{}\label{struct__Event}\index{\_Event@{\_Event}}
+
+
+Event struct to control special interactions or triggers within the game.  
+
+
+\doxysubsubsection*{Data Fields}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{types_8h_a845e604fb28f7e3d97549da3448149d3}{Id}} \mbox{\hyperlink{struct__Event_a487294ba3213ab1e48e8acc2f1c7b58a}{id}}
+\item 
+\mbox{\hyperlink{event__manager_8h_a2628ea8d12e8b2563c32f05dc7fff6fa}{Event\+Type}} \mbox{\hyperlink{struct__Event_ada81087bbbae001f33f9c0f0305c500c}{type}}
+\item 
+\mbox{\hyperlink{command_8h_a805cf38fd2b6d5604bf1f1036b80fde2}{Command\+Code}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{struct__Event_a9e3cc06eb601d1548625af65ccf28f64}{commands}}
+\item 
+int \mbox{\hyperlink{struct__Event_a86ba66c954475c91b67febc8508cc411}{cmd\+Num}}
+\item 
+char \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{struct__Event_a64fdff74191c07519b498d121e7c6d21}{data}}
+\item 
+bool \mbox{\hyperlink{struct__Event_a0c9649eb5570ac3d9806dfd4251bfa29}{remove\+On\+Trigger}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Event struct to control special interactions or triggers within the game. 
+
+\doxysubsection{Field Documentation}
+\Hypertarget{struct__Event_a86ba66c954475c91b67febc8508cc411}\label{struct__Event_a86ba66c954475c91b67febc8508cc411} 
+\index{\_Event@{\_Event}!cmdNum@{cmdNum}}
+\index{cmdNum@{cmdNum}!\_Event@{\_Event}}
+\doxysubsubsection{\texorpdfstring{cmdNum}{cmdNum}}
+{\footnotesize\ttfamily int \+\_\+\+Event\+::cmd\+Num}
+
+Number of commands that trigger the event \Hypertarget{struct__Event_a9e3cc06eb601d1548625af65ccf28f64}\label{struct__Event_a9e3cc06eb601d1548625af65ccf28f64} 
+\index{\_Event@{\_Event}!commands@{commands}}
+\index{commands@{commands}!\_Event@{\_Event}}
+\doxysubsubsection{\texorpdfstring{commands}{commands}}
+{\footnotesize\ttfamily \mbox{\hyperlink{command_8h_a805cf38fd2b6d5604bf1f1036b80fde2}{Command\+Code}}\texorpdfstring{$\ast$}{*} \+\_\+\+Event\+::commands}
+
+Commands that trigger the event \Hypertarget{struct__Event_a64fdff74191c07519b498d121e7c6d21}\label{struct__Event_a64fdff74191c07519b498d121e7c6d21} 
+\index{\_Event@{\_Event}!data@{data}}
+\index{data@{data}!\_Event@{\_Event}}
+\doxysubsubsection{\texorpdfstring{data}{data}}
+{\footnotesize\ttfamily char\texorpdfstring{$\ast$}{*} \+\_\+\+Event\+::data}
+
+Data of the event \Hypertarget{struct__Event_a487294ba3213ab1e48e8acc2f1c7b58a}\label{struct__Event_a487294ba3213ab1e48e8acc2f1c7b58a} 
+\index{\_Event@{\_Event}!id@{id}}
+\index{id@{id}!\_Event@{\_Event}}
+\doxysubsubsection{\texorpdfstring{id}{id}}
+{\footnotesize\ttfamily \mbox{\hyperlink{types_8h_a845e604fb28f7e3d97549da3448149d3}{Id}} \+\_\+\+Event\+::id}
+
+Id of the event \Hypertarget{struct__Event_a0c9649eb5570ac3d9806dfd4251bfa29}\label{struct__Event_a0c9649eb5570ac3d9806dfd4251bfa29} 
+\index{\_Event@{\_Event}!removeOnTrigger@{removeOnTrigger}}
+\index{removeOnTrigger@{removeOnTrigger}!\_Event@{\_Event}}
+\doxysubsubsection{\texorpdfstring{removeOnTrigger}{removeOnTrigger}}
+{\footnotesize\ttfamily bool \+\_\+\+Event\+::remove\+On\+Trigger}
+
+Bool true if it is removed on trigger \Hypertarget{struct__Event_ada81087bbbae001f33f9c0f0305c500c}\label{struct__Event_ada81087bbbae001f33f9c0f0305c500c} 
+\index{\_Event@{\_Event}!type@{type}}
+\index{type@{type}!\_Event@{\_Event}}
+\doxysubsubsection{\texorpdfstring{type}{type}}
+{\footnotesize\ttfamily \mbox{\hyperlink{event__manager_8h_a2628ea8d12e8b2563c32f05dc7fff6fa}{Event\+Type}} \+\_\+\+Event\+::type}
+
+Type of the event 
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/event\+\_\+manager.\+c\end{DoxyCompactItemize}

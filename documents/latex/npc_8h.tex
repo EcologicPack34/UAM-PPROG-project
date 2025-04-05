@@ -1,0 +1,361 @@
+\doxysection{include/npc.h File Reference}
+\hypertarget{npc_8h}{}\label{npc_8h}\index{include/npc.h@{include/npc.h}}
+
+
+The NPC module controls the creation and actions of the NPCs on the game, each NPC is an entity, has a message and a status to determine their behaviour towards the player.  
+
+
+{\ttfamily \#include $<$stdio.\+h$>$}\newline
+{\ttfamily \#include $<$string.\+h$>$}\newline
+{\ttfamily \#include "{}entity.\+h"{}}\newline
+{\ttfamily \#include "{}types.\+h"{}}\newline
+{\ttfamily \#include "{}debug\+\_\+printing.\+h"{}}\newline
+Include dependency graph for npc.\+h\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{npc_8h__incl}
+\end{center}
+\end{figure}
+This graph shows which files directly or indirectly include this file\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{npc_8h__dep__incl}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{npc_8h_a39909c657c1a61d1470271e3029ab7cb}\label{npc_8h_a39909c657c1a61d1470271e3029ab7cb} 
+typedef struct \mbox{\hyperlink{struct__NPC}{\+\_\+\+NPC}} {\bfseries NPC}
+\begin{DoxyCompactList}\small\item\em Struct that contains all the entity information related to an NPC, their dialogues and their NPC\+\_\+status. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{npc_8h_a71b1bede51c452f2811ba0cd6ee4e875}\label{npc_8h_a71b1bede51c452f2811ba0cd6ee4e875} 
+enum \mbox{\hyperlink{npc_8h_a71b1bede51c452f2811ba0cd6ee4e875}{NPC\+\_\+status}} \{ {\bfseries UNKNOWN\+\_\+\+STATUS}
+, {\bfseries NEUTRAL}
+, {\bfseries ALLY}
+, {\bfseries ENEMY}
+ \}
+\begin{DoxyCompactList}\small\item\em Enum to determine wether an NPC is neutral with the player, is an ally or an enemy. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{npc_8h_a39909c657c1a61d1470271e3029ab7cb}{NPC}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{npc_8h_a3fda1d94b7051886b2151ff201541f4b}{npc\+\_\+create}} (\mbox{\hyperlink{npc_8h_a71b1bede51c452f2811ba0cd6ee4e875}{NPC\+\_\+status}} status, bool can\+\_\+follow, char \texorpdfstring{$\ast$}{*}message, char \texorpdfstring{$\ast$}{*}name, \mbox{\hyperlink{types_8h_a845e604fb28f7e3d97549da3448149d3}{Id}} id, \mbox{\hyperlink{types_8h_a845e604fb28f7e3d97549da3448149d3}{Id}} location)
+\begin{DoxyCompactList}\small\item\em Allocates memory for an NPC struct and returns its pointer. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{npc_8h_a90188700ae27ad76751863ccfe486807}{npc\+\_\+destroy}} (void \texorpdfstring{$\ast$}{*}npc)
+\begin{DoxyCompactList}\small\item\em Frees all the memory related to an npc. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{entity_8h_a88bccc76704ed1a036c3500da8c42bcc}{Entity}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{npc_8h_a4c4eaaea996757be01036eee72091232}{npc\+\_\+get\+\_\+entity}} (\mbox{\hyperlink{npc_8h_a39909c657c1a61d1470271e3029ab7cb}{NPC}} \texorpdfstring{$\ast$}{*}npc)
+\begin{DoxyCompactList}\small\item\em Gets the entity struct of an NPC. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{npc_8h_a71b1bede51c452f2811ba0cd6ee4e875}{NPC\+\_\+status}} \mbox{\hyperlink{npc_8h_a332852606edd5ff11cea5bb1b6e3fe0a}{npc\+\_\+get\+\_\+status}} (\mbox{\hyperlink{npc_8h_a39909c657c1a61d1470271e3029ab7cb}{NPC}} \texorpdfstring{$\ast$}{*}npc)
+\begin{DoxyCompactList}\small\item\em Gets the NPC\+\_\+status of an NPC. \end{DoxyCompactList}\item 
+char \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{npc_8h_a0f8c72a07f088f4ed441db82da4177d8}{npc\+\_\+get\+\_\+message}} (\mbox{\hyperlink{npc_8h_a39909c657c1a61d1470271e3029ab7cb}{NPC}} \texorpdfstring{$\ast$}{*}npc)
+\begin{DoxyCompactList}\small\item\em Gets the char \texorpdfstring{$\ast$}{*} with the message of the NPC. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{npc_8h_aeb45e1deb15713577c5d3f0fac878e39}{npc\+\_\+get\+\_\+can\+\_\+follow}} (\mbox{\hyperlink{npc_8h_a39909c657c1a61d1470271e3029ab7cb}{NPC}} \texorpdfstring{$\ast$}{*}npc)
+\begin{DoxyCompactList}\small\item\em Gets if the NPC can be a follower after chat or not. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} \mbox{\hyperlink{npc_8h_ad98f5e6d2aa014694ae52318d138b604}{npc\+\_\+set\+\_\+status}} (\mbox{\hyperlink{npc_8h_a39909c657c1a61d1470271e3029ab7cb}{NPC}} \texorpdfstring{$\ast$}{*}npc, \mbox{\hyperlink{npc_8h_a71b1bede51c452f2811ba0cd6ee4e875}{NPC\+\_\+status}} status)
+\begin{DoxyCompactList}\small\item\em Sets an npc status towards the player. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} \mbox{\hyperlink{npc_8h_a9ae03b83b9f341ed90df8ca4ae77264a}{npc\+\_\+set\+\_\+message}} (\mbox{\hyperlink{npc_8h_a39909c657c1a61d1470271e3029ab7cb}{NPC}} \texorpdfstring{$\ast$}{*}npc, char \texorpdfstring{$\ast$}{*}message)
+\begin{DoxyCompactList}\small\item\em Sets the message of the NPC to the one received as an input. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} \mbox{\hyperlink{npc_8h_a1b98da4577adad76d9ebeee98c98058c}{npc\+\_\+set\+\_\+is\+\_\+follower}} (\mbox{\hyperlink{npc_8h_a39909c657c1a61d1470271e3029ab7cb}{NPC}} \texorpdfstring{$\ast$}{*}npc, bool can\+\_\+follow)
+\begin{DoxyCompactList}\small\item\em Sets the can\+\_\+follow bool on npc. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{npc_8h_a43b11863022a5b01447c7a06eb492224}{npc\+\_\+cmp}} (void \texorpdfstring{$\ast$}{*}npc1, void \texorpdfstring{$\ast$}{*}npc2)
+\begin{DoxyCompactList}\small\item\em Compares two npcs. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{npc_8h_a5bee1148a22d0e99e55025229adaba1d}{npc\+\_\+print}} (void \texorpdfstring{$\ast$}{*}npc)
+\begin{DoxyCompactList}\small\item\em Prints on screen the NPC information. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} \mbox{\hyperlink{npc_8h_ac8328328dcef7dbbb6cb711b31911190}{npc\+\_\+get\+\_\+str\+\_\+descr}} (\mbox{\hyperlink{npc_8h_a39909c657c1a61d1470271e3029ab7cb}{NPC}} \texorpdfstring{$\ast$}{*}npc, char \texorpdfstring{$\ast$}{*}str, int index)
+\begin{DoxyCompactList}\small\item\em Gets a string without \textbackslash{} n with the information of an NPC on str, str starts with (index). \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+The NPC module controls the creation and actions of the NPCs on the game, each NPC is an entity, has a message and a status to determine their behaviour towards the player. 
+
+\begin{DoxyAuthor}{Author}
+Maksym Polyak 
+\end{DoxyAuthor}
+\begin{DoxyVersion}{Version}
+0.\+1 
+\end{DoxyVersion}
+\begin{DoxyDate}{Date}
+2025-\/03-\/04
+\end{DoxyDate}
+\begin{DoxyCopyright}{Copyright}
+Copyright (c) 2025 
+\end{DoxyCopyright}
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{npc_8h_a43b11863022a5b01447c7a06eb492224}\label{npc_8h_a43b11863022a5b01447c7a06eb492224} 
+\index{npc.h@{npc.h}!npc\_cmp@{npc\_cmp}}
+\index{npc\_cmp@{npc\_cmp}!npc.h@{npc.h}}
+\doxysubsubsection{\texorpdfstring{npc\_cmp()}{npc\_cmp()}}
+{\footnotesize\ttfamily int npc\+\_\+cmp (\begin{DoxyParamCaption}\item[{void \texorpdfstring{$\ast$}{*}}]{npc1,  }\item[{void \texorpdfstring{$\ast$}{*}}]{npc2 }\end{DoxyParamCaption})}
+
+
+
+Compares two npcs. 
+
+\begin{DoxyAuthor}{Author}
+Maksym Polyak
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em npc1} & npc struct 1 \\
+\hline
+{\em npc2} & npc struct 2 \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int = 0 if their id is equal, 1 if the id of npc1 is greater, -\/1 if the id of npc2 is greater or -\/2 if there was an error 
+\end{DoxyReturn}
+\Hypertarget{npc_8h_a3fda1d94b7051886b2151ff201541f4b}\label{npc_8h_a3fda1d94b7051886b2151ff201541f4b} 
+\index{npc.h@{npc.h}!npc\_create@{npc\_create}}
+\index{npc\_create@{npc\_create}!npc.h@{npc.h}}
+\doxysubsubsection{\texorpdfstring{npc\_create()}{npc\_create()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{npc_8h_a39909c657c1a61d1470271e3029ab7cb}{NPC}} \texorpdfstring{$\ast$}{*} npc\+\_\+create (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{npc_8h_a71b1bede51c452f2811ba0cd6ee4e875}{NPC\+\_\+status}}}]{status,  }\item[{bool}]{can\+\_\+follow,  }\item[{char \texorpdfstring{$\ast$}{*}}]{message,  }\item[{char \texorpdfstring{$\ast$}{*}}]{name,  }\item[{\mbox{\hyperlink{types_8h_a845e604fb28f7e3d97549da3448149d3}{Id}}}]{id,  }\item[{\mbox{\hyperlink{types_8h_a845e604fb28f7e3d97549da3448149d3}{Id}}}]{location }\end{DoxyParamCaption})}
+
+
+
+Allocates memory for an NPC struct and returns its pointer. 
+
+\begin{DoxyAuthor}{Author}
+Maksym Polyak
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em status} & status with the player\+: NPC\+\_\+status \\
+\hline
+{\em can\+\_\+follow} & determines if the NPC becomes a follower after chat \\
+\hline
+{\em message} & message of the NPC on start \\
+\hline
+{\em name} & name of the NPC \\
+\hline
+{\em id} & id of the NPC \\
+\hline
+{\em location} & id of the space where the NPC is located\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+NPC\texorpdfstring{$\ast$}{*} or NULL if error 
+\end{DoxyReturn}
+\Hypertarget{npc_8h_a90188700ae27ad76751863ccfe486807}\label{npc_8h_a90188700ae27ad76751863ccfe486807} 
+\index{npc.h@{npc.h}!npc\_destroy@{npc\_destroy}}
+\index{npc\_destroy@{npc\_destroy}!npc.h@{npc.h}}
+\doxysubsubsection{\texorpdfstring{npc\_destroy()}{npc\_destroy()}}
+{\footnotesize\ttfamily void npc\+\_\+destroy (\begin{DoxyParamCaption}\item[{void \texorpdfstring{$\ast$}{*}}]{npc }\end{DoxyParamCaption})}
+
+
+
+Frees all the memory related to an npc. 
+
+\begin{DoxyAuthor}{Author}
+Maksym Polyak
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em npc} & struct pointer of the NPC \\
+\hline
+\end{DoxyParams}
+\Hypertarget{npc_8h_aeb45e1deb15713577c5d3f0fac878e39}\label{npc_8h_aeb45e1deb15713577c5d3f0fac878e39} 
+\index{npc.h@{npc.h}!npc\_get\_can\_follow@{npc\_get\_can\_follow}}
+\index{npc\_get\_can\_follow@{npc\_get\_can\_follow}!npc.h@{npc.h}}
+\doxysubsubsection{\texorpdfstring{npc\_get\_can\_follow()}{npc\_get\_can\_follow()}}
+{\footnotesize\ttfamily bool npc\+\_\+get\+\_\+can\+\_\+follow (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{npc_8h_a39909c657c1a61d1470271e3029ab7cb}{NPC}} \texorpdfstring{$\ast$}{*}}]{npc }\end{DoxyParamCaption})}
+
+
+
+Gets if the NPC can be a follower after chat or not. 
+
+\begin{DoxyAuthor}{Author}
+Maksym Polyak
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em npc} & npc struct \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true if npc can be a follower 
+
+false if npc cannot be a follower 
+\end{DoxyReturn}
+\Hypertarget{npc_8h_a4c4eaaea996757be01036eee72091232}\label{npc_8h_a4c4eaaea996757be01036eee72091232} 
+\index{npc.h@{npc.h}!npc\_get\_entity@{npc\_get\_entity}}
+\index{npc\_get\_entity@{npc\_get\_entity}!npc.h@{npc.h}}
+\doxysubsubsection{\texorpdfstring{npc\_get\_entity()}{npc\_get\_entity()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{entity_8h_a88bccc76704ed1a036c3500da8c42bcc}{Entity}} \texorpdfstring{$\ast$}{*} npc\+\_\+get\+\_\+entity (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{npc_8h_a39909c657c1a61d1470271e3029ab7cb}{NPC}} \texorpdfstring{$\ast$}{*}}]{npc }\end{DoxyParamCaption})}
+
+
+
+Gets the entity struct of an NPC. 
+
+\begin{DoxyAuthor}{Author}
+Maksym Polyak
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em npc} & struct pointer of the NPC \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Entity\texorpdfstring{$\ast$}{*} or NULL if error 
+\end{DoxyReturn}
+\Hypertarget{npc_8h_a0f8c72a07f088f4ed441db82da4177d8}\label{npc_8h_a0f8c72a07f088f4ed441db82da4177d8} 
+\index{npc.h@{npc.h}!npc\_get\_message@{npc\_get\_message}}
+\index{npc\_get\_message@{npc\_get\_message}!npc.h@{npc.h}}
+\doxysubsubsection{\texorpdfstring{npc\_get\_message()}{npc\_get\_message()}}
+{\footnotesize\ttfamily char \texorpdfstring{$\ast$}{*} npc\+\_\+get\+\_\+message (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{npc_8h_a39909c657c1a61d1470271e3029ab7cb}{NPC}} \texorpdfstring{$\ast$}{*}}]{npc }\end{DoxyParamCaption})}
+
+
+
+Gets the char \texorpdfstring{$\ast$}{*} with the message of the NPC. 
+
+\begin{DoxyAuthor}{Author}
+Maksym Polyak
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em npc} & npc struct \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+char\texorpdfstring{$\ast$}{*} or NULL if error 
+\end{DoxyReturn}
+\Hypertarget{npc_8h_a332852606edd5ff11cea5bb1b6e3fe0a}\label{npc_8h_a332852606edd5ff11cea5bb1b6e3fe0a} 
+\index{npc.h@{npc.h}!npc\_get\_status@{npc\_get\_status}}
+\index{npc\_get\_status@{npc\_get\_status}!npc.h@{npc.h}}
+\doxysubsubsection{\texorpdfstring{npc\_get\_status()}{npc\_get\_status()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{npc_8h_a71b1bede51c452f2811ba0cd6ee4e875}{NPC\+\_\+status}} npc\+\_\+get\+\_\+status (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{npc_8h_a39909c657c1a61d1470271e3029ab7cb}{NPC}} \texorpdfstring{$\ast$}{*}}]{npc }\end{DoxyParamCaption})}
+
+
+
+Gets the NPC\+\_\+status of an NPC. 
+
+\begin{DoxyAuthor}{Author}
+Maksym Polyak
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em npc} & struct pointer of the NPC \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+NPC\+\_\+status or UNKNOWN\+\_\+\+STATUS if error 
+\end{DoxyReturn}
+\Hypertarget{npc_8h_ac8328328dcef7dbbb6cb711b31911190}\label{npc_8h_ac8328328dcef7dbbb6cb711b31911190} 
+\index{npc.h@{npc.h}!npc\_get\_str\_descr@{npc\_get\_str\_descr}}
+\index{npc\_get\_str\_descr@{npc\_get\_str\_descr}!npc.h@{npc.h}}
+\doxysubsubsection{\texorpdfstring{npc\_get\_str\_descr()}{npc\_get\_str\_descr()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} npc\+\_\+get\+\_\+str\+\_\+descr (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{npc_8h_a39909c657c1a61d1470271e3029ab7cb}{NPC}} \texorpdfstring{$\ast$}{*}}]{npc,  }\item[{char \texorpdfstring{$\ast$}{*}}]{str,  }\item[{int}]{index }\end{DoxyParamCaption})}
+
+
+
+Gets a string without \textbackslash{} n with the information of an NPC on str, str starts with (index). 
+
+\begin{DoxyAuthor}{Author}
+Maksym Polyak
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em npc} & npc struct \\
+\hline
+{\em str} & string where description is saved \\
+\hline
+{\em index} & index where the NPC is located \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Status 
+\end{DoxyReturn}
+\Hypertarget{npc_8h_a5bee1148a22d0e99e55025229adaba1d}\label{npc_8h_a5bee1148a22d0e99e55025229adaba1d} 
+\index{npc.h@{npc.h}!npc\_print@{npc\_print}}
+\index{npc\_print@{npc\_print}!npc.h@{npc.h}}
+\doxysubsubsection{\texorpdfstring{npc\_print()}{npc\_print()}}
+{\footnotesize\ttfamily void npc\+\_\+print (\begin{DoxyParamCaption}\item[{void \texorpdfstring{$\ast$}{*}}]{npc }\end{DoxyParamCaption})}
+
+
+
+Prints on screen the NPC information. 
+
+\begin{DoxyAuthor}{Author}
+Maksym Polyak
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em npc} & npc struct \\
+\hline
+\end{DoxyParams}
+\Hypertarget{npc_8h_a1b98da4577adad76d9ebeee98c98058c}\label{npc_8h_a1b98da4577adad76d9ebeee98c98058c} 
+\index{npc.h@{npc.h}!npc\_set\_is\_follower@{npc\_set\_is\_follower}}
+\index{npc\_set\_is\_follower@{npc\_set\_is\_follower}!npc.h@{npc.h}}
+\doxysubsubsection{\texorpdfstring{npc\_set\_is\_follower()}{npc\_set\_is\_follower()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} npc\+\_\+set\+\_\+is\+\_\+follower (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{npc_8h_a39909c657c1a61d1470271e3029ab7cb}{NPC}} \texorpdfstring{$\ast$}{*}}]{npc,  }\item[{bool}]{can\+\_\+follow }\end{DoxyParamCaption})}
+
+
+
+Sets the can\+\_\+follow bool on npc. 
+
+\begin{DoxyAuthor}{Author}
+Maksym Polyak
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em npc} & npc struct \\
+\hline
+{\em can\+\_\+follow} & bool 1 if can follow \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Status 
+\end{DoxyReturn}
+\Hypertarget{npc_8h_a9ae03b83b9f341ed90df8ca4ae77264a}\label{npc_8h_a9ae03b83b9f341ed90df8ca4ae77264a} 
+\index{npc.h@{npc.h}!npc\_set\_message@{npc\_set\_message}}
+\index{npc\_set\_message@{npc\_set\_message}!npc.h@{npc.h}}
+\doxysubsubsection{\texorpdfstring{npc\_set\_message()}{npc\_set\_message()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} npc\+\_\+set\+\_\+message (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{npc_8h_a39909c657c1a61d1470271e3029ab7cb}{NPC}} \texorpdfstring{$\ast$}{*}}]{npc,  }\item[{char \texorpdfstring{$\ast$}{*}}]{message }\end{DoxyParamCaption})}
+
+
+
+Sets the message of the NPC to the one received as an input. 
+
+\begin{DoxyAuthor}{Author}
+Maksym Polyak
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em npc} & npc struct \\
+\hline
+{\em message} & message string to set \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Status 
+\end{DoxyReturn}
+\Hypertarget{npc_8h_ad98f5e6d2aa014694ae52318d138b604}\label{npc_8h_ad98f5e6d2aa014694ae52318d138b604} 
+\index{npc.h@{npc.h}!npc\_set\_status@{npc\_set\_status}}
+\index{npc\_set\_status@{npc\_set\_status}!npc.h@{npc.h}}
+\doxysubsubsection{\texorpdfstring{npc\_set\_status()}{npc\_set\_status()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} npc\+\_\+set\+\_\+status (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{npc_8h_a39909c657c1a61d1470271e3029ab7cb}{NPC}} \texorpdfstring{$\ast$}{*}}]{npc,  }\item[{\mbox{\hyperlink{npc_8h_a71b1bede51c452f2811ba0cd6ee4e875}{NPC\+\_\+status}}}]{status }\end{DoxyParamCaption})}
+
+
+
+Sets an npc status towards the player. 
+
+\begin{DoxyAuthor}{Author}
+Maksym Polyak
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em npc} & struct pointer of the NPC \\
+\hline
+{\em status} & status to be set \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Status 
+\end{DoxyReturn}

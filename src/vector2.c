@@ -1,3 +1,14 @@
+/**
+ * @file vector2.c
+ * @author Daniel Gómez
+ * @brief Vector internal funcitonality
+ * @version 0.1
+ * @date 2025-04-03
+ * 
+ * @copyright Copyright (c) 2025
+ * 
+ */
+
 #include "vector2.h"
 
 void vector2_add(Vector2 *v1, Vector2 v2){

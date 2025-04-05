@@ -148,13 +148,13 @@ int ability_get_cooldown_length(Ability *ability){
 }
 
 bool ability_get_is_player_ability(Ability *ability){
-  if(!ability) return FALSE;
+  if(!ability) return false;
 
   return ability->is_player_ability;
 }
 
 bool ability_get_is_object_use(Ability *ability){
-  if(!ability) return FALSE;
+  if(!ability) return false;
 
   return ability->is_object_use;
 }

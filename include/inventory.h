@@ -24,10 +24,13 @@
  
 #include <stdbool.h>
 
-#define INVENTORY_PLAYER_MAX_SIZE 10
-#define INVENTORY_ENTITY_MAX_SIZE 10
-#define INVENTORY_SPACE_MAX_SIZE 10
+#define INVENTORY_PLAYER_MAX_SIZE 10    /*!< Maximum inventory space for a player*/
+#define INVENTORY_ENTITY_MAX_SIZE 10    /*!< Maximum inventory space for an entity*/
+#define INVENTORY_SPACE_MAX_SIZE 50     /*!< Maximum inventory space for a space*/
  
+/**
+ * @brief ADT with all the information of the objects related to an entity, or space
+ */
 typedef struct _Inventory Inventory;
 
 /*Game public interface functions*/
@@ -95,6 +98,8 @@ Collection *inventory_get_collection(Inventory *inventory);
  *
  * @param inventory inventory where the objects are located
  * @param objectlist string where the object list is going to be located
+ * @param mode mode of the function
+ * @param length number of obects listed
  * @return OK if well or ERROR if error
  */
 Status inventory_get_object_list(Inventory *inventory, char *objectlist, int mode, int length);
@@ -103,9 +108,9 @@ Status inventory_get_object_list(Inventory *inventory, char *objectlist, int mod
  * @brief Gets a str without \n with the id of the object and its name
  * @author Maksym Polyak
  *
- * @param inventory 
- * @param objectdescr 
- * @param index 
+ * @param inventory inventory struct
+ * @param objectdescr where the object description is saved
+ * @param index index from the object on the inventory
  * @return Status 
  */
 Status inventory_get_object_str_at(Inventory *inventory, char *objectdescr, int index);
@@ -173,7 +178,7 @@ Status inventory_move_object(Inventory *inventoryOUT, Inventory *inventoryIN, Id
 bool inventory_contains_object(Inventory *inventory, Id objectid);
 
 /**
- * @brief Returns the number of objects with such name, and the objects
+ * @brief Returns the number of objects with such name, and the objects -- TO BE IMPLEMENTED
  * @author Sofía Calvo
  *
  * @param inventory contains the inventory information

@@ -1,0 +1,249 @@
+\doxysection{include/queue.h File Reference}
+\hypertarget{queue_8h}{}\label{queue_8h}\index{include/queue.h@{include/queue.h}}
+
+
+Queue implementation with a linked list THE QUEUE DOESN\textquotesingle{}T MANAGE THE MEMORY OF THE ELEMENTS IT STORES.  
+
+
+{\ttfamily \#include "{}types.\+h"{}}\newline
+{\ttfamily \#include $<$stdbool.\+h$>$}\newline
+Include dependency graph for queue.\+h\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=214pt]{queue_8h__incl}
+\end{center}
+\end{figure}
+This graph shows which files directly or indirectly include this file\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{queue_8h__dep__incl}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef struct \mbox{\hyperlink{struct__Queue}{\+\_\+\+Queue}} \mbox{\hyperlink{queue_8h_aaa31d02f2b2876d12bb8f83900eacce6}{Queue}}
+\begin{DoxyCompactList}\small\item\em Data type containing all the information of the queue. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{queue_8h_aaa31d02f2b2876d12bb8f83900eacce6}{Queue}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{queue_8h_a8839b4e99adcf7db181790759ab73251}{queue\+\_\+create}} ()
+\begin{DoxyCompactList}\small\item\em Initializes and allocates memory for a queue. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{queue_8h_ad21ee75924298937673e2b8d66665466}{queue\+\_\+destroy}} (\mbox{\hyperlink{queue_8h_aaa31d02f2b2876d12bb8f83900eacce6}{Queue}} \texorpdfstring{$\ast$}{*}q)
+\begin{DoxyCompactList}\small\item\em Frees all the memory used by queue DOESN\textquotesingle{}T FREE MEMORY USED BY ELEMENTS STORE IN QUEUE. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} \mbox{\hyperlink{queue_8h_aaa5dd9fd686b69fd04abfcd9af6f0298}{queue\+\_\+push}} (\mbox{\hyperlink{queue_8h_aaa31d02f2b2876d12bb8f83900eacce6}{Queue}} \texorpdfstring{$\ast$}{*}q, void \texorpdfstring{$\ast$}{*}element)
+\begin{DoxyCompactList}\small\item\em Tries to add an element to the queue. \end{DoxyCompactList}\item 
+void \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{queue_8h_a31dc5c3d3f5c6e5005700e427ea296c1}{queue\+\_\+pop}} (\mbox{\hyperlink{queue_8h_aaa31d02f2b2876d12bb8f83900eacce6}{Queue}} \texorpdfstring{$\ast$}{*}q)
+\begin{DoxyCompactList}\small\item\em Retrieves an element from the queue. \end{DoxyCompactList}\item 
+void \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{queue_8h_a8d6df0b9f09d006409f99b920ac17834}{queue\+\_\+front}} (\mbox{\hyperlink{queue_8h_aaa31d02f2b2876d12bb8f83900eacce6}{Queue}} \texorpdfstring{$\ast$}{*}q)
+\begin{DoxyCompactList}\small\item\em Gets the first element of the queue without extracting it. \end{DoxyCompactList}\item 
+void \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{queue_8h_a5c20bf03e3d57db93f79019f6ed7634c}{queue\+\_\+rear}} (\mbox{\hyperlink{queue_8h_aaa31d02f2b2876d12bb8f83900eacce6}{Queue}} \texorpdfstring{$\ast$}{*}q)
+\begin{DoxyCompactList}\small\item\em Gets the last element of the queue without extracting it. \end{DoxyCompactList}\item 
+long \mbox{\hyperlink{queue_8h_a2055b900bc866bdf604d16c56946c6a2}{queue\+\_\+size}} (\mbox{\hyperlink{queue_8h_aaa31d02f2b2876d12bb8f83900eacce6}{Queue}} \texorpdfstring{$\ast$}{*}q)
+\begin{DoxyCompactList}\small\item\em Returns the size of the queue. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{queue_8h_a0a2065fd13b692660090281131e5fb44}{queue\+\_\+is\+Empty}} (\mbox{\hyperlink{queue_8h_aaa31d02f2b2876d12bb8f83900eacce6}{Queue}} \texorpdfstring{$\ast$}{*}q)
+\begin{DoxyCompactList}\small\item\em Returns if the queue has elements in it or not. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Queue implementation with a linked list THE QUEUE DOESN\textquotesingle{}T MANAGE THE MEMORY OF THE ELEMENTS IT STORES. 
+
+\begin{DoxyAuthor}{Author}
+Daniel Gómez 
+\end{DoxyAuthor}
+\begin{DoxyVersion}{Version}
+0.\+1 
+\end{DoxyVersion}
+\begin{DoxyDate}{Date}
+2025-\/03-\/06
+\end{DoxyDate}
+\begin{DoxyCopyright}{Copyright}
+GNU Public License 
+\end{DoxyCopyright}
+
+
+\doxysubsection{Typedef Documentation}
+\Hypertarget{queue_8h_aaa31d02f2b2876d12bb8f83900eacce6}\label{queue_8h_aaa31d02f2b2876d12bb8f83900eacce6} 
+\index{queue.h@{queue.h}!Queue@{Queue}}
+\index{Queue@{Queue}!queue.h@{queue.h}}
+\doxysubsubsection{\texorpdfstring{Queue}{Queue}}
+{\footnotesize\ttfamily typedef struct \mbox{\hyperlink{struct__Queue}{\+\_\+\+Queue}} \mbox{\hyperlink{queue_8h_aaa31d02f2b2876d12bb8f83900eacce6}{Queue}}}
+
+
+
+Data type containing all the information of the queue. 
+
+\begin{DoxyAuthor}{Author}
+Daniel Gómez 
+\end{DoxyAuthor}
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{queue_8h_a8839b4e99adcf7db181790759ab73251}\label{queue_8h_a8839b4e99adcf7db181790759ab73251} 
+\index{queue.h@{queue.h}!queue\_create@{queue\_create}}
+\index{queue\_create@{queue\_create}!queue.h@{queue.h}}
+\doxysubsubsection{\texorpdfstring{queue\_create()}{queue\_create()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{queue_8h_aaa31d02f2b2876d12bb8f83900eacce6}{Queue}} \texorpdfstring{$\ast$}{*} queue\+\_\+create (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Initializes and allocates memory for a queue. 
+
+\begin{DoxyAuthor}{Author}
+Daniel Gómez
+\end{DoxyAuthor}
+\begin{DoxyReturn}{Returns}
+Pointer to allocated memory, NULL if error 
+\end{DoxyReturn}
+\Hypertarget{queue_8h_ad21ee75924298937673e2b8d66665466}\label{queue_8h_ad21ee75924298937673e2b8d66665466} 
+\index{queue.h@{queue.h}!queue\_destroy@{queue\_destroy}}
+\index{queue\_destroy@{queue\_destroy}!queue.h@{queue.h}}
+\doxysubsubsection{\texorpdfstring{queue\_destroy()}{queue\_destroy()}}
+{\footnotesize\ttfamily void queue\+\_\+destroy (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{queue_8h_aaa31d02f2b2876d12bb8f83900eacce6}{Queue}} \texorpdfstring{$\ast$}{*}}]{q }\end{DoxyParamCaption})}
+
+
+
+Frees all the memory used by queue DOESN\textquotesingle{}T FREE MEMORY USED BY ELEMENTS STORE IN QUEUE. 
+
+\begin{DoxyAuthor}{Author}
+Daniel Gómez 
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em q} & pointer to queue \\
+\hline
+\end{DoxyParams}
+\Hypertarget{queue_8h_a8d6df0b9f09d006409f99b920ac17834}\label{queue_8h_a8d6df0b9f09d006409f99b920ac17834} 
+\index{queue.h@{queue.h}!queue\_front@{queue\_front}}
+\index{queue\_front@{queue\_front}!queue.h@{queue.h}}
+\doxysubsubsection{\texorpdfstring{queue\_front()}{queue\_front()}}
+{\footnotesize\ttfamily void \texorpdfstring{$\ast$}{*} queue\+\_\+front (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{queue_8h_aaa31d02f2b2876d12bb8f83900eacce6}{Queue}} \texorpdfstring{$\ast$}{*}}]{q }\end{DoxyParamCaption})}
+
+
+
+Gets the first element of the queue without extracting it. 
+
+\begin{DoxyAuthor}{Author}
+Daniel Gómez
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em q} & queue struct \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void\texorpdfstring{$\ast$}{*} 
+\end{DoxyReturn}
+\Hypertarget{queue_8h_a0a2065fd13b692660090281131e5fb44}\label{queue_8h_a0a2065fd13b692660090281131e5fb44} 
+\index{queue.h@{queue.h}!queue\_isEmpty@{queue\_isEmpty}}
+\index{queue\_isEmpty@{queue\_isEmpty}!queue.h@{queue.h}}
+\doxysubsubsection{\texorpdfstring{queue\_isEmpty()}{queue\_isEmpty()}}
+{\footnotesize\ttfamily bool queue\+\_\+is\+Empty (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{queue_8h_aaa31d02f2b2876d12bb8f83900eacce6}{Queue}} \texorpdfstring{$\ast$}{*}}]{q }\end{DoxyParamCaption})}
+
+
+
+Returns if the queue has elements in it or not. 
+
+\begin{DoxyAuthor}{Author}
+Daniel Gómez
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em q} & queue struct \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true 
+
+false 
+\end{DoxyReturn}
+\Hypertarget{queue_8h_a31dc5c3d3f5c6e5005700e427ea296c1}\label{queue_8h_a31dc5c3d3f5c6e5005700e427ea296c1} 
+\index{queue.h@{queue.h}!queue\_pop@{queue\_pop}}
+\index{queue\_pop@{queue\_pop}!queue.h@{queue.h}}
+\doxysubsubsection{\texorpdfstring{queue\_pop()}{queue\_pop()}}
+{\footnotesize\ttfamily void \texorpdfstring{$\ast$}{*} queue\+\_\+pop (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{queue_8h_aaa31d02f2b2876d12bb8f83900eacce6}{Queue}} \texorpdfstring{$\ast$}{*}}]{q }\end{DoxyParamCaption})}
+
+
+
+Retrieves an element from the queue. 
+
+\begin{DoxyAuthor}{Author}
+Daniel Gómez
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em q} & pointer to queue \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Pointer to element, NULL if something went wrong 
+\end{DoxyReturn}
+\Hypertarget{queue_8h_aaa5dd9fd686b69fd04abfcd9af6f0298}\label{queue_8h_aaa5dd9fd686b69fd04abfcd9af6f0298} 
+\index{queue.h@{queue.h}!queue\_push@{queue\_push}}
+\index{queue\_push@{queue\_push}!queue.h@{queue.h}}
+\doxysubsubsection{\texorpdfstring{queue\_push()}{queue\_push()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} queue\+\_\+push (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{queue_8h_aaa31d02f2b2876d12bb8f83900eacce6}{Queue}} \texorpdfstring{$\ast$}{*}}]{q,  }\item[{void \texorpdfstring{$\ast$}{*}}]{element }\end{DoxyParamCaption})}
+
+
+
+Tries to add an element to the queue. 
+
+\begin{DoxyAuthor}{Author}
+Daniel Gómez
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em q} & pointer to queue \\
+\hline
+{\em element} & pointer to element \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Ok if added, ERROR if not 
+\end{DoxyReturn}
+\Hypertarget{queue_8h_a5c20bf03e3d57db93f79019f6ed7634c}\label{queue_8h_a5c20bf03e3d57db93f79019f6ed7634c} 
+\index{queue.h@{queue.h}!queue\_rear@{queue\_rear}}
+\index{queue\_rear@{queue\_rear}!queue.h@{queue.h}}
+\doxysubsubsection{\texorpdfstring{queue\_rear()}{queue\_rear()}}
+{\footnotesize\ttfamily void \texorpdfstring{$\ast$}{*} queue\+\_\+rear (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{queue_8h_aaa31d02f2b2876d12bb8f83900eacce6}{Queue}} \texorpdfstring{$\ast$}{*}}]{q }\end{DoxyParamCaption})}
+
+
+
+Gets the last element of the queue without extracting it. 
+
+\begin{DoxyAuthor}{Author}
+Daniel Gómez
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em q} & queue struct \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void\texorpdfstring{$\ast$}{*} 
+\end{DoxyReturn}
+\Hypertarget{queue_8h_a2055b900bc866bdf604d16c56946c6a2}\label{queue_8h_a2055b900bc866bdf604d16c56946c6a2} 
+\index{queue.h@{queue.h}!queue\_size@{queue\_size}}
+\index{queue\_size@{queue\_size}!queue.h@{queue.h}}
+\doxysubsubsection{\texorpdfstring{queue\_size()}{queue\_size()}}
+{\footnotesize\ttfamily long queue\+\_\+size (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{queue_8h_aaa31d02f2b2876d12bb8f83900eacce6}{Queue}} \texorpdfstring{$\ast$}{*}}]{q }\end{DoxyParamCaption})}
+
+
+
+Returns the size of the queue. 
+
+\begin{DoxyAuthor}{Author}
+Daniel Gómez
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em q} & queue struct \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+size, -\/1 if wrong 
+\end{DoxyReturn}

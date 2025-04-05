@@ -1,0 +1,692 @@
+\doxysection{src/command.c File Reference}
+\hypertarget{command_8c}{}\label{command_8c}\index{src/command.c@{src/command.c}}
+
+
+It implements the command interpreter.  
+
+
+{\ttfamily \#include "{}command.\+h"{}}\newline
+{\ttfamily \#include "{}debug\+\_\+printing.\+h"{}}\newline
+{\ttfamily \#include "{}collection.\+h"{}}\newline
+{\ttfamily \#include $<$stdio.\+h$>$}\newline
+{\ttfamily \#include $<$stdlib.\+h$>$}\newline
+{\ttfamily \#include $<$string.\+h$>$}\newline
+{\ttfamily \#include $<$strings.\+h$>$}\newline
+Include dependency graph for command.\+c\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{command_8c__incl}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{struct__CommandInfo}{\+\_\+\+Command\+Info}}
+\begin{DoxyCompactList}\small\item\em Struct containing the info of a command. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{struct__Command}{\+\_\+\+Command}}
+\begin{DoxyCompactList}\small\item\em Command. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{command_8c_af3cc4ba42efb48f16226cb5ba77c1bbb}{CMD\+\_\+\+LENGTH}}~500
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} \mbox{\hyperlink{command_8c_aafa8c03093da0cb8dfe3b1c6a3ef3f19}{command\+\_\+info\+\_\+copy}} (\mbox{\hyperlink{command_8h_a12f42edede7479fc4cbb644f585bdf9b}{Command\+Info}} \texorpdfstring{$\ast$}{*}data1, \mbox{\hyperlink{command_8h_a12f42edede7479fc4cbb644f585bdf9b}{Command\+Info}} \texorpdfstring{$\ast$}{*}data2)
+\begin{DoxyCompactList}\small\item\em Copies data from data2 into data1. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} \mbox{\hyperlink{command_8c_ab889506bc7b12f3407d82cfa4b999d3d}{command\+\_\+set\+\_\+arguments\+\_\+count}} (\mbox{\hyperlink{command_8h_a7d2935971c252377cb0fc1c8545dc2bc}{Command}} \texorpdfstring{$\ast$}{*}command, int num)
+\begin{DoxyCompactList}\small\item\em Sets the number of readed arguments. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} \mbox{\hyperlink{command_8c_affd1e607999b4c5289ffe07047c13a9e}{command\+\_\+set\+\_\+argument\+\_\+at}} (\mbox{\hyperlink{command_8h_a7d2935971c252377cb0fc1c8545dc2bc}{Command}} \texorpdfstring{$\ast$}{*}command, char args\mbox{[}\mbox{\hyperlink{command_8h_ac2f56e31aca8ded10296698277aa3f21}{MAX\+\_\+\+CMD\+\_\+\+ARGS\+\_\+\+LENGTH}}\mbox{]}, int index)
+\begin{DoxyCompactList}\small\item\em Sets the argument to a given string at a given argument. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} \mbox{\hyperlink{command_8c_ae9794e58ad66c210064b2ba8a0d4e703}{command\+\_\+reset\+\_\+arguments}} (\mbox{\hyperlink{command_8h_a7d2935971c252377cb0fc1c8545dc2bc}{Command}} \texorpdfstring{$\ast$}{*}command)
+\begin{DoxyCompactList}\small\item\em Resets the arguments to avoid getting them between commands. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{command_8h_a7d2935971c252377cb0fc1c8545dc2bc}{Command}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{command_8c_aa3d3d6bdeb73c7bbaff6ee913569f456}{command\+\_\+create}} ()
+\begin{DoxyCompactList}\small\item\em Creates a command dynamically. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} \mbox{\hyperlink{command_8c_abfb6dbf1977dc1a9a6136baefd91b451}{command\+\_\+destroy}} (\mbox{\hyperlink{command_8h_a7d2935971c252377cb0fc1c8545dc2bc}{Command}} \texorpdfstring{$\ast$}{*}command)
+\begin{DoxyCompactList}\small\item\em Frees command memory. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{command_8h_a12f42edede7479fc4cbb644f585bdf9b}{Command\+Info}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{command_8c_acff4a1625ab858663fc0ee832af50822}{command\+\_\+info\+\_\+create}} ()
+\begin{DoxyCompactList}\small\item\em Creates a struct of command info dynamically. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} \mbox{\hyperlink{command_8c_ac01087456d769efd9fe98e8ea38a37a1}{command\+\_\+info\+\_\+destroy}} (\mbox{\hyperlink{command_8h_a12f42edede7479fc4cbb644f585bdf9b}{Command\+Info}} \texorpdfstring{$\ast$}{*}cmd\+Data)
+\begin{DoxyCompactList}\small\item\em Destroys a struct of command info. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} \mbox{\hyperlink{command_8c_a0abb96f9b182d0018ec4b5e15d5307e4}{command\+\_\+set\+\_\+code}} (\mbox{\hyperlink{command_8h_a7d2935971c252377cb0fc1c8545dc2bc}{Command}} \texorpdfstring{$\ast$}{*}command, \mbox{\hyperlink{command_8h_a805cf38fd2b6d5604bf1f1036b80fde2}{Command\+Code}} code)
+\begin{DoxyCompactList}\small\item\em changes name of the command on the command struct \end{DoxyCompactList}\item 
+\mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} \mbox{\hyperlink{command_8c_ae952c0ab6f2d01276bec693ae32ccdbf}{command\+\_\+set\+\_\+status}} (\mbox{\hyperlink{command_8h_a7d2935971c252377cb0fc1c8545dc2bc}{Command}} \texorpdfstring{$\ast$}{*}command, \mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} status)
+\begin{DoxyCompactList}\small\item\em Sets the status of a given command. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} \mbox{\hyperlink{command_8c_ac1bb6a1210690ea2a3099cbb9a596e30}{command\+\_\+set\+\_\+info}} (\mbox{\hyperlink{command_8h_a7d2935971c252377cb0fc1c8545dc2bc}{Command}} \texorpdfstring{$\ast$}{*}command, \mbox{\hyperlink{command_8h_a805cf38fd2b6d5604bf1f1036b80fde2}{Command\+Code}} cmd, char \texorpdfstring{$\ast$}{*}info)
+\begin{DoxyCompactList}\small\item\em Sets the description of a command. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} \mbox{\hyperlink{command_8c_a6a21ea3411d34dd503e9feab68a1785b}{command\+\_\+state\+\_\+add\+\_\+type}} (\mbox{\hyperlink{command_8h_a7d2935971c252377cb0fc1c8545dc2bc}{Command}} \texorpdfstring{$\ast$}{*}command, \mbox{\hyperlink{types_8h_a7899b65f1ea0f655e4bbf8d2a5714285}{Game\+State}} state, \mbox{\hyperlink{command_8h_a805cf38fd2b6d5604bf1f1036b80fde2}{Command\+Code}} type)
+\begin{DoxyCompactList}\small\item\em Adds a command code to a game state valid commands. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} \mbox{\hyperlink{command_8c_ad7a69ca278618ec935388a78b816c1b1}{command\+\_\+set\+\_\+player\+\_\+data}} (\mbox{\hyperlink{command_8h_a7d2935971c252377cb0fc1c8545dc2bc}{Command}} \texorpdfstring{$\ast$}{*}cmd, \mbox{\hyperlink{command_8h_a12f42edede7479fc4cbb644f585bdf9b}{Command\+Info}} \texorpdfstring{$\ast$}{*}data)
+\begin{DoxyCompactList}\small\item\em Sets the data struct which will be used to store data. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} \mbox{\hyperlink{command_8c_acfe2f99963d903f0d8238b4a7e5546f5}{command\+\_\+update\+\_\+player\+\_\+data}} (\mbox{\hyperlink{command_8h_a7d2935971c252377cb0fc1c8545dc2bc}{Command}} \texorpdfstring{$\ast$}{*}cmd)
+\begin{DoxyCompactList}\small\item\em Updates the data of cmd stored by player. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} \mbox{\hyperlink{command_8c_a8c5598b1043f4e67bbfbdb768c2fa6f4}{command\+\_\+get\+\_\+as\+\_\+string}} (\mbox{\hyperlink{command_8h_a7d2935971c252377cb0fc1c8545dc2bc}{Command}} \texorpdfstring{$\ast$}{*}cmd, char \texorpdfstring{$\ast$}{*}dest)
+\begin{DoxyCompactList}\small\item\em Copies into dest the info of the current command. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} \mbox{\hyperlink{command_8c_a7a8043ae4ce1e16ca1d74ca3607062cd}{command\+\_\+get\+\_\+info}} (\mbox{\hyperlink{command_8h_a7d2935971c252377cb0fc1c8545dc2bc}{Command}} \texorpdfstring{$\ast$}{*}command, \mbox{\hyperlink{command_8h_a805cf38fd2b6d5604bf1f1036b80fde2}{Command\+Code}} cmd, char \texorpdfstring{$\ast$}{*}dest)
+\begin{DoxyCompactList}\small\item\em Gets the pointer to the string containing the info of a command. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{command_8h_a805cf38fd2b6d5604bf1f1036b80fde2}{Command\+Code}} \mbox{\hyperlink{command_8c_a2206702025ffe5340d172decb4ceea52}{command\+\_\+get\+\_\+code}} (\mbox{\hyperlink{command_8h_a7d2935971c252377cb0fc1c8545dc2bc}{Command}} \texorpdfstring{$\ast$}{*}command)
+\begin{DoxyCompactList}\small\item\em Gets the command name. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{command_8c_a140d3962107b33344ffd6c1ec749f783}{command\+\_\+get\+\_\+arguments\+\_\+count}} (\mbox{\hyperlink{command_8h_a7d2935971c252377cb0fc1c8545dc2bc}{Command}} \texorpdfstring{$\ast$}{*}command)
+\begin{DoxyCompactList}\small\item\em Gets the number of arguments in the command. \end{DoxyCompactList}\item 
+char \texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*} \mbox{\hyperlink{command_8c_af2a964b2e08e1bec073146405014c82b}{command\+\_\+get\+\_\+arguments}} (\mbox{\hyperlink{command_8h_a7d2935971c252377cb0fc1c8545dc2bc}{Command}} \texorpdfstring{$\ast$}{*}command)
+\begin{DoxyCompactList}\small\item\em Gets the array of command arguments. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{command_8h_a805cf38fd2b6d5604bf1f1036b80fde2}{Command\+Code}} \mbox{\hyperlink{command_8c_ac2f46ec6874b7bb26d4225f848df3038}{command\+\_\+get\+\_\+code\+\_\+from\+\_\+str}} (char \texorpdfstring{$\ast$}{*}string)
+\begin{DoxyCompactList}\small\item\em Gets the command code for a given string value. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} \mbox{\hyperlink{command_8c_adf15cb97a09577adb8475a3c6c99e7c5}{command\+\_\+get\+\_\+user\+\_\+input}} (\mbox{\hyperlink{command_8h_a7d2935971c252377cb0fc1c8545dc2bc}{Command}} \texorpdfstring{$\ast$}{*}command)
+\begin{DoxyCompactList}\small\item\em Receives the user input and sets the command name to that of the input. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} \mbox{\hyperlink{command_8c_a235edb3056f521d5ca39cdbf2740c9c9}{command\+\_\+get\+\_\+list}} (\mbox{\hyperlink{command_8h_a7d2935971c252377cb0fc1c8545dc2bc}{Command}} \texorpdfstring{$\ast$}{*}command, char \texorpdfstring{$\ast$}{*}destination, \mbox{\hyperlink{types_8h_a7899b65f1ea0f655e4bbf8d2a5714285}{Game\+State}} state, bool get\+All)
+\begin{DoxyCompactList}\small\item\em Makes a string of the current commands and copies it to a given string. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} \mbox{\hyperlink{command_8c_ad169918de25f368b833304d0481e7869}{command\+\_\+get\+\_\+status}} (\mbox{\hyperlink{command_8h_a7d2935971c252377cb0fc1c8545dc2bc}{Command}} \texorpdfstring{$\ast$}{*}command)
+\begin{DoxyCompactList}\small\item\em Gets the status of a given Command. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{command_8c_a7f6a9a93ded5c74d16b6f9a5149c64ed}{command\+\_\+code\+\_\+is\+Equal}} (void \texorpdfstring{$\ast$}{*}cmd1, void \texorpdfstring{$\ast$}{*}cmd2)
+\begin{DoxyCompactList}\small\item\em Checks if two commands codes are equal. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{command_8c_a13dd22aee394ef87b6ed0bc6adc9b8b6}{command\+\_\+current\+\_\+type\+\_\+valid\+\_\+by\+\_\+state}} (\mbox{\hyperlink{command_8h_a7d2935971c252377cb0fc1c8545dc2bc}{Command}} \texorpdfstring{$\ast$}{*}command, \mbox{\hyperlink{types_8h_a7899b65f1ea0f655e4bbf8d2a5714285}{Game\+State}} state)
+\begin{DoxyCompactList}\small\item\em Gets if the current command is valid by checking the game state. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+char \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{command_8c_a3574ce85761f52cf9b70d061831533ee}{cmd\+\_\+to\+\_\+str}} \mbox{[}\mbox{\hyperlink{command_8h_ae180fe89f0ae48ce5c80ffaa18de9271}{N\+\_\+\+CMD}}\mbox{]}\mbox{[}\mbox{\hyperlink{command_8h_a8d93932dcdc527c13e06b688b68c7ffc}{N\+\_\+\+CMDT}}\mbox{]}
+\begin{DoxyCompactList}\small\item\em Global variable that stores all the commands and their shortucts. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+It implements the command interpreter. 
+
+Commands are defined by the global variable cmd\+\_\+to\+\_\+str, which stores each command and their fast access.
+
+\begin{DoxyAuthor}{Author}
+Profesores PPROG 
+\end{DoxyAuthor}
+\begin{DoxyVersion}{Version}
+0 
+\end{DoxyVersion}
+\begin{DoxyDate}{Date}
+27-\/01-\/2025 
+\end{DoxyDate}
+\begin{DoxyCopyright}{Copyright}
+GNU Public License 
+\end{DoxyCopyright}
+
+
+\doxysubsection{Macro Definition Documentation}
+\Hypertarget{command_8c_af3cc4ba42efb48f16226cb5ba77c1bbb}\label{command_8c_af3cc4ba42efb48f16226cb5ba77c1bbb} 
+\index{command.c@{command.c}!CMD\_LENGTH@{CMD\_LENGTH}}
+\index{CMD\_LENGTH@{CMD\_LENGTH}!command.c@{command.c}}
+\doxysubsubsection{\texorpdfstring{CMD\_LENGTH}{CMD\_LENGTH}}
+{\footnotesize\ttfamily \#define CMD\+\_\+\+LENGTH~500}
+
+Maximum length of a command 
+
+\doxysubsection{Function Documentation}
+\Hypertarget{command_8c_a7f6a9a93ded5c74d16b6f9a5149c64ed}\label{command_8c_a7f6a9a93ded5c74d16b6f9a5149c64ed} 
+\index{command.c@{command.c}!command\_code\_isEqual@{command\_code\_isEqual}}
+\index{command\_code\_isEqual@{command\_code\_isEqual}!command.c@{command.c}}
+\doxysubsubsection{\texorpdfstring{command\_code\_isEqual()}{command\_code\_isEqual()}}
+{\footnotesize\ttfamily int command\+\_\+code\+\_\+is\+Equal (\begin{DoxyParamCaption}\item[{void \texorpdfstring{$\ast$}{*}}]{cmd1,  }\item[{void \texorpdfstring{$\ast$}{*}}]{cmd2 }\end{DoxyParamCaption})}
+
+
+
+Checks if two commands codes are equal. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em cmd1} & command struct 1 \\
+\hline
+{\em cmd2} & command struct 2 \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int 
+\end{DoxyReturn}
+\Hypertarget{command_8c_aa3d3d6bdeb73c7bbaff6ee913569f456}\label{command_8c_aa3d3d6bdeb73c7bbaff6ee913569f456} 
+\index{command.c@{command.c}!command\_create@{command\_create}}
+\index{command\_create@{command\_create}!command.c@{command.c}}
+\doxysubsubsection{\texorpdfstring{command\_create()}{command\_create()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{command_8h_a7d2935971c252377cb0fc1c8545dc2bc}{Command}} \texorpdfstring{$\ast$}{*} command\+\_\+create (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Creates a command dynamically. 
+
+\begin{DoxyAuthor}{Author}
+Profesores PPROG
+\end{DoxyAuthor}
+\begin{DoxyReturn}{Returns}
+command pointer, initialized to NO\+\_\+\+CMD 
+\end{DoxyReturn}
+\Hypertarget{command_8c_a13dd22aee394ef87b6ed0bc6adc9b8b6}\label{command_8c_a13dd22aee394ef87b6ed0bc6adc9b8b6} 
+\index{command.c@{command.c}!command\_current\_type\_valid\_by\_state@{command\_current\_type\_valid\_by\_state}}
+\index{command\_current\_type\_valid\_by\_state@{command\_current\_type\_valid\_by\_state}!command.c@{command.c}}
+\doxysubsubsection{\texorpdfstring{command\_current\_type\_valid\_by\_state()}{command\_current\_type\_valid\_by\_state()}}
+{\footnotesize\ttfamily bool command\+\_\+current\+\_\+type\+\_\+valid\+\_\+by\+\_\+state (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{command_8h_a7d2935971c252377cb0fc1c8545dc2bc}{Command}} \texorpdfstring{$\ast$}{*}}]{command,  }\item[{\mbox{\hyperlink{types_8h_a7899b65f1ea0f655e4bbf8d2a5714285}{Game\+State}}}]{state }\end{DoxyParamCaption})}
+
+
+
+Gets if the current command is valid by checking the game state. 
+
+\begin{DoxyAuthor}{Author}
+Daniel Gómoez
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em command} & command struct \\
+\hline
+{\em state} & state to check if its valid \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true if valid 
+
+false if not valid 
+\end{DoxyReturn}
+\Hypertarget{command_8c_abfb6dbf1977dc1a9a6136baefd91b451}\label{command_8c_abfb6dbf1977dc1a9a6136baefd91b451} 
+\index{command.c@{command.c}!command\_destroy@{command\_destroy}}
+\index{command\_destroy@{command\_destroy}!command.c@{command.c}}
+\doxysubsubsection{\texorpdfstring{command\_destroy()}{command\_destroy()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} command\+\_\+destroy (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{command_8h_a7d2935971c252377cb0fc1c8545dc2bc}{Command}} \texorpdfstring{$\ast$}{*}}]{command }\end{DoxyParamCaption})}
+
+
+
+Frees command memory. 
+
+\begin{DoxyAuthor}{Author}
+Profesores PPROG
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em command} & saves all information related to a command \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+OK if everything goes well or ERROR if there was some mistake 
+\end{DoxyReturn}
+\Hypertarget{command_8c_af2a964b2e08e1bec073146405014c82b}\label{command_8c_af2a964b2e08e1bec073146405014c82b} 
+\index{command.c@{command.c}!command\_get\_arguments@{command\_get\_arguments}}
+\index{command\_get\_arguments@{command\_get\_arguments}!command.c@{command.c}}
+\doxysubsubsection{\texorpdfstring{command\_get\_arguments()}{command\_get\_arguments()}}
+{\footnotesize\ttfamily char \texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*} command\+\_\+get\+\_\+arguments (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{command_8h_a7d2935971c252377cb0fc1c8545dc2bc}{Command}} \texorpdfstring{$\ast$}{*}}]{command }\end{DoxyParamCaption})}
+
+
+
+Gets the array of command arguments. 
+
+\begin{DoxyAuthor}{Author}
+Daniel Gómez
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em command} & command struct \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+returns the pointer to the array or null if error 
+\end{DoxyReturn}
+\Hypertarget{command_8c_a140d3962107b33344ffd6c1ec749f783}\label{command_8c_a140d3962107b33344ffd6c1ec749f783} 
+\index{command.c@{command.c}!command\_get\_arguments\_count@{command\_get\_arguments\_count}}
+\index{command\_get\_arguments\_count@{command\_get\_arguments\_count}!command.c@{command.c}}
+\doxysubsubsection{\texorpdfstring{command\_get\_arguments\_count()}{command\_get\_arguments\_count()}}
+{\footnotesize\ttfamily int command\+\_\+get\+\_\+arguments\+\_\+count (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{command_8h_a7d2935971c252377cb0fc1c8545dc2bc}{Command}} \texorpdfstring{$\ast$}{*}}]{command }\end{DoxyParamCaption})}
+
+
+
+Gets the number of arguments in the command. 
+
+\begin{DoxyAuthor}{Author}
+Daniel Gómez
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em command} & command struct \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+returns the number of arguments or -\/1 if error 
+\end{DoxyReturn}
+\Hypertarget{command_8c_a8c5598b1043f4e67bbfbdb768c2fa6f4}\label{command_8c_a8c5598b1043f4e67bbfbdb768c2fa6f4} 
+\index{command.c@{command.c}!command\_get\_as\_string@{command\_get\_as\_string}}
+\index{command\_get\_as\_string@{command\_get\_as\_string}!command.c@{command.c}}
+\doxysubsubsection{\texorpdfstring{command\_get\_as\_string()}{command\_get\_as\_string()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} command\+\_\+get\+\_\+as\+\_\+string (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{command_8h_a7d2935971c252377cb0fc1c8545dc2bc}{Command}} \texorpdfstring{$\ast$}{*}}]{cmd,  }\item[{char \texorpdfstring{$\ast$}{*}}]{dest }\end{DoxyParamCaption})}
+
+
+
+Copies into dest the info of the current command. 
+
+\begin{DoxyAuthor}{Author}
+Daniel Gómez
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em cmd} & command where the info is taken \\
+\hline
+{\em dest} & string where the info is copied \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Status 
+\end{DoxyReturn}
+\Hypertarget{command_8c_a2206702025ffe5340d172decb4ceea52}\label{command_8c_a2206702025ffe5340d172decb4ceea52} 
+\index{command.c@{command.c}!command\_get\_code@{command\_get\_code}}
+\index{command\_get\_code@{command\_get\_code}!command.c@{command.c}}
+\doxysubsubsection{\texorpdfstring{command\_get\_code()}{command\_get\_code()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{command_8h_a805cf38fd2b6d5604bf1f1036b80fde2}{Command\+Code}} command\+\_\+get\+\_\+code (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{command_8h_a7d2935971c252377cb0fc1c8545dc2bc}{Command}} \texorpdfstring{$\ast$}{*}}]{command }\end{DoxyParamCaption})}
+
+
+
+Gets the command name. 
+
+\begin{DoxyAuthor}{Author}
+Profesores PPROG
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em command} & saves all information related to a command \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+retrieves code from command struct 
+\end{DoxyReturn}
+\Hypertarget{command_8c_ac2f46ec6874b7bb26d4225f848df3038}\label{command_8c_ac2f46ec6874b7bb26d4225f848df3038} 
+\index{command.c@{command.c}!command\_get\_code\_from\_str@{command\_get\_code\_from\_str}}
+\index{command\_get\_code\_from\_str@{command\_get\_code\_from\_str}!command.c@{command.c}}
+\doxysubsubsection{\texorpdfstring{command\_get\_code\_from\_str()}{command\_get\_code\_from\_str()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{command_8h_a805cf38fd2b6d5604bf1f1036b80fde2}{Command\+Code}} command\+\_\+get\+\_\+code\+\_\+from\+\_\+str (\begin{DoxyParamCaption}\item[{char \texorpdfstring{$\ast$}{*}}]{string }\end{DoxyParamCaption})}
+
+
+
+Gets the command code for a given string value. 
+
+\begin{DoxyAuthor}{Author}
+Daniel Gómez
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em string} & string of a type cmd\+\_\+to\+\_\+str \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Command\+Code 
+\end{DoxyReturn}
+\Hypertarget{command_8c_a7a8043ae4ce1e16ca1d74ca3607062cd}\label{command_8c_a7a8043ae4ce1e16ca1d74ca3607062cd} 
+\index{command.c@{command.c}!command\_get\_info@{command\_get\_info}}
+\index{command\_get\_info@{command\_get\_info}!command.c@{command.c}}
+\doxysubsubsection{\texorpdfstring{command\_get\_info()}{command\_get\_info()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} command\+\_\+get\+\_\+info (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{command_8h_a7d2935971c252377cb0fc1c8545dc2bc}{Command}} \texorpdfstring{$\ast$}{*}}]{command,  }\item[{\mbox{\hyperlink{command_8h_a805cf38fd2b6d5604bf1f1036b80fde2}{Command\+Code}}}]{cmd,  }\item[{char \texorpdfstring{$\ast$}{*}}]{dest }\end{DoxyParamCaption})}
+
+
+
+Gets the pointer to the string containing the info of a command. 
+
+\begin{DoxyAuthor}{Author}
+Daniel Gómez
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em command} & command struct \\
+\hline
+{\em cmd} & command code where info is taken \\
+\hline
+{\em dest} & string where info is copied \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Status 
+\end{DoxyReturn}
+\Hypertarget{command_8c_a235edb3056f521d5ca39cdbf2740c9c9}\label{command_8c_a235edb3056f521d5ca39cdbf2740c9c9} 
+\index{command.c@{command.c}!command\_get\_list@{command\_get\_list}}
+\index{command\_get\_list@{command\_get\_list}!command.c@{command.c}}
+\doxysubsubsection{\texorpdfstring{command\_get\_list()}{command\_get\_list()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} command\+\_\+get\+\_\+list (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{command_8h_a7d2935971c252377cb0fc1c8545dc2bc}{Command}} \texorpdfstring{$\ast$}{*}}]{command,  }\item[{char \texorpdfstring{$\ast$}{*}}]{destination,  }\item[{\mbox{\hyperlink{types_8h_a7899b65f1ea0f655e4bbf8d2a5714285}{Game\+State}}}]{state,  }\item[{bool}]{get\+All }\end{DoxyParamCaption})}
+
+
+
+Makes a string of the current commands and copies it to a given string. 
+
+\begin{DoxyAuthor}{Author}
+Daniel Gómez
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em command} & command struct \\
+\hline
+{\em destination} & string to which the information is copied. Requires the user to assing this string a proper length \\
+\hline
+{\em state} & state of the game \\
+\hline
+{\em get\+All} & Wheter it gets all of them or not \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Status 
+\end{DoxyReturn}
+\Hypertarget{command_8c_ad169918de25f368b833304d0481e7869}\label{command_8c_ad169918de25f368b833304d0481e7869} 
+\index{command.c@{command.c}!command\_get\_status@{command\_get\_status}}
+\index{command\_get\_status@{command\_get\_status}!command.c@{command.c}}
+\doxysubsubsection{\texorpdfstring{command\_get\_status()}{command\_get\_status()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} command\+\_\+get\+\_\+status (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{command_8h_a7d2935971c252377cb0fc1c8545dc2bc}{Command}} \texorpdfstring{$\ast$}{*}}]{command }\end{DoxyParamCaption})}
+
+
+
+Gets the status of a given Command. 
+
+\begin{DoxyAuthor}{Author}
+Daniel Gómez
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em command} & command struct \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Status 
+\end{DoxyReturn}
+\Hypertarget{command_8c_adf15cb97a09577adb8475a3c6c99e7c5}\label{command_8c_adf15cb97a09577adb8475a3c6c99e7c5} 
+\index{command.c@{command.c}!command\_get\_user\_input@{command\_get\_user\_input}}
+\index{command\_get\_user\_input@{command\_get\_user\_input}!command.c@{command.c}}
+\doxysubsubsection{\texorpdfstring{command\_get\_user\_input()}{command\_get\_user\_input()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} command\+\_\+get\+\_\+user\+\_\+input (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{command_8h_a7d2935971c252377cb0fc1c8545dc2bc}{Command}} \texorpdfstring{$\ast$}{*}}]{command }\end{DoxyParamCaption})}
+
+
+
+Receives the user input and sets the command name to that of the input. 
+
+\begin{DoxyAuthor}{Author}
+Original\+: Profesores Prog, Modified by\+: Daniel Gómez
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em command} & struct that saves all information related to a command \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+OK if everything goes well or ERROR if there was some mistake 
+\end{DoxyReturn}
+\Hypertarget{command_8c_aafa8c03093da0cb8dfe3b1c6a3ef3f19}\label{command_8c_aafa8c03093da0cb8dfe3b1c6a3ef3f19} 
+\index{command.c@{command.c}!command\_info\_copy@{command\_info\_copy}}
+\index{command\_info\_copy@{command\_info\_copy}!command.c@{command.c}}
+\doxysubsubsection{\texorpdfstring{command\_info\_copy()}{command\_info\_copy()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} command\+\_\+info\+\_\+copy (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{command_8h_a12f42edede7479fc4cbb644f585bdf9b}{Command\+Info}} \texorpdfstring{$\ast$}{*}}]{data1,  }\item[{\mbox{\hyperlink{command_8h_a12f42edede7479fc4cbb644f585bdf9b}{Command\+Info}} \texorpdfstring{$\ast$}{*}}]{data2 }\end{DoxyParamCaption})}
+
+
+
+Copies data from data2 into data1. 
+
+\begin{DoxyAuthor}{Author}
+Daniel Gómez
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em data1} & command info 1 \\
+\hline
+{\em data2} & command info 2 \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Status 
+\end{DoxyReturn}
+\Hypertarget{command_8c_acff4a1625ab858663fc0ee832af50822}\label{command_8c_acff4a1625ab858663fc0ee832af50822} 
+\index{command.c@{command.c}!command\_info\_create@{command\_info\_create}}
+\index{command\_info\_create@{command\_info\_create}!command.c@{command.c}}
+\doxysubsubsection{\texorpdfstring{command\_info\_create()}{command\_info\_create()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{command_8h_a12f42edede7479fc4cbb644f585bdf9b}{Command\+Info}} \texorpdfstring{$\ast$}{*} command\+\_\+info\+\_\+create (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Creates a struct of command info dynamically. 
+
+\begin{DoxyAuthor}{Author}
+Daniel Gómez
+\end{DoxyAuthor}
+\begin{DoxyReturn}{Returns}
+Command\+Info\texorpdfstring{$\ast$}{*} 
+\end{DoxyReturn}
+\Hypertarget{command_8c_ac01087456d769efd9fe98e8ea38a37a1}\label{command_8c_ac01087456d769efd9fe98e8ea38a37a1} 
+\index{command.c@{command.c}!command\_info\_destroy@{command\_info\_destroy}}
+\index{command\_info\_destroy@{command\_info\_destroy}!command.c@{command.c}}
+\doxysubsubsection{\texorpdfstring{command\_info\_destroy()}{command\_info\_destroy()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} command\+\_\+info\+\_\+destroy (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{command_8h_a12f42edede7479fc4cbb644f585bdf9b}{Command\+Info}} \texorpdfstring{$\ast$}{*}}]{cmd\+Data }\end{DoxyParamCaption})}
+
+
+
+Destroys a struct of command info. 
+
+\begin{DoxyAuthor}{Author}
+Daniel Gómez
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em cmd\+Data} & command info to destroy \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Status 
+\end{DoxyReturn}
+\Hypertarget{command_8c_ae9794e58ad66c210064b2ba8a0d4e703}\label{command_8c_ae9794e58ad66c210064b2ba8a0d4e703} 
+\index{command.c@{command.c}!command\_reset\_arguments@{command\_reset\_arguments}}
+\index{command\_reset\_arguments@{command\_reset\_arguments}!command.c@{command.c}}
+\doxysubsubsection{\texorpdfstring{command\_reset\_arguments()}{command\_reset\_arguments()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} command\+\_\+reset\+\_\+arguments (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{command_8h_a7d2935971c252377cb0fc1c8545dc2bc}{Command}} \texorpdfstring{$\ast$}{*}}]{command }\end{DoxyParamCaption})}
+
+
+
+Resets the arguments to avoid getting them between commands. 
+
+\begin{DoxyAuthor}{Author}
+Daniel Gómez
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em command} & command struct \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Status 
+\end{DoxyReturn}
+\Hypertarget{command_8c_affd1e607999b4c5289ffe07047c13a9e}\label{command_8c_affd1e607999b4c5289ffe07047c13a9e} 
+\index{command.c@{command.c}!command\_set\_argument\_at@{command\_set\_argument\_at}}
+\index{command\_set\_argument\_at@{command\_set\_argument\_at}!command.c@{command.c}}
+\doxysubsubsection{\texorpdfstring{command\_set\_argument\_at()}{command\_set\_argument\_at()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} command\+\_\+set\+\_\+argument\+\_\+at (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{command_8h_a7d2935971c252377cb0fc1c8545dc2bc}{Command}} \texorpdfstring{$\ast$}{*}}]{command,  }\item[{char}]{args\mbox{[}\+MAX\+\_\+\+CMD\+\_\+\+ARGS\+\_\+\+LENGTH\mbox{]},  }\item[{int}]{index }\end{DoxyParamCaption})}
+
+
+
+Sets the argument to a given string at a given argument. 
+
+\begin{DoxyAuthor}{Author}
+Daniel Gómez
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em command} & command struct \\
+\hline
+{\em args} & string to set \\
+\hline
+{\em index} & index of where it is set \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Status 
+\end{DoxyReturn}
+\Hypertarget{command_8c_ab889506bc7b12f3407d82cfa4b999d3d}\label{command_8c_ab889506bc7b12f3407d82cfa4b999d3d} 
+\index{command.c@{command.c}!command\_set\_arguments\_count@{command\_set\_arguments\_count}}
+\index{command\_set\_arguments\_count@{command\_set\_arguments\_count}!command.c@{command.c}}
+\doxysubsubsection{\texorpdfstring{command\_set\_arguments\_count()}{command\_set\_arguments\_count()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} command\+\_\+set\+\_\+arguments\+\_\+count (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{command_8h_a7d2935971c252377cb0fc1c8545dc2bc}{Command}} \texorpdfstring{$\ast$}{*}}]{command,  }\item[{int}]{num }\end{DoxyParamCaption})}
+
+
+
+Sets the number of readed arguments. 
+
+\begin{DoxyAuthor}{Author}
+Daniel Gómez
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em command} & command struct \\
+\hline
+{\em num} & count to set \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Status 
+\end{DoxyReturn}
+\Hypertarget{command_8c_a0abb96f9b182d0018ec4b5e15d5307e4}\label{command_8c_a0abb96f9b182d0018ec4b5e15d5307e4} 
+\index{command.c@{command.c}!command\_set\_code@{command\_set\_code}}
+\index{command\_set\_code@{command\_set\_code}!command.c@{command.c}}
+\doxysubsubsection{\texorpdfstring{command\_set\_code()}{command\_set\_code()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} command\+\_\+set\+\_\+code (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{command_8h_a7d2935971c252377cb0fc1c8545dc2bc}{Command}} \texorpdfstring{$\ast$}{*}}]{command,  }\item[{\mbox{\hyperlink{command_8h_a805cf38fd2b6d5604bf1f1036b80fde2}{Command\+Code}}}]{code }\end{DoxyParamCaption})}
+
+
+
+changes name of the command on the command struct 
+
+\begin{DoxyAuthor}{Author}
+Profesores PPROG
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em command} & struct that saves all information related to a command \\
+\hline
+{\em code} & command name \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+OK if everything goes well or ERROR if there was some mistake 
+\end{DoxyReturn}
+\Hypertarget{command_8c_ac1bb6a1210690ea2a3099cbb9a596e30}\label{command_8c_ac1bb6a1210690ea2a3099cbb9a596e30} 
+\index{command.c@{command.c}!command\_set\_info@{command\_set\_info}}
+\index{command\_set\_info@{command\_set\_info}!command.c@{command.c}}
+\doxysubsubsection{\texorpdfstring{command\_set\_info()}{command\_set\_info()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} command\+\_\+set\+\_\+info (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{command_8h_a7d2935971c252377cb0fc1c8545dc2bc}{Command}} \texorpdfstring{$\ast$}{*}}]{command,  }\item[{\mbox{\hyperlink{command_8h_a805cf38fd2b6d5604bf1f1036b80fde2}{Command\+Code}}}]{cmd,  }\item[{char \texorpdfstring{$\ast$}{*}}]{info }\end{DoxyParamCaption})}
+
+
+
+Sets the description of a command. 
+
+\begin{DoxyAuthor}{Author}
+Daniel Gómez
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em command} & command to modify \\
+\hline
+{\em cmd} & command code where info is set \\
+\hline
+{\em info} & info to set \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Status 
+\end{DoxyReturn}
+\Hypertarget{command_8c_ad7a69ca278618ec935388a78b816c1b1}\label{command_8c_ad7a69ca278618ec935388a78b816c1b1} 
+\index{command.c@{command.c}!command\_set\_player\_data@{command\_set\_player\_data}}
+\index{command\_set\_player\_data@{command\_set\_player\_data}!command.c@{command.c}}
+\doxysubsubsection{\texorpdfstring{command\_set\_player\_data()}{command\_set\_player\_data()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} command\+\_\+set\+\_\+player\+\_\+data (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{command_8h_a7d2935971c252377cb0fc1c8545dc2bc}{Command}} \texorpdfstring{$\ast$}{*}}]{cmd,  }\item[{\mbox{\hyperlink{command_8h_a12f42edede7479fc4cbb644f585bdf9b}{Command\+Info}} \texorpdfstring{$\ast$}{*}}]{data }\end{DoxyParamCaption})}
+
+
+
+Sets the data struct which will be used to store data. 
+
+\begin{DoxyAuthor}{Author}
+Daniel Gómez
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em cmd} & command struct \\
+\hline
+{\em data} & command info \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Status 
+\end{DoxyReturn}
+\Hypertarget{command_8c_ae952c0ab6f2d01276bec693ae32ccdbf}\label{command_8c_ae952c0ab6f2d01276bec693ae32ccdbf} 
+\index{command.c@{command.c}!command\_set\_status@{command\_set\_status}}
+\index{command\_set\_status@{command\_set\_status}!command.c@{command.c}}
+\doxysubsubsection{\texorpdfstring{command\_set\_status()}{command\_set\_status()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} command\+\_\+set\+\_\+status (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{command_8h_a7d2935971c252377cb0fc1c8545dc2bc}{Command}} \texorpdfstring{$\ast$}{*}}]{command,  }\item[{\mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}}}]{status }\end{DoxyParamCaption})}
+
+
+
+Sets the status of a given command. 
+
+\begin{DoxyAuthor}{Author}
+Daniel Gómez
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em command} & command to modify \\
+\hline
+{\em status} & status to set \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Status 
+\end{DoxyReturn}
+\Hypertarget{command_8c_a6a21ea3411d34dd503e9feab68a1785b}\label{command_8c_a6a21ea3411d34dd503e9feab68a1785b} 
+\index{command.c@{command.c}!command\_state\_add\_type@{command\_state\_add\_type}}
+\index{command\_state\_add\_type@{command\_state\_add\_type}!command.c@{command.c}}
+\doxysubsubsection{\texorpdfstring{command\_state\_add\_type()}{command\_state\_add\_type()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} command\+\_\+state\+\_\+add\+\_\+type (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{command_8h_a7d2935971c252377cb0fc1c8545dc2bc}{Command}} \texorpdfstring{$\ast$}{*}}]{command,  }\item[{\mbox{\hyperlink{types_8h_a7899b65f1ea0f655e4bbf8d2a5714285}{Game\+State}}}]{state,  }\item[{\mbox{\hyperlink{command_8h_a805cf38fd2b6d5604bf1f1036b80fde2}{Command\+Code}}}]{type }\end{DoxyParamCaption})}
+
+
+
+Adds a command code to a game state valid commands. 
+
+\begin{DoxyAuthor}{Author}
+Daniel Gómez
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em command} & command to modify \\
+\hline
+{\em state} & state where the command code type is added \\
+\hline
+{\em type} & command code type to add \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Status 
+\end{DoxyReturn}
+\Hypertarget{command_8c_acfe2f99963d903f0d8238b4a7e5546f5}\label{command_8c_acfe2f99963d903f0d8238b4a7e5546f5} 
+\index{command.c@{command.c}!command\_update\_player\_data@{command\_update\_player\_data}}
+\index{command\_update\_player\_data@{command\_update\_player\_data}!command.c@{command.c}}
+\doxysubsubsection{\texorpdfstring{command\_update\_player\_data()}{command\_update\_player\_data()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{types_8h_a67a0db04d321a74b7e7fcfd3f1a3f70b}{Status}} command\+\_\+update\+\_\+player\+\_\+data (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{command_8h_a7d2935971c252377cb0fc1c8545dc2bc}{Command}} \texorpdfstring{$\ast$}{*}}]{cmd }\end{DoxyParamCaption})}
+
+
+
+Updates the data of cmd stored by player. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em cmd} & command struct \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Status 
+\end{DoxyReturn}
+
+
+\doxysubsection{Variable Documentation}
+\Hypertarget{command_8c_a3574ce85761f52cf9b70d061831533ee}\label{command_8c_a3574ce85761f52cf9b70d061831533ee} 
+\index{command.c@{command.c}!cmd\_to\_str@{cmd\_to\_str}}
+\index{cmd\_to\_str@{cmd\_to\_str}!command.c@{command.c}}
+\doxysubsubsection{\texorpdfstring{cmd\_to\_str}{cmd\_to\_str}}
+{\footnotesize\ttfamily char\texorpdfstring{$\ast$}{*} cmd\+\_\+to\+\_\+str\mbox{[}\mbox{\hyperlink{command_8h_ae180fe89f0ae48ce5c80ffaa18de9271}{N\+\_\+\+CMD}}\mbox{]}\mbox{[}\mbox{\hyperlink{command_8h_a8d93932dcdc527c13e06b688b68c7ffc}{N\+\_\+\+CMDT}}\mbox{]}}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{=\ \{\{\textcolor{stringliteral}{"{}"{}},\ \textcolor{stringliteral}{"{}No\ command"{}}\},\ \{\textcolor{stringliteral}{"{}"{}},\ \textcolor{stringliteral}{"{}Unknown"{}}\},\ \{\textcolor{stringliteral}{"{}q"{}},\ \textcolor{stringliteral}{"{}Exit"{}}\},\ \{\textcolor{stringliteral}{"{}s"{}},\ \textcolor{stringliteral}{"{}South"{}}\},\ \{\textcolor{stringliteral}{"{}w"{}},\ \textcolor{stringliteral}{"{}North"{}}\},\ \{\textcolor{stringliteral}{"{}d"{}},\ \textcolor{stringliteral}{"{}East"{}}\},\ \{\textcolor{stringliteral}{"{}a"{}},\ \textcolor{stringliteral}{"{}West"{}}\},\{\textcolor{stringliteral}{"{}tk"{}},\ \textcolor{stringliteral}{"{}Take"{}}\},\ \{\textcolor{stringliteral}{"{}dr"{}},\ \textcolor{stringliteral}{"{}Drop"{}}\},}
+\DoxyCodeLine{\ \{\textcolor{stringliteral}{"{}ch"{}},\ \textcolor{stringliteral}{"{}Chat"{}}\},\ \{\textcolor{stringliteral}{"{}at"{}},\ \textcolor{stringliteral}{"{}Attack"{}}\},\ \{\textcolor{stringliteral}{"{}h"{}},\ \textcolor{stringliteral}{"{}Run\_Away"{}}\},\ \{\textcolor{stringliteral}{"{}sw"{}},\ \textcolor{stringliteral}{"{}Switch\_Player"{}}\},\ \{\textcolor{stringliteral}{"{}sk"{}},\ \textcolor{stringliteral}{"{}Ability"{}}\},\ \{\textcolor{stringliteral}{"{}ou"{}},\ \textcolor{stringliteral}{"{}Object\_Use"{}}\},\ \{\textcolor{stringliteral}{"{}hp"{}},\ \textcolor{stringliteral}{"{}Help"{}}\},\ \{\textcolor{stringliteral}{"{}m"{}},\ \textcolor{stringliteral}{"{}Move"{}}\},\ \{\textcolor{stringliteral}{"{}sh"{}},\textcolor{stringliteral}{"{}Search"{}}\},}
+\DoxyCodeLine{\ \{\textcolor{stringliteral}{"{}eq"{}},\ \textcolor{stringliteral}{"{}Equip"{}}\},\ \{\textcolor{stringliteral}{"{}ue"{}},\ \textcolor{stringliteral}{"{}Unequip"{}}\},\ \{\textcolor{stringliteral}{"{}i"{}},\ \textcolor{stringliteral}{"{}Inspect"{}}\},\ \{\textcolor{stringliteral}{"{}4444444444444444"{}},\ \textcolor{stringliteral}{"{}4444444444444444"{}}\}\}}
+
+\end{DoxyCode}
+
+
+Global variable that stores all the commands and their shortucts. 
+

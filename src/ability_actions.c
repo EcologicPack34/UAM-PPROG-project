@@ -1,7 +1,7 @@
 /**
  * @file ability_actions.c
  * @author Maksym Polyak
- * @brief 
+ * @brief Determines game interactions with abilities
  * @version 0.1
  * @date 2025-03-25
  * 
@@ -58,13 +58,14 @@ Status ability_money_bag(Ability *ability, Game *game);
 
 /**
  * @brief Unlocks a link related to the ability data
+ *      Data of the ability stores the link which will be unlocked when using ability
  * @author Daniel Gómez
  * 
  * @param ability 
  * @param game 
  * @return Status 
  */
-//Status ability_unlock_link(Ability *ability, Game *game);
+Status ability_unlock_link(Ability *ability, Game *game);
 
 Status ability_heal_self(Ability *ability, Game *game){
     Combat *combat = NULL;
@@ -178,42 +179,24 @@ Status ability_money_bag(Ability *ability, Game *game){
 
     return player_add_money(game_get_player(game), value);
 }
-/*
+
 Status ability_unlock_link(Ability *ability, Game *game){
     Link *link = NULL;
-    Space *space = NULL;
-    int i;
+    Entity *player = NULL;
+    Id linkId = NO_ID;
 
-    if(!ability || !game) return NULL;
-
-    space = game_get_space(game, game_get_player_location(game));
-
-    for (i = 0; i < 4; i++)
-    {
-        switch (i)
-        {
-        case 0:
-            link = space_get_north(space);
-            break;
-        case 1:
-            link = space_get_east(space);
-            break;
-        case 2:
-            link = space_get_south(space);
-            break;
-        case 3:
-            link = space_get_west(space);
-            break;
-        default:
-            break;
-        }
-
-        if(link_unlock(link, ))
-
-    }
+    if(!ability || !game) return ERROR;
     
+    linkId = atoi(ability_get_data(ability));
 
-}*/
+    link = game_get_link_by_id(game, linkId);
+
+    player = player_get_entity(game_get_player(game));
+
+    if(!link || !player) return ERROR;
+
+    return link_unlock(link, player);
+}
 
 /*
   * Public functions
@@ -231,7 +214,7 @@ Status ability_action_use_ability(Game *game){
 
     queue = ability_manager_get_queue(sm);
 
-    while(queue_isEmpty(queue) == FALSE){
+    while(queue_isEmpty(queue) == false){
         ability = (Ability *)queue_pop(queue);
         status = OK;
 
@@ -243,6 +226,9 @@ Status ability_action_use_ability(Game *game){
                 break;
             case HEAL_ALLY:
                 status = ability_heal_ally(ability, game);
+                break;
+            case LINK_UNLOCK:
+                status = ability_unlock_link(ability, game);
                 break;
             default:
                 break;

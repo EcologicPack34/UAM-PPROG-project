@@ -21,34 +21,41 @@
 #include "types.h"
 #include "collection.h"
 
-#define MAP_WIDTH 53
-#define MAP_HEIGHT 29
-#define DESCRIPT_WIDTH 40
-#define HELP_BANNER_HEIGHT 1
-#define HELP_BANNER_WIDTH 23
-#define HELP_HEIGHT 4
-#define CMD_HISTORY_HEIGHT 3
+#define MAP_WIDTH 53                  /*!< Width of the map part*/
+#define MAP_HEIGHT 29                 /*!< Height of the map part*/
+#define DESCRIPT_WIDTH 40             /*!< Width of the description part*/
+#define HELP_BANNER_HEIGHT 1          /*!< Height of the help banner part*/
+#define HELP_BANNER_WIDTH 23          /*!< Width of the help banner part*/
+#define HELP_HEIGHT 4                 /*!< Height of the help banner*/
+#define CMD_HISTORY_HEIGHT 3          /*!< Height of the command history*/
 
-#define SPACE_HEIGHT 9
-#define SPACE_WIDTH 17
+#define SPACE_HEIGHT 9                /*!< Height of a space*/
+#define SPACE_WIDTH 17                /*!< Width of a space*/
 
-#define COMBAT_OFFSET 10
-#define HEALTH_BAR_WIDTH 5
+#define COMBAT_OFFSET 10              /*!< Offset needed on combat mode*/
+#define HEALTH_BAR_WIDTH 5            /*!< Length of the health bar*/
 
-#define MAX_PRINT_PLAYER_INVENTORY 7
-#define MAX_PRINT_INVENTORY 7
-#define MAX_PRINT_SPACE_NPCS 5
+#define MAX_PRINT_PLAYER_INVENTORY 7  /*!< Maximum number of items printed from the player inventory*/
+#define MAX_PRINT_INVENTORY 7         /*!< Maximum number of items printed from the space inventory*/
+#define MAX_PRINT_SPACE_NPCS 5        /*!< Maximum number of NPCs printed from the space*/
 
+/**
+ * @brief Graphic engine internal struct
+ */
 struct _Graphic_engine {
-  Area *map, *descript, *banner, *help, *feedback;
+  Area *map;        /*!< Area with the spaces and general info*/
+  Area *descript;   /*!< Area with descriptions*/
+  Area *banner;     /*!< Banner of the game*/
+  Area *help;       /*!< Help descriptions*/
+  Area *feedback;   /*!< Feedback of the graphic engine*/
 };
 
 /**
  * @brief Paints a string with newlines in a designated screen area
  * @author Daniel Gómez
  * 
- * @param area 
- * @param string 
+ * @param area where the print is done
+ * @param string string to be printed
  */
 void graphic_engine_newline_print(Area *area, char *string);
 
@@ -56,11 +63,11 @@ void graphic_engine_newline_print(Area *area, char *string);
  * @brief Paints a space in map area
  * @author Daniel Gómez
  * 
- * @param game 
- * @param space 
- * @param direction 
- * @param map 
- * @param spaceStr 
+ * @param game game struct
+ * @param space space to print
+ * @param direction direction where the space is located from the center
+ * @param map char array with the map
+ * @param spaceStr graphical description of the space
  */
 void graphic_engine_paint_space(Game *game, Space *space, Direction direction,char map[SPACE_HEIGHT + 1][MAP_WIDTH + 33], char spaceStr[SPACE_HEIGHT + 1][SPACE_WIDTH+10]);
 
@@ -68,8 +75,8 @@ void graphic_engine_paint_space(Game *game, Space *space, Direction direction,ch
  * @brief Paints map in map area
  * @author Daniel Gómez
  * 
- * @param ge 
- * @param game 
+ * @param ge graphic engine struct
+ * @param game game struct
  */
 void graphic_engine_paint_map(Graphic_engine *ge, Game *game);
 
@@ -77,8 +84,8 @@ void graphic_engine_paint_map(Graphic_engine *ge, Game *game);
  * @brief Paints combat during combat mode
  * @author Daniel Gómez
  * 
- * @param ge 
- * @param game 
+ * @param ge graphic engine struct
+ * @param game game struct
  */
 void graphic_engine_paint_combat(Graphic_engine *ge, Game *game);
 
@@ -86,8 +93,8 @@ void graphic_engine_paint_combat(Graphic_engine *ge, Game *game);
  * @brief Paints a general description of the game in description area
  * @author Daniel Gómez
  * 
- * @param ge 
- * @param game 
+ * @param ge graphic engine struct
+ * @param game game struct
  */
 void graphic_engine_paint_generalDesc(Graphic_engine *ge, Game *game);
 
@@ -103,8 +110,8 @@ void graphic_engine_paint_deathScreen(Graphic_engine *ge, Game *game);
  * @brief Paints info related to commands in the command area
  * @author Daniel Gómez
  * 
- * @param ge 
- * @param game 
+ * @param ge graphic engine struct
+ * @param game game struct
  */
 void graphic_engine_paint_commandInfo(Graphic_engine *ge, Game *game);
 

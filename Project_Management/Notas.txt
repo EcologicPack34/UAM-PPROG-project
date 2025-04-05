@@ -1,0 +1,4 @@
+game->object = object_create(game_get_space_id_at(game, game_get_n_spaces(game) - 1) + 1, OBJECT_NAME);
+
+
+^en game.c - da un error porque se ejecuta antes de cargar los espacios y los links. hay que incorporarlo al interior de game_reader de cara al futuro para poder implementar objetos en el .dat

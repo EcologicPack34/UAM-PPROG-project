@@ -1,7 +1,7 @@
 /**
  * @file vector2.h
  * @author Daniel Gómez
- * @brief 
+ * @brief Vectors to save positions with 2 dimensional values
  * @version 0.1
  * @date 2025-03-06
  * 
@@ -15,7 +15,8 @@
  * @brief Data structure to store 2 dimensional values
  */
 typedef struct{
-    float x, y; /*!< Coordenadas del vector*/
+    float x; /*!< x coordinate of the vector*/
+    float y; /*!< y coordinate of the vector*/
 }Vector2;
 
 /**

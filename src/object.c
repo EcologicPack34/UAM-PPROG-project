@@ -22,12 +22,10 @@
 #include <string.h>
 #include <stdbool.h>
 
-#define OBJECT_MAX_DATA_SIZE 200
+#define OBJECT_MAX_DATA_SIZE 200 /*!< Max data size of an object*/
 
 /**
- * @brief Object
- *
- * This struct stores all the information of an object
+ * @brief ADT that stores all the information of an object
  */
 struct _Object {
   Id id;                    /*!< Id number of the object, it must be unique */
@@ -51,6 +49,8 @@ struct _Object {
 /*Object public functions*/
 Object *object_create(Id id, char *name, char* data, char *description, bool is_consumable, Id location, InventoryType type){
     Object *object = NULL;
+
+    if((id <= UNDEFINED_ID) || !name || !data || !description || (location <= UNDEFINED_ID)) return NULL;
 
     if(!(object = (Object *)calloc(1,sizeof(Object))))
         return NULL;
@@ -82,7 +82,8 @@ void object_destroy(void *object){
 
     e = (Object *)object;
 
-    free(e->data);
+    if(e->data)
+        free(e->data);
     free(e);
 }
 
@@ -185,7 +186,7 @@ char *object_get_descr(Object *object){
 
 bool object_get_is_consumable(Object *object){
     if(!object)
-        return TRUE;
+        return false;
         
     return object->is_consumable;
 }
