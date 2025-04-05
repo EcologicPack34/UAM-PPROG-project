@@ -204,43 +204,98 @@ Status ability_unlock_link(Ability *ability, Game *game){
 
 Status ability_action_use_ability(Game *game){
     AbilityManager *sm = NULL;
-    Queue *queue = NULL;
     Ability *ability = NULL;
     Status status;
+
+    Object *object = NULL;
+    Entity *entity = NULL;
+
+    int cd;
     
     if(!game) return ERROR;
 
     sm = game_get_ability_manager(game);
 
+    /*Evaluates the ability received and tries to execute it*/
+    status = ERROR; cd = -1;
+
+    /*Gets the ability to use*/
+    ability = ability_manager_get_evaluated_ability(sm);
+    if(!ability) return ERROR;
+
+    /*Checks cooldown to see if it is still on cd*/
+    cd = ability_get_cooldown_count(ability);
+    if(cd > 0)
+        return ERROR;
+
+    switch(ability_get_type(ability)){
+        case NO_SKILL:
+            break;
+        case HEAL_SELF:
+            status = ability_heal_self(ability, game);
+            break;
+        case HEAL_ALLY:
+            status = ability_heal_ally(ability, game);
+            break;
+        case LINK_UNLOCK:
+            status = ability_unlock_link(ability, game);
+            break;
+        default:
+            break;
+    }
+
+    /*Removes the object from the inventory if its a consumable*/
+    if(status == OK && ability_get_is_object_use(ability) == true){
+        object = game_get_object_by_id(game, ability_get_entityid(ability));
+        entity = player_get_entity(game_get_player_by_id(game, object_get_location(object)));
+
+        if(object && entity){
+            if(object_get_is_consumable(object) == true){
+                inventory_remove_object(entity_get_inventory(entity), object);
+            }
+        }
+    }
+
+    /*Sets the cooldown to its max length and pushes it into the cooldown queue*/
+    if(status == OK && (cd = ability_get_cooldown_length(ability)) > 0 ){
+        ability_set_cooldown_to_length(ability);
+        queue_push(ability_manager_get_queue(sm), (void *)ability);
+    }
+
+    return OK;
+}
+
+Status ability_actions_manage_cooldowns(Game *game){
+    AbilityManager *sm = NULL;
+    Queue *queue = NULL;
+    Queue *auxqueue = NULL;
+    Ability *ability = NULL;
+    int cd;
+    
+    sm = game_get_ability_manager(game);
+
     queue = ability_manager_get_queue(sm);
 
+    auxqueue = queue_create();
+    if(!auxqueue) return ERROR;
+
+    /*Updates the cooldowns in the queue*/
     while(queue_isEmpty(queue) == false){
         ability = (Ability *)queue_pop(queue);
-        status = OK;
-
-        switch(ability_get_type(ability)){
-            case NO_SKILL:
-                break;
-            case HEAL_SELF:
-                status = ability_heal_self(ability, game);
-                break;
-            case HEAL_ALLY:
-                status = ability_heal_ally(ability, game);
-                break;
-            case LINK_UNLOCK:
-                status = ability_unlock_link(ability, game);
-                break;
-            default:
-                break;
-        }
-
-        if(ability_get_cooldown_count(ability) > 0)
+    
+        cd = ability_get_cooldown_count(ability);
+        if(cd > 0)
             ability_reduce_cooldown(ability);
 
-        if(status == OK && ability_get_cooldown_count(ability) == 0 && game_get_state(game) == COMBAT)
-            ability_set_cooldown_to_length(ability);
+        if(cd > 1)
+            queue_push(auxqueue, (void *)ability);
     }
-    
+
+    while(queue_isEmpty(auxqueue) == false){
+        queue_push(queue, queue_pop(auxqueue));
+    }
+
+    queue_destroy(auxqueue);
 
     return OK;
 }

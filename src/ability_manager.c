@@ -49,8 +49,10 @@ struct _Ability {
  * @brief Struct that saves all the abilities in the game and a queue to trigger abilities
  */
 struct _AbilityManager{
-  Collection *ability;    /*!< Collection where all abilities are stored*/
-  Queue *queue_ability;   /*!< Queue to control ability usage*/
+  Collection *ability;        /*!< Collection where all abilities are stored*/
+  Queue *queue_cooldowns;     /*!< Queue to control cooldowns*/
+  Ability *evaluated_ability; /*!< Ability to evaluate*/
+
 };
 
 /*
@@ -238,8 +240,10 @@ AbilityManager *ability_manager_create(){
     return NULL;
   }
 
-  sm->queue_ability = queue_create();
-  if(!sm->queue_ability){
+  sm->evaluated_ability = NULL;
+
+  sm->queue_cooldowns = queue_create();
+  if(!sm->queue_cooldowns){
     collection_destroy(sm->ability);
     free(sm);
     return NULL;
@@ -252,19 +256,33 @@ void ability_manager_destroy(AbilityManager *sm){
   if(sm){
     collection_free_elements(sm->ability, ability_destroy);
     collection_destroy(sm->ability);
-    queue_destroy(sm->queue_ability);
+    queue_destroy(sm->queue_cooldowns);
 
     free(sm);
   }
 }
 
-Status ability_manager_add_ability(AbilityManager *sm, Ability *ability){
+Status ability_manager_add_evaluated_ability(AbilityManager *sm, Ability *ability){
+  if(!sm || !ability) return ERROR;
+
+  sm->evaluated_ability = ability;
+
+  return OK;
+}
+
+Ability *ability_manager_get_evaluated_ability(AbilityManager *sm){
+  if(!sm) return ERROR;
+
+  return sm->evaluated_ability;
+}
+
+Status ability_manager_add_ability_to_cd(AbilityManager *sm, Ability *ability){
   if(!sm || !ability) return ERROR;
 
   return collection_add(sm->ability, (void *)ability);
 }
 
-Status ability_manager_remove_ability(AbilityManager *sm, Ability *ability){
+Status ability_manager_remove_ability_from_cd(AbilityManager *sm, Ability *ability){
   if(!sm || !ability) return ERROR;
 
   return collection_remove(sm->ability, (void *)ability);
@@ -282,41 +300,10 @@ Ability *ability_manager_get_ability_at(AbilityManager *sm, long index){
   return (Ability *)collection_get_element_at(sm->ability, index);
 }
 
-Status ability_manager_update_cooldowns(AbilityManager *sm){
-  int size, i;
-
-  if(!sm) return ERROR;
-
-  size = ability_manager_get_ability_count(sm);
-
-  for(i = 0; i < size; i++){
-    if((ability_reduce_cooldown((Ability *)ability_manager_get_ability_at(sm, i))) == ERROR)
-      return ERROR;
-  }
-
-  return OK;
-}
-
-Status ability_manager_reset_cooldowns(AbilityManager *sm){
-  int size, i;
-
-  if(!sm) return ERROR;
-
-  size = ability_manager_get_ability_count(sm);
-
-  for(i = 0; i < size; i++){
-    if((ability_set_cooldown_to_0((Ability *)ability_manager_get_ability_at(sm, i))) == ERROR)
-      return ERROR;
-  }
-
-  return OK;
-}
-
 Status ability_manager_use_ability(AbilityManager *sm, Ability *ability){
   if(!sm || !ability) return ERROR;
 
-  if(queue_push(sm->queue_ability, (void *)ability) == ERROR)
-    return ERROR;
+  sm->evaluated_ability = ability;
 
   return OK;
 }
@@ -324,5 +311,5 @@ Status ability_manager_use_ability(AbilityManager *sm, Ability *ability){
 Queue *ability_manager_get_queue(AbilityManager *sm){
   if(!sm) return ERROR;
 
-  return sm->queue_ability;
+  return sm->queue_cooldowns;
 }

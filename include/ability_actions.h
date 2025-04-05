@@ -17,12 +17,22 @@
 #include "types.h"
 
 /**
- * @brief Uses the ability on the queue of the ability manager on the game
+ * @brief Uses the evaluated ability of the ability manager
  * @author Maksym Polyak
  * 
  * @param game game struct
  * @return Status 
  */
 Status ability_action_use_ability(Game *game);
+
+/**
+ * @brief Updates the cooldowns of the abilities in the queue
+ * or removes them if they are available
+ * @author Maksym Polyak
+ * 
+ * @param game 
+ * @return Status 
+ */
+Status ability_actions_manage_cooldowns(Game *game);
 
 #endif

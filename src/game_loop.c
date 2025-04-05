@@ -149,6 +149,7 @@ void game_loop_run(Game *game, Graphic_engine *gengine){
 
   while ((command_get_code(last_cmd) != EXIT) )
   {
+
     /*Paints graphics on screen*/
     graphic_engine_paint_game(gengine, game);
     
@@ -159,10 +160,12 @@ void game_loop_run(Game *game, Graphic_engine *gengine){
     command_get_user_input(last_cmd);
     game_actions_update(game, last_cmd);
     
-    /*Triggers event with last command actions*/
-    event_actions_trigger_events(game);
-    /*Uses all the ability added to the queue on ability manager if possible*/
-    ability_action_use_ability(game);
+    if(game_get_is_turn_valid(game) == VALID){
+      /*Triggers event with last command actions*/
+      event_actions_trigger_events(game);
+      /*Manages the cooldowns of the abilities*/
+      ability_actions_manage_cooldowns(game);
+    }
   }
 }
 

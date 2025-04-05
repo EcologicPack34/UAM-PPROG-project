@@ -196,15 +196,20 @@ bool event_trigger_combat(Event *event, Game *game){
     game_combat_start(game);
     return true;
 }
+
 bool event_trigger_player_death(Event *event, Game *game){
 
+    Entity *entity = NULL;
+    int status = 0;
     if(!event || !game) return false;
 
-
-    if(entity_get_health(player_get_entity(game_get_player(game))) <= 0){
-        game_set_finished(game, true);
-        debug_log(PRINT,"Player died, finishing game");
-        return true;
+    entity = player_get_entity(game_get_player(game));
+    if(entity_get_health(entity) <= 0.0){
+        status = game_switch_player(game, -1);
+        if(status == -2 || status == -1){
+            debug_log(PRINT,"Players died, finishing game");
+            return true;
+        }
     }
     return false;
 }

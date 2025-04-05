@@ -101,6 +101,7 @@ void player_destroy(Player *player){
 
     entity_destroy(player_get_entity(player));
     equipment_destroy(player->equipment);
+    command_info_destroy(player->cmdData);
     free(player);
 }
 

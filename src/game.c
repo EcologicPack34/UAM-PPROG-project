@@ -34,6 +34,7 @@ struct _Game {
   Player *players[MAX_PLAYERS];       /*!< Contains all the players available on the game*/
   int active_player_index;            /*!< Index of the players array with the active_player*/
   int n_players;                      /*!< Number of players on the players array*/
+  TurnValidation is_turn_valid;       /*!< Checks if the turn evaluated was valid or not*/
 
   /*Collections*/
   Collection *npcs;                   /*!< Contains all the information related to the NPCs*/
@@ -126,6 +127,7 @@ Status game_create(Game **game) {
   (*game)->finished = false;
   (*game)->n_links = 0;
   (*game)->current_state = DEFAULT;
+  (*game)->is_turn_valid = VALID;
 
   (*game)->event_manager = event_manager_create();
   if(!((*game)->event_manager)){
@@ -353,6 +355,12 @@ bool game_get_god_mode(Game *game){
   return game->godmode;
 }
 
+TurnValidation game_get_is_turn_valid(Game *game){
+  if(!game) return false;
+
+  return game->is_turn_valid;
+}
+
 /*-----------SETTERS-----------*/
 
 Status game_set_last_command(Game *game, Command *command) {
@@ -382,6 +390,12 @@ Status game_set_state(Game *game, GameState state){
 Status game_set_godmode(Game *game, bool value){
   if(!game) return ERROR;
   game->godmode = value;
+  return OK;
+}
+
+Status game_set_is_turn_valid(Game *game, TurnValidation value){
+  if(!game) return ERROR;
+  game->is_turn_valid = value;
   return OK;
 }
 
@@ -717,7 +731,7 @@ Combat *game_get_combat(Game *game){
   return game->combat;
 }
 
-Status game_switch_player(Game *game, int player){
+int game_switch_player(Game *game, int player){
   int i;
   bool alivePlayers = false;
 
@@ -737,13 +751,14 @@ Status game_switch_player(Game *game, int player){
     }
     if(!alivePlayers){
       game_add_log_message(game, MESSAGE_ERROR, "Couldn't find a player which is alive");
-      return ERROR;/*Case if every player is dead*/
+      game_set_finished(game, 1);
+      return -2;/*Case if every player is dead*/
     } 
   } 
   else{
     if(entity_is_dead( player_get_entity(game->players[player] ) ) == true){
       game_add_log_message(game, MESSAGE_ERROR, "Couldn't switch player because it isn't alive");
-      return ERROR;
+      return -1;
     }
     game->active_player_index = player;
   } 
@@ -751,7 +766,7 @@ Status game_switch_player(Game *game, int player){
   game->active_player = game->players[game->active_player_index];
   command_set_player_data(game->last_cmd, player_get_cmdData(game->active_player));
 
-  return OK;
+  return 0;
 }
 
 AbilityManager *game_get_ability_manager(Game *game){
@@ -825,7 +840,7 @@ Status game_add_ability(Game *game, Ability *ability){
 
   entityid = ability_get_entityid(ability);
 
-  if(ability_manager_add_ability(game_get_ability_manager(game), ability) == ERROR) return ERROR;
+  if(ability_manager_add_ability_to_cd(game_get_ability_manager(game), ability) == ERROR) return ERROR;
 
   if(ability_get_is_player_ability(ability) == true){
     player = game_get_player_by_id(game, entityid);
