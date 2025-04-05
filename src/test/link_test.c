@@ -90,7 +90,7 @@ int main(int argc, char** argv) {
     Debug *debugLog = NULL;
   
     if (argc < 2) {
-      printf("Running all test for module Space:\n");
+      printf("Running all test for module Link:\n");
     } else {
       test = atoi(argv[1]);
       all = 0;

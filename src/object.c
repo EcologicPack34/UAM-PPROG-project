@@ -50,6 +50,8 @@ struct _Object {
 Object *object_create(Id id, char *name, char* data, char *description, bool is_consumable, Id location, InventoryType type){
     Object *object = NULL;
 
+    if((id <= UNDEFINED_ID) || !name || !data || !description || (location <= UNDEFINED_ID)) return NULL;
+
     if(!(object = (Object *)calloc(1,sizeof(Object))))
         return NULL;
 
@@ -80,7 +82,8 @@ void object_destroy(void *object){
 
     e = (Object *)object;
 
-    free(e->data);
+    if(e->data)
+        free(e->data);
     free(e);
 }
 
