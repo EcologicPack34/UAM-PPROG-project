@@ -211,9 +211,6 @@ Status game_actions_update(Game *game, Command *command) {
     game_set_godmode(game, true);
     game_actions_god_mode(game);
 
-    if(game_get_state(game) == COMBAT)
-      combat_update(game_get_combat(game), game_get_last_command(game));
-
     return command_set_status(command, OK);
   }
 
@@ -295,6 +292,14 @@ Status game_actions_update(Game *game, Command *command) {
     debug_log(PRINT,"Executed command: %s; by player %d:%s",str , entity_get_id(player), entity_get_name(player));
   }
 
+  if(status == ERROR){
+    game_set_is_turn_valid(game, NOT_VALID);
+  } else {
+    game_set_is_turn_valid(game, VALID);
+  }
+
+  if(game_get_state(game) == COMBAT && game_get_is_turn_valid(game) == VALID)
+    combat_update(game_get_combat(game), game_get_last_command(game));
 
   return OK;
 }
@@ -534,18 +539,18 @@ Status game_actions_attack(Game *game){
   if(!game) return ERROR;
 
   Combat *combat = NULL;
-  bool initCombat = false;
 
   combat = game_get_combat(game);
   if(!combat){
     game_combat_start(game);
-    initCombat = true;
-  } 
-  combat = game_get_combat(game);
-  if(!combat) return ERROR;
+    /*If game starts then the first action isn't valid so combat doesnt update*/
+    return ERROR;
+  }
   
-  if(!initCombat)
-    combat_update(combat, game_get_last_command(game));
+  if(combat){
+    if(combat_update_player_attack(combat, game_get_last_command(game)) == ERROR)
+      return ERROR;
+  }
 
   return OK;
 }
@@ -696,9 +701,7 @@ Status game_actions_object_use(Game *game){
   entity = player_get_entity(game_get_player(game));
   object = inventory_get_object_by_name(entity_get_inventory(entity), command_get_arguments(comm)[0]);
 
-  if(object_get_is_consumable(object) == true){
-    inventory_remove_object(entity_get_inventory(entity), object);
-  }
+
 
   return ability_manager_use_ability(game_get_ability_manager(game), object_get_object_effect(object));
 }
@@ -717,6 +720,8 @@ Status game_actions_search(Game *game){
 
 Status game_actions_god_mode(Game *game){
   Player *pl=NULL;
+  Combat *combat = NULL;
+  Stats *stat = NULL;
 
   if(!game) return ERROR;
 
@@ -724,8 +729,17 @@ Status game_actions_god_mode(Game *game){
     return ERROR;
   
   pl = game_get_player(game);
+  if(player_set_stats(pl, MAX_LVL, MAX_LVL, MAX_LVL, MAX_LVL, MAX_LVL, MAX_LVL) == ERROR)
+    return ERROR;
 
-  return player_set_stats(pl, MAX_LVL, MAX_LVL, MAX_LVL, MAX_LVL, MAX_LVL, MAX_LVL);
+  combat = game_get_combat(game);
+  if(combat){
+    stat = combat_get_player_stats(combat);
+    if(entity_stats_set_all(&(stat->stats), MAX_LVL, MAX_LVL, MAX_LVL, MAX_LVL, MAX_LVL, MAX_LVL) == ERROR)
+      return ERROR;
+  }
+
+  return OK;
 }
 
 Status game_actions_equip(Game *game){

@@ -219,6 +219,25 @@ AbilityManager *ability_manager_create();
 void ability_manager_destroy(AbilityManager *sm);
 
 /**
+ * @brief Adds an ability to be evaluated by the ability_manager
+ * @author Maksym Polyak    
+ * 
+ * @param sm ability manager struct
+ * @param ability ability to be added
+ * @return Status 
+ */
+Status ability_manager_add_evaluated_ability(AbilityManager *sm, Ability *ability);
+
+/**
+ * @brief Gets the evaluated ability
+ * @author Maksym Polyak    
+ * 
+ * @param sm ability manager struct
+ * @return Ability * or NULL if error
+ */
+Ability *ability_manager_get_evaluated_ability(AbilityManager *sm);
+
+/**
  * @brief Adds a ability to the ability manager collection
  * @author Maksym Polyak
  * 
@@ -226,7 +245,7 @@ void ability_manager_destroy(AbilityManager *sm);
  * @param ability to be added to ability manager
  * @return Status 
  */
-Status ability_manager_add_ability(AbilityManager *sm, Ability *ability);
+Status ability_manager_add_ability_to_cd(AbilityManager *sm, Ability *ability);
 
 /**
  * @brief Removes a ability from the ability manager collection
@@ -236,7 +255,7 @@ Status ability_manager_add_ability(AbilityManager *sm, Ability *ability);
  * @param ability to be removed from ability manager
  * @return Status 
  */
-Status ability_manager_remove_ability(AbilityManager *sm, Ability *ability);
+Status ability_manager_remove_ability_from_cd(AbilityManager *sm, Ability *ability);
 
 /**
  * @brief Gets the count of ability in the collection
@@ -258,26 +277,8 @@ long ability_manager_get_ability_count(AbilityManager *sm);
 Ability *ability_manager_get_ability_at(AbilityManager *sm, long index);
 
 /**
- * @brief IN COMBAT STATE Reduces the cooldown of all the ability by one if they have been used 
- * @author Maksym Polyak
- * 
- * @param sm ability manager
- * @return Status 
- */
-Status ability_manager_update_cooldowns(AbilityManager *sm);
-
-/**
- * @brief Returns all the ability cooldown to 0
- * @author Maksym Polyak
- * 
- * @param sm ability manager
- * @return Status 
- */
-Status ability_manager_reset_cooldowns(AbilityManager *sm);
-
-/**
- * @brief Adds a ability to the queue of ability on ability manager
- * DOES NOT COPY THE SKILL STRUCT
+ * @brief Tries to use an ability, if succesfull, adds it to the queue of abilities
+ * DOES NOT COPY THE ABILITY STRUCT
  * @author Maksym Polyak
  * 
  * @param sm ability manager

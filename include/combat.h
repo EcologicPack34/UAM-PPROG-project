@@ -72,6 +72,16 @@ void combat_free(Combat *combat);
 Status combat_update(Combat *combat, Command *last_cmd);
 
 /**
+ * @brief Sub function of combat_update that manages player attack type and allies/enemies turn
+ * @author Sofía Calvo
+ * 
+ * @param cmb combat struct
+ * @param last_cmd last command of the player on the combat
+ * @return Status 
+ */
+Status combat_update_player_attack(Combat *cmb, Command *last_cmd);
+
+/**
  * @brief Finalizes the combat and returns the game state to DEFAULT
  * @author Maksym Polyak && Daniel Gómez
  * 

@@ -38,6 +38,11 @@ typedef long Id;
 typedef enum { ERROR, OK } Status;
 
 /**
+ * @brief Enum that says if a turn was valid or not
+ */
+typedef enum { NOT_VALID, VALID } TurnValidation;
+
+/**
  * @brief Directions of the map: North, South, East, West
  */
 typedef enum { N, NE, E, SE, S , SW, W , NW, NO_DIR} Direction;

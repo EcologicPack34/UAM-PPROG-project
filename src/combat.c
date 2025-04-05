@@ -138,14 +138,13 @@ Status combat_enemies_turn(Combat *cmb);
 Status combat_allies_turn(Combat *cmb);
 
 /**
- * @brief Sub function of combat_update that manages player attack type and allies/enemies turn
- * @author Sofía Calvo
+ * @brief Updates NPCs turns
+ * @author Maksym Polyak
  * 
- * @param cmb combat struct
- * @param last_cmd last command of the player on the combat
+ * @param cmb 
  * @return Status 
  */
-Status combat_update_attack(Combat *cmb, Command *last_cmd);
+Status combat_update_NPCs_turns(Combat *cmb);
 
 Status combat_copy_entity_stats(Entity *entity, Stats *stats){
 
@@ -328,7 +327,7 @@ Status combat_allies_turn(Combat *cmb){
     return OK;
 }
 
-Status combat_update_attack(Combat *cmb, Command *last_cmd){
+Status combat_update_player_attack(Combat *cmb, Command *last_cmd){
     int numEnemy, enemycount;
     char **args = NULL;
     Stats *stEn = NULL;
@@ -340,11 +339,6 @@ Status combat_update_attack(Combat *cmb, Command *last_cmd){
     numEnemy = atoi(args[1]);
     stEn = combat_get_enemies_stats(cmb);
     enemycount = combat_get_enemies_count(cmb);
-
-    if(cmb->is_player_turn == false){
-        combat_enemies_turn(cmb);
-        combat_allies_turn(cmb);
-    }
 
     if (strcmp(args[0], "light") == 0)
     {
@@ -362,14 +356,16 @@ Status combat_update_attack(Combat *cmb, Command *last_cmd){
     {
         combat_attack_swift(&cmb->allies_stats[0], stEn, enemycount);
     }
-
-    if (cmb->is_player_turn == true)
-    {
-        combat_allies_turn(cmb);
-        combat_enemies_turn(cmb);
-    }
-
     
+    return OK;
+}
+
+Status combat_update_NPCs_turns(Combat *cmb){
+    if(!cmb) return ERROR;
+
+    combat_enemies_turn(cmb);
+    combat_allies_turn(cmb);
+
     return OK;
 }
 
@@ -449,19 +445,14 @@ Status combat_update(Combat *combat, Command *last_cmd){
     if(!combat || !last_cmd)
         return ERROR;
 
-    if(command_get_code(last_cmd) == GM){
-        /*stats copy are modified for combat*/
-        return entity_stats_set_all(&combat->allies_stats[0].stats, MAX_LVL, MAX_LVL, MAX_LVL, MAX_LVL, MAX_LVL, MAX_LVL);
+    if(combat->is_player_turn == false){
+        combat_enemies_turn(combat);
+        combat_allies_turn(combat);
     }
 
-    if(command_get_code(last_cmd) == ATTACK) {
-
-        if(combat_update_attack(combat, last_cmd) == ERROR) return ERROR;
-    }
-
-    if (command_get_code(last_cmd) == RUN_AWAY)
-    {
-        if (combat_runaway(combat) == ERROR) return ERROR;
+    if(combat->is_player_turn == true){
+        combat_allies_turn(combat);
+        combat_enemies_turn(combat);
     }
 
     return OK;
