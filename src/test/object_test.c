@@ -16,7 +16,7 @@
  #include <stdlib.h>
  #include <stdio.h>
  
- #define N_TEST 32
+ #define N_TEST 39
 
 /*it creates an object, expected result != NULL*/
 void test1_object_create();
