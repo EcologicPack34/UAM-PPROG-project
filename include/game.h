@@ -461,9 +461,9 @@ Combat *game_get_combat(Game *game);
  * 
  * @param game game struct
  * @param player player index to switch
- * @return Status 
+ * @return int -2 if all dead, -1 if not found or 0 if ok
  */
-Status game_switch_player(Game *game, int player);
+int game_switch_player(Game *game, int player);
 
 /**
  * @brief Gets the ability manager struct from the game struct

@@ -50,6 +50,7 @@ typedef struct{
     double maxhealth;           /*!< Max health of the entity*/
     double health;              /*!< Health of the entity */
     double baseDamage;          /*!< Base damage of the entity */
+    bool is_dead;               /*!< Bool to check if an entity is dead*/
 
     int strength;               /*!< Strength stat of the entity */
     int defense;                /*!< Defense stat of the entity */
