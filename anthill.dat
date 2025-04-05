@@ -4,9 +4,9 @@ la longitud de gdescLine esta limitidad por el codigo, es decir, si es mas larga
 Formato Player: #p:ID|Nombre|LocationID|VidaMaxima|Vida|DanoBase|Fuerza|Defensa|NivelMagia|gdesc
 
 #p:1|Hero1|11|mO^"
--#p:2|Hero2|14|m1^"
--#p:3|Hero3|13|m2^"
--#p:4|Hero4|121|m3^"
+#p:2|Hero2|14|m1^"
+#p:3|Hero3|13|m2^"
+#p:4|Hero4|121|m3^"
 
 -#s:11|Entry|-1|-1|1|4
 -#s:12|Corridor1|1|-1|2|-1
@@ -74,10 +74,10 @@ Formato NPC: #n:ID|Message|Nombre|LocationID|is_follower|Status|
 
 Formato STATS: #st:ID|EntityType|VidaMaxima|Vida|DanoBase|Fuerza|Defensa|NivelMagia
 
-#st:1|1|100|2|2|1|1|1
--#st:2|1|100|2|2|1|1|1
--#st:3|1|100|100|2|1|1|1
--#st:4|1|100|100|2|1|1|1
+#st:1|1|100|100|2|1|1|1
+#st:2|1|100|100|2|1|1|1
+#st:3|1|100|100|2|1|1|1
+#st:4|1|100|100|2|1|1|1
 
 #st:1|2|2|5|2|2|2|2|
 #st:2|2|2|5|2|2|2|2|
