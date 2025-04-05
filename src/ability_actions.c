@@ -295,5 +295,7 @@ Status ability_actions_manage_cooldowns(Game *game){
         queue_push(queue, queue_pop(auxqueue));
     }
 
+    queue_destroy(auxqueue);
+
     return OK;
 }
