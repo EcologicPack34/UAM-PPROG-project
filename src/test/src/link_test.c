@@ -8,9 +8,9 @@
  * @copyright GNU Public License
  */
 
-#include "../../include/link.h"
-#include "../../include/types.h"
-#include "../../include/debug_printing.h"
+#include "../../../include/link.h"
+#include "../../../include/types.h"
+#include "../../../include/debug_printing.h"
 #include "test.h"
 
 #include <stdlib.h>

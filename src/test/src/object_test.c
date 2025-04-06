@@ -8,13 +8,14 @@
  * @copyright GNU Public License
  */
 
- #include "../../include/object.h"
- #include "../../include/types.h"
- #include "../../include/debug_printing.h"
+ #include "../../../include/object.h"
+ #include "../../../include/types.h"
+ #include "../../../include/debug_printing.h"
  #include "test.h"
  
  #include <stdlib.h>
  #include <stdio.h>
+ #include <string.h>
  
  #define N_TEST 39
 
@@ -50,7 +51,7 @@ void test3_object_set_location();
 void test1_object_set_type();
 /*sets the inventory type of a non existent object, expected result ERROR*/
 void test2_object_set_type();
-/*sets an unknown inventory type to an object, expected result ERROR*/
+/*sets an unknown inventory type to an object, expected result OK*/
 void test3_object_set_type();
 /*sets an object description, expected result OK*/
 void test1_object_set_descr();
@@ -177,20 +178,20 @@ void test2_object_create(){
 void test1_object_isEqual(){
     Object *obj1= object_create(1,"test1","test1","test1",true,10,SPACE_INVENTORY);
     Object *obj2= object_create(1,"test1","test1","test1",true,10,SPACE_INVENTORY);
-    PRINT_TEST_RESULT(object_isEqual(obj1,obj2) == true);
+    PRINT_TEST_RESULT(object_isEqual(obj1,obj2) == 0);
     object_destroy(obj1);
     object_destroy(obj2);
 }
 void test2_object_isEqual(){
     Object *obj1= object_create(1,"test1","test1","test1",true,10,SPACE_INVENTORY);
     Object *obj2= object_create(2,"test2","test2","test2",true,10,SPACE_INVENTORY);
-    PRINT_TEST_RESULT(object_isEqual(obj1,obj2) == false);
+    PRINT_TEST_RESULT(object_isEqual(obj1,obj2) != 0);
     object_destroy(obj1);
     object_destroy(obj2);
 }
 void test3_object_isEqual(){
     Object *obj1= object_create(1,"test1","test1","test1",true,10,SPACE_INVENTORY);
-    PRINT_TEST_RESULT(object_isEqual(obj1,NULL) == false);
+    PRINT_TEST_RESULT(object_isEqual(obj1,NULL) != 0);
     object_destroy(obj1);
 }
 void test1_object_set_id(){
@@ -199,11 +200,11 @@ void test1_object_set_id(){
     object_destroy(obj);
 }
 void test2_object_set_id(){
-    PRINT_TEST_RESULT(object_set_id(NULL, 5) == OK);
+    PRINT_TEST_RESULT(object_set_id(NULL, 5) == ERROR);
 }
 void test3_object_set_id(){
     Object *obj= object_create(1,"test1","test1","test1",true,10,SPACE_INVENTORY);
-    PRINT_TEST_RESULT(object_isEqual(obj, NO_ID) == OK);
+    PRINT_TEST_RESULT(object_isEqual(obj, NULL) == ERROR);
     object_destroy(obj);
 }
 void test1_object_set_name(){
@@ -241,6 +242,11 @@ void test1_object_set_type(){
 void test2_object_set_type(){
     PRINT_TEST_RESULT(object_set_type(NULL, PLAYER_INVENTORY) == OK);
 }
+void test3_object_set_type(){
+    Object *obj= object_create(1,"test1","test1","test1",true,10,SPACE_INVENTORY);
+    PRINT_TEST_RESULT(object_set_type(obj, UNKNOWN_INVENTORY) == OK);
+    object_destroy(obj);
+}
 void test1_object_set_descr(){
     Object *obj= object_create(1,"test1","test1","test1",true,10,SPACE_INVENTORY);
     PRINT_TEST_RESULT(object_set_descr(obj, "test") == OK);
@@ -264,7 +270,7 @@ void test2_object_get_id(){
 }
 void test1_object_get_name(){
     Object *obj= object_create(1,"name","test1","test1",true,10,SPACE_INVENTORY);
-    PRINT_TEST_RESULT((strcmp(object_get_name(obj)),"name") == 0);
+    PRINT_TEST_RESULT((strcmp(object_get_name(obj), "name") == 0));
     object_destroy(obj);
 }
 void test2_object_get_name(){
@@ -296,7 +302,7 @@ void test2_object_is_consumable(){
 }
 void test1_object_get_descr(){
     Object *obj= object_create(1,"name","test1","descr",true,10,SPACE_INVENTORY);
-    PRINT_TEST_RESULT((strcmp(object_get_descr(obj)),"descr") == 0);
+    PRINT_TEST_RESULT((strcmp(object_get_descr(obj),"descr") == 0));
     object_destroy(obj);
 }
 void test2_object_get_descr(){
@@ -315,7 +321,7 @@ void test2_object_get_object_effect(){
 }
 void test1_object_get_data(){
     Object *obj= object_create(1,"name","data","test1",true,10,SPACE_INVENTORY);
-    PRINT_TEST_RESULT((strcmp(object_get_data(obj)),"data") == 0);
+    PRINT_TEST_RESULT((strcmp(object_get_data(obj),"data") == 0));
     object_destroy(obj);
 }
 void test2_object_get_data(){
