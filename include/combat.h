@@ -63,7 +63,7 @@ void combat_free(Combat *combat);
 
 /**
  * @brief Updates the combat turns
- * @author Sofía Calvo
+ * @author Sofía Calvo && Maksym Polyak && Daniel Gómez
  * 
  * @param combat combat to update
  * @param last_cmd last command of the player in the combat

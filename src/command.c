@@ -493,6 +493,7 @@ Status command_get_list(Command *command, char *destination, GameState state, bo
     }
 
     for (i = 2; i < N_CMD; i++){
+      if(i == GM - NO_CMD) continue;
       for (j = 0; j < N_CMDT; j++){
         strcat(aux,cmd_to_str[i][j]);
         if(j < N_CMDT -1)
