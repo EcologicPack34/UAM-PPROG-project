@@ -291,25 +291,6 @@ long inventory_get_size(Inventory *inventory){
 
     return collection_length(inventory_get_collection(inventory));
 }
-
-Object *inventory_get_object(Inventory *inventory, Id objectid){
-    Object *object = NULL;
-    long size, i;
-    
-    if(!inventory || !objectid)
-        return NULL;
-
-    size = inventory_get_size(inventory);
-    for(i = 0; i < size; i++){
-        object = inventory_get_object_at(inventory, i);
-        if(objectid == object_get_id(object)){
-            return object;
-        }
-    }
-
-    return NULL;
-}
-
 /*Inventory set functions*/
 
 Status inventory_add_object(Inventory *inventory, Object *object){

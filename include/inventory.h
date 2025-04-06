@@ -124,16 +124,6 @@ Status inventory_get_object_str_at(Inventory *inventory, char *objectdescr, int 
  */
 long inventory_get_size(Inventory *inventory);
 
-/**
- * @brief Gets an object by its id on an inventory
- * @author Maksym Polyak
- *
- * @param inventory inventory where the objects are located
- * @param objectid id of the object
- * @return Object* if well or NULL if ERROR;
- */
-Object *inventory_get_object(Inventory *inventory, Id objectid);
-
 /*Inventory set functions*/
 
 /**
