@@ -1,3 +1,13 @@
+/** 
+ * @brief It declares the tests for the command module
+ * 
+ * @file command_test.h
+ * @author Aaron Charameli Mair
+ * @version 0.0 
+ * @date 6-04-2025
+ * @copyright GNU Public License
+ */
+
 #include "../../include/command.h"
 #include "test.h"
 #include "../../include/types.h"
