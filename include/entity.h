@@ -50,12 +50,11 @@ typedef struct{
     double maxhealth;           /*!< Max health of the entity*/
     double health;              /*!< Health of the entity */
     double baseDamage;          /*!< Base damage of the entity */
-    bool is_dead;               /*!< Bool to check if an entity is dead*/
 
     int strength;               /*!< Strength stat of the entity */
     int defense;                /*!< Defense stat of the entity */
     int magicLevel;             /*!< magicLevel stat of the entity */
-}Entity_Stats;
+}EntityStats;
 
 /*
  * Entity public implementation
@@ -212,7 +211,7 @@ Status entity_set_stats(Entity *ent, double maxhealth, double health, double bas
  * @brief This function sets the values of an EntityStats
  * @author Aaron Charameli Mair
  * 
- * @param es a pointer to the Entity_Stats to modify
+ * @param es a pointer to the EntityStats to modify
  * @param maxhealth 
  * @param health 
  * @param baseDamage 
@@ -221,9 +220,19 @@ Status entity_set_stats(Entity *ent, double maxhealth, double health, double bas
  * @param magicLevel 
  * @return Status 
  */
-Status entity_stats_set_all(Entity_Stats *es, double maxhealth, double health, double baseDamage, int strength, int defense, int magicLevel);
+Status entity_stats_set_all(EntityStats *es, double maxhealth, double health, double baseDamage, int strength, int defense, int magicLevel);
 
 /*Entity GETTERS*/
+
+/**
+ * @brief Gets if an entity is dead or not by its stats, used in combat module
+ * @author Daniel Gómez
+ * 
+ * @param entity contains all the information related to the entity
+ * @return true if entity is dead, also true if there was an error
+ * @return false if entity is alive
+ */
+bool entity_stats_is_dead(EntityStats *entity);
 
 /**
  * @brief Gets if an entity is dead or not

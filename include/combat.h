@@ -33,7 +33,7 @@
  * @brief Struct of the combat module to save the stats of an NPC, public for the graphic_engine
  */
 typedef struct {
-    Entity_Stats stats;             /*!< Copy of the stats in order to buff/debuff and not modify the original stats*/
+    EntityStats stats;             /*!< Copy of the stats in order to buff/debuff and not modify the original stats*/
     Entity *entity;                 /*!< Entity from which the stats are saved*/
 }Stats;
 
@@ -70,16 +70,6 @@ void combat_free(Combat *combat);
  * @return Status 
  */
 Status combat_update(Combat *combat, Command *last_cmd);
-
-/**
- * @brief Sub function of combat_update that manages player attack type and allies/enemies turn
- * @author Sofía Calvo
- * 
- * @param cmb combat struct
- * @param last_cmd last command of the player on the combat
- * @return Status 
- */
-Status combat_update_player_attack(Combat *cmb, Command *last_cmd);
 
 /**
  * @brief Finalizes the combat and returns the game state to DEFAULT

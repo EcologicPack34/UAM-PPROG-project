@@ -541,7 +541,7 @@ void graphic_engine_paint_combat(Graphic_engine *ge, Game *game){
   for (i = 1; i < ally_count; i++)
   {
     strcat(str, entity_get_graphic_description(stats[i].entity));
-    if(i != enemy_count -1) strcat(str, spacing);
+    if(i != ally_count - 1) strcat(str, spacing);
   }
   screen_area_puts(ge->map, str);
 
@@ -569,11 +569,11 @@ void graphic_engine_paint_combat(Graphic_engine *ge, Game *game){
     else strcat(str, "_");
   }
   strcat(str, "]");
-
+  
+  strcat(str, spacing);
   /*allies health bar*/
   for (i = 1; i < ally_count; i++)
   {
-    strcat(str, spacing);
     //sprintf(strAux, "[%.2lf]", stats[i].stats.health);
     strcat(str, "[");
     bar = stats[i].stats.health / entity_get_max_health(stats[i].entity) * HEALTH_BAR_WIDTH;
@@ -589,7 +589,7 @@ void graphic_engine_paint_combat(Graphic_engine *ge, Game *game){
     }
     strcat(str, "]");
     
-    if(i != ally_count -1) strcat(str, spacing);
+    if(i != ally_count - 1) strcat(str, spacing);
   }
   screen_area_puts(ge->map, str);
 

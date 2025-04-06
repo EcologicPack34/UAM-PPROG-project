@@ -10,6 +10,9 @@
         "types.h": "c",
         "link.h": "c",
         "test.h": "c",
-        "debug_printing.h": "c"
+        "debug_printing.h": "c",
+        "inventory.h": "c",
+        "object.h": "c",
+        "collection.h": "c"
     }
 }

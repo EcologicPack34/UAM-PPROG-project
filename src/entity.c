@@ -35,7 +35,7 @@ struct _Entity {
 
     char gdesc[ENTITY_GRAPHIC_LENGTH + 1]; /*!< Graphic description of the entity*/
 
-    Entity_Stats stats;       /*!< Entity combat stats */
+    EntityStats stats;       /*!< Entity combat stats */
 };
 
 /*
@@ -253,7 +253,7 @@ Status entity_set_stats(Entity *ent, double maxhealth, double health, double bas
     return entity_stats_set_all(&ent->stats, maxhealth, health, baseDamage, strength, defense, magicLevel);
 }
 
-Status entity_stats_set_all(Entity_Stats *es, double maxhealth, double health, double baseDamage, int strength, int defense, int magicLevel){
+Status entity_stats_set_all(EntityStats *es, double maxhealth, double health, double baseDamage, int strength, int defense, int magicLevel){
     if(!es) return ERROR;
     
     es->maxhealth = maxhealth;
@@ -268,6 +268,10 @@ Status entity_stats_set_all(Entity_Stats *es, double maxhealth, double health, d
 
 /*Entity GETTERS*/
 
+bool entity_stats_is_dead(EntityStats *stats){
+    if(!stats) return true;
+    return stats->health <= 0;
+}
 bool entity_is_dead(Entity *entity){
     if(!entity) return true;
     return entity->stats.health <= 0;
