@@ -331,10 +331,24 @@ Status entity_add_ability(Entity *entity, Ability *ability){
 }
 
 Ability *entity_get_ability_at(Entity *entity, int index){
-    if(!entity)
+    if(!entity || index < 0 || index > entity->n_ability)
         return NULL;
 
     return entity->ability[index];
+}
+
+char *entity_get_ability_name_at(Entity *entity, int index){
+    if(!entity)
+        return NULL;
+
+    return ability_get_name(entity->ability[index]);
+}
+
+int entity_get_n_abilities(Entity *entity){
+    if(!entity)
+        return -1;
+
+    return entity->n_ability;
 }
 
 double entity_get_max_health(Entity *entity){

@@ -310,6 +310,25 @@ Status entity_add_ability(Entity *entity, Ability *ability);
 Ability *entity_get_ability_at(Entity *entity, int index);
 
 /**
+ * @brief Gets the abilit name at the position index
+ * @author Maksym Polyak
+ * 
+ * @param entity contains all the information related to the entity
+ * @param index index of the ability
+ * @return char* or NULL if error or not found
+ */
+char *entity_get_ability_name_at(Entity *entity, int index);
+
+/**
+ * @brief Gets the number of abilities an entity has
+ * @author Maksym Polyak
+ * 
+ * @param entity 
+ * @return int or -1 if error
+ */
+int entity_get_n_abilities(Entity *entity);
+
+/**
  * @brief Gets the entity max health
  * @author Maksym Polyak
  * 

@@ -185,7 +185,7 @@ Status ability_set_cooldown_to_0(Ability *ability){
 Status ability_set_cooldown_to_length(Ability *ability){
   if(!ability) return ERROR;
 
-  ability->cooldown_count = ability->cooldown_length;
+  ability->cooldown_count = ability->cooldown_length + 1;
 
   return OK;
 }

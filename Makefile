@@ -80,7 +80,7 @@ debug:
 
 gdb:
 	make debug
-	gdb --tui --silent ./anthilldebug
+	gdb --tui --silent --args ./anthilldebug anthill.dat
 
 #To install ddd run $sudo apt install ddd
 ddd:

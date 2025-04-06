@@ -18,6 +18,7 @@
 #include "collection.h"
 #include "combat.h"
 #include "ability_manager.h"
+#include "ability_actions.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -671,16 +672,19 @@ Status game_actions_use_ability(Game *game){
   arguments = command_get_arguments(game_get_last_command(game));
 
   index = atoi(arguments[0]);
-  if(n_arg < 0 || n_arg >= MAX_SKILLS_ENTITY)
+  if(n_arg <= 0 || n_arg >= MAX_SKILLS_ENTITY)
     return ERROR;
 
   entity = player_get_entity(game_get_player(game));
 
-  ability = entity_get_ability_at(entity, index);
+  ability = entity_get_ability_at(entity, index - 1);
   if(!ability)
     return ERROR;
 
   if(ability_manager_use_ability(game_get_ability_manager(game), ability) == ERROR)
+    return ERROR;
+
+  if(ability_actions_use_ability(game) == ERROR)
     return ERROR;
 
   return OK;
@@ -701,9 +705,9 @@ Status game_actions_object_use(Game *game){
   entity = player_get_entity(game_get_player(game));
   object = inventory_get_object_by_name(entity_get_inventory(entity), command_get_arguments(comm)[0]);
 
+  ability_manager_use_ability(game_get_ability_manager(game), object_get_object_effect(object));
 
-
-  return ability_manager_use_ability(game_get_ability_manager(game), object_get_object_effect(object));
+  return ability_actions_use_ability(game);;
 }
 
 Status game_actions_search(Game *game){

@@ -202,7 +202,7 @@ Status ability_unlock_link(Ability *ability, Game *game){
   * Public functions
 */
 
-Status ability_action_use_ability(Game *game){
+Status ability_actions_use_ability(Game *game){
     AbilityManager *sm = NULL;
     Ability *ability = NULL;
     Status status;

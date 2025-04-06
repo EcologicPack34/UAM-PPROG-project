@@ -12,8 +12,8 @@ Chats with an NPC in the space. Needs one argument. Ex: chat NPC1.
 If in exploration, it starts combat. In combat mode, attacks enemies. Takes no arguments
 Exits combat.
 Switches current player. Ex: switch list (gets player list). switch (swithches to next player). switch Id (switches to player with given Id)
-Uses an ability. Takes one argument. Ex: ability 1.
-Uses an ability of an object. Takes one argument. Ex: object_use ObjectName.
+Uses an ability. Takes one argument, the number of the ability on the description part. Ex: sk 1.
+Uses the ability of an object. Takes one argument. Ex: object_use ObjectName.
 Prints all the commands if no arguments. If specified a command, prints its description.
 Generic command for moving. Needs one argument (north, east, south, west). Ex: move north.
 Searches in the current space to obtain info about NPCs and objects.

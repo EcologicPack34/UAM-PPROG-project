@@ -273,6 +273,8 @@ void graphic_engine_paint_map(Graphic_engine *ge, Game *game){
 void graphic_engine_paint_generalDesc(Graphic_engine *ge, Game *game){
   Inventory *spaceInventory = NULL, *playerInventory = NULL;
   int inventorysize, size;
+  Entity *entityplayer = NULL;
+  
 
   int i;
 
@@ -280,6 +282,9 @@ void graphic_engine_paint_generalDesc(Graphic_engine *ge, Game *game){
   char strAux[WORD_SIZE] = "";
   Space *currentSpace;
   bool spaceDiscovered = false;
+
+  int ability_count = 0;
+
 
 
   screen_area_clear(ge->descript);
@@ -319,6 +324,23 @@ void graphic_engine_paint_generalDesc(Graphic_engine *ge, Game *game){
     }
   }
   screen_area_puts(ge->descript, " ");
+
+  entityplayer = player_get_entity(game_get_player(game));
+  ability_count = entity_get_n_abilities(entityplayer);
+  screen_area_puts(ge->descript, "Player abilities:");
+  if(ability_count <= 0) 
+    screen_area_puts(ge->descript, "Player does not have abilities");
+
+  for(i = 0; i < ability_count; i++){
+    sprintf(str, "%d. ", i + 1);
+    strcat(str, entity_get_ability_name_at(entityplayer, i));
+    sprintf(strAux, " | Cd: %d", ability_get_cooldown_count(entity_get_ability_at(entityplayer, i)));
+    strcat(str, strAux);
+    screen_area_puts(ge->descript, str);
+  }
+
+  screen_area_puts(ge->descript, " ");
+
   
   /*Paints space inventory info*/
   inventorysize = inventory_get_size(spaceInventory);
@@ -417,6 +439,12 @@ void graphic_engine_paint_combat(Graphic_engine *ge, Game *game){
   int enemy_count = 0, ally_count = 0;
   Stats *stats = NULL;
   Stats *playerStats = NULL;
+
+  Inventory *playerInventory = NULL;
+  int inventorysize;
+
+  Entity *entityplayer;
+  int ability_count = 0;
 
   heightDiv = (MAP_HEIGHT - 4 + 1)/3;
 
@@ -572,7 +600,7 @@ void graphic_engine_paint_combat(Graphic_engine *ge, Game *game){
 
   strcpy(str, "   ");
   strcat(str, entity_get_graphic_description(playerStats->entity));
-  sprintf(strAux, ": Health: %.1lf", playerStats->stats.health);
+  sprintf(strAux, ": Health: %.1lf/%.1lf", playerStats->stats.health, playerStats->stats.maxhealth);
   strcat(str, strAux);
   screen_area_puts(ge->descript, str);
 
@@ -584,7 +612,7 @@ void graphic_engine_paint_combat(Graphic_engine *ge, Game *game){
     {
       strcpy(str, "   ");
       strcat(str, entity_get_graphic_description(stats[i].entity));
-      sprintf(strAux, ": Health: %.1lf", stats[i].stats.health);
+      sprintf(strAux, ": Health: %.1lf/%.1lf", stats[i].stats.health, stats[i].stats.maxhealth);
       strcat(str, strAux);
       screen_area_puts(ge->descript, str);
     }
@@ -597,13 +625,44 @@ void graphic_engine_paint_combat(Graphic_engine *ge, Game *game){
   {
     strcpy(str, "   ");
     strcat(str, entity_get_graphic_description(stats[i].entity));
-    sprintf(strAux, ": Health: %.1lf", stats[i].stats.health);
+    sprintf(strAux, ": Health: %.1lf/%.1lf", stats[i].stats.health, stats[i].stats.maxhealth);
     strcat(str, strAux);
     screen_area_puts(ge->descript, str);
   }
 
+  entityplayer = player_get_entity(game_get_player(game));
+  ability_count = entity_get_n_abilities(entityplayer);
+  screen_area_puts(ge->descript, "Player abilities:");
+  if(ability_count <= 0) 
+    screen_area_puts(ge->descript, "Player does not have abilities");
 
-  screen_area_puts(ge->descript, " ");
+  for(i = 0; i < ability_count; i++){
+    sprintf(str, "%d. ", i + 1);
+    strcat(str, entity_get_ability_name_at(entityplayer, i));
+    sprintf(strAux, " | Cd: %d", ability_get_cooldown_count(entity_get_ability_at(entityplayer, i)));
+    strcat(str, strAux);
+    screen_area_puts(ge->descript, str);
+  }
+
+  playerInventory = entity_get_inventory(player_get_entity(game_get_player(game)));
+  inventorysize = inventory_get_size(playerInventory);
+
+  strcpy(str, "Player inventory:");
+  screen_area_puts(ge->descript, str);
+
+  if(inventorysize == 0){
+    screen_area_puts(ge->descript, "    No Objects in Player Inventory");
+  }
+  else{
+    for(i = 0; i < inventorysize && i < MAX_PRINT_PLAYER_INVENTORY; i++){
+      inventory_get_object_str_at(playerInventory, strAux, i);
+      
+      strcpy(str,"    ");
+      strcat(str, strAux);
+
+      screen_area_puts(ge->descript, str);
+    }
+  }
   screen_area_puts(ge->descript, " ");
   /*Paints game messages*/
   if(game_log_hasMessage(game)){

@@ -159,7 +159,7 @@ Status combat_update_NPCs_turns(Combat *cmb);
 Status combat_update_deaths(Combat *cmb);
 
 /**
- * @brief Copies stats from one stats struct to another
+ * @brief Copies stats from one stats struct to another, sets as dead the stat_from struct
  * @author Maksym Polyak
  * 
  * @param stat_from from where they are taken
@@ -168,10 +168,21 @@ Status combat_update_deaths(Combat *cmb);
  */
 Status combat_copy_stats_to_stats(Stats *stat_from, Stats *stat_to);
 
+/**
+ * @brief Returns the last entity Stats *, if mode == 0 searches for allies,
+ * if mode == 1 searches for enemies
+ * 
+ * @param cmb combat struct
+ * @param mode operation mode
+ * @return Stats* or NULL if error or not found
+ */
+Stats *combat_get_last_alive(Combat *cmb, int mode);
+
 Status combat_copy_entity_stats(Entity *entity, Stats *stats){
 
     if(!entity || !stats)    return ERROR;
 
+    stats->stats.maxhealth = entity_get_max_health(entity);
     stats->stats.health = entity_get_health(entity);
     stats->stats.baseDamage = entity_get_baseDamage(entity);
     stats->stats.strength = entity_get_strength(entity);
@@ -196,6 +207,10 @@ void combat_finalize(Combat *combat){
         entity_set_health(combat->enemies_stats[i].entity ,combat->enemies_stats[i].stats.health);
     }
 
+    for (i = 0; i < combat->n_dead_entities; i++)
+    {
+        entity_set_health(combat->dead_entities[i].entity ,combat->dead_entities[i].stats.health);
+    }
 }
 
 Status combat_entity_received_damage(Stats *stats, double damage){
@@ -413,39 +428,46 @@ Status combat_copy_stats_to_stats(Stats *stat_from, Stats *stat_to){
     stat_to->stats.is_dead = stat_from->stats.is_dead;
     stat_to->stats.strength = stat_from->stats.strength;
 
+    stat_from->stats.health = 0;
+    stat_from->stats.is_dead = true;
+
     return OK;
 }
 
 Status combat_update_deaths(Combat *cmb){
 
     /*Check if all the enemies are dead to end the combat*/
-    int enemyNum, allyNum, i;
+    int i;
+    Stats *last_stats = NULL;
 
     if (!cmb)
         return ERROR;
 
-    enemyNum = combat_get_enemies_count(cmb);
-    allyNum = combat_get_allies_count(cmb);
-
-    for (i = 0; i < enemyNum; i++)
+    for (i = 0; i < cmb->enemies_count; i++)
     {
         if (cmb->enemies_stats[i].stats.health <= 0)
         {
             combat_copy_stats_to_stats(&(cmb->enemies_stats[i]), &(cmb->dead_entities[(cmb->n_dead_entities)++]));
-            if(i < (cmb->enemies_count - 2)){
-                combat_copy_stats_to_stats(&(cmb->enemies_stats[cmb->enemies_count - 1]), &(cmb->enemies_stats[i]));
+            if(i < (cmb->enemies_count - 1)){
+                last_stats = NULL;
+                last_stats = combat_get_last_alive(cmb, 1);
+                if(last_stats)
+                    combat_copy_stats_to_stats(last_stats, &(cmb->enemies_stats[i]));
             }
             cmb->enemies_count--;
         }
     }
 
-    for(i = 1; i < allyNum; i++)
+    for(i = 1; i < cmb->allies_count; i++)
     {
         if (cmb->allies_stats[i].stats.health <= 0)
         {
             combat_copy_stats_to_stats(&(cmb->allies_stats[i]), &(cmb->dead_entities[(cmb->n_dead_entities)++]));
-            if(i < (cmb->allies_count - 2)){
-                combat_copy_stats_to_stats(&(cmb->allies_stats[cmb->allies_count - 1]), &(cmb->allies_stats[i]));
+            if(i < (cmb->allies_count - 1)){
+                last_stats = NULL;
+                last_stats = combat_get_last_alive(cmb, 0);
+                if(last_stats)
+                    combat_copy_stats_to_stats(last_stats, &(cmb->allies_stats[i]));
             }
             cmb->allies_count--;
         }
@@ -464,6 +486,27 @@ Status combat_update_deaths(Combat *cmb){
     }
 
     return OK;
+}
+
+Stats *combat_get_last_alive(Combat *cmb, int mode){
+    int i;
+    if(!cmb) return NULL;
+
+    if(mode == 0){
+        for(i = NPC_MAX_ALLIES - 1; i > 1; i--){
+            if(cmb->allies_stats[i].stats.health > 0){
+                return &(cmb->allies_stats[i]);
+            }
+        }
+    } else if(mode == 1){
+        for(i = NPC_MAX_ENEMIES - 1; i > 0; i--){
+            if(cmb->enemies_stats[i].stats.health > 0){
+                return &(cmb->enemies_stats[i]);
+            }
+        }
+    }
+
+    return NULL;
 }
 
 /*

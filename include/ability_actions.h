@@ -23,7 +23,7 @@
  * @param game game struct
  * @return Status 
  */
-Status ability_action_use_ability(Game *game);
+Status ability_actions_use_ability(Game *game);
 
 /**
  * @brief Updates the cooldowns of the abilities in the queue
