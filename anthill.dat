@@ -91,4 +91,4 @@ Formato Ability: #sk:Id|Type|Name|Entityid(ObjectId)|is_player_ability|is_object
 #sk:2|heal_self|Heal self 20 HP|5|0|1|0|0|20
 #sk:3|heal_self|Heal self 5 HP|6|0|1|0|0|5
 #sk:4|money_bag|Adds 20 coins|8|0|1|0|0|20
-#sk:5|link_unlock|Unlocks link between 123 and 124|9|0|1|1|0|4
+#sk:5|link_unlock|Unlocks link between 123 and 124|9|0|1|0|0|4
