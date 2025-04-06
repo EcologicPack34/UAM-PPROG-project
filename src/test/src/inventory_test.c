@@ -8,11 +8,11 @@
  * @copyright GNU Public License
  */
 
- #include "../../include/inventory.h"
- #include "../../include/collection.h"
- #include "../../include/object.h"
- #include "../../include/types.h"
- #include "../../include/debug_printing.h"
+ #include "../../../include/inventory.h"
+ #include "../../../include/collection.h"
+ #include "../../../include/object.h"
+ #include "../../../include/types.h"
+#include "../../../include/debug_printing.h"
  #include "test.h"
  
  #include <stdlib.h>
@@ -273,18 +273,18 @@
     Inventory *i = inventory_create(SPACE_INVENTORY,1);
     Object *o = object_create(5, "test", "test", "test", true, 2, PLAYER_INVENTORY);
     inventory_add_object(i, o);
-    PRINT_TEST_RESULT(inventory_contains_object(i, o) == true);
+    PRINT_TEST_RESULT(inventory_contains_object(i, 5) == true);
     inventory_destroy(i);
     object_destroy(o);
  }
  void test2_inventory_contains_object(){
     Inventory *i = inventory_create(SPACE_INVENTORY,1);
-    PRINT_TEST_RESULT(inventory_contains_object(i, NULL) == false);
+    PRINT_TEST_RESULT(inventory_contains_object(i, NO_ID) == false);
     inventory_destroy(i);
  }
  void test3_inventory_contains_object(){
     Object *o = object_create(5, "test", "test", "test", true, 2, PLAYER_INVENTORY);
-    PRINT_TEST_RESULT(inventory_contains_object(NULL, o) == false);
+    PRINT_TEST_RESULT(inventory_contains_object(NULL, 5) == false);
     object_destroy(o);
  }
 
