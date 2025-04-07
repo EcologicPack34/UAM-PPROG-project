@@ -740,10 +740,10 @@ int game_switch_player(Game *game, int player){
 
   if(player < 0){
     /*Sets player to next*/
-    game->active_player_index = (game->active_player_index + 1) % game->n_players;
     /*cycles through players checking if they are dead, if so, skip to next*/
     for (i = 0; i < game->n_players; i++)
     {
+      game->active_player_index = (game->active_player_index + 1) % game->n_players;
       playerEnt = player_get_entity(game->players[game->active_player_index]);
 
       if(entity_is_dead(playerEnt) == false){
@@ -751,7 +751,7 @@ int game_switch_player(Game *game, int player){
         break;
       }
 
-      game->active_player_index = (game->active_player_index + 1) % game->n_players;
+      //game->active_player_index = (game->active_player_index + 1) % game->n_players;
     }
 
     if(!alivePlayers){
