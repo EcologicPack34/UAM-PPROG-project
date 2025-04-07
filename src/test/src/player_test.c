@@ -5,7 +5,7 @@
 #include <string.h>
 #include <stdlib.h>
 
-#define MAX_TESTS 48
+#define MAX_TESTS 30
 
 /*creates a player, expected result != NULL*/
 void test1_player_create();
@@ -88,6 +88,35 @@ int main(int argc, char** argv) {
   
   
     if (all || test == 1) test1_player_create();
+    if (all || test == 2) test2_player_create();
+    if (all || test == 3) test3_player_create();
+    if (all || test == 4) test4_player_create();
+    if (all || test == 5) test1_player_get_entity();
+    if (all || test == 6) test2_player_get_entity();
+    if (all || test == 7) test1_player_get_equipment();
+    if (all || test == 8) test2_player_get_equipment();
+    if (all || test == 9) test1_player_get_cmData();
+    if (all || test == 10) test2_player_get_cmData();
+    if (all || test == 11) test1_player_set_stats();
+    if (all || test == 12) test2_player_set_stats();
+    if (all || test == 13) test1_player_get_str_desc();
+    if (all || test == 14) test2_player_get_str_desc();
+    if (all || test == 15) test3_player_get_str_desc();
+    if (all || test == 16) test1_player_get_money();
+    if (all || test == 17) test2_player_get_money();
+    if (all || test == 18) test1_player_add_money();
+    if (all || test == 19) test2_player_add_money();
+    if (all || test == 20) test1_player_equip_piece();
+    if (all || test == 21) test2_player_equip_piece();
+    if (all || test == 22) test3_player_equip_piece();
+    if (all || test == 23) test1_player_unequip_piece();
+    if (all || test == 24) test2_player_unequip_piece();
+    if (all || test == 25) test1_player_add_follower();
+    if (all || test == 26) test2_player_add_follower();
+    if (all || test == 27) test1_player_remove_follower_by_name();
+    if (all || test == 28) test2_player_remove_follower_by_name();
+    if (all || test == 29) test1_player_get_followers();
+    if (all || test == 30) test2_player_get_followers();
     
   
     PRINT_PASSED_PERCENTAGE;
@@ -163,7 +192,7 @@ void test1_player_get_money(){
   player_destroy(p);
 }
 void test2_player_get_money(){
-  PRINT_TEST_RESULT(player_get_money(NULL) >= 0);
+  PRINT_TEST_RESULT(player_get_money(NULL) <= 0);
 }
 void test1_player_add_money(){
   Player *p = player_create("test",1,1);
@@ -175,7 +204,8 @@ void test2_player_add_money(){
 }
 void test1_player_equip_piece(){
   Player *p = player_create("test",1,1);
-  Object *o = object_create(1,"test","test","test",false,1,PLAYER_INVENTORY);
+  Object *o = object_create(1,"test","wearable helmet","test",false,1,PLAYER_INVENTORY);
+  inventory_add_object(entity_get_inventory(player_get_entity(p)), o);
   PRINT_TEST_RESULT(player_equip_piece(p, o) == OK);
   player_destroy(p);
   object_destroy(o);
@@ -197,7 +227,8 @@ void test1_player_unequip_piece(){
 }
 void test2_player_unequip_piece(){
   Player *p = player_create("test",1,1);
-  Object *o = object_create(1,"test","wearable chest","test",false,1,PLAYER_INVENTORY);
+  Object *o = object_create(1,"chest","wearable chest","test",false,1,PLAYER_INVENTORY);
+  inventory_add_object(entity_get_inventory(player_get_entity(p)), o);
   player_equip_piece(p, o);
   PRINT_TEST_RESULT(player_unequip_piece(p, "chest") == OK);
   object_destroy(o);
@@ -212,7 +243,7 @@ void test1_player_add_follower(){
 }
 void test2_player_add_follower(){
   Player *p = player_create("test",1,1);
-  PRINT_TEST_RESULT(player_add_follower(p, NULL) == OK);
+  PRINT_TEST_RESULT(player_add_follower(p, NULL) == ERROR);
   player_destroy(p);
 }
 void test1_player_remove_follower_by_name(){
@@ -234,5 +265,5 @@ void test1_player_get_followers(){
   player_destroy(p);
 }
 void test2_player_get_followers(){
-  PRINT_TEST_RESULT(player_get_followers(NULL) != NULL);
+  PRINT_TEST_RESULT(player_get_followers(NULL) == NULL);
 }
