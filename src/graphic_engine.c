@@ -162,9 +162,6 @@ void graphic_engine_paint_game(Graphic_engine *ge, Game *game){
   }
   
   /* Paint in the banner area */
-  screen_area_puts(ge->banner, "    The anthill game ");
-  
-
   graphic_engine_paint_commandInfo(ge, game);
   
   return;
@@ -396,12 +393,16 @@ void graphic_engine_paint_generalDesc(Graphic_engine *ge, Game *game){
 }
 
 void graphic_engine_paint_commandInfo(Graphic_engine *ge, Game *game){
-  char str[WORD_SIZE], straux[WORD_SIZE];
-  CommandCode last_cmd = UNKNOWN;
-  extern char *cmd_to_str[N_CMD][N_CMDT];
+  char str[WORD_SIZE] = "";
+  Command *last_cmd = UNKNOWN;
 
-  int i;
-  
+  Entity *player;
+
+  /*Temporal player active*/
+  player = player_get_entity(game_get_player(game));
+  sprintf(str, "   Player: %ld,%s", entity_get_id(player), entity_get_name(player));
+  screen_area_puts(ge->banner, str);
+
   /*Paint command help*/
   screen_area_clear(ge->help);
   sprintf(str, " The commands you can use are:");
@@ -411,13 +412,9 @@ void graphic_engine_paint_commandInfo(Graphic_engine *ge, Game *game){
   screen_area_puts(ge->help, str);
   
   /*Paints commands*/
-  last_cmd = command_get_code(game_get_last_command(game));
-  sprintf(str, " %s (%s)", cmd_to_str[last_cmd - NO_CMD][CMDL], cmd_to_str[last_cmd - NO_CMD][CMDS]);
-  for(i = 0; i < MAX_CMD_ARGS_NUM; i++){
-    sprintf(straux, " %s", *(command_get_arguments(game_get_last_command(game)) + i));
-    strcat(str, straux);
-  }
-  strcat(str, (command_get_status(game_get_last_command(game)) == OK) ? " : OK" : " : ERROR");
+  last_cmd = game_get_last_command(game);
+  str[0] = 0;
+  command_get_as_string(last_cmd, str);
   screen_area_puts(ge->feedback, str);
   
   screen_paint(game_get_player_color(game));
