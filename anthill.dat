@@ -2,16 +2,24 @@ Formato Space: #s:ID|Nombre|northLink|eastLink|southLink|westLink|gdescLine1;gde
 la longitud de gdescLine esta limitidad por el codigo, es decir, si es mas larga de lo debido se ignorara. Si hay mas lineas de descripcion de lo debido tambien se ignoran
 
 Formato Player: #p:ID|Nombre|LocationID|VidaMaxima|Vida|DanoBase|Fuerza|Defensa|NivelMagia|gdesc
+Formato STATS: #st:IDEntity|EntityType|VidaMaxima|Vida|DanoBase|Fuerza|Defensa|NivelMagia
+
 
 #p:1|Hero1|11|mO^"
-#p:2|Hero2|14|m1^"
-#p:3|Hero3|13|m2^"
-#p:4|Hero4|121|m3^"
+#st:1|1|100|100|25|1|1|1
 
--#s:11|Entry|-1|-1|1|4
--#s:12|Corridor1|1|-1|2|-1
--#s:13|Corridor2|2|4|3|-1
--#s:14|AMONGUS|3|-1|-1|-1
+#p:2|Hero2|14|m1^"
+#st:2|1|100|100|25|1|1|1
+
+#p:3|Hero3|13|m2^"
+#st:3|1|100|100|25|1|1|1
+
+#p:4|Hero4|121|m3^"
+#st:4|1|100|100|25|1|1|1
+
+
+
+
 
 #s:11|Entry|-1|-1|1|-1|    _    ;\ \_-------__ ;\  mo'\_;\  @  _  ;  \__/  \__
 #s:121|Corridor1|1|-1|2|-1|    -     ;\   \___;\   _    \;\; \__/ \  /
@@ -25,11 +33,6 @@ Formato Player: #p:ID|Nombre|LocationID|VidaMaxima|Vida|DanoBase|Fuerza|Defensa|
 #s:14|Hole|-1|-1|10|9
 
 Formato Link: #l:ID|Space1|Space2|adjacent|locked //Recordar añadir en cada espacio sus links adyacentes
-
--#l:1|11|12|1|0|0
--#l:2|12|13|1|0|0
--#l:3|13|14|1|0|0
--#l:4|11|13|1|0|0
 
 #l:1|11|121|1|0
 #l:2|121|122|1|0
@@ -67,27 +70,29 @@ Formato Event: #e:Id|Type|cmdTriggersNum|cmdName1 , ...|removeOnTrigger|tagvalue
 
 Formato NPC: #n:ID|Message|Nombre|LocationID|is_follower|Status|
 #n:1|TEST NPC1 FOLLOW/UNFOLLOW|NPC1|11|1|1|^0m"
-#n:2|TEST NPC2 FOLLOW/UNFOLLOW|NPC2|11|1|1|^1m"
-#n:3|TEST NPC3 FOLLOW/UNFOLLOW|NPC3|11|1|1|^2m"
-#n:4|DIE|Enemy1|11|0|3|^3m"
-#n:5|DIE|Enemy2|11|0|3|^4m"
-#n:6|DIE|Enemy3|11|0|3|^5m"
-#n:7|DIE|Enemy4|11|0|3|^6m"
-
-Formato STATS: #st:IDEntity|EntityType|VidaMaxima|Vida|DanoBase|Fuerza|Defensa|NivelMagia
-
-#st:1|1|100|100|25|1|1|1
-#st:2|1|100|100|25|1|1|1
-#st:3|1|100|100|25|1|1|1
-#st:4|1|100|100|25|1|1|1
-
 #st:1|2|100|100|10|2|2|2|
+
+#n:2|TEST NPC2 FOLLOW/UNFOLLOW|NPC2|11|1|1|^1m"
 #st:2|2|100|100|10|2|2|2|
+
+#n:3|TEST NPC3 FOLLOW/UNFOLLOW|NPC3|11|1|1|^2m"
 #st:3|2|100|100|10|2|2|2|
+
+#n:4|DIE|Enemy1|11|0|3|^3m"
 #st:4|2|100|100|10|2|2|2|
+
+#n:5|DIE|Enemy2|11|0|3|^4m"
 #st:5|2|100|100|10|2|2|2|
+
+#n:6|DIE|Enemy3|11|0|3|^5m"
 #st:6|2|100|100|10|2|2|2|
+
+#n:7|DIE|Enemy4|11|0|3|^6m"
 #st:7|2|100|100|10|2|2|2|
+
+#n:8|DIE|Spider-(not)-man|123|0|3|/o\
+#st:8|2|100|100|10|2|2|2|
+
 
 Formato Ability: #sk:Id|Type|Name|Entityid(ObjectId)|is_player_ability|is_object_use|cd_count|cd_length|data
 

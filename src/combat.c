@@ -559,7 +559,7 @@ Combat *combat_initialize(Space *space, Player *player, CommandCode code){
     /*Saves the first four enemies and the first three allies on the combat struct*/
     for(i = 0; i < npc_count; i++){
         npc = space_get_NPC_at(space, i);
-        if(npc_get_status(npc) == ENEMY && npc_enemies <= 4){
+        if(npc_get_status(npc) == ENEMY && npc_enemies < 4){
             if(entity_get_health(npc_get_entity(npc)) <= 0){
                 continue;
             } 
@@ -567,7 +567,7 @@ Combat *combat_initialize(Space *space, Player *player, CommandCode code){
             combat_copy_entity_stats(npc_get_entity(npc), &(combat->enemies_stats[npc_enemies]));
             npc_enemies++;
         }
-        if(npc_get_status(npc) == ALLY && npc_allies <= 3){
+        if(npc_get_status(npc) == ALLY && npc_allies < 3){
             if(entity_get_health(npc_get_entity(npc)) <= 0){
                 continue;
             } 

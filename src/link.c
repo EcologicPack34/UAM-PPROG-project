@@ -207,7 +207,7 @@ Status link_move_entity(Link *link, Entity *entity){
     }
 
     /*mover entidad*/
-    if(link->locked) return OK;
+    if(link->locked) return ERROR;
     
     if(space == link_get_space1(link)){
         /*caso en el que la entidad se encuentra en el espacio 1*/

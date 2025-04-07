@@ -148,7 +148,7 @@ bool link_is_locked(Link *link);
  * 
  * @param link link struct
  * @param entity entity to move
- * @return Status 
+ * @return Ok if moved entity, Error if blocked link or any other error
  */
 Status link_move_entity(Link* link, Entity* entity);
 

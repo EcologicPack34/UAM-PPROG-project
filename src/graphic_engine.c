@@ -273,7 +273,7 @@ void graphic_engine_paint_generalDesc(Graphic_engine *ge, Game *game){
   Entity *entityplayer = NULL;
   
 
-  int i;
+  int i, printedNPCs = 0;
 
   char str[WORD_SIZE] = "";
   char strAux[WORD_SIZE] = "";
@@ -366,13 +366,16 @@ void graphic_engine_paint_generalDesc(Graphic_engine *ge, Game *game){
   if(!spaceDiscovered){
     screen_area_puts(ge->descript, "Space hasn't been explored");
   }else{
-    for(i = 0; i < size && i < MAX_PRINT_SPACE_NPCS; i++){
-      if(entity_get_health(npc_get_entity(space_get_NPC_at(currentSpace, i))) <= 0) continue;
+    for(i = 0; i < size && printedNPCs < MAX_PRINT_SPACE_NPCS; i++){
+      if(entity_is_dead(npc_get_entity(space_get_NPC_at(currentSpace, i)))){
+        continue;
+      }
   
       strcpy(str, "   ");
       npc_get_str_descr(space_get_NPC_at(currentSpace, i), strAux, i + 1);
       strcat(str,strAux);
       screen_area_puts(ge->descript, str);
+      printedNPCs++;
     }
   }
 
