@@ -1,0 +1,118 @@
+NOTAS IMPORTANTES SOBRE EL PROYECTO:
+
+NOTAS ITERACIÓN 3:
+
+NOTA IMPORTANTE: dado que nuestro juego tiene eventos aleatorios, no tiene sentido realizar un fichero de pruebas con una serie de comandos, pues puede que estos resulten
+		en algo erróneo.
+NOTA IMPORTANTE: este archivo contiene una explicación sobre como funciona el combate.
+
+Existe un comando help, sin argumentos, este devuelve una lista de todos los posibles comandos del juego. Si se le especifica un argumento al comando help, como por
+ejemplo "help north", este te dará una breve descripción sobre ese comando y su uso.
+
+Darle a la tecla enter ejecuta el ultimo comando ejecutado por el jugador, si se cambia de jugador, el ultimo comando será el ultimo que haya ejecutado ese jugador.
+
+La limitación del mapeo de espacios para mostrarlo posteriormente en pantalla ha sido mejorado, permitiendo ahora varios bloques no anexos.
+
+Para obtener información de un espacio se debe ejecutar el comando search o sh, este te da información sobre el espacio, pero tiene una probabilidad de 
+entrar en combate si existen enemigos en este.
+
+El combate sigue unas reglas especificas:
+
+-El jugador puede hacer 2 cosas: huir o atacar.
+-Si el jugador ataca existen varios tipos de ataque, cada uno con sus ventajas y desventajas
+	-attack Swift : ataca a todos los enemigos haciéndoles cierta cantidad de daño, pero tiene una alta probabilidad de fallar.
+	-attack light numEnemy : ataca al enemigo con el numero indicado, hace daño medio, pero es un ataque fiable con poca probabilidad de fallo.
+	-attack strong numEnemy :ataca al enemigo con el numero indicado, hace bastante daño, pero tiene una alta probabilidad de fallar
+	-attack quick numEnemy : ataca al enemigo con el numero indicado, hace poco daño, pero es un ataque muy fiable casi imposible de fallar.
+
+Si el jugador empieza atacando o los enemigos (nivel de manejo interno) es decidido por si el ataque es una emboscada (evento aleatorio) o si el jugador a empezado.
+
+Los enemigos y aliados también se regirán por el orden indicado anteriormente.
+Los enemigos y aliados tienen acceso a los mismos ataques que se han mencionado anteriormente, estos elegiran aleatoriamente a su objetivo y el ataque que hacen.
+
+Si todos los enemigos mueren en combate este finaliza y el jugador gana.
+
+Si un jugado muere en combate, este finaliza y se cambia automáticamente al siguiente jugador si existe.
+
+El jugador dispone de habilidades, estas pueden tener un cooldown (cd) que se reduce haciendo acciones del juego.
+para usar una habilidad ver "help sk" o hacer "sk numAbilidad".
+Las habilidades que posee el jugador son mostradas en pantalla.
+
+El jugador también tiene la opción de equiparse armadura, por ejemplo el objeto HTEST es un casco (helmet).
+Para equiparlo haremos "eq HTEST" y equipara el casco en el slot de armadura correcto, si ya existe un objeto equipado en ese hueco este fallará.
+Temporalmente no existe método para ver que equipamiento lleva equipado el jugador, en la próxima iteración se solucionará.
+Para desequipar haremos "ue helmet" para el caso del casco. Nuevamente, en la próxima iteración se mejorará la interfaz de manera que esto sea más intuitivo.
+
+Los objetos tambien pueden poseer habilidades, un ejemplo es el objeto Key, el cual tiene la habilidad de desbloquear el un enlace(indicado en su descripcion).
+Para usar un objeto haremos "ou Key". ver "help ou" para mas información.
+
+Para cambiar el jugador activo se dispone de un comando switch_player o sw :
+	-si hacemos "sw" el juego cambiará al siguiente jugador vivo.
+	-si hacemos "sw list" el juego nos mostrará en pantalla una lista de jugadores con un numero.
+	-si hacemos "sw numJugador" el juego cambiará al jugador con el numero indicado
+el comando switch_player fallará si el jugador al que se intenta cambiar está muerto.
+
+
+IMPORTANTE: cabe la posibilidad de que quede algún bug no identificado durante las pruebas de las mecánicas mas recientes (abilidades, equipamiento, etc).
+IMPORTANTE: Actualmente el espacio disponible para mostrar infomación al usuario es muy limitado, y cabe la posibilidad de que esta se salga de su espacio asignado.
+		Esto se arreglará en la siguiente iteración con una nueva distribución de la representación gráfica.
+
+--------------------------------------------------------------------------------------------------------------------------------
+
+NOTAS ITERACIÓN 2:
+Darle al enter sin especificar un comando ejecuta el comando anterior.
+
+En la descripcion solo se muestran los objetos del espacio actual, además, se puede ver en la descripcion
+grafica de cada espacio algunos de los objetos que contiene. Esto se debe a que pensamos que ver donde se
+encuentra cada objeto en todo momento le quita la gracia al juego, pues el proposito(que nosotros consideramos)
+es que es necesario explorar el mapa para encontrar los objetos.
+
+El combate está regulado por el módulo combat, sigue de forma similar los contenidos del guión, pero más adelante
+se adaptará hacia un estilo de combate por turnos RPG, con implementación de habilidades, equipo, etc.
+
+Existe una cierta probabilidad de que tras ejecutar ciertos comandos, si hay enemigos en el espacio, se entrará en
+modo combate. Esto se puede desactivar cambiando la linea del evento responsable en anthill.dat
+
+Vector2 es un modulo usado unicamente para asignar una posicion espacial a los espacios.
+
+El mapeo de espacios utiliza un struct local a la funcion para guardar información durante el proceso de manera mas facil.
+Esto se debe a que este struct unicamente es requerido en esta funcion.
+
+El mapeo de espacios unicamente funciona entre el primer bloque de espacios adyacentes, es decir, si existe un grupo de espacios no adyacente
+estos no se mostrarán bien en el graphic_engine.
+
+Los enlaces entre espacios adyacentes estan marcadoso como un hueco en blanco.
+Los enlaces bloqueados entre espacios adyacentes estan marcados como una linea.
+Los espacios no adyacentes estan marcados como una 'o'.
+
+Para ejecutar los test existen comandos en el makefile.
+
+Los espacios antes de comandos y entre argumentos son ignorados, es decir, si hay mas de un espacio
+estos se ignoraran. del mismo modo si el comando es correcto pero tiene espacios delante estos 
+tambien serán ignorados.
+
+----------------------------------------------------------------------------------------------------
+
+I1
+
+Este proyecto cumple con los requisitos de funcionalidad y documentación de la iteración 1, pero
+existe mucho código no implementado o no utilizado, que se usará en posteriores iteraciones del
+proyecto. Por ejemplo, collector no se emplea en ninguno de los otros módulos, pero posiblemente
+se use para la interfaz gráfica, utils.h tampoco se usa por el momento y el inventario y los
+objetos no están implementados al completo, sino que parcialmente para cumplir los requisitos.
+
+Para gestionar errores se ha empleado el modulo debug_printing. Este implementa un log llamado
+debug.log donde se almacena información relacionada con la ejecución del programa, funciones de
+alto nivel y demás, se ha utilizado bastante para localizar errores. debug.log sólo se genera
+después de ejecutar el juego y salir. En caso de que el programa pare su ejecución de forma
+anormal no tendra contenido.
+
+En la representación gráfica están implementados los links, que permiten un enlace entre espacioes
+más dinámico, está completamente implementado.
+
+Player cumple los requisitos de funcionalidad, pero porque almacena otra estructura de tipo entity
+la cual contiene datos básicos para cualquier player, aliado, enemigo... Es la base para futuras
+iteraciones.
+
+---------------------------------------------------------------------------------------------------
+

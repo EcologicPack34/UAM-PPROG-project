@@ -24,10 +24,10 @@
 #define MAX_ATTACKS 4       /*!< Number of attack types that exist*/
 
 /*Probabilites for succcess on an attack*/
-#define LIGHT_PROB 100       /*!< Probability for a light attack to be succesful*/
-#define HEAVY_PROB 100       /*!< Probability for a heavy attack to be succesful*/
-#define QUICK_PROB 100       /*!< Probability for a quick attack to be succesful*/
-#define SWIFT_PROB 100       /*!< Probability for a swift attack to be succesful*/
+#define LIGHT_PROB 90       /*!< Probability for a light attack to be succesful*/
+#define HEAVY_PROB 50       /*!< Probability for a heavy attack to be succesful*/
+#define QUICK_PROB 98       /*!< Probability for a quick attack to be succesful*/
+#define SWIFT_PROB 40       /*!< Probability for a swift attack to be succesful*/
 
 /**
  * @brief Internal struct that holds all the information related to the combat
