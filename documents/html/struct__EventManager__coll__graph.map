@@ -1,5 +1,0 @@
-<map id="_EventManager" name="_EventManager">
-<area shape="rect" id="Node000001" title="Event manager to control events trigger and save events." alt="" coords="5,93,128,119"/>
-<area shape="rect" id="Node000002" href="$struct__Collection.html" title="Collection to manage a list of objects with special parametrs as fixed_length and UniqueElements." alt="" coords="19,5,114,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="69,45,69,93,64,93,64,45"/>
-</map>

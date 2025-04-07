@@ -204,7 +204,7 @@ bool event_trigger_player_death(Event *event, Game *game){
     if(!event || !game) return false;
 
     entity = player_get_entity(game_get_player(game));
-    if(entity_get_health(entity) <= 0.0){
+    if(entity_is_dead(entity)){
         status = game_switch_player(game, -1);
         if(status == -2 || status == -1){
             debug_log(PRINT,"Players died, finishing game");

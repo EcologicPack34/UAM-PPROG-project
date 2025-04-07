@@ -134,7 +134,7 @@ Status player_get_str_desc(Player *player, char *str){
 }
 
 int player_get_money(Player *player){
-    if(!player) return ERROR;
+    if(!player) return -1;
 
     return player->money;
 }

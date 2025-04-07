@@ -72,8 +72,9 @@ Link *link_create(Id id,Id space1, Id space2, bool adjacent,bool locked){
         debug_log(LOG_ERROR, "Error Initializing link: link must have at least 1 space: at link_create(Id,Id, Id, bool, Id) in link.c");
         return NULL;
     }
-    if(id <= NO_ID){
+    if(id <= UNDEFINED_ID){
         debug_log(LOG_WARNING, "No ID assigned to link : at link_create(Id, Id, Id, bool, Id) in link.c");
+        return NULL;
     }
     
     link = (Link*)malloc(sizeof(Link));
@@ -107,6 +108,11 @@ Status link_set_id(Link *link, Id id){
 Status link_set_spaces(Link* link, Id id1, Id id2){
     if(link == NULL){
         debug_log(LOG_ERROR, "Null Link* argument: at link_set_spaces(Link*, Id, Id) in link.c");
+        return ERROR;
+    }
+
+    if((id1 <= UNDEFINED_ID) || (id2 <= UNDEFINED_ID)){
+        debug_log(LOG_ERROR, "Invalid Space argument: at link_set_spaces(Link*, Id, Id) in link.c");
         return ERROR;
     }
     

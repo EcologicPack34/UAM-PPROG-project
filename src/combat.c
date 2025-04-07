@@ -73,7 +73,7 @@ void combat_finalize(Combat *combat);
 
 /**
  * @brief Sub function of combat_update that manages player attack type and allies/enemies turn
- * @author Sofía Calvo
+ * @author Sofía Calvo && Daniel Gómez
  * 
  * @param cmb combat struct
  * @param last_cmd last command of the player on the combat

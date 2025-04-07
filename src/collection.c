@@ -190,7 +190,7 @@ Status collection_remove_at(Collection *collection, long index){
 void *collection_get_element_at(Collection *collection, long index){
     if(!collection) return NULL;
 
-    if(index > collection->length) return NULL;
+    if((index > collection->length) || (index < 0)) return NULL;
 
     return collection->list[index];
 }

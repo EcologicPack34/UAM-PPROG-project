@@ -34,8 +34,8 @@ DEPENDENCIES = $(OBJ:.o=.d)
 EXE = anthill
 EXED = anthilldebug
 
-TEST_OBJ = entity_test.o collection_test.o
-TEST = entity_test collection_test
+TEST_OBJ = entity_test.o collection_test.o space_test.o link_test.o object_test.o inventory_test.o
+TEST = entity_test collection_test space_test link_test object_test inventory_test
 
 
 all: $(EXE)
@@ -96,30 +96,58 @@ runv:
 	make debug
 	valgrind --leak-check=full --track-origins=yes --show-leak-kinds=all ./anthilldebug anthill.dat
 
+#tests rules
+
+#in order to make the objects less hard to read, i'll use the following variable
+OP = $(OBJ_PATH)
+
+LINK_TEST_OBJ = ./$(OP)/link_test.o ./$(OP)/link.o ./$(OP)/ability_manager.o ./$(OP)/queue.o ./$(OP)/entity.o ./$(OP)/object.o ./$(OP)/inventory.o ./$(OP)/collection.o ./$(OP)/debug_printing.o
+SPACE_TEST_OBJ  = ./$(OP)/space_test.o ./$(OP)/space.o ./$(OP)/ability_manager.o ./$(OP)/queue.o ./$(OP)/inventory.o ./$(OP)/collection.o ./$(OP)/debug_printing.o ./$(OP)/object.o ./$(OP)/link.o ./$(OP)/npc.o ./$(OP)/entity.o ./$(OP)/vector2.o
+OBJECT_TEST_OBJ = ./$(OP)/object_test.o ./$(OP)/object.o ./$(OP)/ability_manager.o ./$(OP)/queue.o ./$(OP)/debug_printing.o ./$(OP)/collection.o
+INVENTORY_TEST_OBJ = ./$(OP)/inventory_test.o ./$(OP)/inventory.o ./$(OP)/collection.o ./$(OP)/object.o ./$(OP)/debug_printing.o
+ENTITY_TEST_OBJ = ./$(OP)/entity_test.o ./$(OP)/entity.o ./$(OP)/inventory.o ./$(OP)/object.o ./$(OP)/collection.o ./$(OP)/debug_printing.o ./$(OP)/ability_manager.o ./$(OP)/queue.o
+COLLECTION_TEST_OBJ = ./$(OP)/collection_test.o ./$(OP)/collection.o ./$(OP)/debug_printing.o
+
+run_test_all: run_collection_test run_space_test run_link_test run_object_test run_inventory_test clean
+
 run_entity_test:
 	make
-	$(CC) $(CFLAGS) -c ./test/entity_test.c
-	$(CC) $(CFLAGS) -o ./test/entity_test entity_test.o entity.o inventory.o object.o collection.o debug_printing.o
-	./test/entity_test
+	$(CC) -Wall -pedantic -I$(INCLUDE) -c ./src/test/src/entity_test.c -o ./$(OBJ_PATH)/entity_test.o 
+	$(CC) $(CFLAGS) -o ./src/test/link_test $(ENTITY_TEST_OBJ)
+	./src/test/entity_test
 
 run_collection_test:
 	make
-	$(CC) $(CFLAGS) -c ./test/collection_test.c
-	$(CC) $(CFLAGS) -o ./test/collection_test collection_test.o collection.o debug_printing.o
-	./test/collection_test
+	$(CC) -Wall -pedantic -I$(INCLUDE) -c ./src/test/src/collection_test.c -o ./$(OBJ_PATH)/collection_test.o 
+	$(CC) $(CFLAGS) -o ./src/test/collection_test $(COLLECTION_TEST_OBJ)
+	./src/test/collection_test
 
 run_space_test:
 	make
-	$(CC) $(CFLAGS) -c ./test/space_test.c
-	$(CC) $(CFLAGS) -o ./test/space_test space_test.o space.o inventory.o collection.o debug_printing.o object.o link.o npc.o entity.o vector2.o
-	./test/space_test 
+	$(CC) -Wall -pedantic -c ./src/test/src/space_test.c -o ./$(OBJ_PATH)/space_test.o 
+	$(CC) $(CFLAGS) -o ./src/test/space_test $(SPACE_TEST_OBJ)
+	./src/test/space_test
 
 run_link_test:
 	make
-	$(CC) $(CFLAGS) -c ./src/test/link_test.c
-	$(CC) $(CFLAGS) -o link_test link_test.o link.o entity.o inventory.o debug_printing.o
-	./link_test
+	$(CC) -Wall -pedantic -I$(INCLUDE) -c ./src/test/src/link_test.c -o ./$(OBJ_PATH)/link_test.o 
+	$(CC) $(CFLAGS) -o ./src/test/link_test $(LINK_TEST_OBJ)
+	./src/test/link_test
+
+run_object_test:
+	make
+	$(CC) -Wall -pedantic -I$(INCLUDE) -c ./src/test/src/object_test.c -o ./$(OBJ_PATH)/object_test.o 
+	$(CC) $(CFLAGS) -o ./src/test/object_test $(OBJECT_TEST_OBJ)
+	./src/test/object_test
+
+run_inventory_test:
+	make
+	$(CC) -Wall -pedantic -I$(INCLUDE) -c ./src/test/src/inventory_test.c -o ./$(OBJ_PATH)/inventory_test.o 
+	$(CC) $(CFLAGS) -o ./src/test/inventory_test $(INVENTORY_TEST_OBJ)
+	./src/test/inventory_test
 	
+
+
 # $@ devuelve lo que hay a la izquierda de los :, $^ devuelve todas las dependencias
 
 # A la hora de añadir dependencias de librerias de otra carpeta se puede usar:

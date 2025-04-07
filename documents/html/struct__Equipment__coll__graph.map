@@ -1,7 +1,0 @@
-<map id="_Equipment" name="_Equipment">
-<area shape="rect" id="Node000001" title="Equipment internal struct for the player." alt="" coords="5,328,104,353"/>
-<area shape="rect" id="Node000002" href="$struct__Object.html" title="ADT that stores all the information of an object." alt="" coords="19,93,90,119"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="57,133,57,328,52,328,52,133"/>
-<area shape="rect" id="Node000003" href="$struct__Ability.html" title="Struct that contains all the information related to an ability." alt="" coords="19,5,90,31"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="57,45,57,93,52,93,52,45"/>
-</map>

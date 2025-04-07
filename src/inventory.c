@@ -139,6 +139,11 @@ Inventory *inventory_create(InventoryType type, Id locationid){
     Inventory *inventory = NULL;
     long initialsize;
 
+    if(locationid<=UNDEFINED_ID){
+        debug_log(LOG_ERROR, "inventory_create Invalid Id argument: inventoryType: UNDEFINED locationid: UNDEFINED");
+        return NULL;
+    }
+
     /*Reserved with calloc to set to NULL the objects and the other variables*/
     inventory = calloc(1, sizeof(Inventory));
     if(!inventory){

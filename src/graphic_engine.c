@@ -23,7 +23,7 @@
 
 #define MAP_WIDTH 53                  /*!< Width of the map part*/
 #define MAP_HEIGHT 29                 /*!< Height of the map part*/
-#define DESCRIPT_WIDTH 40             /*!< Width of the description part*/
+#define DESCRIPT_WIDTH 67            /*!< Width of the description part*/
 #define HELP_BANNER_HEIGHT 1          /*!< Height of the help banner part*/
 #define HELP_BANNER_WIDTH 23          /*!< Width of the help banner part*/
 #define HELP_HEIGHT 4                 /*!< Height of the help banner*/
@@ -484,7 +484,8 @@ void graphic_engine_paint_combat(Graphic_engine *ge, Game *game){
   /*spacing for health*/
   spacing[0] = 0;
   str[0] = 0;
-  for (i = 0; i < div - (HEALTH_BAR_WIDTH + 1)/2; i++)
+  div = (MAP_WIDTH - COMBAT_OFFSET - (HEALTH_BAR_WIDTH + 2)*enemy_count) / (enemy_count + 1);
+  for (i = 0; i < div; i++) /*Add 2 spaces for number + '.'*/
   {
     strcat(spacing, " ");
   }
@@ -493,6 +494,8 @@ void graphic_engine_paint_combat(Graphic_engine *ge, Game *game){
   for (i = 0; i < enemy_count; i++)
   {
     //sprintf(strAux, "[%.2lf]", stats[i].stats.health);
+    sprintf(strAux, "%d.", i+1);
+    strcat(str, strAux);
     strcat(str, "[");
     bar = stats[i].stats.health / entity_get_max_health(stats[i].entity) * HEALTH_BAR_WIDTH;
     if(bar == 0){
