@@ -1,9 +1,0 @@
-[Mon Mar 17 19:23:11 2025]WARNING: unlocking object is set to NO_ID, did you mean UNDEFINED_ID? : at link_create(Id, Id, Id, bool, Id) in link.c
-[Mon Mar 17 19:23:11 2025]WARNING: unlocking object is set to NO_ID, did you mean UNDEFINED_ID? : at link_create(Id, Id, Id, bool, Id) in link.c
-[Mon Mar 17 19:23:11 2025]WARNING: unlocking object is set to NO_ID, did you mean UNDEFINED_ID? : at link_create(Id, Id, Id, bool, Id) in link.c
-[Mon Mar 17 19:23:11 2025]WARNING: unlocking object is set to NO_ID, did you mean UNDEFINED_ID? : at link_create(Id, Id, Id, bool, Id) in link.c
-[Mon Mar 17 19:23:11 2025]WARNING: unlocking object is set to NO_ID, did you mean UNDEFINED_ID? : at link_create(Id, Id, Id, bool, Id) in link.c
-[Mon Mar 17 19:23:11 2025]WARNING: unlocking object is set to NO_ID, did you mean UNDEFINED_ID? : at link_create(Id, Id, Id, bool, Id) in link.c
-[Mon Mar 17 19:23:11 2025]WARNING: unlocking object is set to NO_ID, did you mean UNDEFINED_ID? : at link_create(Id, Id, Id, bool, Id) in link.c
-[Mon Mar 17 19:23:11 2025]WARNING: unlocking object is set to NO_ID, did you mean UNDEFINED_ID? : at link_create(Id, Id, Id, bool, Id) in link.c
-[Mon Mar 17 19:23:11 2025]LOG: space_move_NPC moved the NPC with id: 1 from the space of id: 1 to the space of id: 2

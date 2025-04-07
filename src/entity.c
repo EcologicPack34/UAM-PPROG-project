@@ -106,6 +106,11 @@ Entity *entity_create(char *name, Id identity, Id idlocation, InventoryType inve
         return NULL;
     }
 
+    if(idlocation <= UNDEFINED_ID){
+        debug_log(LOG_ERROR, "Invalid idlocation when creating entity");
+        return NULL;
+    }
+
     entity = (Entity *)calloc(1,sizeof(Entity));
     if(entity == NULL){
     debug_log(LOG_ERROR, "Error allocating memory for entity");
