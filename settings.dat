@@ -9,7 +9,7 @@ Moves one space to the west.
 Takes an object to the current space. Needs one argument. Ex: take Object1.
 Drops an object to the current space. Needs one argument. Ex: drop Object1.
 Chats with an NPC in the space. Needs one argument. Ex: chat NPC1.
-If in exploration, it starts combat. In combat mode, attacks enemies. Takes no arguments
+If in exploration, it starts combat, no arguments needed. In combat mode: at ATTACKTYPE TARGET IF NEEDED, attack types available: light, strong, quick, swift not target needed.
 Exits combat.
 Switches current player. Ex: switch list (gets player list). switch (swithches to next player). switch Id (switches to player with given Id)
 Uses an ability. Takes one argument, the number of the ability on the description part. Ex: sk 1.
@@ -17,7 +17,7 @@ Uses the ability of an object. Takes one argument. Ex: object_use ObjectName.
 Prints all the commands if no arguments. If specified a command, prints its description.
 Generic command for moving. Needs one argument (north, east, south, west). Ex: move north.
 Searches in the current space to obtain info about NPCs and objects.
-Tries to add a piece of equipment to the active player from the inventory. Use prototype: eq OBJECT_NAME Ex: eq HelmetOfVoid
+Tries to add a piece of equipment to the active player from the inventory. Use prototype: eq OBJECT_NAME Ex: eq HTEST
 Removes a piece of equipment. Use prototype: ue PIECE_TO_REMOVE: helmet,chest,arms,leg_armor,shoes,two_handed,one_handed1,one_handed2. Ex: ue helmet
 Inspect an object that is contained in the players inventory. Ex: inspect objectName.
 
