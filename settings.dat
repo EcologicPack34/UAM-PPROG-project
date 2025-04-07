@@ -9,7 +9,7 @@ Moves one space to the west.
 Takes an object to the current space. Needs one argument. Ex: take Object1.
 Drops an object to the current space. Needs one argument. Ex: drop Object1.
 Chats with an NPC in the space. Needs one argument. Ex: chat NPC1.
-If in exploration, it starts combat, no arguments needed. In combat mode: at ATTACKTYPE TARGET IF NEEDED, attack types available: light, strong, quick, swift not target needed.
+If in exploration, it starts combat, no arguments needed. In combat mode: "at attackType target", attack types available: light, strong, quick, swift(no target).
 Exits combat.
 Switches current player. Ex: switch list (gets player list). switch (swithches to next player). switch Id (switches to player with given Id)
 Uses an ability. Takes one argument, the number of the ability on the description part. Ex: sk 1.
