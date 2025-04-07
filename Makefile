@@ -4,6 +4,7 @@ INCLUDE = include
 LIBRARIES = libraries
 OBJ_PATH = object
 SRC_PATH = src
+TEST_EXE_PATH = src/test
 DEP_PATH = dependency
 
 
@@ -34,8 +35,11 @@ DEPENDENCIES = $(OBJ:.o=.d)
 EXE = anthill
 EXED = anthilldebug
 
-TEST_OBJ = entity_test.o collection_test.o space_test.o link_test.o object_test.o inventory_test.o
-TEST = entity_test collection_test space_test link_test object_test inventory_test
+_TEST_OBJ = entity_test.o collection_test.o space_test.o link_test.o object_test.o inventory_test.o player_test.o
+_TEST = entity_test collection_test space_test link_test object_test inventory_test player_test
+
+TEST = $(patsubst %,$(TEST_EXE_PATH)/%,$(_TEST))
+TEST_OBJ = $(patsubst %,$(OBJ_PATH)/%,$(_TEST_OBJ))
 
 
 all: $(EXE)
@@ -109,7 +113,7 @@ ENTITY_TEST_OBJ = ./$(OP)/entity.o ./$(OP)/inventory.o ./$(OP)/object.o ./$(OP)/
 COLLECTION_TEST_OBJ = ./$(OP)/collection_test.o ./$(OP)/collection.o ./$(OP)/debug_printing.o
 PLAYER_TEST_OBJ = ./$(OP)/player_test.o ./$(OP)/player.o ./$(OP)/command.o ./$(OP)/equipment.o ./$(OP)/npc.o ./$(OP)/entity.o ./$(OP)/object.o ./$(OP)/debug_printing.o ./$(OP)/inventory.o ./$(OP)/collection.o ./$(OP)/ability_manager.o ./$(OP)/queue.o
 
-run_test_all: run_collection_test run_space_test run_link_test run_object_test run_inventory_test run_player_test clean
+run_test_all: run_collection_test run_space_test run_link_test run_object_test run_inventory_test run_player_test
 
 run_entity_test:
 	make
