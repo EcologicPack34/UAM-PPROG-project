@@ -111,7 +111,7 @@ Status player_get_str_desc(Player *player, char *str);
  * @author Maksym Polyak
  * 
  * @param player player struct
- * @return Status 
+ * @return int of the player's money or -1 if error. 
  */
 int player_get_money(Player *player);
 
