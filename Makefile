@@ -108,7 +108,7 @@ INVENTORY_TEST_OBJ = ./$(OP)/inventory_test.o ./$(OP)/inventory.o ./$(OP)/collec
 ENTITY_TEST_OBJ = ./$(OP)/entity_test.o ./$(OP)/entity.o ./$(OP)/inventory.o ./$(OP)/object.o ./$(OP)/collection.o ./$(OP)/debug_printing.o ./$(OP)/ability_manager.o ./$(OP)/queue.o
 COLLECTION_TEST_OBJ = ./$(OP)/collection_test.o ./$(OP)/collection.o ./$(OP)/debug_printing.o
 
-run_test_all: run_collection_test run_space_test run_link_test run_object_test run_inventory_test clean
+run_test_all: run_collection_test run_space_test run_link_test run_object_test run_inventory_test run_player_test clean
 
 run_entity_test:
 	make
@@ -145,6 +145,12 @@ run_inventory_test:
 	$(CC) -Wall -pedantic -I$(INCLUDE) -c ./src/test/src/inventory_test.c -o ./$(OBJ_PATH)/inventory_test.o 
 	$(CC) $(CFLAGS) -o ./src/test/inventory_test $(INVENTORY_TEST_OBJ)
 	./src/test/inventory_test
+
+run_player_test:
+	make
+	$(CC) -Wall -pedantic -I$(INCLUDE) -c ./src/test/src/player_test.c -o ./$(OBJ_PATH)/player_test.o 
+	$(CC) $(CFLAGS) -o ./src/test/player_test $(INVENTORY_TEST_OBJ)
+	./src/test/player_test
 	
 
 

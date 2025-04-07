@@ -26,7 +26,7 @@ void test2_player_get_equipment();
 /*gets a player's command data, expected result != NULL*/
 void test1_player_get_cmData();
 /*gets a non existent player's command data, expected result NULL*/
-void test1_player_get_cmData();
+void test2_player_get_cmData();
 /*sets a player's stats, expected result OK*/
 void test1_player_set_stats();
 /*sets a non existent player's stats, expected result ERROR*/
@@ -51,10 +51,22 @@ void test1_player_equip_piece();
 void test2_player_equip_piece();
 /*equips a non existent piece to a player, expected result == ERROR*/
 void test3_player_equip_piece();
+/*unequips a non-equipped slot, expected result == ERROR*/
 void test1_player_unequip_piece();
+/*unequips a chest piece, and returns it to the inventory, expected result == OK*/
+void test2_player_unequip_piece();
+/*Adds an NPC as a follower to the player, expected result == OK*/
 void test1_player_add_follower();
-void test1_player_remove_follower();
+/*Adds a non existent NPC as a follower to the player, expected result == ERROR*/
+void test2_player_add_follower();
+/*Removes a follower from the player, expected result == OK*/
+void test1_player_remove_follower_by_name();
+/*Removes a follower from the player, but the name is NULL, expected result == ERROR*/
+void test2_player_remove_follower_by_name();
+/*Gets followers double pointer without followers, expected result != NULL*/
 void test1_player_get_followers();
+/*Tries to get followers pointer but player is NULL, expected result == NULL*/
+void test2_player_get_followers();
 
 
 int main(int argc, char** argv) {
@@ -119,7 +131,7 @@ void test1_player_get_cmData(){
   PRINT_TEST_RESULT(player_get_cmdData(p) != NULL);
   player_destroy(p);
 }
-void test1_player_get_cmData(){
+void test2_player_get_cmData(){
   PRINT_TEST_RESULT(player_get_cmdData(NULL) == NULL);
 }
 void test1_player_set_stats(){
@@ -158,7 +170,7 @@ void test1_player_add_money(){
   PRINT_TEST_RESULT(player_add_money(p, 100) == OK);
   player_destroy(p);
 }
-void test1_player_add_money(){
+void test2_player_add_money(){
   PRINT_TEST_RESULT(player_add_money(NULL, 100) == ERROR);
 }
 void test1_player_equip_piece(){
@@ -179,14 +191,48 @@ void test3_player_equip_piece(){
   player_destroy(p);
 }
 void test1_player_unequip_piece(){
-
+  Player *p = player_create("test",1,1);
+  PRINT_TEST_RESULT(player_unequip_piece(p, NULL) == ERROR);
+  player_destroy(p);
+}
+void test2_player_unequip_piece(){
+  Player *p = player_create("test",1,1);
+  Object *o = object_create(1,"test","wearable chest","test",false,1,PLAYER_INVENTORY);
+  player_equip_piece(p, o);
+  PRINT_TEST_RESULT(player_unequip_piece(p, "chest") == OK);
+  object_destroy(o);
+  player_destroy(p);
 }
 void test1_player_add_follower(){
-
+  Player *p = player_create("test",1,1);
+  NPC *npc = npc_create(1, 1, "TESTMESSAGE", "NPCTEST", 1, 1);
+  PRINT_TEST_RESULT(player_add_follower(p, npc) == OK);
+  player_destroy(p);
+  npc_destroy(npc);
 }
-void test1_player_remove_follower(){
-
+void test2_player_add_follower(){
+  Player *p = player_create("test",1,1);
+  PRINT_TEST_RESULT(player_add_follower(p, NULL) == OK);
+  player_destroy(p);
+}
+void test1_player_remove_follower_by_name(){
+  Player *p = player_create("test",1,1);
+  NPC *npc = npc_create(1, 1, "TESTMESSAGE", "NPCTEST", 1, 1);
+  player_add_follower(p, npc);
+  PRINT_TEST_RESULT(player_remove_follower_by_name(p, "NPCTEST") == OK);
+  player_destroy(p);
+  npc_destroy(npc);
+}
+void test2_player_remove_follower_by_name(){
+  Player *p = player_create("test",1,1);
+  PRINT_TEST_RESULT(player_remove_follower_by_name(p, NULL) == ERROR);
+  player_destroy(p);
 }
 void test1_player_get_followers(){
-
+  Player *p = player_create("test",1,1);
+  PRINT_TEST_RESULT(player_get_followers(p) != NULL);
+  player_destroy(p);
+}
+void test2_player_get_followers(){
+  PRINT_TEST_RESULT(player_get_followers(NULL) != NULL);
 }

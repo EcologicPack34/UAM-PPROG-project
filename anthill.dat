@@ -91,8 +91,8 @@ Formato STATS: #st:IDEntity|EntityType|VidaMaxima|Vida|DanoBase|Fuerza|Defensa|N
 
 Formato Ability: #sk:Id|Type|Name|Entityid(ObjectId)|is_player_ability|is_object_use|cd_count|cd_length|data
 
-#sk:1|heal_self|Heal self 50 HP|1|1|0|0|8|50
-#sk:2|heal_self|Heal self 20 HP|5|0|1|0|0|20
-#sk:3|heal_self|Heal self 5 HP|6|0|1|0|0|5
-#sk:4|money_bag|Adds 20 coins|8|0|1|0|0|20
+#sk:1|heal_self|Heal self 50 HP Maximum CD: 8|1|1|0|0|8|50
+#sk:2|heal_self|Heal self 20 HP Maximum CD: 0|5|0|1|0|0|20
+#sk:3|heal_self|Heal self 5 HP  Maximum CD: 0|6|0|1|0|0|5
+#sk:4|money_bag|Adds 20 coins   Maximum CD: 0|8|0|1|0|0|20
 #sk:5|link_unlock|Unlocks link between 123 and 124|9|0|1|0|0|4
