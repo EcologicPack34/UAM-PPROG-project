@@ -82,7 +82,7 @@
  void test1_inventory_get_object_str_at();
  /*gets an object's descr from a non existent inventory by its index, expected result ERROR*/
  void test2_inventory_get_object_str_at();
- /*gets an object's descr from an inventory by its index to a non existent, expected result ERROR*/
+ /*gets an object's descr from an inventory by its index to a non existent string, expected result ERROR*/
  void test3_inventory_get_object_str_at();
 
  int main(int argc, char *argv[]){
@@ -300,7 +300,7 @@
  void test2_inventory_get_object_list(){
    char list[50];
    Object *o = object_create(5, "test", "test", "test", true, 2, PLAYER_INVENTORY);
-   PRINT_TEST_RESULT(inventory_get_object_list(NULL, list, 0, 1) == OK);
+   PRINT_TEST_RESULT(inventory_get_object_list(NULL, list, 0, 1) == ERROR);
    object_destroy(o);
  }
  void test3_inventory_get_object_list(){
@@ -323,14 +323,14 @@
  void test2_inventory_get_object_str_at(){
    char descr[50];
    Object *o = object_create(5, "test", "test", "test", true, 2, PLAYER_INVENTORY);
-   PRINT_TEST_RESULT(inventory_get_object_str_at(NULL, descr, 0) == OK);
+   PRINT_TEST_RESULT(inventory_get_object_str_at(NULL, descr, 0) == ERROR);
    object_destroy(o);
  }
  void test3_inventory_get_object_str_at(){
    Inventory *i = inventory_create(SPACE_INVENTORY,1);
    Object *o = object_create(5, "test", "test", "test", true, 2, PLAYER_INVENTORY);
    inventory_add_object(i, o);
-   PRINT_TEST_RESULT(inventory_get_object_str_at(i, NULL, 0) == OK);
+   PRINT_TEST_RESULT(inventory_get_object_str_at(i, NULL, 0) == ERROR);
    inventory_destroy(i);
    object_destroy(o);
  }
