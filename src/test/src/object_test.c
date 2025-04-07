@@ -204,7 +204,7 @@ void test2_object_set_id(){
 }
 void test3_object_set_id(){
     Object *obj= object_create(1,"test1","test1","test1",true,10,SPACE_INVENTORY);
-    PRINT_TEST_RESULT(object_isEqual(obj, NULL) == ERROR);
+    PRINT_TEST_RESULT(object_set_id(obj, -1) == ERROR);
     object_destroy(obj);
 }
 void test1_object_set_name(){
@@ -240,7 +240,7 @@ void test1_object_set_type(){
     object_destroy(obj);
 }
 void test2_object_set_type(){
-    PRINT_TEST_RESULT(object_set_type(NULL, PLAYER_INVENTORY) == OK);
+    PRINT_TEST_RESULT(object_set_type(NULL, PLAYER_INVENTORY) == ERROR);
 }
 void test3_object_set_type(){
     Object *obj= object_create(1,"test1","test1","test1",true,10,SPACE_INVENTORY);
@@ -266,7 +266,7 @@ void test1_object_get_id(){
     object_destroy(obj);
 }
 void test2_object_get_id(){
-    PRINT_TEST_RESULT(object_get_id(NULL) == 1);
+    PRINT_TEST_RESULT(object_get_id(NULL) == NO_ID);
 }
 void test1_object_get_name(){
     Object *obj= object_create(1,"name","test1","test1",true,10,SPACE_INVENTORY);

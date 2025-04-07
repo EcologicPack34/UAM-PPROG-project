@@ -103,7 +103,7 @@ int object_isEqual(void *object1, void *object2){
 /*Object SETTERS*/
 
 Status object_set_id(Object* object, Id id){
-    if(!object)
+    if(!object || (id<=UNDEFINED_ID))
         return ERROR;
 
     object->id = id;
@@ -121,8 +121,10 @@ Status object_set_name(Object* object, char* name){
 }
 
 Status object_set_location(Object* object, Id id){
-    if(!object)
+    if(!object || (id<=UNDEFINED_ID))
         return ERROR;
+
+    
 
     object->location = id;
 
@@ -151,7 +153,7 @@ Status object_set_descr(Object *object, char *str){
 
 Id object_get_id(Object *object){
     if(!object)
-        return ERROR;
+        return NO_ID;
 
     return object->id;
 }
