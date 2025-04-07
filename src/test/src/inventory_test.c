@@ -90,7 +90,7 @@
     int all = 1;
   
     if (argc < 2) {
-      printf("Running all test for module Collection:\n");
+      printf("Running all test for module Inventory:\n");
     } else {
       test = atoi(argv[1]);
       all = 0;

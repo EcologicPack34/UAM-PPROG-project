@@ -1,5 +1,0 @@
-<map id="include/event_actions.h" name="include/event_actions.h">
-<area shape="rect" id="Node000001" title="Complementary module to event_manager, its purpose is to avoid cross&#45;references." alt="" coords="5,5,181,31"/>
-<area shape="rect" id="Node000002" href="$game__loop_8c.html" title="It defines the game loop." alt="" coords="29,79,157,104"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="96,44,96,79,91,79,91,44"/>
-</map>

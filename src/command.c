@@ -306,13 +306,10 @@ Status command_get_as_string(Command *cmd, char *dest){
   /*North or n arg1 arg2 arg3 : Ok*/
   /*Take or tk Grain1 : Ok*/
 
-  for (i = 0; i < N_CMDT; i++)
-  {
-    strcat(dest,cmd_to_str[cmd->cmdPlayerData->code - NO_CMD][i]);
-    if(i < N_CMDT -1){
-      strcat(dest," or ");
-    }
-  }
+  strcat(dest, cmd_to_str[cmd->cmdPlayerData->code - NO_CMD][1]);
+  strcat(dest, " (");
+  strcat(dest, cmd_to_str[cmd->cmdPlayerData->code -NO_CMD][0]);
+  strcat(dest, ")");
   strcat(dest, " ");
   for (i = 0; i < cmd->cmdPlayerData->argsCount; i++)
   {
@@ -476,7 +473,7 @@ Status command_get_user_input(Command* command) {
 
 Status command_get_list(Command *command, char *destination, GameState state, bool getAll){
   char *aux;
-  int i,j;
+  int i;
   int length;
 
   Collection *codeList = NULL;
@@ -494,11 +491,11 @@ Status command_get_list(Command *command, char *destination, GameState state, bo
 
     for (i = 2; i < N_CMD; i++){
       if(i == GM - NO_CMD) continue;
-      for (j = 0; j < N_CMDT; j++){
-        strcat(aux,cmd_to_str[i][j]);
-        if(j < N_CMDT -1)
-          strcat(aux," or ");
-      }
+
+      strcat(aux, cmd_to_str[i][1]);
+      strcat(aux, " (");
+      strcat(aux, cmd_to_str[i][0]);
+      strcat(aux, ")");
       if(i < N_CMD-1)
         strcat(aux,", ");
     }
@@ -519,14 +516,12 @@ Status command_get_list(Command *command, char *destination, GameState state, bo
   for (i = 0; i < length; i++)
   {
     code = *((CommandCode *)collection_get_element_at(codeList, i));
-    for (j = 0; j < N_CMDT; j++)
-    {
-      strcat(aux, cmd_to_str[code - NO_CMD][j]);
-      if(j < N_CMDT -1){
-        strcat(aux," or ");
-      }
 
-    }
+    strcat(aux, cmd_to_str[code -NO_CMD][1]);
+    strcat(aux, " (");
+    strcat(aux, cmd_to_str[code -NO_CMD][0]);
+    strcat(aux, ")");
+
     if(i < length-1){
       strcat(aux,", ");
     }

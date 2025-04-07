@@ -1,4 +1,4 @@
-#include "../../include/entity.h"
+#include "../../../include/entity.h"
 #include "entity_test.h"
 #include "test.h"
 
@@ -82,7 +82,7 @@ int main(int argc, char** argv) {
 
 void test1_entity_create(){
     Entity *entity = NULL;
-    entity = entity_create("TEST", 1, 2, 3, 4, 5, 6, 7, 8, 9);
+    entity = entity_create("TEST", 1, 2, 3);
 
     PRINT_TEST_RESULT(entity != NULL);
     entity_destroy(entity);
@@ -90,14 +90,14 @@ void test1_entity_create(){
 
 void test2_entity_create(){
     Entity *entity = NULL;
-    entity = entity_create("TEST", 1, 2, 3, -1, 5, 6, 7, 8, 9);
+    entity = entity_create("TEST", 1, 2, 3);
 
     PRINT_TEST_RESULT(entity == NULL);
 }
 
 void test1_entity_set_name(){
     Entity *entity = NULL;
-    entity = entity_create("TEST", 1, 2, 3, 4, 5, 6, 7, 8, 9);
+    entity = entity_create("TEST", 1, 2, 3);
 
     PRINT_TEST_RESULT(entity_set_name(entity, "TRYING") == OK);
     entity_destroy(entity);
@@ -111,7 +111,7 @@ void test2_entity_set_name(){
 
 void test1_entity_set_location(){
     Entity *entity = NULL;
-    entity = entity_create("TEST", 1, 2, 3, 4, 5, 6, 7, 8, 9);
+    entity = entity_create("TEST", 1, 2, 3);
 
     PRINT_TEST_RESULT(entity_set_location(entity, 470) == OK);
     entity_destroy(entity);
@@ -125,7 +125,7 @@ void test2_entity_set_location(){
 
 void test1_entity_set_id(){
     Entity *entity = NULL;
-    entity = entity_create("TEST", 1, 2, 3, 4, 5, 6, 7, 8, 9);
+    entity = entity_create("TEST", 1, 2, 3);
 
     PRINT_TEST_RESULT(entity_set_id(entity, -1) == OK);
     entity_destroy(entity);
@@ -139,7 +139,7 @@ void test2_entity_set_id(){
 
 void test1_entity_set_entityType(){
     Entity *entity = NULL;
-    entity = entity_create("TEST", 1, 2, 3, 4, 5, 6, 7, 8, 9);
+    entity = entity_create("TEST", 1, 2, 3);
 
     PRINT_TEST_RESULT(entity_set_entityType(entity, 2) == OK);
     entity_destroy(entity);
@@ -153,7 +153,7 @@ void test2_entity_set_entityType(){
 
 void test1_entity_set_max_health(){
     Entity *entity = NULL;
-    entity = entity_create("TEST", 1, 2, 3, 4, 5, 6, 7, 8, 9);
+    entity = entity_create("TEST", 1, 2, 3);
 
     PRINT_TEST_RESULT(entity_set_max_health(entity, 10) == OK);
     entity_destroy(entity);
@@ -167,7 +167,7 @@ void test2_entity_set_max_health(){
 
 void test1_entity_set_health(){
     Entity *entity = NULL;
-    entity = entity_create("TEST", 1, 2, 3, 4, 5, 6, 7, 8, 9);
+    entity = entity_create("TEST", 1, 2, 3);
 
     PRINT_TEST_RESULT(entity_set_health(entity, 11) == OK);
     entity_destroy(entity);
@@ -181,7 +181,7 @@ void test2_entity_set_health(){
 
 void test1_entity_set_baseDamage(){
     Entity *entity = NULL;
-    entity = entity_create("TEST", 1, 2, 3, 4, 5, 6, 7, 8, 9);
+    entity = entity_create("TEST", 1, 2, 3);
 
     PRINT_TEST_RESULT(entity_set_baseDamage(entity, -1) == OK);
     entity_destroy(entity);
@@ -195,7 +195,7 @@ void test2_entity_set_baseDamage(){
 
 void test1_entity_set_strength(){
     Entity *entity = NULL;
-    entity = entity_create("TEST", 1, 2, 3, 4, 5, 6, 7, 8, 9);
+    entity = entity_create("TEST", 1, 2, 3);
 
     PRINT_TEST_RESULT(entity_set_strength(entity, -1) == OK);
     entity_destroy(entity);
@@ -209,7 +209,7 @@ void test2_entity_set_strength(){
 
 void test1_entity_set_defense(){
     Entity *entity = NULL;
-    entity = entity_create("TEST", 1, 2, 3, 4, 5, 6, 7, 8, 9);
+    entity = entity_create("TEST", 1, 2, 3);
 
     PRINT_TEST_RESULT(entity_set_defense(entity, -1) == OK);
     entity_destroy(entity);
@@ -223,7 +223,7 @@ void test2_entity_set_defense(){
 
 void test1_entity_set_magicLevel(){
     Entity *entity = NULL;
-    entity = entity_create("TEST", 1, 2, 3, 4, 5, 6, 7, 8, 9);
+    entity = entity_create("TEST", 1, 2, 3);
 
     PRINT_TEST_RESULT(entity_set_magicLevel(entity, -1) == OK);
     entity_destroy(entity);
@@ -237,7 +237,7 @@ void test2_entity_set_magicLevel(){
 
 void test1_entity_set_graphic_description(){
     Entity *entity = NULL;
-    entity = entity_create("TEST", 1, 2, 3, 4, 5, 6, 7, 8, 9);
+    entity = entity_create("TEST", 1, 2, 3);
 
     PRINT_TEST_RESULT(entity_set_id(entity, 2) == OK);
     entity_destroy(entity);
@@ -251,7 +251,7 @@ void test2_entity_set_graphic_description(){
 
 void test1_entity_get_graphic_description(){
     Entity *entity = NULL;
-    entity = entity_create("TEST", 1, 2, 3, 4, 5, 6, 7, 8, 9);
+    entity = entity_create("TEST", 1, 2, 3);
 
     entity_set_graphic_description(entity, "TAS");
 
@@ -261,7 +261,7 @@ void test1_entity_get_graphic_description(){
 
 void test2_entity_get_graphic_description(){
     Entity *entity = NULL;
-    entity = entity_create("TEST", 1, 2, 3, 4, 5, 6, 7, 8, 9);
+    entity = entity_create("TEST", 1, 2, 3);
 
     PRINT_TEST_RESULT(strcmp(entity_get_graphic_description(entity), "ERR") == 0);
     entity_destroy(entity);
@@ -269,7 +269,7 @@ void test2_entity_get_graphic_description(){
 
 void test1_entity_get_name(){
     Entity *entity = NULL;
-    entity = entity_create("TEST", 1, 2, 3, 4, 5, 6, 7, 8, 9);
+    entity = entity_create("TEST", 1, 2, 3);
 
     PRINT_TEST_RESULT(strcmp(entity_get_name(entity), "TEST") == 0);
     entity_destroy(entity);
@@ -277,7 +277,7 @@ void test1_entity_get_name(){
 
 void test2_entity_get_name(){
     Entity *entity = NULL;
-    entity = entity_create("TEST", 1, 2, 3, 4, 5, 6, 7, 8, 9);
+    entity = entity_create("TEST", 1, 2, 3);
 
     entity_set_name(entity, "CHANGED");
 
@@ -287,7 +287,7 @@ void test2_entity_get_name(){
 
 void test1_entity_get_location(){
     Entity *entity = NULL;
-    entity = entity_create("TEST", 1, 2, 3, 4, 5, 6, 7, 8, 9);
+    entity = entity_create("TEST", 1, 2, 3);
 
     entity_set_location(entity, 100);
 
@@ -297,7 +297,7 @@ void test1_entity_get_location(){
 
 void test2_entity_get_location(){
     Entity *entity = NULL;
-    entity = entity_create("TEST", 1, 2, 3, 4, 5, 6, 7, 8, 9);
+    entity = entity_create("TEST", 1, 2, 3);
 
     PRINT_TEST_RESULT(entity_get_location(entity) == 2);
     entity_destroy(entity);
@@ -305,7 +305,7 @@ void test2_entity_get_location(){
 
 void test1_entity_get_inventory(){
     Entity *entity = NULL;
-    entity = entity_create("TEST", 1, 2, 3, 4, 5, 6, 7, 8, 9);
+    entity = entity_create("TEST", 1, 2, 3);
 
     PRINT_TEST_RESULT(entity_get_inventory(entity) != NULL);
     entity_destroy(entity);
@@ -320,7 +320,7 @@ void test2_entity_get_inventory(){
 
 void test1_entity_get_id(){
     Entity *entity = NULL;
-    entity = entity_create("TEST", 1, 2, 3, 4, 5, 6, 7, 8, 9);
+    entity = entity_create("TEST", 1, 2, 3);
 
     entity_set_id(entity, 100);
 
@@ -330,7 +330,7 @@ void test1_entity_get_id(){
 
 void test2_entity_get_id(){
     Entity *entity = NULL;
-    entity = entity_create("TEST", 1, 2, 3, 4, 5, 6, 7, 8, 9);
+    entity = entity_create("TEST", 1, 2, 3);
 
     PRINT_TEST_RESULT(entity_get_location(entity) == 2);
     entity_destroy(entity);
@@ -338,7 +338,7 @@ void test2_entity_get_id(){
 
 void test1_entity_get_entityType(){
     Entity *entity = NULL;
-    entity = entity_create("TEST", 1, 2, 3, 4, 5, 6, 7, 8, 9);
+    entity = entity_create("TEST", 1, 2, 3);
 
     entity_set_entityType(entity, 1);
 
@@ -348,7 +348,7 @@ void test1_entity_get_entityType(){
 
 void test2_entity_get_entityType(){
     Entity *entity = NULL;
-    entity = entity_create("TEST", 1, 2, 3, 4, 5, 6, 7, 8, 9);
+    entity = entity_create("TEST", 1, 2, 3);
 
     PRINT_TEST_RESULT(entity_get_entityType(entity) == UNKNOWN_ENTITY);
     entity_destroy(entity);
@@ -356,7 +356,7 @@ void test2_entity_get_entityType(){
 
 void test1_entity_get_max_health(){
     Entity *entity = NULL;
-    entity = entity_create("TEST", 1, 2, 3, 4, 5, 6, 7, 8, 9);
+    entity = entity_create("TEST", 1, 2, 3);
 
     entity_set_max_health(entity, 1);
 
@@ -366,7 +366,7 @@ void test1_entity_get_max_health(){
 
 void test2_entity_get_max_health(){
     Entity *entity = NULL;
-    entity = entity_create("TEST", 1, 2, 3, 4, 5, 6, 7, 8, 9);
+    entity = entity_create("TEST", 1, 2, 3);
 
     PRINT_TEST_RESULT(entity_get_max_health(entity) == 4);
     entity_destroy(entity);
@@ -374,7 +374,7 @@ void test2_entity_get_max_health(){
 
 void test1_entity_get_health(){
     Entity *entity = NULL;
-    entity = entity_create("TEST", 1, 2, 3, 4, 5, 6, 7, 8, 9);
+    entity = entity_create("TEST", 1, 2, 3);
 
     entity_set_health(entity, 1);
 
@@ -384,7 +384,7 @@ void test1_entity_get_health(){
 
 void test2_entity_get_health(){
     Entity *entity = NULL;
-    entity = entity_create("TEST", 1, 2, 3, 4, 5, 6, 7, 8, 9);
+    entity = entity_create("TEST", 1, 2, 3);
 
     PRINT_TEST_RESULT(entity_get_health(entity) == 5);
     entity_destroy(entity);
@@ -392,7 +392,7 @@ void test2_entity_get_health(){
 
 void test1_entity_get_baseDamage(){
     Entity *entity = NULL;
-    entity = entity_create("TEST", 1, 2, 3, 4, 5, 6, 7, 8, 9);
+    entity = entity_create("TEST", 1, 2, 3);
 
     entity_set_baseDamage(entity, 1);
 
@@ -402,7 +402,7 @@ void test1_entity_get_baseDamage(){
 
 void test2_entity_get_baseDamage(){
     Entity *entity = NULL;
-    entity = entity_create("TEST", 1, 2, 3, 4, 5, 6, 7, 8, 9);
+    entity = entity_create("TEST", 1, 2, 3);
 
     PRINT_TEST_RESULT(entity_get_baseDamage(entity) == 6);
     entity_destroy(entity);
@@ -410,7 +410,7 @@ void test2_entity_get_baseDamage(){
 
 void test1_entity_get_strength(){
     Entity *entity = NULL;
-    entity = entity_create("TEST", 1, 2, 3, 4, 5, 6, 7, 8, 9);
+    entity = entity_create("TEST", 1, 2, 3);
 
     entity_set_strength(entity, 1);
 
@@ -420,7 +420,7 @@ void test1_entity_get_strength(){
 
 void test2_entity_get_strength(){
     Entity *entity = NULL;
-    entity = entity_create("TEST", 1, 2, 3, 4, 5, 6, 7, 8, 9);
+    entity = entity_create("TEST", 1, 2, 3);
 
     PRINT_TEST_RESULT(entity_get_strength(entity) == 7);
     entity_destroy(entity);
@@ -428,7 +428,7 @@ void test2_entity_get_strength(){
 
 void test1_entity_get_defense(){
     Entity *entity = NULL;
-    entity = entity_create("TEST", 1, 2, 3, 4, 5, 6, 7, 8, 9);
+    entity = entity_create("TEST", 1, 2, 3);
 
     entity_set_defense(entity, 1);
 
@@ -438,7 +438,7 @@ void test1_entity_get_defense(){
 
 void test2_entity_get_defense(){
     Entity *entity = NULL;
-    entity = entity_create("TEST", 1, 2, 3, 4, 5, 6, 7, 8, 9);
+    entity = entity_create("TEST", 1, 2, 3);
 
     PRINT_TEST_RESULT(entity_get_defense(entity) == 8);
     entity_destroy(entity);
@@ -446,7 +446,7 @@ void test2_entity_get_defense(){
 
 void test1_entity_get_magicLevel(){
     Entity *entity = NULL;
-    entity = entity_create("TEST", 1, 2, 3, 4, 5, 6, 7, 8, 9);
+    entity = entity_create("TEST", 1, 2, 3);
 
     entity_set_magicLevel(entity, 1);
 
@@ -456,7 +456,7 @@ void test1_entity_get_magicLevel(){
 
 void test2_entity_get_magicLevel(){
     Entity *entity = NULL;
-    entity = entity_create("TEST", 1, 2, 3, 4, 5, 6, 7, 8, 9);
+    entity = entity_create("TEST", 1, 2, 3);
 
     PRINT_TEST_RESULT(entity_get_magicLevel(entity) == 9);
     entity_destroy(entity);

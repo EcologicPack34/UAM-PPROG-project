@@ -23,7 +23,7 @@
 
 #define MAP_WIDTH 53                  /*!< Width of the map part*/
 #define MAP_HEIGHT 29                 /*!< Height of the map part*/
-#define DESCRIPT_WIDTH 40             /*!< Width of the description part*/
+#define DESCRIPT_WIDTH 67            /*!< Width of the description part*/
 #define HELP_BANNER_HEIGHT 1          /*!< Height of the help banner part*/
 #define HELP_BANNER_WIDTH 23          /*!< Width of the help banner part*/
 #define HELP_HEIGHT 4                 /*!< Height of the help banner*/

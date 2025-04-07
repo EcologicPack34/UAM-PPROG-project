@@ -1,9 +1,0 @@
-<map id="_AbilityManager" name="_AbilityManager">
-<area shape="rect" id="Node000001" title="Struct that saves all the abilities in the game and a queue to trigger abilities." alt="" coords="34,196,162,221"/>
-<area shape="rect" id="Node000002" href="$struct__Collection.html" title="Collection to manage a list of objects with special parametrs as fixed_length and UniqueElements." alt="" coords="5,108,100,133"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="61,146,71,171,89,194,84,197,66,173,56,148"/>
-<area shape="rect" id="Node000003" href="$struct__Queue.html" title="Queue internal struct definition." alt="" coords="124,108,195,133"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="145,146,109,197,104,194,141,143"/>
-<area shape="rect" id="Node000004" href="$struct__Node.html" title="Local struct to .c file, contains info to implement linked list." alt="" coords="128,5,191,31"/>
-<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="162,45,162,108,157,108,157,45"/>
-</map>

@@ -105,8 +105,10 @@ LINK_TEST_OBJ = ./$(OP)/link_test.o ./$(OP)/link.o ./$(OP)/ability_manager.o ./$
 SPACE_TEST_OBJ  = ./$(OP)/space_test.o ./$(OP)/space.o ./$(OP)/ability_manager.o ./$(OP)/queue.o ./$(OP)/inventory.o ./$(OP)/collection.o ./$(OP)/debug_printing.o ./$(OP)/object.o ./$(OP)/link.o ./$(OP)/npc.o ./$(OP)/entity.o ./$(OP)/vector2.o
 OBJECT_TEST_OBJ = ./$(OP)/object_test.o ./$(OP)/object.o ./$(OP)/ability_manager.o ./$(OP)/queue.o ./$(OP)/debug_printing.o ./$(OP)/collection.o
 INVENTORY_TEST_OBJ = ./$(OP)/inventory_test.o ./$(OP)/inventory.o ./$(OP)/collection.o ./$(OP)/object.o ./$(OP)/debug_printing.o
-ENTITY_TEST_OBJ = ./$(OP)/entity_test.o ./$(OP)/entity.o ./$(OP)/inventory.o ./$(OP)/object.o ./$(OP)/collection.o ./$(OP)/debug_printing.o
+ENTITY_TEST_OBJ = ./$(OP)/entity_test.o ./$(OP)/entity.o ./$(OP)/inventory.o ./$(OP)/object.o ./$(OP)/collection.o ./$(OP)/debug_printing.o ./$(OP)/ability_manager.o ./$(OP)/queue.o
 COLLECTION_TEST_OBJ = ./$(OP)/collection_test.o ./$(OP)/collection.o ./$(OP)/debug_printing.o
+
+run_test_all: run_collection_test run_space_test run_link_test run_object_test run_inventory_test clean
 
 run_entity_test:
 	make
