@@ -66,28 +66,32 @@ Formato Event: #e:Id|Type|cmdTriggersNum|cmdName1 , ...|removeOnTrigger|tagvalue
 #e:5|trigger_combat|1|sh|0|40
 
 Formato NPC: #n:ID|Message|Nombre|LocationID|is_follower|Status|
-#n:1|Hello traveler i'm NPC1|NPC1|11|1|1|^0m"
-#n:2|Hello traveler i'm NPC2|NPC2|11|1|1|^1m"
-#n:3|Die|Enemy1|11|0|3|^2m"
-#n:4|Die|Enemy2|11|0|3|^3m"
-#n:5|Die|Enemy3|11|0|3|^4m"
+#n:1|TEST NPC1 FOLLOW/UNFOLLOW|NPC1|11|1|1|^0m"
+#n:2|TEST NPC2 FOLLOW/UNFOLLOW|NPC2|11|1|1|^1m"
+#n:3|TEST NPC3 FOLLOW/UNFOLLOW|NPC3|11|1|1|^2m"
+#n:4|DIE|Enemy1|11|0|3|^3m"
+#n:5|DIE|Enemy2|11|0|3|^4m"
+#n:6|DIE|Enemy3|11|0|3|^5m"
+#n:7|DIE|Enemy4|11|0|3|^6m"
 
-Formato STATS: #st:ID|EntityType|VidaMaxima|Vida|DanoBase|Fuerza|Defensa|NivelMagia
+Formato STATS: #st:IDEntity|EntityType|VidaMaxima|Vida|DanoBase|Fuerza|Defensa|NivelMagia
 
 #st:1|1|100|100|25|1|1|1
 #st:2|1|100|100|25|1|1|1
 #st:3|1|100|100|25|1|1|1
 #st:4|1|100|100|25|1|1|1
 
-#st:1|2|50|50|2|2|2|2|
-#st:2|2|50|50|2|2|2|2|
-#st:3|2|50|50|2|2|2|2|
-#st:4|2|50|50|2|2|2|2|
-#st:5|2|50|50|2|2|2|2|
+#st:1|2|100|100|10|2|2|2|
+#st:2|2|100|100|10|2|2|2|
+#st:3|2|100|100|10|2|2|2|
+#st:4|2|100|100|10|2|2|2|
+#st:5|2|100|100|10|2|2|2|
+#st:6|2|100|100|10|2|2|2|
+#st:7|2|100|100|10|2|2|2|
 
 Formato Ability: #sk:Id|Type|Name|Entityid(ObjectId)|is_player_ability|is_object_use|cd_count|cd_length|data
 
-#sk:1|heal_self|Heal self 25 HP|1|1|0|0|2|25
+#sk:1|heal_self|Heal self 50 HP|1|1|0|0|8|50
 #sk:2|heal_self|Heal self 20 HP|5|0|1|0|0|20
 #sk:3|heal_self|Heal self 5 HP|6|0|1|0|0|5
 #sk:4|money_bag|Adds 20 coins|8|0|1|0|0|20
