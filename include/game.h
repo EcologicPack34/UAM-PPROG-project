@@ -28,6 +28,7 @@
 #include "combat.h"
 #include "ability_manager.h"
 #include "libscreen.h"
+#include "effect.h"
 
 #include <stdbool.h>
 

@@ -303,8 +303,8 @@ Status command_get_as_string(Command *cmd, char *dest){
   if(!cmd || !dest) return ERROR;
   if(!(cmd->cmdPlayerData)) return ERROR;
 
-  /*North or n arg1 arg2 arg3 : Ok*/
-  /*Take or tk Grain1 : Ok*/
+  /*North(n) arg1 arg2 arg3 : Ok*/
+  /*Take(tk) tk Grain1 : Ok*/
 
   strcat(dest, cmd_to_str[cmd->cmdPlayerData->code - NO_CMD][1]);
   strcat(dest, " (");

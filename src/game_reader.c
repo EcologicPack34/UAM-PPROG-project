@@ -123,6 +123,16 @@ Status game_reader_load_stats(Game *game, char *filename);
 */
 Status game_reader_load_ability(Game *game, char *filename);
 
+/**
+ * @brief Reats the file to load all effects
+ * @author Aaron Charameli Mair
+ * 
+ * @param game 
+ * @param filename 
+ * @return Status 
+ */
+Status game_reader_load_effects(Game *game, char *filename);
+
 
 /*
 * Public functions implementation
@@ -984,4 +994,97 @@ Status game_reader_load_commandStateTypes(Game *game){
   }
   fclose(file);
   return OK;
+}
+
+Status game_reader_load_effects(Game *game, char *filename){
+  FILE *file=NULL;
+  char line[WORD_SIZE]="";
+  char str[WORD_SIZE]="";
+  char name[WORD_SIZE]="";
+  char data[WORD_SIZE]="";
+  char *toks=NULL;
+
+  Effect *effect=NULL;
+  Id id;
+  EffectIn Eloc;
+  EffectType ET;
+
+  Status status=OK;
+
+  if(!game || !filename) return ERROR;
+
+  if (!filename) {
+    debug_log(LOG_ERROR, "Missing file name at: game_reader_load_effects(Game*, char*) in game_reader.c");
+    return ERROR;
+  }
+
+  file = fopen(filename, "r");
+  if (file == NULL) {
+    debug_log(LOG_ERROR, "Error in file at: game_reader_load_effects(Game*, char*) in game_reader.c");
+    return ERROR;
+  }
+
+  /*#ef:Id|name|EffectIn|EffectType|data*/
+  while (fgets(line, WORD_SIZE, file)) {
+    if (strncmp("#ef:", line, 4) == 0) {
+      toks = strtok(line + 4, "|");
+        if(!toks){
+        printf("toks is null");
+        return ERROR;
+      }
+      id = atoi(toks);
+
+      toks = strtok(NULL, "|");
+      if(!toks){
+        printf("toks is null");
+        return ERROR;
+      }
+      strcpy(name,toks);
+
+      toks = strtok(NULL, "|");
+      if(!toks){
+        printf("toks is null");
+        return ERROR;
+      }
+      Eloc = atoi(toks);
+
+      toks = strtok(NULL, "|");
+      if(!toks){
+        printf("toks is null");
+        return ERROR;
+      }
+      ET = atoi(toks);
+
+      toks = strtok(NULL, "|");
+      if(!toks){
+        printf("toks is null");
+        return ERROR;
+      }
+      strcpy(data, toks);
+
+      
+
+      debug_log(PRINT,"Read Effect: #s:%ld|%d|%s|%ld|%d|%d|%d|%d|%s");
+
+      effect = effect_create(id, name, data, Eloc, ET);
+      game_add_effect(game, effect);
+
+      if(effect == NULL)
+        debug_log(LOG_ERROR,"Error creating effect when reading from file");
+
+      if(game_add_effect(game, effect) == ERROR){
+        //ability_destroy(ability);
+        debug_log(LOG_ERROR,"Error adding effect to efect manager");
+      }
+    }
+  }
+
+  if (ferror(file)) {
+    status = ERROR;
+    debug_log(LOG_ERROR, "Error in file at: game_reader_load_ability(Game*, char*) in game_reader.c");
+  }
+
+  fclose(file);
+
+  return status;
 }
