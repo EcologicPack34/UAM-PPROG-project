@@ -26,7 +26,7 @@
 
 #define INVENTORY_PLAYER_MAX_SIZE 10    /*!< Maximum inventory space for a player*/
 #define INVENTORY_ENTITY_MAX_SIZE 10    /*!< Maximum inventory space for an entity*/
-#define INVENTORY_SPACE_MAX_SIZE 50     /*!< Maximum inventory space for a space*/
+#define INVENTORY_SPACE_MAX_SIZE 500   /*!< Maximum inventory space for a space*/
  
 /**
  * @brief ADT with all the information of the objects related to an entity, or space
