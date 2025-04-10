@@ -1,4 +1,4 @@
-Formato Space: #s:ID|Nombre|northLink|eastLink|southLink|westLink|gdescLine1;gdescLine2,...
+Formato Space: #s:ID|Nombre|northLink|eastLink|southLink|westLink|upLink|downLink|gdescLine1;gdescLine2,...
 la longitud de gdescLine esta limitidad por el codigo, es decir, si es mas larga de lo debido se ignorara. Si hay mas lineas de descripcion de lo debido tambien se ignoran
 
 Formato Player: #p:ID|Nombre|LocationID|VidaMaxima|Vida|DanoBase|Fuerza|Defensa|NivelMagia|gdesc
@@ -21,16 +21,16 @@ Formato STATS: #st:IDEntity|EntityType|VidaMaxima|Vida|DanoBase|Fuerza|Defensa|N
 
 
 
-#s:11|Entry|-1|-1|1|-1|    _    ;\ \_-------__ ;\  mo'\_;\  @  _  ;  \__/  \__
-#s:121|Corridor1|1|-1|2|-1|    -     ;\   \___;\   _    \;\; \__/ \  /
-#s:122|Corridor2|2|6|3|-1|  ___  _; /   \ /; ;   _ ;__/ \   /
-#s:123|Corridor3|3|-1|4|-1|  _/^\_ ; +-   -+ ; /\   /\ ; ; ;
-#s:124|Corridor4|4|-1|5|-1
-#s:13|Pantry|5|-1|-1|-1
-#s:125|Corridor5|-1|7|-1|6
-#s:126|Corridor6|-1|8|-1|7
-#s:127|Corridor7|-1|9|-1|8
-#s:14|Hole|-1|-1|10|9
+#s:11|Entry|-1|-1|1|-1|-1|-1|    _    ;\ \_-------__ ;\  mo'\_;\  @  _  ;  \__/  \__
+#s:121|Corridor1|1|-1|2|-1|-1|-1|    -     ;\   \___;\   _    \;\; \__/ \  /
+#s:122|Corridor2|2|6|3|-1|-1|-1|  ___  _; /   \ /; ;   _ ;__/ \   /
+#s:123|Corridor3|3|-1|4|-1|-1|-1|  _/^\_ ; +-   -+ ; /\   /\ ; ; ;
+#s:124|Corridor4|4|-1|5|-1|-1|-1
+#s:13|Pantry|5|-1|-1|-1|-1|-1
+#s:125|Corridor5|-1|7|-1|6|-1|-1
+#s:126|Corridor6|-1|8|-1|7|-1|-1
+#s:127|Corridor7|-1|9|-1|8|-1|-1
+#s:14|Hole|-1|-1|10|9|-1|-1
 
 Formato Link: #l:ID|Space1|Space2|adjacent|locked //Recordar añadir en cada espacio sus links adyacentes
 

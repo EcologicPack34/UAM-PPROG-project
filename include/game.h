@@ -32,7 +32,7 @@
 #include <stdbool.h>
 
 #define MAX_SPACES 100  /*!< Maximum number of spaces on the map */
-#define MAX_LINKS 400   /*!< Maximum number of links on the map */
+#define MAX_LINKS (MAX_SPACES * 6)   /*!< Maximum number of links on the map */
 #define MAX_PLAYERS 4   /*!< Maximum number of players*/
 
 /**
