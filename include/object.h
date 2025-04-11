@@ -39,12 +39,14 @@ typedef struct _Object Object;
  * @param name name of the object
  * @param data data with the effects of the object and if it can be weared
  * @param description description of the object
+ * @param dependend_object_id id of the object which is needed to move that object
+ * @param is_movable true if object can be moved or false if it cannot
  * @param is_consumable if object is removed after use or not
  * @param location id where the object is located
  * @param type type of inventory where the object is located
  * @return a new object, initialized or NULL if there was a mistake
  */
-Object *object_create(Id id, char *name, char* data, char *description, bool is_consumable, Id location, InventoryType type);
+Object *object_create(Id id, char *name, char* data, char *description, Id dependent_object_id, bool is_movable, bool is_consumable, Id location, InventoryType type){
 
 /**
  * @brief It destroys an object
@@ -128,6 +130,16 @@ Status object_set_descr(Object *object, char *str);
  * @return Status 
  */
 Status object_set_is_equipped(Object *object, bool value);
+
+/**
+ * @brief Sets if an object is movable or not, true means movable, false means not movable
+ * @author Maksym Polyak
+ * 
+ * @param object 
+ * @param value 
+ * @return Status 
+ */
+Status object_set_is_movable(Object *object, bool value);
 
 /*Object GETTERS*/
 
@@ -213,6 +225,25 @@ char *object_get_data(Object *object);
  * @return false 
  */
 bool object_get_is_equipped(Object *object);
+
+/**
+ * @brief Gets if the object is movable or not
+ * @author Maksym Polyak
+ * 
+ * @param object 
+ * @return true if movable
+ * @return false if not movable
+ */
+bool object_get_is_movable(Object *object);
+
+/**
+ * @brief Gets the id of the object needed to take an object
+ * @author Maksym Polyak
+ * 
+ * @param object 
+ * @return Id or NO_ID if error or does not have dependency
+ */
+Id object_get_dependency(Object *object);
 
 /**
  * @brief Prints on screen an object

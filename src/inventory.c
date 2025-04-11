@@ -37,6 +37,26 @@ struct _Inventory {
 */
 
 /**
+ * @brief Checks if the object can be picked(If it has the dependency in the inventory)
+ * @author Maksym Polyak
+ * 
+ * @param inventory inventory struct
+ * @param object object to check
+ * @return Status 
+ */
+Status inventory_add_check_dependencies(Inventory *inventory, Object*object);
+
+/**
+ * @brief Drops the objects which have a dependency on tha tobject
+ * @author Maksym Polyak
+ * 
+ * @param inventory inventory struct
+ * @param object object to check
+ * @return Status
+ */
+Status inventory_remove_check_dependencies(Inventory *inventory, Object*object);
+
+/**
  * @brief Gets the number of objects in the inventory
  * 
  * @param inventory struct with all the information related to the inventory
