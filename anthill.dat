@@ -21,7 +21,7 @@ Formato STATS: #st:IDEntity|EntityType|VidaMaxima|Vida|DanoBase|Fuerza|Defensa|N
 
 
 
-#s:11|Entry|-1|-1|1|-1|-1|-1|    _    ;\ \_-------__ ;\  mo'\_;\  @  _  ;  \__/  \__
+#s:11|Entry|-1|-1|1|-1|11|-1|    _    ;\ \_-------__ ;\  mo'\_;\  @  _  ;  \__/  \__
 #s:121|Corridor1|1|-1|2|-1|-1|-1|    -     ;\   \___;\   _    \;\; \__/ \  /
 #s:122|Corridor2|2|6|3|-1|-1|-1|  ___  _; /   \ /; ;   _ ;__/ \   /
 #s:123|Corridor3|3|-1|4|-1|-1|-1|  _/^\_ ; +-   -+ ; /\   /\ ; ; ;
@@ -30,7 +30,7 @@ Formato STATS: #st:IDEntity|EntityType|VidaMaxima|Vida|DanoBase|Fuerza|Defensa|N
 #s:125|Corridor5|-1|7|-1|6|-1|-1
 #s:126|Corridor6|-1|8|-1|7|-1|-1
 #s:127|Corridor7|-1|9|-1|8|-1|-1
-#s:14|Hole|-1|-1|10|9|-1|-1
+#s:14|Hole|-1|-1|10|9|-1|11
 
 Formato Link: #l:ID|Space1|Space2|adjacent|locked //Recordar añadir en cada espacio sus links adyacentes
 
@@ -44,6 +44,7 @@ Formato Link: #l:ID|Space1|Space2|adjacent|locked //Recordar añadir en cada esp
 #l:8|126|127|1|0
 #l:9|127|14|1|0
 #l:10|14|13|0|0
+#l:11|11|14|0|0
 
 Formato Object: #o:ID|Nombre|Data|Descripcion|ability_id|LocationID|InventoryType
 Use ability_id = 0 for no ability

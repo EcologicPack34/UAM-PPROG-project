@@ -231,6 +231,8 @@ Status game_actions_update(Game *game, Command *command) {
     case EAST:
     case WEST:
     case SOUTH:
+    case UP:
+    case DOWN:
     case MOVE:
       status = game_actions_move(game);
       break;
@@ -366,25 +368,28 @@ Status game_actions_move(Game *game) {
   switch(code){
     case NORTH:
       link = space_get_north(actual_space);
-      if(link == NULL) return ERROR;
       break;
     case WEST:
       link = space_get_west(actual_space);
-      if(link == NULL) return ERROR;
       break;
     case EAST:
       link = space_get_east(actual_space);
-      if(link == NULL) return ERROR;
       break;
     case SOUTH:
       link = space_get_south(actual_space);
-      if(link == NULL) return ERROR;
+      break;
+    case UP:
+      link = space_get_up(actual_space);
+      break;
+    case DOWN:
+      link = space_get_down(actual_space);
       break;
     default:
       game_add_log_message(game, MESSAGE_ERROR, "Invalid direction for move command. Use 'help move' for more info");
       break;
   }
     
+  if(link == NULL) return ERROR;
 
   entity = player_get_entity(game_get_player(game));
   if(entity == NULL) return ERROR;
