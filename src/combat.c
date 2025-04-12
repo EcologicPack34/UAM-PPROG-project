@@ -10,6 +10,7 @@
  */
 
 #include "combat.h"
+#include "attack.h"
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -21,7 +22,7 @@
 #define QUICK_ATTACK 0.8    /*!< quick attack damage multiplier*/
 #define SWIFT_ATTACK 0.8    /*!< swift attack damage multiplier*/
 
-#define MAX_ATTACKS 4       /*!< Number of attack types that exist*/
+#define MAX_ATTACKS 64       /*!< Number of attack types that exist*/
 
 /*Probabilites for succcess on an attack*/
 #define LIGHT_PROB 90       /*!< Probability for a light attack to be succesful*/
@@ -45,6 +46,9 @@ struct _Combat{
     Space *space;                           /*!< Space where the combat is located*/
 
     bool endCombat;                         /*!< if true means combat has ended*/
+
+    Attack *attacks[MAX_ATTACKS];            /*!< array of attacks*/
+    int attacks_count;                       /*!< number of attacks*/
 };
 
 
@@ -597,7 +601,9 @@ Combat *combat_initialize(Space *space, Player *player, CommandCode code){
     
     combat->space = space;
     combat->endCombat = false;
-    
+    //EMPEZAR GAME READER
+
+
     return combat;
 }
 
@@ -694,4 +700,29 @@ Stats *combat_get_allies_stats(Combat *combat){
 Stats *combat_get_player_stats(Combat *combat){
     if(!combat) return NULL;
     return &(combat->allies_stats[0]);
+}
+
+Status combat_set_num_attacks(Combat *combat, int num) {
+
+    if (!combat || num <= 0)
+        return ERROR;
+    
+    combat->attacks_count = num;
+    return OK;
+}
+
+Attack *combat_get_attack_in_position(Combat *combat, int pos) {
+
+    if (!combat || pos < 0)
+        return NULL;
+
+    return combat->attacks[pos];
+}
+
+Status combat_set_attack_in_position(Combat *combat, Attack *attack, int pos) {
+
+    if(!combat || !attack) return ERROR;
+
+    combat->attacks[pos] = attack;
+    return OK;
 }

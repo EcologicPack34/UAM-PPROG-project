@@ -18,6 +18,7 @@
 #include "queue.h"
 #include "combat.h"
 #include "message.h"
+#include "game_reader.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -712,6 +713,9 @@ Status game_combat_start(Game *game){
 
   game->combat = combat_initialize(game_get_space(game, game_get_player_location(game)), game->active_player, command_get_code(game->last_cmd));
   if(!game->combat) return ERROR;
+  //AQUÍ METERLO!!!!
+
+  game_reader_load_attacks(game);
 
   game->current_state = COMBAT;
   return OK;

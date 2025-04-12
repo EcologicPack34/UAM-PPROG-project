@@ -28,4 +28,14 @@
  */
 Status game_reader_create_from_file(Game **game, char *filename);
 
+
+/**
+ * @brief Initializes the attacks, saving them in combat when it starts
+ * @author Sofía Calvo
+ *
+ * @param game struct that saves all information related to the game
+ * @return OK if everything goes well or ERROR if there was some mistake
+ */
+Status game_reader_load_attacks(Game *game);
+
 #endif
