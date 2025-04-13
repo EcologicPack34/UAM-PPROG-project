@@ -89,6 +89,51 @@ Status effect_update(Effect *effect);
 Status effect_get_as_str(Effect *effect, char *destiny);
 
 /**
+ * @brief This function gets the type of effect an effect is
+ * @author Aaron Charameli Mair
+ * 
+ * @param effect a pointer to the effect
+ * @return EffectType or -2 if error
+ */
+EffectType effect_get_effect_type(Effect *effect);
+
+/**
+ * @brief This function gets where an effect is applied to
+ * @author Aaron Charameli Mair
+ * 
+ * @param effect a pointer to the effect
+ * @return EffectIn or -2 if error
+ */
+EffectIn effect_get_effect_in(Effect *effect);
+
+/**
+ * @brief This function gets the name of an effect
+ * @author Aaron Charameli Mair
+ * 
+ * @param effect 
+ * @return char* or NULL if error
+ */
+char *effect_get_name(Effect *effect);
+
+/**
+ * @brief This function gets the data string of an effect
+ * @author Aaron Charameli Mair
+ * 
+ * @param effect 
+ * @return char* or NULL if error
+ */
+char *effect_get_data(Effect *effect);
+
+/**
+ * @brief This function gets the id of an effect
+ * @author Aaron Charameli Mair
+ * 
+ * @param effect 
+ * @return Id or NO_ID if error
+ */
+Id effect_get_id(Effect *effect);
+
+/**
  * @brief This function compares two effects
  * @author Aaron Charameli Mair
  * 

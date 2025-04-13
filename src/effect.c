@@ -131,7 +131,6 @@ Status effect_update(Effect *effect){
         if(aux->turns == 0)
             collection_remove(effect->affecteds, aux);
     }
-
     return OK;
 }
 
@@ -205,9 +204,31 @@ Status effect_get_as_str(Effect *effect, char *destiny){
     et[0]=effect->ET+'0';
     strcat(str,et);
     strcat(str,"|");
-    
+}
 
-    
+EffectType effect_get_effect_type(Effect *effect){
+    if(!effect) return -2;
+    return effect->ET;
+}
+
+EffectIn effect_get_effect_in(Effect *effect){
+    if(!effect) return -2;
+    return effect->Eloc;
+}
+
+char *effect_get_name(Effect *effect){
+    if(!effect) return NULL;
+    return effect->name;
+}
+
+char *effect_get_data(Effect *effect){
+    if(!effect) return NULL;
+    return effect->data;
+}
+
+Id effect_get_id(Effect *effect){
+    if(!effect) return NO_ID;
+    return effect->id;
 }
 
 int effect_cmp(void*e1, void*e2){
@@ -231,10 +252,12 @@ void effect_print(void*effect){
 
 Status _effect_apply_poison(Effect *effect, Entity *entity){
     if(!effect) return ERROR;
+    return ERROR;
 }
 
 Status _effect_apply_regeneration(Effect *effect, Entity *entity){
     if(!effect) return ERROR;
+    return ERROR;
 }
 
 /*END OF PRIVATE FUNCTIONS IMLPEMENTATION*/
