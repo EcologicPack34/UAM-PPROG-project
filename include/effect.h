@@ -96,7 +96,7 @@ Status effect_update(Effect *effect);
  * @param destiny a string where the effect will be stored
  * @return Status 
  */
-Status effect_get_as_str(Effect *effect, char *destiny);
+Status effect_get_as_str(Effect *effect, long destiny_size ,char *destiny);
 
 /**
  * @brief This function gets the type of effect an effect is

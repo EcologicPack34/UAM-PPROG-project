@@ -76,8 +76,10 @@ Effect *effect_create(Id id, char *name, char *data, EffectIn Eloc, EffectType E
 EffectManager *effect_manager_create(){
     EffectManager *em=NULL;
 
-    em = collection_create(EFFECT_MANAGER_INIT_SIZE,false,true,effect_cmp,effect_print);
-    if(!em) return NULL;
+    if((em = (EffectManager*)malloc(sizeof(EffectManager))) == ERROR) return NULL;
+
+    em->effects = collection_create(EFFECT_MANAGER_INIT_SIZE,false,true,effect_cmp,effect_print);
+    if(!em->effects) return NULL;
 
     return em;
 }
@@ -139,76 +141,76 @@ Status effect_update(Effect *effect){
     return OK;
 }
 
-Status effect_get_affecteds_as_str(Effect *effect, long destiny_len,char *destiny){
+Status effect_write_affected_save_data(Effect *effect, char *filename){
     int i,n;
     Affected *aux=NULL;
+    FILE *file=NULL;
     char str[WORD_SIZE]="";
-    char sentid[5]=""; /*string entity id*/
-    char sentt[N_ENTITY_TYPE]=""; /*string entity type*/
-    char sturns[5]; /*string turns*/
-
-    Id entid = NO_ID;
-    EntityType entt;
+    char aux_str[WORD_SIZE]="";
     
-    if(!effect) return NULL;
-    if((collection_length(n = effect->affecteds)) == -1) return NULL;
+    if(!effect || !filename) return ERROR;
+    if((n = collection_length(effect->affecteds)) == -1) return ERROR;
 
     /*
     format is as follows:
-    Entity1Id|Entity1Type|turns:Entity2Id|Entity2Type|turns: ...#
-    "|" delimits values from an entity
-    ":" delimits entities
+    #efsave:n
+    Entity1Id|Entity1Type|turns
+    Entity2Id|Entity2Type|turns
     */
+
+    if((file = fopen(filename,"a")) == NULL) return ERROR;
+    fprintf(file,"\n\n");
+
+    fprintf(file,"#efsave:%d\n", n);
     for(i=0; i<n; i++){
-       /*convert data to string*/
-       aux = collection_get_element_at(effect->affecteds,i);
-       entid = entity_get_id(aux->ent);
-       entt = entity_get_entityType(aux->ent);
-       sprintf(sentid,"%d", entid);
-       sprintf(sentt,"%d", entt);
-       sprintf(sturns,"%d",aux->turns);
+        aux = collection_get_element_at(effect->affecteds,i);
+        
+        /*id print*/
+        sprintf(aux_str,"%d",(int)entity_get_id(aux->ent));
+        strcat(str, aux_str);
+        /*entity type print*/
+        sprintf(aux_str,"%d",(int)entity_get_entityType(aux->ent));
+        strcat(str, aux_str);
+        /*turns print*/
+        sprintf(aux_str,"%d",aux->turns);
+        strcat(str, aux_str);
 
-       strcat(str, sentid);
-       strcat(str, "|");
-       strcat(str, sentt);
-       strcat(str, "|");
-       strcat(str,sturns);
-       strcat(str,":");
+        /*add to file*/
+        fprintf(file,"%s\n",str);
     }
-    strcat(str,"#");
-
+    return OK;
 }
 
-Status effect_get_as_str(Effect *effect, char *destiny){
+Status effect_get_as_str(Effect *effect, long destiny_size ,char *destiny){
+    /*#ef:Id|name|EffectIn|EffectType|data*/
     char str[WORD_SIZE]="";
-    char eloc[2]=""; /*EffectIn (effect location)*/
-    /*im assuming there wont be more than 99 effects */
-    char et[3]=""; /*EffectType*/
+    char aux[WORD_SIZE]="";
     if(!effect || !destiny) return ERROR;
 
+    /*add "#ef:"*/
+    sprintf(str,"#ef:");
     /*add id*/
-    sprintf(str,"%d|",effect->id);
+    sprintf(aux,"%d|",(int)effect->id);
+    strcat(str,aux);
     /*add name*/
     strcat(str,effect->name);
     strcat(str,"|");
 
     /*add EffectIn*/
-    eloc[0]=effect->Eloc+'0';
-    strcat(str,eloc);
+    sprintf(aux,"%d", (int)effect->Eloc);
+    strcat(str,aux);
     strcat(str,"|");
 
     /*add EffectType*/
-    sprintf(et,"%d",effect->ET);
-    strcat(str,et);
+    sprintf(aux,"%d", (int)effect->ET);
+    strcat(str,aux);
     strcat(str,"|");
 
     strcat(str,effect->data);
+    if(destiny_size+1 < strlen(str)) return ERROR;
 
-    
-
-    et[0]=effect->ET+'0';
-    strcat(str,et);
-    strcat(str,"|");
+    strcpy(destiny, str);
+    return OK;
 }
 
 EffectType effect_get_effect_type(Effect *effect){

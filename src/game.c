@@ -14,6 +14,7 @@
 #include "debug_printing.h"
 #include "collection.h"
 #include "npc.h"
+#include "effect.h"
 #include "vector2.h"
 #include "queue.h"
 #include "combat.h"

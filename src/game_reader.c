@@ -20,6 +20,7 @@
 #include "game.h"
 #include "space.h"
 #include "event_manager.h"
+#include "effect.h"
 
 /*
 * Declaration of private functions
