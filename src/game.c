@@ -48,6 +48,7 @@ struct _Game {
 
   /*Others*/
   EventManager *event_manager;        /*!< Struct containing the info about the events that can happen*/
+  EffectManager *effect_manager;      /*!< Struct containing effects and allows to manage them*/
   Queue *screenLog;                   /*!< Queue containing a list of messages to print on screen*/
   bool godmode;                       /*!< bool that determines if god mode is activated*/
 
@@ -122,6 +123,8 @@ Status game_create(Game **game) {
     debug_log(LOG_ERROR,"Error creating command");
     return ERROR;
   }
+
+  (*game)->effect_manager = effect_manager_create();
   
   (*game)->godmode = false;
   (*game)->finished = false;

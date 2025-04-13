@@ -12,11 +12,13 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "effect.h"
 #include "collection.h"
 #include "entity.h"
 
+#define EFFECT_MANAGER_INIT_SIZE 10 /*!< Effects manager collection initial size*/
 #define INIT_AFFECTED 10 /*!< Initial size of affecteds collection in an effect (irrelevant for the game functionality)*/
 
 typedef struct{
@@ -26,18 +28,24 @@ typedef struct{
 }Affected; /*<! Struct that stores an entity and the number of turns that it suffers an effect*/
 
 struct _Effect{
-  Id id;
-  Collection *affecteds; /*!< stores the affecteds that have a certain effect*/
-  char *name;
-  char *data; /*a string containing data related to the effect. A function will use the data to apply the effect*/
-  EffectIn Eloc;
-  EffectType ET;
+    Id id;
+    Collection *affecteds; /*!< stores the affecteds that have a certain effect*/
+    char *name;
+    char *data; /*a string containing data related to the effect. A function will use the data to apply the effect*/
+    EffectIn Eloc;
+    EffectType ET;
+};
+
+struct _EffectsManager{
+    Collection *effects; /*!< an effects collection*/
 };
 
 /*--------------------------------------------------------------------------------------------------------------------------*/
 /*PRIVATE FUNCTIONS HEADERS*/
 
 Status _effect_apply_poison(Effect *effect, Entity *entity);
+
+Status _effect_apply_regeneration(Effect *effect, Entity *entity);
 
 
 /*END OF PRIVATE FUNCTIONS DECLARATIONS*/
@@ -61,6 +69,17 @@ Effect *effect_create(Id id, char *name, char *data, EffectIn Eloc, EffectType E
     e->data = strdup(data);
     e->Eloc = Eloc;
     e->ET = ET;
+
+    return e;
+}
+
+EffectManager *effect_manager_create(){
+    EffectManager *em=NULL;
+
+    em = collection_create(EFFECT_MANAGER_INIT_SIZE,false,true,effect_cmp,effect_print);
+    if(!em) return NULL;
+
+    return em;
 }
 
 void effect_destroy(Effect *e){
@@ -76,16 +95,20 @@ void effect_destroy(Effect *e){
     return;
 }
 
+void effect_manager_destroy(EffectManager *em){
+    if(em){
+        if(em->effects)
+            collection_destroy(em->effects);
+        free(em);
+    }
+    return;
+}
+
 Status effect_update(Effect *effect){
     int i,n;
     Affected *aux=NULL;
-    void **del=NULL;
 
-    if(!effect) return ERROR;
-
-    n = collection_length(effect->affecteds);
-
-    if((del = (void **)calloc(n,sizeof(void *))) == NULL) return ERROR;
+    if(!effect || ((n = collection_length(effect->affecteds)) == -1)) return ERROR;
 
     for(i=0; i<n; i++){
         aux = collection_get_element_at(effect->affecteds, i);
@@ -100,29 +123,102 @@ Status effect_update(Effect *effect){
                 default:
                     break;
             }
-            if(aux->turns == 0)
-                del[i]=aux;
-            
         }
     }
 
-    for(i=0; i<n; i++){
-        if(del[i])
-            collection_remove(effect->affecteds,del[i]);
+    for(i=n-1; i>=0 ; i--){
+        aux = collection_get_element_at(effect->affecteds, i);
+        if(aux->turns == 0)
+            collection_remove(effect->affecteds, aux);
     }
 
     return OK;
 }
 
-int effect_cmp(const Effect*e1, const Effect*e2){
-    if(!e1 || !e2) return -1;
-    return e1->id - e2->id;
+Status effect_get_affecteds_as_str(Effect *effect, long destiny_len,char *destiny){
+    int i,n;
+    Affected *aux=NULL;
+    char str[WORD_SIZE]="";
+    char sentid[5]=""; /*string entity id*/
+    char sentt[N_ENTITY_TYPE]=""; /*string entity type*/
+    char sturns[5]; /*string turns*/
+
+    Id entid = NO_ID;
+    EntityType entt;
+    
+    if(!effect) return NULL;
+    if((collection_length(n = effect->affecteds)) == -1) return NULL;
+
+    /*
+    format is as follows:
+    Entity1Id|Entity1Type|turns:Entity2Id|Entity2Type|turns: ...#
+    "|" delimits values from an entity
+    ":" delimits entities
+    */
+    for(i=0; i<n; i++){
+       /*convert data to string*/
+       aux = collection_get_element_at(effect->affecteds,i);
+       entid = entity_get_id(aux->ent);
+       entt = entity_get_entityType(aux->ent);
+       sprintf(sentid,"%d", entid);
+       sprintf(sentt,"%d", entt);
+       sprintf(sturns,"%d",aux->turns);
+
+       strcat(str, sentid);
+       strcat(str, "|");
+       strcat(str, sentt);
+       strcat(str, "|");
+       strcat(str,sturns);
+       strcat(str,":");
+    }
+    strcat(str,"#");
+
 }
 
-void effect_print(FILE *pf ,const Effect*effect){
+Status effect_get_as_str(Effect *effect, char *destiny){
+    char str[WORD_SIZE]="";
+    char eloc[2]=""; /*EffectIn (effect location)*/
+    /*im assuming there wont be more than 99 effects */
+    char et[3]=""; /*EffectType*/
+    if(!effect || !destiny) return ERROR;
+
+    /*add id*/
+    sprintf(str,"%d|",effect->id);
+    /*add name*/
+    strcat(str,effect->name);
+    strcat(str,"|");
+
+    /*add EffectIn*/
+    eloc[0]=effect->Eloc+'0';
+    strcat(str,eloc);
+    strcat(str,"|");
+
+    /*add EffectType*/
+    sprintf(et,"%d",effect->ET);
+    strcat(str,et);
+    strcat(str,"|");
+
+    strcat(str,effect->data);
+
+    
+
+    et[0]=effect->ET+'0';
+    strcat(str,et);
+    strcat(str,"|");
+    
+
+    
+}
+
+int effect_cmp(void*e1, void*e2){
+    if(!e1 || !e2) return -1;
+    return ((Effect*)e1)->id - ((Effect*)e2)->id;
+}
+
+void effect_print(void*effect){
     if(!effect) return;
     /*for now this will be the print format. Can be modified in the future.*/
-    fprintf(pf, "%s: %s", effect->name, effect->data);
+    fprintf(stdout, "%s: %s", ((Effect*)effect)->name, ((Effect*)effect)->data);
 }
 
 /*END OF PUBLIC FUNCTIONS IMPLEMENTATION*/
