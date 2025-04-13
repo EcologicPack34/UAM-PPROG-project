@@ -698,6 +698,11 @@ Status game_add_log_message(Game *game, MessageType type,char *message){
   return OK;
 }
 
+Status game_add_effect(Game *game, Effect *effect){
+  if(!game || !game->effect_manager || !effect) return ERROR;
+  return effect_manager_add_effect(game->effect_manager, effect);
+}
+
 Status game_get_log_message(Game *game, char *str){
   Message *log = NULL;
   if(!game) return ERROR;

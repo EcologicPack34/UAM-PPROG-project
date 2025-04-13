@@ -71,6 +71,16 @@ void effect_manager_destroy(EffectManager *em);
 void effect_destroy(Effect *e);
 
 /**
+ * @brief This function adds an effect to an effect manager
+ * @author Aaron Charameli Mair
+ * 
+ * @param em the effect manager
+ * @param effect the effect
+ * @return Status 
+ */
+Status effect_manager_add_effect(EffectManager *em, Effect *effect);
+
+/**
  * @brief This function updates the affected entities by an effect.
  * 
  * @param effect a pointer to the effect

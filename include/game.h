@@ -421,6 +421,16 @@ Status game_add_npc(Game *game, NPC *npc);
 Status game_add_log_message(Game *game, MessageType type,char *message);
 
 /**
+ * @brief This function adds an effect to the game
+ * @author Aaron Charameli Mair
+ * 
+ * @param game game struct
+ * @param effect effect to add
+ * @return Status 
+ */
+Status game_add_effect(Game *game, Effect *effect);
+
+/**
  * @brief Gets the first message in the queue and frees its memory
  * @author Daniel Gómez
  * 

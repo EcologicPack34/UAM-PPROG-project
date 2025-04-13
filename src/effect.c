@@ -104,6 +104,11 @@ void effect_manager_destroy(EffectManager *em){
     return;
 }
 
+Status effect_manager_add_effect(EffectManager *em, Effect *effect){
+    if(!em || !effect) return ERROR;
+    return collection_add(em->effects, (void *)effect);
+}
+
 Status effect_update(Effect *effect){
     int i,n;
     Affected *aux=NULL;

@@ -999,7 +999,6 @@ Status game_reader_load_commandStateTypes(Game *game){
 Status game_reader_load_effects(Game *game, char *filename){
   FILE *file=NULL;
   char line[WORD_SIZE]="";
-  char str[WORD_SIZE]="";
   char name[WORD_SIZE]="";
   char data[WORD_SIZE]="";
   char *toks=NULL;
@@ -1061,8 +1060,6 @@ Status game_reader_load_effects(Game *game, char *filename){
         return ERROR;
       }
       strcpy(data, toks);
-
-      
 
       debug_log(PRINT,"Read Effect: #s:%ld|%d|%s|%ld|%d|%d|%d|%d|%s");
 
