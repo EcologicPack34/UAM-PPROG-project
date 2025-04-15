@@ -6,6 +6,8 @@ NOTA IMPORTANTE: dado que nuestro juego tiene eventos aleatorios, no tiene senti
 		en algo erróneo.
 NOTA IMPORTANTE: este archivo contiene una explicación sobre como funciona el combate.
 
+NOTA: únicamente tenemos un acta de reunión, ya que el resto lo organizamos a tiempo real. Además, disponemos de un chat privado (texto y voz) en el queda constancia de que queremos hacer y como lo vamos a hacer de una manera dinámica sin necesidad de reunirse.
+
 Existe un comando help, sin argumentos, este devuelve una lista de todos los posibles comandos del juego. Si se le especifica un argumento al comando help, como por
 ejemplo "help north", este te dará una breve descripción sobre ese comando y su uso.
 
