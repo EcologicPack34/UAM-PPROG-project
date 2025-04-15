@@ -704,9 +704,10 @@ Status game_actions_object_use(Game *game){
 
   comm = game_get_last_command(game);
 
-  if(command_get_arguments_count(comm) != 1)
+  /*Argument count must be checked in each ability, as different abilities can take different number of arguments*/
+  /*if(command_get_arguments_count(comm) != 1)
     return ERROR;
-
+  */
   entity = player_get_entity(game_get_player(game));
   object = inventory_get_object_by_name(entity_get_inventory(entity), command_get_arguments(comm)[0]);
 
