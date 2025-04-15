@@ -32,7 +32,7 @@
 #include <stdbool.h>
 
 #define MAX_SPACES 100  /*!< Maximum number of spaces on the map */
-#define MAX_LINKS 400   /*!< Maximum number of links on the map */
+#define MAX_LINKS (MAX_SPACES * 6)   /*!< Maximum number of links on the map */
 #define MAX_PLAYERS 4   /*!< Maximum number of players*/
 
 /**
@@ -84,6 +84,16 @@ char* game_to_string(Game * game);
  * @return *space if everything goes well or NULL if there was some mistake
  */
 Space *game_get_space(Game *game, Id id);
+
+/**
+ * @brief This function gets a space in a game by its index
+ * @author Aaron Charameli Mair
+ * 
+ * @param game a struct Game 
+ * @param ix the index of the space
+ * @return Space*
+ */
+Space *game_get_space_at(Game *game, int ix);
 
 /**
  * @brief Gets a space from the game by it's spatial position

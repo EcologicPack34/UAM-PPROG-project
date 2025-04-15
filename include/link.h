@@ -156,7 +156,7 @@ Status link_move_entity(Link* link, Entity* entity);
  * @brief Tries to unlock a link using a certain object
  * 
  * @param link link struct
- * @param obj object taken to try to unlock
+ * @param player player that used it
  * @return Status 
  */
 Status link_unlock(Link *link, Entity *player);

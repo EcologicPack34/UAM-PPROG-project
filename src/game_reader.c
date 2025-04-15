@@ -265,7 +265,7 @@ Status game_reader_load_spaces(Game *game, char *filename) {
   char *toks = NULL;
   
   char name[WORD_SIZE] = "";
-  Id id = NO_ID, north = NO_ID, east = NO_ID, south = NO_ID, west = NO_ID;
+  Id id = NO_ID, north = NO_ID, east = NO_ID, south = NO_ID, west = NO_ID, up = NO_ID, down = NO_ID;
   
   Space *space = NULL;
   Status status = OK;
@@ -306,6 +306,11 @@ Status game_reader_load_spaces(Game *game, char *filename) {
       toks = strtok(NULL, "|");
       west = atol(toks);
       
+      toks = strtok(NULL, "|");
+      up = atol(toks);
+
+      toks = strtok(NULL, "|");
+      down = atol(toks);
 
       debug_log(PRINT,"Read Space: #s:%ld|%s|%ld|%ld|%ld|%ld|gdesc", id, name, north, east, south, west);
 
@@ -322,6 +327,8 @@ Status game_reader_load_spaces(Game *game, char *filename) {
       space_set_east(space, game_get_link_by_id(game, east));
       space_set_south(space, game_get_link_by_id(game, south));
       space_set_west(space, game_get_link_by_id(game, west));
+      space_set_up(space, game_get_link_by_id(game, up));
+      space_set_down(space, game_get_link_by_id(game, down));
 
       for (i = 0; i < SPACE_GRAPHIC_HEIGHT; i++)
       {

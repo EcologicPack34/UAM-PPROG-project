@@ -232,6 +232,13 @@ Space *game_get_space(Game *game, Id id) {
   return NULL;
 }
 
+Space *game_get_space_at(Game *game, int ix){
+  if(!game || (ix<0)) return NULL;
+  if(ix >= game_get_n_spaces(game)) return NULL;
+
+  return game->spaces[ix];
+}
+
 Player* game_get_player(Game *game){
   return game->active_player; 
 }

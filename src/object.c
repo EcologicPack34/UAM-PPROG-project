@@ -34,6 +34,7 @@ struct _Object {
   InventoryType type;       /*!< Inventory type where the object is located */
 
   bool is_consumable;       /*!< Determines if object is removed after use*/
+  bool is_equipped;         /*!< Determines if the object is equipped or not*/
 
   Ability *object_effect;   /*!< Ability with the effect of the object --> Assigned on skill read*/
 
@@ -64,6 +65,7 @@ Object *object_create(Id id, char *name, char* data, char *description, bool is_
 
     object->object_effect = NULL;
     object->is_consumable = is_consumable;
+    object->is_equipped = false;
     
     object->id = id;
     object->location = location;
@@ -149,6 +151,14 @@ Status object_set_descr(Object *object, char *str){
     return OK;
 }
 
+Status object_set_is_equipped(Object *object, bool value){
+    if(!object) return ERROR;
+
+    object->is_equipped = value;
+
+    return OK;
+}
+
 /*Object GETTERS*/
 
 Id object_get_id(Object *object){
@@ -203,6 +213,12 @@ char *object_get_data(Object *object){
     if(!object) return NULL;
 
     return object->data;
+}
+
+bool object_get_is_equipped(Object *object){
+    if(!object) return false;
+
+    return object->is_equipped;
 }
 
 void object_print(void *object){

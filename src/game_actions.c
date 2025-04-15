@@ -231,6 +231,8 @@ Status game_actions_update(Game *game, Command *command) {
     case EAST:
     case WEST:
     case SOUTH:
+    case UP:
+    case DOWN:
     case MOVE:
       status = game_actions_move(game);
       break;
@@ -366,25 +368,28 @@ Status game_actions_move(Game *game) {
   switch(code){
     case NORTH:
       link = space_get_north(actual_space);
-      if(link == NULL) return ERROR;
       break;
     case WEST:
       link = space_get_west(actual_space);
-      if(link == NULL) return ERROR;
       break;
     case EAST:
       link = space_get_east(actual_space);
-      if(link == NULL) return ERROR;
       break;
     case SOUTH:
       link = space_get_south(actual_space);
-      if(link == NULL) return ERROR;
+      break;
+    case UP:
+      link = space_get_up(actual_space);
+      break;
+    case DOWN:
+      link = space_get_down(actual_space);
       break;
     default:
       game_add_log_message(game, MESSAGE_ERROR, "Invalid direction for move command. Use 'help move' for more info");
       break;
   }
     
+  if(link == NULL) return ERROR;
 
   entity = player_get_entity(game_get_player(game));
   if(entity == NULL) return ERROR;
@@ -726,6 +731,8 @@ Status game_actions_god_mode(Game *game){
   Player *pl=NULL;
   Combat *combat = NULL;
   Stats *stat = NULL;
+  Space *aux_space=NULL;
+  int n_spaces,i;
 
   if(!game) return ERROR;
 
@@ -735,6 +742,12 @@ Status game_actions_god_mode(Game *game){
   pl = game_get_player(game);
   if(player_set_stats(pl, MAX_LVL, MAX_LVL, MAX_LVL, MAX_LVL, MAX_LVL, MAX_LVL) == ERROR)
     return ERROR;
+
+  n_spaces = game_get_n_spaces(game);
+  for(i = 0; i < n_spaces; i++){
+    aux_space = game_get_space_at(game,i);
+    space_set_discovered(aux_space,true);
+  }
 
   combat = game_get_combat(game);
   if(combat){

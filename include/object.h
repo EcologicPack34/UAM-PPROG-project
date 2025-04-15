@@ -119,6 +119,16 @@ Status object_set_type(Object *object, InventoryType type);
  */
 Status object_set_descr(Object *object, char *str);
 
+/**
+ * @brief Sets if true that the object is equipped or false that the object is not equipped
+ * @author Maksym Polyak
+ * 
+ * @param object object to modify
+ * @param value true if equipped false if not equipped
+ * @return Status 
+ */
+Status object_set_is_equipped(Object *object, bool value);
+
 /*Object GETTERS*/
 
 /**
@@ -193,6 +203,16 @@ Ability *object_get_object_effect(Object *object);
  * @return char* or NULL if error
  */
 char *object_get_data(Object *object);
+
+/**
+ * @brief Gets if the object is equipped or not
+ * @author Maksym Polyak
+ * 
+ * @param object 
+ * @return true 
+ * @return false 
+ */
+bool object_get_is_equipped(Object *object);
 
 /**
  * @brief Prints on screen an object
