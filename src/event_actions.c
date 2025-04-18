@@ -234,7 +234,7 @@ bool event_trigger_npc_rand_move(Event *event, Game *game){
     Space *nextSpace = NULL;
     Link *link = NULL;
 
-    int i;
+    int i,j;
     int npc_length;
     int prob;
     int dir;
@@ -253,7 +253,6 @@ bool event_trigger_npc_rand_move(Event *event, Game *game){
     /*loops through every npc*/
     for (i = 0; i < npc_length; i++)
     {
-        nextSpace = NULL;
         npc = collection_get_element_at(npcs, i);
 
         /*if ally doesn't try to move as it follows player*/
@@ -269,48 +268,53 @@ bool event_trigger_npc_rand_move(Event *event, Game *game){
 
         if(!currentSpace) continue;
 
-        dir = rand()%6;
+        /*Set dir to rand means we start checking a random link*/
+        dir = rand()%SPACE_DIRECTIONS;
 
-        switch (dir)
+        /*Loop through posible links if it doesnt exist, so those spaces with less link has same prob to move enemies as those with more links*/
+        for ( j = 0; j < SPACE_DIRECTIONS; j++)
         {
-            case 0: /*north*/
-                link = space_get_north(currentSpace);
-                if(!link_is_locked(link)){
-                    nextSpace = game_get_space(game, link_get_oposite_space(link, space_get_id(currentSpace)));
-                }
+            /*gets link for the direction*/
+            switch (dir)
+            {
+                case 0: /*north*/
+                    link = space_get_north(currentSpace);
+                    break;
+                case 1: /*east*/
+                    link = space_get_east(currentSpace);
+                    break;
+                case 2: /*south*/
+                    link = space_get_south(currentSpace);
+                    break;
+                case 3: /*west*/
+                    link = space_get_west(currentSpace);
+                    break;
+                case 4: /*up*/
+                    link = space_get_up(currentSpace);
+                    break;
+                case 5: /*down*/
+                    link = space_get_south(currentSpace);
+                    break;
+                default:
+                    break;
+            }
+
+            /*if a link is found, we break the loop*/
+            if(link && !link_is_locked(link) && link_is_adjacent(link)){
                 break;
-            case 1: /*east*/
-                link = space_get_east(currentSpace);
-                if(!link_is_locked(link)){
-                    nextSpace = game_get_space(game, link_get_oposite_space(link, space_get_id(currentSpace)));
-                }
-                break;
-            case 2: /*south*/
-                link = space_get_south(currentSpace);
-                if(!link_is_locked(link)){
-                    nextSpace = game_get_space(game, link_get_oposite_space(link, space_get_id(currentSpace)));
-                }
-                break;
-            case 3: /*west*/
-                link = space_get_west(currentSpace);
-                if(!link_is_locked(link)){
-                    nextSpace = game_get_space(game, link_get_oposite_space(link, space_get_id(currentSpace)));
-                }
-                break;
-            case 4: /*up*/
-                link = space_get_up(currentSpace);
-                if(!link_is_locked(link)){
-                    nextSpace = game_get_space(game, link_get_oposite_space(link, space_get_id(currentSpace)));
-                }
-                break;
-            case 5: /*down*/
-                link = space_get_south(currentSpace);
-                if(!link_is_locked(link)){
-                    nextSpace = game_get_space(game, link_get_oposite_space(link, space_get_id(currentSpace)));
-                }
-                break;
-            default:
-                break;
+            }
+
+            /*if a link isnt found, we check the next dir*/
+            dir = (dir + 1) % SPACE_DIRECTIONS;
+        }
+        
+        if(!link) continue;
+
+        if(!link_is_locked(link) && link_is_adjacent(link)){
+            nextSpace = game_get_space(game, link_get_oposite_space(link, space_get_id(currentSpace)));
+        }
+        else{
+            nextSpace = NULL;
         }
 
         if(!nextSpace || !currentSpace) continue;

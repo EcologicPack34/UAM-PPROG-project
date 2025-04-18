@@ -68,7 +68,7 @@ Formato Event: #e:Id|Type|cmdTriggersNum|cmdName1 , ...|removeOnTrigger|tagvalue
 #e:3|trigger_combat|3|tk,dr,ch|0|20
 #e:4|player_death|0|0|
 #e:5|trigger_combat|1|sh|0|40
-#e:6|npc_rand_move|6|n,s,w,e,up,dw|0|100
+#e:6|npc_rand_move|6|n,s,w,e,up,dw|0|20
 
 Formato NPC: #n:ID|Message|Nombre|LocationID|is_follower|Status|
 #n:1|TEST NPC1 FOLLOW/UNFOLLOW|NPC1|11|1|1|^0m"

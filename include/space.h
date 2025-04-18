@@ -39,6 +39,8 @@
 #define SPACE_GRAPHIC_HEIGHT 5          /*!< Height of a space graphical description*/
 #define SPACE_GRAPHIC_WIDTH 9           /*!< Width of a space graphical description*/
 
+#define SPACE_DIRECTIONS 6
+
 /**
  * @brief ADT with all the information related to a space
  */
