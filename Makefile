@@ -35,8 +35,8 @@ DEPENDENCIES = $(OBJ:.o=.d)
 EXE = anthill
 EXED = anthilldebug
 
-_TEST_OBJ = entity_test.o collection_test.o space_test.o link_test.o object_test.o inventory_test.o player_test.o
-_TEST = entity_test collection_test space_test link_test object_test inventory_test player_test
+_TEST_OBJ = entity_test.o collection_test.o space_test.o link_test.o object_test.o inventory_test.o player_test.o effect_test.o
+_TEST = entity_test collection_test space_test link_test object_test inventory_test player_test effect_test
 
 TEST = $(patsubst %,$(TEST_EXE_PATH)/%,$(_TEST))
 TEST_OBJ = $(patsubst %,$(OBJ_PATH)/%,$(_TEST_OBJ))
@@ -112,8 +112,11 @@ INVENTORY_TEST_OBJ = ./$(OP)/inventory_test.o ./$(OP)/inventory.o ./$(OP)/collec
 ENTITY_TEST_OBJ = ./$(OP)/entity.o ./$(OP)/inventory.o ./$(OP)/object.o ./$(OP)/collection.o ./$(OP)/debug_printing.o ./$(OP)/ability_manager.o ./$(OP)/queue.o
 COLLECTION_TEST_OBJ = ./$(OP)/collection_test.o ./$(OP)/collection.o ./$(OP)/debug_printing.o
 PLAYER_TEST_OBJ = ./$(OP)/player_test.o ./$(OP)/player.o ./$(OP)/command.o ./$(OP)/equipment.o ./$(OP)/npc.o ./$(OP)/entity.o ./$(OP)/object.o ./$(OP)/debug_printing.o ./$(OP)/inventory.o ./$(OP)/collection.o ./$(OP)/ability_manager.o ./$(OP)/queue.o
+EFFECT_TEST_OBJ = ./$(OP)/effect_test.o ./$(OP)/effect.o ./$(OP)/entity.o ./$(OP)/player.o ./$(OP)/debug_printing.o ./$(OP)/equipment.o ./$(OP)/command.o ./$(OP)/inventory.o ./$(OP)/object.o ./$(OP)/collection.o ./$(OP)/ability_manager.o ./$(OP)/queue.o ./$(OP)/npc.o
 
-run_test_all: run_collection_test run_space_test run_link_test run_object_test run_inventory_test run_player_test clean
+
+
+run_test_all: run_collection_test run_space_test run_link_test run_object_test run_inventory_test run_player_test run_effect_test clean
 
 run_entity_test:
 	make
@@ -156,6 +159,12 @@ run_player_test:
 	$(CC) -g -Wall -pedantic -I$(INCLUDE) -c ./src/test/src/player_test.c -o ./$(OBJ_PATH)/player_test.o 
 	$(CC) $(CFLAGS) -o ./src/test/player_test $(PLAYER_TEST_OBJ)
 	./src/test/player_test
+
+run_effect_test:
+	make
+	$(CC) -g -Wall -pedantic -I$(INCLUDE) -c ./src/test/src/effect_test.c -o ./$(OBJ_PATH)/effect_test.o 
+	$(CC) $(CFLAGS) -o ./src/test/effect_test $(EFFECT_TEST_OBJ)
+	./src/test/effect_test
 	
 
 

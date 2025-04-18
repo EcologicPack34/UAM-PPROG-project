@@ -16,6 +16,7 @@
 #define N_EFFECTS 3 /*!< Number of effects implemented*/
 
 #include "types.h"
+#include "entity.h"
 #include <stdio.h>
 
 typedef enum{ENTITY_EFFECT, SPACE_EFFECT}EffectIn; /*!< says if the effect applies to one single entity or all entities located in a space*/
@@ -43,9 +44,11 @@ typedef struct _EffectsManager EffectManager;
  * @param data a string containing the effect's information 
  * @param Eloc the EffectIn which says if the effect applies to an entity or a space 
  * @param ET the EffectType
+ * @param inf_turns a bool to specify if the effect is applied for an infinite amount of turns (if true) or a finite amount (if false)
+ * @param default_turns an int describing the amount of turns an effect is applied for (if infinite, this int will be ignored)
  * @return pointer to Effect or NULL if error
  */
-Effect *effect_create(Id id, char *name, char *data, EffectIn Eloc, EffectType ET);
+Effect *effect_create(Id id, char *name, char *data, EffectIn Eloc, EffectType ET, bool inf_turns, int default_turns);
 
 /**
  * @brief This function creates an effect manager
@@ -65,10 +68,11 @@ void effect_manager_destroy(EffectManager *em);
 
 /**
  * @brief This function frees all the memory of an effect
+ * @author Aaron Charameli Mair
  * 
  * @param e a pointer to the effect
  */
-void effect_destroy(Effect *e);
+void effect_destroy(void *e);
 
 /**
  * @brief This function adds an effect to an effect manager
@@ -81,12 +85,43 @@ void effect_destroy(Effect *e);
 Status effect_manager_add_effect(EffectManager *em, Effect *effect);
 
 /**
+ * @brief This funtion adds an effect to an entity
+ * @author Aaron Charameli Mair
+ * 
+ * @param e a pointer to the effect
+ * @param ent a pointer to the entity/affected
+ * @return Status 
+ */
+Status effect_add_affected(Effect *e, Entity *ent);
+
+/**
+ * @brief This function checks if an entity is affected by an effect
+ * @author Aaron Charameli Mair
+ * 
+ * @param e a pointer to the effect
+ * @param ent a pointer to the entity
+ * @return true 
+ * @return false 
+ */
+bool effect_has_affected(Effect *e, Entity *ent);
+
+/**
  * @brief This function updates the affected entities by an effect.
  * 
  * @param effect a pointer to the effect
  * @return Status 
  */
 Status effect_update(Effect *effect);
+
+/**
+ * @brief This function writes in a text file the data of affected entities from an effect
+ * @author Aaron Charameli Mair
+ * 
+ * @param effect a pointer to the effect
+ * @param filename the file name where the data will be written
+ * @return Status 
+ */
+Status effect_write_affected_save_data(Effect *effect, char *filename);
 
 /**
  * @brief This function gets an effect as a string
