@@ -185,4 +185,14 @@ Attack *combat_get_attack_in_position(Combat *combat, int pos);
  */
 Status combat_set_attack_in_position(Combat *combat, Attack *attack, int pos);
 
+
+/**
+ * @brief Finds the attack in certain position of an array
+ * @author Sofía Calvo
+ * 
+ * @param combat combat struct
+ * @param pos position in the array
+ * @return Attack structure
+ */
+Attack *combat_find_attack_by_name(Combat *cmb, char *name);
 #endif
