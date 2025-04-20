@@ -413,6 +413,7 @@ Status game_reader_load_objects(Game *game, char *filename){
       toks = strtok(NULL, "|");
       objectlocationtype = atol(toks) + UNKNOWN_INVENTORY;
 
+      /*Formato Object: #o:ID|Nombre|Data|Descripcion|Dependency_id|is_movable|is_consumable|LocationID|InventoryType*/
       debug_log(PRINT,"Read Object: #o:%ld|%s|%s|%s|%d|%d|%d|%ld|%ld", objectid, name, data, description, dependency_object, is_movable, is_consumable, objectlocation, objectlocationtype);
 
       /*Creates a object with object_create then saves it on the game with game_add_space*/

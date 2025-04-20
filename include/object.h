@@ -24,6 +24,8 @@
 
 #include <stdbool.h>
 
+#define NO_DEPENDENCY -1         /*!< Determines the no depency id for an object*/
+
 /**
  * @brief ADT that holds all the information related to an object
  */
@@ -46,7 +48,7 @@ typedef struct _Object Object;
  * @param type type of inventory where the object is located
  * @return a new object, initialized or NULL if there was a mistake
  */
-Object *object_create(Id id, char *name, char* data, char *description, Id dependent_object_id, bool is_movable, bool is_consumable, Id location, InventoryType type){
+Object *object_create(Id id, char *name, char* data, char *description, Id dependent_object_id, bool is_movable, bool is_consumable, Id location, InventoryType type);
 
 /**
  * @brief It destroys an object

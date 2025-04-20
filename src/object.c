@@ -67,11 +67,11 @@ Object *object_create(Id id, char *name, char* data, char *description, Id depen
     strcpy(object->data, data);
 
     object->dependent_object_id = dependent_object_id;
+    object->is_movable = is_movable;
 
     object->object_effect = NULL;
     object->is_consumable = is_consumable;
     object->is_equipped = false;
-    object->is_movable = is_movable;
     
     object->id = id;
     object->location = location;
