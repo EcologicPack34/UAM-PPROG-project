@@ -181,21 +181,64 @@ Status ability_money_bag(Ability *ability, Game *game){
 }
 
 Status ability_unlock_link(Ability *ability, Game *game){
-    Link *link = NULL;
-    Entity *player = NULL;
+    Link *linkCurrent = NULL, *linkData = NULL;
     Id linkId = NO_ID;
+
+    Entity *player = NULL;
+
+    Command *cmd = NULL;
+    CommandCode code = NO_CMD;
 
     if(!ability || !game) return ERROR;
     
+    cmd = game_get_last_command(game);
+
+    if(command_get_arguments_count(cmd) != 2){
+        game_add_log_message(game, MESSAGE_ERROR, "Invalid number of arguments");
+        return ERROR;
+    }
+
+    /*Gets the direction to be unlocked from the second argument, first argument was the object to use*/
+    code = command_get_code_from_str(command_get_arguments(cmd)[1]);
+
+    switch (code)
+    {
+    case NORTH:
+        linkCurrent = space_get_north(game_get_space(game, game_get_player_location(game)));
+        break;
+    case SOUTH:
+        linkCurrent = space_get_south(game_get_space(game, game_get_player_location(game)));
+        break;
+    case EAST:
+        linkCurrent = space_get_east(game_get_space(game, game_get_player_location(game)));
+        break;
+    case WEST:
+        linkCurrent = space_get_west(game_get_space(game, game_get_player_location(game)));
+        break;
+    case UP:
+        linkCurrent = space_get_up(game_get_space(game, game_get_player_location(game)));
+        break;
+    case DOWN:
+        linkCurrent = space_get_down(game_get_space(game, game_get_player_location(game)));
+        break;    
+    default:
+        game_add_log_message(game, LOG_ERROR, "Invalid argument format, spcify a valid direction. Ex: north, south");
+        break;
+    }
+
+    if(!linkCurrent) return ERROR;
+
     linkId = atoi(ability_get_data(ability));
 
-    link = game_get_link_by_id(game, linkId);
+    if(linkId != link_get_id(linkCurrent)) return ERROR;
+
+    linkData = game_get_link_by_id(game, linkId);
 
     player = player_get_entity(game_get_player(game));
 
-    if(!link || !player) return ERROR;
+    if(!linkData || !player) return ERROR;
 
-    return link_unlock(link, player);
+    return link_unlock(linkData, player);
 }
 
 /*
@@ -262,7 +305,7 @@ Status ability_actions_use_ability(Game *game){
         queue_push(ability_manager_get_queue(sm), (void *)ability);
     }
 
-    return OK;
+    return status;
 }
 
 Status ability_actions_manage_cooldowns(Game *game){
