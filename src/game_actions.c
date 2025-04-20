@@ -427,6 +427,9 @@ Status game_actions_take(Game *game){
   char **arguments = NULL;
   Command *cmd = NULL;
 
+  char str[WORD_SIZE] = "";
+  Object *objectdep = NULL;
+
   cmd = game_get_last_command(game);
 
   if(command_get_arguments_count(cmd) != 1) return ERROR;
@@ -454,8 +457,15 @@ Status game_actions_take(Game *game){
   if(object_get_location(object) != entity_get_location(player)) 
     return ERROR;
 
+  if(inventory_move_object(spaceInventory, playerInventory, object_get_id(object)) == ERROR){
+    objectdep = game_get_object_by_id(game, object_get_dependency(object));
+    if(!objectdep) return ERROR;
+    sprintf(str, "You need %s to pick %s...", object_get_name(objectdep), object_get_name(object));
+    game_add_log_message(game, MESSAGE_INSPECT, str);
+    return ERROR;
+  }
   
-  return inventory_move_object(spaceInventory, playerInventory, object_get_id(object));
+  return OK;
 }
 
 /**
@@ -485,7 +495,6 @@ Status game_actions_drop(Game *game){
 
   spaceInventory = space_get_inventory(game_get_space(game, game_get_player_location(game)));
 
-  
   return inventory_move_object(playerInventory, spaceInventory, object_get_id(object));
 }
 
