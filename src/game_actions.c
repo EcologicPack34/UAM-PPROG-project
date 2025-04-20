@@ -454,8 +454,8 @@ Status game_actions_take(Game *game){
   if(object_get_location(object) != entity_get_location(player)) 
     return ERROR;
 
-  inventory_move_object(spaceInventory, playerInventory, object_get_id(object));
-  return OK;
+  
+  return inventory_move_object(spaceInventory, playerInventory, object_get_id(object));
 }
 
 /**
@@ -485,8 +485,8 @@ Status game_actions_drop(Game *game){
 
   spaceInventory = space_get_inventory(game_get_space(game, game_get_player_location(game)));
 
-  inventory_move_object(playerInventory, spaceInventory, object_get_id(object));
-  return OK;
+  
+  return inventory_move_object(playerInventory, spaceInventory, object_get_id(object));
 }
 
 /**
@@ -799,7 +799,7 @@ Status game_actions_unequip(Game *game){
 }
 
 Status game_actions_inspect(Game *game){
-  Inventory *playerInv = NULL;
+  Inventory *playerInv = NULL, *spaceInv = NULL;
   Object *obj;
 
   Command *cmd = NULL;
@@ -810,8 +810,13 @@ Status game_actions_inspect(Game *game){
 
   if(command_get_arguments_count(cmd) != 1) return ERROR;
 
+  /*Tries to check if its in the inventory or in the actual space*/
   playerInv = entity_get_inventory(player_get_entity(game_get_player(game)));
   obj = inventory_get_object_by_name(playerInv, command_get_arguments(cmd)[0]);
+  if(!obj){
+    spaceInv = space_get_inventory(game_get_space(game, game_get_player_location(game)));
+    obj = inventory_get_object_by_name(spaceInv, command_get_arguments(cmd)[0]);
+  }
 
   if(!obj) return ERROR;
 

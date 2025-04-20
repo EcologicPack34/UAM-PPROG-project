@@ -46,20 +46,23 @@ Formato Link: #l:ID|Space1|Space2|adjacent|locked //Recordar añadir en cada esp
 #l:10|14|13|0|0
 #l:11|11|14|0|0
 
-Formato Object: #o:ID|Nombre|Data|Descripcion|ability_id|LocationID|InventoryType
+Formato Object: #o:ID|Nombre|Data|Descripcion|Dependency_id|is_movable|is_consumable|LocationID|InventoryType
 Use ability_id = 0 for no ability
+Use dependency_id = -1 for no dependency
 InventoryType = {UNKNOWN_INVENTORY == 0, PLAYER_INVENTORY == 1, NPC_INVENTORY == 2, SPACE_INVENTORY == 3}
 
-#o:1|Grain1|NONE|Grano1|0|11|3
-#o:2|Grain2|NONE|Grano2|0|11|3
-#o:3|Grain3|NONE|Grano3|0|121|3
-#o:4|Grain4|NONE|Grano4|0|122|3
-#o:5|HP|NONE|Health Potion that heals 20 HP|1|11|3
-#o:6|IHP|NONE|Infinite Health Potion that heals 20 HP and isn't consumed|0|11|3
-#o:7|HTEST|wearable helmet base_damage:1 strength:1 max_health:20|Helmet TEST|0|11|3
-#o:8|MoneyBag|NONE|Bag with 20 coins|0|11|3
+#o:1|Grain1|NONE|Needs Pickaxe to be picked|10|1|0|11|3
+#o:2|Grain2|NONE|Grano2, cannot be moved|-1|0|0|121|3
+#o:3|Grain3|NONE|Grano3|-1|1|0|121|3
+#o:4|Grain4|NONE|Grano4|-1|1|0|122|3
+#o:5|HP|NONE|Health Potion that heals 20 HP|-1|1|1|11|3
+#o:6|IHP|NONE|Infinite Health Potion that heals 20 HP and isn't consumed|-1|1|1|121|3
+#o:7|HTEST|wearable helmet base_damage:1 strength:1 max_health:20|Helmet TEST|-1|1|1|11|3
+#o:8|MoneyBag|NONE|Bag with 20 coins|-1|1|1|11|3
 
-#o:9|Key|NONE|Unlocks link between spaces 123 and 124|1|11|3
+#o:9|Key|NONE|Needs Grain1 to be picked, Unlocks link between spaces 123 and 124|1|1|1|11|3
+
+#o:10|Pickaxe|NONE|Needed to pick Grain1|-1|1|0|11|3
 
 Formato Event: #e:Id|Type|cmdTriggersNum|cmdName1 , ...|removeOnTrigger|tagvalue1:tagvalue2,...
 

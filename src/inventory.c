@@ -37,6 +37,27 @@ struct _Inventory {
 */
 
 /**
+ * @brief Checks if the object can be picked(If it has the dependency in the inventory)
+ * @author Maksym Polyak
+ * 
+ * @param inventory inventory struct
+ * @param object object to check
+ * @return Status 
+ */
+Status inventory_add_check_dependencies(Inventory *inventory, Object*object);
+
+/**
+ * @brief Drops the objects which have a dependency on tha tobject
+ * @author Maksym Polyak
+ * 
+ * @param inventoryOUT inventory where the objects are located
+ * @param inventoryIN inventory where the objects are dropped
+ * @param object object to check
+ * @return Status
+ */
+Status inventory_remove_check_dependencies(Inventory *inventoryOUT, Inventory *inventoryIN, Object*object);
+
+/**
  * @brief Gets the number of objects in the inventory
  * 
  * @param inventory struct with all the information related to the inventory
@@ -78,6 +99,17 @@ long inventory_get_size_by_type(InventoryType type);
  * @return OK if well or ERROR if error
  */
 Status inventory_set_object_at(Inventory *inventory, Object *object, int index);
+
+/**
+ * @brief Determines if an object can be moved by checking its dependencies
+ * @author Maksym Polyak
+ * 
+ * @param inventory inventory struct
+ * @param object object to mvoe
+ * @return true if can be moved
+ * @return false if it cannot be moved
+ */
+bool inventory_can_be_moved(Inventory *inventory, Object *object);
 
 long inventory_get_object_count(Inventory *inventory){
     if(!inventory)
@@ -129,6 +161,45 @@ Status inventory_set_object_at(Inventory *inventory, Object *object, int index){
     collection_add(inventory_get_collection(inventory), (void *)object);
 
     return OK;
+}
+
+Status inventory_remove_check_dependencies(Inventory *inventoryOUT, Inventory *inventoryIN, Object *object){
+    int size, i;
+    Id objectid;
+    Object *objectch = NULL;
+    
+    if(!inventoryOUT || !inventoryIN || !object) return ERROR;
+
+
+    /*Checks for dependencies and drops them*/
+    size = inventory_get_size(inventoryOUT);
+    objectid = object_get_id(object);
+    for(i = 0; i < size; i++){
+        objectch = inventory_get_object_at(inventoryOUT, i);
+        if(!object) return ERROR;
+
+        if(object_get_dependency(objectch) == objectid){
+            if(inventory_remove_object(inventoryOUT, objectch) == ERROR) return ERROR;
+            if(inventory_remove_check_dependencies(inventoryOUT, inventoryIN, objectch) == ERROR) return ERROR;
+            if(inventory_add_object(inventoryIN, objectch) == ERROR) return ERROR;
+        }
+    }
+
+    return OK;
+}
+
+bool inventory_can_be_moved(Inventory *inventory, Object *object){
+    if(!inventory || !object) return false;
+
+    if(object_get_is_movable(object) == false) return false;
+    
+    if(inventory_get_type(inventory) != PLAYER_INVENTORY || object_get_dependency(object) == NO_DEPENDENCY)
+        return true;
+
+    if(inventory_contains_object(inventory, object_get_dependency(object)) == false) 
+        return false;
+
+    return true;
 }
 
 /*
@@ -319,6 +390,7 @@ Status inventory_add_object(Inventory *inventory, Object *object){
 }
 
 Status inventory_remove_object(Inventory *inventory, Object *object){
+
     if(!inventory){
         debug_log(LOG_ERROR, "inventory is NULL in inventory_add_remove");
         return ERROR;
@@ -328,6 +400,8 @@ Status inventory_remove_object(Inventory *inventory, Object *object){
         debug_log(LOG_ERROR, "object is NULL in inventory_add_remove");
         return ERROR;
     }
+
+    if(inventory_contains_object(inventory, object_get_id(object)) == false) return OK;
     
     if(collection_remove(inventory_get_collection(inventory), (void *)object) == ERROR) return ERROR;
     
@@ -352,6 +426,14 @@ Status inventory_move_object(Inventory *inventoryOUT, Inventory *inventoryIN, Id
     object = inventory_get_object_by_id(inventoryOUT, objectid);
     if(object == NULL)
         return ERROR;
+
+    /*Checks if the object can be moved to inventoryIN*/
+    if(inventory_can_be_moved(inventoryIN, object) == false) return ERROR;
+
+    /*Removes dependencies*/
+    if(inventory_get_type(inventoryOUT) == PLAYER_INVENTORY){
+        if(inventory_remove_check_dependencies(inventoryOUT, inventoryIN, object) == ERROR) return ERROR;
+    }
     
     if(inventory_remove_object(inventoryOUT, object) == ERROR){
         debug_log(LOG_ERROR, "Object %ld has failed to move due to fail on inventory remove from the inventory of type:%d and id:%ld", object_get_id(object), (int)inventory_get_type(inventoryOUT), inventory_get_location_id(inventoryOUT));
