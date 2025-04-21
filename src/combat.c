@@ -29,7 +29,7 @@
 #define HEAVY_PROB 50       /*!< Probability for a heavy attack to be succesful*/
 #define QUICK_PROB 98       /*!< Probability for a quick attack to be succesful*/
 #define SWIFT_PROB 40       /*!< Probability for a swift attack to be succesful*/
-#define RUN_AWAY_PROG 50
+#define RUN_AWAY_PROB 50
 
 /**
  * @brief Internal struct that holds all the information related to the combat
@@ -520,6 +520,11 @@ Status combat_update_player_attack(Combat *cmb, Command *last_cmd){
         
     args = command_get_arguments(last_cmd);
 
+    if (command_get_code(last_cmd) == RUN_AWAY)
+    {
+        combat_runaway(cmb);
+    } 
+
     player = combat_get_player_stats(cmb);
     atc = combat_find_attack_by_name(cmb, args[0]);
 
@@ -782,7 +787,17 @@ Status combat_update(Combat *combat, Command *last_cmd){
 }
 
 Status combat_runaway(Combat *combat){
+    
+    int chance;
+    
     if(!combat) return ERROR;
+
+    chance = rand()%100;
+
+    if (chance >= RUN_AWAY_PROB)
+    {
+        return OK;
+    }
     combat_finalize(combat);
     return OK;
 }
