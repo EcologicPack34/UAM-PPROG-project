@@ -458,6 +458,12 @@ Status game_actions_take(Game *game){
     return ERROR;
 
   if(inventory_move_object(spaceInventory, playerInventory, object_get_id(object)) == ERROR){
+    if(object_get_is_movable(object) == false){
+      sprintf(str, "Object %s cannot be moved.", object_get_name(object));
+      game_add_log_message(game, MESSAGE_INSPECT, str);
+      return ERROR;
+    }
+    
     objectdep = game_get_object_by_id(game, object_get_dependency(object));
     if(!objectdep) return ERROR;
     sprintf(str, "You need %s to pick %s...", object_get_name(objectdep), object_get_name(object));
