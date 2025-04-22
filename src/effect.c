@@ -35,7 +35,6 @@ struct _Effect{
     char *data; /*!< a string containing data related to the effect. A function will use the data to apply the effect*/
     bool inf_turns; /*!< a boolean describing if the effect is applied for an infinite amount of turns or not*/
     int default_turns; /*!< an int with the default value of turns an effect is applied to an enemy for. e.g.: if an entity is applied an effect twice, he'll have this amount x2 of turns left with the effect*/
-    EffectIn Eloc; /*!< a type that defines if the effect is applied in a whole space or to a single entity*/
     EffectType ET; /*!< a type that defines the effect so it can be identified and applied*/
 };
 
@@ -84,10 +83,10 @@ void _affected_destroy(void *a);
 /*--------------------------------------------------------------------------------------------------------------------------*/
 /*PUBLIC FUNCTIONS IMPLEMENTATION*/
 
-Effect *effect_create(Id id, char *name, char *data, EffectIn Eloc, EffectType ET, bool inf_turns, int default_turns){
+Effect *effect_create(Id id, char *name, char *data, EffectType ET, bool inf_turns, int default_turns){
     Effect *e=NULL;
     
-    if((id<=UNDEFINED_ID) || (ET == UNKNOWN_EFFECT) || ((Eloc != ENTITY_EFFECT) && (Eloc != SPACE_EFFECT))) return NULL;
+    if((id<=UNDEFINED_ID) || (ET == UNKNOWN_EFFECT)) return NULL;
     if((name == NULL) || (data == NULL)) return NULL;
     if(default_turns <= 0) return NULL;
     
@@ -98,7 +97,6 @@ Effect *effect_create(Id id, char *name, char *data, EffectIn Eloc, EffectType E
     if((e->affecteds = collection_create(INIT_AFFECTED,false,true, effect_cmp, effect_print)) == NULL) return NULL;
     e->name = strdup(name);
     e->data = strdup(data);
-    e->Eloc = Eloc;
     e->ET = ET;
     e->inf_turns = inf_turns;
     e->default_turns = default_turns;
@@ -254,7 +252,7 @@ Status effect_write_affected_save_data(Effect *effect, char *filename){
 }
 
 Status effect_get_as_str(Effect *effect, long destiny_size ,char *destiny){
-    /*#ef:Id|name|EffectIn|EffectType|inf_turns|default_turns|data*/
+    /*#ef:Id|name|EffectType|inf_turns|default_turns|data*/
     char str[WORD_SIZE]="";
     char aux[WORD_SIZE]="";
     if(!effect || !destiny) return ERROR;
@@ -266,11 +264,6 @@ Status effect_get_as_str(Effect *effect, long destiny_size ,char *destiny){
     strcat(str,aux);
     /*add name*/
     strcat(str,effect->name);
-    strcat(str,"|");
-
-    /*add EffectIn*/
-    sprintf(aux,"%d", (int)effect->Eloc);
-    strcat(str,aux);
     strcat(str,"|");
 
     /*add EffectType*/
@@ -296,11 +289,6 @@ Status effect_get_as_str(Effect *effect, long destiny_size ,char *destiny){
 EffectType effect_get_effect_type(Effect *effect){
     if(!effect) return -2;
     return effect->ET;
-}
-
-EffectIn effect_get_effect_in(Effect *effect){
-    if(!effect) return -2;
-    return effect->Eloc;
 }
 
 char *effect_get_name(Effect *effect){

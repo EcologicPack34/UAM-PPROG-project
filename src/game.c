@@ -180,6 +180,7 @@ Status game_destroy(Game *game) {
 
   command_destroy(game->last_cmd);
   event_manager_destroy(game->event_manager);
+  effect_manager_destroy(game->effect_manager);
   
   ability_manager_destroy(game->ability_manager);
   queue_destroy(game->screenLog);

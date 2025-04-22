@@ -19,8 +19,6 @@
 #include "entity.h"
 #include <stdio.h>
 
-typedef enum{ENTITY_EFFECT, SPACE_EFFECT}EffectIn; /*!< says if the effect applies to one single entity or all entities located in a space*/
-
 typedef enum{UNKNOWN_EFFECT, REGENERATION, POISON}EffectType; /*!< The type of effect*/
 
 /**
@@ -42,13 +40,12 @@ typedef struct _EffectsManager EffectManager;
  * @param id the id of the effect
  * @param name a string containing the effect's name
  * @param data a string containing the effect's information 
- * @param Eloc the EffectIn which says if the effect applies to an entity or a space 
  * @param ET the EffectType
  * @param inf_turns a bool to specify if the effect is applied for an infinite amount of turns (if true) or a finite amount (if false)
  * @param default_turns an int describing the amount of turns an effect is applied for (if infinite, this int will be ignored)
  * @return pointer to Effect or NULL if error
  */
-Effect *effect_create(Id id, char *name, char *data, EffectIn Eloc, EffectType ET, bool inf_turns, int default_turns);
+Effect *effect_create(Id id, char *name, char *data, EffectType ET, bool inf_turns, int default_turns);
 
 /**
  * @brief This function creates an effect manager
@@ -59,10 +56,10 @@ Effect *effect_create(Id id, char *name, char *data, EffectIn Eloc, EffectType E
 EffectManager *effect_manager_create();
 
 /**
- * @brief This function frees al the memory of an effect manager
+ * @brief This function frees all the memory of an effect manager
  * @author Aaron Charameli Mair 
  * 
- * @note this function doesn't free the effects contained in the effect manager
+ * @note this function also free's the effects contained in the effect manager
  */
 void effect_manager_destroy(EffectManager *em);
 
@@ -141,15 +138,6 @@ Status effect_get_as_str(Effect *effect, long destiny_size ,char *destiny);
  * @return EffectType or -2 if error
  */
 EffectType effect_get_effect_type(Effect *effect);
-
-/**
- * @brief This function gets where an effect is applied to
- * @author Aaron Charameli Mair
- * 
- * @param effect a pointer to the effect
- * @return EffectIn or -2 if error
- */
-EffectIn effect_get_effect_in(Effect *effect);
 
 /**
  * @brief This function gets the name of an effect

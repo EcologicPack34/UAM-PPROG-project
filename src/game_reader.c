@@ -1008,7 +1008,6 @@ Status game_reader_load_effects(Game *game, char *filename){
 
   Effect *effect=NULL;
   Id id;
-  EffectIn Eloc;
   EffectType ET;
 
   Status status=OK;
@@ -1026,7 +1025,7 @@ Status game_reader_load_effects(Game *game, char *filename){
     return ERROR;
   }
 
-  /*#ef:Id|name|EffectIn|EffectType|int_turns|default_turns|data*/
+  /*#ef:Id|name|EffectType|int_turns|default_turns|data*/
   while (fgets(line, WORD_SIZE, file)) {
     if (strncmp("#ef:", line, 4) == 0) {
       toks = strtok(line + 4, "|");
@@ -1042,13 +1041,6 @@ Status game_reader_load_effects(Game *game, char *filename){
         return ERROR;
       }
       strcpy(name,toks);
-
-      toks = strtok(NULL, "|");
-      if(!toks){
-        printf("toks is null");
-        return ERROR;
-      }
-      Eloc = atoi(toks);
 
       toks = strtok(NULL, "|");
       if(!toks){
@@ -1081,9 +1073,9 @@ Status game_reader_load_effects(Game *game, char *filename){
       }
       strcpy(data, toks);
 
-      debug_log(PRINT,"Read Effect: #ef:%ld|%s|%d|%d|%d|%d|%s", id, name, Eloc, ET, inf_turns, default_turns, data);
+      debug_log(PRINT,"Read Effect: #ef:%ld|%s|%d|%d|%d|%s", id, name, ET, inf_turns, default_turns, data);
 
-      effect = effect_create(id, name, data, Eloc, ET, inf_turns, default_turns);
+      effect = effect_create(id, name, data, ET, inf_turns, default_turns);
       game_add_effect(game, effect);
 
       if(effect == NULL){
