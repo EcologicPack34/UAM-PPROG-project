@@ -515,6 +515,7 @@ Status game_actions_chat(Game *game){
   char **arguments = NULL;
   Space *space = NULL;
   NPC *npc = NULL;
+  Player *player = NULL;
 
   if(!game)
     return ERROR;
@@ -526,6 +527,8 @@ Status game_actions_chat(Game *game){
 
   npc = space_get_NPC_by_name(space, arguments[0]);
 
+  player = game_get_player(game);
+
   if(npc == NULL)
     return ERROR;
 
@@ -536,10 +539,17 @@ Status game_actions_chat(Game *game){
 
   if(npc_get_can_follow(npc) == true && npc_get_status(npc) == NEUTRAL){
     npc_set_status(npc, ALLY);
-    player_add_follower(game_get_player(game), npc);
+    npc_set_player_following_id(npc, entity_get_id(player_get_entity(player)));
+    player_add_follower(player, npc);
   }else if(npc_get_can_follow(npc) == true && npc_get_status(npc) == ALLY){
+    /*Prevents other players from stealing followers*/
+    if(npc_get_player_following_id(npc) != entity_get_id(player_get_entity(player))){
+      game_add_log_message(game, MESSAGE_NPC,"I'm following another player.");
+      return ERROR;
+    }
     npc_set_status(npc, NEUTRAL);
-    player_remove_follower_by_name(game_get_player(game), entity_get_name(npc_get_entity(npc)));
+    player_remove_follower_by_name(player, entity_get_name(npc_get_entity(npc)));
+    npc_set_player_following_id(npc, NO_ID);
   }
 
   return OK;
