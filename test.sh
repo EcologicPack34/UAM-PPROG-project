@@ -11,6 +11,7 @@ if [ $1 -eq 0 ]
         ./src/test/object_test
         ./src/test/inventory_test
         ./src/test/player_test
+        make clean_test
 else
     echo "Running test with valgrind"
     make test_all
@@ -21,4 +22,5 @@ else
     valgrind --leak-check=full --track-origins=yes --show-leak-kinds=all ./src/test/object_test
     valgrind --leak-check=full --track-origins=yes --show-leak-kinds=all ./src/test/inventory_test
     valgrind --leak-check=full --track-origins=yes --show-leak-kinds=all ./src/test/player_test
+    make clean_test
 fi

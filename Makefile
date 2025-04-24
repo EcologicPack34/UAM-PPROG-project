@@ -57,7 +57,7 @@ $(OBJ_PATH)/%.o: $(SRC_PATH)/%.c | $(OBJ_PATH)
 
 -include $(DEPENDENCIES)
 
-.PHONY:	clean compile link run runl debug runv gdb
+.PHONY:	clean compile link run runl debug runv gdb clean_test
 clean:
 	@cd ./$(OBJ_PATH)
 	@rm -f $(OBJ) $(DEPENDENCIES) $(EXE) debug.log $(EXED) $(TEST) $(TEST_OBJ)
@@ -150,7 +150,9 @@ player_test:
 	$(CC) -g -Wall -pedantic -I$(INCLUDE) -c ./src/test/src/player_test.c -o ./$(OBJ_PATH)/player_test.o 
 	$(CC) $(CFLAGS) -g -o ./src/test/player_test $(PLAYER_TEST_OBJ)
 	
-
+clean_test:
+	@rm -f ./src/test/player_test ./src/test/inventory_test ./src/test/object_test ./src/test/link_test\
+	./src/test/space_test ./src/test/collection_test ./src/test/entity_test
 
 # $@ devuelve lo que hay a la izquierda de los :, $^ devuelve todas las dependencias
 
