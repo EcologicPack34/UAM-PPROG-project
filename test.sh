@@ -1,5 +1,6 @@
 #!/bin/bash
 
+
 if [ $1 -eq 0 ]
     then
         echo "Runinng test"
@@ -13,14 +14,19 @@ if [ $1 -eq 0 ]
         ./src/test/player_test
         make clean_test
 else
-    echo "Running test with valgrind"
-    make test_all
-    valgrind --leak-check=full --track-origins=yes --show-leak-kinds=all ./src/test/entity_test
-    valgrind --leak-check=full --track-origins=yes --show-leak-kinds=all ./src/test/collection_test
-    valgrind --leak-check=full --track-origins=yes --show-leak-kinds=all ./src/test/space_test
-    valgrind --leak-check=full --track-origins=yes --show-leak-kinds=all ./src/test/link_test
-    valgrind --leak-check=full --track-origins=yes --show-leak-kinds=all ./src/test/object_test
-    valgrind --leak-check=full --track-origins=yes --show-leak-kinds=all ./src/test/inventory_test
-    valgrind --leak-check=full --track-origins=yes --show-leak-kinds=all ./src/test/player_test
-    make clean_test
+    if [ $1 -eq 1 ]
+    then
+        echo "Running test with valgrind"
+        make test_all
+        valgrind --leak-check=full --track-origins=yes --show-leak-kinds=all ./src/test/entity_test
+        valgrind --leak-check=full --track-origins=yes --show-leak-kinds=all ./src/test/collection_test
+        valgrind --leak-check=full --track-origins=yes --show-leak-kinds=all ./src/test/space_test
+        valgrind --leak-check=full --track-origins=yes --show-leak-kinds=all ./src/test/link_test
+        valgrind --leak-check=full --track-origins=yes --show-leak-kinds=all ./src/test/object_test
+        valgrind --leak-check=full --track-origins=yes --show-leak-kinds=all ./src/test/inventory_test
+        valgrind --leak-check=full --track-origins=yes --show-leak-kinds=all ./src/test/player_test
+        make clean_test
+    else
+        echo "Invalid argument. Use 0 for normal execution, 1 for valgrind"
+    fi
 fi
