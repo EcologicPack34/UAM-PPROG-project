@@ -35,6 +35,8 @@
 #define MAX_LINKS (MAX_SPACES * 6)   /*!< Maximum number of links on the map */
 #define MAX_PLAYERS 4   /*!< Maximum number of players*/
 
+#define MAX_PROCEDURAL_SIZE 20
+
 /**
  * @brief Game struct, defines all the information of the game
  */
@@ -522,5 +524,7 @@ Object *game_get_object_by_id(Game *game, Id objectid);
  * @return Status 
  */
 Status game_add_ability(Game *game, Ability *ability);
+
+Status game_generate_procedural();
 
 #endif

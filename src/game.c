@@ -881,3 +881,94 @@ Status game_add_ability(Game *game, Ability *ability){
 
   return ERROR;
 }
+
+#define RANDOM_WALK_ITERATIONS 3
+#define RANDOM_WALK_STEPS 5
+#define RANDOM_WALK_STEP_DIR 1
+
+Status game_generate_procedural(){
+  typedef enum {NO_SPACE = 0, MARKED}SpaceStatus;
+  
+  struct SpaceInfo{
+    Space *current;
+    Space *origin;
+  };
+
+  SpaceStatus map[MAX_PROCEDURAL_SIZE][MAX_PROCEDURAL_SIZE] = {{NO_SPACE,NO_SPACE}};
+  Space *spaces[MAX_PROCEDURAL_SIZE][MAX_PROCEDURAL_SIZE] = {NULL};
+
+  Collection *links = NULL;
+
+  Queue *spaceQ = NULL;
+
+  int x, y;
+  int dirX, dirY;
+  int stepCount = 0;
+
+  int i,j;
+
+  int spaceCount = 0;
+  Space *space = NULL;
+  Link *link = NULL;
+
+
+  x = MAX_PROCEDURAL_SIZE/2;
+  y = x;
+  map[x][y] = MARKED;
+
+  
+  for (i = 0; i < RANDOM_WALK_ITERATIONS; i++)
+  {
+    stepCount = 0;
+    for (j = 0; j < RANDOM_WALK_STEPS; j++)
+    {
+      if(x < 0 || x >= MAX_PROCEDURAL_SIZE || y < 0 || y >= MAX_PROCEDURAL_SIZE){
+        break;
+      }
+
+      if(stepCount >= RANDOM_WALK_STEP_DIR){
+        stepCount = 0;
+      }
+      
+      if(stepCount == 0){
+        dirX = rand()%3 - 2;
+        if(dirX == 0){
+          dirY = rand()%3 -2;
+          if(dirY == 0){
+            dirY++;
+          }
+        }else{
+          dirY = 0;
+        }
+      }
+      x += dirX;
+      y += dirY;
+
+      map[x][y] = MARKED;
+
+      stepCount++;
+    }
+    x = MAX_PROCEDURAL_SIZE/2;
+    y = x;
+  }
+  
+  spaceCount = 1;
+  for (x = 0; i < MAX_PROCEDURAL_SIZE; i++)
+  {
+    for (y = 0; i < MAX_PROCEDURAL_SIZE; i++)
+    {
+      if(map[x][y] == MARKED){
+        space = space_create(spaceCount++);
+        if(!space){
+          return ERROR;
+        }
+        space_set_position(space, x, y);
+      }
+    }
+  }
+  
+
+
+}
+
+
