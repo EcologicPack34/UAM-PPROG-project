@@ -231,6 +231,8 @@ Status game_actions_update(Game *game, Command *command) {
     case EAST:
     case WEST:
     case SOUTH:
+    case UP:
+    case DOWN:
     case MOVE:
       status = game_actions_move(game);
       break;
@@ -366,25 +368,28 @@ Status game_actions_move(Game *game) {
   switch(code){
     case NORTH:
       link = space_get_north(actual_space);
-      if(link == NULL) return ERROR;
       break;
     case WEST:
       link = space_get_west(actual_space);
-      if(link == NULL) return ERROR;
       break;
     case EAST:
       link = space_get_east(actual_space);
-      if(link == NULL) return ERROR;
       break;
     case SOUTH:
       link = space_get_south(actual_space);
-      if(link == NULL) return ERROR;
+      break;
+    case UP:
+      link = space_get_up(actual_space);
+      break;
+    case DOWN:
+      link = space_get_down(actual_space);
       break;
     default:
       game_add_log_message(game, MESSAGE_ERROR, "Invalid direction for move command. Use 'help move' for more info");
       break;
   }
     
+  if(link == NULL) return ERROR;
 
   entity = player_get_entity(game_get_player(game));
   if(entity == NULL) return ERROR;
@@ -422,6 +427,9 @@ Status game_actions_take(Game *game){
   char **arguments = NULL;
   Command *cmd = NULL;
 
+  char str[WORD_SIZE] = "";
+  Object *objectdep = NULL;
+
   cmd = game_get_last_command(game);
 
   if(command_get_arguments_count(cmd) != 1) return ERROR;
@@ -449,7 +457,20 @@ Status game_actions_take(Game *game){
   if(object_get_location(object) != entity_get_location(player)) 
     return ERROR;
 
-  inventory_move_object(spaceInventory, playerInventory, object_get_id(object));
+  if(inventory_move_object(spaceInventory, playerInventory, object_get_id(object)) == ERROR){
+    if(object_get_is_movable(object) == false){
+      sprintf(str, "Object %s cannot be moved.", object_get_name(object));
+      game_add_log_message(game, MESSAGE_INSPECT, str);
+      return ERROR;
+    }
+    
+    objectdep = game_get_object_by_id(game, object_get_dependency(object));
+    if(!objectdep) return ERROR;
+    sprintf(str, "You need %s to pick %s...", object_get_name(objectdep), object_get_name(object));
+    game_add_log_message(game, MESSAGE_INSPECT, str);
+    return ERROR;
+  }
+  
   return OK;
 }
 
@@ -480,8 +501,7 @@ Status game_actions_drop(Game *game){
 
   spaceInventory = space_get_inventory(game_get_space(game, game_get_player_location(game)));
 
-  inventory_move_object(playerInventory, spaceInventory, object_get_id(object));
-  return OK;
+  return inventory_move_object(playerInventory, spaceInventory, object_get_id(object));
 }
 
 /**
@@ -495,6 +515,7 @@ Status game_actions_chat(Game *game){
   char **arguments = NULL;
   Space *space = NULL;
   NPC *npc = NULL;
+  Player *player = NULL;
 
   if(!game)
     return ERROR;
@@ -506,6 +527,8 @@ Status game_actions_chat(Game *game){
 
   npc = space_get_NPC_by_name(space, arguments[0]);
 
+  player = game_get_player(game);
+
   if(npc == NULL)
     return ERROR;
 
@@ -516,10 +539,17 @@ Status game_actions_chat(Game *game){
 
   if(npc_get_can_follow(npc) == true && npc_get_status(npc) == NEUTRAL){
     npc_set_status(npc, ALLY);
-    player_add_follower(game_get_player(game), npc);
+    npc_set_player_following_id(npc, entity_get_id(player_get_entity(player)));
+    player_add_follower(player, npc);
   }else if(npc_get_can_follow(npc) == true && npc_get_status(npc) == ALLY){
+    /*Prevents other players from stealing followers*/
+    if(npc_get_player_following_id(npc) != entity_get_id(player_get_entity(player))){
+      game_add_log_message(game, MESSAGE_NPC,"I'm following another player.");
+      return ERROR;
+    }
     npc_set_status(npc, NEUTRAL);
-    player_remove_follower_by_name(game_get_player(game), entity_get_name(npc_get_entity(npc)));
+    player_remove_follower_by_name(player, entity_get_name(npc_get_entity(npc)));
+    npc_set_player_following_id(npc, NO_ID);
   }
 
   return OK;
@@ -699,9 +729,10 @@ Status game_actions_object_use(Game *game){
 
   comm = game_get_last_command(game);
 
-  if(command_get_arguments_count(comm) != 1)
+  /*Argument count must be checked in each ability, as different abilities can take different number of arguments*/
+  /*if(command_get_arguments_count(comm) != 1)
     return ERROR;
-
+  */
   entity = player_get_entity(game_get_player(game));
   object = inventory_get_object_by_name(entity_get_inventory(entity), command_get_arguments(comm)[0]);
 
@@ -726,6 +757,8 @@ Status game_actions_god_mode(Game *game){
   Player *pl=NULL;
   Combat *combat = NULL;
   Stats *stat = NULL;
+  Space *aux_space=NULL;
+  int n_spaces,i;
 
   if(!game) return ERROR;
 
@@ -735,6 +768,12 @@ Status game_actions_god_mode(Game *game){
   pl = game_get_player(game);
   if(player_set_stats(pl, MAX_LVL, MAX_LVL, MAX_LVL, MAX_LVL, MAX_LVL, MAX_LVL) == ERROR)
     return ERROR;
+
+  n_spaces = game_get_n_spaces(game);
+  for(i = 0; i < n_spaces; i++){
+    aux_space = game_get_space_at(game,i);
+    space_set_discovered(aux_space,true);
+  }
 
   combat = game_get_combat(game);
   if(combat){
@@ -785,7 +824,7 @@ Status game_actions_unequip(Game *game){
 }
 
 Status game_actions_inspect(Game *game){
-  Inventory *playerInv = NULL;
+  Inventory *playerInv = NULL, *spaceInv = NULL;
   Object *obj;
 
   Command *cmd = NULL;
@@ -796,8 +835,13 @@ Status game_actions_inspect(Game *game){
 
   if(command_get_arguments_count(cmd) != 1) return ERROR;
 
+  /*Tries to check if its in the inventory or in the actual space*/
   playerInv = entity_get_inventory(player_get_entity(game_get_player(game)));
   obj = inventory_get_object_by_name(playerInv, command_get_arguments(cmd)[0]);
+  if(!obj){
+    spaceInv = space_get_inventory(game_get_space(game, game_get_player_location(game)));
+    obj = inventory_get_object_by_name(spaceInv, command_get_arguments(cmd)[0]);
+  }
 
   if(!obj) return ERROR;
 

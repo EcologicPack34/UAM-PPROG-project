@@ -56,7 +56,7 @@ bool event_trigger_combat(Event *event, Game *game);
 bool event_trigger_player_death(Event *event, Game *game);
 
 /**
- * @brief 
+ * @brief Checks if combat has endend and returns game to default state
  * @author Daniel Gómez
  * 
  * @param game game struct
@@ -64,6 +64,16 @@ bool event_trigger_player_death(Event *event, Game *game);
  * @return false 
  */
 bool event_trigger_end_combat(Game *game);
+
+/**
+ * @brief Checks for all npcs and move them randomly
+ * @author Daniel Gómez
+ * 
+ * @param game 
+ * @return true 
+ * @return false 
+ */
+bool event_trigger_npc_rand_move(Event *event, Game *game);
 
 /*---------PUBLIC FUNCTIONS----------*/
 void event_actions_trigger_events(Game *game){
@@ -94,6 +104,9 @@ void event_actions_trigger_events(Game *game){
                 break;
             case TRIGGER_COMBAT:
                 triggered = event_trigger_combat(event, game);
+                break;
+            case NPC_RAND_MOVE:
+                triggered = event_trigger_npc_rand_move(event, game);
                 break;
             default:
                 break;
@@ -212,4 +225,102 @@ bool event_trigger_player_death(Event *event, Game *game){
         }
     }
     return false;
+}
+
+bool event_trigger_npc_rand_move(Event *event, Game *game){
+    Collection *npcs = NULL;
+    NPC *npc = NULL;
+    Space *currentSpace = NULL;
+    Space *nextSpace = NULL;
+    Link *link = NULL;
+
+    int i,j;
+    int npc_length;
+    int prob;
+    int dir;
+
+    if(!event || !game) return false;
+
+    if(game_get_state(game) != DEFAULT) return false;
+
+    if(!event_is_cmd_valid(event, game_get_last_command(game))) return false;
+
+    prob = atoi(event_get_aux_data(event));
+
+    npcs = game_get_npcs(game);
+    npc_length = collection_length(npcs);
+
+    /*loops through every npc*/
+    for (i = 0; i < npc_length; i++)
+    {
+        npc = collection_get_element_at(npcs, i);
+
+        /*if ally doesn't try to move as it follows player*/
+        if(npc_get_status(npc) == ALLY){
+            continue;
+        } 
+        /*Checks a probability, if not, it doesnt move the entity*/
+        if(rand()%100 > prob){
+            continue;
+        } 
+
+        currentSpace = game_get_space(game, entity_get_location(npc_get_entity(npc)));
+
+        if(!currentSpace) continue;
+
+        /*Set dir to rand means we start checking a random link*/
+        dir = rand()%SPACE_DIRECTIONS;
+
+        /*Loop through posible links if it doesnt exist, so those spaces with less link has same prob to move enemies as those with more links*/
+        for ( j = 0; j < SPACE_DIRECTIONS; j++)
+        {
+            /*gets link for the direction*/
+            switch (dir)
+            {
+                case 0: /*north*/
+                    link = space_get_north(currentSpace);
+                    break;
+                case 1: /*east*/
+                    link = space_get_east(currentSpace);
+                    break;
+                case 2: /*south*/
+                    link = space_get_south(currentSpace);
+                    break;
+                case 3: /*west*/
+                    link = space_get_west(currentSpace);
+                    break;
+                case 4: /*up*/
+                    link = space_get_up(currentSpace);
+                    break;
+                case 5: /*down*/
+                    link = space_get_south(currentSpace);
+                    break;
+                default:
+                    break;
+            }
+
+            /*if a link is found, we break the loop*/
+            if(link && !link_is_locked(link) && link_is_adjacent(link)){
+                break;
+            }
+
+            /*if a link isnt found, we check the next dir*/
+            dir = (dir + 1) % SPACE_DIRECTIONS;
+        }
+        
+        if(!link) continue;
+
+        if(!link_is_locked(link) && link_is_adjacent(link)){
+            nextSpace = game_get_space(game, link_get_oposite_space(link, space_get_id(currentSpace)));
+        }
+        else{
+            nextSpace = NULL;
+        }
+
+        if(!nextSpace || !currentSpace) continue;
+
+        space_move_NPC(currentSpace, nextSpace, npc);
+
+    }
+    return true;
 }

@@ -33,6 +33,8 @@ struct _Space {
   Link *south;                          /*!< pointer of the Link at the south of the space */
   Link *east;                           /*!< pointer of the Link at the east of the space  */
   Link *west;                           /*!< pointer of the Link at the west of the space  */
+  Link *up;                             /*!< pointer of the Link up of the space  */
+  Link *down;                           /*!< pointer of the Link down of the space  */
   
   char *graphicDescription[SPACE_GRAPHIC_HEIGHT]; /*!< Graphical description of the space*/
 
@@ -178,6 +180,22 @@ Status space_set_west(Space* space, Link* link) {
   return OK;
 }
 
+Status space_set_up(Space* space, Link* link) {
+  if (!space || !link) {
+    return ERROR;
+  }
+  space->up = link;
+  return OK;
+}
+
+Status space_set_down(Space* space, Link* link) {
+  if (!space || !link) {
+    return ERROR;
+  }
+  space->down = link;
+  return OK;
+}
+
 Status space_set_position(Space *space, float x, float y){
   if(!space) return ERROR;
   space->position.x = x;
@@ -279,13 +297,25 @@ Link* space_get_east(Space* space) {
   return space->east;
 }
 
-
-
 Link* space_get_west(Space* space) {
   if (!space) {
     return NULL;
   }
   return space->west;
+}
+
+Link* space_get_up(Space* space) {
+  if (!space) {
+    return NULL;
+  }
+  return space->up;
+}
+
+Link* space_get_down(Space* space) {
+  if (!space) {
+    return NULL;
+  }
+  return space->down;
 }
 
 int space_get_npc_count(Space *space){

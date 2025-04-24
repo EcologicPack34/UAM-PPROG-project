@@ -22,7 +22,8 @@ I4 - Daniel - Niveles verticales
 I4 - enemies and npcs se pueden mover a otros espacios (evento aleatorio)
 I4 - dar opcion para una seed determinada mediante argumentos al abrir el juego
 I4- Integrar pantalla de inicio para cargar partida o crear nueva.
-    usar un script de bash para obtener una lista de los .dat en la carpeta del ejecutable. este txt generado       se usará para proporcionar al jugador una lista con los posibles ficheros a cargar.
+    usar un script de bash para obtener una lista de los .dat en la carpeta del ejecutable. 
+    este txt generado se usará para proporcionar al jugador una lista con los posibles ficheros a cargar.
 I4 - Modularizar ataques a un modulo aparte, cargar estos ataque desde settings.dat y guardarlos en un collection en game. 
 Cuando se inicializa un combate, se guarda una referencia a este collection en combate para ver que ataques son posibles. 
 Además, estos atques contendran el string del nombre de ataque que hay que pasar por argumento, y si necesitan especificar un objetivo, junto con el multiplicador de daño y su probabilidad de fallo

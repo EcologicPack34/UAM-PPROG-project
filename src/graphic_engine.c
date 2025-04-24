@@ -196,8 +196,8 @@ void graphic_engine_paint_map(Graphic_engine *ge, Game *game){
   strcpy(space[0], "+------%c%c%c------+");
   strcpy(space[1], "|%-3s %6s %4ld|");/*player npcs id*/
   strcpy(space[2], "|%-9s      |");
-  strcpy(space[3], "%c%-9s      %c");
-  strcpy(space[4], "%c%-9s      %c");
+  strcpy(space[3], "%c%-9s   %c  %c");
+  strcpy(space[4], "%c%-9s   %c  %c");
   strcpy(space[5], "%c%-9s      %c");
   strcpy(space[6], "|%-9s      |");
   strcpy(space[7], "|%-15s|");
@@ -683,8 +683,8 @@ void graphic_engine_paint_space(Game *game, Space *space, Direction direction,ch
   char str[WORD_SIZE];
   char strAux[WORD_SIZE];
   char player[WORD_SIZE];
-  Link *link1 = NULL, *link2 = NULL;
-  char link1Char, link2Char;
+  Link *link1 = NULL, *link2 = NULL, *link3 = NULL;
+  char link1Char, link2Char, link3Char;
 
   char** gdesc = NULL;
 
@@ -732,10 +732,26 @@ void graphic_engine_paint_space(Game *game, Space *space, Direction direction,ch
       else link2Char = ' ';
     }
 
-    sprintf(str, spaceStr[3], (link2) ? '-' : '|', gdesc[1], (link1) ? '-' : '|');
+    link3 = space_get_up(space);
+    link3Char = ' ';
+    if(link3){
+      if(link_is_locked(link3)) link3Char = '-';
+      else if(link_is_adjacent(link3) == false) link3Char = 'o';
+      else link3Char = '^';
+    }
+    sprintf(str, spaceStr[3], (link2) ? '-' : '|', gdesc[1], link3Char ,(link1) ? '-' : '|');
     strcat(map[3],str);
-    sprintf(str, spaceStr[4], link2Char, gdesc[2], link1Char);
+
+    link3 = space_get_down(space);
+    link3Char = ' ';
+    if(link3){
+      if(link_is_locked(link3)) link3Char = '-';
+      else if(link_is_adjacent(link3) == false) link3Char = 'o';
+      else link3Char = '^';
+    }
+    sprintf(str, spaceStr[4], link2Char, gdesc[2], link3Char,link1Char);
     strcat(map[4],str);
+
     sprintf(str, spaceStr[5], (link2) ? '-' : '|', gdesc[3], (link1) ? '-' : '|');
     strcat(map[5],str);
 

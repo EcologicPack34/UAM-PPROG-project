@@ -39,6 +39,8 @@
 #define SPACE_GRAPHIC_HEIGHT 5          /*!< Height of a space graphical description*/
 #define SPACE_GRAPHIC_WIDTH 9           /*!< Width of a space graphical description*/
 
+#define SPACE_DIRECTIONS 6
+
 /**
  * @brief ADT with all the information related to a space
  */
@@ -116,6 +118,26 @@ Status space_set_east(Space *space, Link *link);
  * @return OK, if everything goes well or ERROR if there was some mistake
  */
 Status space_set_west(Space *space, Link *link);
+
+/**
+ * @brief It sets the id of the space located at the top
+ * @author Daniel Gómez
+ *
+ * @param space a pointer to the space
+ * @param link reference of the link to the west
+ * @return OK, if everything goes well or ERROR if there was some mistake
+ */
+Status space_set_up(Space *space, Link *link);
+
+/**
+ * @brief It sets the id of the space located down
+ * @author Daniel Gómez
+ *
+ * @param space a pointer to the space
+ * @param link reference of the link to the west
+ * @return OK, if everything goes well or ERROR if there was some mistake
+ */
+Status space_set_down(Space *space, Link *link);
 
 /**
  * @brief Sets the position of a given space to a vector of coordenates (x,y)
@@ -292,6 +314,24 @@ Link *space_get_east(Space *space);
  * @return reference of the link in the position
  */
 Link *space_get_west(Space *space);
+
+/**
+ * @brief It gets the link of the space located at the top
+ * @author Daniel Gómez
+ *
+ * @param space a pointer to the space
+ * @return reference of the link in the position
+ */
+Link *space_get_up(Space *space);
+
+/**
+ * @brief It gets the link of the space located at the west
+ * @author Daniel Gómez
+ *
+ * @param space a pointer to the space
+ * @return reference of the link in the position
+ */
+Link *space_get_down(Space *space);
 
 /**
  * @brief Gets the inventory pointer of a space struct

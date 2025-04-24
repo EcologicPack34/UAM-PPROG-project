@@ -274,7 +274,7 @@ Status game_reader_load_spaces(Game *game, char *filename) {
   char *toks = NULL;
   
   char name[WORD_SIZE] = "";
-  Id id = NO_ID, north = NO_ID, east = NO_ID, south = NO_ID, west = NO_ID;
+  Id id = NO_ID, north = NO_ID, east = NO_ID, south = NO_ID, west = NO_ID, up = NO_ID, down = NO_ID;
   
   Space *space = NULL;
   Status status = OK;
@@ -315,6 +315,11 @@ Status game_reader_load_spaces(Game *game, char *filename) {
       toks = strtok(NULL, "|");
       west = atol(toks);
       
+      toks = strtok(NULL, "|");
+      up = atol(toks);
+
+      toks = strtok(NULL, "|");
+      down = atol(toks);
 
       debug_log(PRINT,"Read Space: #s:%ld|%s|%ld|%ld|%ld|%ld|gdesc", id, name, north, east, south, west);
 
@@ -331,6 +336,8 @@ Status game_reader_load_spaces(Game *game, char *filename) {
       space_set_east(space, game_get_link_by_id(game, east));
       space_set_south(space, game_get_link_by_id(game, south));
       space_set_west(space, game_get_link_by_id(game, west));
+      space_set_up(space, game_get_link_by_id(game, up));
+      space_set_down(space, game_get_link_by_id(game, down));
 
       for (i = 0; i < SPACE_GRAPHIC_HEIGHT; i++)
       {
@@ -364,10 +371,11 @@ Status game_reader_load_objects(Game *game, char *filename){
   char description[WORD_SIZE] = "";
   char *toks = NULL;
   long objectid, objectlocation;
+  Id dependency_object = NO_ID;
   InventoryType objectlocationtype;
   Object *object = NULL;
 
-  int is_consumable = 0;
+  int is_consumable = 0, is_movable = 0;
 
   Status status = OK;
 
@@ -400,6 +408,12 @@ Status game_reader_load_objects(Game *game, char *filename){
       strcpy(description, toks);
 
       toks = strtok(NULL, "|");
+      dependency_object = atol(toks);
+
+      toks = strtok(NULL, "|");
+      is_movable = atoi(toks);
+
+      toks = strtok(NULL, "|");
       is_consumable = atoi(toks);
       
       toks = strtok(NULL, "|");
@@ -408,10 +422,11 @@ Status game_reader_load_objects(Game *game, char *filename){
       toks = strtok(NULL, "|");
       objectlocationtype = atol(toks) + UNKNOWN_INVENTORY;
 
-      debug_log(PRINT,"Read Object: #o:%ld|%s|%s|%s|%d|%ld|%ld", objectid, name, data, description, is_consumable, objectlocation, objectlocationtype);
+      /*Formato Object: #o:ID|Nombre|Data|Descripcion|Dependency_id|is_movable|is_consumable|LocationID|InventoryType*/
+      debug_log(PRINT,"Read Object: #o:%ld|%s|%s|%s|%d|%d|%d|%ld|%ld", objectid, name, data, description, dependency_object, is_movable, is_consumable, objectlocation, objectlocationtype);
 
       /*Creates a object with object_create then saves it on the game with game_add_space*/
-      object = object_create(objectid, name, data, description, is_consumable, objectlocation, objectlocationtype);
+      object = object_create(objectid, name, data, description, dependency_object, is_movable, is_consumable, objectlocation, objectlocationtype);
       if (object != NULL) {
         game_add_object(game, object);
         switch(objectlocationtype){
