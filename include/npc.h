@@ -107,6 +107,15 @@ bool npc_get_can_follow(NPC *npc);
  */
 Id npc_get_player_following_id(NPC *npc);
 
+/**
+ * @brief Gets the state of the dialogue with the NPC
+ * @author Maksym Polyak
+ * 
+ * @param npc npc struct
+ * @return int or -1 if error
+ */
+int npc_get_dialogue_state(NPC *npc);
+
 /*NPC SETTERS*/
 
 /**
@@ -148,6 +157,16 @@ Status npc_set_is_follower(NPC *npc, bool can_follow);
  * @return Status 
  */
 Status npc_set_player_following_id(NPC *npc, Id player_follower_id);
+
+/**
+ * @brief Sets the NPC dialogue state
+ * @author Maksym Polyak
+ * 
+ * @param npc npc struct
+ * @param dialogue_state state of the dialogue
+ * @return Status 
+ */
+Status npc_set_dialogue_state(NPC *npc, int dialogue_state);
 
 /**
  * @brief Compares two npcs

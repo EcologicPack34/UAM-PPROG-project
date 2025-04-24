@@ -21,6 +21,7 @@ struct _NPC{
     Entity *entity;                 /*!< Entity struct of the NPC*/
 
     char message[WORD_SIZE];        /*!< Message of the NPC for the player*/
+    int dialogue_state;             /*!< Determines the state of the dialogue in general*/
 
     bool can_follow;                /*!< Determines if the NPC can follow the player or not*/
     Id player_following_id;         /*!< Saves the id of the player its following*/
@@ -107,6 +108,12 @@ Id npc_get_player_following_id(NPC *npc){
     return npc->player_following_id;
 }
 
+int npc_get_dialogue_state(NPC *npc){
+    if(!npc) return -1;
+
+    return npc->dialogue_state;
+}
+
 /*NPC SETTERS*/
 
 Status npc_set_status(NPC *npc, NPC_status status){
@@ -139,6 +146,14 @@ Status npc_set_player_following_id(NPC *npc, Id player_follower_id){
     if(!npc) return ERROR;
 
     npc->can_follow = player_follower_id;
+
+    return OK;
+}
+
+Status npc_set_dialogue_state(NPC *npc, int dialogue_state){
+    if(!npc) return ERROR;
+
+    npc->dialogue_state = dialogue_state;
 
     return OK;
 }
