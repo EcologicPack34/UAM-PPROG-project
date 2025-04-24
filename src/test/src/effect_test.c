@@ -61,7 +61,7 @@ int main(int argc, char** argv) {
 }
 
 void test1_effect_write_affected_save_data(){
-    Effect *e = effect_create(1,"test","5",ENTITY_EFFECT,POISON,false,3);
+    Effect *e = effect_create(1,"test","5",POISON,false,3);
     Player *p1 = player_create("test",10,1);
     Player *p2 = player_create("test",11,1);
     Player *p3 = player_create("test",12,1);
