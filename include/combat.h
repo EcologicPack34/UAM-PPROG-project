@@ -28,6 +28,7 @@
 #include "space.h"
 #include "player.h"
 #include "command.h"
+#include "attack.h"
 
 /**
  * @brief Struct of the combat module to save the stats of an NPC, public for the graphic_engine
@@ -70,6 +71,16 @@ void combat_free(Combat *combat);
  * @return Status 
  */
 Status combat_update(Combat *combat, Command *last_cmd);
+
+/**
+ * @brief Creats and reserves memory for the attacks
+ * @author Sofía Calvo
+ * 
+ * @param combat combat to reserve memory for the array of attacks
+ * @param num number of attacks needed
+ * @return Status 
+ */
+Status combat_set_num_attacks(Combat *combat, int num);
 
 /**
  * @brief Finalizes the combat and returns the game state to DEFAULT
@@ -154,4 +165,34 @@ bool combat_get_isFinished(Combat *combat);
  */
 Stats *combat_get_player_stats(Combat *combat);
 
+/**
+ * @brief Gets the attack in a certain position
+ * @author Sofía Calvo
+ * 
+ * @param combat combat struct
+ * @return Attack* 
+ */
+Attack *combat_get_attack_in_position(Combat *combat, int pos);
+
+/**
+ * @brief Gets the attack in a certain position
+ * @author Sofía Calvo
+ * 
+ * @param combat combat struct
+ * @param attack attack struct
+ * @param pos position in the array
+ * @return Status
+ */
+Status combat_set_attack_in_position(Combat *combat, Attack *attack, int pos);
+
+
+/**
+ * @brief Finds the attack in certain position of an array
+ * @author Sofía Calvo
+ * 
+ * @param combat combat struct
+ * @param pos position in the array
+ * @return Attack structure
+ */
+Attack *combat_find_attack_by_name(Combat *cmb, char *name);
 #endif

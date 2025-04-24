@@ -21,6 +21,7 @@ Formato STATS: #st:IDEntity|EntityType|VidaMaxima|Vida|DanoBase|Fuerza|Defensa|N
 
 
 
+
 #s:11|Entry|-1|-1|1|-1|11|-1|    _    ;\ \_-------__ ;\  mo'\_;\  @  _  ;  \__/  \__
 #s:121|Corridor1|1|-1|2|-1|-1|-1|    -     ;\   \___;\   _    \;\; \__/ \  /
 #s:122|Corridor2|2|6|3|-1|-1|-1|  ___  _; /   \ /; ;   _ ;__/ \   /

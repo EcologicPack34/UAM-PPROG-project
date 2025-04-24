@@ -10,6 +10,7 @@
  */
 
 #include "combat.h"
+#include "attack.h"
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -21,13 +22,14 @@
 #define QUICK_ATTACK 0.8    /*!< quick attack damage multiplier*/
 #define SWIFT_ATTACK 0.8    /*!< swift attack damage multiplier*/
 
-#define MAX_ATTACKS 4       /*!< Number of attack types that exist*/
+#define MAX_ATTACKS 64       /*!< Number of attack types that exist*/
 
 /*Probabilites for succcess on an attack*/
 #define LIGHT_PROB 90       /*!< Probability for a light attack to be succesful*/
 #define HEAVY_PROB 50       /*!< Probability for a heavy attack to be succesful*/
 #define QUICK_PROB 98       /*!< Probability for a quick attack to be succesful*/
 #define SWIFT_PROB 40       /*!< Probability for a swift attack to be succesful*/
+#define RUN_AWAY_PROB 50
 
 /**
  * @brief Internal struct that holds all the information related to the combat
@@ -45,6 +47,9 @@ struct _Combat{
     Space *space;                           /*!< Space where the combat is located*/
 
     bool endCombat;                         /*!< if true means combat has ended*/
+
+    Attack *attacks[MAX_ATTACKS];            /*!< array of attacks*/
+    int attacks_count;                       /*!< number of attacks*/
 };
 
 
@@ -112,6 +117,26 @@ Status combat_attack_swift(Stats *attacker, Stats *victims, int numVictims);
  */
 Status combat_attack_quick(Stats *attacker, Stats *victim);
 
+/**
+ * @brief Tries to make a generic attack
+ * @author Sofía Calvo
+ * 
+ * @param attacker stats of the attacker
+ * @param victim stats of the victim
+ * @return Status 
+ */
+Status combat_attack(Attack *at, Stats *attacker, Stats *victim);
+
+/**
+ * @brief Tries to make a generic attack
+ * @author Sofía Calvo
+ * 
+ * @param attacker stats of the attacker
+ * @param victims stats of all the victims (array)
+ * @param num_victims number of victims
+ * @return Status 
+ */
+Status combat_attack_all(Attack *at, Stats *attacker, Stats *victims, int num_victims);
 /**
  * @brief Tries to make a strong attack from the attacker to the victim
  * @author Sofía Calvo
@@ -216,9 +241,34 @@ void combat_finalize(Combat *combat){
     }
 }
 
-Status combat_entity_received_damage(Stats *stats, double damage){
-    if(!stats) return ERROR;
+Attack *combat_find_attack_by_name(Combat *cmb, char *name) {
 
+    int i;
+    int boolean = 1;
+    Attack *at = NULL;
+
+    if (!cmb || !name)
+        return NULL;
+    
+    for (i = 0; (i < cmb->attacks_count) && (boolean == 1); i++)
+    {
+        at = combat_get_attack_in_position(cmb, i);
+        if (strcmp(attack_get_name(at), name) == 0)
+        {
+            boolean = 0;
+        }
+    }
+
+    if (boolean == 1)
+        return NULL;
+    
+    return at;
+}
+
+Status combat_entity_received_damage(Stats *stats, double damage){
+    
+    if(!stats) return ERROR;
+    
     if(!entity_stats_is_dead(&(stats->stats))){
         stats->stats.health -= damage;
     }
@@ -296,12 +346,48 @@ Status combat_attack_light(Stats *attacker, Stats *victim){
     return combat_entity_received_damage(victim, LIGHT_ATTACK*(attacker->stats.baseDamage));
 }
 
+Status combat_attack(Attack *at, Stats *attacker, Stats *victim) {
+
+    double damage;
+    double chance;
+
+    if (!attacker || !victim)
+        return ERROR;
+    
+    chance = rand()%100;
+    if (chance > attack_get_success_chance(at))
+        return OK;
+    
+    damage = attacker->stats.strength*attack_get_damage_multiplicator(at);
+    combat_entity_received_damage(victim, damage);
+    return OK;
+}
+
+Status combat_attack_all(Attack *at, Stats *attacker, Stats *victims, int n_victims) {
+
+    int i;
+    double damage;
+
+    if (!at || !attacker || !victims)
+        return ERROR;
+    
+    damage = attacker->stats.strength*attack_get_damage_multiplicator(at);
+
+    for (i = 0; i < n_victims; i++)
+    {
+        combat_entity_received_damage(&victims[i], damage);
+    }
+    
+    return OK;
+}
+
 Status combat_enemies_turn(Combat *cmb) {
 
     Stats *stAl = NULL, *stEn = NULL;
     int numEn, numAl;
     int i;
     int randomNumAttack, randomNumAll;
+    bool needs_target;
 
     if (!cmb){
         return ERROR;
@@ -316,6 +402,24 @@ Status combat_enemies_turn(Combat *cmb) {
     if(numEn <= 0 || numAl <= 0) return OK;
 
     for (i = 0; i < numEn; i++)
+    {
+        randomNumAll = rand()%numAl;
+        randomNumAttack = rand()%cmb->attacks_count;
+
+        needs_target = attack_get_target_bool(cmb->attacks[randomNumAttack]);
+        if (needs_target == true)
+        {
+            combat_attack(cmb->attacks[randomNumAttack], &stEn[i], &stAl[randomNumAll]);
+        }
+        else
+        {
+            combat_attack_all(cmb->attacks[randomNumAttack], &stEn[i], stAl, cmb->allies_count);
+        }  
+    }
+    
+    return OK;
+
+    /*for (i = 0; i < numEn; i++)
     {
         randomNumAll = rand()%numAl;
         randomNumAttack = rand()%MAX_ATTACKS + 1;
@@ -340,13 +444,14 @@ Status combat_enemies_turn(Combat *cmb) {
 
         combat_update_deaths(cmb);
     }
-    return OK;
+    return OK;*/
 }
 
 Status combat_allies_turn(Combat *cmb){
 
     Stats *stEn = NULL, *stAl = NULL;
     int numAl, numEn, i, randomNumAttack, randomNumEnemy;
+    bool needs_target;
 
     if (!cmb)
         return ERROR;
@@ -359,6 +464,23 @@ Status combat_allies_turn(Combat *cmb){
     if(numEn <= 0 || numAl <= 0) return OK;
 
     for (i = 1; i < numAl; i++)
+    {
+        randomNumEnemy = rand()%numEn;
+        randomNumAttack = rand()%cmb->attacks_count;
+
+        needs_target = attack_get_target_bool(cmb->attacks[randomNumAttack]);
+        if (needs_target == true)
+        {
+            combat_attack(cmb->attacks[randomNumAttack], &stAl[i], &stEn[randomNumEnemy]);
+        }
+        else
+        {
+            combat_attack_all(cmb->attacks[randomNumAttack], &stAl[i], stEn, cmb->enemies_count);
+        } 
+    }
+    
+    return OK;
+    /*for (i = 1; i < numAl; i++)
     {
         randomNumEnemy = rand()%numEn;
         randomNumAttack = rand()%MAX_ATTACKS + 1;
@@ -384,35 +506,53 @@ Status combat_allies_turn(Combat *cmb){
 
         combat_update_deaths(cmb);
     } 
-    return OK;
+    return OK;*/
 }
 
 Status combat_update_player_attack(Combat *cmb, Command *last_cmd){
-    int numEnemy, enemycount;
+    int numEnemy;
     char **args = NULL;
-    Stats *stEn = NULL;
+    Stats *stEn = NULL, *player = NULL;
+    Attack *atc = NULL;
     
     if (!cmb || !last_cmd)
         return ERROR;
         
     args = command_get_arguments(last_cmd);
 
-    stEn = combat_get_enemies_stats(cmb);
-    enemycount = combat_get_enemies_count(cmb);
-    
+    if (command_get_code(last_cmd) == RUN_AWAY)
+    {
+        combat_runaway(cmb);
+    } 
+
+    player = combat_get_player_stats(cmb);
+    atc = combat_find_attack_by_name(cmb, args[0]);
+
+    if (attack_get_target_bool(atc) == true)
+    {
+        numEnemy = atoi(args[1]) - 1;
+        stEn = combat_get_enemies_stats_at(cmb, numEnemy);
+        combat_attack(atc, player, &stEn[numEnemy]);
+    }
+    else
+    {
+        stEn = combat_get_enemies_stats(cmb);
+        combat_attack_all(atc, player, stEn, cmb->enemies_count);
+    }
+
     /*Checks if only one argument, and the posible combat options for it*/
-    if(command_get_arguments_count(last_cmd) == 1){
+    /*if(command_get_arguments_count(last_cmd) == 1){
         if(strcmp(args[0], "swift") == 0)
         {
             return combat_attack_swift(&cmb->allies_stats[0], stEn, enemycount);
         }
-    }
+    }*/
 
     /*Checks the combat options which need to specify a target*/
 
     
     /*Checks if number of arguments is 2: format= attackName targetNum*/
-    if(command_get_arguments_count(last_cmd) != 2) return ERROR;
+    /*if(command_get_arguments_count(last_cmd) != 2) return ERROR;
     numEnemy = atoi(args[1]);
 
 
@@ -430,8 +570,8 @@ Status combat_update_player_attack(Combat *cmb, Command *last_cmd){
     {
         return combat_attack_quick(&cmb->allies_stats[0], &stEn[numEnemy - 1]);
     }
-    /*Caso como si fuera un else, es decir, todos los ifs han fallado*/
-    return ERROR;
+    */
+    return OK;
 }
 
 
@@ -597,7 +737,9 @@ Combat *combat_initialize(Space *space, Player *player, CommandCode code){
     
     combat->space = space;
     combat->endCombat = false;
-    
+    //EMPEZAR GAME READER
+
+
     return combat;
 }
 
@@ -624,12 +766,12 @@ Status combat_update(Combat *combat, Command *last_cmd){
         return OK;
     }
     
+    combat_update_deaths(combat);
+
     st = combat_update_player_attack(combat, last_cmd);
     if(st == ERROR){
         return ERROR;
     }
-
-    combat_update_deaths(combat);
 
     if(combat->is_player_turn == false){
         combat_enemies_turn(combat);
@@ -641,12 +783,21 @@ Status combat_update(Combat *combat, Command *last_cmd){
         combat_enemies_turn(combat);
     }
 
-    
     return OK;
 }
 
 Status combat_runaway(Combat *combat){
+    
+    int chance;
+    
     if(!combat) return ERROR;
+
+    chance = rand()%100;
+
+    if (chance >= RUN_AWAY_PROB)
+    {
+        return OK;
+    }
     combat_finalize(combat);
     return OK;
 }
@@ -694,4 +845,29 @@ Stats *combat_get_allies_stats(Combat *combat){
 Stats *combat_get_player_stats(Combat *combat){
     if(!combat) return NULL;
     return &(combat->allies_stats[0]);
+}
+
+Status combat_set_num_attacks(Combat *combat, int num) {
+
+    if (!combat || num <= 0)
+        return ERROR;
+    
+    combat->attacks_count = num;
+    return OK;
+}
+
+Attack *combat_get_attack_in_position(Combat *combat, int pos) {
+
+    if (!combat || pos < 0)
+        return NULL;
+
+    return combat->attacks[pos];
+}
+
+Status combat_set_attack_in_position(Combat *combat, Attack *attack, int pos) {
+
+    if(!combat || !attack) return ERROR;
+
+    combat->attacks[pos] = attack;
+    return OK;
 }

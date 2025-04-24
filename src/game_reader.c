@@ -20,6 +20,7 @@
 #include "game.h"
 #include "space.h"
 #include "event_manager.h"
+#include "attack.h"
 
 /*
 * Declaration of private functions
@@ -123,6 +124,16 @@ Status game_reader_load_stats(Game *game, char *filename);
 */
 Status game_reader_load_ability(Game *game, char *filename);
 
+/**
+ * @brief Reads the file settings to load the attacks
+ * @author Sofía Calvo
+ *
+ * @param game struct that saves all information related to the game
+ * @param filename string that stores the data file name
+ * @return Status 
+*/
+Status game_reader_load_attacks(Game *game);
+
 
 /*
 * Public functions implementation
@@ -134,7 +145,7 @@ Status game_reader_create_from_file(Game **game, char *filename){
     printf("Fatal error. Check the log for details\n");
     abort();
   }
-  /*Loads settints*/
+  /*Loads settings*/
   
   if(game_reader_load_commandInfo(*game) == ERROR){
     printf("%c[2J", 27);
@@ -145,9 +156,7 @@ Status game_reader_create_from_file(Game **game, char *filename){
     printf("%c[2J", 27);
     printf("Fatal error. Check the log for details\n");
     abort();
-  }
-  
-
+  }  
   /*Loads data into the game*/
   if(game_reader_load_player(*game, filename) == ERROR){
     debug_log(LOG_ERROR, "Error loading player at: game_reader_create_from_file(Game*, char*) in game_reader.c");
@@ -936,6 +945,70 @@ Status game_reader_load_commandInfo(Game *game){
     break;
   }
   fclose(file);
+  return OK;
+}
+
+Status game_reader_load_attacks(Game *game) {
+
+  FILE *file = NULL;
+  char line[WORD_SIZE];
+
+  char *toks = NULL;
+  int numAttcks;
+  int i = 0;
+  double mult;
+  double chance;
+
+  Combat *cmb = NULL;
+  Attack *at = NULL;
+  bool needs_target;
+
+  if (!game) return ERROR;
+  
+  file = fopen(SETTINGS_FILE_PATH, "r");
+  if (!file) return ERROR;
+
+  while (fscanf(file, "%s", line) != 0)
+  {
+    if (strncmp(line, "[Attacks", 8) != 0){
+      continue;
+    }
+    /*reads the number of attacks*/
+    else {
+      toks = strtok(line, ":");
+      toks = strtok(NULL, "]");
+      numAttcks = atoi(toks);
+      /*starts saving the attacks in the combat*/
+      cmb = game_get_combat(game);
+      combat_set_num_attacks(cmb, numAttcks);
+
+    break;
+    }
+  }
+    
+  for (i = 0; i < numAttcks; i++)
+  {
+    fscanf(file, "%s", line);
+    /*will now read the name of the attack*/
+    toks = strtok(line, ";");
+    /*will now create the attack with the name*/
+    at = attack_create(toks);
+    /*will now get the multiplicator of damage*/
+    toks = strtok(NULL, ";");
+    mult = atof(toks);
+    attack_set_damage_multiplicator(at, mult);
+    /*will now get the chances of failing*/
+    toks = strtok(NULL, ";");
+    chance = atof(toks);
+    attack_set_failure_chance(at, chance);
+    /*Will now get if it needs target or not*/
+    toks = strtok(NULL, ";");
+    needs_target = atoi(toks);
+    attack_set_target_bool(at, needs_target);
+    /*Will now copy this attack into the arrays of attacks in combat*/
+    combat_set_attack_in_position(cmb, at, i);
+  }
+
   return OK;
 }
 
