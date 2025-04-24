@@ -1004,6 +1004,7 @@ Status game_reader_load_effects(Game *game, char *filename){
   char data[WORD_SIZE]="";
   char *toks=NULL;
   bool inf_turns;
+  char inf_char; /*infinite turns y/N char*/
   int default_turns;
 
   Effect *effect=NULL;
@@ -1054,7 +1055,8 @@ Status game_reader_load_effects(Game *game, char *filename){
         printf("toks is null");
         return ERROR;
       }
-      if(atoi(toks) != 0)
+      inf_char = atoi(toks);
+      if((inf_char == 'y') || (inf_char == 'Y'))
         inf_turns=true;
       else
         inf_turns=false;
