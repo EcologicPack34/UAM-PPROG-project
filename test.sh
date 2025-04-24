@@ -2,7 +2,7 @@
 
 #for this script to function properly, the program structure must contain the following folders/structure
 #./program/src/test/
-#the script will be stored in ./program and
+#the script will be stored in ./program and the executable test files must be stored in ./program/src/test
 
 test_dir="./src/test/"
 valgrind="valgrind --leak-check=full --track-origins=yes --show-leak-kinds=all "
