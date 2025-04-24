@@ -113,49 +113,42 @@ ENTITY_TEST_OBJ = ./$(OP)/entity.o ./$(OP)/inventory.o ./$(OP)/object.o ./$(OP)/
 COLLECTION_TEST_OBJ = ./$(OP)/collection_test.o ./$(OP)/collection.o ./$(OP)/debug_printing.o
 PLAYER_TEST_OBJ = ./$(OP)/player_test.o ./$(OP)/player.o ./$(OP)/command.o ./$(OP)/equipment.o ./$(OP)/npc.o ./$(OP)/entity.o ./$(OP)/object.o ./$(OP)/debug_printing.o ./$(OP)/inventory.o ./$(OP)/collection.o ./$(OP)/ability_manager.o ./$(OP)/queue.o
 
-run_test_all: run_collection_test run_space_test run_link_test run_object_test run_inventory_test run_player_test clean
+test_all: collection_test space_test link_test object_test inventory_test player_test
 
-run_entity_test:
+entity_test:
 	make
 	$(CC) -Wall -pedantic -I$(INCLUDE) -c ./src/test/src/entity_test.c -o ./$(OBJ_PATH)/entity_test.o 
-	$(CC) $(CFLAGS) -o ./src/test/link_test $(ENTITY_TEST_OBJ)
-	./src/test/entity_test
+	$(CC) $(CFLAGS) -g -o ./src/test/link_test $(ENTITY_TEST_OBJ)
 
-run_collection_test:
+collection_test:
 	make
 	$(CC) -Wall -pedantic -I$(INCLUDE) -c ./src/test/src/collection_test.c -o ./$(OBJ_PATH)/collection_test.o 
-	$(CC) $(CFLAGS) -o ./src/test/collection_test $(COLLECTION_TEST_OBJ)
-	./src/test/collection_test
+	$(CC) $(CFLAGS) -g -o ./src/test/collection_test $(COLLECTION_TEST_OBJ)
 
-run_space_test:
+space_test:
 	make
 	$(CC) -Wall -pedantic -c ./src/test/src/space_test.c -o ./$(OBJ_PATH)/space_test.o 
-	$(CC) $(CFLAGS) -o ./src/test/space_test $(SPACE_TEST_OBJ)
-	./src/test/space_test
+	$(CC) $(CFLAGS) -g -o ./src/test/space_test $(SPACE_TEST_OBJ)
 
-run_link_test:
+link_test:
 	make
 	$(CC) -Wall -pedantic -I$(INCLUDE) -c ./src/test/src/link_test.c -o ./$(OBJ_PATH)/link_test.o 
-	$(CC) $(CFLAGS) -o ./src/test/link_test $(LINK_TEST_OBJ)
-	./src/test/link_test
+	$(CC) $(CFLAGS) -g -o ./src/test/link_test $(LINK_TEST_OBJ)
 
-run_object_test:
+object_test:
 	make
 	$(CC) -Wall -pedantic -I$(INCLUDE) -c ./src/test/src/object_test.c -o ./$(OBJ_PATH)/object_test.o 
-	$(CC) $(CFLAGS) -o ./src/test/object_test $(OBJECT_TEST_OBJ)
-	./src/test/object_test
+	$(CC) $(CFLAGS) -g -o ./src/test/object_test $(OBJECT_TEST_OBJ)
 
-run_inventory_test:
+inventory_test:
 	make
 	$(CC) -Wall -pedantic -I$(INCLUDE) -c ./src/test/src/inventory_test.c -o ./$(OBJ_PATH)/inventory_test.o 
-	$(CC) $(CFLAGS) -o ./src/test/inventory_test $(INVENTORY_TEST_OBJ)
-	./src/test/inventory_test
+	$(CC) $(CFLAGS) -g -o ./src/test/inventory_test $(INVENTORY_TEST_OBJ)
 
-run_player_test:
+player_test:
 	make
 	$(CC) -g -Wall -pedantic -I$(INCLUDE) -c ./src/test/src/player_test.c -o ./$(OBJ_PATH)/player_test.o 
-	$(CC) $(CFLAGS) -o ./src/test/player_test $(PLAYER_TEST_OBJ)
-	./src/test/player_test
+	$(CC) $(CFLAGS) -g -o ./src/test/player_test $(PLAYER_TEST_OBJ)
 	
 
 
