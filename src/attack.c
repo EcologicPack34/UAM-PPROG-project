@@ -120,4 +120,15 @@ int attack_compare(void *e1, void *e2){
     return strcmp(((Attack*)e1)->name, ((Attack*)e2)->name);
 }
 
+void attack_print(void *at) {
+
+    Attack *att = NULL;
+
+    if (!at)
+        return;
+
+    att = (Attack*)at;
+    printf("Name: %s | Damage multiplication: %lf || Needs target: %d || Success chance: %lf", att->name, att->damage_multiplication, att->needs_target, att->no_missing_chance);
+}
+
 

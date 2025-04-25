@@ -173,16 +173,16 @@ Status game_reader_create_from_file(Game **game, char *filename){
     debug_log(LOG_ERROR, "Error loading spaces at: game_reader_create_from_file(Game*, char*) in game_reader.c");
     return ERROR;
   }
+  if (game_reader_load_npcs(*game, filename) == ERROR){
+    debug_log(LOG_ERROR, "Error loading npcs at: game_reader_create_from_file(Game*, char*) in game_reader.c");
+    return ERROR;
+  }
   if (game_reader_load_objects(*game, filename) == ERROR){
     debug_log(LOG_ERROR, "Error loading objects at: game_reader_create_from_file(Game*, char*) in game_reader.c");
     return ERROR;
   }
   if (game_reader_load_events(*game, filename) == ERROR){
     debug_log(LOG_ERROR, "Error loading events at: game_reader_create_from_file(Game*, char*) in game_reader.c");
-    return ERROR;
-  }
-  if (game_reader_load_npcs(*game, filename) == ERROR){
-    debug_log(LOG_ERROR, "Error loading npcs at: game_reader_create_from_file(Game*, char*) in game_reader.c");
     return ERROR;
   }
   if (game_reader_load_ability(*game, filename) == ERROR){
@@ -197,6 +197,11 @@ Status game_reader_create_from_file(Game **game, char *filename){
 
   if(game_spatial_map(*game) == ERROR){
     debug_log(LOG_ERROR,"Error maping spatialy spaces");
+    return ERROR;
+  }
+
+  if(game_reader_load_attacks(*game) == ERROR) {
+    debug_log(LOG_ERROR,"Error loading attacks");
     return ERROR;
   }
 
@@ -374,6 +379,7 @@ Status game_reader_load_objects(Game *game, char *filename){
   Id dependency_object = NO_ID;
   InventoryType objectlocationtype;
   Object *object = NULL;
+  NPC *npc = NULL;
 
   int is_consumable = 0, is_movable = 0;
 
@@ -435,7 +441,8 @@ Status game_reader_load_objects(Game *game, char *filename){
             inventory_add_object(entity_get_inventory(player_get_entity(game_get_player(game))), object);
             break;
           case NPC_INVENTORY:
-            /* NON IMPLEMENTEDinventory_add_object()*/
+            npc = game_get_npc_by_id(game, objectlocation);
+            inventory_add_object(entity_get_inventory(npc_get_entity(npc)), object); /*An npc inventory is being implemented*/
             break;
           case SPACE_INVENTORY:
             inventory_add_object(space_get_inventory(game_get_space(game, objectlocation)), object);

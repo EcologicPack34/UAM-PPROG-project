@@ -19,6 +19,7 @@
 #include "combat.h"
 #include "message.h"
 #include "game_reader.h"
+#include "attack.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -108,14 +109,15 @@ Status game_create(Game **game) {
   (*game)->active_player = NULL; /*Player creation is controlled by game_reader*/
   (*game)->n_players = 0;
   (*game)->objects = collection_create(COLLECTION_INITIAL_SIZE, false, true, object_isEqual, object_print);
-  if(!((*game)->objects)){
-    debug_log(LOG_ERROR,"Error initializing collection of objects");
-    return ERROR;
-  } 
-  
+
   (*game)->npcs = collection_create(COLLECTION_INITIAL_SIZE, false, true, npc_cmp, npc_print); /*TEMPORAL PRINT*/
   if(!((*game)->npcs)){
     debug_log(LOG_ERROR,"Error initializing collection of npcs");
+    return ERROR;
+  } 
+
+  if(!((*game)->objects)){
+    debug_log(LOG_ERROR,"Error initializing collection of objects");
     return ERROR;
   } 
   
@@ -125,13 +127,11 @@ Status game_create(Game **game) {
     return ERROR;
   }
   
-  (*game)->attacks = collection_create(5, false, false, attack_compare, NULL);
+  (*game)->attacks = collection_create(5, false, false, attack_compare, attack_print);
   if(!((*game)->attacks)){
     debug_log(LOG_ERROR,"Error creating attacks");
     return ERROR;
   }
-
-  game_reader_load_attacks(*game);
 
   (*game)->godmode = false;
   (*game)->finished = false;

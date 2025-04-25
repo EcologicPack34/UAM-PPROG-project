@@ -368,7 +368,7 @@ Status combat_attack(Attack *at, Stats *attacker, Stats *victim) {
     if (chance > attack_get_success_chance(at))
         return OK;
     
-    damage = attacker->stats.strength*attack_get_damage_multiplicator(at);
+    damage = attacker->stats.baseDamage*attack_get_damage_multiplicator(at);
     combat_entity_received_damage(victim, damage);
     return OK;
 }
@@ -381,7 +381,7 @@ Status combat_attack_all(Attack *at, Stats *attacker, Stats *victims, int n_vict
     if (!at || !attacker || !victims)
         return ERROR;
     
-    damage = attacker->stats.strength*attack_get_damage_multiplicator(at);
+    damage = attacker->stats.baseDamage*attack_get_damage_multiplicator(at);
 
     for (i = 0; i < n_victims; i++)
     {
