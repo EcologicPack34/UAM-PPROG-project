@@ -111,4 +111,6 @@ double attack_get_success_chance(Attack *at);
  * @return the name if there weren't errors, NULL if there was a mistake
  */
 char *attack_get_name(Attack *at);
+
+int attack_compare(void *e1, void *e2);
 #endif

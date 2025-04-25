@@ -962,7 +962,7 @@ Status game_reader_load_attacks(Game *game) {
   Combat *cmb = NULL;
   Attack *at = NULL;
   bool needs_target;
-
+  Collection *collection = NULL;
   if (!game) return ERROR;
   
   file = fopen(SETTINGS_FILE_PATH, "r");
@@ -979,13 +979,13 @@ Status game_reader_load_attacks(Game *game) {
       toks = strtok(NULL, "]");
       numAttcks = atoi(toks);
       /*starts saving the attacks in the combat*/
-      cmb = game_get_combat(game);
-      combat_set_num_attacks(cmb, numAttcks);
 
     break;
     }
   }
-    
+  
+  collection = game_get_attacks(game);
+
   for (i = 0; i < numAttcks; i++)
   {
     fscanf(file, "%s", line);
@@ -1005,8 +1005,8 @@ Status game_reader_load_attacks(Game *game) {
     toks = strtok(NULL, ";");
     needs_target = atoi(toks);
     attack_set_target_bool(at, needs_target);
-    /*Will now copy this attack into the arrays of attacks in combat*/
-    combat_set_attack_in_position(cmb, at, i);
+    /*Will now copy this attack into the collection*/
+    collection_add(collection, at);
   }
 
   return OK;

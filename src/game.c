@@ -40,6 +40,7 @@ struct _Game {
   /*Collections*/
   Collection *npcs;                   /*!< Contains all the information related to the NPCs*/
   Collection *objects;                /*!< Contains all the information related to the object */
+  Collection *attacks;                /*!< Contains all the information related to the attacks */
 
   /*Space related*/
   Space *spaces[MAX_SPACES];          /*!< Array with all the spaces of the map */
@@ -124,6 +125,14 @@ Status game_create(Game **game) {
     return ERROR;
   }
   
+  (*game)->attacks = collection_create(5, false, false, attack_compare, NULL);
+  if(!((*game)->attacks)){
+    debug_log(LOG_ERROR,"Error creating attacks");
+    return ERROR;
+  }
+
+  game_reader_load_attacks(*game);
+
   (*game)->godmode = false;
   (*game)->finished = false;
   (*game)->n_links = 0;
@@ -148,6 +157,7 @@ Status game_create(Game **game) {
     return ERROR;
   } 
 
+
   (*game)->combat = NULL;
 
   return OK;
@@ -169,6 +179,9 @@ Status game_destroy(Game *game) {
   
   collection_free_elements(game_get_objects(game), object_destroy);
   collection_destroy(game_get_objects(game));
+
+  collection_free_elements(game_get_attacks(game), object_destroy);
+  collection_destroy(game_get_attacks(game));
 
   if(collection_free_elements(game_get_npcs(game), npc_destroy) == ERROR){
     printf("Error liberando colleccion de npcs");
@@ -718,11 +731,8 @@ bool game_log_hasMessage(Game *game){
 Status game_combat_start(Game *game){
   if(!game) return ERROR;
 
-  game->combat = combat_initialize(game_get_space(game, game_get_player_location(game)), game->active_player, command_get_code(game->last_cmd));
+  game->combat = combat_initialize(game_get_space(game, game_get_player_location(game)), game->active_player, command_get_code(game->last_cmd), game->attacks);
   if(!game->combat) return ERROR;
-  //AQUÍ METERLO!!!!
-
-  game_reader_load_attacks(game);
 
   game->current_state = COMBAT;
   return OK;
@@ -880,4 +890,12 @@ Status game_add_ability(Game *game, Ability *ability){
   }
 
   return ERROR;
+}
+
+Collection *game_get_attacks(Game *game) {
+
+  if (!game)
+    return NULL;
+  
+  return game->attacks;
 }

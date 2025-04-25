@@ -112,4 +112,12 @@ char *attack_get_name(Attack *at) {
     return at->name;
 }
 
+int attack_compare(void *e1, void *e2){
+
+    if (!e1 || !e2)
+        return 0;
+    
+    return strcmp(((Attack*)e1)->name, ((Attack*)e2)->name);
+}
+
 
