@@ -886,20 +886,24 @@ Status game_add_ability(Game *game, Ability *ability){
 #define RANDOM_WALK_STEPS 5
 #define RANDOM_WALK_STEP_DIR 1
 
+/*Note: if this functions fails the game must abort, so there is no point on taking care of memory in case of error*/
 Status game_generate_procedural(){
   typedef enum {NO_SPACE = 0, MARKED}SpaceStatus;
   
-  struct SpaceInfo{
+  typedef struct{
     Space *current;
     Space *origin;
-  };
+  }SpaceInfo;
 
   SpaceStatus map[MAX_PROCEDURAL_SIZE][MAX_PROCEDURAL_SIZE] = {{NO_SPACE,NO_SPACE}};
   Space *spaces[MAX_PROCEDURAL_SIZE][MAX_PROCEDURAL_SIZE] = {NULL};
 
   Collection *links = NULL;
+  Collection *spacesA = NULL;
 
   Queue *spaceQ = NULL;
+
+  int dirs[4][2] = {{0,1},{1,0},{0,-1},{-1,0}};
 
   int x, y;
   int dirX, dirY;
@@ -910,6 +914,7 @@ Status game_generate_procedural(){
   int spaceCount = 0;
   Space *space = NULL;
   Link *link = NULL;
+  SpaceInfo *info;
 
 
   x = MAX_PROCEDURAL_SIZE/2;
@@ -967,6 +972,31 @@ Status game_generate_procedural(){
     }
   }
   
+  spaceQ = queue_create();
+  if(!spaceQ){
+    return ERROR;
+  }
+  spacesA = collection_create(MAX_SPACES, true, false, space_cmp, NULL);
+  if(!spacesA){
+    return ERROR;
+  }
+  links = collection_create(MAX_LINKS, true, false, link_cmp, NULL);
+  if(!links){
+    return ERROR;
+  }
+
+  x = MAX_PROCEDURAL_SIZE/2;
+  y = x;
+
+  info = malloc(sizeof(SpaceInfo));
+  if(!info){
+    return ERROR;
+  }
+  //caso para el espacio central no hay que poner link
+  
+  while(queue_isEmpty(spaceQ) == false){
+    //creo link entre origin y current, y asigno el link a los 2
+  }
 
 
 }

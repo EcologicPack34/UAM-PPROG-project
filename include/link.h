@@ -161,4 +161,13 @@ Status link_move_entity(Link* link, Entity* entity);
  */
 Status link_unlock(Link *link, Entity *player);
 
+/**
+ * @brief Compares two links
+ * 
+ * @param e1 
+ * @param e2 
+ * @return negative if e1<e2, 0 if equal, positive if e1>e2
+ */
+int link_cmp(void *e1, void *e2);
+
 #endif
