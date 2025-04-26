@@ -894,10 +894,13 @@ Status game_add_ability(Game *game, Ability *ability){
 Status game_generate_procedural(Game *game){
   typedef enum {NO_SPACE = 0, MARKED}SpaceStatus;
   
+  /**
+   * @brief Local struct that stores info for link creation between origin and current
+   */
   typedef struct{
-    Space *current;
-    Space *origin;
-    Direction dir;/*Stores the direction in which the link is in the origin space*/
+    Space *current; /*!<Stores the current space*/
+    Space *origin;  /*!<Stores the space of origin*/
+    Direction dir;  /*!<Stores the direction in which the link is in the origin space*/
   }SpaceInfo;
 
   SpaceStatus map[MAX_PROCEDURAL_SIZE][MAX_PROCEDURAL_SIZE] = {NO_SPACE};
