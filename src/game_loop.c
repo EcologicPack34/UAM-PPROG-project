@@ -37,7 +37,7 @@
  * @param file_name string with the name of the filename with the game information
  * @return 0 if everything goes well or 1 if there was some mistake
  */
-int game_loop_init(Game **game, Graphic_engine **gengine, char *file_name);
+int game_loop_init(Game **game, Graphic_engine **gengine, char *file_name, int seed);
 
 /**
  * @brief Essential function, receives last command, while the command isn't EXIT
@@ -72,32 +72,41 @@ int main(int argc, char *argv[]){
   Graphic_engine *gengine = NULL;
   Debug *debugLog = NULL;
   
+  int i;
+  int seed = -1;
+
   /*Checks if num of arguments if correct, if not stops the programm*/
   if (argc < 2)
   {
     fprintf(stderr, "Use: %s <game_data_file>\n", argv[0]);
     return 1;
   }
-  
-  if(argc == 3){
-    fprintf(stderr, "Use: %s <game_data_file> -l <log_file_path>\n", argv[0]);
-    return 1;
-  }
-  if(argc == 4){
-    if(strcmp(argv[2], "-l") != 0){
-      fprintf(stderr, "Argument %s is not recognised", argv[2]);
-      return 1;
-    }
-    else{
-      /*Initialize the global variable for debug*/
-      debugLog = debug_create(argv[3], 1);
+
+  for (i = 1; i < argc; i++)
+  {
+    if(i < (argc - 1) && strcmp(argv[i], "-l") == 0){
+      if(argv[i+1][0] == '-'){
+        fprintf(stderr, "Invalid format for -l argument. Use \"-l <path>\"");
+        return 1;
+      }
+      debugLog = debug_create(argv[i+1], 1);
       debug_log(DEBUG, "Debug global variable");
+    }
+    if(i < (argc - 1) && strcmp(argv[i], "-s") == 0){
+      if(argv[i+1][0] == '-'){
+        fprintf(stderr, "Invalid format for -s argument. Use \"-s <positive number>\"");
+        return 1;
+      }
+      seed = atoi(argv[i+1]);
+      if(seed < 0){
+        fprintf(stderr, "Invalid format for -s argument. Use \"-s <positive number>\"");
+      }
     }
   }
 
 
   /*Initializes and runs the game */
-  if (!game_loop_init(&game, &gengine, argv[1]))
+  if (!game_loop_init(&game, &gengine, argv[1], seed))
   {
     debug_log(PRINT, "Game Initialized correctly");
 
@@ -117,8 +126,13 @@ int main(int argc, char *argv[]){
 }
 
 
-int game_loop_init(Game **game, Graphic_engine **gengine, char *file_name){
-  srand((unsigned) time(NULL));
+int game_loop_init(Game **game, Graphic_engine **gengine, char *file_name, int seed){
+  if(seed < 0){
+    srand((unsigned) time(NULL));
+  }
+  else{
+    srand((unsigned)seed);
+  }
 
   if (game_reader_create_from_file(game, file_name) == ERROR)
   {

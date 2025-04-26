@@ -60,6 +60,8 @@ struct _Game {
   GameState current_state;            /*!< Enum storing the current game state*/
   Command *last_cmd;                  /*!< string with the last command */
   bool finished;                      /*!< bool that determines if the game has finished*/
+
+  bool procedural;                    /*!< Stores if the game is generated prceduraly or not*/
 };
 
 /**
@@ -124,6 +126,7 @@ Status game_create(Game **game) {
     return ERROR;
   }
   
+  (*game)->procedural = false;
   (*game)->godmode = false;
   (*game)->finished = false;
   (*game)->n_links = 0;
@@ -882,20 +885,25 @@ Status game_add_ability(Game *game, Ability *ability){
   return ERROR;
 }
 
-#define RANDOM_WALK_ITERATIONS 3
-#define RANDOM_WALK_STEPS 5
-#define RANDOM_WALK_STEP_DIR 1
+#define RANDOM_WALK_ITERATIONS 6
+#define RANDOM_WALK_STEPS 10
+#define RANDOM_WALK_STEP_DIR_MAX 4
+#define RANDOM_WALK_STEP_DIR_MIN 2
 
 /*Note: if this functions fails the game must abort, so there is no point on taking care of memory in case of error*/
-Status game_generate_procedural(){
+Status game_generate_procedural(Game *game){
   typedef enum {NO_SPACE = 0, MARKED}SpaceStatus;
   
+  /**
+   * @brief Local struct that stores info for link creation between origin and current
+   */
   typedef struct{
-    Space *current;
-    Space *origin;
+    Space *current; /*!<Stores the current space*/
+    Space *origin;  /*!<Stores the space of origin*/
+    Direction dir;  /*!<Stores the direction in which the link is in the origin space*/
   }SpaceInfo;
 
-  SpaceStatus map[MAX_PROCEDURAL_SIZE][MAX_PROCEDURAL_SIZE] = {{NO_SPACE,NO_SPACE}};
+  SpaceStatus map[MAX_PROCEDURAL_SIZE][MAX_PROCEDURAL_SIZE] = {NO_SPACE};
   Space *spaces[MAX_PROCEDURAL_SIZE][MAX_PROCEDURAL_SIZE] = {NULL};
 
   Collection *links = NULL;
@@ -904,80 +912,81 @@ Status game_generate_procedural(){
   Queue *spaceQ = NULL;
 
   int dirs[4][2] = {{0,1},{1,0},{0,-1},{-1,0}};
+  Direction dirEn[4] = {N,E,S,W};
 
   int x, y;
   int dirX, dirY;
+  int dirStepCount = 0;
   int stepCount = 0;
 
   int i,j;
 
-  int spaceCount = 0;
-  Space *space = NULL;
+  int spaceCount = 1;
   Link *link = NULL;
-  SpaceInfo *info;
-
-
+  SpaceInfo *info = NULL, *infoAux = NULL;
+  Vector2 *pos;
+  
   x = MAX_PROCEDURAL_SIZE/2;
   y = x;
-  map[x][y] = MARKED;
 
+  spacesA = collection_create(MAX_SPACES, true, false, space_cmp, NULL);
+  if(!spacesA){
+    return ERROR;
+  }
+
+  map[x][y] = MARKED;
+  spaces[x][y] = space_create(spaceCount++);
+  if(!(spaces[x][y])){
+    debug_log(LOG_ERROR, "Error creating spaces");
+    return ERROR;
+  }
+  space_set_position((spaces[x][y]), x, y);
+  collection_add(spacesA, (spaces[x][y]));
   
+
+  /*Random walk that marks certain positions, always adjascent*/
+  debug_log(PRINT, "Generating map");
   for (i = 0; i < RANDOM_WALK_ITERATIONS; i++)
   {
-    stepCount = 0;
-    for (j = 0; j < RANDOM_WALK_STEPS; j++)
+    for (stepCount = 0; stepCount < RANDOM_WALK_STEPS; stepCount++)
     {
-      if(x < 0 || x >= MAX_PROCEDURAL_SIZE || y < 0 || y >= MAX_PROCEDURAL_SIZE){
-        break;
-      }
-
-      if(stepCount >= RANDOM_WALK_STEP_DIR){
-        stepCount = 0;
-      }
+      /*Choose a number of step before changing directions*/
+      dirStepCount = rand()%(RANDOM_WALK_STEP_DIR_MAX-RANDOM_WALK_STEP_DIR_MIN) + RANDOM_WALK_STEP_DIR_MIN;
       
-      if(stepCount == 0){
-        dirX = rand()%3 - 2;
-        if(dirX == 0){
-          dirY = rand()%3 -2;
-          if(dirY == 0){
-            dirY++;
-          }
-        }else{
-          dirY = 0;
+      /*Choose a random direction*/
+      j = rand()%4;
+      dirX = dirs[j][0];
+      dirY = dirs[j][1];
+
+      for(; dirStepCount > 0 && stepCount < RANDOM_WALK_STEPS; dirStepCount--)
+      {
+        x += dirX;
+        y += dirY;
+        
+        if(x < 0 || x >= MAX_PROCEDURAL_SIZE || y < 0 || y >= MAX_PROCEDURAL_SIZE){
+          break;
         }
+        
+        /*Marks the space and creates it*/
+        map[x][y] = MARKED;
+        if(!(spaces[x][y])){
+          spaces[x][y] = space_create(spaceCount++);
+          if(!(spaces[x][y])){
+            debug_log(LOG_ERROR, "Error creating spaces");
+            return ERROR;
+          }
+          space_set_position((spaces[x][y]), x, y);
+          collection_add(spacesA, (spaces[x][y]));
+        }
+        stepCount++;
       }
-      x += dirX;
-      y += dirY;
-
-      map[x][y] = MARKED;
-
-      stepCount++;
     }
     x = MAX_PROCEDURAL_SIZE/2;
     y = x;
   }
   
-  spaceCount = 1;
-  for (x = 0; i < MAX_PROCEDURAL_SIZE; i++)
-  {
-    for (y = 0; i < MAX_PROCEDURAL_SIZE; i++)
-    {
-      if(map[x][y] == MARKED){
-        space = space_create(spaceCount++);
-        if(!space){
-          return ERROR;
-        }
-        space_set_position(space, x, y);
-      }
-    }
-  }
-  
   spaceQ = queue_create();
   if(!spaceQ){
-    return ERROR;
-  }
-  spacesA = collection_create(MAX_SPACES, true, false, space_cmp, NULL);
-  if(!spacesA){
     return ERROR;
   }
   links = collection_create(MAX_LINKS, true, false, link_cmp, NULL);
@@ -992,13 +1001,111 @@ Status game_generate_procedural(){
   if(!info){
     return ERROR;
   }
-  //caso para el espacio central no hay que poner link
+
+  info->current = spaces[x][y];
+  info->origin = spaces[x][y];
+  info->dir = NO_DIR;
+
+  queue_push(spaceQ, info);
   
+  debug_log(PRINT, "Creating links");
+
+  /*creates links between spaces*/
+  dirStepCount = 1;
   while(queue_isEmpty(spaceQ) == false){
-    //creo link entre origin y current, y asigno el link a los 2
+    info = (SpaceInfo *)queue_pop(spaceQ);
+    
+    space_set_isMapped(info->current, true);
+
+    if(!info) continue;
+
+    /*Adds to queue next spaces in each direction*/
+    pos = space_get_position(info->current);
+    for (i = 0; i < 4; i++)
+    {
+      x = pos->x + dirs[i][0];
+      y = pos->y + dirs[i][1];
+      
+      /*Checks if coords inside the grid*/
+      if(x < 0 || x >= MAX_PROCEDURAL_SIZE || y < 0 || y >= MAX_PROCEDURAL_SIZE){
+        continue;
+      }
+      if(map[x][y] == NO_SPACE || space_get_isMapped(spaces[x][y])){
+        continue;
+      }
+      
+      infoAux = malloc(sizeof(SpaceInfo));
+      if(!infoAux){
+        return ERROR;
+      }
+      infoAux->origin = info->current;
+      infoAux->current = spaces[x][y];
+      infoAux->dir = dirEn[i];
+
+      queue_push(spaceQ, infoAux);
+    }
+    
+    if(info->dir == NO_DIR){
+      free(info);
+      continue;
+    }
+
+    /*Creates link*/
+    link = link_create(dirStepCount, space_get_id(info->origin), space_get_id(info->current), true, false);
+    if(!link){
+      return ERROR;
+    }
+    collection_add(links, link);
+    dirStepCount++;
+    /*Sets spaces links*/
+    switch (info->dir)
+    {
+      case N:
+        space_set_north(info->origin, link);
+        space_set_south(info->current, link);
+        break;
+      case E:
+        space_set_east(info->origin, link);
+        space_set_west(info->current, link);
+        break;
+      case S:
+        space_set_south(info->origin, link);
+        space_set_north(info->current, link);
+        break;
+      case W:
+        space_set_west(info->origin, link);
+        space_set_east(info->current, link);
+        break;
+      default:
+        break;
+    }
+
+    free(info);
   }
 
+  queue_destroy(spaceQ);
 
+  /*Moves data from collections to game*/
+  j = collection_length(spacesA);
+  game->n_spaces = j;
+  for(i = 0; i < j; i++){
+    game->spaces[i] = collection_get_element_at(spacesA, i);
+    space_set_isMapped(game->spaces[i], false);
+  }
+  collection_destroy(spacesA);
+
+  j = collection_length(links);
+  game->n_links = j;
+  for (i = 0; i < j; i++)
+  {
+    game->links[i] = collection_get_element_at(links, i);
+  }
+  collection_destroy(links);
+  game->procedural = true;
+  return OK;
 }
 
-
+bool game_get_is_procedural(Game *game){
+  if(!game) return false;
+  return game->procedural;
+}

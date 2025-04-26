@@ -134,6 +134,13 @@ Status game_reader_load_ability(Game *game, char *filename);
 */
 Status game_reader_load_attacks(Game *game);
 
+/**
+ * @brief Gets if the game should generate proceduraly or not
+ * 
+ * @return true 
+ * @return false 
+ */
+bool game_reader_generate_procedural();
 
 /*
 * Public functions implementation
@@ -157,44 +164,55 @@ Status game_reader_create_from_file(Game **game, char *filename){
     printf("Fatal error. Check the log for details\n");
     abort();
   }  
+  
+  
+  if(game_reader_generate_procedural()){
+    if(game_generate_procedural(*game) == ERROR){
+      printf("%c[2J", 27);
+      printf("Fatal error. Check the log for details\n");
+      abort();
+    }
+  }else{
+    if(game_reader_load_links(*game, filename) == ERROR){
+      debug_log(LOG_ERROR, "Error loading links at: game_reader_create_from_file(Game*, char*) in game_reader.c");
+      return ERROR;
+    }
+    if (game_reader_load_spaces(*game, filename) == ERROR){
+      debug_log(LOG_ERROR, "Error loading spaces at: game_reader_create_from_file(Game*, char*) in game_reader.c");
+      return ERROR;
+    }
+    
+    /*Temp loading*/
+    if (game_reader_load_objects(*game, filename) == ERROR){
+      debug_log(LOG_ERROR, "Error loading objects at: game_reader_create_from_file(Game*, char*) in game_reader.c");
+      return ERROR;
+    }
+    if (game_reader_load_events(*game, filename) == ERROR){
+      debug_log(LOG_ERROR, "Error loading events at: game_reader_create_from_file(Game*, char*) in game_reader.c");
+      return ERROR;
+    }
+    if (game_reader_load_npcs(*game, filename) == ERROR){
+      debug_log(LOG_ERROR, "Error loading npcs at: game_reader_create_from_file(Game*, char*) in game_reader.c");
+      return ERROR;
+    }
+    if (game_reader_load_ability(*game, filename) == ERROR){
+      debug_log(LOG_ERROR, "Error loading ability at: game_reader_create_from_file(Game*, char*) in game_reader.c");
+      return ERROR;
+    }
+  }
+  
   /*Loads data into the game*/
   if(game_reader_load_player(*game, filename) == ERROR){
     debug_log(LOG_ERROR, "Error loading player at: game_reader_create_from_file(Game*, char*) in game_reader.c");
     return ERROR;
   }
-
   game_switch_player(*game, 0);
-
-  if(game_reader_load_links(*game, filename) == ERROR){
-    debug_log(LOG_ERROR, "Error loading links at: game_reader_create_from_file(Game*, char*) in game_reader.c");
-    return ERROR;
-  }
-  if (game_reader_load_spaces(*game, filename) == ERROR){
-    debug_log(LOG_ERROR, "Error loading spaces at: game_reader_create_from_file(Game*, char*) in game_reader.c");
-    return ERROR;
-  }
-  if (game_reader_load_objects(*game, filename) == ERROR){
-    debug_log(LOG_ERROR, "Error loading objects at: game_reader_create_from_file(Game*, char*) in game_reader.c");
-    return ERROR;
-  }
-  if (game_reader_load_events(*game, filename) == ERROR){
-    debug_log(LOG_ERROR, "Error loading events at: game_reader_create_from_file(Game*, char*) in game_reader.c");
-    return ERROR;
-  }
-  if (game_reader_load_npcs(*game, filename) == ERROR){
-    debug_log(LOG_ERROR, "Error loading npcs at: game_reader_create_from_file(Game*, char*) in game_reader.c");
-    return ERROR;
-  }
-  if (game_reader_load_ability(*game, filename) == ERROR){
-    debug_log(LOG_ERROR, "Error loading ability at: game_reader_create_from_file(Game*, char*) in game_reader.c");
-    return ERROR;
-  }
+  
 
   if(game_reader_load_stats(*game, filename) == ERROR){
     debug_log(LOG_ERROR, "Error loading stats at: game_reader_create_from_file(Game*, char*) in game_reader.c");
     return ERROR;
   }
-
   if(game_spatial_map(*game) == ERROR){
     debug_log(LOG_ERROR,"Error maping spatialy spaces");
     return ERROR;
@@ -488,7 +506,7 @@ Status game_reader_load_player(Game *game, char *filename){
       strcpy(name, toks);
       
       toks = strtok(NULL, "|");
-      startinglocation = atol(toks);
+      startinglocation = (game_get_is_procedural(game) == true) ? 1 : atol(toks);
       
       toks = strtok(NULL, "|");
 
@@ -1072,4 +1090,21 @@ Status game_reader_load_commandStateTypes(Game *game){
   }
   fclose(file);
   return OK;
+}
+
+bool game_reader_generate_procedural(){
+  FILE *file = NULL;
+  char line[WORD_SIZE];
+
+  file = fopen(SETTINGS_FILE_PATH, "r");
+  if(!file) return false;
+
+  while(fgets(line, WORD_SIZE - 1, file)){
+    if(strncmp(line,"procedural-gen=true", 19) == 0){
+      fclose(file);
+      return true;
+    }
+  }
+  fclose(file);
+  return false;
 }

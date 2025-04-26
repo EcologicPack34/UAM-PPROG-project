@@ -76,6 +76,9 @@ link:
 run:
 	./anthill anthill.dat
 
+runs:
+	./anthill anthill.dat -l ./debug.log -s 567123
+
 runl:
 	./anthill anthill.dat -l ./debug.log
 
