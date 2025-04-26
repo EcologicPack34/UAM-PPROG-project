@@ -81,11 +81,6 @@ int main(int argc, char *argv[]){
     fprintf(stderr, "Use: %s <game_data_file>\n", argv[0]);
     return 1;
   }
-  
-  if((argc)%2 != 0 && argc != 1){
-    fprintf(stderr, "Invalid number of argumets\nUse \"-l <log_file_path>\" for debug file\nUse \"-s <positive number>\" for a fixed seed for random numbers");
-    return 1;
-  }
 
   for (i = 1; i < argc; i++)
   {
@@ -108,22 +103,6 @@ int main(int argc, char *argv[]){
       }
     }
   }
-  
-/*
-  if(argc == 3){
-    fprintf(stderr, "Use: %s <game_data_file> -l <log_file_path>\n", argv[0]);
-    return 1;
-  }
-  if(argc == 4){
-    if(strcmp(argv[2], "-l") != 0){
-      fprintf(stderr, "Argument %s is not recognised", argv[2]);
-      return 1;
-    }
-    else{
-      
-      
-    }
-  }*/
 
 
   /*Initializes and runs the game */
