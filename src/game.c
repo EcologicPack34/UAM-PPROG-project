@@ -170,6 +170,7 @@ Status game_create(Game **game) {
 Status game_destroy(Game *game) {
   int i = 0;
   int count;
+  Collection *atcs = NULL;
 
   /*Destroys all spaces*/
   for (i = 0; i < game->n_spaces; i++) {
@@ -180,10 +181,12 @@ Status game_destroy(Game *game) {
     player_destroy(game->players[i]);
   }
   
+  atcs = game_get_attacks(game);
+
   collection_free_elements(game_get_objects(game), object_destroy);
   collection_destroy(game_get_objects(game));
 
-  collection_free_elements(game_get_attacks(game), object_destroy);
+  collection_free_elements(atcs, attack_destroy);
   collection_destroy(game_get_attacks(game));
 
   if(collection_free_elements(game_get_npcs(game), npc_destroy) == ERROR){
