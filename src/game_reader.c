@@ -165,6 +165,13 @@ Status game_reader_create_from_file(Game **game, char *filename){
 
   game_switch_player(*game, 0);
 
+  if(game_generate_procedural(*game) == ERROR){
+    printf("%c[2J", 27);
+    printf("Fatal error. Check the log for details\n");
+    abort();
+  }
+
+  /*
   if(game_reader_load_links(*game, filename) == ERROR){
     debug_log(LOG_ERROR, "Error loading links at: game_reader_create_from_file(Game*, char*) in game_reader.c");
     return ERROR;
@@ -172,7 +179,9 @@ Status game_reader_create_from_file(Game **game, char *filename){
   if (game_reader_load_spaces(*game, filename) == ERROR){
     debug_log(LOG_ERROR, "Error loading spaces at: game_reader_create_from_file(Game*, char*) in game_reader.c");
     return ERROR;
-  }
+  }*/
+
+  /*
   if (game_reader_load_objects(*game, filename) == ERROR){
     debug_log(LOG_ERROR, "Error loading objects at: game_reader_create_from_file(Game*, char*) in game_reader.c");
     return ERROR;
@@ -189,12 +198,12 @@ Status game_reader_create_from_file(Game **game, char *filename){
     debug_log(LOG_ERROR, "Error loading ability at: game_reader_create_from_file(Game*, char*) in game_reader.c");
     return ERROR;
   }
+*/
 
   if(game_reader_load_stats(*game, filename) == ERROR){
     debug_log(LOG_ERROR, "Error loading stats at: game_reader_create_from_file(Game*, char*) in game_reader.c");
     return ERROR;
   }
-
   if(game_spatial_map(*game) == ERROR){
     debug_log(LOG_ERROR,"Error maping spatialy spaces");
     return ERROR;

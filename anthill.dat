@@ -5,105 +5,109 @@ Formato Player: #p:ID|Nombre|LocationID|VidaMaxima|Vida|DanoBase|Fuerza|Defensa|
 Formato STATS: #st:IDEntity|EntityType|VidaMaxima|Vida|DanoBase|Fuerza|Defensa|NivelMagia
 
 
-#p:1|Hero1|11|mO^"
+#p:1|Hero1|1|mO^"
 #st:1|1|100|100|25|1|1|1
 
-#p:2|Hero2|14|m1^"
-#st:2|1|100|100|25|1|1|1
+-#p:1|Hero1|11|mO^"
+-#st:1|1|100|100|25|1|1|1
 
-#p:3|Hero3|13|m2^"
-#st:3|1|100|100|25|1|1|1
+-#p:2|Hero2|14|m1^"
+-#st:2|1|100|100|25|1|1|1
 
-#p:4|Hero4|121|m3^"
-#st:4|1|100|100|25|1|1|1
-
-
-
-
-
-
-#s:11|Entry|-1|-1|1|-1|11|-1|    _    ;\ \_-------__ ;\  mo'\_;\  @  _  ;  \__/  \__
-#s:121|Corridor1|1|-1|2|-1|-1|-1|    -     ;\   \___;\   _    \;\; \__/ \  /
-#s:122|Corridor2|2|6|3|-1|-1|-1|  ___  _; /   \ /; ;   _ ;__/ \   /
-#s:123|Corridor3|3|-1|4|-1|-1|-1|  _/^\_ ; +-   -+ ; /\   /\ ; ; ;
-#s:124|Corridor4|4|-1|5|-1|-1|-1
-#s:13|Pantry|5|-1|-1|-1|-1|-1
-#s:125|Corridor5|-1|7|-1|6|-1|-1
-#s:126|Corridor6|-1|8|-1|7|-1|-1
-#s:127|Corridor7|-1|9|-1|8|-1|-1
-#s:14|Hole|-1|-1|10|9|-1|11
-
-Formato Link: #l:ID|Space1|Space2|adjacent|locked //Recordar añadir en cada espacio sus links adyacentes
-
-#l:1|11|121|1|0
-#l:2|121|122|1|0
-#l:3|122|123|1|0
-#l:4|123|124|1|1
-#l:5|124|13|1|0
-#l:6|122|125|1|0
-#l:7|125|126|1|0
-#l:8|126|127|1|0
-#l:9|127|14|1|0
-#l:10|14|13|0|0
-#l:11|11|14|0|0
-
-Formato Object: #o:ID|Nombre|Data|Descripcion|Dependency_id|is_movable|is_consumable|LocationID|InventoryType
-Use ability_id = 0 for no ability
-Use dependency_id = -1 for no dependency
-InventoryType = {UNKNOWN_INVENTORY == 0, PLAYER_INVENTORY == 1, NPC_INVENTORY == 2, SPACE_INVENTORY == 3}
-
-#o:1|Grain1|NONE|Needs Pickaxe to be picked|10|1|0|11|3
-#o:2|Grain2|NONE|Grano2, cannot be moved|-1|0|0|121|3
-#o:3|Grain3|NONE|Grano3|-1|1|0|121|3
-#o:4|Grain4|NONE|Grano4|-1|1|0|122|3
-#o:5|HP|NONE|Health Potion that heals 20 HP|-1|1|1|11|3
-#o:6|IHP|NONE|Infinite Health Potion that heals 20 HP and isn't consumed|-1|1|1|121|3
-#o:7|HTEST|wearable helmet base_damage:1 strength:1 max_health:20|Helmet TEST|-1|1|1|11|3
-#o:8|MoneyBag|NONE|Bag with 20 coins|-1|1|1|11|3
-
-#o:9|Key|NONE|Needs Grain1 to be picked, Unlocks link between spaces 123 and 124|1|1|1|11|3
-
-#o:10|Pickaxe|NONE|Needed to pick Grain1|-1|1|0|11|3
-
-Formato Event: #e:Id|Type|cmdTriggersNum|cmdName1 , ...|removeOnTrigger|tagvalue1:tagvalue2,...
-
-#e:1|object_on_space|2|tk,dr|0|1:13
-#e:2|object_on_space|2|tk,dr|0|2:14
-#e:3|trigger_combat|3|tk,dr,ch|0|20
-#e:4|player_death|0|0|
-#e:5|trigger_combat|1|sh|0|40
-#e:6|npc_rand_move|6|n,s,w,e,up,dw|0|20
-
-Formato NPC: #n:ID|Message|Nombre|LocationID|is_follower|Status|
-#n:1|TEST NPC1 FOLLOW/UNFOLLOW|NPC1|11|1|1|^0m"
-#st:1|2|100|100|10|2|2|2|
-
-#n:2|TEST NPC2 FOLLOW/UNFOLLOW|NPC2|11|1|1|^1m"
-#st:2|2|100|100|10|2|2|2|
-
-#n:3|TEST NPC3 FOLLOW/UNFOLLOW|NPC3|11|1|1|^2m"
-#st:3|2|100|100|10|2|2|2|
-
-#n:4|DIE|Enemy1|11|0|3|^3m"
-#st:4|2|100|100|10|2|2|2|
-
-#n:5|DIE|Enemy2|11|0|3|^4m"
-#st:5|2|100|100|10|2|2|2|
-
-#n:6|DIE|Enemy3|11|0|3|^5m"
-#st:6|2|100|100|10|2|2|2|
-
-#n:7|DIE|Enemy4|11|0|3|^6m"
-#st:7|2|100|100|10|2|2|2|
-
-#n:8|DIE|Spider-(not)-man|123|0|3|/o\
-#st:8|2|100|100|10|2|2|2|
-
-
-Formato Ability: #sk:Id|Type|Name|Entityid(ObjectId)|is_player_ability|is_object_use|cd_count|cd_length|data
-
-#sk:1|heal_self|Heal self 50 HP Maximum CD: 8|1|1|0|0|8|50
-#sk:2|heal_self|Heal self 20 HP Maximum CD: 0|5|0|1|0|0|20
-#sk:3|heal_self|Heal self 5 HP  Maximum CD: 0|6|0|1|0|0|5
-#sk:4|money_bag|Adds 20 coins   Maximum CD: 0|8|0|1|0|0|20
-#sk:5|link_unlock|Unlocks link between 123 and 124|9|0|1|0|0|4
+-#p:3|Hero3|13|m2^"
+-#st:3|1|100|100|25|1|1|1
+-
+--#p:4|Hero4|121|m3^"
+--#st:4|1|100|100|25|1|1|1
+-
+-
+-
+-
+-
+-
+-#s:11|Entry|-1|-1|1|-1|11|-1|    _    ;\ \_-------__ ;\  mo'\_;\  @  _  ;  \__/  \__
+-#s:121|Corridor1|1|-1|2|-1|-1|-1|    -     ;\   \___;\   _    \;\; \__/ \  /
+-#s:122|Corridor2|2|6|3|-1|-1|-1|  ___  _; /   \ /; ;   _ ;__/ \   /
+-#s:123|Corridor3|3|-1|4|-1|-1|-1|  _/^\_ ; +-   -+ ; /\   /\ ; ; ;
+-#s:124|Corridor4|4|-1|5|-1|-1|-1
+-#s:13|Pantry|5|-1|-1|-1|-1|-1
+-#s:125|Corridor5|-1|7|-1|6|-1|-1
+-#s:126|Corridor6|-1|8|-1|7|-1|-1
+-#s:127|Corridor7|-1|9|-1|8|-1|-1
+-#s:14|Hole|-1|-1|10|9|-1|11
+-
+-Formato Link: #l:ID|Space1|Space2|adjacent|locked //Recordar añadir en cada espacio sus links adyacentes
+-
+-#l:1|11|121|1|0
+-#l:2|121|122|1|0
+-#l:3|122|123|1|0
+-#l:4|123|124|1|1
+-#l:5|124|13|1|0
+-#l:6|122|125|1|0
+-#l:7|125|126|1|0
+-#l:8|126|127|1|0
+-#l:9|127|14|1|0
+-#l:10|14|13|0|0
+-#l:11|11|14|0|0
+-
+-Formato Object: #o:ID|Nombre|Data|Descripcion|Dependency_id|is_movable|is_consumable|LocationID|InventoryType
+-Use ability_id = 0 for no ability
+-Use dependency_id = -1 for no dependency
+-InventoryType = {UNKNOWN_INVENTORY == 0, PLAYER_INVENTORY == 1, NPC_INVENTORY == 2, SPACE_INVENTORY == 3}
+-
+-#o:1|Grain1|NONE|Needs Pickaxe to be picked|10|1|0|11|3
+-#o:2|Grain2|NONE|Grano2, cannot be moved|-1|0|0|121|3
+-#o:3|Grain3|NONE|Grano3|-1|1|0|121|3
+-#o:4|Grain4|NONE|Grano4|-1|1|0|122|3
+-#o:5|HP|NONE|Health Potion that heals 20 HP|-1|1|1|11|3
+-#o:6|IHP|NONE|Infinite Health Potion that heals 20 HP and isn't consumed|-1|1|1|121|3
+-#o:7|HTEST|wearable helmet base_damage:1 strength:1 max_health:20|Helmet TEST|-1|1|1|11|3
+-#o:8|MoneyBag|NONE|Bag with 20 coins|-1|1|1|11|3
+-
+-#o:9|Key|NONE|Needs Grain1 to be picked, Unlocks link between spaces 123 and 124|1|1|1|11|3
+-
+-#o:10|Pickaxe|NONE|Needed to pick Grain1|-1|1|0|11|3
+-
+-Formato Event: #e:Id|Type|cmdTriggersNum|cmdName1 , ...|removeOnTrigger|tagvalue1:tagvalue2,...
+-
+-#e:1|object_on_space|2|tk,dr|0|1:13
+-#e:2|object_on_space|2|tk,dr|0|2:14
+-#e:3|trigger_combat|3|tk,dr,ch|0|20
+-#e:4|player_death|0|0|
+-#e:5|trigger_combat|1|sh|0|40
+-#e:6|npc_rand_move|6|n,s,w,e,up,dw|0|20
+-
+-Formato NPC: #n:ID|Message|Nombre|LocationID|is_follower|Status|
+-#n:1|TEST NPC1 FOLLOW/UNFOLLOW|NPC1|11|1|1|^0m"
+-#st:1|2|100|100|10|2|2|2|
+-
+-#n:2|TEST NPC2 FOLLOW/UNFOLLOW|NPC2|11|1|1|^1m"
+-#st:2|2|100|100|10|2|2|2|
+-
+-#n:3|TEST NPC3 FOLLOW/UNFOLLOW|NPC3|11|1|1|^2m"
+-#st:3|2|100|100|10|2|2|2|
+-
+-#n:4|DIE|Enemy1|11|0|3|^3m"
+-#st:4|2|100|100|10|2|2|2|
+-
+-#n:5|DIE|Enemy2|11|0|3|^4m"
+-#st:5|2|100|100|10|2|2|2|
+-
+-#n:6|DIE|Enemy3|11|0|3|^5m"
+-#st:6|2|100|100|10|2|2|2|
+-
+-#n:7|DIE|Enemy4|11|0|3|^6m"
+-#st:7|2|100|100|10|2|2|2|
+-
+-#n:8|DIE|Spider-(not)-man|123|0|3|/o\
+-#st:8|2|100|100|10|2|2|2|
+-
+-
+-Formato Ability: #sk:Id|Type|Name|Entityid(ObjectId)|is_player_ability|is_object_use|cd_count|cd_length|data
+-
+-#sk:1|heal_self|Heal self 50 HP Maximum CD: 8|1|1|0|0|8|50
+-#sk:2|heal_self|Heal self 20 HP Maximum CD: 0|5|0|1|0|0|20
+-#sk:3|heal_self|Heal self 5 HP  Maximum CD: 0|6|0|1|0|0|5
+-#sk:4|money_bag|Adds 20 coins   Maximum CD: 0|8|0|1|0|0|20
+-#sk:5|link_unlock|Unlocks link between 123 and 124|9|0|1|0|0|4
+-
