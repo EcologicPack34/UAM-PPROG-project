@@ -128,4 +128,13 @@ int attack_compare(void *e1, void *e2);
  * @param at pointer to the structure that contains the information of the attack
  */
 void attack_print(void *at);
+
+/**
+ * @brief Frees the attack
+ * @author Sofía Calvo
+ *
+ * @param at pointer to the structure that contains the information of the attack
+ */
+void attack_destroy(void *at);
+
 #endif

@@ -131,4 +131,12 @@ void attack_print(void *at) {
     printf("Name: %s | Damage multiplication: %lf || Needs target: %d || Success chance: %lf", att->name, att->damage_multiplication, att->needs_target, att->no_missing_chance);
 }
 
+void attack_destroy(void *at) {
+
+    if (!at)
+        return;
+    
+    free((Attack*)at);
+}
+
 
