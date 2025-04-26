@@ -1,3 +1,9 @@
+
+
+procedural-gen=false
+
+
+
 nombre;multDaño;prob;requiereTarget
 [Attacks:4]
 light;1;90;0

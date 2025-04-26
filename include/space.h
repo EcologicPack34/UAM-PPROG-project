@@ -443,4 +443,13 @@ Status space_set_discovered(Space *space, bool discovered);
  */
 bool space_is_discovered(Space *space);
 
+/**
+ * @brief Compares to spaces
+ * 
+ * @param e1 
+ * @param e2 
+ * @return negative if e1<e2, 0 if equal, positive if e1>e2
+ */
+int space_cmp(void *e1, void *e2);
+
 #endif

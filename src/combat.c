@@ -361,7 +361,7 @@ Status combat_attack(Attack *at, Stats *attacker, Stats *victim) {
     double damage;
     double chance;
 
-    if (!attacker || !victim)
+    if (!attacker || !victim || !at)
         return ERROR;
     
     chance = rand()%100;
@@ -427,6 +427,7 @@ Status combat_enemies_turn(Combat *cmb) {
         {
             combat_attack_all(at, &stEn[i], stAl, cmb->allies_count);
         }  
+        combat_update_deaths(cmb);
     }
     
     return OK;
@@ -491,6 +492,7 @@ Status combat_allies_turn(Combat *cmb){
         {
             combat_attack_all(at, &stAl[i], stEn, cmb->enemies_count);
         } 
+        combat_update_deaths(cmb);
     }
     
     return OK;
@@ -545,6 +547,7 @@ Status combat_update_player_attack(Combat *cmb, Command *last_cmd){
     if (attack_get_target_bool(atc) == true)
     {
         numEnemy = atoi(args[1]) - 1;
+
         stEn = combat_get_enemies_stats_at(cmb, numEnemy);
         combat_attack(atc, player, stEn);
     }
@@ -788,12 +791,13 @@ Status combat_update(Combat *combat, Command *last_cmd){
     if(st == ERROR){
         return ERROR;
     }
-
+    combat_update_deaths(combat);
+    
     if(combat->is_player_turn == false){
         combat_enemies_turn(combat);
         combat_allies_turn(combat);
     }
-
+    
     if(combat->is_player_turn == true){
         combat_allies_turn(combat);
         combat_enemies_turn(combat);

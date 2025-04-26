@@ -780,7 +780,7 @@ void graphic_engine_paint_space(Game *game, Space *space, Direction direction,ch
   }else{
     for (i = 0; i < SPACE_HEIGHT; i++)
     {
-      strcat(map[i], "                ");
+      strcat(map[i], "                 ");
     }
   }
 }
