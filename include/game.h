@@ -35,7 +35,7 @@
 #define MAX_LINKS (MAX_SPACES * 6)   /*!< Maximum number of links on the map */
 #define MAX_PLAYERS 4   /*!< Maximum number of players*/
 
-#define MAX_PROCEDURAL_SIZE 20
+#define MAX_PROCEDURAL_SIZE 50
 
 /**
  * @brief Game struct, defines all the information of the game
@@ -276,8 +276,16 @@ bool game_get_god_mode(Game *game);
  */
 TurnValidation game_get_is_turn_valid(Game *game);
 
+/**
+ * @brief Gets if the game was generated proceduraly
+ * @author Daniel Gómez
+ * 
+ * @param game 
+ * @return true 
+ * @return false 
+ */
+bool game_get_is_procedural(Game *game);
 /*----------SETTERS----------*/
-
 
 /**
  * @brief Sets the received command on the game struct

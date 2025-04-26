@@ -60,6 +60,8 @@ struct _Game {
   GameState current_state;            /*!< Enum storing the current game state*/
   Command *last_cmd;                  /*!< string with the last command */
   bool finished;                      /*!< bool that determines if the game has finished*/
+
+  bool procedural;                    /*!< Stores if the game is generated prceduraly or not*/
 };
 
 /**
@@ -124,6 +126,7 @@ Status game_create(Game **game) {
     return ERROR;
   }
   
+  (*game)->procedural = false;
   (*game)->godmode = false;
   (*game)->finished = false;
   (*game)->n_links = 0;
@@ -882,9 +885,10 @@ Status game_add_ability(Game *game, Ability *ability){
   return ERROR;
 }
 
-#define RANDOM_WALK_ITERATIONS 3
-#define RANDOM_WALK_STEPS 5
-#define RANDOM_WALK_STEP_DIR 1
+#define RANDOM_WALK_ITERATIONS 6
+#define RANDOM_WALK_STEPS 10
+#define RANDOM_WALK_STEP_DIR_MAX 4
+#define RANDOM_WALK_STEP_DIR_MIN 2
 
 /*Note: if this functions fails the game must abort, so there is no point on taking care of memory in case of error*/
 Status game_generate_procedural(Game *game){
@@ -909,6 +913,7 @@ Status game_generate_procedural(Game *game){
 
   int x, y;
   int dirX, dirY;
+  int dirStepCount = 0;
   int stepCount = 0;
 
   int i,j;
@@ -941,75 +946,42 @@ Status game_generate_procedural(Game *game){
   debug_log(PRINT, "Generating map");
   for (i = 0; i < RANDOM_WALK_ITERATIONS; i++)
   {
-    stepCount = 0;
-    for (j = 0; j < RANDOM_WALK_STEPS; j++)
+    for (stepCount = 0; stepCount < RANDOM_WALK_STEPS; stepCount++)
     {
+      /*Choose a number of step before changing directions*/
+      dirStepCount = rand()%(RANDOM_WALK_STEP_DIR_MAX-RANDOM_WALK_STEP_DIR_MIN) + RANDOM_WALK_STEP_DIR_MIN;
       
-      if(stepCount >= RANDOM_WALK_STEP_DIR){
-        stepCount = 0;
-      }
-      
-      if(stepCount == 0){
-        dirX = rand()%3 - 2;
-        if(dirX == 0){
-          dirY = rand()%3 -2;
-          if(dirY == 0){
-            dirY++;
-          }
-        }else{
-          dirY = 0;
+      /*Choose a random direction*/
+      j = rand()%4;
+      dirX = dirs[j][0];
+      dirY = dirs[j][1];
+
+      for(; dirStepCount > 0 && stepCount < RANDOM_WALK_STEPS; dirStepCount--)
+      {
+        x += dirX;
+        y += dirY;
+        
+        if(x < 0 || x >= MAX_PROCEDURAL_SIZE || y < 0 || y >= MAX_PROCEDURAL_SIZE){
+          break;
         }
-      }
-      if(dirX < -1) dirX = -1;
-      else if(dirX > 1) dirX = 1;
-      if(dirY < -1) dirY = -1;
-      else if(dirY > 1) dirY = 1;
-
-      x += dirX;
-      y += dirY;
-      
-      if(x < 0 || x >= MAX_PROCEDURAL_SIZE || y < 0 || y >= MAX_PROCEDURAL_SIZE){
-        break;
-      }
-
-      map[x][y] = MARKED;
-      if(!(spaces[x][y])){
-        spaces[x][y] = space_create(spaceCount++);
+        
+        /*Marks the space and creates it*/
+        map[x][y] = MARKED;
         if(!(spaces[x][y])){
-          debug_log(LOG_ERROR, "Error creating spaces");
-          return ERROR;
+          spaces[x][y] = space_create(spaceCount++);
+          if(!(spaces[x][y])){
+            debug_log(LOG_ERROR, "Error creating spaces");
+            return ERROR;
+          }
+          space_set_position((spaces[x][y]), x, y);
+          collection_add(spacesA, (spaces[x][y]));
         }
-        space_set_position((spaces[x][y]), x, y);
-        collection_add(spacesA, (spaces[x][y]));
+        stepCount++;
       }
-      
-      spaceCount++;
-      stepCount++;
     }
     x = MAX_PROCEDURAL_SIZE/2;
     y = x;
   }
-
-
-  
-  /*Creates spaces for the marked positions*/
-  debug_log(PRINT,"Generating spaces");
-  /*spaceCount = 1;
-  for (x = 0; x < MAX_PROCEDURAL_SIZE; x++)
-  {
-    for (y = 0; y < MAX_PROCEDURAL_SIZE; y++)
-    {
-      if(map[x][y] == MARKED){
-        space = space_create(spaceCount++);
-        if(!space){
-          debug_log(LOG_ERROR, "Error creating spaces");
-          return ERROR;
-        }
-        space_set_position(space, x, y);
-        collection_add(spacesA, space);
-      }
-    }
-  }*/
   
   spaceQ = queue_create();
   if(!spaceQ){
@@ -1037,15 +1009,13 @@ Status game_generate_procedural(Game *game){
   debug_log(PRINT, "Creating links");
 
   /*creates links between spaces*/
-  stepCount = 1;
+  dirStepCount = 1;
   while(queue_isEmpty(spaceQ) == false){
     info = (SpaceInfo *)queue_pop(spaceQ);
     
     space_set_isMapped(info->current, true);
 
     if(!info) continue;
-
-    if(!(info->current)) continue;
 
     pos = space_get_position(info->current);
     for (i = 0; i < 4; i++)
@@ -1075,12 +1045,12 @@ Status game_generate_procedural(Game *game){
       continue;
     }
 
-    link = link_create(stepCount, space_get_id(info->origin), space_get_id(info->current), true, false);
+    link = link_create(dirStepCount, space_get_id(info->origin), space_get_id(info->current), true, false);
     if(!link){
       return ERROR;
     }
     collection_add(links, link);
-    stepCount++;
+    dirStepCount++;
 
     switch (info->dir)
     {
@@ -1113,6 +1083,7 @@ Status game_generate_procedural(Game *game){
   game->n_spaces = j;
   for(i = 0; i < j; i++){
     game->spaces[i] = collection_get_element_at(spacesA, i);
+    space_set_isMapped(game->spaces[i], false);
   }
   collection_destroy(spacesA);
 
@@ -1123,8 +1094,11 @@ Status game_generate_procedural(Game *game){
     game->links[i] = collection_get_element_at(links, i);
   }
   collection_destroy(links);
-
+  game->procedural = true;
   return OK;
 }
 
-
+bool game_get_is_procedural(Game *game){
+  if(!game) return false;
+  return game->procedural;
+}

@@ -5,56 +5,49 @@ Formato Player: #p:ID|Nombre|LocationID|VidaMaxima|Vida|DanoBase|Fuerza|Defensa|
 Formato STATS: #st:IDEntity|EntityType|VidaMaxima|Vida|DanoBase|Fuerza|Defensa|NivelMagia
 
 
-#p:1|Hero1|1|mO^"
+
+#p:1|Hero1|11|mO^"
 #st:1|1|100|100|25|1|1|1
 
--#p:1|Hero1|11|mO^"
--#st:1|1|100|100|25|1|1|1
-
--#p:2|Hero2|14|m1^"
+#p:2|Hero2|14|m1^"
 -#st:2|1|100|100|25|1|1|1
 
--#p:3|Hero3|13|m2^"
--#st:3|1|100|100|25|1|1|1
--
---#p:4|Hero4|121|m3^"
---#st:4|1|100|100|25|1|1|1
--
--
--
--
--
--
--#s:11|Entry|-1|-1|1|-1|11|-1|    _    ;\ \_-------__ ;\  mo'\_;\  @  _  ;  \__/  \__
--#s:121|Corridor1|1|-1|2|-1|-1|-1|    -     ;\   \___;\   _    \;\; \__/ \  /
--#s:122|Corridor2|2|6|3|-1|-1|-1|  ___  _; /   \ /; ;   _ ;__/ \   /
--#s:123|Corridor3|3|-1|4|-1|-1|-1|  _/^\_ ; +-   -+ ; /\   /\ ; ; ;
--#s:124|Corridor4|4|-1|5|-1|-1|-1
--#s:13|Pantry|5|-1|-1|-1|-1|-1
--#s:125|Corridor5|-1|7|-1|6|-1|-1
--#s:126|Corridor6|-1|8|-1|7|-1|-1
--#s:127|Corridor7|-1|9|-1|8|-1|-1
--#s:14|Hole|-1|-1|10|9|-1|11
--
--Formato Link: #l:ID|Space1|Space2|adjacent|locked //Recordar añadir en cada espacio sus links adyacentes
--
--#l:1|11|121|1|0
--#l:2|121|122|1|0
--#l:3|122|123|1|0
--#l:4|123|124|1|1
--#l:5|124|13|1|0
--#l:6|122|125|1|0
--#l:7|125|126|1|0
--#l:8|126|127|1|0
--#l:9|127|14|1|0
--#l:10|14|13|0|0
--#l:11|11|14|0|0
--
--Formato Object: #o:ID|Nombre|Data|Descripcion|Dependency_id|is_movable|is_consumable|LocationID|InventoryType
--Use ability_id = 0 for no ability
--Use dependency_id = -1 for no dependency
--InventoryType = {UNKNOWN_INVENTORY == 0, PLAYER_INVENTORY == 1, NPC_INVENTORY == 2, SPACE_INVENTORY == 3}
--
+#p:3|Hero3|13|m2^"
+#st:3|1|100|100|25|1|1|1
+
+#p:4|Hero4|121|m3^"
+#st:4|1|100|100|25|1|1|1
+
+#s:11|Entry|-1|-1|1|-1|11|-1|    _    ;\ \_-------__ ;\  mo'\_;\  @  _  ;  \__/  \__
+#s:121|Corridor1|1|-1|2|-1|-1|-1|    -     ;\   \___;\   _    \;\; \__/ \  /
+#s:122|Corridor2|2|6|3|-1|-1|-1|  ___  _; /   \ /; ;   _ ;__/ \   /
+#s:123|Corridor3|3|-1|4|-1|-1|-1|  _/^\_ ; +-   -+ ; /\   /\ ; ; ;
+#s:124|Corridor4|4|-1|5|-1|-1|-1
+#s:13|Pantry|5|-1|-1|-1|-1|-1
+#s:125|Corridor5|-1|7|-1|6|-1|-1
+#s:126|Corridor6|-1|8|-1|7|-1|-1
+#s:127|Corridor7|-1|9|-1|8|-1|-1
+#s:14|Hole|-1|-1|10|9|-1|11
+
+Formato Link: #l:ID|Space1|Space2|adjacent|locked //Recordar añadir en cada espacio sus links adyacentes
+
+#l:1|11|121|1|0
+#l:2|121|122|1|0
+#l:3|122|123|1|0
+#l:4|123|124|1|1
+#l:5|124|13|1|0
+#l:6|122|125|1|0
+#l:7|125|126|1|0
+#l:8|126|127|1|0
+#l:9|127|14|1|0
+#l:10|14|13|0|0
+#l:11|11|14|0|0
+
+Formato Object: #o:ID|Nombre|Data|Descripcion|Dependency_id|is_movable|is_consumable|LocationID|InventoryType
+Use ability_id = 0 for no ability
+Use dependency_id = -1 for no dependency
+InventoryType = {UNKNOWN_INVENTORY == 0, PLAYER_INVENTORY == 1, NPC_INVENTORY == 2, SPACE_INVENTORY == 3}
+
 -#o:1|Grain1|NONE|Needs Pickaxe to be picked|10|1|0|11|3
 -#o:2|Grain2|NONE|Grano2, cannot be moved|-1|0|0|121|3
 -#o:3|Grain3|NONE|Grano3|-1|1|0|121|3
