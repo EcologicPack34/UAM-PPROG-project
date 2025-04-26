@@ -919,7 +919,6 @@ Status game_generate_procedural(Game *game){
   int i,j;
 
   int spaceCount = 1;
-  Space *space = NULL;
   Link *link = NULL;
   SpaceInfo *info = NULL, *infoAux = NULL;
   Vector2 *pos;
@@ -1017,12 +1016,14 @@ Status game_generate_procedural(Game *game){
 
     if(!info) continue;
 
+    /*Adds to queue next spaces in each direction*/
     pos = space_get_position(info->current);
     for (i = 0; i < 4; i++)
     {
       x = pos->x + dirs[i][0];
       y = pos->y + dirs[i][1];
       
+      /*Checks if coords inside the grid*/
       if(x < 0 || x >= MAX_PROCEDURAL_SIZE || y < 0 || y >= MAX_PROCEDURAL_SIZE){
         continue;
       }
@@ -1042,16 +1043,18 @@ Status game_generate_procedural(Game *game){
     }
     
     if(info->dir == NO_DIR){
+      free(info);
       continue;
     }
 
+    /*Creates link*/
     link = link_create(dirStepCount, space_get_id(info->origin), space_get_id(info->current), true, false);
     if(!link){
       return ERROR;
     }
     collection_add(links, link);
     dirStepCount++;
-
+    /*Sets spaces links*/
     switch (info->dir)
     {
       case N:
@@ -1079,6 +1082,7 @@ Status game_generate_procedural(Game *game){
 
   queue_destroy(spaceQ);
 
+  /*Moves data from collections to game*/
   j = collection_length(spacesA);
   game->n_spaces = j;
   for(i = 0; i < j; i++){

@@ -1095,15 +1095,16 @@ Status game_reader_load_commandStateTypes(Game *game){
 bool game_reader_generate_procedural(){
   FILE *file = NULL;
   char line[WORD_SIZE];
-  char str[WORD_SIZE] = "";
 
   file = fopen(SETTINGS_FILE_PATH, "r");
   if(!file) return false;
 
   while(fgets(line, WORD_SIZE - 1, file)){
     if(strncmp(line,"procedural-gen=true", 19) == 0){
+      fclose(file);
       return true;
     }
   }
+  fclose(file);
   return false;
 }
