@@ -534,6 +534,15 @@ Object *game_get_object_by_id(Game *game, Id objectid);
 Status game_add_ability(Game *game, Ability *ability);
 
 /**
+ * @brief Gets the collection of attacks
+ * @author Sofía Calvo
+ * 
+ * @param game game struct
+ * @return Collection
+ */
+Collection *game_get_attacks(Game *game);
+
+/**
  * @brief Generates a level proceduraly
  * @author Daniel Gómez
  * 

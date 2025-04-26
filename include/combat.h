@@ -52,7 +52,7 @@ typedef struct _Combat Combat;
  * @param code last cmd 
  * @return Combat* or NULL if ERROR
  */
-Combat *combat_initialize(Space *space, Player *player, CommandCode code);
+Combat *combat_initialize(Space *space, Player *player, CommandCode code, Collection *attacks);
 
 /**
  * @brief Ends the combat and frees all the memory related to it
@@ -195,4 +195,5 @@ Status combat_set_attack_in_position(Combat *combat, Attack *attack, int pos);
  * @return Attack structure
  */
 Attack *combat_find_attack_by_name(Combat *cmb, char *name);
+
 #endif
