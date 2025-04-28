@@ -28,6 +28,7 @@
 #include "combat.h"
 #include "ability_manager.h"
 #include "libscreen.h"
+#include "dialogue.h"
 
 #include <stdbool.h>
 
@@ -522,5 +523,21 @@ Object *game_get_object_by_id(Game *game, Id objectid);
  * @return Status 
  */
 Status game_add_ability(Game *game, Ability *ability);
+
+/**
+ * @brief Gets the dialogue struct from game
+ * 
+ * @param game game struct
+ * @return Status 
+ */
+Status game_get_dialogue(Game *game);
+
+/**
+ * @brief Frees dialogue struct and sets game state to default
+ * 
+ * @param game game struct
+ * @return Status 
+ */
+Status game_end_dialogue(Game *game);
 
 #endif

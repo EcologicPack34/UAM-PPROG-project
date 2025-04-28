@@ -15,20 +15,29 @@
 #include "npc.h"
 #include "game.h"
 
+#define DOUTPUTS_NUM 4          /*!< Number of dialogue_outputs implemented*/
+
+/**
+ * @brief Dialogue outputs enum
+ * 
+ */
 typedef enum{NO_OUTPUT, DIALOGUE_STOP, FIGHT, STORE}Dialogue_Outputs;
 
+/**
+ * @brief Dialogue ADT definition
+ * 
+ */
 typedef struct _Dialogue Dialogue;
 
 /**
  * @brief Creates a dialogue to initialize a dialogue
  * @author Maksym Polyak
  * 
- * @param game game struct
  * @param npc npc who has the dialogue
  * @param fIN file of the dialogues on the start of file
  * @return Dialogue* or NULL if error
  */
-Dialogue *dialogue_create(Game *game, NPC *npc, FILE *fIN);
+Dialogue *dialogue_create(NPC *npc, FILE *fIN);
 
 /**
  * @brief Frees a dialogue struct
@@ -42,20 +51,19 @@ void dialogue_destroy(Dialogue *dialogue);
  * @brief Updates dialogues to the next states and controls outcomes
  * @author Maksym Polyak
  * 
- * @param game game struct
  * @param dialogue dialogue struct
  * @return Status 
  */
-Status dialogue_update(Game *game, Dialogue *dialogue);
+Status dialogue_update(Dialogue *dialogue);
 
 /**
- * @brief Controls the outcomes of the dialogue and destroys the dialogue if necessary
+ * @brief Controls the outcomes of the dialogue and updates dialogue state and destroys the dialogue if necessary
  * @author Maksym Polyak
  * 
+ * @param last_cmd last command from player
  * @param dialogue dialogue struct
- * @param outcome outcome code
- * @return Status 
+ * @param next_dialogue_state has to be created, has the direction of the next_dialogue_state to save on entity
+ * @return Status
  */
-Status dialogue_outcomes(Dialogue *dialogue, Dialogue_Outputs outcome);
-
+Dialogue_Outputs dialogue_outcomes(Command *last_cmd, Dialogue *dialogue, int *next_dialogue_state);
 #endif

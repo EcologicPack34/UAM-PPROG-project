@@ -48,6 +48,7 @@ struct _Game {
   int n_links;                        /*!< Number of links on the links array*/
 
   /*Others*/
+  Dialogue *dialogue;                  /*!< Dialogue struct*/
   EventManager *event_manager;        /*!< Struct containing the info about the events that can happen*/
   Queue *screenLog;                   /*!< Queue containing a list of messages to print on screen*/
   bool godmode;                       /*!< bool that determines if god mode is activated*/
@@ -174,6 +175,8 @@ Status game_destroy(Game *game) {
     printf("Error liberando colleccion de npcs");
   }
   collection_destroy(game_get_npcs(game));
+
+  dialogue_destroy(game->dialogue);
 
   command_destroy(game->last_cmd);
   event_manager_destroy(game->event_manager);
@@ -880,4 +883,36 @@ Status game_add_ability(Game *game, Ability *ability){
   }
 
   return ERROR;
+}
+
+Status game_dialogue_init(Game *game, NPC *npc){
+  FILE *fIN = NULL;
+  
+  if(!game) return ERROR;
+
+  fIN = fopen(DIALOGUE_FILENAME,"r");
+  if(!fIN) return ERROR;
+
+  game->dialogue = dialogue_create(npc, fIN);
+  if(game->dialogue == NULL) return ERROR;
+  
+  game_set_state(game, DIALOGUE);
+
+  return OK;
+}
+
+Status game_get_dialogue(Game *game){
+  if(!game) return ERROR;
+
+  return game->dialogue;
+}
+
+Status game_end_dialogue(Game *game){
+  if(!game) return ERROR;
+
+  dialogue_destroy(game->dialogue);
+
+  game_set_state(game, DEFAULT);
+
+  return OK;
 }
