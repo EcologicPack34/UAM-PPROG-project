@@ -636,12 +636,28 @@ Status game_add_link(Game *game, Link *link){
 }
 
 Status game_add_object(Game *game, Object *object){
+  int proceduralLoc;
 
   if(!object || !game)
     return ERROR;
 
   if(collection_add(game_get_objects(game), object) == ERROR)
     return ERROR;
+
+  switch(object_get_type(object)){
+    case UNKNOWN_INVENTORY: 
+      return ERROR;
+    case PLAYER_INVENTORY:
+      inventory_add_object(entity_get_inventory(player_get_entity(game_get_player(game))), object);
+      break;
+    case NPC_INVENTORY:
+      /* NON IMPLEMENTEDinventory_add_object()*/
+      break;
+    case SPACE_INVENTORY:
+      proceduralLoc = (game->procedural) ? (rand() % (game->n_spaces - 1) + 2) : object_get_location(object);
+      inventory_add_object(space_get_inventory(game_get_space(game, proceduralLoc)), object);
+      break;
+  }
 
   debug_log(PRINT,"Game Added Object: ID: %ld, name: %s, objectlocation: %ld, inventoryType: %d", object_get_id(object), object_get_name(object), object_get_location(object), object_get_type(object) - UNKNOWN_INVENTORY);
   return OK;
@@ -672,13 +688,12 @@ Status game_add_npc(Game *game, NPC *npc){
     return ERROR;
     
   ent = npc_get_entity(npc);
-  locationid = entity_get_location(ent);
 
-
+  locationid = (game->procedural) ? (rand() % (game->n_spaces - 1) + 2): entity_get_location(ent);
   if(space_add_NPC(game_get_space(game, locationid), npc) == ERROR){
     return ERROR;
   }
-
+  
   debug_log(PRINT,"Game Added NPC: ID: %ld, name: %s, objectlocation: %ld", entity_get_id(ent), entity_get_name(ent), entity_get_location(ent));
   return OK;
 }
