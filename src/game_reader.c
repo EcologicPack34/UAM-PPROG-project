@@ -866,6 +866,8 @@ Status game_reader_load_ability(Game *game, char *filename){
 
   int cd_count, cd_length;
 
+  int i, len;
+
   Status status = OK;
 
   if (!filename) {
@@ -883,6 +885,16 @@ Status game_reader_load_ability(Game *game, char *filename){
   /*#sk:Id|Type|Name|Entityid|is_player_ability|is_object_use|cd_count|cd_length|data*/
   while (fgets(line, WORD_SIZE, file)) {
     if (strncmp("#sk:", line, 4) == 0) {
+
+      len = strlen(line);
+      for (i = 0; i < len; i++)
+      {
+        if(line[i] == '\r' || line[i] == '\n'){
+          line[i] = 0;
+        }
+      }
+      
+
       /*Reads id*/
       toks = strtok(line, ":");
       toks = strtok(NULL, "|");
