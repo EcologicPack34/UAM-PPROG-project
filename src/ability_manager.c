@@ -76,14 +76,14 @@ Ability *ability_create(Id id, char *data, char *name, AbilityType type, Id enti
     return NULL;
   }
 
-  ability->data = (char *)malloc(strlen(data) * sizeof(char) + 1);
+  ability->data = (char *)malloc((strlen(data)+10) * sizeof(char));
   if(!ability->data){
     debug_log(LOG_ERROR,"Couldn't allocate memory when creating ability");
     free(ability);
     return NULL;
   }
 
-  ability->name = (char *)malloc(strlen(name) * sizeof(char) + 1);
+  ability->name = (char *)malloc((strlen(name)+10) * sizeof(char));
   if(!ability->name){
     free(ability->data);
     free(ability);
@@ -109,8 +109,10 @@ void ability_destroy(void *ability){
   
   if(ability){
     sk = (Ability *)ability;
-    free(sk->name);
-    free(sk->data);
+    if(sk->name)
+      free(sk->name);
+    if(sk->data)
+      free(sk->data);
     free(sk);
   }
 }

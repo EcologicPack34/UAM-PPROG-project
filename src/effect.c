@@ -345,7 +345,6 @@ Status _effect_apply_poison(Effect *effect, Affected *affected){
 
 Status _effect_apply_regeneration(Effect *effect, Affected *affected){
     double regeneration;
-    double AffectedHealth;
     char aux[WORD_SIZE];
     Status st;
     /*data string will be: "(int)regeneration_value"*/
@@ -355,9 +354,9 @@ Status _effect_apply_regeneration(Effect *effect, Affected *affected){
     regeneration = atoi(aux);
     
     if(regeneration >= (entity_get_max_health(affected->ent) - regeneration))
-        entity_set_health(affected->ent, entity_get_max_health(affected->ent));
-
-    st = entity_set_health(affected->ent,entity_get_health(affected->ent)+regeneration);
+        st = entity_set_health(affected->ent, entity_get_max_health(affected->ent));
+    else
+        st = entity_set_health(affected->ent,entity_get_health(affected->ent)+regeneration);
 
     if((affected->turns>0) && (st == OK))
         affected->turns--;
