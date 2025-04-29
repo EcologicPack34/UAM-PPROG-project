@@ -32,6 +32,7 @@
 #include "inventory.h"
 #include "npc.h"
 #include "vector2.h"
+#include "graphic_description.h"
 
 #include <stdbool.h>
 
@@ -182,15 +183,14 @@ Status space_set_map_block(Space *space, int block);
 Status space_set_neighbour(Space *space, Space *neighbour, Direction direction);
 
 /**
- * @brief Sets the graphic description of a given spaces
+ * @brief Sets the graphic description of a given space
  * @author Daniel Gómez
  * 
- * @param space space struct
- * @param desc string where the graphic description is saved
- * @param index index of the space
+ * @param space current space
+ * @param gdesc reference to graphic desc
  * @return Status 
  */
-Status space_set_graphic_description(Space *space, char *desc, int index);
+Status space_set_graphic_description(Space *space, GDesc *gdesc);
 
 /**
  * @brief Sets if the space has been discovered or not.
@@ -219,9 +219,9 @@ bool space_get_isDiscovered(Space *space);
  * @author Daniel Gómez
  * 
  * @param space space struct
- * @return char** or NULL if error
+ * @return GDesc* or NULL if error
  */
-char **space_get_graphic_description(Space *space);
+GDesc *space_get_graphic_description(Space *space);
 
 /**
  * @brief Gets the pointer to the vector2 storing the position of the space

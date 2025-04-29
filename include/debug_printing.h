@@ -69,4 +69,10 @@ int debug_log(LOG_LEVEL level, char *formatedString, ...);
  */
 char *debug_getPath(Debug *info);
 
+/**
+ * @brief Closes the global debug file without needen to destroy de debug
+ *  USE ONLY BEFORE ABORTING PROGRAM, OTHER WISE IT WILL BREAK DEBUG LOGS
+ */
+void debug_force_global_fclose();
+
 #endif

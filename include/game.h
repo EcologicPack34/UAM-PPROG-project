@@ -28,6 +28,7 @@
 #include "combat.h"
 #include "ability_manager.h"
 #include "libscreen.h"
+#include "graphic_description.h"
 
 #include <stdbool.h>
 
@@ -255,6 +256,14 @@ Collection *game_get_npcs(Game *game);
  */
 NPC *game_get_npc_by_id(Game *game, Id id);
 
+/**
+ * @brief Gets player by id
+ * @author Aaron Charameli Mair
+ * 
+ * @param game 
+ * @param id 
+ * @return Player* 
+ */
 Player *game_get_player_by_id(Game *game, Id id);
 
 /**
@@ -285,6 +294,17 @@ TurnValidation game_get_is_turn_valid(Game *game);
  * @return false 
  */
 bool game_get_is_procedural(Game *game);
+
+/**
+ * @brief Gets a graphic description by id
+ * @author Daniel Gómez
+ * 
+ * @param game 
+ * @param id 
+ * @return GDesc* 
+ */
+GDesc *game_get_gdesc_by_id(Game *game, Id id);
+
 /*----------SETTERS----------*/
 
 /**
@@ -532,6 +552,16 @@ Object *game_get_object_by_id(Game *game, Id objectid);
  * @return Status 
  */
 Status game_add_ability(Game *game, Ability *ability);
+
+/**
+ * @brief Adds a graphic description to the game
+ * @author Daniel Gómez
+ * 
+ * @param game 
+ * @param gdesc 
+ * @return Status 
+ */
+Status game_add_gdesc(Game *game, GDesc *gdesc);
 
 /**
  * @brief Generates a level proceduraly
