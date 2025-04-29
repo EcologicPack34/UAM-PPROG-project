@@ -32,12 +32,15 @@
 #include "inventory.h"
 #include "npc.h"
 #include "vector2.h"
+#include "graphic_description.h"
 
 #include <stdbool.h>
 
 #define SPACE_INITIAL_SIZE_NPCS 50      /*!< Maximum number of NPCs the space can hold*/
 #define SPACE_GRAPHIC_HEIGHT 5          /*!< Height of a space graphical description*/
 #define SPACE_GRAPHIC_WIDTH 9           /*!< Width of a space graphical description*/
+
+#define SPACE_DIRECTIONS 6
 
 /**
  * @brief ADT with all the information related to a space
@@ -118,6 +121,26 @@ Status space_set_east(Space *space, Link *link);
 Status space_set_west(Space *space, Link *link);
 
 /**
+ * @brief It sets the id of the space located at the top
+ * @author Daniel Gómez
+ *
+ * @param space a pointer to the space
+ * @param link reference of the link to the west
+ * @return OK, if everything goes well or ERROR if there was some mistake
+ */
+Status space_set_up(Space *space, Link *link);
+
+/**
+ * @brief It sets the id of the space located down
+ * @author Daniel Gómez
+ *
+ * @param space a pointer to the space
+ * @param link reference of the link to the west
+ * @return OK, if everything goes well or ERROR if there was some mistake
+ */
+Status space_set_down(Space *space, Link *link);
+
+/**
  * @brief Sets the position of a given space to a vector of coordenates (x,y)
  * @author Daniel Gómez
  * 
@@ -160,15 +183,14 @@ Status space_set_map_block(Space *space, int block);
 Status space_set_neighbour(Space *space, Space *neighbour, Direction direction);
 
 /**
- * @brief Sets the graphic description of a given spaces
+ * @brief Sets the graphic description of a given space
  * @author Daniel Gómez
  * 
- * @param space space struct
- * @param desc string where the graphic description is saved
- * @param index index of the space
+ * @param space current space
+ * @param gdesc reference to graphic desc
  * @return Status 
  */
-Status space_set_graphic_description(Space *space, char *desc, int index);
+Status space_set_graphic_description(Space *space, GDesc *gdesc);
 
 /**
  * @brief Sets if the space has been discovered or not.
@@ -197,9 +219,9 @@ bool space_get_isDiscovered(Space *space);
  * @author Daniel Gómez
  * 
  * @param space space struct
- * @return char** or NULL if error
+ * @return GDesc* or NULL if error
  */
-char **space_get_graphic_description(Space *space);
+GDesc *space_get_graphic_description(Space *space);
 
 /**
  * @brief Gets the pointer to the vector2 storing the position of the space
@@ -292,6 +314,24 @@ Link *space_get_east(Space *space);
  * @return reference of the link in the position
  */
 Link *space_get_west(Space *space);
+
+/**
+ * @brief It gets the link of the space located at the top
+ * @author Daniel Gómez
+ *
+ * @param space a pointer to the space
+ * @return reference of the link in the position
+ */
+Link *space_get_up(Space *space);
+
+/**
+ * @brief It gets the link of the space located at the west
+ * @author Daniel Gómez
+ *
+ * @param space a pointer to the space
+ * @return reference of the link in the position
+ */
+Link *space_get_down(Space *space);
 
 /**
  * @brief Gets the inventory pointer of a space struct
@@ -402,5 +442,14 @@ Status space_set_discovered(Space *space, bool discovered);
  * @return false if space is not discovered
  */
 bool space_is_discovered(Space *space);
+
+/**
+ * @brief Compares to spaces
+ * 
+ * @param e1 
+ * @param e2 
+ * @return negative if e1<e2, 0 if equal, positive if e1>e2
+ */
+int space_cmp(void *e1, void *e2);
 
 #endif

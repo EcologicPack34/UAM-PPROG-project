@@ -384,7 +384,7 @@ Status equipment_add_piece(Entity *entity, Equipment *equipment, Object *object)
     strcpy(line, data);
 
     toks = strtok(line, " ");
-    if(strcmp(toks, "wearable") != 0)
+    if(strcmp(toks, "wearable") != 0 || object_get_is_equipped(object) == true)
         return ERROR;
 
     toks = strtok(NULL, " ");
@@ -396,6 +396,8 @@ Status equipment_add_piece(Entity *entity, Equipment *equipment, Object *object)
         return ERROR;
 
     if(equipment_add_stats(entity, equipment, object) == ERROR) return ERROR;
+
+    object_set_is_equipped(object, true); 
 
     return OK;
 }
@@ -415,6 +417,8 @@ Object *equipment_remove_piece(Entity *entity, Equipment *equipment, char *data)
         return NULL;
 
     if(equipment_remove_stats(entity, equipment, retobject) == ERROR) return NULL;
+
+    object_set_is_equipped(retobject, false);
 
     return retobject;
 }

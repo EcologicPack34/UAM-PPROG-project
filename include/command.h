@@ -22,7 +22,7 @@
 #include <stdbool.h>
 
 #define N_CMDT 2    /*!< Total number of CommandType in the enum */
-#define N_CMD 22    /*!< Total number of CommandCode in the enum */
+#define N_CMD 24    /*!< Total number of CommandCode in the enum */
 
 #define MAX_CMD_ARGS_NUM 5      /*!< Max number of arguments that can be passed to a command*/
 #define MAX_CMD_ARGS_LENGTH 20  /*!< Max length that the arguments of a command can have */
@@ -35,7 +35,9 @@ typedef enum { CMDS, CMDL } CommandType; /* CMDS: Command Short | CMDL: Command 
 /**
  * @brief Enum with the codes of all the commands in the game
  */
-typedef enum { NO_CMD = -1, UNKNOWN, EXIT, SOUTH, NORTH, EAST, WEST, TAKE, DROP, CHAT, ATTACK, RUN_AWAY, SWITCH, ABILITY, OBJECT_USE, HELP, MOVE, SEARCH, EQUIP, UNEQUIP, INSPECT, GM} CommandCode; /* All values that a command can take */
+typedef enum { NO_CMD = -1, UNKNOWN, EXIT, SOUTH, NORTH, EAST, WEST, TAKE, DROP, CHAT,\
+     ATTACK, RUN_AWAY, SWITCH, ABILITY, OBJECT_USE, HELP, MOVE, SEARCH, EQUIP, UNEQUIP, INSPECT, GM,\
+    UP, DOWN} CommandCode; /* All values that a command can take */
 
 /**
  * @brief ADT with player related information

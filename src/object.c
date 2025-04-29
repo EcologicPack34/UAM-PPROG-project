@@ -33,7 +33,11 @@ struct _Object {
   Id location;              /*!< Id with the location of the object */
   InventoryType type;       /*!< Inventory type where the object is located */
 
+  Id dependent_object_id;   /*!< Saves the id of the object if it needs another object in the inventory to be picked*/
+
+  bool is_movable;          /*!< Determines if the object can be moved to a player's inventory or not*/
   bool is_consumable;       /*!< Determines if object is removed after use*/
+  bool is_equipped;         /*!< Determines if the object is equipped or not*/
 
   Ability *object_effect;   /*!< Ability with the effect of the object --> Assigned on skill read*/
 
@@ -47,7 +51,7 @@ struct _Object {
 
 
 /*Object public functions*/
-Object *object_create(Id id, char *name, char* data, char *description, bool is_consumable, Id location, InventoryType type){
+Object *object_create(Id id, char *name, char* data, char *description, Id dependent_object_id, bool is_movable, bool is_consumable, Id location, InventoryType type){
     Object *object = NULL;
 
     if((id <= UNDEFINED_ID) || !name || !data || !description || (location <= UNDEFINED_ID)) return NULL;
@@ -62,8 +66,12 @@ Object *object_create(Id id, char *name, char* data, char *description, bool is_
     }
     strcpy(object->data, data);
 
+    object->dependent_object_id = dependent_object_id;
+    object->is_movable = is_movable;
+
     object->object_effect = NULL;
     object->is_consumable = is_consumable;
+    object->is_equipped = false;
     
     object->id = id;
     object->location = location;
@@ -149,6 +157,22 @@ Status object_set_descr(Object *object, char *str){
     return OK;
 }
 
+Status object_set_is_equipped(Object *object, bool value){
+    if(!object) return ERROR;
+
+    object->is_equipped = value;
+
+    return OK;
+}
+
+Status object_set_is_movable(Object *object, bool value){
+    if(!object) return ERROR;
+
+    object->is_movable = value;
+
+    return OK;
+}
+
 /*Object GETTERS*/
 
 Id object_get_id(Object *object){
@@ -203,6 +227,24 @@ char *object_get_data(Object *object){
     if(!object) return NULL;
 
     return object->data;
+}
+
+bool object_get_is_equipped(Object *object){
+    if(!object) return false;
+
+    return object->is_equipped;
+}
+
+bool object_get_is_movable(Object *object){
+    if(!object) return false;
+
+    return object->is_movable;
+}
+
+Id object_get_dependency(Object *object){
+    if(!object) return NO_ID;
+
+    return object->dependent_object_id;
 }
 
 void object_print(void *object){

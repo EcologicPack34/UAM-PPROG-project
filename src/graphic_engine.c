@@ -20,6 +20,7 @@
 #include "space.h"
 #include "types.h"
 #include "collection.h"
+#include "graphic_description.h"
 
 #define MAP_WIDTH 53                  /*!< Width of the map part*/
 #define MAP_HEIGHT 29                 /*!< Height of the map part*/
@@ -196,8 +197,8 @@ void graphic_engine_paint_map(Graphic_engine *ge, Game *game){
   strcpy(space[0], "+------%c%c%c------+");
   strcpy(space[1], "|%-3s %6s %4ld|");/*player npcs id*/
   strcpy(space[2], "|%-9s      |");
-  strcpy(space[3], "%c%-9s      %c");
-  strcpy(space[4], "%c%-9s      %c");
+  strcpy(space[3], "%c%-9s   %c  %c");
+  strcpy(space[4], "%c%-9s   %c  %c");
   strcpy(space[5], "%c%-9s      %c");
   strcpy(space[6], "|%-9s      |");
   strcpy(space[7], "|%-15s|");
@@ -228,7 +229,7 @@ void graphic_engine_paint_map(Graphic_engine *ge, Game *game){
   graphic_engine_paint_space(game, directionSpace, NE, map, space);
   
   for(i = 0; i < SPACE_HEIGHT; i++){
-    screen_area_puts(ge->map, map[i]);
+    graphic_engine_newline_print(ge->map, map[i]);
   }
 
   /*Prints Middle spaces*/
@@ -244,7 +245,7 @@ void graphic_engine_paint_map(Graphic_engine *ge, Game *game){
   directionSpace = space_get_neighbour(currentSpace, E);
   graphic_engine_paint_space(game, directionSpace, E, map, space);
   for(i = 0; i < SPACE_HEIGHT; i++){
-    screen_area_puts(ge->map, map[i]);
+    graphic_engine_newline_print(ge->map, map[i]);
   }
 
   /*Prints Bottom spaces*/
@@ -262,7 +263,7 @@ void graphic_engine_paint_map(Graphic_engine *ge, Game *game){
   graphic_engine_paint_space(game, directionSpace, SE, map, space);
   
   for(i = 0; i < SPACE_HEIGHT; i++){
-    screen_area_puts(ge->map, map[i]);
+    graphic_engine_newline_print(ge->map, map[i]);
   }
 
 }
@@ -683,10 +684,11 @@ void graphic_engine_paint_space(Game *game, Space *space, Direction direction,ch
   char str[WORD_SIZE];
   char strAux[WORD_SIZE];
   char player[WORD_SIZE];
-  Link *link1 = NULL, *link2 = NULL;
-  char link1Char, link2Char;
+  Link *link1 = NULL, *link2 = NULL, *link3 = NULL;
+  char link1Char, link2Char, link3Char;
 
-  char** gdesc = NULL;
+  GDesc *gdesc = NULL;
+  char gdescAux[2] = "";
 
   bool spaceDiscovered = false;
 
@@ -713,7 +715,7 @@ void graphic_engine_paint_space(Game *game, Space *space, Direction direction,ch
     sprintf(str, spaceStr[1], (direction == NO_DIR) ? player : " ", (spaceDiscovered == true) ? strAux : " ", space_get_id(space));
     strcat(map[1],str);
 
-    sprintf(str, spaceStr[2], gdesc[0]);
+    sprintf(str, spaceStr[2], (gdesc) ? gdesc_get_line(gdesc, 0) : gdescAux);
     strcat(map[2],str);
 
     /*Determines the state of the lateral conexion between spaces*/
@@ -732,15 +734,31 @@ void graphic_engine_paint_space(Game *game, Space *space, Direction direction,ch
       else link2Char = ' ';
     }
 
-    sprintf(str, spaceStr[3], (link2) ? '-' : '|', gdesc[1], (link1) ? '-' : '|');
+    link3 = space_get_up(space);
+    link3Char = ' ';
+    if(link3){
+      if(link_is_locked(link3)) link3Char = '-';
+      else if(link_is_adjacent(link3) == false) link3Char = 'o';
+      else link3Char = '^';
+    }
+    sprintf(str, spaceStr[3], (link2) ? '-' : '|', (gdesc) ? gdesc_get_line(gdesc, 1) : gdescAux, link3Char ,(link1) ? '-' : '|');
     strcat(map[3],str);
-    sprintf(str, spaceStr[4], link2Char, gdesc[2], link1Char);
+
+    link3 = space_get_down(space);
+    link3Char = ' ';
+    if(link3){
+      if(link_is_locked(link3)) link3Char = '-';
+      else if(link_is_adjacent(link3) == false) link3Char = 'o';
+      else link3Char = '^';
+    }
+    sprintf(str, spaceStr[4], link2Char, (gdesc) ? gdesc_get_line(gdesc, 2) : gdescAux, link3Char,link1Char);
     strcat(map[4],str);
-    sprintf(str, spaceStr[5], (link2) ? '-' : '|', gdesc[3], (link1) ? '-' : '|');
+
+    sprintf(str, spaceStr[5], (link2) ? '-' : '|', (gdesc) ? gdesc_get_line(gdesc, 3) : gdescAux, (link1) ? '-' : '|');
     strcat(map[5],str);
 
 
-    sprintf(str, spaceStr[6], gdesc[4]);
+    sprintf(str, spaceStr[6], (gdesc) ? gdesc_get_line(gdesc, 4) : gdescAux);
     strcat(map[6],str);
 
     /*Prints the list of items in the last row of the space*/
@@ -764,7 +782,7 @@ void graphic_engine_paint_space(Game *game, Space *space, Direction direction,ch
   }else{
     for (i = 0; i < SPACE_HEIGHT; i++)
     {
-      strcat(map[i], "                ");
+      strcat(map[i], "                 ");
     }
   }
 }
