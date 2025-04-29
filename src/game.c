@@ -719,6 +719,7 @@ Status game_add_link(Game *game, Link *link){
 Status game_add_object(Game *game, Object *object){
   int proceduralLoc;
   NPC *npc = NULL;
+  Player *player = NULL;
 
   if(!object || !game)
     return ERROR;
@@ -730,7 +731,8 @@ Status game_add_object(Game *game, Object *object){
     case UNKNOWN_INVENTORY: 
       return ERROR;
     case PLAYER_INVENTORY:
-      inventory_add_object(entity_get_inventory(player_get_entity(game_get_player(game))), object);
+      player = game_get_player_by_id(game, object_get_location(object));
+      inventory_add_object(entity_get_inventory(player_get_entity(player)), object);
       break;
     case NPC_INVENTORY:
       npc = game_get_npc_by_id(game, object_get_location(object));
