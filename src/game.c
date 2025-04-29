@@ -721,6 +721,8 @@ Status game_add_object(Game *game, Object *object){
   NPC *npc = NULL;
   Player *player = NULL;
 
+  Status status = OK;
+
   if(!object || !game)
     return ERROR;
 
@@ -732,20 +734,20 @@ Status game_add_object(Game *game, Object *object){
       return ERROR;
     case PLAYER_INVENTORY:
       player = game_get_player_by_id(game, object_get_location(object));
-      inventory_add_object(entity_get_inventory(player_get_entity(player)), object);
+      status = inventory_add_object(entity_get_inventory(player_get_entity(player)), object);
       break;
     case NPC_INVENTORY:
       npc = game_get_npc_by_id(game, object_get_location(object));
-      inventory_add_object(entity_get_inventory(npc_get_entity(npc)), object); /*An npc inventory is being implemented*/
+      status = inventory_add_object(entity_get_inventory(npc_get_entity(npc)), object); /*An npc inventory is being implemented*/
       break;
     case SPACE_INVENTORY:
       proceduralLoc = (game->procedural) ? (rand() % (game->n_spaces - 1) + 2) : object_get_location(object);
-      inventory_add_object(space_get_inventory(game_get_space(game, proceduralLoc)), object);
+      status = inventory_add_object(space_get_inventory(game_get_space(game, proceduralLoc)), object);
       break;
   }
 
   debug_log(PRINT,"Game Added Object: ID: %ld, name: %s, objectlocation: %ld, inventoryType: %d", object_get_id(object), object_get_name(object), object_get_location(object), object_get_type(object) - UNKNOWN_INVENTORY);
-  return OK;
+  return status;
 }
 
 Status game_add_player(Game *game, Player *player){
