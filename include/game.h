@@ -564,6 +564,16 @@ Status game_add_ability(Game *game, Ability *ability);
 Status game_add_gdesc(Game *game, GDesc *gdesc);
 
 /**
+ * @brief Gets the collection of attacks
+ * @author Sofía Calvo
+ * 
+ * @param game game struct
+ * @return Collection
+ */
+Collection *game_get_attacks(Game *game);
+
+
+/**
  * @brief Generates a level proceduraly
  * @author Daniel Gómez
  * 

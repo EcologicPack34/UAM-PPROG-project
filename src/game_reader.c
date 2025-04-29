@@ -226,7 +226,6 @@ Status game_reader_create_from_file(Game **game, char *filename){
     return ERROR;
   }
   game_switch_player(*game, 0);
-  
 
   if(game_reader_load_stats(*game, filename) == ERROR){
     debug_log(LOG_ERROR, "Error loading stats at: game_reader_create_from_file(Game*, char*) in game_reader.c");
@@ -234,6 +233,11 @@ Status game_reader_create_from_file(Game **game, char *filename){
   }
   if(game_spatial_map(*game) == ERROR){
     debug_log(LOG_ERROR,"Error maping spatialy spaces");
+    return ERROR;
+  }
+
+  if(game_reader_load_attacks(*game) == ERROR) {
+    debug_log(LOG_ERROR,"Error loading attacks");
     return ERROR;
   }
 
@@ -404,6 +408,7 @@ Status game_reader_load_objects(Game *game, char *filename){
   Id dependency_object = NO_ID;
   InventoryType objectlocationtype;
   Object *object = NULL;
+  NPC *npc = NULL;
 
   int is_consumable = 0, is_movable = 0;
 
@@ -980,7 +985,7 @@ Status game_reader_load_attacks(Game *game) {
   Combat *cmb = NULL;
   Attack *at = NULL;
   bool needs_target;
-
+  Collection *collection = NULL;
   if (!game) return ERROR;
   
   file = fopen(SETTINGS_FILE_PATH, "r");
@@ -997,13 +1002,13 @@ Status game_reader_load_attacks(Game *game) {
       toks = strtok(NULL, "]");
       numAttcks = atoi(toks);
       /*starts saving the attacks in the combat*/
-      cmb = game_get_combat(game);
-      combat_set_num_attacks(cmb, numAttcks);
 
     break;
     }
   }
-    
+  
+  collection = game_get_attacks(game);
+
   for (i = 0; i < numAttcks; i++)
   {
     fscanf(file, "%s", line);
@@ -1023,8 +1028,8 @@ Status game_reader_load_attacks(Game *game) {
     toks = strtok(NULL, ";");
     needs_target = atoi(toks);
     attack_set_target_bool(at, needs_target);
-    /*Will now copy this attack into the arrays of attacks in combat*/
-    combat_set_attack_in_position(cmb, at, i);
+    /*Will now copy this attack into the collection*/
+    collection_add(collection, at);
   }
 
   return OK;

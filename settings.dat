@@ -6,9 +6,9 @@ procedural-gen=false
 
 nombre;multDaño;prob;requiereTarget
 [Attacks:4]
-light;1;90;1
+light;1;90;0
 strong;2;70;1
-quick;1.2;60;1
+quick;1.2;60;0
 swift;3;40;0
 
 

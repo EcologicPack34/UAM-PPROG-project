@@ -81,7 +81,7 @@ InventoryType = {UNKNOWN_INVENTORY == 0, PLAYER_INVENTORY == 1, NPC_INVENTORY ==
 #o:2|Grain2|NONE|Grano2, cannot be moved|-1|0|0|121|3
 #o:3|Grain3|NONE|Grano3|-1|1|0|121|3
 #o:4|Grain4|NONE|Grano4|-1|1|0|122|3
-#o:5|HP|NONE|Health Potion that heals 20 HP|-1|1|1|11|3
+#o:5|HP|NONE|Health Potion that heals 20 HP|-1|1|1|4|2
 #o:6|IHP|NONE|Infinite Health Potion that heals 20 HP and isn't consumed|-1|1|1|121|3
 #o:7|HTEST|wearable helmet base_damage:1 strength:1 max_health:20|Helmet TEST|-1|1|1|11|3
 #o:8|MoneyBag|NONE|Bag with 20 coins|-1|1|1|11|3
