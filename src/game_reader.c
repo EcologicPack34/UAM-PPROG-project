@@ -200,6 +200,27 @@ Status game_reader_create_from_file(Game **game, char *filename){
       debug_log(LOG_ERROR, "Error loading spaces at: game_reader_create_from_file(Game*, char*) in game_reader.c");
       return ERROR;
     }
+<<<<<<< Updated upstream
+=======
+    
+    /*Temp loading*/
+    if (game_reader_load_events(*game, filename) == ERROR){
+      debug_log(LOG_ERROR, "Error loading events at: game_reader_create_from_file(Game*, char*) in game_reader.c");
+      return ERROR;
+    }
+    if (game_reader_load_npcs(*game, filename) == ERROR){
+      debug_log(LOG_ERROR, "Error loading npcs at: game_reader_create_from_file(Game*, char*) in game_reader.c");
+      return ERROR;
+    }
+    if (game_reader_load_objects(*game, filename) == ERROR){
+      debug_log(LOG_ERROR, "Error loading objects at: game_reader_create_from_file(Game*, char*) in game_reader.c");
+      return ERROR;
+    }
+    if (game_reader_load_ability(*game, filename) == ERROR){
+      debug_log(LOG_ERROR, "Error loading ability at: game_reader_create_from_file(Game*, char*) in game_reader.c");
+      return ERROR;
+    }
+>>>>>>> Stashed changes
   }
   
   /*Temp loading*/
@@ -407,6 +428,7 @@ Status game_reader_load_objects(Game *game, char *filename){
   long objectid, objectlocation;
   Id dependency_object = NO_ID;
   InventoryType objectlocationtype;
+  Entity *ent = NULL;
   Object *object = NULL;
 
   int is_consumable = 0, is_movable = 0;
