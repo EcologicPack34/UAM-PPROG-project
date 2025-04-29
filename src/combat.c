@@ -595,6 +595,7 @@ Status combat_update_deaths(Combat *cmb){
     /*Check if all the enemies are dead to end the combat*/
     int i;
     Stats *last_stats = NULL;
+    Inventory *invent = NULL;
 
     if (!cmb)
         return ERROR;
@@ -603,7 +604,11 @@ Status combat_update_deaths(Combat *cmb){
     {
         if (entity_stats_is_dead(&(cmb->enemies_stats[i].stats)))
         {
+<<<<<<< Updated upstream
             /*Copies enemies into dead entities array*/
+=======
+            /*Copies enemie into dead entities array*/
+>>>>>>> Stashed changes
             combat_release_dead_loot(cmb, &(cmb->enemies_stats[i]));
             combat_copy_stats(&(cmb->enemies_stats[i]), &(cmb->dead_entities[(cmb->n_dead_entities)++]));
 
@@ -617,6 +622,7 @@ Status combat_update_deaths(Combat *cmb){
             }
 
             cmb->enemies_count--;
+            invent = entity_get_inventory(cmb->enemies_stats[i].entity);
         }
     }
 
@@ -886,6 +892,10 @@ Status combat_release_dead_loot(Combat *cmb, Stats *st) {
             return ERROR;
         }
         objID = object_get_id(obj);
+<<<<<<< Updated upstream
+=======
+        object_set_location(obj, spaceID);
+>>>>>>> Stashed changes
         inventory_move_object(inv, space_inventory, objID);
     }
 
