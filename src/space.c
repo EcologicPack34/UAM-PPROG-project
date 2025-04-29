@@ -36,7 +36,7 @@ struct _Space {
   Link *up;                             /*!< pointer of the Link up of the space  */
   Link *down;                           /*!< pointer of the Link down of the space  */
   
-  char *graphicDescription[SPACE_GRAPHIC_HEIGHT]; /*!< Graphical description of the space*/
+  GDesc *gdesc;                         /*!< pointer to a graphic description*/
 
   Vector2 position;                     /*!< Position vector on the block*/
   bool mapped;                          /*!< Bool to determine if space is mapped(true) or not*/
@@ -52,7 +52,6 @@ struct _Space {
 
 Space* space_create(Id id) {
   Space* newSpace = NULL;
-  int i;
 
   /* Error control */
   if (id == NO_ID) return NULL;
@@ -77,6 +76,11 @@ Space* space_create(Id id) {
   newSpace->south = NULL;
   newSpace->east = NULL;
   newSpace->west = NULL;
+  newSpace->up = NULL;
+  newSpace->down = NULL;
+
+  newSpace->discovered = false;
+  newSpace->gdesc = NULL;
   
   newSpace->npcs = collection_create(SPACE_INITIAL_SIZE_NPCS, false, true, npc_cmp, npc_print);
   if(!(newSpace->npcs)){
@@ -85,36 +89,16 @@ Space* space_create(Id id) {
     free(newSpace);
     return NULL;
   }
-  /*Allocates memory for graphic description*/
-  for (i = 0; i < SPACE_GRAPHIC_HEIGHT; i++)
-  {
-    newSpace->graphicDescription[i] = calloc(SPACE_GRAPHIC_WIDTH + 1, sizeof(char));
-    /*Checks if fails and frees memory*/
-    if(newSpace->graphicDescription[i] == NULL){
-      for (i--; i >= 0; i--){
-        free(newSpace->graphicDescription[i]);
-      }
-      inventory_destroy(newSpace->inventory);
-      collection_destroy(newSpace->npcs);
-      free(newSpace);
-      return NULL;
-    }
-  }
   return newSpace;
 }
 
 Status space_destroy(Space* space) {
-  int i;
   if (!space) {
     return ERROR;
   }
 
   inventory_destroy(space->inventory);
   collection_destroy(space->npcs); /*Dynamic memory from NPCs is controlled by the main*/
-
-  for (i = 0; i < SPACE_GRAPHIC_HEIGHT; i++){
-    free(space->graphicDescription[i]);
-  }
 
   free(space);
   space = NULL;
@@ -219,13 +203,9 @@ Status space_set_neighbour(Space *space, Space *neighbour, Direction direction){
   return OK;
 }
 
-Status space_set_graphic_description(Space *space, char *desc, int index){
-  if(!space || !desc) return ERROR;
-
-  if(index < 0 || index > SPACE_GRAPHIC_HEIGHT) return ERROR;
-
-  strncpy(space->graphicDescription[index], desc, SPACE_GRAPHIC_WIDTH);
-  space->graphicDescription[index][SPACE_GRAPHIC_WIDTH] = '\00';
+Status space_set_graphic_description(Space *space, GDesc *gdesc){
+  if(!space || !gdesc) return ERROR;
+  space->gdesc = gdesc;
   return OK;
 }
 
@@ -242,9 +222,9 @@ bool space_get_isDiscovered(Space *space){
   return space->discovered;
 }
 
-char **space_get_graphic_description(Space *space){
+GDesc *space_get_graphic_description(Space *space){
   if(!space) return NULL;
-  return space->graphicDescription;
+  return space->gdesc;
 }
 
 Space *space_get_neighbour(Space *space, Direction direction){

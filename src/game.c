@@ -41,6 +41,7 @@ struct _Game {
   /*Collections*/
   Collection *npcs;                   /*!< Contains all the information related to the NPCs*/
   Collection *objects;                /*!< Contains all the information related to the object */
+  Collection *gdescs;                 /*!< Contains all the information of graphic descriptions*/
   Collection *attacks;                /*!< Contains all the information related to the attacks */
 
   /*Space related*/
@@ -62,9 +63,11 @@ struct _Game {
   GameState current_state;            /*!< Enum storing the current game state*/
   Command *last_cmd;                  /*!< string with the last command */
   bool finished;                      /*!< bool that determines if the game has finished*/
-
+  
   bool procedural;                    /*!< Stores if the game is generated prceduraly or not*/
 };
+
+/*-----PRIVATE FUNCTIONS-----*/
 
 /**
  * @brief Gets the link in a certain position of the game links array
@@ -95,6 +98,51 @@ Link *game_get_link_at(Game *game, long index){
 Status game_map_space_block(Game *game, Space *initSpace ,int block);
 
 /**
+ * @brief Gets a random graphic description of type space
+ * 
+ * @param game 
+ * @return GDesc* 
+ */
+GDesc *_game_get_randomSpaceDesc(Game *game){
+  int random = 0;
+  int spaceDescNum = 0;
+  int count = 0;
+  int i;
+  int length;
+
+  GDesc *gdesc = NULL;
+
+  if(!game) return NULL;
+  if(collection_length(game->gdescs) <= 0) return NULL;
+
+  length = collection_length(game->gdescs);
+  for (i = 0; i < length; i++)
+  {
+    gdesc = collection_get_element_at(game->gdescs, i);
+    if(gdesc_get_type(gdesc) == SPACE_DESC){
+      spaceDescNum++;
+    }
+  }
+  
+  if(spaceDescNum <= 0) return NULL;
+
+  random = rand()%spaceDescNum;
+  for (i = 0; i < length; i++)
+  {
+    gdesc = collection_get_element_at(game->gdescs, i);
+    if(gdesc_get_type(gdesc) == SPACE_DESC){
+      if(count == random){
+        return gdesc;
+      }
+      count++;
+    }
+  }
+  return NULL;
+}
+
+/*-----PUBLIC FUNCTIONS-----*/
+
+/**
    Game interface implementation
 */
 
@@ -123,6 +171,12 @@ Status game_create(Game **game) {
     return ERROR;
   } 
   
+  (*game)->gdescs = collection_create(COLLECTION_INITIAL_SIZE, false, true, gdesc_cmp, NULL);
+  if(!((*game)->objects)){
+    debug_log(LOG_ERROR,"Error initializing collection of graphic descriptions");
+    return ERROR;
+  }
+
   (*game)->last_cmd = command_create();
   if(!((*game)->last_cmd)){
     debug_log(LOG_ERROR,"Error creating command");
@@ -177,36 +231,50 @@ Status game_destroy(Game *game) {
     space_destroy(game->spaces[i]);
   }
 
+  /*Frees players*/
   for(i = 0; i < game->n_players; i++){
     player_destroy(game->players[i]);
   }
   
-  atcs = game_get_attacks(game);
 
   collection_free_elements(game_get_objects(game), object_destroy);
   collection_destroy(game_get_objects(game));
 
+  /*Frees objects*/
+  collection_free_elements(game_get_objects(game), object_destroy);
+  collection_destroy(game_get_objects(game));
+
+  /*Frees attacks*/
+  atcs = game_get_attacks(game);
   collection_free_elements(atcs, attack_destroy);
   collection_destroy(game_get_attacks(game));
-
+ /*Frees npcs*/
   if(collection_free_elements(game_get_npcs(game), npc_destroy) == ERROR){
     printf("Error liberando colleccion de npcs");
   }
   collection_destroy(game_get_npcs(game));
 
+  /*Frees graphic descriptions*/
+  if(collection_free_elements(game->gdescs, gdesc_destroy) == ERROR){
+    printf("Error freeing graphic descriptions");
+  }
+  collection_destroy(game->gdescs);
+
+  /*Frees comand and event manager*/
   command_destroy(game->last_cmd);
   event_manager_destroy(game->event_manager);
   
+  /*Frees abilities and log messages*/
   ability_manager_destroy(game->ability_manager);
   queue_destroy(game->screenLog);
 
+  /*Frees combat*/
   if(game->combat){
     combat_free(game->combat);
   }
 
   /*Destroys all links */
   count = game_get_n_links(game);
-
   for (i = 0; i < count; i++)
   {
     free(game_get_link_at(game,i));
@@ -652,12 +720,28 @@ Status game_add_link(Game *game, Link *link){
 }
 
 Status game_add_object(Game *game, Object *object){
+  int proceduralLoc;
 
   if(!object || !game)
     return ERROR;
 
   if(collection_add(game_get_objects(game), object) == ERROR)
     return ERROR;
+
+  switch(object_get_type(object)){
+    case UNKNOWN_INVENTORY: 
+      return ERROR;
+    case PLAYER_INVENTORY:
+      inventory_add_object(entity_get_inventory(player_get_entity(game_get_player(game))), object);
+      break;
+    case NPC_INVENTORY:
+      /* NON IMPLEMENTEDinventory_add_object()*/
+      break;
+    case SPACE_INVENTORY:
+      proceduralLoc = (game->procedural) ? (rand() % (game->n_spaces - 1) + 2) : object_get_location(object);
+      inventory_add_object(space_get_inventory(game_get_space(game, proceduralLoc)), object);
+      break;
+  }
 
   debug_log(PRINT,"Game Added Object: ID: %ld, name: %s, objectlocation: %ld, inventoryType: %d", object_get_id(object), object_get_name(object), object_get_location(object), object_get_type(object) - UNKNOWN_INVENTORY);
   return OK;
@@ -688,13 +772,12 @@ Status game_add_npc(Game *game, NPC *npc){
     return ERROR;
     
   ent = npc_get_entity(npc);
-  locationid = entity_get_location(ent);
 
-
+  locationid = (game->procedural) ? (rand() % (game->n_spaces - 1) + 2): entity_get_location(ent);
   if(space_add_NPC(game_get_space(game, locationid), npc) == ERROR){
     return ERROR;
   }
-
+  
   debug_log(PRINT,"Game Added NPC: ID: %ld, name: %s, objectlocation: %ld", entity_get_id(ent), entity_get_name(ent), entity_get_location(ent));
   return OK;
 }
@@ -1113,6 +1196,7 @@ Status game_generate_procedural(Game *game){
   for(i = 0; i < j; i++){
     game->spaces[i] = collection_get_element_at(spacesA, i);
     space_set_isMapped(game->spaces[i], false);
+    space_set_graphic_description(game->spaces[i], _game_get_randomSpaceDesc(game));
   }
   collection_destroy(spacesA);
 
@@ -1123,6 +1207,7 @@ Status game_generate_procedural(Game *game){
     game->links[i] = collection_get_element_at(links, i);
   }
   collection_destroy(links);
+
   game->procedural = true;
   return OK;
 }
@@ -1130,4 +1215,20 @@ Status game_generate_procedural(Game *game){
 bool game_get_is_procedural(Game *game){
   if(!game) return false;
   return game->procedural;
+}
+
+GDesc *game_get_gdesc_by_id(Game *game, Id id){
+  GDesc *temp;
+  GDesc *found = NULL;
+  if(!game || id <= UNDEFINED_ID) return NULL;
+
+  temp = gdesc_create(id, 1,1, NO_DESC);
+  found = collection_find(game->gdescs,temp);
+  gdesc_destroy(temp);
+  return found;
+}
+
+Status game_add_gdesc(Game *game, GDesc *gdesc){
+  if(!game || !gdesc) return ERROR;
+  return collection_add(game->gdescs, gdesc);
 }
