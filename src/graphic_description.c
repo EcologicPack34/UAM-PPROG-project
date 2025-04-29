@@ -52,7 +52,7 @@ Status gdesc_set_line(GDesc *gdesc, int line, char *content){
     if(!gdesc || !content) return ERROR;
     if(line < 0 || line >= gdesc->height) return ERROR;
 
-    gdesc->description[line] = (char *)malloc((strlen(content) + 1) * sizeof(char));
+    gdesc->description[line] = (char *)calloc(gdesc->width + 2, sizeof(char));
     if(!(gdesc->description[line])) return ERROR;
 
     strncpy(gdesc->description[line], content, gdesc->width);

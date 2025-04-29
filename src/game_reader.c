@@ -408,7 +408,6 @@ Status game_reader_load_objects(Game *game, char *filename){
   Id dependency_object = NO_ID;
   InventoryType objectlocationtype;
   Object *object = NULL;
-  NPC *npc = NULL;
 
   int is_consumable = 0, is_movable = 0;
 
@@ -982,7 +981,6 @@ Status game_reader_load_attacks(Game *game) {
   double mult;
   double chance;
 
-  Combat *cmb = NULL;
   Attack *at = NULL;
   bool needs_target;
   Collection *collection = NULL;
@@ -1013,25 +1011,26 @@ Status game_reader_load_attacks(Game *game) {
   {
     fscanf(file, "%s", line);
     /*will now read the name of the attack*/
-    toks = strtok(line, ";");
+    toks = strtok(line, "|");
     /*will now create the attack with the name*/
     at = attack_create(toks);
     /*will now get the multiplicator of damage*/
-    toks = strtok(NULL, ";");
+    toks = strtok(NULL, "|");
     mult = atof(toks);
     attack_set_damage_multiplicator(at, mult);
     /*will now get the chances of failing*/
-    toks = strtok(NULL, ";");
+    toks = strtok(NULL, "|");
     chance = atof(toks);
     attack_set_failure_chance(at, chance);
     /*Will now get if it needs target or not*/
-    toks = strtok(NULL, ";");
+    toks = strtok(NULL, "|");
     needs_target = atoi(toks);
     attack_set_target_bool(at, needs_target);
     /*Will now copy this attack into the collection*/
     collection_add(collection, at);
   }
 
+  fclose(file);
   return OK;
 }
 

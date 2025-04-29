@@ -237,9 +237,6 @@ Status game_destroy(Game *game) {
   }
   
 
-  collection_free_elements(game_get_objects(game), object_destroy);
-  collection_destroy(game_get_objects(game));
-
   /*Frees objects*/
   collection_free_elements(game_get_objects(game), object_destroy);
   collection_destroy(game_get_objects(game));
@@ -721,6 +718,7 @@ Status game_add_link(Game *game, Link *link){
 
 Status game_add_object(Game *game, Object *object){
   int proceduralLoc;
+  NPC *npc = NULL;
 
   if(!object || !game)
     return ERROR;
@@ -735,7 +733,8 @@ Status game_add_object(Game *game, Object *object){
       inventory_add_object(entity_get_inventory(player_get_entity(game_get_player(game))), object);
       break;
     case NPC_INVENTORY:
-      /* NON IMPLEMENTEDinventory_add_object()*/
+      npc = game_get_npc_by_id(game, object_get_location(object));
+      inventory_add_object(entity_get_inventory(npc_get_entity(npc)), object); /*An npc inventory is being implemented*/
       break;
     case SPACE_INVENTORY:
       proceduralLoc = (game->procedural) ? (rand() % (game->n_spaces - 1) + 2) : object_get_location(object);
