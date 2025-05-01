@@ -133,7 +133,7 @@ Formato Ability: #sk:Id|Type|Name|Entityid(ObjectId)|is_player_ability|is_object
 #sk:3|heal_self|Heal self 5 HP  Maximum CD: 0|6|0|1|0|0|5
 #sk:4|money_bag|Adds 20 coins   Maximum CD: 0|8|0|1|0|0|20
 #sk:5|link_unlock|Unlocks link between 123 and 124|9|0|1|0|0|4
-#sk:6|effect_enemy|FireBall Launcher|1|1|0|0|0|2
+#sk:6|effect_enemy|FireBall Launcher|1|1|0|0|3|2
 #sk:7|effect_self|Self Regeneration Spell|1|1|0|0|2|3
 
 
