@@ -757,8 +757,6 @@ Status game_actions_god_mode(Game *game){
   Player *pl=NULL;
   Combat *combat = NULL;
   Stats *stat = NULL;
-  Space *aux_space=NULL;
-  int n_spaces,i;
 
   if(!game) return ERROR;
 
@@ -769,19 +767,13 @@ Status game_actions_god_mode(Game *game){
   if(player_set_stats(pl, MAX_LVL, MAX_LVL, MAX_LVL, MAX_LVL, MAX_LVL, MAX_LVL) == ERROR)
     return ERROR;
 
-  n_spaces = game_get_n_spaces(game);
-  for(i = 0; i < n_spaces; i++){
-    aux_space = game_get_space_at(game,i);
-    space_set_discovered(aux_space,true);
-  }
-
   combat = game_get_combat(game);
   if(combat){
     stat = combat_get_player_stats(combat);
     if(entity_stats_set_all(&(stat->stats), MAX_LVL, MAX_LVL, MAX_LVL, MAX_LVL, MAX_LVL, MAX_LVL) == ERROR)
       return ERROR;
   }
-
+  
   return OK;
 }
 

@@ -98,6 +98,21 @@ Link *game_get_link_at(Game *game, long index){
 Status game_map_space_block(Game *game, Space *initSpace ,int block);
 
 /**
+ * @brief This function gets a space in a game by its index
+ * @author Aaron Charameli Mair
+ * 
+ * @param game a struct Game 
+ * @param ix the index of the space
+ * @return Space*
+ */
+Space *game_get_space_at(Game *game, int ix){
+  if(!game || (ix<0)) return NULL;
+  if(ix >= game_get_n_spaces(game)) return NULL;
+
+  return game->spaces[ix];
+}
+
+/**
  * @brief Gets a random graphic description of type space
  * 
  * @param game 
@@ -317,13 +332,6 @@ Space *game_get_space(Game *game, Id id) {
   return NULL;
 }
 
-Space *game_get_space_at(Game *game, int ix){
-  if(!game || (ix<0)) return NULL;
-  if(ix >= game_get_n_spaces(game)) return NULL;
-
-  return game->spaces[ix];
-}
-
 Player* game_get_player(Game *game){
   return game->active_player; 
 }
@@ -480,8 +488,21 @@ Status game_set_state(Game *game, GameState state){
 }
 
 Status game_set_godmode(Game *game, bool value){
+  int i;
   if(!game) return ERROR;
   game->godmode = value;
+  if(value == true){
+
+    /*spaces set discovered*/
+    for(i=0;i<game->n_spaces;i++){
+      space_set_discovered(game_get_space_at(game,i),true);
+    }
+
+  /*links set unlocked*/
+    for(i=0;i<game->n_links;i++){
+      link_set_locked(game_get_link_at(game, i), false);
+    }
+  }
   return OK;
 }
 

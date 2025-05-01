@@ -89,16 +89,6 @@ char* game_to_string(Game * game);
 Space *game_get_space(Game *game, Id id);
 
 /**
- * @brief This function gets a space in a game by its index
- * @author Aaron Charameli Mair
- * 
- * @param game a struct Game 
- * @param ix the index of the space
- * @return Space*
- */
-Space *game_get_space_at(Game *game, int ix);
-
-/**
  * @brief Gets a space from the game by it's spatial position
  * @author Daniel Gómez
  * 
