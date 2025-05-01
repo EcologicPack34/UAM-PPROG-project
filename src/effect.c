@@ -6,7 +6,7 @@
  * @file effect_manager.c
  * @author Aaron Charameli Mair
  * @version 0
- * @date 10-04-2025
+ * @date 30-04-2025
  * @copyright GNU Public License
  */
 
@@ -52,11 +52,30 @@ struct _EffectsManager{
  * @param effect a pointer to the effect
  * @param affected a pointer to the affected (that contains the entity)
  * @return Status 
- * @note data string will be: "DamageTaken" (a string with the number of damage dealt per turn)
+ * @note data string will be "DamageTaken" (a number with the number of damage dealt per turn)
  */
 Status _effect_apply_poison(Effect *effect, Affected *affected);
 
+/**
+ * @brief This function applies an effect of type regeneration to an entity
+ * @author Aaron Charameli Mair
+ * 
+ * @param effect a pointer to the effect
+ * @param affected a pointer to the affecter
+ * @return Status 
+ * @note data string will be a number with the number of health regenerated per turn
+ */
 Status _effect_apply_regeneration(Effect *effect, Affected *affected);
+
+/**
+ * @brief This function gets the affected struct of an effect given its entity
+ * @author Aaron Charameli Mair
+ * 
+ * @param effect a pointer to the effet
+ * @param ent a pointer to the entity
+ * @return Affected* or NULL if not fount or ERROR
+ */
+Affected *_effect_get_affected(Effect *effect, Entity *ent);
 
 /**
  * @brief this function creates an affected
@@ -131,6 +150,21 @@ void effect_destroy(void *e){
     return;
 }
 
+Effect *effect_get_by_id(EffectManager *em, Id id){
+    Effect *effect=NULL;
+    int i,len;
+    if(!em || (id<UNDEFINED_ID)) return NULL;
+
+    len = collection_length(em->effects);
+
+    for(i=0;i<len;i++){
+        effect = collection_get_element_at(em->effects, i);
+        if(effect && (effect->id == id))
+            return effect;
+    }
+    return NULL;
+}
+
 void effect_manager_destroy(EffectManager *em){
     if(em){
         if(em->effects){
@@ -148,26 +182,22 @@ Status effect_manager_add_effect(EffectManager *em, Effect *effect){
 }
 
 Status effect_add_affected(Effect *e, Entity *ent){
+    Status st = OK;
     Affected *a=NULL;
     if(!e || !ent) return ERROR;
-    if((a = _affected_create(ent,e->default_turns)) == NULL) return ERROR;
+    if(effect_has_affected(e, ent) == false){
+        if((a = _affected_create(ent,e->default_turns)) == NULL) return ERROR;
+            st = collection_add(e->affecteds,a);
+        }
+    else{
 
-    return collection_add(e->affecteds,a);
+    }
+    
+    return st;
 }
 
 bool effect_has_affected(Effect *e, Entity *ent){
-    Affected *aux=NULL;
-    int i,n;
-    if(!e || !ent) return false;
-
-    if((n=collection_length(e->affecteds)) == -1) return false;
-
-    for(i = 0; i<n; i++){
-        aux = collection_get_element_at(e->affecteds,i);
-        if(aux->ent==ent)
-            return true;
-    }
-    return false;
+    return (_effect_get_affected(e,ent)!=NULL) ? true : false;
 }
 
 Status effect_update(Effect *effect){
@@ -286,6 +316,8 @@ Status effect_get_as_str(Effect *effect, long destiny_size ,char *destiny){
     return OK;
 }
 
+
+
 EffectType effect_get_effect_type(Effect *effect){
     if(!effect) return -2;
     return effect->ET;
@@ -362,6 +394,21 @@ Status _effect_apply_regeneration(Effect *effect, Affected *affected){
         affected->turns--;
 
     return st;
+}
+
+Affected *_effect_get_affected(Effect *effect, Entity *ent){
+    Affected *aux=NULL;
+    int i,n;
+    if(!effect || !ent) return NULL;
+
+    if((n=collection_length(effect->affecteds)) == -1) return NULL;
+
+    for(i = 0; i<n; i++){
+        aux = collection_get_element_at(effect->affecteds,i);
+        if(aux->ent==ent)
+            return aux;
+    }
+    return NULL;
 }
 
 Affected *_affected_create(Entity *ent, int turns){

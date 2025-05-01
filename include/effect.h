@@ -13,13 +13,13 @@
 #ifndef EFFECT_H
 #define EFFECT_H
 
-#define N_EFFECTS 3 /*!< Number of effects implemented*/
+#define N_EFFECT_TYPES 4 /*!< Number of effect types implemented*/
 
 #include "types.h"
 #include "entity.h"
 #include <stdio.h>
 
-typedef enum{UNKNOWN_EFFECT, REGENERATION, POISON}EffectType; /*!< The type of effect*/
+typedef enum{UNKNOWN_EFFECT, REGENERATION, POISON, FIRE}EffectType; /*!< The type of effect*/
 
 /**
  * @brief ADT containing basic info about effect
@@ -62,6 +62,16 @@ EffectManager *effect_manager_create();
  * @note this function also free's the effects contained in the effect manager
  */
 void effect_manager_destroy(EffectManager *em);
+
+/**
+ * @brief This function gets an effect by its if
+ * @author Aaron Charameli Mair
+ * 
+ * @param em pointer to effect manager
+ * @param id the id of the effect
+ * @return Effect* or NULL if not found or ERROR
+ */
+Effect *effect_get_by_id(EffectManager *em, Id id);
 
 /**
  * @brief This function frees all the memory of an effect

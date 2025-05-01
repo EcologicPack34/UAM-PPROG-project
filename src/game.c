@@ -458,6 +458,12 @@ TurnValidation game_get_is_turn_valid(Game *game){
   return game->is_turn_valid;
 }
 
+Effect *game_get_effect_by_id(Game *game, Id id){
+  if(!game || (id<=UNDEFINED_ID)) return ERROR;
+
+  return effect_get_by_id(game->effect_manager, id);
+}
+
 /*-----------SETTERS-----------*/
 
 Status game_set_last_command(Game *game, Command *command) {

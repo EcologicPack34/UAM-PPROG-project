@@ -306,6 +306,16 @@ bool game_get_is_procedural(Game *game);
  */
 GDesc *game_get_gdesc_by_id(Game *game, Id id);
 
+/**
+ * @brief This function gets an effect by its id
+ * @author Aaron Charameli Mair
+ * 
+ * @param game game struct
+ * @param id id of the effect
+ * @return Effect* or NULL if not found or ERROR
+ */
+Effect *game_get_effect_by_id(Game *game, Id id);
+
 /*----------SETTERS----------*/
 
 /**

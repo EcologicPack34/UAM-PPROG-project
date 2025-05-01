@@ -10,18 +10,18 @@
 */
 
 #ifndef SKILLS_MANAGER_H
-#define SKILLS_MANAGER_H
+#define SKILLS_MANAGER_H 
 
 #include "types.h"
 #include "stdbool.h"
 #include "queue.h"
 
-#define N_SKILLS 5 /*!< Number of skills implemented on AbilityType*/
+#define N_SKILLS 7 /*!< Number of skills implemented on AbilityType*/
 
 /**
  * @brief Enum storing the different types of events 
  */
-typedef enum {NO_SKILL, HEAL_SELF, HEAL_ALLY, MONEY_BAG, LINK_UNLOCK}AbilityType; /*!< Type to determine the effect of an ability*/
+typedef enum {NO_SKILL, HEAL_SELF, HEAL_ALLY, MONEY_BAG, LINK_UNLOCK, EFFECT_SELF, EFFECT_ENEMY, EFFECT_ALLY}AbilityType; /*!< Type to determine the effect of an ability*/
 
 /**
  * @brief Ability ADT that contains all the information about the ability
