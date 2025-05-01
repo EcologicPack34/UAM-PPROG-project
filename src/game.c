@@ -1039,6 +1039,8 @@ Status game_end_dialogue(Game *game){
 
   game_set_state(game, DEFAULT);
 
+  game->dialogue = NULL;
+
   return OK;
 }
 

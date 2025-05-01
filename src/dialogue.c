@@ -11,24 +11,27 @@
 
 #include "dialogue.h"
 #include "utils.h"
+#include "types.h"
 #include <stdio.h>
 #include <stdlib.h>
 
-#define LINE_LENGTH 124     /*!< Max length of a line of dialogue*/
-#define LINE_MAX 4          /*!< Maximum number of lines in a dialogue*/
+char doutput_to_str[DOUTPUTS_NUM][LINE_LENGTH] = {"Nothing...", "Stop Dialogue", "Fight!", "Access Store", "Follow", "Unfollow"};
 
-
+/**
+ * @brief Dialogue ADT implementation
+ * 
+ */
 struct _Dialogue{
-    char actual_text[WORD_SIZE];
-    int dialogue_state;
-    NPC *npc;
+    char actual_text[WORD_SIZE];        /*!< Text of the NPC*/
+    int dialogue_state;                 /*!< Actual state of dialogue*/
+    NPC *npc;                           /*!< NPC with who the dialogue is ocurring*/
 
-    char **player_replies;
-    Dialogue_Outputs *outcomes;
-    int *next_dialogue_states;
-    int player_replies_num;
+    char **player_replies;              /*!< Possible replies of the player*/
+    Dialogue_Outputs *outcomes;         /*!< Outcomes of each reply*/
+    int *next_dialogue_states;          /*!< Next dialogue_state for each reply*/
+    int player_replies_num;             /*!< Number of replies*/
 
-    FILE *dialogue_file;
+    FILE *dialogue_file;                /*!< FILE stream where the dialogue is located*/
 };
 
 /**
@@ -59,20 +62,12 @@ Dialogue *dialogue_create(NPC *npc, FILE *fIN){
     return dialogue;
 }
 
-void dialogue_destroy(Dialogue *dialogue){
-    int i;
-    
+void dialogue_destroy(Dialogue *dialogue){ 
     if(dialogue){
-        for(i = 0; i < dialogue->player_replies_num; i++){
-            free(dialogue->player_replies[i]);
-        }
-        free(dialogue->player_replies);
+
+        dialogue_strings_destroy(dialogue);
 
         fclose(dialogue->dialogue_file);
-
-        free(dialogue->outcomes);
-
-        free(dialogue->next_dialogue_states);
 
         free(dialogue);
     }
@@ -92,11 +87,49 @@ void dialogue_strings_destroy(Dialogue *dialogue){
     }
 }
 
+NPC *dialogue_get_NPC(Dialogue *dialogue){
+    if(!dialogue) return NULL;
+
+    return dialogue->npc;
+}
+
+char *dialogue_get_npc_text(Dialogue *dialogue){
+    if(!dialogue) return NULL;
+
+    return dialogue->actual_text;
+}
+
+char **dialogue_get_player_replies(Dialogue *dialogue){
+    if(!dialogue) return NULL;
+
+    return dialogue->player_replies;
+}
+
+int dialogue_get_num_player_replies(Dialogue *dialogue){
+    if(!dialogue) return -1;
+
+    return dialogue->player_replies_num;
+}
+
+Dialogue_Outputs dialogue_get_output_at(Dialogue *dialogue, int i){
+    if(!dialogue) return NO_OUTPUT;
+
+    return dialogue->outcomes[i];
+}
+
+char *dialogue_get_outcome_as_string(Dialogue_Outputs output){
+    
+    if(output < 0 || (int)output >= DOUTPUTS_NUM) return NULL;
+
+    return doutput_to_str[(int)output];
+}
+
 /*
 Dialogue read example NOTE: DIALOGUE_OUTCOME is 0 if not outcome
 ---------
 // Maximum number of lines in AT is 4 and each line can have up to 124 char
 // Final dialogue state is the DS:0 and the initial DS is DS:1
+// Maximum length of a line has to be 50
 
 ID:{NPCID} //Has to be of the type: ID:1
 DS:{DIALOGUE_STATE}
@@ -177,7 +210,7 @@ Status dialogue_update(Dialogue *dialogue){
     strcpy(aux_str, "");
     for(i = 0; i < line_num && i < LINE_MAX; i++){
         fgets(str, LINE_LENGTH, dialogue->dialogue_file);
-        string_remove_newline_escape_sequence_on_end(str);
+        string_remove_endofline_escape_sequence_on_end_to_newline(str);
         strcat(aux_str, str);
     }
     
@@ -197,7 +230,7 @@ Status dialogue_update(Dialogue *dialogue){
 
     for(i = 0; i < line_num; i++){
         fgets(str, WORD_SIZE, dialogue->dialogue_file);
-        string_remove_newline_escape_sequence_on_end(str);
+        string_remove_endofline_escape_sequence_on_end_to_newline(str);
         toks = strtok(str, ":");
         if(toks == NULL) return ERROR;
         dyn_str = (char *)malloc((LINE_LENGTH + 1)*sizeof(char));
@@ -216,7 +249,7 @@ Status dialogue_update(Dialogue *dialogue){
     return OK;
 }
 
-Dialogue_Outputs dialogue_outcomes(Command *last_cmd, Dialogue *dialogue, int *next_dialogue_state){
+Dialogue_Outputs dialogue_outcomes(Command *last_cmd, Dialogue *dialogue){
     char **args = NULL;
     int n_arg, reply_num;
     Dialogue_Outputs out;
@@ -230,12 +263,13 @@ Dialogue_Outputs dialogue_outcomes(Command *last_cmd, Dialogue *dialogue, int *n
     args = command_get_arguments(last_cmd);
     if(!args) return NO_OUTPUT;
 
-    reply_num = atoi(args[0]);
+    reply_num = atoi(args[0]) - 1;
 
-    if(reply_num < 0 || reply_num > dialogue->player_replies_num) return NO_OUTPUT;
+    if(reply_num < 0 || reply_num >= dialogue->player_replies_num) return NO_OUTPUT;
 
     out = dialogue->outcomes[reply_num];
-    if(out <= NO_OUTPUT || (int)out > DOUTPUTS_NUM) return NO_OUTPUT;
+    npc_set_dialogue_state(dialogue->npc, dialogue->next_dialogue_states[reply_num]);
+    if(out < NO_OUTPUT || (int)out >= DOUTPUTS_NUM) return NO_OUTPUT;
     dialogue->dialogue_state = dialogue->next_dialogue_states[reply_num];
     if(dialogue->dialogue_state < 0){
         dialogue->dialogue_state = 0;

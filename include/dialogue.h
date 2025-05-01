@@ -16,13 +16,13 @@
 #include "command.h"
 #include "utils.h"
 
-#define DOUTPUTS_NUM 4          /*!< Number of dialogue_outputs implemented*/
+#define DOUTPUTS_NUM 6          /*!< Number of dialogue_outputs implemented*/
 
 /**
  * @brief Dialogue outputs enum
  * 
  */
-typedef enum{NO_OUTPUT, DIALOGUE_STOP, FIGHT, STORE}Dialogue_Outputs;
+typedef enum{NO_OUTPUT, DIALOGUE_STOP, FIGHT, STORE, FOLLOW, UNFOLLOW}Dialogue_Outputs;
 
 /**
  * @brief Dialogue ADT definition
@@ -44,9 +44,63 @@ Dialogue *dialogue_create(NPC *npc, FILE *fIN);
  * @brief Frees a dialogue struct
  * @author Maksym Polyak
  * 
- * @param dialogue 
+ * @param dialogue dialogue struct
  */
 void dialogue_destroy(Dialogue *dialogue);
+
+/**
+ * @brief Gets the NPC of a dialogue
+ * 
+ * @param dialogue dialogue struct
+ * @return NPC* or NULL if error
+ */
+NPC *dialogue_get_NPC(Dialogue *dialogue);
+
+/**
+ * @brief Gets the text of an NPC in the actual dialogue state
+ * @author Maksym Polyak
+ * 
+ * @param dialogue dialogue struct
+ * @return char* 
+ */
+char *dialogue_get_npc_text(Dialogue *dialogue);
+
+/**
+ * @brief Gets the player possible replies
+ * @author Maksym Polyak
+ * 
+ * @param dialogue dialogue struct
+ * @return char** or NULL if error, at least one has to exist
+ */
+char **dialogue_get_player_replies(Dialogue *dialogue);
+
+/**
+ * @brief Gets the number of player replies available
+ * @author Maksym Polyak
+ * 
+ * @param dialogue dialogue struct
+ * @return int or -1 if error
+ */
+int dialogue_get_num_player_replies(Dialogue *dialogue);
+
+/**
+ * @brief Returns the dialogue output code for a reply placed at i
+ * 
+ * @param dialogue dialogue struct
+ * @param i index
+ * @return Dialogue_Outputs or NO_OUTPUT if error
+ */
+Dialogue_Outputs dialogue_get_output_at(Dialogue *dialogue, int i);
+
+/**
+ * @brief Returns a static string(No need to free) depending on the output code
+ * received
+ * @author Maksym Polyak
+ * 
+ * @param output dialogue struct
+ * @return char* or NULL if not found or error
+ */
+char *dialogue_get_outcome_as_string(Dialogue_Outputs output);
 
 /**
  * @brief Updates dialogues to the next states and controls outcomes
@@ -63,8 +117,7 @@ Status dialogue_update(Dialogue *dialogue);
  * 
  * @param last_cmd last command from player
  * @param dialogue dialogue struct
- * @param next_dialogue_state has to be created, has the direction of the next_dialogue_state to save on entity
  * @return Status
  */
-Dialogue_Outputs dialogue_outcomes(Command *last_cmd, Dialogue *dialogue, int *next_dialogue_state);
+Dialogue_Outputs dialogue_outcomes(Command *last_cmd, Dialogue *dialogue);
 #endif

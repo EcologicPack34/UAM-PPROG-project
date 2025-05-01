@@ -44,7 +44,7 @@ all
 Move,North,South,East,West,Attack,Take,Drop,Chat,Exit,Help,Ability,Object_Use,Search,Equip,Unequip,Inspect,sw,up,dw,
 Attack,Run_Away,Exit,Help,Ability,Object_Use,Inspect,
 all
-all
+Chat,
 ----------------
 
 

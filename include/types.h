@@ -29,6 +29,9 @@
 #define N_GAME_STATES 5             /*!< Number of game states*/
 #define MAX_SKILLS_ENTITY 5         /*!< Maximum number of skils per entity*/
 
+#define LINE_LENGTH 50              /*!< Max length of a line of dialogue*/
+#define LINE_MAX 4                  /*!< Maximum number of lines in a dialogue*/
+
 /**
  * @brief Id typedef
  */
