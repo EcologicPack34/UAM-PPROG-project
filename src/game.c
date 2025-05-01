@@ -100,6 +100,21 @@ Link *game_get_link_at(Game *game, long index){
 Status game_map_space_block(Game *game, Space *initSpace ,int block);
 
 /**
+ * @brief This function gets a space in a game by its index
+ * @author Aaron Charameli Mair
+ * 
+ * @param game a struct Game 
+ * @param ix the index of the space
+ * @return Space*
+ */
+Space *game_get_space_at(Game *game, int ix){
+  if(!game || (ix<0)) return NULL;
+  if(ix >= game_get_n_spaces(game)) return NULL;
+
+  return game->spaces[ix];
+}
+
+/**
  * @brief Gets a random graphic description of type space
  * 
  * @param game 
@@ -322,13 +337,6 @@ Space *game_get_space(Game *game, Id id) {
   return NULL;
 }
 
-Space *game_get_space_at(Game *game, int ix){
-  if(!game || (ix<0)) return NULL;
-  if(ix >= game_get_n_spaces(game)) return NULL;
-
-  return game->spaces[ix];
-}
-
 Player* game_get_player(Game *game){
   return game->active_player; 
 }
@@ -491,8 +499,21 @@ Status game_set_state(Game *game, GameState state){
 }
 
 Status game_set_godmode(Game *game, bool value){
+  int i;
   if(!game) return ERROR;
   game->godmode = value;
+  if(value == true){
+
+    /*spaces set discovered*/
+    for(i=0;i<game->n_spaces;i++){
+      space_set_discovered(game_get_space_at(game,i),true);
+    }
+
+  /*links set unlocked*/
+    for(i=0;i<game->n_links;i++){
+      link_set_locked(game_get_link_at(game, i), false);
+    }
+  }
   return OK;
 }
 
@@ -730,6 +751,9 @@ Status game_add_link(Game *game, Link *link){
 Status game_add_object(Game *game, Object *object){
   int proceduralLoc;
   NPC *npc = NULL;
+  Player *player = NULL;
+
+  Status status = OK;
 
   if(!object || !game)
     return ERROR;
@@ -741,20 +765,21 @@ Status game_add_object(Game *game, Object *object){
     case UNKNOWN_INVENTORY: 
       return ERROR;
     case PLAYER_INVENTORY:
-      inventory_add_object(entity_get_inventory(player_get_entity(game_get_player(game))), object);
+      player = game_get_player_by_id(game, object_get_location(object));
+      status = inventory_add_object(entity_get_inventory(player_get_entity(player)), object);
       break;
     case NPC_INVENTORY:
       npc = game_get_npc_by_id(game, object_get_location(object));
-      inventory_add_object(entity_get_inventory(npc_get_entity(npc)), object); /*An npc inventory is being implemented*/
+      status = inventory_add_object(entity_get_inventory(npc_get_entity(npc)), object); /*An npc inventory is being implemented*/
       break;
     case SPACE_INVENTORY:
       proceduralLoc = (game->procedural) ? (rand() % (game->n_spaces - 1) + 2) : object_get_location(object);
-      inventory_add_object(space_get_inventory(game_get_space(game, proceduralLoc)), object);
+      status = inventory_add_object(space_get_inventory(game_get_space(game, proceduralLoc)), object);
       break;
   }
 
   debug_log(PRINT,"Game Added Object: ID: %ld, name: %s, objectlocation: %ld, inventoryType: %d", object_get_id(object), object_get_name(object), object_get_location(object), object_get_type(object) - UNKNOWN_INVENTORY);
-  return OK;
+  return status;
 }
 
 Status game_add_player(Game *game, Player *player){
