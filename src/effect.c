@@ -36,6 +36,7 @@ struct _Effect{
     bool inf_turns; /*!< a boolean describing if the effect is applied for an infinite amount of turns or not*/
     int default_turns; /*!< an int with the default value of turns an effect is applied to an enemy for. e.g.: if an entity is applied an effect twice, he'll have this amount x2 of turns left with the effect*/
     EffectType ET; /*!< a type that defines the effect so it can be identified and applied*/
+    EffectAffects EA;
 };
 
 struct _EffectsManager{
@@ -51,10 +52,12 @@ struct _EffectsManager{
  * 
  * @param effect a pointer to the effect
  * @param affected a pointer to the affected (that contains the entity)
+ * @param enemy_stats an array of enemy stats needed if in combat. Otherwise, leave as NULL
+ * @param enemy_count an int describing the number of elements in the enemy Stats array
  * @return Status 
  * @note data string will be "DamageTaken" (a number with the number of damage dealt per turn)
  */
-Status _effect_apply_poison(Effect *effect, Affected *affected);
+Status _effect_apply_poison(Effect*effect, Affected*affected, Stats*enemy_stats, int enemy_count);
 
 /**
  * @brief this function applies an effect of type fire to an entity
@@ -62,21 +65,25 @@ Status _effect_apply_poison(Effect *effect, Affected *affected);
  * 
  * @param effect a pointer to the effect
  * @param affected a pointer to the affected (that contains the entity)
+ * @param enemy_stats an array of enemy stats needed if in combat. Otherwise, leave as NULL
+ * @param enemy_count an int describing the number of elements in the enemy Stats array
  * @return Status 
  * @note data string will be "DamageTaken" (a number with the number of damage dealt per turn)
  */
-Status _effect_apply_fire(Effect *effect, Affected *affected);
+Status _effect_apply_fire(Effect*effect, Affected*affected, Stats*enemy_stats, int enemy_count);
 
 /**
  * @brief This function applies an effect of type regeneration to an entity
  * @author Aaron Charameli Mair
  * 
  * @param effect a pointer to the effect
- * @param affected a pointer to the affecter
+ * @param affected a pointer to the affected (that contains the entity)
+ * @param ally_stats an array of ally Stats, needed if in combat. Otherwise, leave as NULL
+ * @param ally_count an int describing the number of elements in the ally Stats array
  * @return Status 
  * @note data string will be a number with the number of health regenerated per turn
  */
-Status _effect_apply_regeneration(Effect *effect, Affected *affected);
+Status _effect_apply_regeneration(Effect*effect, Affected*affected, Stats*ally_stats, int ally_count);
 
 /**
  * @brief This function gets the affected struct of an effect given its entity
@@ -113,7 +120,7 @@ void _affected_destroy(void *a);
 /*--------------------------------------------------------------------------------------------------------------------------*/
 /*PUBLIC FUNCTIONS IMPLEMENTATION*/
 
-Effect *effect_create(Id id, char *name, char *data, EffectType ET, bool inf_turns, int default_turns){
+Effect *effect_create(Id id, char *name, char *data, EffectType ET, EffectAffects EA, bool inf_turns, int default_turns){
     Effect *e=NULL;
     
     if((id<=UNDEFINED_ID) || (ET == UNKNOWN_EFFECT)) return NULL;
@@ -128,6 +135,7 @@ Effect *effect_create(Id id, char *name, char *data, EffectType ET, bool inf_tur
     e->name = strdup(name);
     e->data = strdup(data);
     e->ET = ET;
+    e->EA = EA;
     e->inf_turns = inf_turns;
     e->default_turns = default_turns;
 
@@ -216,10 +224,11 @@ bool effect_has_affected(Effect *e, Entity *ent){
     return (_effect_get_affected(e,ent)!=NULL) ? true : false;
 }
 
-Status effect_update(Effect *effect){
+Status effect_update(Effect *effect, Stats *ent_stats, int ent_count){
     int i,n;
     Affected *aux=NULL;
 
+    if((ent_stats != NULL) && (ent_count<=0)) return ERROR;
     if(!effect || ((n = collection_length(effect->affecteds)) == -1)) return ERROR;
 
     for(i=0; i<n; i++){
@@ -227,13 +236,13 @@ Status effect_update(Effect *effect){
         if(aux){
             switch (effect->ET){
                 case POISON:
-                    _effect_apply_poison(effect, aux);
+                    _effect_apply_poison(effect, aux, ent_stats, ent_count);
                     break;
                 case REGENERATION:
-                    _effect_apply_regeneration(effect, aux);
+                    _effect_apply_regeneration(effect, aux, ent_stats, ent_count);
                     break;
                 case FIRE:
-                    _effect_apply_fire(effect, aux);
+                    _effect_apply_fire(effect, aux, ent_stats, ent_count);
                     break;
                 default:
                     break;
@@ -357,6 +366,11 @@ Id effect_get_id(Effect *effect){
     return effect->id;
 }
 
+EffectAffects effect_get_effectAffects(Effect *effect){
+    if(!effect) return NO_EFFECT;
+    return effect->EA;
+}
+
 int effect_cmp(void*e1, void*e2){
     if(!e1 || !e2) return -2;
     return ((Effect*)e1)->id - ((Effect*)e2)->id;
@@ -376,10 +390,11 @@ void effect_print(void*effect){
 /*--------------------------------------------------------------------------------------------------------------------------*/
 /*PRIVATE FUNCTIONS IMPLEMENTATION*/
 
-Status _effect_apply_poison(Effect *effect, Affected *affected){
+Status _effect_apply_poison(Effect*effect, Affected*affected, Stats*enemy_stats, int enemy_count){
     double DamageTaken;
     char aux[WORD_SIZE];
-    Status st;
+    int i;
+    Status st=OK;
     /*data string will be: "(int)DamageTaken"*/
     if(!effect || !affected) return ERROR;
     if(effect->ET != POISON) return ERROR;
@@ -387,7 +402,15 @@ Status _effect_apply_poison(Effect *effect, Affected *affected){
     strcpy(aux, effect->data);
     DamageTaken = atoi(aux);
     
-    st = entity_set_health(affected->ent,entity_get_health(affected->ent)-DamageTaken);
+    /*this is gameState != COMBAT*/
+    if(enemy_stats == NULL)
+        st = entity_set_health(affected->ent,entity_get_health(affected->ent)-DamageTaken);
+    else{
+        for(i=0; i<=enemy_count-1; i++){
+            if(affected->ent == (enemy_stats+i)->entity)
+                (enemy_stats+i)->stats.health -= DamageTaken;
+        }
+    }
 
     if((affected->turns>0) && (st == OK))
         affected->turns--;
@@ -395,10 +418,11 @@ Status _effect_apply_poison(Effect *effect, Affected *affected){
     return st;
 }
 
-Status _effect_apply_fire(Effect *effect, Affected *affected){
+Status _effect_apply_fire(Effect*effect, Affected*affected, Stats*enemy_stats, int enemy_count){
     double DamageTaken;
     char aux[WORD_SIZE];
-    Status st;
+    int i;
+    Status st=OK;
     /*data string will be: "(int)DamageTaken"*/
     if(!effect || !affected) return ERROR;
     if(effect->ET != FIRE) return ERROR;
@@ -406,7 +430,16 @@ Status _effect_apply_fire(Effect *effect, Affected *affected){
     strcpy(aux, effect->data);
     DamageTaken = atoi(aux);
     
-    st = entity_set_health(affected->ent,entity_get_health(affected->ent)-DamageTaken);
+    /*this is gameState != COMBAT*/
+    if(enemy_stats == NULL)
+        st = entity_set_health(affected->ent,entity_get_health(affected->ent)-DamageTaken);
+    /*this is gameState == COMBAT*/
+    else{
+        for(i=0; i<=enemy_count-1; i++){
+            if(affected->ent == (enemy_stats+i)->entity)
+                (enemy_stats+i)->stats.health -= DamageTaken;
+        }
+    }
 
     if((affected->turns>0) && (st == OK))
         affected->turns--;
@@ -414,10 +447,11 @@ Status _effect_apply_fire(Effect *effect, Affected *affected){
     return st;
 }
 
-Status _effect_apply_regeneration(Effect *effect, Affected *affected){
+Status _effect_apply_regeneration(Effect *effect, Affected *affected, Stats*ally_stats, int ally_count){
     double regeneration;
     char aux[WORD_SIZE];
-    Status st;
+    int i;
+    Status st=OK;
     /*data string will be: "(int)regeneration_value"*/
     if(!effect || !affected) return ERROR;
     if(effect->ET != REGENERATION) return ERROR;
@@ -425,10 +459,22 @@ Status _effect_apply_regeneration(Effect *effect, Affected *affected){
     strcpy(aux, effect->data);
     regeneration = atoi(aux);
     
-    if(regeneration >= (entity_get_max_health(affected->ent) - regeneration))
-        st = entity_set_health(affected->ent, entity_get_max_health(affected->ent));
-    else
-        st = entity_set_health(affected->ent,entity_get_health(affected->ent)+regeneration);
+    if(ally_stats == NULL){
+        if(entity_get_health(affected->ent) >= (entity_get_max_health(affected->ent) - regeneration))
+            st = entity_set_health(affected->ent, entity_get_max_health(affected->ent));
+        else
+            st = entity_set_health(affected->ent,entity_get_health(affected->ent)+regeneration);
+    }
+    else{
+        for(i=0; i<=ally_count-1; i++){
+            if(affected->ent == (ally_stats+i)->entity){
+                if((ally_stats+i)->stats.health >= ((ally_stats+i)->stats.maxhealth - regeneration))
+                    (ally_stats+i)->stats.health = (ally_stats+i)->stats.maxhealth;
+                else
+                    (ally_stats+i)->stats.health += regeneration;
+            }
+        }
+    }
 
     if((affected->turns>0) && (st == OK))
         affected->turns--;

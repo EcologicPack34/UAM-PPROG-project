@@ -17,9 +17,12 @@
 
 #include "types.h"
 #include "entity.h"
+#include "combat.h"
 #include <stdio.h>
 
 typedef enum{UNKNOWN_EFFECT, REGENERATION, POISON, FIRE}EffectType; /*!< The type of effect*/
+
+typedef enum{NO_EFFECT=-1 ,AFFECTS_PLAYER, AFFECTS_ALLY, AFFECTS_ENEMY}EffectAffects; /*!< The type of entity affected by an effect in a combat*/
 
 /**
  * @brief ADT containing basic info about effect
@@ -41,11 +44,12 @@ typedef struct _EffectsManager EffectManager;
  * @param name a string containing the effect's name
  * @param data a string containing the effect's information 
  * @param ET the EffectType
+ * @param EA the EffectedAffects that determines if an effect affects a player, an ally or an enemy if in combat
  * @param inf_turns a bool to specify if the effect is applied for an infinite amount of turns (if true) or a finite amount (if false)
  * @param default_turns an int describing the amount of turns an effect is applied for (if infinite, this int will be ignored)
  * @return pointer to Effect or NULL if error
  */
-Effect *effect_create(Id id, char *name, char *data, EffectType ET, bool inf_turns, int default_turns);
+Effect *effect_create(Id id, char *name, char *data, EffectType ET, EffectAffects EA,bool inf_turns, int default_turns);
 
 /**
  * @brief This function creates an effect manager
@@ -125,9 +129,12 @@ bool effect_has_affected(Effect *e, Entity *ent);
  * @brief This function updates the affected entities by an effect.
  * 
  * @param effect a pointer to the effect
+ * @param ent_stats an array of entity Stats, needed if in combat. Otherwise, leave as NULL
+ * @param ent_count an int describing the number of elements in the Stats array
  * @return Status 
+ * @note If in combat, a pointer to the entities Stats will be required otherwise, NULL can be passed as argument
  */
-Status effect_update(Effect *effect);
+Status effect_update(Effect*effect, Stats* ent_stats, int ent_count);
 
 /**
  * @brief This function writes in a text file the data of affected entities from an effect
@@ -184,6 +191,15 @@ char *effect_get_data(Effect *effect);
  * @return Id or NO_ID if error
  */
 Id effect_get_id(Effect *effect);
+
+/**
+ * @brief This function gets the type EffectedAffects from an effect
+ * @author Aaron Charameli Mair
+ * 
+ * @param effect 
+ * @return the corresponding EffectAffects or NO_EFFECT if ERROR
+ */
+EffectAffects effect_get_effectAffects(Effect *effect);
 
 /**
  * @brief This function compares two effects

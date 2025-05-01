@@ -344,6 +344,9 @@ bool event_trigger_effects(Event *event, Game *game){
     EffectManager *em=NULL;
     Collection *effects=NULL;
     Effect *aux=NULL;
+    Stats *ally_stats=NULL;
+    Stats *enemy_stats=NULL;
+    int ally_count, enemy_count;
     int n_effects,i;
 
     if(!event || !game) return false;
@@ -352,9 +355,31 @@ bool event_trigger_effects(Event *event, Game *game){
     effects = effect_manager_get_effects(game_get_effect_manager(game));
     n_effects = collection_length(effects);
 
+    if(game_get_state(game) == COMBAT){
+        ally_stats = combat_get_allies_stats(game_get_combat(game));
+        ally_count = combat_get_allies_count(game_get_combat(game));
+        enemy_stats = combat_get_enemies_stats(game_get_combat(game));
+        enemy_count = combat_get_enemies_count(game_get_combat(game));
+    }
+
     for(i=0; i<n_effects; i++){
         aux = collection_get_element_at(effects,i);
-        effect_update(aux);
+        switch (effect_get_effectAffects(aux))
+        {
+        case AFFECTS_ENEMY:
+            effect_update(aux, enemy_stats, enemy_count);
+            break;
+        case AFFECTS_ALLY:
+            effect_update(aux, ally_stats, ally_count);
+            break;
+        /*ally stats position 0 is now the player's stats*/
+        case AFFECTS_PLAYER:
+            effect_update(aux, ally_stats, ally_count);
+            break;
+        default:
+            return false;
+            break;
+        }
     }
     return true;
 }

@@ -1137,6 +1137,7 @@ Status game_reader_load_effects(Game *game, char *filename){
   Effect *effect=NULL;
   Id id;
   EffectType ET;
+  EffectAffects EA;
 
   Status status=OK;
 
@@ -1153,7 +1154,7 @@ Status game_reader_load_effects(Game *game, char *filename){
     return ERROR;
   }
 
-  /*#ef:Id|name|EffectType|int_turns|default_turns|data*/
+  /*#ef:Id|name|EffectType|EffectAffects|inf_turns|default_turns|data*/
   while (fgets(line, WORD_SIZE, file)) {
     if (strncmp("#ef:", line, 4) == 0) {
       toks = strtok(line + 4, "|");
@@ -1176,6 +1177,22 @@ Status game_reader_load_effects(Game *game, char *filename){
         return ERROR;
       }
       ET = atoi(toks);
+      
+      toks = strtok(NULL, "|");
+      if(!toks){
+        printf("toks is null");
+        return ERROR;
+      }
+      if((toks[0] == 'p') || (toks[0] == 'P'))
+        EA = AFFECTS_PLAYER;
+      else if((toks[0] == 'a') || (toks[0] == 'A'))
+        EA = AFFECTS_ALLY;
+      else if((toks[0] == 'e') || (toks[0] == 'E'))
+        EA = AFFECTS_ENEMY;
+      else{
+        debug_log(LOG_ERROR,"Error creating effect when reading from file (Affected)");
+        abort();
+      }
 
       toks = strtok(NULL, "|");
       if(!toks){
@@ -1204,7 +1221,7 @@ Status game_reader_load_effects(Game *game, char *filename){
 
       debug_log(PRINT,"Read Effect: #ef:%ld|%s|%d|%d|%d|%s", id, name, ET, inf_turns, default_turns, data);
 
-      effect = effect_create(id, name, data, ET, inf_turns, default_turns);
+      effect = effect_create(id, name, data, ET, EA, inf_turns, default_turns);
 
       if(effect == NULL){
         debug_log(LOG_ERROR,"Error creating effect when reading from file");

@@ -113,7 +113,7 @@ Formato NPC: #n:ID|Message|Nombre|LocationID|is_follower|Status|
 #n:4|DIE|Enemy1|11|0|3|^3m"
 #st:4|2|100|100|10|2|2|2|
 
-#n:5|DIE|Enemy2|11|0|3|^4m"
+#n:5|DIE|Enemy2|11|0|3|0Oo"
 #st:5|2|100|100|10|2|2|2|
 
 #n:6|DIE|Enemy3|11|0|3|^5m"
@@ -134,9 +134,13 @@ Formato Ability: #sk:Id|Type|Name|Entityid(ObjectId)|is_player_ability|is_object
 #sk:4|money_bag|Adds 20 coins   Maximum CD: 0|8|0|1|0|0|20
 #sk:5|link_unlock|Unlocks link between 123 and 124|9|0|1|0|0|4
 #sk:6|effect_enemy|FireBall Launcher|1|1|0|0|0|2
+#sk:7|effect_self|Self Regeneration Spell|1|1|0|0|2|3
 
 
-formato effects #ef:Id|name|EffectType|InfiniteTurns(y/N)|DefaultNumberOfTurns|data
+formato effects #ef:Id|name|EffectType|EffectAffects|InfiniteTurns(y/N)|DefaultNumberOfTurns|data
+EffectType = {UNKNOWN_EFFECT = 0, REGENERATION = 1, POISON = 2, FIRE = 3}
+EffectAffects = {AFFECTS_PLAYER = (p/P), AFFECTS_ALLY = (a/A), AFFECTS_ENEMY = (e/E)}
 
-#ef:1|Poison|2|N|5|5
-#ef:2|Fire|3|N|3|10
+#ef:1|Poison|2|E|N|5|5
+#ef:2|Fire|3|E|N|2|10
+#ef:3|Regeneration|1|p|n|4|5
