@@ -21,6 +21,7 @@
 #include "message.h"
 #include "game_reader.h"
 #include "dialogue.h"
+#include "effect.h"
 #include "attack.h"
 
 #include <stdio.h>
