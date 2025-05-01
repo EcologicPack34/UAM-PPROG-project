@@ -513,44 +513,72 @@ Status game_actions_drop(Game *game){
  */
 Status game_actions_chat(Game *game){
   char **arguments = NULL;
+  Command *comm = NULL;
   Space *space = NULL;
   NPC *npc = NULL;
+  Dialogue *dialogue = NULL;
   Player *player = NULL;
+  Status status;
 
   if(!game)
     return ERROR;
 
-
-  arguments = command_get_arguments(game_get_last_command(game));
-
-  space = game_get_space(game, game_get_player_location(game));
-
-  npc = space_get_NPC_by_name(space, arguments[0]);
-
   player = game_get_player(game);
 
-  if(npc == NULL)
-    return ERROR;
+  comm = game_get_last_command(game);
 
-  if(entity_get_health(npc_get_entity(npc)) <= 0)
-    return ERROR;
+  space = game_get_space(game, game_get_player_location(game));
+  if(!space) return ERROR;
 
-  game_add_log_message(game, MESSAGE_NPC,npc_get_message(npc));
+  arguments = command_get_arguments(comm);
 
-  if(npc_get_can_follow(npc) == true && npc_get_status(npc) == NEUTRAL){
-    npc_set_status(npc, ALLY);
-    npc_set_player_following_id(npc, entity_get_id(player_get_entity(player)));
-    player_add_follower(player, npc);
-  }else if(npc_get_can_follow(npc) == true && npc_get_status(npc) == ALLY){
-    /*Prevents other players from stealing followers*/
-    if(npc_get_player_following_id(npc) != entity_get_id(player_get_entity(player))){
-      game_add_log_message(game, MESSAGE_NPC,"I'm following another player.");
+  if(game_get_state(game) != DIALOGUE){
+
+    npc = space_get_NPC_by_name(space, arguments[0]);
+    if(npc == NULL)
       return ERROR;
+
+    if(npc_get_status(npc) == ENEMY)
+      return game_combat_start(game);
+
+    if(entity_get_health(npc_get_entity(npc)) <= 0)
+      return ERROR;
+
+    if((dialogue = game_get_dialogue(game)) == NULL)
+      return game_dialogue_init(game, npc);
+  } else {
+    npc = dialogue_get_NPC(game_get_dialogue(game));
+    if(!npc) return ERROR;
+
+    dialogue = game_get_dialogue(game);
+
+    switch(dialogue_outcomes(comm, dialogue)){
+      case NO_OUTPUT:
+        break;
+      case DIALOGUE_STOP:
+        game_end_dialogue(game);
+        return OK;
+      case FIGHT:
+        npc_set_status(npc, ENEMY);
+        game_end_dialogue(game);
+        game_combat_start(game);
+        return OK;
+      case STORE:
+        return OK;
+      case FOLLOW:
+        if((status = player_add_follower(player, npc)) == ERROR)
+          game_add_log_message(game, MESSAGE_HELP, "Following another player or not an available follower.");
+        game_end_dialogue(game);
+        return status;
+      case UNFOLLOW:
+        if((status = player_remove_follower_by_name(player, entity_get_name(npc_get_entity(npc)))) == ERROR)
+          game_add_log_message(game, MESSAGE_HELP, "Not following you.");
+        game_end_dialogue(game);
+        return status;
     }
-    npc_set_status(npc, NEUTRAL);
-    player_remove_follower_by_name(player, entity_get_name(npc_get_entity(npc)));
-    npc_set_player_following_id(npc, NO_ID);
-  }
+
+    dialogue_update(dialogue);
+    }
 
   return OK;
 }
@@ -603,7 +631,8 @@ Status game_actions_runaway(Game *game){
   combat = game_get_combat(game);
   if(!combat) return ERROR;
 
-  combat_runaway(combat);
+  if(combat_runaway(combat) == ERROR)
+    game_add_log_message(game, MESSAGE_HELP, "You failed to escape!");
 
   return OK;
 }

@@ -56,7 +56,7 @@ bool event_trigger_combat(Event *event, Game *game);
 bool event_trigger_player_death(Event *event, Game *game);
 
 /**
- * @brief Checks if combat has endend and returns game to default state
+ * @brief Checks if combat has ended and returns game to default state
  * @author Daniel Gómez
  * 
  * @param game game struct
@@ -64,6 +64,8 @@ bool event_trigger_player_death(Event *event, Game *game);
  * @return false 
  */
 bool event_trigger_end_combat(Game *game);
+
+bool event_trigger_end_dialoge(Game *game);
 
 /**
  * @brief Checks for all npcs and move them randomly

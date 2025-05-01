@@ -818,7 +818,7 @@ Status combat_runaway(Combat *combat){
 
     if (chance >= RUN_AWAY_PROB)
     {
-        return OK;
+        return ERROR;
     }
     combat_finalize(combat);
     return OK;
