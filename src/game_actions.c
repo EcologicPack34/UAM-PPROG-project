@@ -571,6 +571,9 @@ Status game_actions_attack(Game *game){
   if(!game) return ERROR;
 
   Combat *combat = NULL;
+  Player *pl = NULL;
+  Player *pl_new = NULL;
+  int i, player_num;
 
   combat = game_get_combat(game);
   if(!combat){
@@ -582,7 +585,20 @@ Status game_actions_attack(Game *game){
     if(combat_update(combat, game_get_last_command(game)) == ERROR)
       return ERROR;
   }
+  pl = game_get_player(game);
+  player_num = game_get_n_players(game);
 
+  for (i = 0; i < player_num; i++)
+  {
+    pl_new = game_get_player_at(game, i);
+    if (entity_get_id(player_get_entity(pl)) == entity_get_id(player_get_entity(pl_new)))
+    {
+      break;
+    }
+  }
+
+  i = (i+1)%player_num;
+  game_switch_player(game, i);
   return OK;
 }
 

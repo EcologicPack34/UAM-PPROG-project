@@ -823,7 +823,7 @@ bool game_log_hasMessage(Game *game){
 Status game_combat_start(Game *game){
   if(!game) return ERROR;
 
-  game->combat = combat_initialize(game_get_space(game, game_get_player_location(game)), game->active_player, command_get_code(game->last_cmd), game->attacks);
+  game->combat = combat_initialize(game_get_space(game, game_get_player_location(game)), game->players, command_get_code(game->last_cmd), game->attacks, game->n_players);
   if(!game->combat) return ERROR;
 
   game->current_state = COMBAT;
