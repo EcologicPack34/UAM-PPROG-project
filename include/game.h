@@ -29,12 +29,15 @@
 #include "ability_manager.h"
 #include "libscreen.h"
 #include "dialogue.h"
+#include "graphic_description.h"
 
 #include <stdbool.h>
 
 #define MAX_SPACES 100  /*!< Maximum number of spaces on the map */
 #define MAX_LINKS (MAX_SPACES * 6)   /*!< Maximum number of links on the map */
 #define MAX_PLAYERS 4   /*!< Maximum number of players*/
+
+#define MAX_PROCEDURAL_SIZE 50
 
 /**
  * @brief Game struct, defines all the information of the game
@@ -85,16 +88,6 @@ char* game_to_string(Game * game);
  * @return *space if everything goes well or NULL if there was some mistake
  */
 Space *game_get_space(Game *game, Id id);
-
-/**
- * @brief This function gets a space in a game by its index
- * @author Aaron Charameli Mair
- * 
- * @param game a struct Game 
- * @param ix the index of the space
- * @return Space*
- */
-Space *game_get_space_at(Game *game, int ix);
 
 /**
  * @brief Gets a space from the game by it's spatial position
@@ -254,6 +247,14 @@ Collection *game_get_npcs(Game *game);
  */
 NPC *game_get_npc_by_id(Game *game, Id id);
 
+/**
+ * @brief Gets player by id
+ * @author Aaron Charameli Mair
+ * 
+ * @param game 
+ * @param id 
+ * @return Player* 
+ */
 Player *game_get_player_by_id(Game *game, Id id);
 
 /**
@@ -275,8 +276,27 @@ bool game_get_god_mode(Game *game);
  */
 TurnValidation game_get_is_turn_valid(Game *game);
 
-/*----------SETTERS----------*/
+/**
+ * @brief Gets if the game was generated proceduraly
+ * @author Daniel Gómez
+ * 
+ * @param game 
+ * @return true 
+ * @return false 
+ */
+bool game_get_is_procedural(Game *game);
 
+/**
+ * @brief Gets a graphic description by id
+ * @author Daniel Gómez
+ * 
+ * @param game 
+ * @param id 
+ * @return GDesc* 
+ */
+GDesc *game_get_gdesc_by_id(Game *game, Id id);
+
+/*----------SETTERS----------*/
 
 /**
  * @brief Sets the received command on the game struct
@@ -541,5 +561,33 @@ Dialogue *game_get_dialogue(Game *game);
  * @return Status 
  */
 Status game_end_dialogue(Game *game);
+/**
+ * @brief Adds a graphic description to the game
+ * @author Daniel Gómez
+ * 
+ * @param game 
+ * @param gdesc 
+ * @return Status 
+ */
+Status game_add_gdesc(Game *game, GDesc *gdesc);
+
+/**
+ * @brief Gets the collection of attacks
+ * @author Sofía Calvo
+ * 
+ * @param game game struct
+ * @return Collection
+ */
+Collection *game_get_attacks(Game *game);
+
+
+/**
+ * @brief Generates a level proceduraly
+ * @author Daniel Gómez
+ * 
+ * @param game 
+ * @return Status 
+ */
+Status game_generate_procedural(Game *game);
 
 #endif

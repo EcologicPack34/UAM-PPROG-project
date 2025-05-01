@@ -127,3 +127,9 @@ int debug_log(LOG_LEVEL level, char *formatedString, ...)
 char *debug_getPath(Debug *info){
     return info->logFilePath;
 }
+
+void debug_force_global_fclose(){
+    if(globalDebug){
+        fclose(globalDebug->logFile);
+    }
+}

@@ -1,10 +1,17 @@
-nombre;multDaño;prob;requiereTarget
-[Attacks:4]
-light;1;90;1
-strong;2;70;1
-quick;1.2;60;1
-swift;3;40;0
 
+
+procedural-gen=false
+
+
+---------
+name|damageMult|succesProb|requireTarget
+
+[Attacks:4]
+light|0.8|90|1
+strong|1.8|70|1
+quick|1|60|1
+swift|0.5|50|0
+-------------
 
 [CmdInfo]
 Error code for commands. Doesn't have a use during gameplay. 
@@ -31,13 +38,13 @@ Inspect an object that is contained in the players inventory. Ex: inspect object
 Enables God Mod, gives high health, discovers all spaces...
 Moves one space up.
 Moves one space down.
-
+-------------------
 [CmdStateTypes]
 all
 Move,North,South,East,West,Attack,Take,Drop,Chat,Exit,Help,Ability,Object_Use,Search,Equip,Unequip,Inspect,sw,up,dw,
 Attack,Run_Away,Exit,Help,Ability,Object_Use,Inspect,
 all
 all
-
+----------------
 
 

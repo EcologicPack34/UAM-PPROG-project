@@ -27,7 +27,7 @@
 */
 
 /**
- * @brief Reads the filename to save all space and their links
+ * @brief Reads the filename to load all space and their links
  * @author Daniel Gómez
  *
  * @param game struct that saves all information related to the game
@@ -37,7 +37,7 @@
 Status game_reader_load_spaces(Game *game, char *filename);
 
 /**
- * @brief Reads the filename to save all links between spaces
+ * @brief Reads the filename to load all links between spaces
  * @author Daniel Gómez
  *
  * @param game struct that saves all information related to the game
@@ -47,7 +47,7 @@ Status game_reader_load_spaces(Game *game, char *filename);
 Status game_reader_load_links(Game *game, char *filename);
 
 /**
- * @brief Reads the filename to save all objects
+ * @brief Reads the filename to load all objects
  * @author Maksym Polyak
  * 
  * @param game struct that saves all information related to the game
@@ -134,6 +134,24 @@ Status game_reader_load_ability(Game *game, char *filename);
 */
 Status game_reader_load_attacks(Game *game);
 
+/**
+ * @brief Reads the file to load all graphic descriptions
+ * @author Daniel Gómez
+ * 
+ * @param game 
+ * @return Status 
+ */
+Status game_reader_load_gdesc(Game *game, char *filename);
+
+
+/**
+ * @brief Gets if the game should generate proceduraly or not by reading from settings file
+ * @author Daniel Gómez
+ * 
+ * @return true 
+ * @return false 
+ */
+bool game_reader_generate_procedural();
 
 /*
 * Public functions implementation
@@ -143,6 +161,7 @@ Status game_reader_create_from_file(Game **game, char *filename){
     debug_log(LOG_ERROR, "Error creating game at: game_reader_create_from_file(Game*, char*) in game_reader.c");
     printf("%c[2J", 27);
     printf("Fatal error. Check the log for details\n");
+    debug_force_global_fclose();
     abort();
   }
   /*Loads settings*/
@@ -150,29 +169,40 @@ Status game_reader_create_from_file(Game **game, char *filename){
   if(game_reader_load_commandInfo(*game) == ERROR){
     printf("%c[2J", 27);
     printf("Fatal error. Check the log for details\n");
+    debug_force_global_fclose();
     abort();
   }
   if(game_reader_load_commandStateTypes(*game) == ERROR){
     printf("%c[2J", 27);
     printf("Fatal error. Check the log for details\n");
+    debug_force_global_fclose();
     abort();
   }  
-  /*Loads data into the game*/
-  if(game_reader_load_player(*game, filename) == ERROR){
-    debug_log(LOG_ERROR, "Error loading player at: game_reader_create_from_file(Game*, char*) in game_reader.c");
+  
+  if(game_reader_load_gdesc(*game, filename) == ERROR){
+    debug_log(LOG_ERROR, "Error loading graphic descriptions at: game_reader_create_from_file(Game*, char*) in game_reader.c");
     return ERROR;
   }
-
-  game_switch_player(*game, 0);
-
-  if(game_reader_load_links(*game, filename) == ERROR){
-    debug_log(LOG_ERROR, "Error loading links at: game_reader_create_from_file(Game*, char*) in game_reader.c");
-    return ERROR;
+  
+  if(game_reader_generate_procedural()){
+    if(game_generate_procedural(*game) == ERROR){
+      printf("%c[2J", 27);
+      printf("Fatal error. Check the log for details\n");
+      debug_force_global_fclose();
+      abort();
+    }
+  }else{
+    if(game_reader_load_links(*game, filename) == ERROR){
+      debug_log(LOG_ERROR, "Error loading links at: game_reader_create_from_file(Game*, char*) in game_reader.c");
+      return ERROR;
+    }
+    if (game_reader_load_spaces(*game, filename) == ERROR){
+      debug_log(LOG_ERROR, "Error loading spaces at: game_reader_create_from_file(Game*, char*) in game_reader.c");
+      return ERROR;
+    }
   }
-  if (game_reader_load_spaces(*game, filename) == ERROR){
-    debug_log(LOG_ERROR, "Error loading spaces at: game_reader_create_from_file(Game*, char*) in game_reader.c");
-    return ERROR;
-  }
+  
+  /*Temp loading*/
   if (game_reader_load_objects(*game, filename) == ERROR){
     debug_log(LOG_ERROR, "Error loading objects at: game_reader_create_from_file(Game*, char*) in game_reader.c");
     return ERROR;
@@ -190,13 +220,24 @@ Status game_reader_create_from_file(Game **game, char *filename){
     return ERROR;
   }
 
+  /*Loads data into the game*/
+  if(game_reader_load_player(*game, filename) == ERROR){
+    debug_log(LOG_ERROR, "Error loading player at: game_reader_create_from_file(Game*, char*) in game_reader.c");
+    return ERROR;
+  }
+  game_switch_player(*game, 0);
+
   if(game_reader_load_stats(*game, filename) == ERROR){
     debug_log(LOG_ERROR, "Error loading stats at: game_reader_create_from_file(Game*, char*) in game_reader.c");
     return ERROR;
   }
-
   if(game_spatial_map(*game) == ERROR){
     debug_log(LOG_ERROR,"Error maping spatialy spaces");
+    return ERROR;
+  }
+
+  if(game_reader_load_attacks(*game) == ERROR) {
+    debug_log(LOG_ERROR,"Error loading attacks");
     return ERROR;
   }
 
@@ -275,11 +316,10 @@ Status game_reader_load_spaces(Game *game, char *filename) {
   
   char name[WORD_SIZE] = "";
   Id id = NO_ID, north = NO_ID, east = NO_ID, south = NO_ID, west = NO_ID, up = NO_ID, down = NO_ID;
+  Id gdesc = NO_ID;
   
   Space *space = NULL;
   Status status = OK;
-
-  int i;
 
   if (!filename) {
     debug_log(LOG_ERROR, "Missing file name at: game_reader_load_spaces(Game*, char*) in game_reader.c");
@@ -303,6 +343,9 @@ Status game_reader_load_spaces(Game *game, char *filename) {
       toks = strtok(NULL, "|");
       strcpy(name, toks);
       
+      toks = strtok(NULL, "|");
+      gdesc = atol(toks);
+
       toks = strtok(NULL, "|");
       north = atol(toks);
       
@@ -338,16 +381,7 @@ Status game_reader_load_spaces(Game *game, char *filename) {
       space_set_west(space, game_get_link_by_id(game, west));
       space_set_up(space, game_get_link_by_id(game, up));
       space_set_down(space, game_get_link_by_id(game, down));
-
-      for (i = 0; i < SPACE_GRAPHIC_HEIGHT; i++)
-      {
-        toks = strtok(NULL, ";");
-        if(toks){
-          space_set_graphic_description(space, toks, i);
-        }else{
-          space_set_graphic_description(space, " \00", i);
-        }
-      }
+      space_set_graphic_description(space, game_get_gdesc_by_id(game, gdesc));
 
       game_add_space(game, space);
     }
@@ -429,18 +463,6 @@ Status game_reader_load_objects(Game *game, char *filename){
       object = object_create(objectid, name, data, description, dependency_object, is_movable, is_consumable, objectlocation, objectlocationtype);
       if (object != NULL) {
         game_add_object(game, object);
-        switch(objectlocationtype){
-          case UNKNOWN_INVENTORY: return ERROR;
-          case PLAYER_INVENTORY:
-            inventory_add_object(entity_get_inventory(player_get_entity(game_get_player(game))), object);
-            break;
-          case NPC_INVENTORY:
-            /* NON IMPLEMENTEDinventory_add_object()*/
-            break;
-          case SPACE_INVENTORY:
-            inventory_add_object(space_get_inventory(game_get_space(game, objectlocation)), object);
-            break;
-        }
       }
     }
   }
@@ -488,7 +510,7 @@ Status game_reader_load_player(Game *game, char *filename){
       strcpy(name, toks);
       
       toks = strtok(NULL, "|");
-      startinglocation = atol(toks);
+      startinglocation = (game_get_is_procedural(game) == true) ? 1 : atol(toks);
       
       toks = strtok(NULL, "|");
 
@@ -959,10 +981,9 @@ Status game_reader_load_attacks(Game *game) {
   double mult;
   double chance;
 
-  Combat *cmb = NULL;
   Attack *at = NULL;
   bool needs_target;
-
+  Collection *collection = NULL;
   if (!game) return ERROR;
   
   file = fopen(SETTINGS_FILE_PATH, "r");
@@ -979,36 +1000,37 @@ Status game_reader_load_attacks(Game *game) {
       toks = strtok(NULL, "]");
       numAttcks = atoi(toks);
       /*starts saving the attacks in the combat*/
-      cmb = game_get_combat(game);
-      combat_set_num_attacks(cmb, numAttcks);
 
     break;
     }
   }
-    
+  
+  collection = game_get_attacks(game);
+
   for (i = 0; i < numAttcks; i++)
   {
     fscanf(file, "%s", line);
     /*will now read the name of the attack*/
-    toks = strtok(line, ";");
+    toks = strtok(line, "|");
     /*will now create the attack with the name*/
     at = attack_create(toks);
     /*will now get the multiplicator of damage*/
-    toks = strtok(NULL, ";");
+    toks = strtok(NULL, "|");
     mult = atof(toks);
     attack_set_damage_multiplicator(at, mult);
     /*will now get the chances of failing*/
-    toks = strtok(NULL, ";");
+    toks = strtok(NULL, "|");
     chance = atof(toks);
     attack_set_failure_chance(at, chance);
     /*Will now get if it needs target or not*/
-    toks = strtok(NULL, ";");
+    toks = strtok(NULL, "|");
     needs_target = atoi(toks);
     attack_set_target_bool(at, needs_target);
-    /*Will now copy this attack into the arrays of attacks in combat*/
-    combat_set_attack_in_position(cmb, at, i);
+    /*Will now copy this attack into the collection*/
+    collection_add(collection, at);
   }
 
+  fclose(file);
   return OK;
 }
 
@@ -1069,6 +1091,97 @@ Status game_reader_load_commandStateTypes(Game *game){
       }
     }
     break;
+  }
+  fclose(file);
+  return OK;
+}
+
+bool game_reader_generate_procedural(){
+  FILE *file = NULL;
+  char line[WORD_SIZE];
+
+  file = fopen(SETTINGS_FILE_PATH, "r");
+  if(!file) return false;
+
+  while(fgets(line, WORD_SIZE - 1, file)){
+    if(strncmp(line,"procedural-gen=true", 19) == 0){
+      fclose(file);
+      return true;
+    }
+  }
+  fclose(file);
+  return false;
+}
+
+Status game_reader_load_gdesc(Game *game, char *filename){
+  FILE *file = NULL;
+  char line[WORD_SIZE];
+  char *toks = NULL;
+
+  Id id = NO_ID;
+  int height = 0;
+  int width = 0;
+  GDescType type = NO_DESC;
+
+  GDesc *gdesc = NULL;
+
+  int i;
+
+  if (!filename) {
+    debug_log(LOG_ERROR, "Missing file name at: game_reader_load_ability(Game*, char*) in game_reader.c");
+    return ERROR;
+  }
+
+  file = fopen(filename, "r");
+  if (file == NULL) {
+    debug_log(LOG_ERROR, "Error in file at: game_reader_load_ability(Game*, char*) in game_reader.c");
+    return ERROR;
+  }
+
+  /*format: 
+  #gd:ID|height|width|type
+  line1
+  line2
+  ...
+  lineHeight
+  */
+  while(fgets(line, WORD_SIZE - 1, file)){
+    if(strncmp(line,"#gd:", 4) != 0){
+      continue;
+    }
+    toks = strtok(line + 4, "|");
+    id = atol(toks);
+
+    toks = strtok(NULL, "|");
+    height = atoi(toks);
+
+    toks = strtok(NULL, "|");
+    width = atoi(toks);
+
+    toks = strtok(NULL, "|");
+    type = atoi(toks) + NO_DESC;
+
+    gdesc = gdesc_create(id, height, width, type);
+    if(!gdesc){
+      fclose(file);
+      return ERROR;
+    }
+
+    for (i = 0; i < height; i++)
+    {
+      if(!fgets(line, WORD_SIZE - 1, file)){
+        fclose(file);
+        return ERROR;
+      }
+      line[strlen(line) - 2] = 0;
+      if(gdesc_set_line(gdesc, i, line) == ERROR){
+        fclose(file);
+        return ERROR;
+      }
+    }
+    
+    game_add_gdesc(game, gdesc);
+
   }
   fclose(file);
   return OK;

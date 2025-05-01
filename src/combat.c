@@ -48,7 +48,8 @@ struct _Combat{
 
     bool endCombat;                         /*!< if true means combat has ended*/
 
-    Attack *attacks[MAX_ATTACKS];            /*!< array of attacks*/
+
+    Collection *attacks;                     /*!< array of attacks*/
     int attacks_count;                       /*!< number of attacks*/
 };
 
@@ -204,6 +205,15 @@ Status combat_copy_stats(Stats *stat_from, Stats *stat_to);
  */
 Stats *combat_get_last_alive(Combat *cmb, int mode);
 
+/**
+ * @brief Copy the collection of attacks in game into combat
+ * 
+ * @param combat combat struct
+ * @param colc collection struct
+ * @return OK if it was succesful or ERROR if there was an error
+ */
+Status combat_copy_attacks_into_array(Combat *combat, Collection *colc);
+
 /*-----------IMPLENTATIONS-------------*/
 
 Status combat_copy_entity_stats(Entity *entity, Stats *stats){
@@ -252,7 +262,7 @@ Attack *combat_find_attack_by_name(Combat *cmb, char *name) {
     
     for (i = 0; (i < cmb->attacks_count) && (boolean == 1); i++)
     {
-        at = combat_get_attack_in_position(cmb, i);
+        at = (Attack *)collection_get_element_at(cmb->attacks, i);
         if (strcmp(attack_get_name(at), name) == 0)
         {
             boolean = 0;
@@ -371,7 +381,7 @@ Status combat_attack_all(Attack *at, Stats *attacker, Stats *victims, int n_vict
     if (!at || !attacker || !victims)
         return ERROR;
     
-    damage = attacker->stats.strength*attack_get_damage_multiplicator(at);
+    damage = attacker->stats.baseDamage*attack_get_damage_multiplicator(at);
 
     for (i = 0; i < n_victims; i++)
     {
@@ -384,6 +394,7 @@ Status combat_attack_all(Attack *at, Stats *attacker, Stats *victims, int n_vict
 Status combat_enemies_turn(Combat *cmb) {
 
     Stats *stAl = NULL, *stEn = NULL;
+    Attack *at = NULL;
     int numEn, numAl;
     int i;
     int randomNumAttack, randomNumAll;
@@ -406,14 +417,15 @@ Status combat_enemies_turn(Combat *cmb) {
         randomNumAll = rand()%numAl;
         randomNumAttack = rand()%cmb->attacks_count;
 
-        needs_target = attack_get_target_bool(cmb->attacks[randomNumAttack]);
+        at = (Attack*) collection_get_element_at(cmb->attacks, randomNumAttack);
+        needs_target = attack_get_target_bool(at);
         if (needs_target == true)
         {
-            combat_attack(cmb->attacks[randomNumAttack], &stEn[i], &stAl[randomNumAll]);
+            combat_attack(at, &stEn[i], &stAl[randomNumAll]);
         }
         else
         {
-            combat_attack_all(cmb->attacks[randomNumAttack], &stEn[i], stAl, cmb->allies_count);
+            combat_attack_all(at, &stEn[i], stAl, cmb->allies_count);
         }  
         combat_update_deaths(cmb);
     }
@@ -451,6 +463,7 @@ Status combat_enemies_turn(Combat *cmb) {
 Status combat_allies_turn(Combat *cmb){
 
     Stats *stEn = NULL, *stAl = NULL;
+    Attack *at = NULL;
     int numAl, numEn, i, randomNumAttack, randomNumEnemy;
     bool needs_target;
 
@@ -469,14 +482,15 @@ Status combat_allies_turn(Combat *cmb){
         randomNumEnemy = rand()%numEn;
         randomNumAttack = rand()%cmb->attacks_count;
 
-        needs_target = attack_get_target_bool(cmb->attacks[randomNumAttack]);
+        at = (Attack*) collection_get_element_at(cmb->attacks, randomNumAttack);
+        needs_target = attack_get_target_bool(at);
         if (needs_target == true)
         {
-            combat_attack(cmb->attacks[randomNumAttack], &stAl[i], &stEn[randomNumEnemy]);
+            combat_attack(at, &stAl[i], &stEn[randomNumEnemy]);
         }
         else
         {
-            combat_attack_all(cmb->attacks[randomNumAttack], &stAl[i], stEn, cmb->enemies_count);
+            combat_attack_all(at, &stAl[i], stEn, cmb->enemies_count);
         } 
         combat_update_deaths(cmb);
     }
@@ -533,8 +547,9 @@ Status combat_update_player_attack(Combat *cmb, Command *last_cmd){
     if (attack_get_target_bool(atc) == true)
     {
         numEnemy = atoi(args[1]) - 1;
-        stEn = combat_get_enemies_stats(cmb);
-        combat_attack(atc, player, &stEn[numEnemy]);
+
+        stEn = combat_get_enemies_stats_at(cmb, numEnemy);
+        combat_attack(atc, player, stEn);
     }
     else
     {
@@ -682,7 +697,7 @@ Stats *combat_get_last_alive(Combat *cmb, int mode){
     * PUBLIC FUNCTIONS
 */
 
-Combat *combat_initialize(Space *space, Player *player, CommandCode code){
+Combat *combat_initialize(Space *space, Player *player, CommandCode code, Collection *attacks){
     Combat *combat = NULL;
     NPC *npc = NULL;
     int i, npc_count = 0, npc_allies = 1, npc_enemies = 0;
@@ -721,7 +736,7 @@ Combat *combat_initialize(Space *space, Player *player, CommandCode code){
     
     combat->enemies_count = npc_enemies;
     combat->allies_count = npc_allies;
-    
+
     if(combat->enemies_count == 0){
         free(combat);
         return NULL;
@@ -739,8 +754,12 @@ Combat *combat_initialize(Space *space, Player *player, CommandCode code){
     
     combat->space = space;
     combat->endCombat = false;
-    //EMPEZAR GAME READER
 
+    /*Will now copy the data from the collection into combat*/
+
+    combat->attacks = attacks;
+    combat->attacks_count = collection_length(attacks);
+    printf("%d", combat->allies_count);
 
     return combat;
 }
@@ -783,7 +802,9 @@ Status combat_update(Combat *combat, Command *last_cmd){
         combat_allies_turn(combat);
         combat_enemies_turn(combat);
     }
-    
+
+    combat_update_deaths(combat);
+
     return OK;
 }
 
@@ -857,18 +878,18 @@ Status combat_set_num_attacks(Combat *combat, int num) {
     return OK;
 }
 
-Attack *combat_get_attack_in_position(Combat *combat, int pos) {
+/*Attack *combat_get_attack_in_position(Combat *combat, int pos) {
 
     if (!combat || pos < 0)
         return NULL;
 
     return combat->attacks[pos];
-}
+}*/
 
-Status combat_set_attack_in_position(Combat *combat, Attack *attack, int pos) {
+/*Status combat_set_attack_in_position(Combat *combat, Attack *attack, int pos) {
 
     if(!combat || !attack) return ERROR;
 
     combat->attacks[pos] = attack;
     return OK;
-}
+}*/

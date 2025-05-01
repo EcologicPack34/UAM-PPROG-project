@@ -111,4 +111,30 @@ double attack_get_success_chance(Attack *at);
  * @return the name if there weren't errors, NULL if there was a mistake
  */
 char *attack_get_name(Attack *at);
+
+/**
+ * @brief Compares two attacks
+ * @author Sofía Calvo
+ *
+ * @param at pointer to the structure that contains the information of the attack
+ * @return the strcmp of the names, 0 if there was a mistake
+ */
+int attack_compare(void *e1, void *e2);
+
+/**
+ * @brief Prints the name of an attack
+ * @author Sofía Calvo
+ *
+ * @param at pointer to the structure that contains the information of the attack
+ */
+void attack_print(void *at);
+
+/**
+ * @brief Frees the attack
+ * @author Sofía Calvo
+ *
+ * @param at pointer to the structure that contains the information of the attack
+ */
+void attack_destroy(void *at);
+
 #endif

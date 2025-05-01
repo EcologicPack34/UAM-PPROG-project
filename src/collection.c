@@ -96,9 +96,6 @@ Collection *collection_create(long initialSize, bool fixed_length, bool unique_e
         debug_log(LOG_ERROR, "Error creating collection: collection size must be non-zero positive number");
         return NULL;
     }
-    if(!print_element){
-        debug_log(LOG_WARNING, "No print method assigned to a collection.");
-    }
 
     collection = (Collection *)calloc(1, sizeof(Collection));
     if(!collection){
