@@ -19,6 +19,7 @@
 #include "combat.h"
 #include "message.h"
 #include "game_reader.h"
+#include "dialogue.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -901,8 +902,8 @@ Status game_dialogue_init(Game *game, NPC *npc){
   return OK;
 }
 
-Status game_get_dialogue(Game *game){
-  if(!game) return ERROR;
+Dialogue *game_get_dialogue(Game *game){
+  if(!game) return NULL;
 
   return game->dialogue;
 }

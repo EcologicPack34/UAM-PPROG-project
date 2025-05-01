@@ -141,7 +141,7 @@ NR:{NUMBER_OF_REPLIES}
 */
 
 Status dialogue_update(Dialogue *dialogue){
-    char str[WORD_SIZE] = "", aux_str[WORD_SIZE] = "", outcome[WORD_SIZE] = "", *dyn_str = NULL;
+    char str[WORD_SIZE] = "", aux_str[WORD_SIZE] = "", *dyn_str = NULL;
     char *toks = NULL;
     Id id, entityid;
     int i, state = -1, line_num;
@@ -159,25 +159,19 @@ Status dialogue_update(Dialogue *dialogue){
     if(strncmp(str, "ID:", 3) == 0){
         sscanf(str,"ID:%ld", &id);
     }
-    while((id != entityid) && (dialogue->dialogue_file != EOF)){
-        fgets(str,WORD_SIZE, dialogue->dialogue_file);
+    while((id != entityid) && (fgets(str,WORD_SIZE, dialogue->dialogue_file) != NULL)){
         if(strncmp(str, "ID:", 3) == 0){
             sscanf(str,"ID:%ld", &id);
         }
     }
 
-    if(dialogue->dialogue_file == EOF) return ERROR;
-
-    while((dialogue->dialogue_state != state) && (dialogue->dialogue_file != EOF)){
-        fgets(str,WORD_SIZE, dialogue->dialogue_file);
+    while((dialogue->dialogue_state != state) && (fgets(str,WORD_SIZE, dialogue->dialogue_file))){
         if(strncmp(str, "DS:", 3) == 0){
-            sscanf(str,"DS:%ld", &state);
+            sscanf(str,"DS:%d", &state);
         }
     }
 
-    if(dialogue->dialogue_file == EOF) return ERROR;
-
-    fgets(str,WORD_SIZE, dialogue->dialogue_file);
+    if(fgets(str,WORD_SIZE, dialogue->dialogue_file) == NULL) return ERROR;
     sscanf(str, "%d", &line_num);
 
     strcpy(aux_str, "");

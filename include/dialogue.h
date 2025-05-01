@@ -13,7 +13,8 @@
 #define DIALOGUE_H
 
 #include "npc.h"
-#include "game.h"
+#include "command.h"
+#include "utils.h"
 
 #define DOUTPUTS_NUM 4          /*!< Number of dialogue_outputs implemented*/
 

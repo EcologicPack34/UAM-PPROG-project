@@ -526,14 +526,16 @@ Status game_add_ability(Game *game, Ability *ability);
 
 /**
  * @brief Gets the dialogue struct from game
+ * @author Maksym Polyak
  * 
  * @param game game struct
- * @return Status 
+ * @return Dialogue * or NULL if error
  */
-Status game_get_dialogue(Game *game);
+Dialogue *game_get_dialogue(Game *game);
 
 /**
  * @brief Frees dialogue struct and sets game state to default
+ * @author Maksym Polyak
  * 
  * @param game game struct
  * @return Status 
