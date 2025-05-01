@@ -58,7 +58,7 @@ void dialogue_destroy(Dialogue *dialogue);
 Status dialogue_update(Dialogue *dialogue);
 
 /**
- * @brief Controls the outcomes of the dialogue and updates dialogue state and destroys the dialogue if necessary
+ * @brief Controls the outcomes of the dialogue and updates dialogue state
  * @author Maksym Polyak
  * 
  * @param last_cmd last command from player

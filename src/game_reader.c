@@ -629,8 +629,7 @@ Status game_reader_load_npcs(Game *game, char *filename){
   char line[WORD_SIZE] = "";
   char name[WORD_SIZE] = "";
   char *toks = NULL;
-  char message[WORD_SIZE] = "";
-  int can_follow;
+  int can_follow, dialogue_state;
   long npcid, startinglocation;
   NPC_status statusnpc;
 
@@ -661,7 +660,7 @@ Status game_reader_load_npcs(Game *game, char *filename){
         printf("toks is null");
         return ERROR;
       }
-      strcpy(message, toks);
+      dialogue_state = atoi(toks);
       toks = strtok(NULL, "|");
       if(!toks){
 	      printf("toks is null");
@@ -692,10 +691,10 @@ Status game_reader_load_npcs(Game *game, char *filename){
         return ERROR;
       }
       
-      debug_log(PRINT,"Read NPC: #n:%ld|%s|%s|%ld|%d|%d|gdesc", npcid, message, name, startinglocation, (bool)can_follow, (int)statusnpc);
+      debug_log(PRINT,"Read NPC: #n:%ld|%d|%s|%ld|%d|%d|gdesc", npcid, dialogue_state, name, startinglocation, (bool)can_follow, (int)statusnpc);
       /*Creates an NPC with npc_create then saves it on the game with game_add_npc*/
       /*by default, lvl 1 stats are set. If .dat containts a stats line for this npc, they will be set afterwards.*/
-      npc = npc_create(statusnpc, (bool)can_follow, message, name, npcid, startinglocation);
+      npc = npc_create(statusnpc, (bool)can_follow, dialogue_state, name, npcid, startinglocation);
       if (npc == NULL) {
         status = ERROR;
         break;

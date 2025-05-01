@@ -1,0 +1,14 @@
+ID:1
+DS:1
+AT:2
+Hello
+Traveler!
+NR:2
+Hello old man!:2:0
+Bye!:1:1
+
+DS:0
+AT:1
+I don't have anything to tell you
+NR:1
+Bye!:1:0

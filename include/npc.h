@@ -42,14 +42,14 @@ typedef struct _NPC NPC;
  * 
  * @param status status with the player: NPC_status
  * @param can_follow determines if the NPC becomes a follower after chat
- * @param message message of the NPC on start
+ * @param dialogue_state state of the dialogue with the NPC
  * @param name name of the NPC
  * @param id id of the NPC
  * @param location id of the space where the NPC is located
  *
  * @return NPC* or NULL if error
  */
-NPC *npc_create(NPC_status status, bool can_follow, char *message, char *name, Id id, Id location);
+NPC *npc_create(NPC_status status, bool can_follow, int dialogue_state, char *name, Id id, Id location);
 
 /**
  * @brief Frees all the memory related to an npc

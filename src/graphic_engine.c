@@ -91,6 +91,15 @@ void graphic_engine_paint_map(Graphic_engine *ge, Game *game);
 void graphic_engine_paint_combat(Graphic_engine *ge, Game *game);
 
 /**
+ * @brief Paints the dialogue scene in dialogue mode
+ * @author Maksym Polyak
+ * 
+ * @param ge graphic engine struct
+ * @param game game struct
+ */
+void graphic_engine_paint_dialogue(Graphic_engine *ge, Game *game);
+
+/**
  * @brief Paints a general description of the game in description area
  * @author Daniel Gómez
  * 
@@ -160,6 +169,8 @@ void graphic_engine_paint_game(Graphic_engine *ge, Game *game){
   }
   else if(gameState == COMBAT){
     graphic_engine_paint_combat(ge, game);
+  } else if(gameState == DIALOGUE){
+    graphic_engine_paint_dialogue(ge, game);
   }
   
   /* Paint in the banner area */
@@ -677,6 +688,18 @@ void graphic_engine_paint_combat(Graphic_engine *ge, Game *game){
     game_get_log_message(game, str);
     screen_area_puts(ge->descript, str);
   }
+}
+
+void graphic_engine_paint_dialogue(Graphic_engine *ge, Game *game){
+  char str[WORD_SIZE] = "";
+
+  if(!ge || !game) return;
+
+  screen_area_clear(ge->map);
+
+  /*Paints the dialogue on the map*/
+  strcpy(str, "TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST TEST");
+  screen_area_puts(ge->map, str);
 }
 
 void graphic_engine_paint_space(Game *game, Space *space, Direction direction,char map[SPACE_HEIGHT + 1][MAP_WIDTH + 33], char spaceStr[SPACE_HEIGHT + 1][SPACE_WIDTH+10]){

@@ -20,7 +20,6 @@
 struct _NPC{
     Entity *entity;                 /*!< Entity struct of the NPC*/
 
-    char message[WORD_SIZE];        /*!< Message of the NPC for the player*/
     int dialogue_state;             /*!< Determines the state of the dialogue in general*/
 
     bool can_follow;                /*!< Determines if the NPC can follow the player or not*/
@@ -38,7 +37,7 @@ struct _NPC{
 * PUBLIC INTERFACE IMPLEMENTATION
 */
 
-NPC *npc_create(NPC_status status, bool can_follow, char *message, char *name, Id id, Id location){
+NPC *npc_create(NPC_status status, bool can_follow, int dialogue_state, char *name, Id id, Id location){
     NPC *npc = NULL;
 
     if(!name)
@@ -50,10 +49,10 @@ NPC *npc_create(NPC_status status, bool can_follow, char *message, char *name, I
         return NULL;
     }
 
-    strcpy(npc->message, message);
     npc->status = status;
     npc->can_follow = can_follow;
     npc->player_following_id = NO_ID;
+    npc->dialogue_state = dialogue_state;
 
     /*by default, all stats are set to level 1*/
     npc->entity = entity_create(name, id, location, NPC_INVENTORY);
@@ -89,13 +88,6 @@ NPC_status npc_get_status(NPC *npc){
     return npc->status;
 }
 
-char *npc_get_message(NPC *npc){
-    if(!npc)
-        return NULL;
-
-    return npc->message;
-}
-
 bool npc_get_can_follow(NPC *npc){
     if(!npc) return false;
 
@@ -121,15 +113,6 @@ Status npc_set_status(NPC *npc, NPC_status status){
         return ERROR;
 
     npc->status = status;
-
-    return OK;
-}
-
-Status npc_set_message(NPC *npc, char *message){
-    if(!npc || !message)
-        return ERROR;
-
-    strcpy(npc->message, message);
 
     return OK;
 }

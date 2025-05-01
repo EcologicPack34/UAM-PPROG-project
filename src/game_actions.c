@@ -513,43 +513,53 @@ Status game_actions_drop(Game *game){
  */
 Status game_actions_chat(Game *game){
   char **arguments = NULL;
+  Command *comm = NULL;
   Space *space = NULL;
   NPC *npc = NULL;
-  Player *player = NULL;
+  Dialogue *dialogue = NULL;
+  int next_dialogue_state;
 
   if(!game)
     return ERROR;
 
+  comm = game_get_last_command(game);
 
-  arguments = command_get_arguments(game_get_last_command(game));
+  arguments = command_get_arguments(comm);
 
   space = game_get_space(game, game_get_player_location(game));
 
   npc = space_get_NPC_by_name(space, arguments[0]);
 
-  player = game_get_player(game);
-
   if(npc == NULL)
     return ERROR;
+
+  if(npc_get_status(npc) == ENEMY)
+    return game_combat_start(game);
 
   if(entity_get_health(npc_get_entity(npc)) <= 0)
     return ERROR;
 
-  game_add_log_message(game, MESSAGE_NPC,npc_get_message(npc));
-
-  if(npc_get_can_follow(npc) == true && npc_get_status(npc) == NEUTRAL){
-    npc_set_status(npc, ALLY);
-    npc_set_player_following_id(npc, entity_get_id(player_get_entity(player)));
-    player_add_follower(player, npc);
-  }else if(npc_get_can_follow(npc) == true && npc_get_status(npc) == ALLY){
-    /*Prevents other players from stealing followers*/
-    if(npc_get_player_following_id(npc) != entity_get_id(player_get_entity(player))){
-      game_add_log_message(game, MESSAGE_NPC,"I'm following another player.");
+  if((dialogue = game_get_dialogue(game)) == NULL){
+    return game_dialogue_init(game, npc);
+  } else {
+    dialogue_update(dialogue);
+  }
+  
+  switch(dialogue_outcomes(comm, dialogue, &next_dialogue_state)){
+    case NO_OUTPUT:
       return ERROR;
-    }
-    npc_set_status(npc, NEUTRAL);
-    player_remove_follower_by_name(player, entity_get_name(npc_get_entity(npc)));
-    npc_set_player_following_id(npc, NO_ID);
+    case DIALOGUE_STOP:
+      npc_set_dialogue_state(npc, next_dialogue_state);
+      game_end_dialogue(game);
+      return OK;
+    case FIGHT:
+      npc_set_status(npc, ENEMY);
+      npc_set_dialogue_state(npc, next_dialogue_state);
+      game_end_dialogue(game);
+      game_combat_start(game);
+      return OK;
+    case STORE:
+      return OK;
   }
 
   return OK;

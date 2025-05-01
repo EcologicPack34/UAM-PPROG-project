@@ -545,6 +545,16 @@ Object *game_get_object_by_id(Game *game, Id objectid);
 Status game_add_ability(Game *game, Ability *ability);
 
 /**
+ * @brief Initializes a dialogue with an NPC
+ * @author Maksym Polyak
+ * 
+ * @param game game struct
+ * @param npc npc struct
+ * @return Status 
+ */
+Status game_dialogue_init(Game *game, NPC *npc);
+
+/**
  * @brief Gets the dialogue struct from game
  * @author Maksym Polyak
  * 
