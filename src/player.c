@@ -239,6 +239,7 @@ Status player_add_follower(Player *player, NPC *npc){
     /*If an empty pointer wasn't found then followers are full*/
     if(index == -1) return ERROR;
 
+    npc_set_status(npc, ALLY);
     npc_set_player_following_id(npc, entity_get_id(player_get_entity(player)));
 
     player->followers[index] = npc;
@@ -255,6 +256,7 @@ Status player_remove_follower_by_name(Player *player, char *npc_name){
     for(i = 0; i < NPC_MAX_FOLLOWERS; i++){
         if(player->followers[i] != NULL && strcmp(entity_get_name(npc_get_entity(player->followers[i])), npc_name) == 0){
             npc_set_player_following_id(player->followers[i], NO_ID);
+            npc_set_status(player->followers[i], NEUTRAL);
             player->followers[i] = NULL;
             return OK;
         }
