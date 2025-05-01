@@ -16,7 +16,7 @@
 #include "stdbool.h"
 #include "queue.h"
 
-#define N_SKILLS 7 /*!< Number of skills implemented on AbilityType*/
+#define N_SKILLS 8 /*!< Number of skills implemented on AbilityType*/
 
 /**
  * @brief Enum storing the different types of events 

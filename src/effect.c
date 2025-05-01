@@ -57,6 +57,17 @@ struct _EffectsManager{
 Status _effect_apply_poison(Effect *effect, Affected *affected);
 
 /**
+ * @brief this function applies an effect of type fire to an entity
+ * @author Aaron Charameli Mair
+ * 
+ * @param effect a pointer to the effect
+ * @param affected a pointer to the affected (that contains the entity)
+ * @return Status 
+ * @note data string will be "DamageTaken" (a number with the number of damage dealt per turn)
+ */
+Status _effect_apply_fire(Effect *effect, Affected *affected);
+
+/**
  * @brief This function applies an effect of type regeneration to an entity
  * @author Aaron Charameli Mair
  * 
@@ -150,6 +161,11 @@ void effect_destroy(void *e){
     return;
 }
 
+Collection *effect_manager_get_effects(EffectManager *em){
+    if(!em) return NULL;
+    return em->effects;
+}
+
 Effect *effect_get_by_id(EffectManager *em, Id id){
     Effect *effect=NULL;
     int i,len;
@@ -215,6 +231,9 @@ Status effect_update(Effect *effect){
                     break;
                 case REGENERATION:
                     _effect_apply_regeneration(effect, aux);
+                    break;
+                case FIRE:
+                    _effect_apply_fire(effect, aux);
                     break;
                 default:
                     break;
@@ -363,6 +382,26 @@ Status _effect_apply_poison(Effect *effect, Affected *affected){
     Status st;
     /*data string will be: "(int)DamageTaken"*/
     if(!effect || !affected) return ERROR;
+    if(effect->ET != POISON) return ERROR;
+    
+    strcpy(aux, effect->data);
+    DamageTaken = atoi(aux);
+    
+    st = entity_set_health(affected->ent,entity_get_health(affected->ent)-DamageTaken);
+
+    if((affected->turns>0) && (st == OK))
+        affected->turns--;
+
+    return st;
+}
+
+Status _effect_apply_fire(Effect *effect, Affected *affected){
+    double DamageTaken;
+    char aux[WORD_SIZE];
+    Status st;
+    /*data string will be: "(int)DamageTaken"*/
+    if(!effect || !affected) return ERROR;
+    if(effect->ET != FIRE) return ERROR;
     
     strcpy(aux, effect->data);
     DamageTaken = atoi(aux);
@@ -381,6 +420,7 @@ Status _effect_apply_regeneration(Effect *effect, Affected *affected){
     Status st;
     /*data string will be: "(int)regeneration_value"*/
     if(!effect || !affected) return ERROR;
+    if(effect->ET != REGENERATION) return ERROR;
     
     strcpy(aux, effect->data);
     regeneration = atoi(aux);

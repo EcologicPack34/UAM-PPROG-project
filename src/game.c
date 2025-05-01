@@ -466,6 +466,11 @@ TurnValidation game_get_is_turn_valid(Game *game){
   return game->is_turn_valid;
 }
 
+EffectManager *game_get_effect_manager(Game *game){
+  if(!game) return NULL;
+  return game->effect_manager;
+}
+
 Effect *game_get_effect_by_id(Game *game, Id id){
   if(!game || (id<=UNDEFINED_ID)) return ERROR;
 

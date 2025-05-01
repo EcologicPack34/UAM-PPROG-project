@@ -234,6 +234,10 @@ Status game_reader_create_from_file(Game **game, char *filename){
     debug_log(LOG_ERROR, "Error loading ability at: game_reader_create_from_file(Game*, char*) in game_reader.c");
     return ERROR;
   }
+  if (game_reader_load_effects(*game, filename) == ERROR){
+    debug_log(LOG_ERROR, "Error loading ability at: game_reader_create_from_file(Game*, char*) in game_reader.c");
+    return ERROR;
+  }
 
   /*Loads data into the game*/
   
@@ -1201,7 +1205,6 @@ Status game_reader_load_effects(Game *game, char *filename){
       debug_log(PRINT,"Read Effect: #ef:%ld|%s|%d|%d|%d|%s", id, name, ET, inf_turns, default_turns, data);
 
       effect = effect_create(id, name, data, ET, inf_turns, default_turns);
-      game_add_effect(game, effect);
 
       if(effect == NULL){
         debug_log(LOG_ERROR,"Error creating effect when reading from file");

@@ -64,6 +64,15 @@ EffectManager *effect_manager_create();
 void effect_manager_destroy(EffectManager *em);
 
 /**
+ * @brief This function gets the effects collection of an effect manager
+ * @author Aaron Charameli Mair
+ * 
+ * @param em a pointer to the effect manager
+ * @return Collection* or NULL if error
+ */
+Collection *effect_manager_get_effects(EffectManager *em);
+
+/**
  * @brief This function gets an effect by its if
  * @author Aaron Charameli Mair
  * 

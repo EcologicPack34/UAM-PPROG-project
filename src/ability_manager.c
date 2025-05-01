@@ -20,7 +20,7 @@
 
 #include "debug_printing.h"
 
-#define INITIAL_SKILLS_SIZE 7 /*!< Initial number of abilities on the collection of the ability manager*/
+#define INITIAL_SKILLS_SIZE 8 /*!< Initial number of abilities on the collection of the ability manager*/
 
 /**
  * @brief Tags related to the ability references on the .dat. Uses N_SKILLS as maximum size

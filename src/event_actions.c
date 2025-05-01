@@ -69,11 +69,23 @@ bool event_trigger_end_combat(Game *game);
  * @brief Checks for all npcs and move them randomly
  * @author Daniel Gómez
  * 
+ * @param event
  * @param game 
  * @return true 
  * @return false 
  */
 bool event_trigger_npc_rand_move(Event *event, Game *game);
+
+/**
+ * @brief Triggers all the effects to each affected entity in the game
+ * @author Aaron Charameli Mair
+ * 
+ * @param event a pointer to event
+ * @param game a pointer to game
+ * @return true 
+ * @return false 
+ */
+bool event_trigger_effects(Event *event, Game *game);
 
 /*---------PUBLIC FUNCTIONS----------*/
 void event_actions_trigger_events(Game *game){
@@ -107,6 +119,9 @@ void event_actions_trigger_events(Game *game){
                 break;
             case NPC_RAND_MOVE:
                 triggered = event_trigger_npc_rand_move(event, game);
+                break;
+            case TRIGGER_EFFECTS:
+                triggered = event_trigger_effects(event, game);
                 break;
             default:
                 break;
@@ -321,6 +336,25 @@ bool event_trigger_npc_rand_move(Event *event, Game *game){
 
         space_move_NPC(currentSpace, nextSpace, npc);
 
+    }
+    return true;
+}
+
+bool event_trigger_effects(Event *event, Game *game){
+    EffectManager *em=NULL;
+    Collection *effects=NULL;
+    Effect *aux=NULL;
+    int n_effects,i;
+
+    if(!event || !game) return false;
+    if(!(em = game_get_effect_manager(game))) return false;
+
+    effects = effect_manager_get_effects(game_get_effect_manager(game));
+    n_effects = collection_length(effects);
+
+    for(i=0; i<n_effects; i++){
+        aux = collection_get_element_at(effects,i);
+        effect_update(aux);
     }
     return true;
 }

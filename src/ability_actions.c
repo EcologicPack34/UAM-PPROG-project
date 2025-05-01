@@ -264,15 +264,15 @@ Status ability_effect_enemy(Ability *ability, Game *game){
     /*last command is: sk (num) (enemy)*/
 
     if(!ability || !game) return ERROR;
-    if(command_get_arguments_count(game_get_last_command(game)) != 3) return ERROR;
+    if(command_get_arguments_count(game_get_last_command(game)) != 2) return ERROR;
 
     args=command_get_arguments(game_get_last_command(game));
     combat = game_get_combat(game);
     if(!args || !combat) return ERROR;
-    target=atoi(args[2]);
+    target=atoi(args[1]);
     if((target <= 0) || (target>combat_get_enemies_count(combat))) return ERROR;
     if((st = combat_get_enemies_stats_at(combat,target)) == NULL) return ERROR;
-    
+    ent = st->entity;
     if(ability_get_data(ability) == NULL) return ERROR; 
     effect_id = atoi(ability_get_data(ability));
     effect = game_get_effect_by_id(game, effect_id);
@@ -321,6 +321,9 @@ Status ability_actions_use_ability(Game *game){
             break;
         case LINK_UNLOCK:
             status = ability_unlock_link(ability, game);
+            break;
+        case EFFECT_ENEMY:
+            status = ability_effect_enemy(ability, game);
             break;
         default:
             break;

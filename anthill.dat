@@ -98,6 +98,7 @@ Formato Event: #e:Id|Type|cmdTriggersNum|cmdName1 , ...|removeOnTrigger|tagvalue
 #e:4|player_death|0|0|
 #e:5|trigger_combat|1|sh|0|40
 #e:6|npc_rand_move|6|n,s,w,e,up,dw|0|20
+#e:7|trigger_effects|8|n,s,w,e,up,dw,at,sk|0||
 
 Formato NPC: #n:ID|Message|Nombre|LocationID|is_follower|Status|
 #n:1|TEST NPC1 FOLLOW/UNFOLLOW|NPC1|11|1|1|^0m"
@@ -132,9 +133,10 @@ Formato Ability: #sk:Id|Type|Name|Entityid(ObjectId)|is_player_ability|is_object
 #sk:3|heal_self|Heal self 5 HP  Maximum CD: 0|6|0|1|0|0|5
 #sk:4|money_bag|Adds 20 coins   Maximum CD: 0|8|0|1|0|0|20
 #sk:5|link_unlock|Unlocks link between 123 and 124|9|0|1|0|0|4
+#sk:6|effect_enemy|FireBall Launcher|1|1|0|0|0|2
 
 
 formato effects #ef:Id|name|EffectType|InfiniteTurns(y/N)|DefaultNumberOfTurns|data
 
 #ef:1|Poison|2|N|5|5
-#ef:2|Fire|2|N|3|10
+#ef:2|Fire|3|N|3|10
