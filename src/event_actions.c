@@ -207,8 +207,9 @@ bool event_trigger_combat(Event *event, Game *game){
     command_get_as_string(game_get_last_command(game), str);
 
     sprintf(strAux, "You were attack while doing %s", str);
-    game_add_log_message(game, MESSAGE_LOG, strAux);
-    game_combat_start(game);
+    
+    if(game_combat_start(game) == OK)
+        game_add_log_message(game, MESSAGE_LOG, strAux);
     return true;
 }
 

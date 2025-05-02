@@ -187,6 +187,15 @@ Status game_actions_unequip(Game *game);
 Status game_actions_inspect(Game *game);
 
 /**
+ * @brief Action for entering leveling up state
+ * @author Maksym Polyak
+ * 
+ * @param game game struct
+ * @return Status 
+ */
+Status game_actions_level_up(Game *game);
+
+/**
    Game actions implementation
 */
 
@@ -277,6 +286,9 @@ Status game_actions_update(Game *game, Command *command) {
       break;
     case INSPECT:
       status = game_actions_inspect(game);
+      break;
+    case LEVEL_UP:
+      status = game_actions_level_up(game);
       break;
     default:
       break;
@@ -867,4 +879,77 @@ Status game_actions_inspect(Game *game){
   if(!obj) return ERROR;
 
   return game_add_log_message(game, MESSAGE_INSPECT, object_get_descr(obj));
+}
+
+Status game_actions_level_up(Game *game){
+  Player *player = NULL;
+  char **args = NULL;
+  int n_args, index;
+  Entity *entity = NULL;
+  Leveling *leveling = NULL;
+
+  if(!game) return ERROR;
+
+  player = game_get_player(game);
+  if(!player) return ERROR;
+
+  leveling = player_get_leveling(player);
+  if(!leveling) return ERROR;
+
+  if(game_get_state(game) != LEVEL_UP_STATE){
+
+    if((leveling_check_level_up(leveling) == false) && (leveling_get_skill_points(leveling) <= 0)){
+      game_add_log_message(game, MESSAGE_HELP, "You don't have skill points. Try to level up!");
+      return ERROR;
+    }
+
+    game_set_state(game, LEVEL_UP_STATE);
+    return OK;
+  }else{
+    
+    args = command_get_arguments(game_get_last_command(game));
+    if(!args) return ERROR;
+
+    n_args = command_get_arguments_count(game_get_last_command(game));
+    if(n_args <= 0 || n_args >= 2) return ERROR;
+
+    entity = player_get_entity(player);
+
+    index = atoi(args[0]);
+
+    switch(index){
+      case 1:
+        entity_set_strength(entity, entity_get_strength(entity) + 1);
+        leveling_set_skill_points(leveling, leveling_get_skill_points(leveling) - 1);
+        break;
+      case 2:
+        entity_set_magicLevel(entity, entity_get_magicLevel(entity) + 1);
+        leveling_set_skill_points(leveling, leveling_get_skill_points(leveling) - 1);
+        break;
+      case 3:
+        entity_set_max_health(entity, entity_get_max_health(entity) + 10);
+        leveling_set_skill_points(leveling, leveling_get_skill_points(leveling) - 1);
+        break;
+      case 4:
+        entity_set_defense(entity, entity_get_defense(entity) + 1);
+        leveling_set_skill_points(leveling, leveling_get_skill_points(leveling) - 1);
+        break;
+      case 5:
+        game_set_state(game, DEFAULT);
+        return OK;
+      default:
+        game_add_log_message(game, MESSAGE_LOG, "Not a valid option.");
+        return ERROR;
+    }
+
+    if(leveling_get_skill_points(leveling) <= 0){
+      game_set_state(game, DEFAULT);
+      game_add_log_message(game, MESSAGE_LOG, "You ran out of skill points");
+      return OK;
+    }
+
+    return OK;
+  }
+
+  return ERROR;
 }

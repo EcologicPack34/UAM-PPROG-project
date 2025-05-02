@@ -214,7 +214,51 @@ Stats *combat_get_last_alive(Combat *cmb, int mode);
  */
 Status combat_copy_attacks_into_array(Combat *combat, Collection *colc);
 
+/**
+ * @brief Gets the damage multiplier relative to the strength stat,
+ * if strength is greater than MAX_STRENGTH it doesnt have an effect
+ * 
+ * @param stats entity stats struct
+ * @return double 
+ */
+double stats_get_strength_dmg_multiplier(EntityStats *stats);
+
+/**
+ * @brief Gets the multiplier with the reduced damage incoming, if defense
+ * is greather than MAX_DEFENSE it does not have any effect
+ * 
+ * @param stats entity stats struct
+ * @return double 
+ */
+double stats_get_defense_reduced_damage_multiplier(EntityStats *stats);
+
 /*-----------IMPLENTATIONS-------------*/
+
+double stats_get_strength_dmg_multiplier(EntityStats *stats){
+    int strength;
+    
+    if(!stats) return 0;
+
+    if(stats->strength >= MAX_STRENGTH)
+        strength = MAX_STRENGTH;
+    else
+        strength = stats->strength;
+
+    return (strength - 1)*STRENGTH_DAMAGE_MULTIPLIER/100 + 1;
+}
+
+double stats_get_defense_reduced_damage_multiplier(EntityStats *stats){
+    int defense;
+    
+    if(!stats) return 0;
+
+    if(stats->defense >= MAX_DEFENSE)
+    defense = MAX_DEFENSE;
+    else
+    defense = stats->defense;
+
+    return 1 - (defense)*DEFENSE_REDUCED_DAMAGE_PERCENTAGE/100;
+}
 
 Status combat_copy_entity_stats(Entity *entity, Stats *stats){
 
@@ -280,7 +324,7 @@ Status combat_entity_received_damage(Stats *stats, double damage){
     if(!stats) return ERROR;
     
     if(!entity_stats_is_dead(&(stats->stats))){
-        stats->stats.health -= damage;
+        stats->stats.health -= damage*stats_get_defense_reduced_damage_multiplier(&(stats->stats));
     }
 
     return OK;
@@ -368,7 +412,7 @@ Status combat_attack(Attack *at, Stats *attacker, Stats *victim) {
     if (chance > attack_get_success_chance(at))
         return OK;
     
-    damage = attacker->stats.baseDamage*attack_get_damage_multiplicator(at);
+    damage = attacker->stats.baseDamage*attack_get_damage_multiplicator(at)*stats_get_strength_dmg_multiplier(&(attacker->stats));
     combat_entity_received_damage(victim, damage);
     return OK;
 }

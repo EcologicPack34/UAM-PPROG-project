@@ -102,6 +102,15 @@ void graphic_engine_paint_map(Graphic_engine *ge, Game *game);
 void graphic_engine_paint_combat(Graphic_engine *ge, Game *game);
 
 /**
+ * @brief Paints level up state
+ * @author Maksym Polyak
+ * 
+ * @param ge graphic engine struct
+ * @param game game struct
+ */
+void graphic_engine_paint_level_up(Graphic_engine *ge, Game *game);
+
+/**
  * @brief Paints the dialogue scene in dialogue mode
  * @author Maksym Polyak
  * 
@@ -182,6 +191,8 @@ void graphic_engine_paint_game(Graphic_engine *ge, Game *game){
     graphic_engine_paint_combat(ge, game);
   } else if(gameState == DIALOGUE){
     graphic_engine_paint_dialogue(ge, game);
+  } else if(gameState == LEVEL_UP_STATE){
+    graphic_engine_paint_level_up(ge, game);
   }
   
   /* Paint in the banner area */
@@ -754,6 +765,26 @@ void graphic_engine_paint_dialogue(Graphic_engine *ge, Game *game){
     sprintf(str, "   %d. %s | (%s)", count + 1, player_replies[count], dialogue_get_outcome_as_string(dialogue_get_output_at(dialogue, count)));
     screen_area_puts(ge->map, str);
   }
+}
+
+void graphic_engine_paint_level_up(Graphic_engine *ge, Game *game){
+
+  if(!ge || !game) return;
+
+  screen_area_clear(ge->map);
+  screen_area_clear(ge->descript);
+
+  graphic_engine_paint_generalDesc(ge, game);
+
+  graphic_engine_newline_print(ge->map," \n \n \n \n \n \n \n");
+  graphic_engine_newline_print(ge->map,"  Options to level up:\n");
+
+  graphic_engine_newline_print(ge->map,"   1. (1 SP) Level up your strength\n    and crush your enemies!\n");
+  graphic_engine_newline_print(ge->map,"   2. (1 SP) Level up your magic level\n    and strengthen your abilities!\n");
+  graphic_engine_newline_print(ge->map,"   3. (1 SP) Level up your maximum health\n    and overcome your obstacles!\n");
+  graphic_engine_newline_print(ge->map,"   4. (1 SP) Level up your defense\n    and ignore those weaklings!\n");
+  graphic_engine_newline_print(ge->map,"   5. Exit level up menu\n");
+
 }
                                                      
 void graphic_engine_paint_space(Game *game, Space *space, Direction direction,char map[SPACE_HEIGHT + 1][MAP_WIDTH + 33], char spaceStr[SPACE_HEIGHT + 1][SPACE_WIDTH+10]){
