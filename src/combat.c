@@ -214,6 +214,14 @@ Stats *combat_get_last_alive(Combat *cmb, int mode);
  */
 Status combat_copy_attacks_into_array(Combat *combat, Collection *colc);
 
+/**
+ * @brief Releases the objects of the dead entity's inventory
+ * 
+ * @param cmb combat struct
+ * @param st stats struct
+ * @return OK if it was succesful or ERROR if there was an error
+ */
+Status combat_release_dead_loot(Combat *cmb, Stats *st);
 /*-----------IMPLENTATIONS-------------*/
 
 Status combat_copy_entity_stats(Entity *entity, Stats *stats){
@@ -431,33 +439,6 @@ Status combat_enemies_turn(Combat *cmb) {
     }
     
     return OK;
-
-    /*for (i = 0; i < numEn; i++)
-    {
-        randomNumAll = rand()%numAl;
-        randomNumAttack = rand()%MAX_ATTACKS + 1;
-
-        switch (randomNumAttack)
-        {
-        case 1:
-            combat_attack_light(&stEn[i], &stAl[randomNumAll]);
-            break;
-        case 2:
-            combat_attack_strong(&stEn[i], &stAl[randomNumAll]);
-            break;
-        case 3:
-            combat_attack_quick(&stEn[i], &stAl[randomNumAll]);
-            break;
-        case 4:
-            combat_attack_swift(&stEn[i], stAl, numAl);
-            break;
-        default:
-            break;
-        }
-
-        combat_update_deaths(cmb);
-    }
-    return OK;*/
 }
 
 Status combat_allies_turn(Combat *cmb){
@@ -622,7 +603,8 @@ Status combat_update_deaths(Combat *cmb){
     {
         if (entity_stats_is_dead(&(cmb->enemies_stats[i].stats)))
         {
-            /*Copies enemie into dead entities array*/
+            /*Copies enemies into dead entities array*/
+            combat_release_dead_loot(cmb, &(cmb->enemies_stats[i]));
             combat_copy_stats(&(cmb->enemies_stats[i]), &(cmb->dead_entities[(cmb->n_dead_entities)++]));
 
             /*Checks if it's not the last in the array to avoid exceptions*/
@@ -642,6 +624,7 @@ Status combat_update_deaths(Combat *cmb){
     {
         if (entity_stats_is_dead(&(cmb->allies_stats[i].stats)))
         {
+            combat_release_dead_loot(cmb, &(cmb->allies_stats[i]));
             combat_copy_stats(&(cmb->allies_stats[i]), &(cmb->dead_entities[(cmb->n_dead_entities)++]));
             if(i > (cmb->allies_count - 1)){
                 continue;
@@ -878,18 +861,33 @@ Status combat_set_num_attacks(Combat *combat, int num) {
     return OK;
 }
 
-/*Attack *combat_get_attack_in_position(Combat *combat, int pos) {
+Status combat_release_dead_loot(Combat *cmb, Stats *st) {
 
-    if (!combat || pos < 0)
-        return NULL;
+    Inventory *inv = NULL;
+    Inventory *space_inventory = NULL;
+    Id spaceID, objID;
+    int inventory_size;
+    long i;
+    Object *obj = NULL;
 
-    return combat->attacks[pos];
-}*/
+    if (!cmb || !st)
+        return ERROR;
+    
+    if(!(inv = entity_get_inventory(st->entity))) return ERROR;
+    if(!(space_inventory = space_get_inventory(cmb->space))) {
+        return ERROR;
+    }
+    spaceID = space_get_id(cmb->space);
+    inventory_size = inventory_get_size(inv);
 
-/*Status combat_set_attack_in_position(Combat *combat, Attack *attack, int pos) {
+    for (i = 0; i < inventory_size; i++)
+    {
+        if(!(obj = inventory_get_object_at(inv, i))) {
+            return ERROR;
+        }
+        objID = object_get_id(obj);
+        inventory_move_object(inv, space_inventory, objID);
+    }
 
-    if(!combat || !attack) return ERROR;
-
-    combat->attacks[pos] = attack;
-    return OK;
-}*/
+    return OK; 
+}

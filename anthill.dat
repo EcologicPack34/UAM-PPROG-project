@@ -79,7 +79,7 @@ InventoryType = {UNKNOWN_INVENTORY == 0, PLAYER_INVENTORY == 1, NPC_INVENTORY ==
 
 #o:1|Grain1|NONE|Needs Pickaxe to be picked|10|1|0|11|3
 #o:2|Grain2|NONE|Grano2, cannot be moved|-1|0|0|121|3
-#o:3|Grain3|NONE|Grano3|-1|1|0|121|3
+#o:3|Grain3|NONE|Grano3|-1|1|0|4|2
 #o:4|Grain4|NONE|Grano4|-1|1|0|122|3
 #o:5|HP|NONE|Health Potion that heals 20 HP|-1|1|1|4|2
 #o:6|IHP|NONE|Infinite Health Potion that heals 20 HP and isn't consumed|-1|1|1|121|3
@@ -110,7 +110,7 @@ Formato NPC: #n:ID|Message|Nombre|LocationID|is_follower|Status|
 #st:3|2|100|100|10|2|2|2|
 
 #n:4|DIE|Enemy1|11|0|3|^3m"
-#st:4|2|100|100|10|2|2|2|
+#st:4|2|100|1|10|2|2|2|
 
 #n:5|DIE|Enemy2|11|0|3|^4m"
 #st:5|2|100|100|10|2|2|2|
