@@ -21,6 +21,7 @@
 #include "types.h"
 #include "collection.h"
 #include "graphic_description.h"
+#include "dialogue.h"
 
 #define MAP_WIDTH 53                  /*!< Width of the map part*/
 #define MAP_HEIGHT 29                 /*!< Height of the map part*/
@@ -61,6 +62,16 @@ struct _Graphic_engine {
 void graphic_engine_newline_print(Area *area, char *string);
 
 /**
+ * @brief Paints a string with newlines in a designated screen area
+ * but at the start adds the extra string
+ * @author Maksym Polyak
+ * 
+ * @param area where the print is done
+ * @param string string to be printed
+ */
+void graphic_engine_newline_print_with_extra(Area *area, char *string, char *extra);
+
+/**
  * @brief Paints a space in map area
  * @author Daniel Gómez
  * 
@@ -89,6 +100,15 @@ void graphic_engine_paint_map(Graphic_engine *ge, Game *game);
  * @param game game struct
  */
 void graphic_engine_paint_combat(Graphic_engine *ge, Game *game);
+
+/**
+ * @brief Paints the dialogue scene in dialogue mode
+ * @author Maksym Polyak
+ * 
+ * @param ge graphic engine struct
+ * @param game game struct
+ */
+void graphic_engine_paint_dialogue(Graphic_engine *ge, Game *game);
 
 /**
  * @brief Paints a general description of the game in description area
@@ -160,6 +180,8 @@ void graphic_engine_paint_game(Graphic_engine *ge, Game *game){
   }
   else if(gameState == COMBAT){
     graphic_engine_paint_combat(ge, game);
+  } else if(gameState == DIALOGUE){
+    graphic_engine_paint_dialogue(ge, game);
   }
   
   /* Paint in the banner area */
@@ -182,6 +204,23 @@ void graphic_engine_newline_print(Area *area, char *string){
 
   while(toks){
     screen_area_puts(area, toks);
+    toks = strtok(NULL,"\n");
+  }
+}
+
+void graphic_engine_newline_print_with_extra(Area *area, char *string, char *extra){
+  char str[WORD_SIZE], aux_str[WORD_SIZE];
+  char *toks = NULL;
+
+  if(!area || !string) return;
+
+  strcpy(str, string);
+
+  toks = strtok(str,"\n");
+
+  while(toks){
+    sprintf(aux_str,"%s%s", extra, toks);
+    screen_area_puts(area, aux_str);
     toks = strtok(NULL,"\n");
   }
 }
@@ -679,6 +718,44 @@ void graphic_engine_paint_combat(Graphic_engine *ge, Game *game){
   }
 }
 
+void graphic_engine_paint_dialogue(Graphic_engine *ge, Game *game){
+  char str[MAP_WIDTH] = "";
+  Dialogue *dialogue = NULL;
+  NPC *npc = NULL;
+  char *text = NULL;
+  char **player_replies = NULL;
+  int count, n_player_replies;
+
+  if(!ge || !game) return;
+
+  dialogue = game_get_dialogue(game);
+  if(!dialogue) return;
+
+  npc = dialogue_get_NPC(dialogue);
+  if(!npc) return;
+
+  screen_area_clear(ge->map);
+
+  /*Paints the dialogue on the map*/
+  graphic_engine_newline_print(ge->map," \n \n \n \n \n \n \n");
+  graphic_engine_newline_print(ge->map,"  Dialogue:\n");
+
+  text = dialogue_get_npc_text(dialogue);
+  if(!text) return;
+
+  graphic_engine_newline_print_with_extra(ge->map, text, "   ");
+
+  graphic_engine_newline_print(ge->map," \n \n");
+  graphic_engine_newline_print(ge->map,"  Possible replies:\n");
+
+  player_replies = dialogue_get_player_replies(dialogue);
+  n_player_replies = dialogue_get_num_player_replies(dialogue);
+  for(count = 0; count < n_player_replies; count++){
+    sprintf(str, "   %d. %s | (%s)", count + 1, player_replies[count], dialogue_get_outcome_as_string(dialogue_get_output_at(dialogue, count)));
+    screen_area_puts(ge->map, str);
+  }
+}
+                                                     
 void graphic_engine_paint_space(Game *game, Space *space, Direction direction,char map[SPACE_HEIGHT + 1][MAP_WIDTH + 33], char spaceStr[SPACE_HEIGHT + 1][SPACE_WIDTH+10]){
   int i;
   char str[WORD_SIZE];

@@ -11,6 +11,8 @@
 #ifndef TYPES_H
 #define TYPES_H
 
+#define DIALOGUE_FILENAME "dialogue.txt"    /*!< String with the name of the dialogue txt file*/
+
 #define NO_NAME ""                  /*!< String that represents an empty name string*/
 
 #define WORD_SIZE 500               /*!< Maximum word size */
@@ -26,6 +28,9 @@
 
 #define N_GAME_STATES 5             /*!< Number of game states*/
 #define MAX_SKILLS_ENTITY 5         /*!< Maximum number of skils per entity*/
+
+#define LINE_LENGTH 50              /*!< Max length of a line of dialogue*/
+#define LINE_MAX 4                  /*!< Maximum number of lines in a dialogue*/
 
 /**
  * @brief Id typedef

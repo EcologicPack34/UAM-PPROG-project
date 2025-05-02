@@ -94,34 +94,36 @@ Formato Event: #e:Id|Type|cmdTriggersNum|cmdName1 , ...|removeOnTrigger|tagvalue
 
 #e:1|object_on_space|2|tk,dr|0|1:13
 #e:2|object_on_space|2|tk,dr|0|2:14
-#e:3|trigger_combat|3|tk,dr,ch|0|20
+#e:3|trigger_combat|2|tk,dr|0|20
 #e:4|player_death|0|0|
 #e:5|trigger_combat|1|sh|0|40
 #e:6|npc_rand_move|6|n,s,w,e,up,dw|0|20
 
-Formato NPC: #n:ID|Message|Nombre|LocationID|is_follower|Status|
-#n:1|TEST NPC1 FOLLOW/UNFOLLOW|NPC1|11|1|1|^0m"
+Formato NPC: #n:ID|Dialogue State - 1 means initial - 0 means no dialogue|Nombre|LocationID|is_follower|Status|
+#n:1|1|NPC1|11|1|1|^0m"
 #st:1|2|100|100|10|2|2|2|
 
-#n:2|TEST NPC2 FOLLOW/UNFOLLOW|NPC2|11|1|1|^1m"
+#n:2|1|NPC2|11|1|1|^1m"
 #st:2|2|100|100|10|2|2|2|
 
-#n:3|TEST NPC3 FOLLOW/UNFOLLOW|NPC3|11|1|1|^2m"
+#n:3|1|NPC3|11|1|1|^2m"
 #st:3|2|100|100|10|2|2|2|
 
 #n:4|DIE|Enemy1|11|0|3|^3m"
 #st:4|2|100|1|10|2|2|2|
+#n:4|0|Enemy1|11|0|3|^3m"
+#st:4|2|100|100|10|2|2|2|
 
-#n:5|DIE|Enemy2|11|0|3|^4m"
+#n:5|0|Enemy2|11|0|3|^4m"
 #st:5|2|100|100|10|2|2|2|
 
-#n:6|DIE|Enemy3|11|0|3|^5m"
+#n:6|0|Enemy3|11|0|3|^5m"
 #st:6|2|100|100|10|2|2|2|
 
-#n:7|DIE|Enemy4|11|0|3|^6m"
+#n:7|0|Enemy4|11|0|3|^6m"
 #st:7|2|100|100|10|2|2|2|
 
-#n:8|DIE|Spider-(not)-man|123|0|3|/o\
+#n:8|0|Spider-(not)-man|123|0|3|/o\
 #st:8|2|100|100|10|2|2|2|
 
 
