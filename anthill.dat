@@ -40,15 +40,15 @@ decription
 #gd:2|5|9|1
 
 
-
+dddddd
 
 
 ----------
 #gd:3|5|9|1
 
-
-
-
+d
+w
+a
 
 ----------
 
@@ -92,6 +92,7 @@ Formato Event: #e:Id|Type|cmdTriggersNum|cmdName1 , ...|removeOnTrigger|tagvalue
 #e:4|player_death|0|0|
 #e:5|trigger_combat|1|sh|0|40
 #e:6|npc_rand_move|6|n,s,w,e,up,dw|0|20
+#e:7|trigger_effects|8|n,s,w,e,up,dw,at,sk|0||
 
 Formato NPC: #n:ID|Dialogue State - 1 means initial - 0 means no dialogue|Nombre|LocationID|is_follower|Status|
 #n:1|1|NPC1|11|1|1|^0m"
@@ -119,10 +120,26 @@ Formato NPC: #n:ID|Dialogue State - 1 means initial - 0 means no dialogue|Nombre
 #st:8|2|100|100|10|2|2|2|
 
 
-Formato Ability: #sk:Id|Type|Name|Entityid(ObjectId)|is_player_ability|is_object_use|cd_count|cd_length|data
+Formato Ability: #sk:Id|Type|Name|Entityid(ObjectId)|is_player_ability|is_object_use|cd_init|cd_max|data
 
 #sk:1|heal_self|Heal self 50 HP Maximum CD: 8|1|1|0|0|8|50
-#sk:2|heal_self|Heal self 20 HP Maximum CD: 0|5|0|1|0|0|20
-#sk:3|heal_self|Heal self 5 HP  Maximum CD: 0|6|0|1|0|0|5
-#sk:4|money_bag|Adds 20 coins   Maximum CD: 0|8|0|1|0|0|20
-#sk:5|link_unlock|Unlocks link between 123 and 124|9|0|1|0|0|4
+#sk:2|effect_self|Self Regeneration Spell|1|1|0|0|2|3
+#sk:3|effect_ally|Ally Regeneration Spell|1|1|0|0|3|3
+#sk:3|heal_self|Heal self 20 HP Maximum CD: 0|5|0|1|0|0|20
+#sk:4|heal_self|Heal self 5 HP  Maximum CD: 0|6|0|1|0|0|5
+#sk:5|money_bag|Adds 20 coins   Maximum CD: 0|8|0|1|0|0|20
+#sk:6|link_unlock|Unlocks link between 123 and 124|9|0|1|0|0|4
+#sk:7|effect_enemy|FireBall Launcher|1|1|0|0|0|2
+#sk:8|effect_enemy|Poison Bomb|1|1|0|0|6|1
+
+
+
+
+
+formato effects #ef:Id|name|EffectType|EffectAffects|InfiniteTurns(y/N)|DefaultNumberOfTurns|data
+EffectType = {UNKNOWN_EFFECT = 0, REGENERATION = 1, POISON = 2, FIRE = 3}
+EffectAffects = {AFFECTS_PLAYER = (p/P), AFFECTS_ALLY = (a/A), AFFECTS_ENEMY = (e/E)}
+
+#ef:1|Poison|2|E|N|1|25
+#ef:2|Fire|3|E|N|1|1
+#ef:3|Regeneration|1|p|y|4|5

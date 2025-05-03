@@ -737,7 +737,7 @@ Status game_actions_use_ability(Game *game){
   if(!game) return ERROR;
 
   n_arg = command_get_arguments_count(game_get_last_command(game));
-  if(n_arg != 1)
+  if(n_arg != 1  &&  n_arg != 2)
     return ERROR;
 
   arguments = command_get_arguments(game_get_last_command(game));
