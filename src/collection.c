@@ -233,6 +233,7 @@ Status collection_free_elements(Collection *collection, void (*free_element)(voi
     for (i = 0; i < collection->length; i++)
     {
         free_element(collection->list[i]);
+        collection->list[i] = NULL;
     }
 
     return OK;

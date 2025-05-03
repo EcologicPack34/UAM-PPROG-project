@@ -17,7 +17,7 @@ D_FLAGS = -Wall -pedantic -g -I$(INCLUDE)
 #Names of the .c files
 _SRC = command.c debug_printing.c game_actions.c game_loop.c game.c graphic_engine.c space.c object.c player.c game_reader.c entity.c \
  link.c inventory.c collection.c event_manager.c event_actions.c npc.c vector2.c queue.c message.c combat.c ability_actions.c ability_manager.c \
- equipment.c attack.c dialogue.c utils.c graphic_description.c
+ equipment.c attack.c dialogue.c utils.c graphic_description.c effect.c
 
 #Adds to the names of .c files the path of the file before
 SRC = $(patsubst %,$(SRC_PATH)/%,$(_SRC))
@@ -35,8 +35,8 @@ DEPENDENCIES = $(OBJ:.o=.d)
 EXE = anthill
 EXED = anthilldebug
 
-_TEST_OBJ = entity_test.o collection_test.o space_test.o link_test.o object_test.o inventory_test.o player_test.o
-_TEST = entity_test collection_test space_test link_test object_test inventory_test player_test
+_TEST_OBJ = entity_test.o collection_test.o space_test.o link_test.o object_test.o inventory_test.o player_test.o effect_test.o
+_TEST = entity_test collection_test space_test link_test object_test inventory_test player_test effect_test
 
 TEST = $(patsubst %,$(TEST_EXE_PATH)/%,$(_TEST))
 TEST_OBJ = $(patsubst %,$(OBJ_PATH)/%,$(_TEST_OBJ))
@@ -115,6 +115,7 @@ INVENTORY_TEST_OBJ = ./$(OP)/inventory_test.o ./$(OP)/inventory.o ./$(OP)/collec
 ENTITY_TEST_OBJ = ./$(OP)/entity.o ./$(OP)/inventory.o ./$(OP)/object.o ./$(OP)/collection.o ./$(OP)/debug_printing.o ./$(OP)/ability_manager.o ./$(OP)/queue.o
 COLLECTION_TEST_OBJ = ./$(OP)/collection_test.o ./$(OP)/collection.o ./$(OP)/debug_printing.o
 PLAYER_TEST_OBJ = ./$(OP)/player_test.o ./$(OP)/player.o ./$(OP)/command.o ./$(OP)/equipment.o ./$(OP)/npc.o ./$(OP)/entity.o ./$(OP)/object.o ./$(OP)/debug_printing.o ./$(OP)/inventory.o ./$(OP)/collection.o ./$(OP)/ability_manager.o ./$(OP)/queue.o
+#EFFECT_TEST_OBJ = ./$(OP)/effect_test.o ./$(OP)/effect.o ./$(OP)/entity.o ./$(OP)/player.o ./$(OP)/debug_printing.o ./$(OP)/equipment.o ./$(OP)/command.o ./$(OP)/inventory.o ./$(OP)/object.o ./$(OP)/collection.o ./$(OP)/ability_manager.o ./$(OP)/queue.o ./$(OP)/npc.o
 
 test_all: collection_test space_test link_test object_test inventory_test player_test
 
@@ -152,6 +153,11 @@ player_test:
 	make
 	$(CC) -g -Wall -pedantic -I$(INCLUDE) -c ./src/test/src/player_test.c -o ./$(OBJ_PATH)/player_test.o 
 	$(CC) $(CFLAGS) -g -o ./src/test/player_test $(PLAYER_TEST_OBJ)
+
+#effect_test:
+#	make
+#	$(CC) -g -Wall -pedantic -I$(INCLUDE) -c ./src/test/src/effect_test.c -o ./$(OBJ_PATH)/effect_test.o 
+#	$(CC) $(CFLAGS) -g -o ./src/test/effect_test $(EFFECT_TEST_OBJ)
 	
 clean_test:
 	@rm -f ./src/test/player_test ./src/test/inventory_test ./src/test/object_test ./src/test/link_test\

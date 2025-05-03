@@ -14,12 +14,14 @@
 #include "debug_printing.h"
 #include "collection.h"
 #include "npc.h"
+#include "effect.h"
 #include "vector2.h"
 #include "queue.h"
 #include "combat.h"
 #include "message.h"
 #include "game_reader.h"
 #include "dialogue.h"
+#include "effect.h"
 #include "attack.h"
 
 #include <stdio.h>
@@ -54,6 +56,7 @@ struct _Game {
   /*Others*/
   Dialogue *dialogue;                  /*!< Dialogue struct*/
   EventManager *event_manager;        /*!< Struct containing the info about the events that can happen*/
+  EffectManager *effect_manager;      /*!< Struct containing effects and allows to manage them*/
   Queue *screenLog;                   /*!< Queue containing a list of messages to print on screen*/
   bool godmode;                       /*!< bool that determines if god mode is activated*/
 
@@ -199,6 +202,8 @@ Status game_create(Game **game) {
     debug_log(LOG_ERROR,"Error creating command");
     return ERROR;
   }
+
+  (*game)->effect_manager = effect_manager_create();
   
   (*game)->attacks = collection_create(5, false, false, attack_compare, attack_print);
   if(!((*game)->attacks)){
@@ -280,6 +285,7 @@ Status game_destroy(Game *game) {
   /*Frees comand and event manager*/
   command_destroy(game->last_cmd);
   event_manager_destroy(game->event_manager);
+  effect_manager_destroy(game->effect_manager);
   
   /*Frees abilities and log messages*/
   ability_manager_destroy(game->ability_manager);
@@ -464,6 +470,17 @@ TurnValidation game_get_is_turn_valid(Game *game){
   if(!game) return false;
 
   return game->is_turn_valid;
+}
+
+EffectManager *game_get_effect_manager(Game *game){
+  if(!game) return NULL;
+  return game->effect_manager;
+}
+
+Effect *game_get_effect_by_id(Game *game, Id id){
+  if(!game || (id<=UNDEFINED_ID)) return ERROR;
+
+  return effect_get_by_id(game->effect_manager, id);
 }
 
 /*-----------SETTERS-----------*/
@@ -825,6 +842,11 @@ Status game_add_log_message(Game *game, MessageType type,char *message){
   }
 
   return OK;
+}
+
+Status game_add_effect(Game *game, Effect *effect){
+  if(!game || !game->effect_manager || !effect) return ERROR;
+  return effect_manager_add_effect(game->effect_manager, effect);
 }
 
 Status game_get_log_message(Game *game, char *str){

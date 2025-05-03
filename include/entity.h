@@ -27,6 +27,7 @@
 #include "types.h"
 
 #define N_STATS 7 /*!< Number of stats implemented + NO_STAT*/
+#define N_ENTITY_TYPE 3 /*!< Number of entity types*/
 
 /**
  * @brief enum to identify where the entity is located

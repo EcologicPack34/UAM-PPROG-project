@@ -20,13 +20,14 @@
 
 #include "debug_printing.h"
 
-#define INITIAL_SKILLS_SIZE 5 /*!< Initial number of abilities on the collection of the ability manager*/
+#define INITIAL_SKILLS_SIZE 8 /*!< Initial number of abilities on the collection of the ability manager*/
 
 /**
  * @brief Tags related to the ability references on the .dat. Uses N_SKILLS as maximum size
  * @file ability_manager.c
  */
-char *abilityTags[N_SKILLS] = { "" , "heal_self", "heal_ally", "money_bag","link_unlock"}; /*!< Tags related to the type | Same order as AbilityType*/
+char *abilityTags[N_SKILLS] = { "" , "heal_self", "heal_ally", "money_bag","link_unlock","effect_self","effect_enemy"\
+  ,"effect_ally"}; /*!< Tags related to the type | Same order as AbilityType*/
 
 /**
  * @brief Struct that contains all the information related to an ability
@@ -76,14 +77,12 @@ Ability *ability_create(Id id, char *data, char *name, AbilityType type, Id enti
     return NULL;
   }
 
-  ability->data = (char *)malloc(strlen(data) * sizeof(char) + 1);
+  ability->data = (char *)malloc((strlen(data)+10) * sizeof(char));
   if(!ability->data){
-    debug_log(LOG_ERROR,"Couldn't allocate memory when creating ability");
-    free(ability);
-    return NULL;
+    debug_log(LOG_WARNING,"Couldn't allocate memory for ability's data");
   }
 
-  ability->name = (char *)malloc(strlen(name) * sizeof(char) + 1);
+  ability->name = (char *)malloc((strlen(name)+10) * sizeof(char));
   if(!ability->name){
     free(ability->data);
     free(ability);
@@ -109,8 +108,10 @@ void ability_destroy(void *ability){
   
   if(ability){
     sk = (Ability *)ability;
-    free(sk->name);
-    free(sk->data);
+    if(sk->name)
+      free(sk->name);
+    if(sk->data)
+      free(sk->data);
     free(sk);
   }
 }
