@@ -280,6 +280,7 @@ Status game_reader_create_save_file(char *save_file, Game *game, char *original_
   char *toks=NULL;
   int gdesc_hight=0;
   int i;
+  Id aux_id;
 
   if(!save_file || !game || !original_file) return ERROR;
 
@@ -304,12 +305,19 @@ Status game_reader_create_save_file(char *save_file, Game *game, char *original_
         fgets(line, WORD_SIZE, Poriginal);
         fprintf(Psave_file, "%s", line);
       }
-      fprintf(Psave_file, "----------");
+      fprintf(Psave_file, "----------\n");
     }
-  }
+    if(strncmp("#l:", line, 3) == 0){
+      toks = strtok(line+3, "|");
+      aux_id = atoi(toks);
+      link_save_to_str(game_get_link_by_id(game, aux_id), aux);
+      fprintf(Psave_file, "%s\n", aux);
+    }
 
+  }
   fclose(Poriginal);
   fclose(Psave_file);
+
 
 return OK;
 }

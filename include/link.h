@@ -170,4 +170,15 @@ Status link_unlock(Link *link, Entity *player);
  */
 int link_cmp(void *e1, void *e2);
 
+/**
+ * @brief this function saves a link in a string format
+ * 
+ * @param l a pointer to the link
+ * @param destiny the string where it will be stored
+ * @return Status 
+ * @note format: #l:ID|Space1|Space2|adjacent|locked
+ * @note the destiny str is assumed to have enough space
+ */
+Status link_save_to_str(Link *l, char *destiny);
+
 #endif
