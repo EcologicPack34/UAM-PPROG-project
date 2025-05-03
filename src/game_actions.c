@@ -196,6 +196,15 @@ Status game_actions_inspect(Game *game);
 Status game_actions_level_up(Game *game);
 
 /**
+ * @brief Action for buying in the store
+ * @author Maksym Polyak
+ * 
+ * @param game game struct
+ * @return Status 
+ */
+Status game_actions_buy(Game *game);
+
+/**
    Game actions implementation
 */
 
@@ -289,6 +298,9 @@ Status game_actions_update(Game *game, Command *command) {
       break;
     case LEVEL_UP:
       status = game_actions_level_up(game);
+      break;
+    case BUY:
+      status = game_actions_buy(game);
       break;
     default:
       break;
@@ -576,6 +588,7 @@ Status game_actions_chat(Game *game){
         game_combat_start(game);
         return OK;
       case STORE:
+        game_set_state(game, STORE);
         return OK;
       case FOLLOW:
         if((status = player_add_follower(player, npc)) == ERROR)
@@ -954,4 +967,72 @@ Status game_actions_level_up(Game *game){
   }
 
   return ERROR;
+}
+
+Status game_actions_buy(Game *game){
+  char **args = NULL;
+  int n_args;
+  Command *comm = NULL;
+  int index, cost;
+  NPC *seller = NULL;
+  Object *obj = NULL;
+  Player *player = NULL;
+  char str[WORD_SIZE] = "";
+
+
+  if(!game) return ERROR;
+
+  if(game_get_state(game) != STORE_STATE){
+    game_add_log_message(game, MESSAGE_HELP, "You're not in a shop!");
+    return ERROR;
+  }
+
+  comm = game_get_last_command(game);
+  if(!comm) return ERROR;
+
+  args = command_get_arguments(comm);
+  n_args = command_get_arguments_count(comm);
+
+  if(n_args <= 0) return ERROR;
+
+  index = atoi(args[0]);
+
+  if(index == 0){
+    game_end_dialogue(game);
+    game_set_state(game, DEFAULT);
+    return OK;
+  }
+
+  seller = dialogue_get_NPC(game_get_dialogue(game));
+
+  if(index < 0 || index > inventory_get_size(entity_get_inventory(npc_get_entity(seller))));
+
+  if(inventory_get_size(entity_get_inventory(npc_get_entity(seller))) <= 0){
+    sprintf(str, "%s ran out of goods to sell!", entity_get_name(npc_get_entity(seller)));
+    game_add_log_message(game, MESSAGE_NPC, str);
+    game_end_dialogue(game);
+    game_set_state(game, DEFAULT);
+    return ERROR;
+  }
+
+
+  player = game_get_player(game);
+
+  if((obj = inventory_get_object_at(entity_get_inventory(npc_get_entity(seller)), index)) == NULL) return ERROR;
+
+  if(object_get_cost(obj) > player_get_money(player)){
+    sprintf(str, "You don't have enough money to buy a %s!", object_get_name(obj));
+    game_add_log_message(game, MESSAGE_NPC, str);
+    return ERROR;
+  }
+
+  
+  if(inventory_move_object(entity_get_inventory(npc_get_entity(seller)), entity_get_inventory(player_get_entity(player)), object_get_id(obj)) == ERROR){
+    sprintf(str, "You don't have space to add %s to your inventory!", object_get_name(obj));
+    game_add_log_message(game, MESSAGE_NPC, str);
+    return ERROR;
+  }
+  player_add_money(player, -object_get_cost(obj));
+
+  return OK;
 }

@@ -140,7 +140,7 @@ Status player_get_str_desc(Player *player, char *str){
         return ERROR;
 
     ent = player_get_entity(player);
-    sprintf(str, "%s (%s): H:%.1lf/%.1lf,L:%ld, Level:%d", entity_get_graphic_description(ent), entity_get_name(ent), entity_get_health(ent), entity_get_max_health(ent),entity_get_location(ent), leveling_get_level(player->leveling));
+    sprintf(str, "%s (%s): H:%.1lf/%.1lf,L:%ld,M:%d, Lev:%d", entity_get_graphic_description(ent), entity_get_name(ent), entity_get_health(ent), entity_get_max_health(ent),entity_get_location(ent), player_get_money(player), leveling_get_level(player->leveling));
 
     if(leveling_check_level_up(player->leveling) == true){
         strcpy(aux_str, " LEVEL UP!");

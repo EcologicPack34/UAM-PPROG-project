@@ -38,6 +38,8 @@
 #define XP_MINIMUM 1                        /*!< Minimum XP a dead enemy gives*/
 #define XP_MULT 10                          /*!< Multiplier for the stats to add XP when an enemy dies*/
 
+#define MONEY_MIN 10                        /*!< Minimum amount of money an enemy can yield when defeated*/
+
 
 #define N_GAME_STATES 7             /*!< Number of game states*/
 #define MAX_SKILLS_ENTITY 5         /*!< Maximum number of skils per entity*/

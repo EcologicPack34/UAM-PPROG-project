@@ -120,6 +120,15 @@ void graphic_engine_paint_level_up(Graphic_engine *ge, Game *game);
 void graphic_engine_paint_dialogue(Graphic_engine *ge, Game *game);
 
 /**
+ * @brief Paints the store scene in store mode
+ * @author Maksym Polyak
+ * 
+ * @param ge graphic engine struct
+ * @param game game struct
+ */
+void graphic_engine_paint_store(Graphic_engine *ge, Game *game);
+
+/**
  * @brief Paints a general description of the game in description area
  * @author Daniel Gómez
  * 
@@ -193,6 +202,8 @@ void graphic_engine_paint_game(Graphic_engine *ge, Game *game){
     graphic_engine_paint_dialogue(ge, game);
   } else if(gameState == LEVEL_UP_STATE){
     graphic_engine_paint_level_up(ge, game);
+  } else if(gameState == STORE_STATE){
+    graphic_engine_paint_store(ge, game);
   }
   
   /* Paint in the banner area */
@@ -784,6 +795,41 @@ void graphic_engine_paint_level_up(Graphic_engine *ge, Game *game){
   graphic_engine_newline_print(ge->map,"   3. (1 SP) Level up your maximum health\n    and overcome your obstacles!\n");
   graphic_engine_newline_print(ge->map,"   4. (1 SP) Level up your defense\n    and ignore those weaklings!\n");
   graphic_engine_newline_print(ge->map,"   5. Exit level up menu\n");
+
+}
+
+void graphic_engine_paint_store(Graphic_engine *ge, Game *game){
+  int i, obj_num, cost;
+  Object *obj = NULL;
+  Inventory *inventory = NULL;
+  NPC *seller = NULL;
+  char str[WORD_SIZE] = "";
+
+
+  if(!ge || !game) return;
+
+  screen_area_clear(ge->map);
+  screen_area_clear(ge->descript);
+
+  graphic_engine_paint_generalDesc(ge, game);
+
+  seller = game_get_dialogue(game);
+  if(!seller) return;
+
+  inventory = entity_get_inventory(npc_get_entity(seller));
+  if(!inventory) return;
+
+  obj_num = inventory_get_size(inventory);
+
+  graphic_engine_newline_print(ge->map," \n \n \n \n \n \n \n");
+  graphic_engine_newline_print(ge->map,"  (Enter 'by 0' to exit the store \n   or 'by (NUMBER OF ITEM)' to buy\n  You can also use i (NUMBER OF ITEM) to see description)\n \n");
+  sprintf(str, "  %s: This is all I can offer:\n", entity_get_name(npc_get_entity(seller)));
+  graphic_engine_newline_print(ge->map,str);
+
+  for(i = 0; i < obj_num; i++){
+    obj = inventory_get_object_at(inventory, i);
+    sprintf(str, "%d -> %s - Cost: %d", )
+  }
 
 }
                                                      

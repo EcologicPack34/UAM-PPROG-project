@@ -39,15 +39,16 @@ Enables God Mod, gives high health, discovers all spaces...
 Moves one space up.
 Moves one space down.
 Levels up the player if he has skill points available. In level up state write lu (option you want)
+Buys the object if you have enough money
 -------------------
 [CmdStateTypes]
 all
 Move,North,South,East,West,Attack,Take,Drop,Chat,Exit,Help,Ability,Object_Use,Search,Equip,Unequip,Inspect,sw,up,dw,Level_Up,
 Attack,Run_Away,Exit,Help,Ability,Object_Use,Inspect,
 all
-Chat,
-Level_Up,
-Chat,
+Chat,Help,
+Level_Up,Help,
+Buy,Help,
 ----------------
 
 

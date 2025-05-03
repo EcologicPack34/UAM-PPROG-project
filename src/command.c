@@ -27,7 +27,7 @@
  */
 char *cmd_to_str[N_CMD][N_CMDT] = {{"", "No command"}, {"", "Unknown"}, {"q", "Exit"}, {"s", "South"}, {"w", "North"}, {"d", "East"}, {"a", "West"},{"tk", "Take"}, {"dr", "Drop"},\
  {"ch", "Chat"}, {"at", "Attack"}, {"h", "Run_Away"}, {"sw", "Switch_Player"}, {"sk", "Ability"}, {"ou", "Object_Use"}, {"hp", "Help"}, {"m", "Move"}, {"sh","Search"},\
- {"eq", "Equip"}, {"ue", "Unequip"}, {"i", "Inspect"}, {"4444444444444444", "4444444444444444"}, {"up", "Up"}, {"dw", "Down"}, {"lu", "Level_Up"}};
+ {"eq", "Equip"}, {"ue", "Unequip"}, {"i", "Inspect"}, {"4444444444444444", "4444444444444444"}, {"up", "Up"}, {"dw", "Down"}, {"lu", "Level_Up"}, {"by","Buy"}};
 
 /**
 * @brief Struct containing the info of a command
