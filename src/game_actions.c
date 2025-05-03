@@ -630,6 +630,7 @@ Status game_actions_chat(Game *game){
         if(npc_get_status(npc) == ALLY || ((status = player_add_follower(player, npc_get_entity(npc))) == ERROR))
           game_add_log_message(game, MESSAGE_HELP, "Following another player or not an available follower.");
         
+        npc_set_status(npc, ALLY);
         game_end_dialogue(game);
         return status;
       case UNFOLLOW:
