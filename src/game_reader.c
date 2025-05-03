@@ -267,6 +267,53 @@ Status game_reader_create_from_file(Game **game, char *filename){
   return OK;
 }
 
+Status game_reader_create_from_save_file(Game **game, char *filename){
+  if(game || !filename) return ERROR;
+  return ERROR;
+}
+
+Status game_reader_create_save_file(char *save_file, Game *game, char *original_file){
+  FILE *Poriginal=NULL;
+  FILE *Psave_file=NULL;
+  char line[WORD_SIZE]="";
+  char aux[WORD_SIZE]="";
+  char *toks=NULL;
+  int gdesc_hight=0;
+  int i;
+
+  if(!save_file || !game || !original_file) return ERROR;
+
+
+
+  if((Poriginal = fopen(original_file, "r")) == NULL) return ERROR;
+  if((Psave_file = fopen(save_file, "w")) == NULL){
+    fclose(Poriginal);
+    return ERROR;
+  }
+  
+  /*GDESC SAVE*/
+  while(fgets(line, WORD_SIZE, Poriginal)){
+    if(strncmp("#gd:", line, 4) == 0){
+      strcpy(aux,line);
+      toks = strtok(aux+4,"|");
+      toks = strtok(NULL, "|");
+      gdesc_hight = atoi(toks);
+      fprintf(Psave_file, "%s", line);
+
+      for(i=0; i<gdesc_hight; i++){
+        fgets(line, WORD_SIZE, Poriginal);
+        fprintf(Psave_file, "%s", line);
+      }
+      fprintf(Psave_file, "----------");
+    }
+  }
+
+  fclose(Poriginal);
+  fclose(Psave_file);
+
+return OK;
+}
+
 /*
 * Private functions implementation
 */

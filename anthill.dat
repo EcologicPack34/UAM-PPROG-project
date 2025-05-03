@@ -1,7 +1,7 @@
 Formato Space: #s:ID|Nombre|gdescId|northLink|eastLink|southLink|westLink|upLink|downLink
 la longitud de gdescLine esta limitidad por el codigo, es decir, si es mas larga de lo debido se ignorara. Si hay mas lineas de descripcion de lo debido tambien se ignoran
 
-Formato Player: #p:ID|Nombre|LocationID|VidaMaxima|Vida|DanoBase|Fuerza|Defensa|NivelMagia|gdesc
+Formato Player: #p:ID|Nombre|LocationID|gdesc
 Formato STATS: #st:IDEntity|EntityType|VidaMaxima|Vida|DanoBase|Fuerza|Defensa|NivelMagia
 
 
@@ -46,15 +46,15 @@ decription
 #gd:2|5|9|1
 
 
-
+dddddd
 
 
 ----------
 #gd:3|5|9|1
 
-
-
-
+d
+w
+a
 
 ----------
 
