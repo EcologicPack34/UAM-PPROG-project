@@ -27,7 +27,7 @@
 struct _Player {
     Entity *entity;                     /*!< Entity type of the player */
 
-    NPC *followers[NPC_MAX_ALLIES - 1]; /*!< Pointer with all the actual followers allies*/
+    Collection *followers;              /*!< Saves the entities of the followers of the player*/
 
     Equipment *equipment;               /*!< Equipment of the player*/
 
@@ -66,7 +66,6 @@ Status player_set_entity(Player *player, Entity *entity){
 
 Player *player_create(char *name, Id identity, Id location, int money, int xp, int next_xp, int level, int skill_points){
     Player *player = NULL;
-    int i;
 
     if(!(player = (Player *)malloc(sizeof(Player))))
         return NULL;
@@ -90,12 +89,12 @@ Player *player_create(char *name, Id identity, Id location, int money, int xp, i
 
     player->money = money;
 
-    for(i = 0; i < NPC_MAX_FOLLOWERS; i++){
-        player->followers[i] = NULL;
-    }
+    player->followers = collection_create(NPC_MAX_FOLLOWERS, true, true, entity_compare, NULL);
+    if(!player->followers) return NULL;
 
     player->cmdData = command_info_create();
     if(!(player->cmdData)){
+        collection_destroy(player->followers);
         entity_destroy(player->entity);
         equipment_destroy(player->equipment);
         leveling_destroy(player->leveling);
@@ -109,6 +108,7 @@ void player_destroy(Player *player){
     if(!player)
         return;
 
+    collection_destroy(player->followers);
     entity_destroy(player_get_entity(player));
     equipment_destroy(player->equipment);
     leveling_destroy(player->leveling);
@@ -252,55 +252,26 @@ Status player_unequip_piece(Player *player, char *data){
     return OK;
 }
 
-Status player_add_follower(Player *player, NPC *npc){
-    int i, index = -1;
+Status player_add_follower(Player *player, Entity *entity){
+    if(!player || !entity) return ERROR;
 
-    if(!player || !npc || (npc_get_can_follow(npc) == false)) return ERROR;
-
-    if(npc_get_player_following_id(npc) != NO_ID)
-        return ERROR;
-
-    /*Checks if its already a follower and saves the first NULL index*/
-    for(i = 0; i < NPC_MAX_FOLLOWERS; i++){
-        if(npc_cmp(npc, player->followers[i]) == 0)
-            return OK;
-        if(player->followers[i] == NULL)
-            index = i;
-    }
-
-    /*If an empty pointer wasn't found then followers are full*/
-    if(index == -1) return ERROR;
-
-    npc_set_status(npc, ALLY);
-    npc_set_player_following_id(npc, entity_get_id(player_get_entity(player)));
-
-    player->followers[index] = npc;
-
-    return OK;
+    return collection_add(player->followers, (void *)entity);
 }
 
-Status player_remove_follower_by_name(Player *player, char *npc_name){
-    int i;
+Status player_remove_follower_by_pointer(Player *player, Entity *entity){
+    if(!player || !entity) return ERROR;
 
-    if(!player || !npc_name) return ERROR;
-
-    /*Searches by name and removes it*/
-    for(i = 0; i < NPC_MAX_FOLLOWERS; i++){
-        if(player->followers[i] != NULL && strcmp(entity_get_name(npc_get_entity(player->followers[i])), npc_name) == 0){
-            npc_set_player_following_id(player->followers[i], NO_ID);
-            npc_set_status(player->followers[i], NEUTRAL);
-            player->followers[i] = NULL;
-            return OK;
-        }
-    }
-
-    /*If not found then its removed*/
-    return ERROR;
+    return collection_remove(player->followers, entity);
 }
 
-NPC **player_get_followers(Player *player){
-    
+Entity *player_get_follower_at(Player *player, int i){
     if(!player) return NULL;
 
-    return player->followers;
+    return collection_get_element_at(player->followers, i);
+}
+
+int player_get_follower_num(Player *player){
+    if(!player) return -1;
+
+    return collection_length(player->followers);
 }
