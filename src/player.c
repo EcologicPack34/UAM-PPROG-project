@@ -64,7 +64,7 @@ Status player_set_entity(Player *player, Entity *entity){
    Game interface implementation
 */
 
-Player *player_create(char *name, Id identity, Id location, int xp, int next_xp, int level, int skill_points){
+Player *player_create(char *name, Id identity, Id location, int money, int xp, int next_xp, int level, int skill_points){
     Player *player = NULL;
     int i;
 
@@ -88,7 +88,7 @@ Player *player_create(char *name, Id identity, Id location, int xp, int next_xp,
         free(player);
     }
 
-    player->money = 0;
+    player->money = money;
 
     for(i = 0; i < NPC_MAX_FOLLOWERS; i++){
         player->followers[i] = NULL;

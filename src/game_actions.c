@@ -595,7 +595,11 @@ Status game_actions_chat(Game *game){
         game_combat_start(game);
         return OK;
       case STORE:
-        game_set_state(game, STORE);
+        if(inventory_get_size(entity_get_inventory(npc_get_entity(dialogue_get_NPC(dialogue)))) <= 0){
+          game_add_log_message(game, MESSAGE_HELP, "Merchant does not have any goods to sell.");
+          return OK;
+        }
+        game_set_state(game, STORE_STATE);
         return OK;
       case FOLLOW:
         if((status = player_add_follower(player, npc)) == ERROR)
@@ -977,7 +981,7 @@ Status game_actions_buy(Game *game){
   char **args = NULL;
   int n_args;
   Command *comm = NULL;
-  int index, cost;
+  int index;
   NPC *seller = NULL;
   Object *obj = NULL;
   Player *player = NULL;
@@ -999,9 +1003,9 @@ Status game_actions_buy(Game *game){
 
   if(n_args <= 0) return ERROR;
 
-  index = atoi(args[0]);
+  index = atoi(args[0]) - 1;
 
-  if(index == 0){
+  if(index == -1){
     game_end_dialogue(game);
     game_set_state(game, DEFAULT);
     return OK;
@@ -1009,7 +1013,7 @@ Status game_actions_buy(Game *game){
 
   seller = dialogue_get_NPC(game_get_dialogue(game));
 
-  if(index < 0 || index > inventory_get_size(entity_get_inventory(npc_get_entity(seller))));
+  if(index < 0 || index > inventory_get_size(entity_get_inventory(npc_get_entity(seller)))) return ERROR;
 
   if(inventory_get_size(entity_get_inventory(npc_get_entity(seller))) <= 0){
     sprintf(str, "%s ran out of goods to sell!", entity_get_name(npc_get_entity(seller)));
@@ -1037,6 +1041,14 @@ Status game_actions_buy(Game *game){
     return ERROR;
   }
   player_add_money(player, -object_get_cost(obj));
+
+  if(inventory_get_size(entity_get_inventory(npc_get_entity(seller))) <= 0){
+    sprintf(str, "%s ran out of goods to sell!", entity_get_name(npc_get_entity(seller)));
+    game_add_log_message(game, MESSAGE_NPC, str);
+    game_end_dialogue(game);
+    game_set_state(game, DEFAULT);
+    return ERROR;
+  }
 
   return OK;
 }

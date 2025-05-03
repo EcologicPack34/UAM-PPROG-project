@@ -45,7 +45,6 @@ Buys the object if you have enough money
 all
 Move,North,South,East,West,Attack,Take,Drop,Chat,Exit,Help,Ability,Object_Use,Search,Equip,Unequip,Inspect,sw,up,dw,Level_Up,
 Attack,Run_Away,Exit,Help,Ability,Object_Use,Inspect,
-all
 Chat,Help,
 Level_Up,Help,
 Buy,Help,

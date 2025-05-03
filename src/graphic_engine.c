@@ -776,6 +776,8 @@ void graphic_engine_paint_dialogue(Graphic_engine *ge, Game *game){
     sprintf(str, "   %d. %s | (%s)", count + 1, player_replies[count], dialogue_get_outcome_as_string(dialogue_get_output_at(dialogue, count)));
     screen_area_puts(ge->map, str);
   }
+
+  graphic_engine_paint_generalDesc(ge, game);
 }
 
 void graphic_engine_paint_level_up(Graphic_engine *ge, Game *game){
@@ -799,7 +801,7 @@ void graphic_engine_paint_level_up(Graphic_engine *ge, Game *game){
 }
 
 void graphic_engine_paint_store(Graphic_engine *ge, Game *game){
-  int i, obj_num, cost;
+  int i, obj_num;
   Object *obj = NULL;
   Inventory *inventory = NULL;
   NPC *seller = NULL;
@@ -813,7 +815,7 @@ void graphic_engine_paint_store(Graphic_engine *ge, Game *game){
 
   graphic_engine_paint_generalDesc(ge, game);
 
-  seller = game_get_dialogue(game);
+  seller = dialogue_get_NPC(game_get_dialogue(game));
   if(!seller) return;
 
   inventory = entity_get_inventory(npc_get_entity(seller));
@@ -821,16 +823,16 @@ void graphic_engine_paint_store(Graphic_engine *ge, Game *game){
 
   obj_num = inventory_get_size(inventory);
 
-  graphic_engine_newline_print(ge->map," \n \n \n \n \n \n \n");
-  graphic_engine_newline_print(ge->map,"  (Enter 'by 0' to exit the store \n   or 'by (NUMBER OF ITEM)' to buy\n  You can also use i (NUMBER OF ITEM) to see description)\n \n");
+  graphic_engine_newline_print(ge->map," \n \n \n");
+  graphic_engine_newline_print(ge->map,"  (Enter 'by 0' to exit the store \n   or 'by (NUMBER OF ITEM)' to buy\n   You can also use i (NUMBER OF ITEM)\n   to see description)\n \n");
   sprintf(str, "  %s: This is all I can offer:\n", entity_get_name(npc_get_entity(seller)));
   graphic_engine_newline_print(ge->map,str);
 
-  for(i = 0; i < obj_num; i++){
+  for(i = 0; i < obj_num && obj_num < MAX_PRINT_INVENTORY; i++){
     obj = inventory_get_object_at(inventory, i);
-    sprintf(str, "%d -> %s - Cost: %d", )
+    sprintf(str, "%d -> Cost: %d - %s - %s\n", i +1, object_get_cost(obj), object_get_name(obj), object_get_descr(obj));
+    graphic_engine_newline_print(ge->map,str);
   }
-
 }
                                                      
 void graphic_engine_paint_space(Game *game, Space *space, Direction direction,char map[SPACE_HEIGHT + 1][MAP_WIDTH + 33], char spaceStr[SPACE_HEIGHT + 1][SPACE_WIDTH+10]){

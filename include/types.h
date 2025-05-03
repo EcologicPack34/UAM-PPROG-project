@@ -41,7 +41,7 @@
 #define MONEY_MIN 10                        /*!< Minimum amount of money an enemy can yield when defeated*/
 
 
-#define N_GAME_STATES 7             /*!< Number of game states*/
+#define N_GAME_STATES 6             /*!< Number of game states*/
 #define MAX_SKILLS_ENTITY 5         /*!< Maximum number of skils per entity*/
 
 #define LINE_LENGTH 50              /*!< Max length of a line of dialogue*/
@@ -75,6 +75,6 @@ typedef enum {UNKNOWN_INVENTORY, PLAYER_INVENTORY, NPC_INVENTORY, SPACE_INVENTOR
 /**
  * @brief Enum describing the different game states
  */
-typedef enum {ERROR_STATE ,DEFAULT, COMBAT, INVENTORY, DIALOGUE, LEVEL_UP_STATE, STORE_STATE}GameState;
+typedef enum {ERROR_STATE ,DEFAULT, COMBAT, DIALOGUE, LEVEL_UP_STATE, STORE_STATE}GameState;
 
 #endif
