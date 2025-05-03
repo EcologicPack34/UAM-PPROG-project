@@ -281,6 +281,7 @@ Status game_reader_create_save_file(char *save_file, Game *game, char *original_
   int gdesc_hight=0;
   int i;
   Id aux_id;
+  int n_npcs;
 
   if(!save_file || !game || !original_file) return ERROR;
 
@@ -316,6 +317,17 @@ Status game_reader_create_save_file(char *save_file, Game *game, char *original_
 
   }
   fclose(Poriginal);
+
+  for(i=0; i<MAX_PLAYERS; i++){
+    player_save_to_file(Psave_file, game_get_player_at(game, i));
+  }
+
+  n_npcs = collection_length(game_get_npcs(game));
+  for(i=0; i<n_npcs; i++){
+    npc_save_to_file(Psave_file, collection_get_element_at(game_get_npcs(game), i));
+  }
+  
+
   fclose(Psave_file);
 
 
@@ -880,7 +892,7 @@ Status game_reader_load_stats(Game *game, char *filename){
         entity = player_get_entity(game_get_player_by_id(game, id));
       }
       else if(et == NPC_TYPE){
-        entity = npc_get_entity(game_get_npc_by_id(game, id));
+        entity = npc_get_entity(game_get_NPC_by_id(game, id));
       }
       else
         entity = NULL;

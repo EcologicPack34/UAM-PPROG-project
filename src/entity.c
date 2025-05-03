@@ -402,4 +402,3 @@ int entity_get_magicLevel(Entity *entity){
     
     return entity->stats.magicLevel;
 }
-

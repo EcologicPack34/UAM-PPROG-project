@@ -272,3 +272,54 @@ NPC **player_get_followers(Player *player){
 
     return player->followers;
 }
+
+Status player_save_to_file(FILE *file, Player *p){
+    char aux[WORD_SIZE]="";
+    Id id, location;
+    char *name=NULL;
+    char *Gdesc=NULL;
+    long mH,h,bD;
+    int str,def,magicLvl;
+    int n_followers,i;
+    Id allys[NPC_MAX_ALLIES-1];
+    char id_aux[WORD_SIZE]="";
+
+    if(!file || !p) return ERROR;
+
+
+    id = entity_get_id(p->entity);
+    location = entity_get_location(p->entity);
+    name = entity_get_name(p->entity);
+    Gdesc = entity_get_graphic_description(p->entity);
+
+    for(i=0, n_followers=0; i<NPC_MAX_ALLIES; i++){
+        if(p->followers[i] != NULL){
+            n_followers++;
+            allys[i]= entity_get_id(npc_get_entity(p->followers[i]));
+        } 
+    }
+
+    /*#p:1|Hero1|11|mO^";money;n_followers;id_following1;id_following2...*/
+    sprintf(aux, "#p:%ld|%s|%ld|%s;%d;%d",id,name,location,Gdesc,p->money,n_followers);
+    for(i=0;i<n_followers;i++){
+        sprintf(id_aux, ";%ld", allys[i]);
+        strcat(aux, id_aux);
+    }
+    strcat(aux, "\n");
+
+    fprintf(file, "%s", aux);
+
+    /*stats print*/
+    mH=entity_get_max_health(p->entity);
+    h=entity_get_health(p->entity);
+    bD=entity_get_baseDamage(p->entity);
+    str=entity_get_strength(p->entity);
+    def=entity_get_defense(p->entity);
+    magicLvl=entity_get_magicLevel(p->entity);
+
+    /*#st:IDEntity|EntityType|VidaMaxima|Vida|DanoBase|Fuerza|Defensa|NivelMagia*/
+    sprintf(aux, "#st:%ld|1|%ld|%ld|%ld|%d|%d|%d\n",id,mH,h,bD,str,def,magicLvl);
+    fprintf(file, "%s", aux);
+
+    return OK;
+}

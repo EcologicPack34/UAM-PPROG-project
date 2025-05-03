@@ -429,24 +429,6 @@ Collection *game_get_npcs(Game *game){
   return game->npcs;
 }
 
-NPC *game_get_npc_by_id(Game *game, Id id){
-  Collection *all_npcs=NULL;
-  long i,size;
-
-  if(!game || (id == NO_ID)) return NULL;
-
-  if((all_npcs = game_get_npcs(game)) == NULL) return NULL;
-
-  size = collection_length(all_npcs);
-
-  for(i=0; i<size; i++){
-    if(entity_get_id(npc_get_entity((NPC *)collection_get_element_at(all_npcs, i))) == id)
-      return (NPC *)collection_get_element_at(all_npcs, i);
-  }
-
-  return NULL;
-}
-
 Player *game_get_player_by_id(Game *game, Id id){
   long i;
 
@@ -780,7 +762,7 @@ Status game_add_object(Game *game, Object *object){
       status = inventory_add_object(entity_get_inventory(player_get_entity(player)), object);
       break;
     case NPC_INVENTORY:
-      npc = game_get_npc_by_id(game, object_get_location(object));
+      npc = game_get_NPC_by_id(game, object_get_location(object));
       status = inventory_add_object(entity_get_inventory(npc_get_entity(npc)), object); /*An npc inventory is being implemented*/
       break;
     case SPACE_INVENTORY:

@@ -184,5 +184,15 @@ Status player_remove_follower_by_name(Player *player, char *npc_name);
  */
 NPC **player_get_followers(Player *player);
 
+/**
+ * @brief saves all the data related to a player in a file
+ * @author Aaron Charameli Mair
+ * 
+ * @param file 
+ * @param p 
+ * @return Status 
+ */
+Status player_save_to_file(FILE *file, Player *p);
+
 
 #endif
