@@ -74,7 +74,7 @@ Status collection_add_non_unique(Collection *collection, void *element){
     }else if(isFull){
         auxp = collection->list;
 
-        auxp = (void**)realloc(auxp, collection->allocated_size * 2);
+        auxp = (void**)realloc(auxp, (collection->allocated_size * 2)*sizeof(void *));
         if(!auxp){
             debug_log(LOG_ERROR,"Couldn't allocate more memory for Collection");
             return ERROR;

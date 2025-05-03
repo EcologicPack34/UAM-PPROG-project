@@ -32,6 +32,7 @@ struct _Object {
   char name[WORD_SIZE];     /*!< Name of the object */
   Id location;              /*!< Id with the location of the object */
   InventoryType type;       /*!< Inventory type where the object is located */
+  int cost;                 /*!< Cost of the object if it is in a store*/
 
   Id dependent_object_id;   /*!< Saves the id of the object if it needs another object in the inventory to be picked*/
 
@@ -51,7 +52,7 @@ struct _Object {
 
 
 /*Object public functions*/
-Object *object_create(Id id, char *name, char* data, char *description, Id dependent_object_id, bool is_movable, bool is_consumable, Id location, InventoryType type){
+Object *object_create(Id id, char *name, char* data, char *description, int cost, Id dependent_object_id, bool is_movable, bool is_consumable, Id location, InventoryType type){
     Object *object = NULL;
 
     if((id <= UNDEFINED_ID) || !name || !data || !description || (location <= UNDEFINED_ID)) return NULL;
@@ -68,6 +69,7 @@ Object *object_create(Id id, char *name, char* data, char *description, Id depen
 
     object->dependent_object_id = dependent_object_id;
     object->is_movable = is_movable;
+    object->cost = cost;
 
     object->object_effect = NULL;
     object->is_consumable = is_consumable;
@@ -157,6 +159,14 @@ Status object_set_descr(Object *object, char *str){
     return OK;
 }
 
+Status object_set_cost(Object *object, int cost){
+    if(!object || cost < 0) return ERROR;
+
+    object->cost = cost;
+
+    return OK;
+}
+
 Status object_set_is_equipped(Object *object, bool value){
     if(!object) return ERROR;
 
@@ -208,6 +218,13 @@ char *object_get_descr(Object *object){
         return NULL;
 
     return object->descr;
+}
+
+int object_get_cost(Object *object){
+    if(!object)
+        return -1;
+
+    return object->cost;
 }
 
 bool object_get_is_consumable(Object *object){

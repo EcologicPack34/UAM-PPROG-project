@@ -639,4 +639,14 @@ Status game_generate_procedural(Game *game);
  */
 int game_get_combat_experience(Combat *combat, Game *game);
 
+/**
+ * @brief Returns the earned money after a combat
+ * @author Maksym Polyak
+ * 
+ * @param combat combat struct
+ * @param game game struct
+ * @return int or 0 if error
+ */
+int game_get_combat_money(Combat *combat, Game *game);
+
 #endif

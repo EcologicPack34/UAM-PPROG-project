@@ -39,6 +39,7 @@ typedef struct _Player Player;
  * @param name name of the player
  * @param identity id of the entity
  * @param location id of the space where the player is located
+ * @param money money of the player
  * @param xp xp of the player
  * @param next_xp xp needed for next level of the player
  * @param level level of the player
@@ -46,8 +47,7 @@ typedef struct _Player Player;
  * 
  * @return player pointer if everything went fine or NULL if there was a mistake
  */
-Player *player_create(char *name, Id identity, Id location, int xp, int next_xp, int level, int skill_points);
-
+Player *player_create(char *name, Id identity, Id location, int money, int xp, int next_xp, int level, int skill_points);
 /**
  * @brief Frees a player struct
  * @author Profesores PPROG

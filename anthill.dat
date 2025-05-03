@@ -1,15 +1,15 @@
 Formato Space: #s:ID|Nombre|gdescId|northLink|eastLink|southLink|westLink|upLink|downLink
 la longitud de gdescLine esta limitidad por el codigo, es decir, si es mas larga de lo debido se ignorara. Si hay mas lineas de descripcion de lo debido tambien se ignoran
 
-Formato Player: #p:ID|Nombre|LocationID|XP actual|XP del siguiente nivel 100 si nivel es 1|nivel|skill points|gdesc
+Formato Player: #p:ID|Nombre|LocationID|Money|XP actual|XP del siguiente nivel 100 si nivel es 1|nivel|skill points|gdesc
 Formato STATS: #st:IDEntity|EntityType|VidaMaxima|Vida|DanoBase|Fuerza|Defensa|NivelMagia
 
 
 
-#p:1|Hero1|11|0|100|1|1|mO^"
+#p:1|Hero1|11|100|0|100|1|1|mO^"
 #st:1|1|100|100|25|1|1|1
 
-#p:2|Hero2|14|0|100|1|0|m1^"
+#p:2|Hero2|14|100|0|100|1|0|m1^"
 #st:2|1|100|100|25|1|1|1
 
 #s:11|Entry|1|-1|-1|1|-1|11|-1
@@ -70,18 +70,27 @@ Formato Object: #o:ID|Nombre|Data|Descripcion|Dependency_id|is_movable|is_consum
 Use dependency_id = -1 for no dependency
 InventoryType = {UNKNOWN_INVENTORY == 0, PLAYER_INVENTORY == 1, NPC_INVENTORY == 2, SPACE_INVENTORY == 3}
 
-#o:1|Grain1|NONE|Needs Pickaxe to be picked|10|1|0|11|3
-#o:2|Grain2|NONE|Grano2, cannot be moved|-1|0|0|121|3
-#o:3|Grain3|NONE|Grano3|-1|1|0|4|2
-#o:4|Grain4|NONE|Grano4|-1|1|0|122|3
-#o:5|HP|NONE|Health Potion that heals 20 HP|-1|1|1|4|2
-#o:6|IHP|NONE|Infinite Health Potion that heals 20 HP and isn't consumed|-1|1|1|121|3
-#o:7|HTEST|wearable helmet base_damage:1 strength:1 max_health:20|Helmet TEST|-1|1|1|11|3
-#o:8|MoneyBag|NONE|Bag with 20 coins|-1|1|1|11|3
+#o:1|Grain1|NONE|Needs Pickaxe to be picked|100|10|1|0|11|3
+#o:2|Grain2|NONE|Grano2, cannot be moved|100|-1|0|0|121|3
+#o:3|Grain3|NONE|Grano3|100|-1|1|0|4|2
+#o:4|Grain4|NONE|Grano4|100|-1|1|0|122|3
+#o:5|HP1|NONE|Health Potion that heals 20 HP|5|-1|1|1|2|2
+#o:6|IHP|NONE|Infinite Health Potion that heals 20 HP and isn't consumed|200|-1|1|1|121|3
+#o:7|MoneyBag|NONE|Bag with 20 coins|100|-1|1|1|11|3
+#o:8|Key|NONE|Needs Grain1 to be picked, Unlocks link between spaces 123 and 124|100|1|1|1|11|3
+#o:9|Pickaxe|NONE|Needed to pick Grain1|100|-1|1|0|11|3
+#o:10|HP2|NONE|Health Potion that heals 20 HP|5|-1|1|1|2|2
+#o:11|HP3|NONE|Health Potion that heals 20 HP|5|-1|1|1|2|2
+#o:12|HP4|NONE|Health Potion that heals 20 HP|5|-1|1|1|2|2
+#o:13|HP5|NONE|Health Potion that heals 20 HP|5|-1|1|1|2|2
+#o:14|HP6|NONE|Health Potion that heals 20 HP|5|-1|1|1|2|2
+#o:15|HTEST|wearable helmet base_damage:1 strength:1 max_health:20|Helmet TEST|1|-1|1|1|1|2
+#o:16|CHESTTEST|wearable chest base_damage:1 strength:1 max_health:20|Chest TEST|2|-1|1|1|1|2
+#o:17|ARMSTEST|wearable arms base_damage:1 strength:1 max_health:20|Arms TEST|3|-1|1|1|1|2
+#o:18|LEGSTEST|wearable leg_armor base_damage:1 strength:1 max_health:20|Legs TEST|4|-1|1|1|1|2
+#o:19|SHOESTEST|wearable shoes base_damage:1 strength:1 max_health:20|Shoes TEST|5|-1|1|1|1|2
+#o:20|TWOHANDTEST|wearable two_handed base_damage:1 strength:1 max_health:20|Two Handed TEST|6|-1|1|1|1|2
 
-#o:9|Key|NONE|Needs Grain1 to be picked, Unlocks link between spaces 123 and 124|1|1|1|11|3
-
-#o:10|Pickaxe|NONE|Needed to pick Grain1|-1|1|0|11|3
 
 Formato Event: #e:Id|Type|cmdTriggersNum|cmdName1 , ...|removeOnTrigger|tagvalue1:tagvalue2,...
 

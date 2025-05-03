@@ -64,7 +64,7 @@ Status player_set_entity(Player *player, Entity *entity){
    Game interface implementation
 */
 
-Player *player_create(char *name, Id identity, Id location, int xp, int next_xp, int level, int skill_points){
+Player *player_create(char *name, Id identity, Id location, int money, int xp, int next_xp, int level, int skill_points){
     Player *player = NULL;
     int i;
 
@@ -88,7 +88,7 @@ Player *player_create(char *name, Id identity, Id location, int xp, int next_xp,
         free(player);
     }
 
-    player->money = 0;
+    player->money = money;
 
     for(i = 0; i < NPC_MAX_FOLLOWERS; i++){
         player->followers[i] = NULL;
@@ -140,7 +140,7 @@ Status player_get_str_desc(Player *player, char *str){
         return ERROR;
 
     ent = player_get_entity(player);
-    sprintf(str, "%s (%s): H:%.1lf/%.1lf,L:%ld, Level:%d", entity_get_graphic_description(ent), entity_get_name(ent), entity_get_health(ent), entity_get_max_health(ent),entity_get_location(ent), leveling_get_level(player->leveling));
+    sprintf(str, "%s (%s): H:%.1lf/%.1lf,L:%ld,M:%d, Lev:%d", entity_get_graphic_description(ent), entity_get_name(ent), entity_get_health(ent), entity_get_max_health(ent),entity_get_location(ent), player_get_money(player), leveling_get_level(player->leveling));
 
     if(leveling_check_level_up(player->leveling) == true){
         strcpy(aux_str, " LEVEL UP!");

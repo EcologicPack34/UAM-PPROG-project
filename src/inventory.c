@@ -441,7 +441,8 @@ Status inventory_move_object(Inventory *inventoryOUT, Inventory *inventoryIN, Id
     }
 
     if(inventory_add_object(inventoryIN, object) == ERROR){
-        debug_log(LOG_ERROR, "Object %ld was lost, move has failed due to fail on inventory add from the inventory of type:%d and id:%ld", object_get_id(object), (int)inventory_get_type(inventoryIN), inventory_get_location_id(inventoryIN));
+        inventory_add_object(inventoryOUT, object);
+        debug_log(LOG_ERROR, "Object %ld was possibly lost, move has failed due to fail on inventory add from the inventory of type:%d and id:%ld", object_get_id(object), (int)inventory_get_type(inventoryIN), inventory_get_location_id(inventoryIN));
         return ERROR;
     }
 

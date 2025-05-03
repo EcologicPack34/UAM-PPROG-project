@@ -57,8 +57,9 @@ DS:2
 2
 Well well... Can i go with you?
 I can fight pretty well!
-3
+4
 Let's slay those bastards!:4:3
+Let's see the store:3:2
 I hate you! DIE!!:2:0
 No, i can't let you in.:1:2
 

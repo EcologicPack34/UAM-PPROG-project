@@ -468,7 +468,7 @@ Status game_reader_load_objects(Game *game, char *filename){
   InventoryType objectlocationtype;
   Object *object = NULL;
 
-  int is_consumable = 0, is_movable = 0;
+  int is_consumable = 0, is_movable = 0, cost;
 
   Status status = OK;
 
@@ -501,6 +501,9 @@ Status game_reader_load_objects(Game *game, char *filename){
       strcpy(description, toks);
 
       toks = strtok(NULL, "|");
+      cost = atoi(toks);
+
+      toks = strtok(NULL, "|");
       dependency_object = atol(toks);
 
       toks = strtok(NULL, "|");
@@ -516,10 +519,10 @@ Status game_reader_load_objects(Game *game, char *filename){
       objectlocationtype = atol(toks) + UNKNOWN_INVENTORY;
 
       /*Formato Object: #o:ID|Nombre|Data|Descripcion|Dependency_id|is_movable|is_consumable|LocationID|InventoryType*/
-      debug_log(PRINT,"Read Object: #o:%ld|%s|%s|%s|%d|%d|%d|%ld|%ld", objectid, name, data, description, dependency_object, is_movable, is_consumable, objectlocation, objectlocationtype);
+      debug_log(PRINT,"Read Object: #o:%ld|%s|%s|%s|%d|%d|%d|%d|%ld|%ld", objectid, name, data, description, cost, dependency_object, is_movable, is_consumable, objectlocation, objectlocationtype);
 
-      /*Creates a object with object_create then saves it on the game with game_add_space*/
-      object = object_create(objectid, name, data, description, dependency_object, is_movable, is_consumable, objectlocation, objectlocationtype);
+      /*Creates an object with object_create then saves it on the game with game_add_space*/
+      object = object_create(objectid, name, data, description, cost, dependency_object, is_movable, is_consumable, objectlocation, objectlocationtype);
       if (object != NULL) {
         game_add_object(game, object);
       }
@@ -543,7 +546,7 @@ Status game_reader_load_player(Game *game, char *filename){
   char name[WORD_SIZE] = "";
   char *toks = NULL;
   long playerid, startinglocation;
-  int xp, next_xp, level, skill_points;
+  int xp, next_xp, level, skill_points, money;
 
   Status status = OK;
 
@@ -571,6 +574,9 @@ Status game_reader_load_player(Game *game, char *filename){
       
       toks = strtok(NULL, "|");
       startinglocation = (game_get_is_procedural(game) == true) ? 1 : atol(toks);
+
+      toks = strtok(NULL, "|");
+      money = atoi(toks);
       
       toks = strtok(NULL, "|");
       xp = atoi(toks);
@@ -586,10 +592,10 @@ Status game_reader_load_player(Game *game, char *filename){
 
       toks = strtok(NULL, "|");
 
-      debug_log(PRINT,"Read Player: #p:%ld|%s|%ld|%d|%d|%d|%d|gdesc", playerid, name, startinglocation, xp, next_xp, level, skill_points);
+      debug_log(PRINT,"Read Player: #p:%ld|%s|%ld|%d|%d|%d|%d|%d|gdesc", playerid, name, startinglocation, money, xp, next_xp, level, skill_points);
 
       /*Creates a player with player_create then saves it on the game with game_add_player*/
-      player = player_create(name, playerid, startinglocation, xp, next_xp, level, skill_points);
+      player = player_create(name, playerid, startinglocation, money, xp, next_xp, level, skill_points);
       if (player == NULL){
         status = ERROR;
         break;
