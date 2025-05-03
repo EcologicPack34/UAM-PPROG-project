@@ -239,16 +239,6 @@ EventManager *game_get_event_manager(Game *game);
 Collection *game_get_npcs(Game *game);
 
 /**
- * @brief it gets an NPC from it's id in a Game
- * @author Aaron Charameli Mair
- * 
- * @param game game struct
- * @param id the NPC's Id
- * @return NPC* or NULL if error 
- */
-NPC *game_get_npc_by_id(Game *game, Id id);
-
-/**
  * @brief Gets player by id
  * @author Aaron Charameli Mair
  * 
