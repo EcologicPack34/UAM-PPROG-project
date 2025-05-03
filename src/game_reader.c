@@ -224,6 +224,10 @@ Status game_reader_create_from_file(Game **game, char *filename){
     debug_log(LOG_ERROR, "Error loading player at: game_reader_create_from_file(Game*, char*) in game_reader.c");
     return ERROR;
   }
+  if(game_reader_load_stats(*game, filename) == ERROR){
+    debug_log(LOG_ERROR, "Error loading stats at: game_reader_create_from_file(Game*, char*) in game_reader.c");
+    return ERROR;
+  }
   if (game_reader_load_objects(*game, filename) == ERROR){
     debug_log(LOG_ERROR, "Error loading objects at: game_reader_create_from_file(Game*, char*) in game_reader.c");
     return ERROR;
@@ -236,29 +240,18 @@ Status game_reader_create_from_file(Game **game, char *filename){
     debug_log(LOG_ERROR, "Error loading ability at: game_reader_create_from_file(Game*, char*) in game_reader.c");
     return ERROR;
   }
-
-  /*Loads data into the game*/
-  
-  
-  
-  if (game_reader_load_ability(*game, filename) == ERROR){
-    debug_log(LOG_ERROR, "Error loading ability at: game_reader_create_from_file(Game*, char*) in game_reader.c");
-    return ERROR;
-  }
-
-  if(game_reader_load_stats(*game, filename) == ERROR){
-    debug_log(LOG_ERROR, "Error loading stats at: game_reader_create_from_file(Game*, char*) in game_reader.c");
-    return ERROR;
-  }
-  if(game_spatial_map(*game) == ERROR){
-    debug_log(LOG_ERROR,"Error maping spatialy spaces");
-    return ERROR;
-  }
-
   if(game_reader_load_attacks(*game) == ERROR) {
     debug_log(LOG_ERROR,"Error loading attacks");
     return ERROR;
   }
+
+  /*Loads data into the game*/
+  
+  if(game_spatial_map(*game) == ERROR){
+    debug_log(LOG_ERROR,"Error maping spatialy spaces");
+    return ERROR;
+  }
+  
 
   /*Initialization*/
   /*Sets the actual player as the first one read in the .dat*/
