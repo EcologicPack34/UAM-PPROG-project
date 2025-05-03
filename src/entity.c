@@ -30,7 +30,7 @@ struct _Entity {
     Id location;              /*!< Id of the space where the entity is located*/
     Inventory *inventory;     /*!< entity inventory */
 
-    Ability **ability;        /*!< Abilitys of the entity*/
+    Ability **ability;        /*!< Abilities of the entity*/
     int n_ability;            /*!< Number of ability the entity has*/
 
     char gdesc[ENTITY_GRAPHIC_LENGTH + 1]; /*!< Graphic description of the entity*/
@@ -402,4 +402,3 @@ int entity_get_magicLevel(Entity *entity){
     
     return entity->stats.magicLevel;
 }
-
