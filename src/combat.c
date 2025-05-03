@@ -935,3 +935,17 @@ Status combat_release_dead_loot(Combat *cmb, Stats *st) {
 
     return OK; 
 }
+
+int combat_get_dead_entities_num(Combat *combat){
+
+    if(!combat) return 0;
+
+    return combat->n_dead_entities;
+}
+
+Entity *combat_get_dead_entity_at(Combat *combat, int i){
+
+    if(!combat || i < 0 || i >= combat_get_dead_entities_num(combat)) return NULL;
+
+    return combat->dead_entities[i].entity;
+}

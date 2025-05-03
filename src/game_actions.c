@@ -896,6 +896,8 @@ Status game_actions_level_up(Game *game){
   leveling = player_get_leveling(player);
   if(!leveling) return ERROR;
 
+  leveling_update_level_up(leveling);
+
   if(game_get_state(game) != LEVEL_UP_STATE){
 
     if((leveling_check_level_up(leveling) == false) && (leveling_get_skill_points(leveling) <= 0)){

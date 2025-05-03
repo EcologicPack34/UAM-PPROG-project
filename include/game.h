@@ -620,7 +620,6 @@ Status game_add_gdesc(Game *game, GDesc *gdesc);
  */
 Collection *game_get_attacks(Game *game);
 
-
 /**
  * @brief Generates a level proceduraly
  * @author Daniel Gómez
@@ -629,5 +628,15 @@ Collection *game_get_attacks(Game *game);
  * @return Status 
  */
 Status game_generate_procedural(Game *game);
+
+/**
+ * @brief Returns the earned experience after a combat
+ * @author Maksym Polyak
+ * 
+ * @param combat combat struct
+ * @param game game struct
+ * @return int or 0 if error
+ */
+int game_get_combat_experience(Combat *combat, Game *game);
 
 #endif

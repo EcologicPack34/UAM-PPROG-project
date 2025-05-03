@@ -879,7 +879,15 @@ Status game_combat_start(Game *game){
 }
 
 Status game_combat_end(Game *game){
+  int XP;
+  Leveling *leveling = NULL;
+  
   if(!game) return ERROR;
+
+  leveling = player_get_leveling(game_get_player(game));
+  XP = game_get_combat_experience(game_get_combat(game), game);
+
+  leveling_set_XP(leveling, XP + leveling_get_XP(leveling));
 
   combat_free(game->combat);
   game->current_state = DEFAULT;
@@ -1315,4 +1323,19 @@ GDesc *game_get_gdesc_by_id(Game *game, Id id){
 Status game_add_gdesc(Game *game, GDesc *gdesc){
   if(!game || !gdesc) return ERROR;
   return collection_add(game->gdescs, gdesc);
+}
+
+int game_get_combat_experience(Combat *combat, Game *game){
+  Entity *ent = NULL;
+  int i, XP = 0;
+
+  if(!combat || !game) return 0;
+
+  for(i = 0, ent = combat_get_dead_entity_at(combat, i); ent != NULL; i++, ent = combat_get_dead_entity_at(combat, i)){
+    if(npc_get_status(game_get_npc_by_id(game, entity_get_id(ent))) == ENEMY){
+      XP += (XP_MINIMUM + entity_get_strength(ent)*XP_MULT + entity_get_magicLevel(ent)*XP_MULT)*(entity_get_max_health(ent)/100);
+    }
+  }
+
+  return XP;
 }

@@ -35,6 +35,8 @@
 #define LEVELING_DIFFICULTY_MULTIPLIER 2    /*!< Defines the rate at which the leveling difficulty increases per level up*/
 #define BASE_XP_QUANTITY 100                /*!< Base XP on level 1*/
 #define SKILL_POINTS_PER_LEVEL 1            /*!< Number of skill points an entity gets per level up*/
+#define XP_MINIMUM 1                        /*!< Minimum XP a dead enemy gives*/
+#define XP_MULT 10                          /*!< Multiplier for the stats to add XP when an enemy dies*/
 
 
 #define N_GAME_STATES 7             /*!< Number of game states*/
