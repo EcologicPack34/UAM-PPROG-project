@@ -552,27 +552,33 @@ Status combat_allies_turn(Combat *cmb){
 }
 
 Status combat_update_player_attack(Combat *cmb, Command *last_cmd){
-    int numEnemy;
+    int numEnemy, n_args;
     char **args = NULL;
     Stats *stEn = NULL, *player = NULL;
     Attack *atc = NULL;
+    CommandCode cmd;
     
     if (!cmb || !last_cmd)
         return ERROR;
         
     args = command_get_arguments(last_cmd);
 
-    if (command_get_code(last_cmd) == RUN_AWAY)
-    {
-        combat_runaway(cmb);
-    } 
+    cmd = command_get_code(last_cmd);
+    if(cmd != ATTACK && cmd != ABILITY && cmd != OBJECT_USE && cmd != RUN_AWAY) return ERROR;
+
+    n_args = command_get_arguments_count(last_cmd);
+    if(n_args == 0 && cmd != RUN_AWAY) return ERROR;
+
+    if(cmd != ATTACK) return OK; 
 
     player = combat_get_player_stats(cmb);
     atc = combat_find_attack_by_name(cmb, args[0]);
+    if(atc == NULL) return ERROR;
 
     if (attack_get_target_bool(atc) == true)
     {
         numEnemy = atoi(args[1]) - 1;
+        if(numEnemy < 0 || numEnemy >= combat_get_enemies_count(cmb)) return ERROR;
 
         stEn = combat_get_enemies_stats_at(cmb, numEnemy);
         combat_attack(atc, player, stEn);
@@ -820,6 +826,7 @@ Status combat_update(Combat *combat, Command *last_cmd){
         return ERROR;
     }
     combat_update_deaths(combat);
+    
     
     if(combat->is_player_turn == false){
         combat_enemies_turn(combat);

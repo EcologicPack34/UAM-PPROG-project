@@ -1,36 +1,12 @@
-I3 - Maksym - Añadir modo de loot (añadir a game reader en objetos añadir, a inventario de npc)
-    Los enemigos tienen una lista, se cogen aleatoriamente un numero de objetos de su inventario y se sueltan al espacio
-    --> Cambiar inventarios para que el inventario de los espacios sea infinito.
-I3 - Maksym --> NEEDS DIALOGUE - Posible tienda de compra objetos --> Interfaz
-I3 - Maksym -Espacios "seguros"
-
 I4 - gamestate con información sobre el jugador --> inventario, habilidades, stats, equipamiento (Comando inventory open para abrir e inventory close)
-I4 - POSIBLE: Generación procedural de mapa
 I4 - Sistema de guardado
 I4 - Aaron - Modificar GodMode para que se actualice
-I4 - Maksym - experiencia y subir de nivel(esto sube los stats base permanentemente). Ganar combates, encontrar ciertos objetos te dan xp. Subir de nivel te puede dar mas habilidades.
-I4 - Maksym - Recruit --> DIALOGOS
-I4 - Maksym - Diálogos
-I4 - Sistema de guardado
-I4 - Usar objetos en objetivos
-I4 - Añadir efectos(fuego, veneno, curacion)
-    Un modulo que guarde la info, y modifica los stats de la entidad afectada
-    Cuando los turnos restantes del efecto son 0, restaurar los stats originales, si no es vida.
-    Hacer efectos que neutralizan otros efectos, ej resitencia al fuego.
 I4 - Daniel - modificiar libscreen e interfaz grafica
-I4 - Daniel - Niveles verticales
-I4 - enemies and npcs se pueden mover a otros espacios (evento aleatorio)
-I4 - dar opcion para una seed determinada mediante argumentos al abrir el juego
-I4- Integrar pantalla de inicio para cargar partida o crear nueva.
-    usar un script de bash para obtener una lista de los .dat en la carpeta del ejecutable. 
-    este txt generado se usará para proporcionar al jugador una lista con los posibles ficheros a cargar.
-I4 - Modularizar ataques a un modulo aparte, cargar estos ataque desde settings.dat y guardarlos en un collection en game. 
-Cuando se inicializa un combate, se guarda una referencia a este collection en combate para ver que ataques son posibles. 
-Además, estos atques contendran el string del nombre de ataque que hay que pasar por argumento, y si necesitan especificar un objetivo, junto con el multiplicador de daño y su probabilidad de fallo
-De este modo añadir ataques es mas facil y modular, y no es necesario comprobar manualmente los argumentos del comando para saber que ataque se ha hecho.
+I4 - Integrar pantalla de inicio para cargar partida o crear nueva.
+     usar un script de bash para obtener una lista de los .dat en la carpeta del ejecutable. 
+     este txt generado se usará para proporcionar al jugador una lista con los posibles ficheros a cargar.
 I4 - Añadir cooperacion de players
     si se implementa en combate, hacer que combat se actualize solo tras x turnos, tantos como jugadores.
     para que funcione correctamente se debe acceder a los campos que guardan los comandos en player.
     Hacer que puedas aliarte con un jugador y ambos se mueven a la vez?
-I4 - Daniel - Generación procedural
 I4 - Diseño de nivel final(historia, objectivos, items, aliados, enemigos, etc)

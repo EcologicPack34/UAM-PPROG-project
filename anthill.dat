@@ -67,7 +67,6 @@ Formato Link: #l:ID|Space1|Space2|adjacent|locked //Recordar añadir en cada esp
 #l:11|11|14|0|0
 
 Formato Object: #o:ID|Nombre|Data|Descripcion|Dependency_id|is_movable|is_consumable|LocationID|InventoryType
-Use ability_id = 0 for no ability
 Use dependency_id = -1 for no dependency
 InventoryType = {UNKNOWN_INVENTORY == 0, PLAYER_INVENTORY == 1, NPC_INVENTORY == 2, SPACE_INVENTORY == 3}
 
@@ -125,12 +124,12 @@ Formato Ability: #sk:Id|Type|Name|Entityid(ObjectId)|is_player_ability|is_object
 #sk:1|heal_self|Heal self 50 HP Maximum CD: 8|1|1|0|0|8|50
 #sk:2|effect_self|Self Regeneration Spell|1|1|0|0|2|3
 #sk:3|effect_ally|Ally Regeneration Spell|1|1|0|0|3|3
-#sk:3|heal_self|Heal self 20 HP Maximum CD: 0|5|0|1|0|0|20
 #sk:4|heal_self|Heal self 5 HP  Maximum CD: 0|6|0|1|0|0|5
 #sk:5|money_bag|Adds 20 coins   Maximum CD: 0|8|0|1|0|0|20
 #sk:6|link_unlock|Unlocks link between 123 and 124|9|0|1|0|0|4
 #sk:7|effect_enemy|FireBall Launcher|1|1|0|0|0|2
 #sk:8|effect_enemy|Poison Bomb|1|1|0|0|6|1
+sk:9|heal_self|Heal self 20 HP Maximum CD: 0|5|0|1|0|0|20
 
 
 

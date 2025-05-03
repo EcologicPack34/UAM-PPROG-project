@@ -314,6 +314,13 @@ Status game_actions_update(Game *game, Command *command) {
   } else {
     game_set_is_turn_valid(game, VALID);
   }
+
+  if(game_get_state(game) == COMBAT && game_get_is_turn_valid(game) == VALID){
+    if(combat_update(game_get_combat(game), game_get_last_command(game)) == ERROR)
+      return ERROR;
+
+    
+  }
   
   return OK;
 }
@@ -618,10 +625,7 @@ Status game_actions_attack(Game *game){
     /*If game starts then the first action isn't valid so combat doesnt update*/
     return ERROR;
   }
-  else if(combat){
-    if(combat_update(combat, game_get_last_command(game)) == ERROR)
-      return ERROR;
-  }
+  
 
   return OK;
 }
