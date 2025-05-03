@@ -10,14 +10,17 @@ DEP_PATH = dependency
 
 #-MMP generates dependencies files for each .c, i.e. it generates a file that makefile checks to see its dependencies when compiling
 #-MP Is used to detect errors if any .h is deleted, but mentioned on a dependency file (.d)
-CFLAGS = -Wall -pedantic -I$(INCLUDE) -MMD -MP
+CFLAGS = -Wall -I$(INCLUDE) -MMD -MP
+CFLAGS += $(shell pkg-config --cflags glfw3)
 
-D_FLAGS = -Wall -pedantic -g -I$(INCLUDE)
+LDFLAGS = $(shell pkg-config --libs glfw3) -lGL -lm
+
+D_FLAGS = -Wall -g -I$(INCLUDE)
 
 #Names of the .c files
 _SRC = command.c debug_printing.c game_actions.c game_loop.c game.c graphic_engine.c space.c object.c player.c game_reader.c entity.c \
  link.c inventory.c collection.c event_manager.c event_actions.c npc.c vector2.c queue.c message.c combat.c ability_actions.c ability_manager.c \
- equipment.c attack.c dialogue.c utils.c graphic_description.c
+ equipment.c attack.c dialogue.c utils.c graphic_description.c glad.c mesh.c shader.c texture2D.c mesh_renderer.c
 
 #Adds to the names of .c files the path of the file before
 SRC = $(patsubst %,$(SRC_PATH)/%,$(_SRC))
@@ -49,7 +52,7 @@ $(OBJ_PATH):
 
 #Rule to link all the objects with libraries
 $(EXE):	$(OBJ)
-	$(CC) $(CFLAGS) -o $(EXE) $(OBJ) -L$(LIBRARIES) -lscreen
+	$(CC) $(CFLAGS) -o $(EXE) $(OBJ) -L$(LIBRARIES) -lscreen $(LDFLAGS)
 
 #Rule to compile each .c file into its .o file
 $(OBJ_PATH)/%.o: $(SRC_PATH)/%.c | $(OBJ_PATH)

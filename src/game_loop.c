@@ -28,6 +28,70 @@
 #include "event_actions.h"
 #include "ability_actions.h"
 
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
+#include <cglm/cglm.h>
+
+#include "mesh_renderer.h"
+#include "mesh.h"
+#include "shader.h"
+#include "texture2D.h"
+
+#define WINDOW_WIDTH 800
+#define WINDOW_HEIGHT 600
+#define WINDOW_TITLE ("GL TESTING")
+
+/*Proyection matrices*/
+//Model matrix is stored in mesh renderer as its local to each object
+mat4 view = GLM_MAT4_IDENTITY_INIT;//in a future will be inside camera
+mat4 projection = GLM_MAT4_IDENTITY_INIT;//in a futurewill be inside camera
+
+/*Temp vertex shader*/
+const char *vertexShaderSource = "./shaders/vertex.glsl";
+
+const char *framentSource = "./shaders/fragment.glsl";
+
+/**
+ * @brief Functions that sets the gl viewport size on resize
+ * @author Daniel Gómez
+ * 
+ * @param window 
+ * @param width 
+ * @param height 
+ */
+void frame_buffer_size_callback(GLFWwindow *window, int width, int height);
+
+/**
+ * @brief Function that checks all input of a given window
+ * @author Daniel Gómez
+ * 
+ * @param window 
+ */
+void process_input(GLFWwindow *window);
+
+/**
+ * @brief Renders ALL
+ * @author Daniel Gómez
+ * 
+ * @param window 
+ */
+void draw_viewport(GLFWwindow * window);
+
+/**
+ * @brief Starts a context to render
+ * @author Daniel Gómez
+ * 
+ * @return GLFWwindow* 
+ */
+GLFWwindow *initialize_window();
+
+/**
+ * @brief Updates opengl graphics
+ * @author Daniel Gómez
+ * 
+ */
+void gl_update_render(GLFWwindow * window);
+
 /**
  * @brief Initializes game reading from the data file and starts the graphic engine
  * @author Original: Profesores PPROG, Modified By: Daniel Gómez
@@ -47,7 +111,7 @@ int game_loop_init(Game **game, Graphic_engine **gengine, char *file_name, int s
  * @param game struct that saves all information related to the game
  * @param gengine struct that saves all information related to the graphic engine
  */
-void game_loop_run(Game *game, Graphic_engine *gengine);
+void game_loop_run(Game *game, Graphic_engine *gengine, GLFWwindow* window);
 
 /**
  * @brief Frees game memory and destroys graphic engine
@@ -72,6 +136,8 @@ int main(int argc, char *argv[]){
   Graphic_engine *gengine = NULL;
   Debug *debugLog = NULL;
   
+  GLFWwindow * window;
+
   int i;
   int seed = -1;
 
@@ -104,13 +170,14 @@ int main(int argc, char *argv[]){
     }
   }
 
+  window = initialize_window();
 
   /*Initializes and runs the game */
   if (!game_loop_init(&game, &gengine, argv[1], seed))
   {
     debug_log(PRINT, "Game Initialized correctly");
 
-    game_loop_run(game, gengine);
+    game_loop_run(game, gengine, window);
     game_loop_cleanup(game, gengine);
 
     debug_log(PRINT, "Game ended");
@@ -151,7 +218,7 @@ int game_loop_init(Game **game, Graphic_engine **gengine, char *file_name, int s
   return 0;
 }
 
-void game_loop_run(Game *game, Graphic_engine *gengine){
+void game_loop_run(Game *game, Graphic_engine *gengine, GLFWwindow *window){
   Command *last_cmd;
 
   if (!gengine)
@@ -161,11 +228,12 @@ void game_loop_run(Game *game, Graphic_engine *gengine){
 
   last_cmd = game_get_last_command(game);
 
-  while ((command_get_code(last_cmd) != EXIT) )
+  while ((command_get_code(last_cmd) != EXIT) && !glfwWindowShouldClose(window))
   {
 
     /*Paints graphics on screen*/
     graphic_engine_paint_game(gengine, game);
+    gl_update_render(window);
     
     /*Checks if game finished before getting new input*/
     if(game_get_finished(game) == true) break;
@@ -186,4 +254,70 @@ void game_loop_run(Game *game, Graphic_engine *gengine){
 void game_loop_cleanup(Game *game, Graphic_engine *gengine){
   game_destroy(game);
   graphic_engine_destroy(gengine);
+}
+
+GLFWwindow *initialize_window(){
+  GLFWwindow *window = NULL;
+  /*Initializes glfw*/
+  glfwInit();
+  glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+  glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+  glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
+  /*Creates window and sets it as current context*/
+  window = glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, WINDOW_TITLE, NULL, NULL);
+  if(!window){
+      fprintf(stderr, "ERROR CREATING WINDOW\n");
+      glfwTerminate();
+      return NULL;
+  }
+  glfwMakeContextCurrent(window);
+
+  /*GLAD loader*/
+  if(!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)){
+      fprintf(stderr, "FAILED TO INITIALIZE GLAD\n");
+      glfwTerminate();
+      return NULL;
+  }
+  /*Tells gl the size and position of window (Position of the lower left corner)*/
+  glViewport(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
+  glfwSetFramebufferSizeCallback(window, frame_buffer_size_callback);
+  
+  glEnable(GL_DEPTH_TEST);
+  glDepthFunc(GL_LESS);
+  
+//    glEnable(GL_BLEND);
+//    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+  glm_perspective(glm_rad(45.0f), (float)WINDOW_WIDTH/(float)WINDOW_HEIGHT, 0.1f, 100.0f, projection);
+  glm_translate(view, (vec3){0,0,-3});
+
+  return window;
+}
+
+void gl_update_render(GLFWwindow * window){
+  /*Input*/
+  process_input(window);
+
+  draw_viewport(window);
+
+ /*Events and buffer swap*/
+  glfwSwapBuffers(window);/*Renders frame buffer*/
+  glfwPollEvents();/*Checks if events are trigger(mouse, keyboard, etc) and calls corresponding functions*/
+}
+
+void frame_buffer_size_callback(GLFWwindow *window, int width, int height){
+  glViewport(0, 0, width, height);
+}
+
+void process_input(GLFWwindow *window){
+  /*Checks if escape key is pressend and if so closes window*/
+  if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS){
+      glfwSetWindowShouldClose(window, true);
+  }
+}
+
+void draw_viewport(GLFWwindow * window){
+  glClearColor(1,1,1,1);
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
