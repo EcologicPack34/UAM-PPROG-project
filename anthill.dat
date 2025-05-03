@@ -106,8 +106,6 @@ Formato NPC: #n:ID|Dialogue State - 1 means initial - 0 means no dialogue|Nombre
 
 #n:4|DIE|Enemy1|11|0|3|^3m"
 #st:4|2|100|1|10|2|2|2|
-#n:4|0|Enemy1|11|0|3|^3m"
-#st:4|2|100|100|10|2|2|2|
 
 #n:5|0|Enemy2|11|0|3|^4m"
 #st:5|2|100|100|10|2|2|2|

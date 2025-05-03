@@ -222,6 +222,8 @@ Status combat_copy_attacks_into_array(Combat *combat, Collection *colc);
  * @return OK if it was succesful or ERROR if there was an error
  */
 Status combat_release_dead_loot(Combat *cmb, Stats *st);
+
+/**
  * @brief Gets the damage multiplier relative to the strength stat,
  * if strength is greater than MAX_STRENGTH it doesnt have an effect
  * 
@@ -908,7 +910,7 @@ Status combat_release_dead_loot(Combat *cmb, Stats *st) {
 
     Inventory *inv = NULL;
     Inventory *space_inventory = NULL;
-    Id spaceID, objID;
+    Id objID;
     int inventory_size;
     long i;
     Object *obj = NULL;
@@ -920,7 +922,6 @@ Status combat_release_dead_loot(Combat *cmb, Stats *st) {
     if(!(space_inventory = space_get_inventory(cmb->space))) {
         return ERROR;
     }
-    spaceID = space_get_id(cmb->space);
     inventory_size = inventory_get_size(inv);
 
     for (i = 0; i < inventory_size; i++)
