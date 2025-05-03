@@ -21,7 +21,7 @@
 #include "command.h"
 #include "entity.h"
 #include "equipment.h"
-#include "npc.h"
+#include "entity.h"
 #include "types.h"
 #include "leveling.h"
 
@@ -174,29 +174,39 @@ Status player_unequip_piece(Player *player, char *data);
  * @author Maksym Polyak
  * 
  * @param player player struct
- * @param npc npc to add as a follower
+ * @param entity entity to add
  * @return Status 
  */
-Status player_add_follower(Player *player, NPC *npc);
+Status player_add_follower(Player *player, Entity *entity);
 
 /**
- * @brief Removes a follower from the player by a name
+ * @brief Removes a follower from the player by an entity id
  * @author Maksym Polyak
  * 
  * @param player player struct
- * @param npc_name name of the npc to remove as follower
+ * @param entity entity struct
  * @return Status 
  */
-Status player_remove_follower_by_name(Player *player, char *npc_name);
+Status player_remove_follower_by_pointer(Player *player, Entity *entity);
 
 /**
- * @brief Gets the array with the followers, of max size NPC_MAX_FOLLOWERS
+ * @brief Gets the follower at the index
  * @author Maksym Polyak
  * 
  * @param player player struct
- * @return Status 
+ * @param i index
+ * @return Entity* or NULL if error
  */
-NPC **player_get_followers(Player *player);
+Entity *player_get_follower_at(Player *player, int i);
+
+/**
+ * @brief Gets the number of followers of a player
+ * @author Maksym Polyak
+ * 
+ * @param player player struct
+ * @return int or -1 if error
+ */
+int player_get_follower_num(Player *player);
 
 
 #endif

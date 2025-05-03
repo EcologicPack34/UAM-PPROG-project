@@ -333,6 +333,7 @@ void graphic_engine_paint_generalDesc(Graphic_engine *ge, Game *game){
   Inventory *spaceInventory = NULL, *playerInventory = NULL;
   int inventorysize, size;
   Entity *entityplayer = NULL;
+  Player *player = NULL;
   
 
   int i, printedNPCs = 0;
@@ -358,13 +359,19 @@ void graphic_engine_paint_generalDesc(Graphic_engine *ge, Game *game){
   spaceInventory = space_get_inventory(currentSpace);
   
   /*Paints player info*/
-  strcpy(str, "Player:");
+  strcpy(str, "Players:");
   screen_area_puts(ge->descript, str);
 
-  player_get_str_desc(game_get_player(game), strAux);
-  strcpy(str, "   ");
-  strcat(str, strAux);
-  screen_area_puts(ge->descript, str);
+  size = game_get_n_players(game);
+  for(i = 0; i < size; i++){
+    player = game_get_player_at(game, i);
+    if(game_get_player_location(game) == entity_get_location(player_get_entity(player))){
+      player_get_str_desc(player, strAux);
+      strcpy(str, "   ");
+      strcat(str, strAux);
+      screen_area_puts(ge->descript, str);
+    }
+  }
 
   strcpy(str, "Player inventory:");
   screen_area_puts(ge->descript, str);
