@@ -1127,6 +1127,18 @@ Status game_actions_follow(Game *game){
     }
   }
 
+  if(following_the_player == false){
+    for(i = 0, size = player_get_follower_num(player_to_follow); i < size; i++){
+      entity = player_get_follower_at(player_to_follow, i);
+      if(entity_get_entityType(entity) == PLAYER_TYPE){
+        if(strcmp(entity_get_name(player_get_entity(player_to_follow)), entity_get_name(entity)) != 0){
+          game_add_log_message(game, MESSAGE_ERROR, "The player you are trying to follow is already following another player.");
+          return ERROR;
+        }
+      }
+    }
+  }
+
   if(player_get_follower_num(player) == NPC_MAX_FOLLOWERS){
     game_add_log_message(game, MESSAGE_ERROR, "The player you are trying to follow has max amount of followers");
     return ERROR;
