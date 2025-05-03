@@ -550,6 +550,7 @@ Status game_reader_load_player(Game *game, char *filename){
   char name[WORD_SIZE] = "";
   char *toks = NULL;
   long playerid, startinglocation;
+  int xp, next_xp, level, skill_points;
 
   Status status = OK;
 
@@ -579,11 +580,23 @@ Status game_reader_load_player(Game *game, char *filename){
       startinglocation = (game_get_is_procedural(game) == true) ? 1 : atol(toks);
       
       toks = strtok(NULL, "|");
+      xp = atoi(toks);
 
-      debug_log(PRINT,"Read Player: #p:%ld|%s|%ld|gdesc", playerid, name, startinglocation);
+      toks = strtok(NULL, "|");
+      next_xp = atoi(toks);
+
+      toks = strtok(NULL, "|");
+      level = atoi(toks);
+
+      toks = strtok(NULL, "|");
+      skill_points = atoi(toks);
+
+      toks = strtok(NULL, "|");
+
+      debug_log(PRINT,"Read Player: #p:%ld|%s|%ld|%d|%d|%d|%d|gdesc", playerid, name, startinglocation, xp, next_xp, level, skill_points);
 
       /*Creates a player with player_create then saves it on the game with game_add_player*/
-      player = player_create(name, playerid, startinglocation);
+      player = player_create(name, playerid, startinglocation, xp, next_xp, level, skill_points);
       if (player == NULL){
         status = ERROR;
         break;
