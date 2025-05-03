@@ -16,11 +16,12 @@ CFLAGS += $(shell pkg-config --cflags glfw3)
 LDFLAGS = $(shell pkg-config --libs glfw3) -lGL -lm
 
 D_FLAGS = -Wall -g -I$(INCLUDE)
+D_FLAGS += $(shell pkg-config --cflags glfw3)
 
 #Names of the .c files
 _SRC = command.c debug_printing.c game_actions.c game_loop.c game.c graphic_engine.c space.c object.c player.c game_reader.c entity.c \
  link.c inventory.c collection.c event_manager.c event_actions.c npc.c vector2.c queue.c message.c combat.c ability_actions.c ability_manager.c \
- equipment.c attack.c dialogue.c utils.c graphic_description.c glad.c mesh.c shader.c texture2D.c mesh_renderer.c
+ equipment.c attack.c dialogue.c utils.c graphic_description.c glad.c mesh.c shader.c texture2D.c mesh_renderer.c gl_game_interpreter.c
 
 #Adds to the names of .c files the path of the file before
 SRC = $(patsubst %,$(SRC_PATH)/%,$(_SRC))
@@ -86,7 +87,7 @@ runl:
 	./anthill anthill.dat -l ./debug.log
 
 debug:
-	$(CC) -o $(EXED) $(SRC) $(D_FLAGS) -g -L$(LIBRARIES) -lscreen
+	$(CC) -o $(EXED) $(SRC) $(D_FLAGS) -g -L$(LIBRARIES) -lscreen $(LDFLAGS)
 
 gdb:
 	make debug

@@ -32,10 +32,7 @@
 #include <GLFW/glfw3.h>
 #include <cglm/cglm.h>
 
-#include "mesh_renderer.h"
-#include "mesh.h"
-#include "shader.h"
-#include "texture2D.h"
+#include "gl_game_interpreter.h"
 
 #define WINDOW_WIDTH 800
 #define WINDOW_HEIGHT 600
@@ -43,13 +40,8 @@
 
 /*Proyection matrices*/
 //Model matrix is stored in mesh renderer as its local to each object
-mat4 view = GLM_MAT4_IDENTITY_INIT;//in a future will be inside camera
-mat4 projection = GLM_MAT4_IDENTITY_INIT;//in a futurewill be inside camera
 
-/*Temp vertex shader*/
-const char *vertexShaderSource = "./shaders/vertex.glsl";
 
-const char *framentSource = "./shaders/fragment.glsl";
 
 /**
  * @brief Functions that sets the gl viewport size on resize
@@ -90,7 +82,7 @@ GLFWwindow *initialize_window();
  * @author Daniel Gómez
  * 
  */
-void gl_update_render(GLFWwindow * window);
+void gl_update_render(GLFWwindow * window, GLInterpreter* gl, Game* game);
 
 /**
  * @brief Initializes game reading from the data file and starts the graphic engine
@@ -101,7 +93,7 @@ void gl_update_render(GLFWwindow * window);
  * @param file_name string with the name of the filename with the game information
  * @return 0 if everything goes well or 1 if there was some mistake
  */
-int game_loop_init(Game **game, Graphic_engine **gengine, char *file_name, int seed);
+int game_loop_init(Game **game, Graphic_engine **gengine, char *file_name, int seed, GLInterpreter **gl);
 
 /**
  * @brief Essential function, receives last command, while the command isn't EXIT
@@ -111,7 +103,7 @@ int game_loop_init(Game **game, Graphic_engine **gengine, char *file_name, int s
  * @param game struct that saves all information related to the game
  * @param gengine struct that saves all information related to the graphic engine
  */
-void game_loop_run(Game *game, Graphic_engine *gengine, GLFWwindow* window);
+void game_loop_run(Game *game, Graphic_engine *gengine, GLFWwindow* window, GLInterpreter *gl);
 
 /**
  * @brief Frees game memory and destroys graphic engine
@@ -135,7 +127,8 @@ int main(int argc, char *argv[]){
   Game *game = NULL;
   Graphic_engine *gengine = NULL;
   Debug *debugLog = NULL;
-  
+  GLInterpreter *gl = NULL;
+
   GLFWwindow * window;
 
   int i;
@@ -173,11 +166,11 @@ int main(int argc, char *argv[]){
   window = initialize_window();
 
   /*Initializes and runs the game */
-  if (!game_loop_init(&game, &gengine, argv[1], seed))
+  if (!game_loop_init(&game, &gengine, argv[1], seed, &gl))
   {
     debug_log(PRINT, "Game Initialized correctly");
 
-    game_loop_run(game, gengine, window);
+    game_loop_run(game, gengine, window, gl);
     game_loop_cleanup(game, gengine);
 
     debug_log(PRINT, "Game ended");
@@ -189,17 +182,30 @@ int main(int argc, char *argv[]){
     debug_destroy(debugLog);
   }
 
+  glfwTerminate();
+
   return 0;
 }
 
 
-int game_loop_init(Game **game, Graphic_engine **gengine, char *file_name, int seed){
+int game_loop_init(Game **game, Graphic_engine **gengine, char *file_name, int seed, GLInterpreter **gl){
   if(seed < 0){
     srand((unsigned) time(NULL));
   }
   else{
     srand((unsigned)seed);
   }
+
+  if((*gl = gl_inter_create()) == NULL){
+    fprintf(stderr, "Error while initializing openGL graphics.\n");
+    game_destroy(*game);
+    return 1;
+  }
+
+  /*Load texures*/
+  gl_inter_load_space_tex(*gl,"./textures/tempSpace.jpg");
+  gl_inter_load_link_tex(*gl,"./textures/tempLink.png");
+
 
   if (game_reader_create_from_file(game, file_name) == ERROR)
   {
@@ -218,7 +224,7 @@ int game_loop_init(Game **game, Graphic_engine **gengine, char *file_name, int s
   return 0;
 }
 
-void game_loop_run(Game *game, Graphic_engine *gengine, GLFWwindow *window){
+void game_loop_run(Game *game, Graphic_engine *gengine, GLFWwindow *window, GLInterpreter *gl){
   Command *last_cmd;
 
   if (!gengine)
@@ -233,7 +239,7 @@ void game_loop_run(Game *game, Graphic_engine *gengine, GLFWwindow *window){
 
     /*Paints graphics on screen*/
     graphic_engine_paint_game(gengine, game);
-    gl_update_render(window);
+    gl_update_render(window, gl, game);
     
     /*Checks if game finished before getting new input*/
     if(game_get_finished(game) == true) break;
@@ -258,6 +264,7 @@ void game_loop_cleanup(Game *game, Graphic_engine *gengine){
 
 GLFWwindow *initialize_window(){
   GLFWwindow *window = NULL;
+
   /*Initializes glfw*/
   glfwInit();
   glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -283,23 +290,22 @@ GLFWwindow *initialize_window(){
   glViewport(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
   glfwSetFramebufferSizeCallback(window, frame_buffer_size_callback);
   
-  glEnable(GL_DEPTH_TEST);
-  glDepthFunc(GL_LESS);
+  //glEnable(GL_DEPTH_TEST);
+  //glDepthFunc(GL_LESS);
   
-//    glEnable(GL_BLEND);
-//    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-  glm_perspective(glm_rad(45.0f), (float)WINDOW_WIDTH/(float)WINDOW_HEIGHT, 0.1f, 100.0f, projection);
-  glm_translate(view, (vec3){0,0,-3});
+  glEnable(GL_BLEND);
+  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
   return window;
 }
 
-void gl_update_render(GLFWwindow * window){
+void gl_update_render(GLFWwindow * window, GLInterpreter *gl, Game *game){
   /*Input*/
   process_input(window);
 
   draw_viewport(window);
+
+  gl_inter_update_graphics(gl, game, (float)WINDOW_WIDTH/(float)WINDOW_HEIGHT);
 
  /*Events and buffer swap*/
   glfwSwapBuffers(window);/*Renders frame buffer*/
@@ -318,6 +324,6 @@ void process_input(GLFWwindow *window){
 }
 
 void draw_viewport(GLFWwindow * window){
-  glClearColor(1,1,1,1);
+  glClearColor(0,0,0,1);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
