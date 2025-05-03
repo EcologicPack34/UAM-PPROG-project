@@ -17,6 +17,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "equipment.h"
+#include "leveling.h"
 
 /**
  * @brief Player
@@ -29,6 +30,8 @@ struct _Player {
     NPC *followers[NPC_MAX_ALLIES - 1]; /*!< Pointer with all the actual followers allies*/
 
     Equipment *equipment;               /*!< Equipment of the player*/
+
+    Leveling *leveling;                 /*!< Leveling info of the player*/
 
     int money;                          /*!< Money quantity of the player*/
 
@@ -61,7 +64,7 @@ Status player_set_entity(Player *player, Entity *entity){
    Game interface implementation
 */
 
-Player *player_create(char *name, Id identity, Id location){
+Player *player_create(char *name, Id identity, Id location, int xp, int next_xp, int level, int skill_points){
     Player *player = NULL;
     int i;
 
@@ -79,6 +82,12 @@ Player *player_create(char *name, Id identity, Id location){
         free(player);
     }
 
+    if((player->leveling = leveling_create(xp, next_xp, level, skill_points)) == ERROR){
+        entity_destroy(player->entity);
+        equipment_destroy(player->equipment);
+        free(player);
+    }
+
     player->money = 0;
 
     for(i = 0; i < NPC_MAX_FOLLOWERS; i++){
@@ -89,6 +98,7 @@ Player *player_create(char *name, Id identity, Id location){
     if(!(player->cmdData)){
         entity_destroy(player->entity);
         equipment_destroy(player->equipment);
+        leveling_destroy(player->leveling);
         free(player);
     }
     
@@ -101,6 +111,7 @@ void player_destroy(Player *player){
 
     entity_destroy(player_get_entity(player));
     equipment_destroy(player->equipment);
+    leveling_destroy(player->leveling);
     command_info_destroy(player->cmdData);
     free(player);
 }
@@ -123,12 +134,27 @@ Equipment *player_get_equipment(Player *player){
 
 Status player_get_str_desc(Player *player, char *str){
     Entity *ent = NULL;
+    char aux_str[LINE_LENGTH] = "";
     
     if(!player || !str)
         return ERROR;
 
     ent = player_get_entity(player);
-    sprintf(str, "%s (%s): H:%.1lf/%.1lf,L:%ld (%ld)", entity_get_graphic_description(ent), entity_get_name(ent), entity_get_health(ent), entity_get_max_health(ent),entity_get_location(ent), entity_get_id(ent));
+    sprintf(str, "%s (%s): H:%.1lf/%.1lf,L:%ld, Level:%d", entity_get_graphic_description(ent), entity_get_name(ent), entity_get_health(ent), entity_get_max_health(ent),entity_get_location(ent), leveling_get_level(player->leveling));
+
+    if(leveling_check_level_up(player->leveling) == true){
+        strcpy(aux_str, " LEVEL UP!");
+        strcat(str, aux_str);
+    } else {
+        sprintf(aux_str, " XP:%d/%d", leveling_get_XP(player->leveling), leveling_get_next_XP(player->leveling));
+        strcat(str, aux_str);
+    }
+
+    sprintf(aux_str, " SP:%d", leveling_get_skill_points(player->leveling));
+    strcat(str, aux_str);
+
+    sprintf(aux_str, " (%ld)", entity_get_id(ent));
+    strcat(str, aux_str);
 
     return OK;
 }
@@ -137,6 +163,12 @@ int player_get_money(Player *player){
     if(!player) return -1;
 
     return player->money;
+}
+
+Leveling *player_get_leveling(Player *player){
+    if(!player) return NULL;
+
+    return player->leveling;
 }
 
 CommandInfo *player_get_cmdData(Player *player){
@@ -223,7 +255,10 @@ Status player_unequip_piece(Player *player, char *data){
 Status player_add_follower(Player *player, NPC *npc){
     int i, index = -1;
 
-    if(!player || !npc) return ERROR;
+    if(!player || !npc || (npc_get_can_follow(npc) == false)) return ERROR;
+
+    if(npc_get_player_following_id(npc) != NO_ID)
+        return ERROR;
 
     /*Checks if its already a follower and saves the first NULL index*/
     for(i = 0; i < NPC_MAX_FOLLOWERS; i++){
@@ -235,6 +270,9 @@ Status player_add_follower(Player *player, NPC *npc){
 
     /*If an empty pointer wasn't found then followers are full*/
     if(index == -1) return ERROR;
+
+    npc_set_status(npc, ALLY);
+    npc_set_player_following_id(npc, entity_get_id(player_get_entity(player)));
 
     player->followers[index] = npc;
 
@@ -249,13 +287,15 @@ Status player_remove_follower_by_name(Player *player, char *npc_name){
     /*Searches by name and removes it*/
     for(i = 0; i < NPC_MAX_FOLLOWERS; i++){
         if(player->followers[i] != NULL && strcmp(entity_get_name(npc_get_entity(player->followers[i])), npc_name) == 0){
+            npc_set_player_following_id(player->followers[i], NO_ID);
+            npc_set_status(player->followers[i], NEUTRAL);
             player->followers[i] = NULL;
             return OK;
         }
     }
 
     /*If not found then its removed*/
-    return OK;
+    return ERROR;
 }
 
 NPC **player_get_followers(Player *player){

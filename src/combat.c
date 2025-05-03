@@ -223,7 +223,52 @@ Status combat_copy_attacks_into_array(Combat *combat, Collection *colc);
  * @return OK if it was succesful or ERROR if there was an error
  */
 Status combat_release_dead_loot(Combat *cmb, Stats *st);
+
+/**
+ * @brief Gets the damage multiplier relative to the strength stat,
+ * if strength is greater than MAX_STRENGTH it doesnt have an effect
+ * 
+ * @param stats entity stats struct
+ * @return double 
+ */
+double stats_get_strength_dmg_multiplier(EntityStats *stats);
+
+/**
+ * @brief Gets the multiplier with the reduced damage incoming, if defense
+ * is greather than MAX_DEFENSE it does not have any effect
+ * 
+ * @param stats entity stats struct
+ * @return double 
+ */
+double stats_get_defense_reduced_damage_multiplier(EntityStats *stats);
+
 /*-----------IMPLENTATIONS-------------*/
+
+double stats_get_strength_dmg_multiplier(EntityStats *stats){
+    int strength;
+    
+    if(!stats) return 0;
+
+    if(stats->strength >= MAX_STRENGTH)
+        strength = MAX_STRENGTH;
+    else
+        strength = stats->strength;
+
+    return (strength - 1)*STRENGTH_DAMAGE_MULTIPLIER/100 + 1;
+}
+
+double stats_get_defense_reduced_damage_multiplier(EntityStats *stats){
+    int defense;
+    
+    if(!stats) return 0;
+
+    if(stats->defense >= MAX_DEFENSE)
+    defense = MAX_DEFENSE;
+    else
+    defense = stats->defense;
+
+    return 1 - (defense)*DEFENSE_REDUCED_DAMAGE_PERCENTAGE/100;
+}
 
 Status combat_copy_entity_stats(Entity *entity, Stats *stats){
 
@@ -289,7 +334,7 @@ Status combat_entity_received_damage(Stats *stats, double damage){
     if(!stats) return ERROR;
     
     if(!entity_stats_is_dead(&(stats->stats))){
-        stats->stats.health -= damage;
+        stats->stats.health -= damage*stats_get_defense_reduced_damage_multiplier(&(stats->stats));
     }
 
     return OK;
@@ -377,7 +422,7 @@ Status combat_attack(Attack *at, Stats *attacker, Stats *victim) {
     if (chance > attack_get_success_chance(at))
         return OK;
     
-    damage = attacker->stats.baseDamage*attack_get_damage_multiplicator(at);
+    damage = attacker->stats.baseDamage*attack_get_damage_multiplicator(at)*stats_get_strength_dmg_multiplier(&(attacker->stats));
     combat_entity_received_damage(victim, damage);
     return OK;
 }
@@ -806,7 +851,7 @@ Status combat_runaway(Combat *combat){
 
     if (chance >= RUN_AWAY_PROB)
     {
-        return OK;
+        return ERROR;
     }
     combat_finalize(combat);
     return OK;
@@ -870,7 +915,7 @@ Status combat_release_dead_loot(Combat *cmb, Stats *st) {
 
     Inventory *inv = NULL;
     Inventory *space_inventory = NULL;
-    Id spaceID, objID;
+    Id objID;
     int inventory_size;
     long i;
     Object *obj = NULL;
@@ -882,7 +927,6 @@ Status combat_release_dead_loot(Combat *cmb, Stats *st) {
     if(!(space_inventory = space_get_inventory(cmb->space))) {
         return ERROR;
     }
-    spaceID = space_get_id(cmb->space);
     inventory_size = inventory_get_size(inv);
 
     for (i = 0; i < inventory_size; i++)
@@ -896,4 +940,18 @@ Status combat_release_dead_loot(Combat *cmb, Stats *st) {
     }
 
     return OK; 
+}
+
+int combat_get_dead_entities_num(Combat *combat){
+
+    if(!combat) return 0;
+
+    return combat->n_dead_entities;
+}
+
+Entity *combat_get_dead_entity_at(Combat *combat, int i){
+
+    if(!combat || i < 0 || i >= combat_get_dead_entities_num(combat)) return NULL;
+
+    return combat->dead_entities[i].entity;
 }

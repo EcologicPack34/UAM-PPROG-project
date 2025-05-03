@@ -23,6 +23,7 @@
 #include "equipment.h"
 #include "npc.h"
 #include "types.h"
+#include "leveling.h"
 
 /**
  * @brief ADT with all the information of the player
@@ -38,10 +39,14 @@ typedef struct _Player Player;
  * @param name name of the player
  * @param identity id of the entity
  * @param location id of the space where the player is located
+ * @param xp xp of the player
+ * @param next_xp xp needed for next level of the player
+ * @param level level of the player
+ * @param skill_points skill points available for the player
  * 
  * @return player pointer if everything went fine or NULL if there was a mistake
  */
-Player *player_create(char *name, Id identity, Id location);
+Player *player_create(char *name, Id identity, Id location, int xp, int next_xp, int level, int skill_points);
 
 /**
  * @brief Frees a player struct
@@ -105,6 +110,15 @@ Status player_set_stats(Player *p, double maxhealth, double health, double baseD
  * @return Status 
  */
 Status player_get_str_desc(Player *player, char *str);
+
+/**
+ * @brief Gets the leveling info of a player
+ * @author Maksym Polyak
+ * 
+ * @param player player struct
+ * @return Leveling* or NULL if error
+ */
+Leveling *player_get_leveling(Player *player);
 
 /**
  * @brief Gets the money quantity of the player

@@ -28,6 +28,8 @@
 #include "combat.h"
 #include "ability_manager.h"
 #include "libscreen.h"
+#include "dialogue.h"
+#include "effect.h"
 #include "graphic_description.h"
 
 #include <stdbool.h>
@@ -87,16 +89,6 @@ char* game_to_string(Game * game);
  * @return *space if everything goes well or NULL if there was some mistake
  */
 Space *game_get_space(Game *game, Id id);
-
-/**
- * @brief This function gets a space in a game by its index
- * @author Aaron Charameli Mair
- * 
- * @param game a struct Game 
- * @param ix the index of the space
- * @return Space*
- */
-Space *game_get_space_at(Game *game, int ix);
 
 /**
  * @brief Gets a space from the game by it's spatial position
@@ -305,6 +297,25 @@ bool game_get_is_procedural(Game *game);
  */
 GDesc *game_get_gdesc_by_id(Game *game, Id id);
 
+/**
+ * @brief This function gets an effect by its id
+ * @author Aaron Charameli Mair
+ * 
+ * @param game game struct
+ * @param id id of the effect
+ * @return Effect* or NULL if not found or ERROR
+ */
+Effect *game_get_effect_by_id(Game *game, Id id);
+
+/**
+ * @brief This function gets the effect manager of a game
+ * @author Aaron Charameli Mair
+ * 
+ * @param game a pointer to game
+ * @return EffectManager* or NULL if ERROR
+ */
+EffectManager *game_get_effect_manager(Game *game);
+
 /*----------SETTERS----------*/
 
 /**
@@ -450,6 +461,16 @@ Status game_add_npc(Game *game, NPC *npc);
 Status game_add_log_message(Game *game, MessageType type,char *message);
 
 /**
+ * @brief This function adds an effect to the game
+ * @author Aaron Charameli Mair
+ * 
+ * @param game game struct
+ * @param effect effect to add
+ * @return Status 
+ */
+Status game_add_effect(Game *game, Effect *effect);
+
+/**
  * @brief Gets the first message in the queue and frees its memory
  * @author Daniel Gómez
  * 
@@ -554,6 +575,33 @@ Object *game_get_object_by_id(Game *game, Id objectid);
 Status game_add_ability(Game *game, Ability *ability);
 
 /**
+ * @brief Initializes a dialogue with an NPC
+ * @author Maksym Polyak
+ * 
+ * @param game game struct
+ * @param npc npc struct
+ * @return Status 
+ */
+Status game_dialogue_init(Game *game, NPC *npc);
+
+/**
+ * @brief Gets the dialogue struct from game
+ * @author Maksym Polyak
+ * 
+ * @param game game struct
+ * @return Dialogue * or NULL if error
+ */
+Dialogue *game_get_dialogue(Game *game);
+
+/**
+ * @brief Frees dialogue struct and sets game state to default
+ * @author Maksym Polyak
+ * 
+ * @param game game struct
+ * @return Status 
+ */
+Status game_end_dialogue(Game *game);
+/**
  * @brief Adds a graphic description to the game
  * @author Daniel Gómez
  * 
@@ -572,7 +620,6 @@ Status game_add_gdesc(Game *game, GDesc *gdesc);
  */
 Collection *game_get_attacks(Game *game);
 
-
 /**
  * @brief Generates a level proceduraly
  * @author Daniel Gómez
@@ -581,5 +628,15 @@ Collection *game_get_attacks(Game *game);
  * @return Status 
  */
 Status game_generate_procedural(Game *game);
+
+/**
+ * @brief Returns the earned experience after a combat
+ * @author Maksym Polyak
+ * 
+ * @param combat combat struct
+ * @param game game struct
+ * @return int or 0 if error
+ */
+int game_get_combat_experience(Combat *combat, Game *game);
 
 #endif

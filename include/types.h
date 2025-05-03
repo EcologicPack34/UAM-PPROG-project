@@ -11,6 +11,8 @@
 #ifndef TYPES_H
 #define TYPES_H
 
+#define DIALOGUE_FILENAME "dialogue.txt"    /*!< String with the name of the dialogue txt file*/
+
 #define NO_NAME ""                  /*!< String that represents an empty name string*/
 
 #define WORD_SIZE 500               /*!< Maximum word size */
@@ -23,9 +25,25 @@
 #define NPC_MAX_ENEMIES 4           /*!< Maximum number of enemy NPCs in a combat*/
 #define COMBAT_MAX_ENTITIES 8       /*!< Maximum number of entities in a combat*/
 
+#define BASE_DAMAGE_MINIMUM 10      /*!< Minimum damage an entity can do if attack is succesful*/
+#define STRENGTH_DAMAGE_MULTIPLIER 1.5  /*!< Rate at which the strength affects the base damage*/
+#define DEFENSE_REDUCED_DAMAGE_PERCENTAGE 1 /*!< Rate at which the defense reduces the damage of an incoming attack*/
 
-#define N_GAME_STATES 5             /*!< Number of game states*/
+#define MAX_STRENGTH 30             /*!< Maximum level where the strength takes effect*/
+#define MAX_DEFENSE 40              /*!< Maximum level where the defense takes effect*/
+
+#define LEVELING_DIFFICULTY_MULTIPLIER 2    /*!< Defines the rate at which the leveling difficulty increases per level up*/
+#define BASE_XP_QUANTITY 100                /*!< Base XP on level 1*/
+#define SKILL_POINTS_PER_LEVEL 1            /*!< Number of skill points an entity gets per level up*/
+#define XP_MINIMUM 1                        /*!< Minimum XP a dead enemy gives*/
+#define XP_MULT 10                          /*!< Multiplier for the stats to add XP when an enemy dies*/
+
+
+#define N_GAME_STATES 7             /*!< Number of game states*/
 #define MAX_SKILLS_ENTITY 5         /*!< Maximum number of skils per entity*/
+
+#define LINE_LENGTH 50              /*!< Max length of a line of dialogue*/
+#define LINE_MAX 4                  /*!< Maximum number of lines in a dialogue*/
 
 /**
  * @brief Id typedef
@@ -55,6 +73,6 @@ typedef enum {UNKNOWN_INVENTORY, PLAYER_INVENTORY, NPC_INVENTORY, SPACE_INVENTOR
 /**
  * @brief Enum describing the different game states
  */
-typedef enum {ERROR_STATE ,DEFAULT, COMBAT, INVENTORY, DIALOGUE}GameState;
+typedef enum {ERROR_STATE ,DEFAULT, COMBAT, INVENTORY, DIALOGUE, LEVEL_UP_STATE, STORE_STATE}GameState;
 
 #endif

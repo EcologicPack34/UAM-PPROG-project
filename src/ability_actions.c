@@ -67,6 +67,20 @@ Status ability_money_bag(Ability *ability, Game *game);
  */
 Status ability_unlock_link(Ability *ability, Game *game);
 
+/**
+ * @brief Ability that applies an effect to an enemy. The effect applied is the one which id is in data string
+ * @author Aaron Charameli Mair
+ * 
+ * @param ability ability struct
+ * @param game game struct
+ * @return Status 
+ */
+Status ability_effect_enemy(Ability *ability, Game *game);
+
+Status ability_effect_self(Ability *ability, Game *game);
+
+Status ability_effect_ally(Ability *ability, Game *game);
+
 Status ability_heal_self(Ability *ability, Game *game){
     Combat *combat = NULL;
     Stats *stats = NULL;
@@ -241,6 +255,85 @@ Status ability_unlock_link(Ability *ability, Game *game){
     return link_unlock(linkData, player);
 }
 
+Status ability_effect_enemy(Ability *ability, Game *game){
+    Combat *combat=NULL;
+    Stats *st;
+    Entity *ent=NULL;
+    char **args=NULL;
+    Id effect_id;
+    Effect *effect=NULL;
+    int target=0;
+
+    /*this function applies the effect of id == ability->data, to the enemy specified in the last command*/
+    /*last command is: sk (num) (enemy)*/
+    /*player must be in a combat to use the ability*/
+
+    if(!ability || !game) return ERROR;
+    if(command_get_arguments_count(game_get_last_command(game)) != 2) return ERROR;
+    if(game_get_state(game) != COMBAT) return ERROR;
+
+    args=command_get_arguments(game_get_last_command(game));
+    combat = game_get_combat(game);
+    if(!args || !combat) return ERROR;
+    target=atoi(args[1]);
+    if((target <= 0) || (target>combat_get_enemies_count(combat))) return ERROR;
+    if((st = combat_get_enemies_stats_at(combat,target-1)) == NULL) return ERROR;
+    ent = st->entity;
+    if(ability_get_data(ability) == NULL) return ERROR; 
+    effect_id = atoi(ability_get_data(ability));
+    effect = game_get_effect_by_id(game, effect_id);
+
+    return effect_add_affected(effect, ent);
+}
+Status ability_effect_ally(Ability *ability, Game *game){
+    Combat *combat=NULL;
+    Stats *st;
+    Entity *ent=NULL;
+    char **args=NULL;
+    Id effect_id;
+    Effect *effect=NULL;
+    int target=0;
+
+    /*this function applies the effect of id == ability->data, to the ally specified in the last command*/
+    /*last command is: sk (num) (ally)*/
+    /*player must be in combat to apply the ability*/
+
+    if(!ability || !game) return ERROR;
+    if(command_get_arguments_count(game_get_last_command(game)) != 2) return ERROR;
+    if(game_get_state(game) != COMBAT) return ERROR;
+
+    args=command_get_arguments(game_get_last_command(game));
+    combat = game_get_combat(game);
+    if(!args || !combat) return ERROR;
+    target=atoi(args[1]);
+    if((target <= 0) || (target>combat_get_allies_count(combat))) return ERROR;
+    if((st = combat_get_allies_stats_at(combat,target)) == NULL) return ERROR;
+    ent = st->entity;
+    if(ability_get_data(ability) == NULL) return ERROR; 
+    effect_id = atoi(ability_get_data(ability));
+    effect = game_get_effect_by_id(game, effect_id);
+
+    return effect_add_affected(effect, ent);
+}
+Status ability_effect_self(Ability *ability, Game *game){
+    Entity *ent=NULL;
+    Id effect_id;
+    Effect *effect=NULL;
+
+    /*this function applies the effect of id == ability->data, to the enemy specified in the last command*/
+    /*last command is: sk (num) */
+
+    if(!ability || !game) return ERROR;
+    if(command_get_arguments_count(game_get_last_command(game)) != 1) return ERROR;
+
+    if(ability_get_data(ability) == NULL) return ERROR; 
+    effect_id = atoi(ability_get_data(ability));
+    effect = game_get_effect_by_id(game, effect_id);
+    ent = player_get_entity(game_get_player(game));
+
+    return effect_add_affected(effect, ent);
+}
+
 /*
   * Public functions
 */
@@ -282,6 +375,15 @@ Status ability_actions_use_ability(Game *game){
             break;
         case LINK_UNLOCK:
             status = ability_unlock_link(ability, game);
+            break;
+        case EFFECT_ENEMY:
+            status = ability_effect_enemy(ability, game);
+            break;
+        case EFFECT_SELF:
+            status = ability_effect_self(ability, game);
+            break;
+        case EFFECT_ALLY:
+            status = ability_effect_ally(ability, game);
             break;
         default:
             break;

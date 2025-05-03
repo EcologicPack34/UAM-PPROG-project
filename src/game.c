@@ -14,11 +14,14 @@
 #include "debug_printing.h"
 #include "collection.h"
 #include "npc.h"
+#include "effect.h"
 #include "vector2.h"
 #include "queue.h"
 #include "combat.h"
 #include "message.h"
 #include "game_reader.h"
+#include "dialogue.h"
+#include "effect.h"
 #include "attack.h"
 
 #include <stdio.h>
@@ -51,7 +54,9 @@ struct _Game {
   int n_links;                        /*!< Number of links on the links array*/
 
   /*Others*/
+  Dialogue *dialogue;                  /*!< Dialogue struct*/
   EventManager *event_manager;        /*!< Struct containing the info about the events that can happen*/
+  EffectManager *effect_manager;      /*!< Struct containing effects and allows to manage them*/
   Queue *screenLog;                   /*!< Queue containing a list of messages to print on screen*/
   bool godmode;                       /*!< bool that determines if god mode is activated*/
 
@@ -96,6 +101,21 @@ Link *game_get_link_at(Game *game, long index){
  * @return Status 
  */
 Status game_map_space_block(Game *game, Space *initSpace ,int block);
+
+/**
+ * @brief This function gets a space in a game by its index
+ * @author Aaron Charameli Mair
+ * 
+ * @param game a struct Game 
+ * @param ix the index of the space
+ * @return Space*
+ */
+Space *game_get_space_at(Game *game, int ix){
+  if(!game || (ix<0)) return NULL;
+  if(ix >= game_get_n_spaces(game)) return NULL;
+
+  return game->spaces[ix];
+}
 
 /**
  * @brief Gets a random graphic description of type space
@@ -182,6 +202,8 @@ Status game_create(Game **game) {
     debug_log(LOG_ERROR,"Error creating command");
     return ERROR;
   }
+
+  (*game)->effect_manager = effect_manager_create();
   
   (*game)->attacks = collection_create(5, false, false, attack_compare, attack_print);
   if(!((*game)->attacks)){
@@ -251,6 +273,9 @@ Status game_destroy(Game *game) {
   }
   collection_destroy(game_get_npcs(game));
 
+  /*Frees dialogue*/
+  dialogue_destroy(game->dialogue);
+
   /*Frees graphic descriptions*/
   if(collection_free_elements(game->gdescs, gdesc_destroy) == ERROR){
     printf("Error freeing graphic descriptions");
@@ -260,6 +285,7 @@ Status game_destroy(Game *game) {
   /*Frees comand and event manager*/
   command_destroy(game->last_cmd);
   event_manager_destroy(game->event_manager);
+  effect_manager_destroy(game->effect_manager);
   
   /*Frees abilities and log messages*/
   ability_manager_destroy(game->ability_manager);
@@ -315,13 +341,6 @@ Space *game_get_space(Game *game, Id id) {
   }
 
   return NULL;
-}
-
-Space *game_get_space_at(Game *game, int ix){
-  if(!game || (ix<0)) return NULL;
-  if(ix >= game_get_n_spaces(game)) return NULL;
-
-  return game->spaces[ix];
 }
 
 Player* game_get_player(Game *game){
@@ -453,6 +472,17 @@ TurnValidation game_get_is_turn_valid(Game *game){
   return game->is_turn_valid;
 }
 
+EffectManager *game_get_effect_manager(Game *game){
+  if(!game) return NULL;
+  return game->effect_manager;
+}
+
+Effect *game_get_effect_by_id(Game *game, Id id){
+  if(!game || (id<=UNDEFINED_ID)) return ERROR;
+
+  return effect_get_by_id(game->effect_manager, id);
+}
+
 /*-----------SETTERS-----------*/
 
 Status game_set_last_command(Game *game, Command *command) {
@@ -480,8 +510,21 @@ Status game_set_state(Game *game, GameState state){
 }
 
 Status game_set_godmode(Game *game, bool value){
+  int i;
   if(!game) return ERROR;
   game->godmode = value;
+  if(value == true){
+
+    /*spaces set discovered*/
+    for(i=0;i<game->n_spaces;i++){
+      space_set_discovered(game_get_space_at(game,i),true);
+    }
+
+  /*links set unlocked*/
+    for(i=0;i<game->n_links;i++){
+      link_set_locked(game_get_link_at(game, i), false);
+    }
+  }
   return OK;
 }
 
@@ -801,6 +844,11 @@ Status game_add_log_message(Game *game, MessageType type,char *message){
   return OK;
 }
 
+Status game_add_effect(Game *game, Effect *effect){
+  if(!game || !game->effect_manager || !effect) return ERROR;
+  return effect_manager_add_effect(game->effect_manager, effect);
+}
+
 Status game_get_log_message(Game *game, char *str){
   Message *log = NULL;
   if(!game) return ERROR;
@@ -831,7 +879,15 @@ Status game_combat_start(Game *game){
 }
 
 Status game_combat_end(Game *game){
+  int XP;
+  Leveling *leveling = NULL;
+  
   if(!game) return ERROR;
+
+  leveling = player_get_leveling(game_get_player(game));
+  XP = game_get_combat_experience(game_get_combat(game), game);
+
+  leveling_set_XP(leveling, XP + leveling_get_XP(leveling));
 
   combat_free(game->combat);
   game->current_state = DEFAULT;
@@ -984,6 +1040,39 @@ Status game_add_ability(Game *game, Ability *ability){
   return ERROR;
 }
 
+Status game_dialogue_init(Game *game, NPC *npc){
+  FILE *fIN = NULL;
+  
+  if(!game) return ERROR;
+
+  fIN = fopen(DIALOGUE_FILENAME,"r");
+  if(!fIN) return ERROR;
+
+  game->dialogue = dialogue_create(npc, fIN);
+  if(game->dialogue == NULL) return ERROR;
+  
+  game_set_state(game, DIALOGUE);
+
+  return OK;
+}
+
+Dialogue *game_get_dialogue(Game *game){
+  if(!game) return NULL;
+
+  return game->dialogue;
+}
+
+Status game_end_dialogue(Game *game){
+  if(!game) return ERROR;
+
+  dialogue_destroy(game->dialogue);
+
+  game_set_state(game, DEFAULT);
+
+  game->dialogue = NULL;
+
+  return OK;
+}
 
 Collection *game_get_attacks(Game *game) {
 
@@ -1234,4 +1323,19 @@ GDesc *game_get_gdesc_by_id(Game *game, Id id){
 Status game_add_gdesc(Game *game, GDesc *gdesc){
   if(!game || !gdesc) return ERROR;
   return collection_add(game->gdescs, gdesc);
+}
+
+int game_get_combat_experience(Combat *combat, Game *game){
+  Entity *ent = NULL;
+  int i, XP = 0;
+
+  if(!combat || !game) return 0;
+
+  for(i = 0, ent = combat_get_dead_entity_at(combat, i); ent != NULL; i++, ent = combat_get_dead_entity_at(combat, i)){
+    if(npc_get_status(game_get_npc_by_id(game, entity_get_id(ent))) == ENEMY){
+      XP += (XP_MINIMUM + entity_get_strength(ent)*XP_MULT + entity_get_magicLevel(ent)*XP_MULT)*(entity_get_max_health(ent)/100);
+    }
+  }
+
+  return XP;
 }

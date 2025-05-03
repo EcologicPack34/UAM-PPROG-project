@@ -15,12 +15,12 @@
 #include "command.h"
 #include "types.h"
 
-#define N_EVENTS 6 /*!< Number of events implemented*/
+#define N_EVENTS 7 /*!< Number of events implemented*/
 
 /**
  * @brief Enum storing the different types of events 
  */
-typedef enum {NO_EVENT, OBJECT_ON_SPACE, TRIGGER_COMBAT, PLAYER_DEATH, NPC_RAND_MOVE}EventType;
+typedef enum {NO_EVENT, OBJECT_ON_SPACE, TRIGGER_COMBAT, PLAYER_DEATH, NPC_RAND_MOVE, TRIGGER_EFFECTS}EventType;
 
 /**
  * @brief ADT containing basic info about event

@@ -28,6 +28,25 @@
  */
 Status game_reader_create_from_file(Game **game, char *filename);
 
+/**
+ * @brief Initializes a game from a save file
+ * 
+ * @param game 
+ * @param filename 
+ * @return Status 
+ */
+Status game_reader_create_from_save_file(Game **game, char *filename);
+
+/**
+ * @brief Saves all the data from a game to a file
+ * 
+ * @param save_file 
+ * @param game 
+ * @param original_file the name of the .dat file used to create the game
+ * @return Status 
+ */
+Status game_reader_create_save_file(char *save_file, Game *game, char *original_file);
+
 
 /**
  * @brief Initializes the attacks, saving them in combat when it starts

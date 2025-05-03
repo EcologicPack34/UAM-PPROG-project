@@ -196,4 +196,22 @@ Status combat_set_attack_in_position(Combat *combat, Attack *attack, int pos);
  */
 Attack *combat_find_attack_by_name(Combat *cmb, char *name);
 
+/**
+ * @brief Gets the number of dead entities of a combat
+ * @author Maksym Polyak
+ * 
+ * @param combat combat struct
+ * @return int or -1 if error
+ */
+int combat_get_dead_entities_num(Combat *combat);
+
+/**
+ * @brief Gets the dead entity at the index
+ * 
+ * @param combat combat struct
+ * @param i index
+ * @return Entity* or NULL if error or not valid index
+ */
+Entity *combat_get_dead_entity_at(Combat *combat, int i);
+
 #endif

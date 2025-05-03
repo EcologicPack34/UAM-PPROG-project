@@ -27,7 +27,7 @@
  */
 char *cmd_to_str[N_CMD][N_CMDT] = {{"", "No command"}, {"", "Unknown"}, {"q", "Exit"}, {"s", "South"}, {"w", "North"}, {"d", "East"}, {"a", "West"},{"tk", "Take"}, {"dr", "Drop"},\
  {"ch", "Chat"}, {"at", "Attack"}, {"h", "Run_Away"}, {"sw", "Switch_Player"}, {"sk", "Ability"}, {"ou", "Object_Use"}, {"hp", "Help"}, {"m", "Move"}, {"sh","Search"},\
- {"eq", "Equip"}, {"ue", "Unequip"}, {"i", "Inspect"}, {"4444444444444444", "4444444444444444"}, {"up", "Up"}, {"dw", "Down"}};
+ {"eq", "Equip"}, {"ue", "Unequip"}, {"i", "Inspect"}, {"4444444444444444", "4444444444444444"}, {"up", "Up"}, {"dw", "Down"}, {"lu", "Level_Up"}};
 
 /**
 * @brief Struct containing the info of a command
@@ -303,8 +303,8 @@ Status command_get_as_string(Command *cmd, char *dest){
   if(!cmd || !dest) return ERROR;
   if(!(cmd->cmdPlayerData)) return ERROR;
 
-  /*North or n arg1 arg2 arg3 : Ok*/
-  /*Take or tk Grain1 : Ok*/
+  /*North(n) arg1 arg2 arg3 : Ok*/
+  /*Take(tk) tk Grain1 : Ok*/
 
   strcat(dest, cmd_to_str[cmd->cmdPlayerData->code - NO_CMD][1]);
   strcat(dest, " (");

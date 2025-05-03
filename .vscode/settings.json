@@ -13,6 +13,7 @@
         "debug_printing.h": "c",
         "inventory.h": "c",
         "object.h": "c",
-        "collection.h": "c"
+        "collection.h": "c",
+        "effect.h": "c"
     }
 }
