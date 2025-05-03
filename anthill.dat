@@ -135,8 +135,8 @@ Formato Ability: #sk:Id|Type|Name|Entityid(ObjectId)|is_player_ability|is_object
 #sk:4|heal_self|Heal self 5 HP  Maximum CD: 0|6|0|1|0|0|5
 #sk:5|money_bag|Adds 20 coins   Maximum CD: 0|8|0|1|0|0|20
 #sk:6|link_unlock|Unlocks link between 123 and 124|9|0|1|0|0|4
-#sk:7|effect_enemy|FireBall Launcher|1|1|0|0|3|2
-#sk:8|effect_enemy|Poison Bomb|1|1|0|0|6|3|1
+#sk:7|effect_enemy|FireBall Launcher|1|1|0|0|0|2
+#sk:8|effect_enemy|Poison Bomb|1|1|0|0|6|1
 
 
 
@@ -146,6 +146,6 @@ formato effects #ef:Id|name|EffectType|EffectAffects|InfiniteTurns(y/N)|DefaultN
 EffectType = {UNKNOWN_EFFECT = 0, REGENERATION = 1, POISON = 2, FIRE = 3}
 EffectAffects = {AFFECTS_PLAYER = (p/P), AFFECTS_ALLY = (a/A), AFFECTS_ENEMY = (e/E)}
 
-#ef:1|Poison|2|E|N|2|25
-#ef:2|Fire|3|E|N|2|10
+#ef:1|Poison|2|E|N|1|25
+#ef:2|Fire|3|E|N|1|1
 #ef:3|Regeneration|1|p|y|4|5
