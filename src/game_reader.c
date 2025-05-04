@@ -665,11 +665,9 @@ Status game_reader_load_player(Game *game, char *filename, bool fromSaveFile){
   char *toks = NULL;
   long playerid, startinglocation;
   int xp, next_xp, level, skill_points, money;
-  int i,n_followers=0,n_args=0;
+  int i,n_followers=0;
+  Id aux_id=NO_ID;
   EntityType ET;
-  Id aux_id;
-  CommandCode code;
-  Status command_status;
   
 
   Status status = OK;
@@ -741,7 +739,7 @@ Status game_reader_load_player(Game *game, char *filename, bool fromSaveFile){
         for(i=0; i<n_followers; i++){
           toks = strtok(NULL, "-");
           aux_id = atol(toks);
-          toks = strok(NULL, ";");
+          toks = strtok(NULL, ";");
           ET = atoi(toks);
 
           if(ET == PLAYER_TYPE){
