@@ -265,4 +265,23 @@ void object_print(void *object);
  */
 Status object_add_object_effect(Object *object, Ability *ability);
 
+/**
+ * @brief Saves an object struct on a file
+ * @author Maksym Polyak
+ * 
+ * @param object object struct
+ * @param fOUT file stream output
+ * @return int with num of char printed or -1 if error
+ */
+int object_save_on_file(Object *object, FILE *fOUT);
+
+/**
+ * @brief Creates an object struct from a file
+ * @author Maksym Polyak
+ * 
+ * @param fIN file stream input
+ * @return Object* or NULL if error
+ */
+Object *object_create_from_file(FILE *fIN);
+
 #endif

@@ -615,9 +615,18 @@ Collection *game_get_attacks(Game *game);
  * @brief Generates a level proceduraly
  * @author Daniel Gómez
  * 
- * @param game 
+ * @param game game struct
  * @return Status 
  */
 Status game_generate_procedural(Game *game);
+
+/**
+ * @brief Gets the index of the active player
+ * @author Maksym Polyak
+ * 
+ * @param game game struct
+ * @return int or -1 if error
+ */
+int game_get_active_player_index(Game *game);
 
 #endif

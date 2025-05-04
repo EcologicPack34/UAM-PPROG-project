@@ -1298,3 +1298,9 @@ Status game_add_gdesc(Game *game, GDesc *gdesc){
   if(!game || !gdesc) return ERROR;
   return collection_add(game->gdescs, gdesc);
 }
+
+int game_get_active_player_index(Game *game){
+  if(!game) return -1;
+
+  return game->active_player_index;
+}

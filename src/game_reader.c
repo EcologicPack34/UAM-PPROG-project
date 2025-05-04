@@ -281,7 +281,7 @@ Status game_reader_create_save_file(char *save_file, Game *game, char *original_
   int gdesc_hight=0;
   int i;
   Id aux_id;
-  int n_npcs;
+  int n_npcs, size;
 
   if(!save_file || !game || !original_file) return ERROR;
 
@@ -292,6 +292,12 @@ Status game_reader_create_save_file(char *save_file, Game *game, char *original_
     fclose(Poriginal);
     return ERROR;
   }
+
+  /*ActivePlayerIndex;NumOfPlayers;Is_Turn_Valid;N_spaces;N_links;godmode;finished;procedural*/
+  fprintf(Psave_file, "%d;%d;%d;%d;%d;%d;%d;%d\n", \
+    game_get_active_player_index(game), game_get_n_players(game), (int)game_get_is_turn_valid(game)\
+     ,game_get_n_spaces(game), game_get_n_links(game), (int)game_get_god_mode(game),\
+     (int)game_get_finished(game), (int)game_get_is_procedural(game));
   
   /*GDESC SAVE*/
   while(fgets(line, WORD_SIZE, Poriginal)){
@@ -318,15 +324,22 @@ Status game_reader_create_save_file(char *save_file, Game *game, char *original_
   }
   fclose(Poriginal);
 
+  /*Saves players to the file*/
   for(i=0; i<MAX_PLAYERS; i++){
     player_save_to_file(Psave_file, game_get_player_at(game, i));
   }
 
+  /*Saves npcs to the file*/
   n_npcs = collection_length(game_get_npcs(game));
   for(i=0; i<n_npcs; i++){
     npc_save_to_file(Psave_file, collection_get_element_at(game_get_npcs(game), i));
   }
   
+  /*Saves objects to the file*/
+  size = collection_length(game_get_objects(game));
+  for(i = 0; i < size; i++){
+    object_save_on_file(collection_get_element_at(game_get_objects(game), i), Psave_file);
+  }
 
   fclose(Psave_file);
 
