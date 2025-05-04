@@ -317,15 +317,15 @@ Status game_reader_create_save_file(char *save_file, Game *game, char *original_
   }
   fclose(Poriginal);
 
-  /*Saves players to the file*/
-  for(i=0; i<MAX_PLAYERS; i++){
-    player_save_to_file(Psave_file, game_get_player_at(game, i));
-  }
-
   /*Saves npcs to the file*/
   n_npcs = collection_length(game_get_npcs(game));
   for(i=0; i<n_npcs; i++){
     npc_save_to_file(Psave_file, collection_get_element_at(game_get_npcs(game), i));
+  }
+
+  /*Saves players to the file*/
+  for(i=0; i<MAX_PLAYERS; i++){
+    player_save_to_file(Psave_file, game_get_player_at(game, i));
   }
   
   /*Saves objects to the file*/
@@ -337,7 +337,7 @@ Status game_reader_create_save_file(char *save_file, Game *game, char *original_
   /*Saves attacks to the file*/
   size = collection_length(game_get_attacks(game));
   for(i = 0; i < size; i++){
-    object_save_on_file(collection_get_element_at(game_get_objects(game), i), Psave_file);
+    attack_save_on_file(collection_get_element_at(game_get_attacks(game), i), Psave_file);
   }
 
   fclose(Psave_file);
