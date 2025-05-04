@@ -249,6 +249,16 @@ Collection *game_get_npcs(Game *game);
 Player *game_get_player_by_id(Game *game, Id id);
 
 /**
+ * @brief This function gets a space from a game by its position index
+ * @author Aaron Charameli Mair
+ * 
+ * @param game a pointer to game
+ * @param ix an int containing the position index
+ * @return Space* or NULL if ERROR
+ */
+Space *game_get_space_at(Game *game, int ix);
+
+/**
  * @brief it gets the status of god mode
  * @author Aaron Charameli Mair
  * 

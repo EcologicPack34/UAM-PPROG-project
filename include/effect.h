@@ -137,24 +137,14 @@ bool effect_has_affected(Effect *e, Entity *ent);
 Status effect_update(Effect*effect, Stats* ent_stats, int ent_count);
 
 /**
- * @brief This function writes in a text file the data of affected entities from an effect
+ * @brief This function saves an effect's data to a save file in a specific format
  * @author Aaron Charameli Mair
  * 
- * @param effect a pointer to the effect
- * @param filename the file name where the data will be written
- * @return Status 
- */
-Status effect_write_affected_save_data(Effect *effect, char *filename);
-
-/**
- * @brief This function gets an effect as a string
- * @author Aaron Charameli Mair
- * 
+ * @param file a pointer to the opened file
  * @param effect the effect to get in a string format
- * @param destiny a string where the effect will be stored
  * @return Status 
  */
-Status effect_get_as_str(Effect *effect, long destiny_size ,char *destiny);
+Status effect_save_to_file(FILE *file, Effect *effect);
 
 /**
  * @brief This function gets the type of effect an effect is

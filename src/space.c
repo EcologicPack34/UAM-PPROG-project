@@ -16,6 +16,7 @@
 
 #include "collection.h"
 #include "vector2.h"
+#include "utils.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -474,4 +475,23 @@ bool space_is_discovered(Space *space){
 
 int space_cmp(void *e1, void *e2){
   return ((Space *)e1)->id - ((Space *)e2)->id;
+}
+
+Status space_save_to_file(FILE *file, Space *s){
+  Id north,south,west,east,up,down;
+  if(!file || !s) return ERROR;
+
+  north = link_get_id(space_get_north(s));
+  south = link_get_id(space_get_south(s));
+  east = link_get_id(space_get_east(s));
+  west = link_get_id(space_get_west(s));
+  up = link_get_id(space_get_up(s));
+  down = link_get_id(space_get_down(s));
+  
+  /*#s:ID|gdescId|northLink|eastLink|southLink|westLink|upLink|downLink;isDiscovered*/
+  /*Nombre*/
+  fprintf(file, "#s:%ld|%ld|%ld|%ld|%ld|%ld|%ld|%ld;%d\n", space_get_id(s),\
+  gdesc_get_id(space_get_graphic_description(s)), north, east, south, west, up, down, space_get_isDiscovered(s));
+  fprintf(file, "%s\n",  space_get_name(s));
+  return OK;
 }

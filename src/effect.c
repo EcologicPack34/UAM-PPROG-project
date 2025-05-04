@@ -258,89 +258,27 @@ Status effect_update(Effect *effect, Stats *ent_stats, int ent_count){
     return OK;
 }
 
-Status effect_write_affected_save_data(Effect *effect, char *filename){
-    int i,n;
-    Affected *aux=NULL;
-    FILE *file=NULL;
-    char str[WORD_SIZE]="";
-    char aux_str[WORD_SIZE]="";
-    
-    if(!effect || !filename) return ERROR;
-    if((n = collection_length(effect->affecteds)) == -1) return ERROR;
-
+Status effect_save_to_file(FILE *file, Effect *effect){
     /*
-    format is as follows:
-    #efdat:n
+    #ef:Id|N|name|EffectType|EffectAffects|InfiniteTurns|DefaultNumberOfTurns|data
     Entity1Id|Entity1Type|turns
     Entity2Id|Entity2Type|turns
-    */
+    EntityNId|EntityNType|turns*/
 
-    if((file = fopen(filename,"a")) == NULL) return ERROR;
-    fprintf(file,"\n\n");
+    int i,N; /*n represents the number of affected entities by an effect*/
+    Affected *aux=NULL;
+    if(!effect || !file) return ERROR;
 
-    fprintf(file,"#efdat:%d\n", n);
-    for(i=0; i<n; i++){
+    if((N = collection_length(effect->affecteds)) == -1) return ERROR;
+
+    fprintf(file, "#ef:%ld|%d|%s|%d|%d|%d|%d|%s\n",effect->id, N, effect->name, effect->ET, effect->EA, effect->inf_turns\
+    ,effect->default_turns, effect->data);
+
+    for(i=0; i<N; i++){
         aux = collection_get_element_at(effect->affecteds,i);
-        
-        /*id print*/
-        sprintf(aux_str,"%d",(int)entity_get_id(aux->ent));
-        strcat(str, aux_str);
-        strcat(str, "|");
-        /*entity type print*/
-        sprintf(aux_str,"%d",(int)entity_get_entityType(aux->ent));
-        strcat(str, aux_str);
-        strcat(str, "|");
-        /*turns print*/
-        sprintf(aux_str,"%d",aux->turns);
-        strcat(str, aux_str);
-
-        /*add to file*/
-        fprintf(file,"%s\n",str);
-        strcpy(str,"\0");
+        fprintf(file,"%ld|%d|%d\n", entity_get_id(aux->ent), entity_get_entityType(aux->ent), aux->turns);
     }
 
-    if (ferror(file)) {
-        debug_log(LOG_ERROR, "Error in file at: effect_write_affected_save_data(Effect*, char*) in effect.c");
-        fclose(file);
-        return ERROR;
-      }
-
-    fclose(file);
-    return OK;
-}
-
-Status effect_get_as_str(Effect *effect, long destiny_size ,char *destiny){
-    /*#ef:Id|name|EffectType|inf_turns|default_turns|data*/
-    char str[WORD_SIZE]="";
-    char aux[WORD_SIZE]="";
-    if(!effect || !destiny) return ERROR;
-
-    /*add "#ef:"*/
-    sprintf(str,"#ef:");
-    /*add id*/
-    sprintf(aux,"%d|",(int)effect->id);
-    strcat(str,aux);
-    /*add name*/
-    strcat(str,effect->name);
-    strcat(str,"|");
-
-    /*add EffectType*/
-    sprintf(aux,"%d", (int)effect->ET);
-    strcat(str,aux);
-    strcat(str,"|");
-
-    /*add inf_turns*/
-    (effect->inf_turns==false)? strcat(str,"0|") : strcat(str,"1|");
-
-    /*add default_turns*/
-    sprintf(aux,"%d", (int)effect->default_turns);
-    strcat(str,aux);
-    strcat(str,"|");
-
-    strcat(str,effect->data);
-    if(destiny_size+1 < strlen(str)) return ERROR;
-
-    strcpy(destiny, str);
     return OK;
 }
 

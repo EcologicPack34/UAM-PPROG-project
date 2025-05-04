@@ -452,4 +452,14 @@ bool space_is_discovered(Space *space);
  */
 int space_cmp(void *e1, void *e2);
 
+/**
+ * @brief This function saves a space's information to a save file
+ * @author Aaron Charameli Mair
+ * 
+ * @param file a pointer to the opened file
+ * @param s a pointer to the space that will be saved
+ * @return Status 
+ */
+Status space_save_to_file(FILE *file, Space *s);
+
 #endif

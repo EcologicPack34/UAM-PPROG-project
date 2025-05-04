@@ -148,6 +148,6 @@ formato effects #ef:Id|name|EffectType|EffectAffects|InfiniteTurns(y/N)|DefaultN
 EffectType = {UNKNOWN_EFFECT = 0, REGENERATION = 1, POISON = 2, FIRE = 3}
 EffectAffects = {AFFECTS_PLAYER = (p/P), AFFECTS_ALLY = (a/A), AFFECTS_ENEMY = (e/E)}
 
-#ef:1|Poison|2|E|N|1|25
-#ef:2|Fire|3|E|N|1|1
+#ef:1|Poison|2|E|N|10|3
+#ef:2|Fire|3|E|N|10|1
 #ef:3|Regeneration|1|p|y|4|5

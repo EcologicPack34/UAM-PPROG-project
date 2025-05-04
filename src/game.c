@@ -103,21 +103,6 @@ Link *game_get_link_at(Game *game, long index){
 Status game_map_space_block(Game *game, Space *initSpace ,int block);
 
 /**
- * @brief This function gets a space in a game by its index
- * @author Aaron Charameli Mair
- * 
- * @param game a struct Game 
- * @param ix the index of the space
- * @return Space*
- */
-Space *game_get_space_at(Game *game, int ix){
-  if(!game || (ix<0)) return NULL;
-  if(ix >= game_get_n_spaces(game)) return NULL;
-
-  return game->spaces[ix];
-}
-
-/**
  * @brief Gets a random graphic description of type space
  * 
  * @param game 
@@ -1022,6 +1007,11 @@ Status game_add_ability(Game *game, Ability *ability){
   }
 
   return ERROR;
+}
+
+Space *game_get_space_at(Game *game, int ix){
+  if(!game || (ix<0) || (ix>game->n_spaces)) return NULL;
+  return game->spaces[ix];
 }
 
 Status game_dialogue_init(Game *game, NPC *npc){

@@ -164,6 +164,17 @@ Status game_reader_load_gdesc(Game *game, char *filename);
  */
 bool game_reader_generate_procedural();
 
+/**
+ * @brief This function creates a space from a saved file
+ * @author Aaron Charameli Mair
+ * 
+ * @param f a pointer to the opened file
+ * @param game a pointer to game
+ * @return Space* 
+ * @note a correct text format is required and this function does not add the Gdesc
+ */
+Space *game_reader_load_spaces_from_save_file(FILE *f, Game *game);
+
 /*
 * Public functions implementation
 */
@@ -263,6 +274,18 @@ Status game_reader_create_from_file(Game **game, char *filename){
 Status game_reader_create_from_save_file(Game **game, char *filename){
   if(game || !filename) return ERROR;
   return ERROR;
+  /*if(st == OK)
+    st = space_set_north(s, north);
+  if(st == OK)
+    st = space_set_east(s, east);
+  if(st == OK)
+    st = space_set_south(s, south);
+  if(st == OK)
+    st = space_set_west(s, west);
+  if(st == OK)
+    st = space_set_up(s, up);
+  if(st == OK)
+    st = space_set_down(s, down);*/
 }
 
 Status game_reader_create_save_file(char *save_file, Game *game, char *original_file){
@@ -274,7 +297,7 @@ Status game_reader_create_save_file(char *save_file, Game *game, char *original_
   int gdesc_hight=0;
   int i;
   Id aux_id;
-  int n_npcs, size;
+  int size=0; /*aux size variable for multiple uses*/
 
   if(!save_file || !game || !original_file) return ERROR;
 
@@ -317,9 +340,20 @@ Status game_reader_create_save_file(char *save_file, Game *game, char *original_
   }
   fclose(Poriginal);
 
+  /*Saves spaces to the file*/
+  size = game_get_n_spaces(game);
+  for(i=0; i<size; i++){
+    space_save_to_file(Psave_file, game_get_space_at(game, i));
+  }
+
+  /*Saves players to the file*/
+  for(i=0; i<MAX_PLAYERS; i++){
+    player_save_to_file(Psave_file, game_get_player_at(game, i));
+  }
+
   /*Saves npcs to the file*/
-  n_npcs = collection_length(game_get_npcs(game));
-  for(i=0; i<n_npcs; i++){
+  size = collection_length(game_get_npcs(game));
+  for(i=0; i<size; i++){
     npc_save_to_file(Psave_file, collection_get_element_at(game_get_npcs(game), i));
   }
 
@@ -338,6 +372,11 @@ Status game_reader_create_save_file(char *save_file, Game *game, char *original_
   size = collection_length(game_get_attacks(game));
   for(i = 0; i < size; i++){
     attack_save_on_file(collection_get_element_at(game_get_attacks(game), i), Psave_file);
+  }
+
+  size = collection_length(effect_manager_get_effects(game_get_effect_manager(game)));
+  for(i=0; i < size; i++){
+    effect_save_to_file(Psave_file, collection_get_element_at(effect_manager_get_effects(game_get_effect_manager(game)),i));
   }
 
   fclose(Psave_file);
@@ -1312,7 +1351,7 @@ Status game_reader_load_effects(Game *game, char *filename){
       }
       default_turns = atoi(toks);
 
-      toks = strtok(NULL, "|");
+      toks = strtok(NULL, "|\r\n");
       if(!toks){
         printf("toks is null");
         return ERROR;
@@ -1435,4 +1474,52 @@ Status game_reader_load_gdesc(Game *game, char *filename){
   }
   fclose(file);
   return OK;
+}
+
+Space *game_reader_load_spaces_from_save_file(FILE *f, Game *game){
+  Space *s=NULL;
+  Id id,gdesc,north,south,west,east,up,down;
+  Link *pnorth,*psouth=NULL,*pwest=NULL,*peast=NULL,*pup=NULL,*pdown=NULL;
+  char name[WORD_SIZE +1]="";
+  int isDiscovered;
+  Status st=OK;
+
+
+
+  fscanf(f, "#s:%ld|%ld|%ld|%ld|%ld|%ld|%ld|%ld;%d", &id, &gdesc, &north, &east, &south, &west, &up, &down, &isDiscovered);
+  
+  if(!f) return NULL;
+  fgets(name, WORD_SIZE+1, f);
+
+  s = space_create(id);
+  if(!s) return NULL;
+
+  pnorth = game_get_link_by_id(game, north);
+  peast = game_get_link_by_id(game, east);
+  psouth = game_get_link_by_id(game,south);
+  pwest = game_get_link_by_id(game,west);
+  pup = game_get_link_by_id(game, up);
+  pdown = game_get_link_by_id(game, down);
+
+
+  if(st == OK)
+    st = string_remove_newline_escape_sequence_on_end(name);
+  if(st == OK)
+    st = space_set_name(s, name);
+  if(st == OK)
+    st = space_set_north(s, pnorth);
+  if(st == OK)
+    st = space_set_east(s, peast);
+  if(st == OK)
+    st = space_set_south(s, psouth);
+  if(st == OK)
+    st = space_set_west(s, pwest);
+  if(st == OK)
+    st = space_set_up(s, pup);
+  if(st == OK)
+    st = space_set_down(s, pdown);
+  if(st == OK)
+    st = space_set_isDiscovered(s, (bool)isDiscovered);
+
+  return (st == OK)? s : NULL;
 }
