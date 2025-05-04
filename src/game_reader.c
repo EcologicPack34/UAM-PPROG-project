@@ -292,7 +292,7 @@ Status game_reader_create_save_file(char *save_file, Game *game, char *original_
      ,game_get_n_spaces(game), game_get_n_links(game), (int)game_get_god_mode(game),\
      (int)game_get_finished(game), (int)game_get_is_procedural(game), (int)game_get_state(game));
   
-  /*GDESC SAVE*/
+  /*GDESC SAVE & LINKS SAVE*/
   while(fgets(line, WORD_SIZE, Poriginal)){
     if(strncmp("#gd:", line, 4) == 0){
       strcpy(aux,line);
