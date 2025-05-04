@@ -374,16 +374,14 @@ Status game_reader_create_save_file(char *save_file, Game *game, char *original_
     attack_save_on_file(collection_get_element_at(game_get_attacks(game), i), Psave_file);
   }
 
-<<<<<<< Updated upstream
   size = collection_length(effect_manager_get_effects(game_get_effect_manager(game)));
   for(i=0; i < size; i++){
     effect_save_to_file(Psave_file, collection_get_element_at(effect_manager_get_effects(game_get_effect_manager(game)),i));
   }
-=======
+  
   event_manager_save_on_file(game_get_event_manager(game), Psave_file);
 
   ability_manager_save_on_file(game_get_ability_manager(game), Psave_file);
->>>>>>> Stashed changes
 
   fclose(Psave_file);
 
