@@ -33,9 +33,10 @@
  *
  * @param game struct that saves all information related to the game
  * @param filename string that stores the data file name
+ * @param fromSaveFile bool to indicate if the spaces are loading from a save file or a new file
  * @return OK if everything goes well or ERROR if there was some error
  */
-Status game_reader_load_spaces(Game *game, char *filename);
+Status game_reader_load_spaces(Game *game, char *filename, bool fromSaveFile);
 
 /**
  * @brief Reads the filename to load all links between spaces
@@ -164,17 +165,6 @@ Status game_reader_load_gdesc(Game *game, char *filename);
  */
 bool game_reader_generate_procedural();
 
-/**
- * @brief This function creates a space from a saved file
- * @author Aaron Charameli Mair
- * 
- * @param f a pointer to the opened file
- * @param game a pointer to game
- * @return Space* 
- * @note a correct text format is required and this function does not add the Gdesc
- */
-Space *game_reader_load_spaces_from_save_file(FILE *f, Game *game);
-
 /*
 * Public functions implementation
 */
@@ -218,7 +208,7 @@ Status game_reader_create_from_file(Game **game, char *filename){
       debug_log(LOG_ERROR, "Error loading links at: game_reader_create_from_file(Game*, char*) in game_reader.c");
       return ERROR;
     }
-    if (game_reader_load_spaces(*game, filename) == ERROR){
+    if (game_reader_load_spaces(*game, filename, false) == ERROR){
       debug_log(LOG_ERROR, "Error loading spaces at: game_reader_create_from_file(Game*, char*) in game_reader.c");
       return ERROR;
     }
@@ -272,20 +262,46 @@ Status game_reader_create_from_file(Game **game, char *filename){
 }
 
 Status game_reader_create_from_save_file(Game **game, char *filename){
-  if(game || !filename) return ERROR;
-  return ERROR;
-  /*if(st == OK)
-    st = space_set_north(s, north);
-  if(st == OK)
-    st = space_set_east(s, east);
-  if(st == OK)
-    st = space_set_south(s, south);
-  if(st == OK)
-    st = space_set_west(s, west);
-  if(st == OK)
-    st = space_set_up(s, up);
-  if(st == OK)
-    st = space_set_down(s, down);*/
+  if(!game || !filename) return ERROR;
+
+  if (game_create(game) == ERROR){
+    debug_log(LOG_ERROR, "Error creating game at: game_reader_create_from_file(Game*, char*) in game_reader.c");
+    printf("%c[2J", 27);
+    printf("Fatal error. Check the log for details\n");
+    debug_force_global_fclose();
+    abort();
+  }
+  /*Loads settings*/
+  
+  if(game_reader_load_commandInfo(*game) == ERROR){
+    printf("%c[2J", 27);
+    printf("Fatal error. Check the log for details\n");
+    debug_force_global_fclose();
+    abort();
+  }
+  if(game_reader_load_commandStateTypes(*game) == ERROR){
+    printf("%c[2J", 27);
+    printf("Fatal error. Check the log for details\n");
+    debug_force_global_fclose();
+    abort();
+  }  
+  
+  if(game_reader_load_gdesc(*game, filename) == ERROR){
+    debug_log(LOG_ERROR, "Error loading graphic descriptions at: game_reader_create_from_file(Game*, char*) in game_reader.c");
+    return ERROR;
+  }
+
+  if(game_reader_load_links(*game, filename) == ERROR){
+      debug_log(LOG_ERROR, "Error loading links at: game_reader_create_from_file(Game*, char*) in game_reader.c");
+      return ERROR;
+    }
+
+  if(game_reader_load_spaces(*game, filename, true) == ERROR){
+      debug_log(LOG_ERROR, "Error loading links at: game_reader_create_from_file(Game*, char*) in game_reader.c");
+      return ERROR;
+    }
+
+  
 }
 
 Status game_reader_create_save_file(char *save_file, Game *game, char *original_file){
@@ -315,7 +331,8 @@ Status game_reader_create_save_file(char *save_file, Game *game, char *original_
      ,game_get_n_spaces(game), game_get_n_links(game), (int)game_get_god_mode(game),\
      (int)game_get_finished(game), (int)game_get_is_procedural(game), (int)game_get_state(game));
   
-  /*GDESC SAVE & LINKS SAVE*/
+  /*GDESC SAVE (gathered from the original file, as they aren't modified)*/
+  fprintf(Psave_file, "\n\n");
   while(fgets(line, WORD_SIZE, Poriginal)){
     if(strncmp("#gd:", line, 4) == 0){
       strcpy(aux,line);
@@ -323,39 +340,40 @@ Status game_reader_create_save_file(char *save_file, Game *game, char *original_
       toks = strtok(NULL, "|");
       gdesc_hight = atoi(toks);
       fprintf(Psave_file, "%s", line);
-
+      
       for(i=0; i<gdesc_hight; i++){
         fgets(line, WORD_SIZE, Poriginal);
         fprintf(Psave_file, "%s", line);
       }
       fprintf(Psave_file, "----------\n");
     }
-    if(strncmp("#l:", line, 3) == 0){
-      toks = strtok(line+3, "|");
-      aux_id = atoi(toks);
-      link_save_to_str(game_get_link_by_id(game, aux_id), aux);
-      fprintf(Psave_file, "%s\n", aux);
-    }
 
-  }
-  fclose(Poriginal);
+      
+    }
+    fprintf(Psave_file, "\n\n");
+    fclose(Poriginal);
+
+
+  /*Saves links to the file*/
+  size = game_get_n_links(game);
+  for(i=0; i<size; i++){
+      link_save_to_file(Psave_file, game_get_link_at(game, i));
+    }
+  fprintf(Psave_file, "\n\n");
 
   /*Saves spaces to the file*/
   size = game_get_n_spaces(game);
   for(i=0; i<size; i++){
     space_save_to_file(Psave_file, game_get_space_at(game, i));
   }
-
-  /*Saves players to the file*/
-  for(i=0; i<MAX_PLAYERS; i++){
-    player_save_to_file(Psave_file, game_get_player_at(game, i));
-  }
+  fprintf(Psave_file, "\n\n");
 
   /*Saves npcs to the file*/
   size = collection_length(game_get_npcs(game));
   for(i=0; i<size; i++){
     npc_save_to_file(Psave_file, collection_get_element_at(game_get_npcs(game), i));
   }
+  fprintf(Psave_file, "\n\n");
 
   /*Saves players to the file*/
   for(i=0; i<MAX_PLAYERS; i++){
@@ -364,12 +382,16 @@ Status game_reader_create_save_file(char *save_file, Game *game, char *original_
   
   /*Saves objects to the file*/
   size = collection_length(game_get_objects(game));
+  fprintf(Psave_file, "\n\n");
+  fprintf(Psave_file, "#obj:%d\n", size);
   for(i = 0; i < size; i++){
     object_save_on_file(collection_get_element_at(game_get_objects(game), i), Psave_file);
   }
 
   /*Saves attacks to the file*/
   size = collection_length(game_get_attacks(game));
+  fprintf(Psave_file, "\n\n");
+  fprintf(Psave_file, "#at:%d\n", size);
   for(i = 0; i < size; i++){
     attack_save_on_file(collection_get_element_at(game_get_attacks(game), i), Psave_file);
   }
@@ -455,7 +477,7 @@ Status game_reader_load_links(Game *game, char *filename){
 }
 
 
-Status game_reader_load_spaces(Game *game, char *filename) {
+Status game_reader_load_spaces(Game *game, char *filename, bool fromSaveFile) {
   FILE *file = NULL;
 
   char line[WORD_SIZE] = "";
@@ -464,6 +486,7 @@ Status game_reader_load_spaces(Game *game, char *filename) {
   char name[WORD_SIZE] = "";
   Id id = NO_ID, north = NO_ID, east = NO_ID, south = NO_ID, west = NO_ID, up = NO_ID, down = NO_ID;
   Id gdesc = NO_ID;
+  bool isDiscovered=false;
   
   Space *space = NULL;
   Status status = OK;
@@ -511,6 +534,11 @@ Status game_reader_load_spaces(Game *game, char *filename) {
       toks = strtok(NULL, "|");
       down = atol(toks);
 
+      if(fromSaveFile){
+        toks = strtok(NULL, ";");
+        isDiscovered = (bool) atoi(toks);
+      }
+
       debug_log(PRINT,"Read Space: #s:%ld|%s|%ld|%ld|%ld|%ld|gdesc", id, name, north, east, south, west);
 
       /*Creates a space with space_create, and sets the ID on that space
@@ -529,6 +557,7 @@ Status game_reader_load_spaces(Game *game, char *filename) {
       space_set_up(space, game_get_link_by_id(game, up));
       space_set_down(space, game_get_link_by_id(game, down));
       space_set_graphic_description(space, game_get_gdesc_by_id(game, gdesc));
+      space_set_isDiscovered(space, isDiscovered);
 
       game_add_space(game, space);
     }
@@ -1484,52 +1513,4 @@ Status game_reader_load_gdesc(Game *game, char *filename){
   }
   fclose(file);
   return OK;
-}
-
-Space *game_reader_load_spaces_from_save_file(FILE *f, Game *game){
-  Space *s=NULL;
-  Id id,gdesc,north,south,west,east,up,down;
-  Link *pnorth,*psouth=NULL,*pwest=NULL,*peast=NULL,*pup=NULL,*pdown=NULL;
-  char name[WORD_SIZE +1]="";
-  int isDiscovered;
-  Status st=OK;
-
-
-
-  fscanf(f, "#s:%ld|%ld|%ld|%ld|%ld|%ld|%ld|%ld;%d", &id, &gdesc, &north, &east, &south, &west, &up, &down, &isDiscovered);
-  
-  if(!f) return NULL;
-  fgets(name, WORD_SIZE+1, f);
-
-  s = space_create(id);
-  if(!s) return NULL;
-
-  pnorth = game_get_link_by_id(game, north);
-  peast = game_get_link_by_id(game, east);
-  psouth = game_get_link_by_id(game,south);
-  pwest = game_get_link_by_id(game,west);
-  pup = game_get_link_by_id(game, up);
-  pdown = game_get_link_by_id(game, down);
-
-
-  if(st == OK)
-    st = string_remove_newline_escape_sequence_on_end(name);
-  if(st == OK)
-    st = space_set_name(s, name);
-  if(st == OK)
-    st = space_set_north(s, pnorth);
-  if(st == OK)
-    st = space_set_east(s, peast);
-  if(st == OK)
-    st = space_set_south(s, psouth);
-  if(st == OK)
-    st = space_set_west(s, pwest);
-  if(st == OK)
-    st = space_set_up(s, pup);
-  if(st == OK)
-    st = space_set_down(s, pdown);
-  if(st == OK)
-    st = space_set_isDiscovered(s, (bool)isDiscovered);
-
-  return (st == OK)? s : NULL;
 }

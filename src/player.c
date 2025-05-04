@@ -315,7 +315,8 @@ Status player_save_to_file(FILE *file, Player *p){
         sprintf(id_aux, ";%ld-%d", entity_get_id(allys[i]), entity_get_entityType(allys[i]));
         strcat(aux, id_aux);
     }
-    strcat(aux, "\n");
+
+    fprintf(file, "%s\n", aux);
 
     command_info_save_on_file(p->cmdData, file);
 

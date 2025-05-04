@@ -249,6 +249,16 @@ Collection *game_get_npcs(Game *game);
 Player *game_get_player_by_id(Game *game, Id id);
 
 /**
+ * @brief Gets the link in a certain position of the game links array
+ * @author Daniel Gómez
+ * 
+ * @param game game struct
+ * @param index index where the link is located
+ * @return Link* or NULL if error
+ */
+Link *game_get_link_at(Game *game, long index);
+
+/**
  * @brief This function gets a space from a game by its position index
  * @author Aaron Charameli Mair
  * 

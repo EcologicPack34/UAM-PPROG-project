@@ -74,22 +74,7 @@ struct _Game {
 
 /*-----PRIVATE FUNCTIONS-----*/
 
-/**
- * @brief Gets the link in a certain position of the game links array
- * @author Daniel Gómez
- * 
- * @param game game struct
- * @param index index where the link is located
- * @return Link* or NULL if error
- */
-Link *game_get_link_at(Game *game, long index){
-  if(!game) return NULL;
 
-  if(index < 0 || index >= game_get_n_links(game))
-    return NULL;
-
-  return game->links[index];
-}
 
 /**
  * @brief Maps spatially a block of spaces starting at initSpace
@@ -309,6 +294,15 @@ Link *game_get_link_by_id(Game *game, Id id){
   }
 
   return NULL;
+}
+
+Link *game_get_link_at(Game *game, long index){
+  if(!game) return NULL;
+
+  if(index < 0 || index >= game_get_n_links(game))
+    return NULL;
+
+  return game->links[index];
 }
 
 Space *game_get_space(Game *game, Id id) {
@@ -1010,7 +1004,7 @@ Status game_add_ability(Game *game, Ability *ability){
 }
 
 Space *game_get_space_at(Game *game, int ix){
-  if(!game || (ix<0) || (ix>game->n_spaces)) return NULL;
+  if(!game || (ix<0) || (ix>=game->n_spaces)) return NULL;
   return game->spaces[ix];
 }
 

@@ -488,10 +488,9 @@ Status space_save_to_file(FILE *file, Space *s){
   up = link_get_id(space_get_up(s));
   down = link_get_id(space_get_down(s));
   
-  /*#s:ID|gdescId|northLink|eastLink|southLink|westLink|upLink|downLink;isDiscovered*/
+  /*#s:ID|Name|gdescId|northLink|eastLink|southLink|westLink|upLink|downLink;isDiscovered*/
   /*Nombre*/
-  fprintf(file, "#s:%ld|%ld|%ld|%ld|%ld|%ld|%ld|%ld;%d\n", space_get_id(s),\
+  fprintf(file, "#s:%ld|%s|%ld|%ld|%ld|%ld|%ld|%ld|%ld;%d\n", space_get_id(s), space_get_name(s),\
   gdesc_get_id(space_get_graphic_description(s)), north, east, south, west, up, down, space_get_isDiscovered(s));
-  fprintf(file, "%s\n",  space_get_name(s));
   return OK;
 }
