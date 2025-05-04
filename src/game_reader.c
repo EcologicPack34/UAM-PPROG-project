@@ -371,6 +371,56 @@ Status game_reader_load_from_save_file(Game **game, char *save_file){
     
 }
 
+Status game_reader_load_from_save_file(Game **game, char *save_file){
+  int active_player_index, n_player, is_turn_valid, n_spaces, n_links, godmode, current_state, finished, procedural;
+  FILE *fIN = NULL;
+  int i, size;
+
+  if(!save_file) abort();
+
+  if (game_create(game) == ERROR){
+    debug_log(LOG_ERROR, "Error creating game at: game_reader_load_from_save_file in game_reader.c");
+    printf("%c[2J", 27);
+    printf("Fatal error. Check the log for details\n");
+    debug_force_global_fclose();
+    abort();
+  }
+
+  fIN = fopen(save_file, "r");
+  if(!fIN){
+    debug_log(LOG_ERROR, "Error opening save file at: game_reader_load_from_save_file in game_reader.c");
+    printf("%c[2J", 27);
+    printf("Fatal error. Check the log for details\n");
+    debug_force_global_fclose();
+    abort();
+  }
+
+  fscanf(fIN, "%d;%d;%d;%d;%ld;%d;%d;%d;%d\n", &active_player_index, &n_player,\
+     &is_turn_valid, &n_spaces, &n_links, &godmode, &finished, &procedural, &current_state);
+  
+  game_set_basic_info(*game, active_player_index, n_player, is_turn_valid,\
+    godmode, finished, procedural, current_state);
+
+  fscanf(fIN, "%d\n", &size);
+  for(i = 0; i < size; i++){
+    game_add_gdesc(*game, gdesc_create_from_file(fIN));
+  }
+  
+  for(i = 0; i < n_links; i++){
+    game_add_link(*game, link_create_from_file(fIN));
+  }
+
+  for(i = 0; i < n_spaces; i++){
+    game_add_space(*game, space_create_from_file(fIN, game_get_gdescs(*game), game_get_links(game), n_links));
+  }
+
+  fscanf(fIN, "%d\n", &size);
+  for(i = 0; i < size; i++){
+    /*game_add_npc(game, aa) FINISHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH*/
+  }
+    
+}
+
 Status game_reader_create_save_file(char *save_file, Game *game, char *original_file){
   FILE *Poriginal=NULL;
   FILE *Psave_file=NULL;
