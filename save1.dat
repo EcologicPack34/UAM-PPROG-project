@@ -1,3 +1,4 @@
+0;2;1;10;11;1;0;0;1
 #gd:1|5|9|1
 esto
 es
@@ -22,7 +23,7 @@ a
 #l:1|11|121|1|0
 #l:2|121|122|1|0
 #l:3|122|123|1|0
-#l:4|123|124|1|1
+#l:4|123|124|1|0
 #l:5|124|13|1|0
 #l:6|122|125|1|0
 #l:7|125|126|1|0
@@ -30,27 +31,103 @@ a
 #l:9|127|14|1|0
 #l:10|14|13|0|0
 #l:11|11|14|0|0
-#p:1|Hero1|11|mO^;0;1;1
-#st:1|1|100|100|25|1|1|1
-#p:2|Hero2|14|m1^;0;1;1
-#st:2|1|1|1|1|1|1|1
-#p:3|Hero3|13|m2^;0;1;1
-#st:3|1|100|100|25|1|1|1
-#p:4|Hero4|121|m3^;0;1;1
-#st:4|1|100|100|25|1|1|1
-#n:1|1|NPC1|121|1|1|^0m;-1
+#p:1|Hero1|11|mO^;140;164;100;1;1;0
+#st:1|1|999999|999949|999999|999999|999999|999999
+#p:2|Hero2|14|m1^;100;0;100;1;0;0
+#st:2|1|100|100|25|1|1|1
+#n:1|1|NPC1|121|1|1|^0m
 #st:1|2|100|100|10|2|2|2
-#n:2|1|NPC2|122|1|1|^1m;-1
+#n:2|1|NPC2|121|1|1|^1m
 #st:2|2|100|100|10|2|2|2
-#n:3|1|NPC3|121|1|1|^2m;-1
+#n:3|1|NPC3|121|1|1|^2m
 #st:3|2|100|100|10|2|2|2
-#n:4|0|Enemy1|122|0|3|^3m;-1
-#st:4|2|100|100|10|2|2|2
-#n:5|0|Enemy2|11|0|3|^4m;-1
-#st:5|2|100|100|10|2|2|2
-#n:6|0|Enemy3|11|0|3|^5m;-1
-#st:6|2|100|100|10|2|2|2
-#n:7|0|Enemy4|11|0|3|^6m;-1
-#st:7|2|100|100|10|2|2|2
-#n:8|0|Spider-(not)-man|123|0|3|/o\;-1
+#n:4|0|Enemy1|11|0|3|^3m
+#st:4|2|100|0|10|2|2|2
+#n:5|0|Enemy2|11|0|3|^4m
+#st:5|2|100|-1147898|10|2|2|2
+#n:6|0|Enemy3|11|0|3|^5m
+#st:6|2|100|-1147898|10|2|2|2
+#n:7|0|Enemy4|11|0|3|^6m
+#st:7|2|100|-1147898|10|2|2|2
+#n:8|0|Spider-(not)-man|123|0|3|/o\
 #st:8|2|100|100|10|2|2|2
+1;11;3;10;1;0;0;100
+Grain1
+NONE
+Needs Pickaxe to be picked
+2;121;3;-1;0;0;0;100
+Grain2
+NONE
+Grano2, cannot be moved
+3;11;3;-1;1;0;0;100
+Grain3
+NONE
+Grano3
+4;122;3;-1;1;0;0;100
+Grain4
+NONE
+Grano4
+5;2;2;-1;1;1;0;5
+HP1
+NONE
+Health Potion that heals 20 HP
+6;121;3;-1;1;1;0;200
+IHP
+NONE
+Infinite Health Potion that heals 20 HP and isn't consumed
+7;11;3;-1;1;1;0;100
+MoneyBag
+NONE
+Bag with 20 coins
+8;11;3;1;1;1;0;100
+Key
+NONE
+Needs Grain1 to be picked, Unlocks link between spaces 123 and 124
+9;11;3;-1;1;0;0;100
+Pickaxe
+NONE
+Needed to pick Grain1
+10;2;2;-1;1;1;0;5
+HP2
+NONE
+Health Potion that heals 20 HP
+11;2;2;-1;1;1;0;5
+HP3
+NONE
+Health Potion that heals 20 HP
+12;2;2;-1;1;1;0;5
+HP4
+NONE
+Health Potion that heals 20 HP
+13;2;2;-1;1;1;0;5
+HP5
+NONE
+Health Potion that heals 20 HP
+14;2;2;-1;1;1;0;5
+HP6
+NONE
+Health Potion that heals 20 HP
+15;1;2;-1;1;1;0;1
+HTEST
+wearable helmet base_damage:1 strength:1 max_health:20
+Helmet TEST
+16;1;2;-1;1;1;0;2
+CHESTTEST
+wearable chest base_damage:1 strength:1 max_health:20
+Chest TEST
+17;1;2;-1;1;1;0;3
+ARMSTEST
+wearable arms base_damage:1 strength:1 max_health:20
+Arms TEST
+18;1;2;-1;1;1;0;4
+LEGSTEST
+wearable leg_armor base_damage:1 strength:1 max_health:20
+Legs TEST
+19;1;2;-1;1;1;0;5
+SHOESTEST
+wearable shoes base_damage:1 strength:1 max_health:20
+Shoes TEST
+20;1;2;-1;1;1;0;6
+TWOHANDTEST
+wearable two_handed base_damage:1 strength:1 max_health:20
+Two Handed TEST

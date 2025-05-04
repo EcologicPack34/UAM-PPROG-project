@@ -287,7 +287,7 @@ Status game_reader_create_save_file(char *save_file, Game *game, char *original_
   }
 
   /*ActivePlayerIndex;NumOfPlayers;Is_Turn_Valid;N_spaces;N_links;godmode;finished;procedural;GameState*/
-  fprintf(Psave_file, "%d;%d;%d;%d;%d;%d;%d;%d;%d\n", \
+  fprintf(Psave_file, "%d;%d;%d;%d;%ld;%d;%d;%d;%d\n", \
     game_get_active_player_index(game), game_get_n_players(game), (int)game_get_is_turn_valid(game)\
      ,game_get_n_spaces(game), game_get_n_links(game), (int)game_get_god_mode(game),\
      (int)game_get_finished(game), (int)game_get_is_procedural(game), (int)game_get_state(game));

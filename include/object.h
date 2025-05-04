@@ -23,6 +23,7 @@
 #include "ability_manager.h"
 
 #include <stdbool.h>
+#include <stdio.h>
 
 #define NO_DEPENDENCY -1         /*!< Determines the no depency id for an object*/
 

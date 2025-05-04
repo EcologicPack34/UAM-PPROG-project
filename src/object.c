@@ -292,11 +292,11 @@ int object_save_on_file(Object *object, FILE *fOUT){
 
     if(!object || !fOUT) return -1;
 
-    /*objectid;locationid;inventorytype;dependencyid;is_movable;is_consumable;is_equipped*/
-    count += fprintf(fOUT, "%ld;%ld;%d;%ld;%d;%d;%d\n", \
+    /*objectid;locationid;inventorytype;dependencyid;is_movable;is_consumable;is_equipped;cost*/
+    count += fprintf(fOUT, "%ld;%ld;%d;%ld;%d;%d;%d;%d\n", \
     object_get_id(object), object_get_location(object), object_get_type(object), \
     object_get_dependency(object), object_get_is_movable(object), object_get_is_consumable(object),\
-    object_get_is_equipped(object));
+    object_get_is_equipped(object), object_get_cost(object));
 
     /*name;data;descr*/
     count += fprintf(fOUT, "%s\n%s\n%s\n", object_get_name(object), object_get_data(object), object_get_descr(object));
@@ -307,21 +307,21 @@ int object_save_on_file(Object *object, FILE *fOUT){
 Object *object_create_from_file(FILE *fIN){
     Object *obj = NULL;
     Id id, location, dependency;
-    int type, is_movable, is_consumable, is_equipped;
+    int type, is_movable, is_consumable, is_equipped, cost;
     char name[WORD_SIZE] = "", descr[WORD_SIZE] = "", data[OBJECT_MAX_DATA_SIZE] = "";
 
     if(!fIN) return NULL;
 
-    fscanf(fIN, "%ld;%ld;%d;%ld;%d;%d;%d\n", &id, &location, &type, &dependency, &is_movable, &is_consumable, &is_equipped);
+    fscanf(fIN, "%ld;%ld;%d;%ld;%d;%d;%d;%d\n", &id, &location, &type, &dependency, &is_movable, &is_consumable, &is_equipped, &cost);
     fgets(name,WORD_SIZE,fIN);
     string_remove_newline_escape_sequence_on_end(name);
-    fgets(data,WORD_SIZE,fIN);
+    fgets(data,OBJECT_MAX_DATA_SIZE,fIN);
     string_remove_newline_escape_sequence_on_end(data);
     fgets(descr,WORD_SIZE,fIN);
     string_remove_newline_escape_sequence_on_end(descr);
 
 
-    obj = object_create(id, name, data, descr, dependency, (bool)is_movable, (bool)is_consumable, location, type);
+    obj = object_create(id, name, data, descr, cost, dependency, (bool)is_movable, (bool)is_consumable, location, type);
     if(!obj) return NULL;
 
     object_set_is_equipped(obj, (bool)is_equipped);

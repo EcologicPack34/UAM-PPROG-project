@@ -191,11 +191,11 @@ Status npc_save_to_file(FILE *file, NPC *p){
     Gdesc = entity_get_graphic_description(p->entity);
 
     /*
-   #n:ID|Dialogue State - 1 means initial - 0 means no dialogue|Nombre|LocationID|is_follower|Status|Gdesc;player_following_id
+   #n:ID|Dialogue State - 1 means initial - 0 means no dialogue|Nombre|LocationID|is_follower|Status|Gdesc
     #n:1|1|NPC1|11|1|1|^0m"
     */
     
-    sprintf(aux, "#n:%ld|%d|%s|%ld|%d|%d|%s;%ld\n",id,p->dialogue_state,name,location,p->can_follow,p->status,Gdesc,p->player_following_id);
+    sprintf(aux, "#n:%ld|%d|%s|%ld|%d|%d|%s\n",id,p->dialogue_state,name,location,p->can_follow,p->status,Gdesc);
     fprintf(file, "%s", aux);
 
     mH=entity_get_max_health(p->entity);
