@@ -10,6 +10,8 @@
 
 #include "graphic_engine.h"
 
+#include "ansi_colors.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -25,11 +27,13 @@
 
 #define MAP_WIDTH 53                  /*!< Width of the map part*/
 #define MAP_HEIGHT 29                 /*!< Height of the map part*/
-#define DESCRIPT_WIDTH 67            /*!< Width of the description part*/
+#define DESCRIPT_WIDTH 50            /*!< Width of the description part*/
+#define DESCRIPT_WIDTH2 50            /*!< Width of the description part*/
 #define HELP_BANNER_HEIGHT 1          /*!< Height of the help banner part*/
 #define HELP_BANNER_WIDTH 23          /*!< Width of the help banner part*/
 #define HELP_HEIGHT 4                 /*!< Height of the help banner*/
 #define CMD_HISTORY_HEIGHT 3          /*!< Height of the command history*/
+#define MESSAGES_HEIGHT 4             /*!< Height of the are for displaying messages*/
 
 #define SPACE_HEIGHT 9                /*!< Height of a space*/
 #define SPACE_WIDTH 17                /*!< Width of a space*/
@@ -47,9 +51,11 @@
 struct _Graphic_engine {
   Area *map;        /*!< Area with the spaces and general info*/
   Area *descript;   /*!< Area with descriptions*/
+  Area *descript2;  /*!< Area with descriptions*/
   Area *banner;     /*!< Banner of the game*/
   Area *help;       /*!< Help descriptions*/
   Area *feedback;   /*!< Feedback of the graphic engine*/
+  Area *messages;   /*!< Area which displays game messages*/
 };
 
 /**
@@ -138,6 +144,15 @@ void graphic_engine_paint_store(Graphic_engine *ge, Game *game);
 void graphic_engine_paint_generalDesc(Graphic_engine *ge, Game *game);
 
 /**
+ * @brief Paints a general description of the game in description area
+ * @author Daniel Gómez
+ * 
+ * @param ge graphic engine struct
+ * @param game game struct
+ */
+void graphic_engine_paint_playerDesc(Graphic_engine *ge, Game *game);
+
+/**
  * @brief Paints info related to commands in the command area
  * @author Daniel Gómez
  * 
@@ -153,7 +168,7 @@ Graphic_engine *graphic_engine_create() {
     return ge;
   }
   /*Initializes screen and graphics engine*/
-  screen_init(MAP_HEIGHT + HELP_BANNER_HEIGHT + HELP_HEIGHT + CMD_HISTORY_HEIGHT + 4, MAP_WIDTH + DESCRIPT_WIDTH + 3);
+  screen_init(MAP_HEIGHT + HELP_BANNER_HEIGHT + HELP_HEIGHT + CMD_HISTORY_HEIGHT + MESSAGES_HEIGHT + 5, MAP_WIDTH + DESCRIPT_WIDTH + DESCRIPT_WIDTH2 + 4);
   
   
   ge = (Graphic_engine *)malloc(sizeof(Graphic_engine));
@@ -162,10 +177,14 @@ Graphic_engine *graphic_engine_create() {
   }
   /*Initializes each area of the display*/
   ge->map = screen_area_init(1,1, MAP_WIDTH, MAP_HEIGHT);
+
   ge->descript = screen_area_init(1 + MAP_WIDTH + 1, 1, DESCRIPT_WIDTH, MAP_HEIGHT);
+  ge->descript2 = screen_area_init(1 + MAP_WIDTH + 1 + DESCRIPT_WIDTH + 1, 1, DESCRIPT_WIDTH2, MAP_HEIGHT + HELP_BANNER_HEIGHT + HELP_HEIGHT + CMD_HISTORY_HEIGHT + MESSAGES_HEIGHT + 3);
+
   ge->banner = screen_area_init((int)((MAP_WIDTH + DESCRIPT_WIDTH + 1 - HELP_BANNER_WIDTH)/2) , MAP_HEIGHT + 2 , HELP_BANNER_WIDTH, HELP_BANNER_HEIGHT);
-  ge->help = screen_area_init(1, MAP_HEIGHT + 1 + 1  + HELP_BANNER_HEIGHT, MAP_WIDTH + DESCRIPT_WIDTH + 1, HELP_HEIGHT);
-  ge->feedback = screen_area_init(1, MAP_HEIGHT + 1 + 1+ HELP_BANNER_HEIGHT + 1 + HELP_HEIGHT, MAP_WIDTH + DESCRIPT_WIDTH + 1, CMD_HISTORY_HEIGHT);
+  ge->messages = screen_area_init(1, MAP_HEIGHT + 3, MAP_WIDTH + DESCRIPT_WIDTH + 1, MESSAGES_HEIGHT);
+  ge->help = screen_area_init(1, MAP_HEIGHT + MESSAGES_HEIGHT + 3 + HELP_BANNER_HEIGHT, MAP_WIDTH + DESCRIPT_WIDTH + 1, HELP_HEIGHT);
+  ge->feedback = screen_area_init(1, MAP_HEIGHT + 1 + MESSAGES_HEIGHT + 1 + HELP_BANNER_HEIGHT + 1 + HELP_HEIGHT + 1, MAP_WIDTH + DESCRIPT_WIDTH + 1, CMD_HISTORY_HEIGHT);
 
   return ge;
 }
@@ -178,6 +197,8 @@ void graphic_engine_destroy(Graphic_engine *ge) {
   screen_area_destroy(ge->banner);
   screen_area_destroy(ge->help);
   screen_area_destroy(ge->feedback);
+  screen_area_destroy(ge->descript2);
+  screen_area_destroy(ge->messages);
 
   screen_destroy();
   free(ge);
@@ -195,6 +216,7 @@ void graphic_engine_paint_game(Graphic_engine *ge, Game *game){
   if(gameState == DEFAULT){
     graphic_engine_paint_map(ge, game);
     graphic_engine_paint_generalDesc(ge, game);
+    graphic_engine_paint_playerDesc(ge, game);
   }
   else if(gameState == COMBAT){
     graphic_engine_paint_combat(ge, game);
@@ -326,6 +348,74 @@ void graphic_engine_paint_map(Graphic_engine *ge, Game *game){
   for(i = 0; i < SPACE_HEIGHT; i++){
     graphic_engine_newline_print(ge->map, map[i]);
   }
+
+}
+
+void graphic_engine_paint_playerDesc(Graphic_engine *ge, Game *game){
+  Inventory *playerInventory = NULL;
+  int inventorysize, size;
+  Entity *entityplayer = NULL;
+  Player *player = NULL;
+  Leveling *leveling = NULL;
+
+  int i;
+
+  char tab[5] = "    ";
+  char str[WORD_SIZE] = "";
+  char strAux[WORD_SIZE] = "";
+
+  int ability_count = 0;
+
+  screen_area_clear(ge->descript2);
+
+  playerInventory = entity_get_inventory(player_get_entity(game_get_player(game)));
+  inventorysize = inventory_get_size(playerInventory);
+
+  player = game_get_player(game);
+  entityplayer = player_get_entity(player);
+  leveling = player_get_leveling(player);
+
+  screen_area_puts(ge->descript2, "Player: ");
+
+  strcpy(str, tab);
+  strcat(str, entity_get_graphic_description(entityplayer));
+  strcat(str, " | Name: ");
+  strcat(str, entity_get_name(entityplayer));
+
+  strcat(str, " | Loc: ");
+  sprintf(strAux, "%ld", entity_get_location(entityplayer));
+  strcat(str, strAux);
+
+  strcat(str, " | Money: ");
+  sprintf(strAux, "%d", player_get_money(player));
+  strcat(str, strAux);
+
+  screen_area_puts(ge->descript2, str);//Gdes, name, location, money
+
+  strcpy(str, tab);
+  strcat(str, "Health: ");
+
+  if(entity_get_health(entityplayer) <= 50){
+    strcat(str, "[YELLOW]");
+  }
+  else if(entity_get_health(entityplayer) <= 10){
+    strcat(str, "[RED]");
+  }else{
+    strcat(str, "[GREEN]");
+  }
+
+  sprintf(strAux, "%.2lf [BLACK]/ %.2lf", entity_get_health(entityplayer), entity_get_max_health(entityplayer));
+  strcat(str, strAux);
+
+  screen_area_puts(ge->descript2, str);// health
+
+  strcpy(str, tab);
+  strcat(str, "Level: ");
+  sprintf(strAux, "%d | Skill Points: %d | XP: %d / %d", leveling_get_level(leveling), leveling_get_skill_points(leveling) ,leveling_get_XP(leveling), leveling_get_next_XP(leveling));
+  strcat(str, strAux);
+
+  screen_area_puts(ge->descript2, str);// level, skill points, xp
+
 
 }
 

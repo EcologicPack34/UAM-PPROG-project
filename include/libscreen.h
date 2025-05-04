@@ -19,7 +19,7 @@ typedef struct _Area Area;
 /**
  * @brief Colors enum for the frame
  */
-typedef enum {BLUE, GREEN, BLACK, RED, YELLOW, PURPLE, CYAN, WHITE} Frame_color;
+typedef enum {BLACK = 0, RED, GREEN, YELLOW, BLUE, PURPLE, CYAN, WHITE, NO_TAG} Frame_color;
 
 
 
