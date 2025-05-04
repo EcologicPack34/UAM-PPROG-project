@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "utils.h"
 
 struct _GDesc{
     Id id;
@@ -82,4 +83,63 @@ int gdesc_cmp(void *e1, void *e2){
     res = ((GDesc*)e1)->id - ((GDesc*)e2)->id;
 
     return res; 
+}
+
+int gdesc_save_on_file(GDesc *gdesc, FILE *fOUT){
+    int count = 0, i;
+
+    if(!gdesc ||!fOUT) return -1;
+
+    count += fprintf(fOUT, "%ld|%d|%d|%d\n", gdesc->id, gdesc->height, gdesc->width, gdesc->type);
+    for(i = 0; i < gdesc->height; i++){
+        string_remove_newline_escape_sequence_on_end(gdesc->description[i]);
+        count += fprintf(fOUT, "%s\n", gdesc->description[i]);
+    }
+
+    return count;
+}
+
+GDesc *gdesc_create_from_file(FILE *fIN){
+    Id id;
+    int height, width, type, i;
+    GDesc *gdesc = NULL;
+    char *toks = NULL;
+    char line[WORD_SIZE] = "", str[WORD_SIZE] = "";
+
+    if(!fIN) return NULL;
+
+    fgets(str,WORD_SIZE, fIN);
+
+    toks = strtok(str, "|");
+    id = atol(toks);
+
+    toks = strtok(NULL, "|");
+    height = atoi(toks);
+
+    toks = strtok(NULL, "|");
+    width = atoi(toks);
+
+    toks = strtok(NULL, "|");
+    type = atoi(toks) + NO_DESC;
+
+    gdesc = gdesc_create(id, height, width, type);
+    if(!gdesc){
+      fclose(fIN);
+      return NULL;
+    }
+
+    for (i = 0; i < height; i++)
+    {
+      if(!fgets(line, WORD_SIZE - 1, fIN)){
+        gdesc_destroy(gdesc);
+        return NULL;
+      }
+      line[strlen(line) - 2] = 0;
+      if(gdesc_set_line(gdesc, i, line) == ERROR){
+        gdesc_destroy(gdesc);
+        return NULL;
+      }
+    }
+
+    return gdesc;
 }

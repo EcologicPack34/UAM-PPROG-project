@@ -668,4 +668,48 @@ int game_get_combat_experience(Combat *combat, Game *game);
  */
 int game_get_combat_money(Combat *combat, Game *game);
 
+/**
+ * @brief Sets basic info for save loading
+ * @author Maksym Polyak
+ * 
+ * @param game game struct
+ * @param api active player index
+ * @param nplay number of players
+ * @param isturnvalid is turn valid
+ * @param godmode bool godmode
+ * @param finished bool finished
+ * @param proced bool procedural
+ * @param currstate currentstate
+ * @return Status 
+ */
+Status game_set_basic_info(Game *game, int api, int nplay, int isturnvalid, int godmode, int finished, int proced, int currstate);
+
+/**
+ * @brief Gets the collection with the gdescs
+ * @author Maksym Polyak
+ * 
+ * @param game game struct
+ * @return Collection* or NULL if error
+ */
+Collection *game_get_gdescs(Game *game);
+
+/**
+ * @brief Gets the gdesc at the index
+ * @author Maksym Polyak
+ * 
+ * @param game game struct
+ * @param i index
+ * @return GDesc* or NULL if error or index not valid
+ */
+GDesc *game_get_gdesc_at(Game *game, int i);
+
+/**
+ * @brief Gets the collection with the links
+ * @author Maksym Polyak
+ * 
+ * @param game game struct
+ * @return Collection* or NULL if error
+ */
+Link **game_get_links(Game *game);
+
 #endif

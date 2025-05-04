@@ -462,4 +462,16 @@ int space_cmp(void *e1, void *e2);
  */
 Status space_save_to_file(FILE *file, Space *s);
 
+/**
+ * @brief Creates a space from a file and its collections
+ * @author Maksym Polyak
+ * 
+ * @param fIN file stream input
+ * @param gdescs collection of graphic descriptions
+ * @param links links of the game
+ * @param n_links num of links
+ * @return Space* or NULL if error
+ */
+Space *space_create_from_file(FILE *fIN, Collection *gdescs, Link **links, int n_links);
+
 #endif

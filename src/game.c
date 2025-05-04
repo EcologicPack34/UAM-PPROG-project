@@ -1328,3 +1328,36 @@ int game_get_combat_money(Combat *combat, Game *game){
 
   return money;
 }
+
+Status game_set_basic_info(Game *game, int api, int nplay, int isturnvalid, int godmode, int finished, int proced, int currstate){
+
+  if(!game) return ERROR;
+
+  game->active_player_index = api;
+  game->n_players = nplay;
+  game->is_turn_valid = isturnvalid;
+  game->godmode = godmode;
+  game->finished = finished;
+  game->procedural = proced;
+  game->current_state = currstate;
+
+  return OK;
+}
+
+Collection *game_get_gdescs(Game *game){
+  if(!game) return NULL;
+
+  return game->gdescs;
+}
+
+GDesc *game_get_gdesc_at(Game *game, int i){
+  if(!game || i < 0) return NULL;
+
+  return collection_get_element_at(game->gdescs, i);
+}
+
+Collection *game_get_links(Game *game){
+  if(!game) return NULL;
+
+  return game->links;
+}
