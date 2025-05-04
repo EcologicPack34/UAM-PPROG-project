@@ -309,8 +309,9 @@ Status player_save_to_file(FILE *file, Player *p){
             allys[i]= (collection_get_element_at(p->followers, i));
     }
 
+    /*#p:ID|Nombre|LocationID|Money|XP actual|XP siguiente nvl|nivel|skill points|gdesc;n_followers;id_following1-type;id_following2-type...*/
     /*#p:1|Hero1|11|mO^";money;xp;next_xp;lvl;SP;n_followers;id_following1-type;id_following2-type...*/
-    sprintf(aux, "#p:%ld|%s|%ld|%s;%d;%d;%d;%d;%d;%d",id,name,location,Gdesc,p->money,xp,next_xp,lvl,sp,n_followers);
+    sprintf(aux, "#p:%ld|%s|%ld|%d|%d|%d|%d|%d|%s;%d",id,name,location,p->money,xp,next_xp,lvl,sp,Gdesc,n_followers);
     for(i=0;i<n_followers;i++){
         sprintf(id_aux, ";%ld-%d", entity_get_id(allys[i]), entity_get_entityType(allys[i]));
         strcat(aux, id_aux);

@@ -64,9 +64,10 @@ Status game_reader_load_objects(Game *game, char *filename);
  * 
  * @param game struct that saves all information related to the game
  * @param filename string that stores the data file name
+ * @param fromSaveFile bool to indicate if the spaces are loading from a save file or a new file
  * @return OK if everything goes well or ERROR if there was some error
  */
-Status game_reader_load_player(Game *game, char *filename);
+Status game_reader_load_player(Game *game, char *filename, bool fromSaveFile);
 
 /**
  * @brief Reads the file to load all events
@@ -221,7 +222,7 @@ Status game_reader_create_from_file(Game **game, char *filename){
     debug_log(LOG_ERROR, "Error loading npcs at: game_reader_create_from_file(Game*, char*) in game_reader.c");
     return ERROR;
   }
-  if(game_reader_load_player(*game, filename) == ERROR){
+  if(game_reader_load_player(*game, filename, false) == ERROR){
     debug_log(LOG_ERROR, "Error loading player at: game_reader_create_from_file(Game*, char*) in game_reader.c");
     return ERROR;
   }
@@ -340,7 +341,7 @@ Status game_reader_create_save_file(char *save_file, Game *game, char *original_
       toks = strtok(NULL, "|");
       gdesc_hight = atoi(toks);
       fprintf(Psave_file, "%s", line);
-      
+
       for(i=0; i<gdesc_hight; i++){
         fgets(line, WORD_SIZE, Poriginal);
         fprintf(Psave_file, "%s", line);
@@ -656,7 +657,7 @@ Status game_reader_load_objects(Game *game, char *filename){
   return status;
 }
 
-Status game_reader_load_player(Game *game, char *filename){
+Status game_reader_load_player(Game *game, char *filename, bool fromSaveFile){
   FILE *file = NULL;
   Player *player = NULL;
   char line[WORD_SIZE] = "";
@@ -664,6 +665,12 @@ Status game_reader_load_player(Game *game, char *filename){
   char *toks = NULL;
   long playerid, startinglocation;
   int xp, next_xp, level, skill_points, money;
+  int i,n_followers=0,n_args=0;
+  EntityType ET;
+  Id aux_id;
+  CommandCode code;
+  Status command_status;
+  
 
   Status status = OK;
 
@@ -718,7 +725,47 @@ Status game_reader_load_player(Game *game, char *filename){
         break;
       }
 
-      entity_set_graphic_description(player_get_entity(player), toks);
+      if(entity_set_graphic_description(player_get_entity(player), toks) == ERROR){
+        status = ERROR;
+        break;
+      }
+
+    /*#p:ID|Nombre|LocationID|Money|XP actual|XP siguiente nvl|nivel|skill points|gdesc;n_followers;id_following1-type;id_following2-type...*/
+      if(fromSaveFile){
+        /*adding followers*/
+        toks = strtok(NULL, ";");
+        toks = strtok(NULL, ";");
+
+        n_followers = atoi(toks);
+
+        for(i=0; i<n_followers; i++){
+          toks = strtok(NULL, "-");
+          aux_id = atol(toks);
+          toks = strok(NULL, ";");
+          ET = atoi(toks);
+
+          if(ET == PLAYER_TYPE){
+            if(player_add_follower(player, player_get_entity(game_get_player_by_id(game, aux_id))) == ERROR){
+              status = ERROR;
+              break;
+            }
+          }
+          else if(ET == NPC_TYPE){
+            if(player_add_follower(player, npc_get_entity(game_get_NPC_by_id(game, aux_id))) == ERROR){
+              status = ERROR;
+              break;
+            }
+          }
+        }
+        
+        /*adding command*/
+        
+        if(command_info_read_from_file(player_get_cmdData(player), file) == ERROR){
+          status = ERROR;
+          break;
+        }
+
+      }
 
       if (game_add_player(game, player) == ERROR){
         player_destroy(player);
