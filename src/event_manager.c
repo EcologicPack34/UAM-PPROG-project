@@ -8,6 +8,7 @@
 
 #include "collection.h"
 #include "debug_printing.h"
+#include "utils.h"
 
 #define EVENT_MANAGER_DEFAULT_SIZE 10 /*!< Inital size of the event manager*/
 
@@ -219,4 +220,84 @@ Event *event_manager_get_event(EventManager *manager, long index){
     if(!manager || index < 0) return NULL;
 
     return (Event*)collection_get_element_at(manager->events, index);
+}
+
+int event_manager_save_on_file(EventManager *manager, FILE *fOUT){
+    int i, count = 0, size;
+
+    if(!manager || !fOUT) return -1;
+
+    size = collection_length(manager->events);
+    count += fprintf(fOUT, "%d\n", size);
+    for(i = 0; i < size; i++){
+        count += event_save_on_file(collection_get_element_at(manager->events, i), fOUT);
+    }
+
+    return count;
+}
+
+Status event_manager_read_from_file(EventManager *manager, FILE *fIN){
+    int i, size;
+
+    if(!manager || !fIN) return ERROR;
+
+    fscanf(fIN, "%d\n", &size);
+    for(i = 0; i < size; i++){
+        if(event_manager_add_event(manager, event_create_from_file(fIN)) == ERROR)
+            return ERROR;
+    }
+
+    return OK;
+}
+
+int event_save_on_file(Event *event, FILE *fOUT){
+    int i, count = 0;
+
+    if(!event || !fOUT) return -1;
+
+    count += fprintf(fOUT, "%ld;%d;%d;%d\n", event->id, event->type, event->removeOnTrigger, event->cmdNum);
+    for(i = 0; i < event->cmdNum; i++){
+        count += fprintf(fOUT, "%d,", event->commands[i]);
+    }
+    count += fprintf(fOUT, "\n");
+
+    count += fprintf(fOUT, "%s\n", event->data);
+
+    return count;
+}
+
+Event *event_create_from_file(FILE *fIN){
+    Event *event = NULL;
+    Id id;
+    int i, type, removeOnTrigger, cmdNum;
+    char data[WORD_SIZE] = "", *toks = NULL, aux_str[WORD_SIZE];
+    CommandCode *commands = NULL;
+
+    if(!fIN) return NULL;
+
+    fscanf(fIN, "%ld;%d;%d;%d\n", &id, &type, &removeOnTrigger, &cmdNum);
+
+    commands = (CommandCode *)malloc(cmdNum*sizeof(CommandCode));
+    if(!commands) return NULL;
+
+    fgets(aux_str,WORD_SIZE,fIN);
+    if(cmdNum > 0){
+        toks = strtok(aux_str,",");
+        commands[0] = (CommandCode)atoi(toks);
+    }
+    for(i = 1; i < cmdNum && toks != NULL; i++){
+        toks = strtok(NULL,",");
+        commands[i] = (CommandCode)atoi(toks);
+    }
+
+    fgets(data, WORD_SIZE, fIN);
+    string_remove_newline_escape_sequence_on_end(data);
+
+    event = event_create(id, type, commands, cmdNum, data, removeOnTrigger);
+    if(!event){
+        free(commands);
+        return NULL;
+    }
+
+    return event;
 }
