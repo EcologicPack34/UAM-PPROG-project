@@ -374,14 +374,20 @@ Status game_reader_create_save_file(char *save_file, Game *game, char *original_
     attack_save_on_file(collection_get_element_at(game_get_attacks(game), i), Psave_file);
   }
 
+  /*Saves effects to the file*/
   size = collection_length(effect_manager_get_effects(game_get_effect_manager(game)));
   for(i=0; i < size; i++){
     effect_save_to_file(Psave_file, collection_get_element_at(effect_manager_get_effects(game_get_effect_manager(game)),i));
   }
-  
+
+  /*Saves events to the file*/
   event_manager_save_on_file(game_get_event_manager(game), Psave_file);
 
+  /*Saves abilities to the file*/
   ability_manager_save_on_file(game_get_ability_manager(game), Psave_file);
+
+  /*Saves command to the file*/
+  command_save_on_file(game_get_last_command(game),Psave_file);
 
   fclose(Psave_file);
 

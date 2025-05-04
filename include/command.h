@@ -20,6 +20,7 @@
 
 #include "types.h"
 #include <stdbool.h>
+#include <stdio.h>
 
 #define N_CMDT 2    /*!< Total number of CommandType in the enum */
 #define N_CMD 27    /*!< Total number of CommandCode in the enum */
@@ -253,5 +254,45 @@ Status command_get_list(Command *command, char *destination, GameState state, bo
  * @return int 
  */
 int command_code_isEqual(void *cmd1, void *cmd2);
+
+/**
+ * @brief Saves a command struct on a file
+ * @author Maksym Polyak
+ * 
+ * @param command command struct
+ * @param fOUT file stream output
+ * @return int with num of char printed or -1 if error
+ */
+int command_save_on_file(Command *command, FILE *fOUT);
+
+/**
+ * @brief Reads a command struct from a file
+ * @author Maksym Polyak
+ * 
+ * @param command command struct
+ * @param fIN file stream input
+ * @return Status 
+ */
+Status command_read_from_file(Command *command, FILE *fIN);
+
+/**
+ * @brief Saves a command info struct on a file
+ * @author Maksym Polyak
+ * 
+ * @param cminfo command info struct
+ * @param fOUT file stream output
+ * @return int with num of char printed or -1 if error
+ */
+int command_info_save_on_file(CommandInfo *cminfo, FILE *fOUT);
+
+/**
+ * @brief Reads a command info struct from a file
+ * @author Maksym Polyak
+ * 
+ * @param cminfo command info struct
+ * @param fIN file stream input
+ * @return Status 
+ */
+Status command_info_read_from_file(CommandInfo *cminfo, FILE *fIN);
 
 #endif

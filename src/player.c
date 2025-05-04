@@ -317,7 +317,7 @@ Status player_save_to_file(FILE *file, Player *p){
     }
     strcat(aux, "\n");
 
-    fprintf(file, "%s", aux);
+    command_info_save_on_file(p->cmdData, file);
 
     /*stats print*/
     mH=entity_get_max_health(p->entity);
@@ -330,6 +330,5 @@ Status player_save_to_file(FILE *file, Player *p){
     /*#st:IDEntity|EntityType|VidaMaxima|Vida|DanoBase|Fuerza|Defensa|NivelMagia*/
     sprintf(aux, "#st:%ld|1|%ld|%ld|%ld|%d|%d|%d\n",id,mH,h,bD,str,def,magicLvl);
     fprintf(file, "%s", aux);
-
     return OK;
 }
