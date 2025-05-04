@@ -187,6 +187,33 @@ Status game_actions_unequip(Game *game);
 Status game_actions_inspect(Game *game);
 
 /**
+ * @brief Action for entering leveling up state
+ * @author Maksym Polyak
+ * 
+ * @param game game struct
+ * @return Status 
+ */
+Status game_actions_level_up(Game *game);
+
+/**
+ * @brief Action for buying in the store
+ * @author Maksym Polyak
+ * 
+ * @param game game struct
+ * @return Status 
+ */
+Status game_actions_buy(Game *game);
+
+/**
+ * @brief Action for following another player or unfollowing
+ * @author Maksym Polyak
+ * 
+ * @param game game struct
+ * @return Status 
+ */
+Status game_actions_follow(Game *game);
+
+/**
    Game actions implementation
 */
 
@@ -278,6 +305,15 @@ Status game_actions_update(Game *game, Command *command) {
     case INSPECT:
       status = game_actions_inspect(game);
       break;
+    case LEVEL_UP:
+      status = game_actions_level_up(game);
+      break;
+    case BUY:
+      status = game_actions_buy(game);
+      break;
+    case FOLLOW_PLAYER:
+      status = game_actions_follow(game);
+      break;
     default:
       break;
   }
@@ -301,6 +337,13 @@ Status game_actions_update(Game *game, Command *command) {
     game_set_is_turn_valid(game, NOT_VALID);
   } else {
     game_set_is_turn_valid(game, VALID);
+  }
+
+  if(game_get_state(game) == COMBAT && game_get_is_turn_valid(game) == VALID){
+    if(combat_update(game_get_combat(game), game_get_last_command(game)) == ERROR)
+      return ERROR;
+
+    
   }
   
   return OK;
@@ -339,12 +382,13 @@ Status game_actions_exit(Game *game){
 Status game_actions_move(Game *game) {
   Id space_id = NO_ID;
   Link *link = NULL;
-  Entity *entity = NULL;
+  Entity *entity = NULL, *entity2 = NULL;
   CommandCode code = NO_CMD;
   Command *cmd = NULL;
-  NPC **followers = NULL;
   Space *actual_space = NULL, *next_space = NULL;
-  int i;
+  int i, j, size, size2;
+  Player *player = NULL;
+  Player *add_player = NULL;
 
   space_id = game_get_player_location(game);
   if (space_id == NO_ID) {
@@ -391,22 +435,34 @@ Status game_actions_move(Game *game) {
     
   if(link == NULL) return ERROR;
 
-  entity = player_get_entity(game_get_player(game));
+  player = game_get_player(game);
+  if(!player) return ERROR;
+
+  entity = player_get_entity(player);
   if(entity == NULL) return ERROR;
 
   if(link_move_entity(link, entity) == ERROR){
     return ERROR;
   }
 
-  followers = player_get_followers(game_get_player(game));
-  if(!followers) return OK;
+  next_space = game_get_space(game, game_get_player_location(game));
+  if(!next_space) return ERROR;
 
-  next_space = game_get_space(game, link_get_oposite_space(link, space_id));
-
-  for(i = 0; i < NPC_MAX_FOLLOWERS; i++){
-    if(followers[i] != NULL){
-      entity = npc_get_entity(followers[i]);
-      space_move_NPC(actual_space, next_space, followers[i]);
+  size = player_get_follower_num(player);
+  for(i = 0; i < size; i++){
+    entity = player_get_follower_at(player, i);
+    if(entity_get_entityType(entity) == NPC_TYPE){
+      space_move_NPC(actual_space, next_space, game_get_NPC_by_id(game, entity_get_id(entity)));
+    } else {
+      add_player = game_get_player_by_id(game, entity_get_id(entity));
+      size2 = player_get_follower_num(add_player);
+      for(j = 0; j < size2; j++){
+        entity2 = player_get_follower_at(add_player, j);
+        if(entity_get_entityType(entity2) == NPC_TYPE){
+          space_move_NPC(actual_space, next_space, game_get_NPC_by_id(game, entity_get_id(entity2)));
+        } 
+      }
+      link_move_entity(link, entity);
     }
   }
 
@@ -564,15 +620,23 @@ Status game_actions_chat(Game *game){
         game_combat_start(game);
         return OK;
       case STORE:
+        if(inventory_get_size(entity_get_inventory(npc_get_entity(dialogue_get_NPC(dialogue)))) <= 0){
+          game_add_log_message(game, MESSAGE_HELP, "Merchant does not have any goods to sell.");
+          return OK;
+        }
+        game_set_state(game, STORE_STATE);
         return OK;
       case FOLLOW:
-        if((status = player_add_follower(player, npc)) == ERROR)
+        if(npc_get_status(npc) == ALLY || ((status = player_add_follower(player, npc_get_entity(npc))) == ERROR))
           game_add_log_message(game, MESSAGE_HELP, "Following another player or not an available follower.");
+        
+        npc_set_status(npc, ALLY);
         game_end_dialogue(game);
         return status;
       case UNFOLLOW:
-        if((status = player_remove_follower_by_name(player, entity_get_name(npc_get_entity(npc)))) == ERROR)
+        if((status = player_remove_follower_by_pointer(player, npc_get_entity(npc))) == ERROR)
           game_add_log_message(game, MESSAGE_HELP, "Not following you.");
+        npc_set_status(npc, NEUTRAL);
         game_end_dialogue(game);
         return status;
     }
@@ -606,10 +670,7 @@ Status game_actions_attack(Game *game){
     /*If game starts then the first action isn't valid so combat doesnt update*/
     return ERROR;
   }
-  else if(combat){
-    if(combat_update(combat, game_get_last_command(game)) == ERROR)
-      return ERROR;
-  }
+  
 
   return OK;
 }
@@ -867,4 +928,229 @@ Status game_actions_inspect(Game *game){
   if(!obj) return ERROR;
 
   return game_add_log_message(game, MESSAGE_INSPECT, object_get_descr(obj));
+}
+
+Status game_actions_level_up(Game *game){
+  Player *player = NULL;
+  char **args = NULL;
+  int n_args, index;
+  Entity *entity = NULL;
+  Leveling *leveling = NULL;
+
+  if(!game) return ERROR;
+
+  player = game_get_player(game);
+  if(!player) return ERROR;
+
+  leveling = player_get_leveling(player);
+  if(!leveling) return ERROR;
+
+  leveling_update_level_up(leveling);
+
+  if(game_get_state(game) != LEVEL_UP_STATE){
+
+    if((leveling_check_level_up(leveling) == false) && (leveling_get_skill_points(leveling) <= 0)){
+      game_add_log_message(game, MESSAGE_HELP, "You don't have skill points. Try to level up!");
+      return ERROR;
+    }
+
+    game_set_state(game, LEVEL_UP_STATE);
+    return OK;
+  }else{
+    
+    args = command_get_arguments(game_get_last_command(game));
+    if(!args) return ERROR;
+
+    n_args = command_get_arguments_count(game_get_last_command(game));
+    if(n_args <= 0 || n_args >= 2) return ERROR;
+
+    entity = player_get_entity(player);
+
+    index = atoi(args[0]);
+
+    switch(index){
+      case 1:
+        entity_set_strength(entity, entity_get_strength(entity) + 1);
+        leveling_set_skill_points(leveling, leveling_get_skill_points(leveling) - 1);
+        break;
+      case 2:
+        entity_set_magicLevel(entity, entity_get_magicLevel(entity) + 1);
+        leveling_set_skill_points(leveling, leveling_get_skill_points(leveling) - 1);
+        break;
+      case 3:
+        entity_set_max_health(entity, entity_get_max_health(entity) + 10);
+        leveling_set_skill_points(leveling, leveling_get_skill_points(leveling) - 1);
+        break;
+      case 4:
+        entity_set_defense(entity, entity_get_defense(entity) + 1);
+        leveling_set_skill_points(leveling, leveling_get_skill_points(leveling) - 1);
+        break;
+      case 5:
+        game_set_state(game, DEFAULT);
+        return OK;
+      default:
+        game_add_log_message(game, MESSAGE_LOG, "Not a valid option.");
+        return ERROR;
+    }
+
+    if(leveling_get_skill_points(leveling) <= 0){
+      game_set_state(game, DEFAULT);
+      game_add_log_message(game, MESSAGE_LOG, "You ran out of skill points");
+      return OK;
+    }
+
+    return OK;
+  }
+
+  return ERROR;
+}
+
+Status game_actions_buy(Game *game){
+  char **args = NULL;
+  int n_args;
+  Command *comm = NULL;
+  int index;
+  NPC *seller = NULL;
+  Object *obj = NULL;
+  Player *player = NULL;
+  char str[WORD_SIZE] = "";
+
+
+  if(!game) return ERROR;
+
+  if(game_get_state(game) != STORE_STATE){
+    game_add_log_message(game, MESSAGE_HELP, "You're not in a shop!");
+    return ERROR;
+  }
+
+  comm = game_get_last_command(game);
+  if(!comm) return ERROR;
+
+  args = command_get_arguments(comm);
+  n_args = command_get_arguments_count(comm);
+
+  if(n_args <= 0) return ERROR;
+
+  index = atoi(args[0]) - 1;
+
+  if(index == -1){
+    game_end_dialogue(game);
+    game_set_state(game, DEFAULT);
+    return OK;
+  }
+
+  seller = dialogue_get_NPC(game_get_dialogue(game));
+
+  if(index < 0 || index > inventory_get_size(entity_get_inventory(npc_get_entity(seller)))) return ERROR;
+
+  if(inventory_get_size(entity_get_inventory(npc_get_entity(seller))) <= 0){
+    sprintf(str, "%s ran out of goods to sell!", entity_get_name(npc_get_entity(seller)));
+    game_add_log_message(game, MESSAGE_NPC, str);
+    game_end_dialogue(game);
+    game_set_state(game, DEFAULT);
+    return ERROR;
+  }
+
+
+  player = game_get_player(game);
+
+  if((obj = inventory_get_object_at(entity_get_inventory(npc_get_entity(seller)), index)) == NULL) return ERROR;
+
+  if(object_get_cost(obj) > player_get_money(player)){
+    sprintf(str, "You don't have enough money to buy a %s!", object_get_name(obj));
+    game_add_log_message(game, MESSAGE_NPC, str);
+    return ERROR;
+  }
+
+  
+  if(inventory_move_object(entity_get_inventory(npc_get_entity(seller)), entity_get_inventory(player_get_entity(player)), object_get_id(obj)) == ERROR){
+    sprintf(str, "You don't have space to add %s to your inventory!", object_get_name(obj));
+    game_add_log_message(game, MESSAGE_NPC, str);
+    return ERROR;
+  }
+  player_add_money(player, -object_get_cost(obj));
+
+  if(inventory_get_size(entity_get_inventory(npc_get_entity(seller))) <= 0){
+    sprintf(str, "%s ran out of goods to sell!", entity_get_name(npc_get_entity(seller)));
+    game_add_log_message(game, MESSAGE_NPC, str);
+    game_end_dialogue(game);
+    game_set_state(game, DEFAULT);
+    return ERROR;
+  }
+
+  return OK;
+}
+
+Status game_actions_follow(Game *game){
+  Command *comm = NULL;
+  char **args = NULL;
+  int n_args, i, size;
+  Player *player = NULL, *player_to_follow = NULL;
+  bool following_the_player = false;
+  Entity *entity = NULL;
+
+  if(!game) return ERROR;
+
+  player = game_get_player(game);
+
+  comm = game_get_last_command(game);
+  if(!comm) return ERROR;
+
+  n_args = command_get_arguments_count(comm);
+  if(n_args < 0 || n_args > 1) return ERROR;
+
+  args = command_get_arguments(comm);
+  if(!args) return ERROR;
+
+  if(strcmp(entity_get_name(player_get_entity(player)), args[0]) == 0){
+    game_add_log_message(game, MESSAGE_ERROR, "You cannot follow yourself...");
+    return ERROR;
+  }
+
+  for(i = 0, size = game_get_n_players(game); i < size; i++){
+    player_to_follow = game_get_player_at(game, i);
+    if(player_to_follow){
+      if(strcmp(entity_get_name(player_get_entity(player_to_follow)), args[0]) == 0)
+        break;
+    }
+  }
+
+  if(player_to_follow == NULL || entity_get_location(player_get_entity(player)) != entity_get_location(player_get_entity(player_to_follow))){
+    game_add_log_message(game, MESSAGE_ERROR, "Not found that player, or he is not with you");
+    return ERROR;
+  }
+
+  for(i = 0, size = player_get_follower_num(player_to_follow); (i < size) && (following_the_player == false); i++){
+    entity = player_get_follower_at(player_to_follow, i);
+    if(entity_get_id(entity) == entity_get_id(player_get_entity(player))){
+      following_the_player = true;
+    }
+  }
+
+  if(following_the_player == false){
+    for(i = 0, size = player_get_follower_num(player_to_follow); i < size; i++){
+      entity = player_get_follower_at(player_to_follow, i);
+      if(entity_get_entityType(entity) == PLAYER_TYPE){
+        if(strcmp(entity_get_name(player_get_entity(player_to_follow)), entity_get_name(entity)) != 0){
+          game_add_log_message(game, MESSAGE_ERROR, "The player you are trying to follow is already following another player.");
+          return ERROR;
+        }
+      }
+    }
+  }
+
+  if(player_get_follower_num(player) == NPC_MAX_FOLLOWERS){
+    game_add_log_message(game, MESSAGE_ERROR, "The player you are trying to follow has max amount of followers");
+    return ERROR;
+  }
+
+  if(following_the_player == false){
+    player_add_follower(player_to_follow, player_get_entity(player));
+    player_add_follower(player, player_get_entity(player_to_follow));
+  } else {
+    player_remove_follower_by_pointer(player_to_follow, player_get_entity(player));
+    player_remove_follower_by_pointer(player, player_get_entity(player_to_follow));
+  }
+
+  return OK;
 }

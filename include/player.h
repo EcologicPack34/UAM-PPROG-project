@@ -21,8 +21,9 @@
 #include "command.h"
 #include "entity.h"
 #include "equipment.h"
-#include "npc.h"
+#include "entity.h"
 #include "types.h"
+#include "leveling.h"
 
 /**
  * @brief ADT with all the information of the player
@@ -38,11 +39,15 @@ typedef struct _Player Player;
  * @param name name of the player
  * @param identity id of the entity
  * @param location id of the space where the player is located
+ * @param money money of the player
+ * @param xp xp of the player
+ * @param next_xp xp needed for next level of the player
+ * @param level level of the player
+ * @param skill_points skill points available for the player
  * 
  * @return player pointer if everything went fine or NULL if there was a mistake
  */
-Player *player_create(char *name, Id identity, Id location);
-
+Player *player_create(char *name, Id identity, Id location, int money, int xp, int next_xp, int level, int skill_points);
 /**
  * @brief Frees a player struct
  * @author Profesores PPROG
@@ -107,6 +112,15 @@ Status player_set_stats(Player *p, double maxhealth, double health, double baseD
 Status player_get_str_desc(Player *player, char *str);
 
 /**
+ * @brief Gets the leveling info of a player
+ * @author Maksym Polyak
+ * 
+ * @param player player struct
+ * @return Leveling* or NULL if error
+ */
+Leveling *player_get_leveling(Player *player);
+
+/**
  * @brief Gets the money quantity of the player
  * @author Maksym Polyak
  * 
@@ -160,29 +174,39 @@ Status player_unequip_piece(Player *player, char *data);
  * @author Maksym Polyak
  * 
  * @param player player struct
- * @param npc npc to add as a follower
+ * @param entity entity to add
  * @return Status 
  */
-Status player_add_follower(Player *player, NPC *npc);
+Status player_add_follower(Player *player, Entity *entity);
 
 /**
- * @brief Removes a follower from the player by a name
+ * @brief Removes a follower from the player by an entity id
  * @author Maksym Polyak
  * 
  * @param player player struct
- * @param npc_name name of the npc to remove as follower
+ * @param entity entity struct
  * @return Status 
  */
-Status player_remove_follower_by_name(Player *player, char *npc_name);
+Status player_remove_follower_by_pointer(Player *player, Entity *entity);
 
 /**
- * @brief Gets the array with the followers, of max size NPC_MAX_FOLLOWERS
+ * @brief Gets the follower at the index
  * @author Maksym Polyak
  * 
  * @param player player struct
- * @return Status 
+ * @param i index
+ * @return Entity* or NULL if error
  */
-NPC **player_get_followers(Player *player);
+Entity *player_get_follower_at(Player *player, int i);
+
+/**
+ * @brief Gets the number of followers of a player
+ * @author Maksym Polyak
+ * 
+ * @param player player struct
+ * @return int or -1 if error
+ */
+int player_get_follower_num(Player *player);
 
 /**
  * @brief saves all the data related to a player in a file

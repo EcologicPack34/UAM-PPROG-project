@@ -861,7 +861,17 @@ Status game_combat_start(Game *game){
 }
 
 Status game_combat_end(Game *game){
+  int XP, money;
+  Leveling *leveling = NULL;
+  
   if(!game) return ERROR;
+
+  leveling = player_get_leveling(game_get_player(game));
+  XP = game_get_combat_experience(game_get_combat(game), game);
+  money = game_get_combat_money(game_get_combat(game), game);
+
+  leveling_set_XP(leveling, XP + leveling_get_XP(leveling));
+  player_add_money(game_get_player(game), money);
 
   combat_free(game->combat);
   game->current_state = DEFAULT;
@@ -1303,4 +1313,34 @@ int game_get_active_player_index(Game *game){
   if(!game) return -1;
 
   return game->active_player_index;
+}
+
+int game_get_combat_experience(Combat *combat, Game *game){
+  Entity *ent = NULL;
+  int i, XP = 0;
+
+  if(!combat || !game) return 0;
+
+  for(i = 0, ent = combat_get_dead_entity_at(combat, i); ent != NULL; i++, ent = combat_get_dead_entity_at(combat, i)){
+    if(npc_get_status(game_get_NPC_by_id(game, entity_get_id(ent))) == ENEMY){
+      XP += (XP_MINIMUM + entity_get_strength(ent)*XP_MULT + entity_get_magicLevel(ent)*XP_MULT)*(entity_get_max_health(ent)/100);
+    }
+  }
+
+  return XP;
+}
+
+int game_get_combat_money(Combat *combat, Game *game){
+  Entity *ent = NULL;
+  int i, money = 0;
+
+  if(!combat || !game) return 0;
+
+  for(i = 0, ent = combat_get_dead_entity_at(combat, i); ent != NULL; i++, ent = combat_get_dead_entity_at(combat, i)){
+    if(npc_get_status(game_get_NPC_by_id(game, entity_get_id(ent))) == ENEMY){
+      money += (MONEY_MIN*(entity_get_strength(ent)/100 + 1)*(entity_get_magicLevel(ent)/100 + 1))*(entity_get_max_health(ent)/100);
+    }
+  }
+
+  return money;
 }

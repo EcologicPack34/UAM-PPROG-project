@@ -41,6 +41,7 @@ typedef struct _Object Object;
  * @param name name of the object
  * @param data data with the effects of the object and if it can be weared
  * @param description description of the object
+ * @param cost cost of the object if it is in a store
  * @param dependend_object_id id of the object which is needed to move that object
  * @param is_movable true if object can be moved or false if it cannot
  * @param is_consumable if object is removed after use or not
@@ -48,7 +49,7 @@ typedef struct _Object Object;
  * @param type type of inventory where the object is located
  * @return a new object, initialized or NULL if there was a mistake
  */
-Object *object_create(Id id, char *name, char* data, char *description, Id dependent_object_id, bool is_movable, bool is_consumable, Id location, InventoryType type);
+Object *object_create(Id id, char *name, char* data, char *description, int cost, Id dependent_object_id, bool is_movable, bool is_consumable, Id location, InventoryType type);
 
 /**
  * @brief It destroys an object
@@ -122,6 +123,15 @@ Status object_set_type(Object *object, InventoryType type);
  * @return Status 
  */
 Status object_set_descr(Object *object, char *str);
+
+/**
+ * @brief Sets the cost of an object
+ * 
+ * @param object object struct
+ * @param cost money quantity
+ * @return Status 
+ */
+Status object_set_cost(Object *object, int cost);
 
 /**
  * @brief Sets if true that the object is equipped or false that the object is not equipped
@@ -199,6 +209,15 @@ bool object_get_is_consumable(Object *object);
  * @return char* or NULL if error
  */
 char *object_get_descr(Object *object);
+
+/**
+ * @brief Gets the object cost
+ * @author Maksym Polyak
+ * 
+ * @param object object struct
+ * @return int or -1 if error
+ */
+int object_get_cost(Object *object);
 
 /**
  * @brief Gets the object ability pointer

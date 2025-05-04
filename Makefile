@@ -17,7 +17,7 @@ D_FLAGS = -Wall -pedantic -g -I$(INCLUDE)
 #Names of the .c files
 _SRC = command.c debug_printing.c game_actions.c game_loop.c game.c graphic_engine.c space.c object.c player.c game_reader.c entity.c \
  link.c inventory.c collection.c event_manager.c event_actions.c npc.c vector2.c queue.c message.c combat.c ability_actions.c ability_manager.c \
- equipment.c attack.c dialogue.c utils.c graphic_description.c effect.c
+ equipment.c attack.c dialogue.c utils.c graphic_description.c leveling.c effect.c
 
 #Adds to the names of .c files the path of the file before
 SRC = $(patsubst %,$(SRC_PATH)/%,$(_SRC))
@@ -49,7 +49,7 @@ $(OBJ_PATH):
 
 #Rule to link all the objects with libraries
 $(EXE):	$(OBJ)
-	$(CC) $(CFLAGS) -o $(EXE) $(OBJ) -L$(LIBRARIES) -lscreen
+	$(CC) $(CFLAGS) -o $(EXE) $(OBJ) -L$(LIBRARIES) -lscreen -lm
 
 #Rule to compile each .c file into its .o file
 $(OBJ_PATH)/%.o: $(SRC_PATH)/%.c | $(OBJ_PATH)
@@ -83,7 +83,7 @@ runl:
 	./anthill anthill.dat -l ./debug.log
 
 debug:
-	$(CC) -o $(EXED) $(SRC) $(D_FLAGS) -g -L$(LIBRARIES) -lscreen
+	$(CC) -o $(EXED) $(SRC) $(D_FLAGS) -g -L$(LIBRARIES) -lscreen -lm
 
 gdb:
 	make debug
