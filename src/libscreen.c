@@ -71,55 +71,28 @@ void screen_destroy(){
 }
 
 void screen_paint(Frame_color color){
-  char *src = NULL;
-  char dest[COLUMNS + 1];
   int i=0;
-
-  int x,y;
   Cell *cell;
 
-  memset(dest, 0, COLUMNS + 1);
   printf("\033[2J");
   if (__data){
     /* puts(__data); */ /*Dump data directly to the terminal*/
     /*It works fine if the terminal window has the right size*/
-    for (y = 0; y < ROWS; y++)
+
+    for (i = 0; i < TOTAL_DATA - 1; i++)
     {
-      for ( x = 0; x < COLUMNS; x++)
-      {
-        cell = ACCESS(__data,x, y);
-        if(cell->character == BG_CHAR){
-          cell->charColor = color;
-          cell->background = color;
-        }else{
-          cell->background = WHITE;
-        }
-
-        printf("%s%c\033[0m", color_to_ansi(cell->charColor, cell->background), cell->character);
+      cell = __data + i;
+      if(cell->character == BG_CHAR){
+        cell->charColor = color;
+        cell->background = color;
+      }else{
+        cell->background = WHITE;
       }
-      printf("\n");
+      printf("%s%c\033[0m", color_to_ansi(cell->charColor, cell->background), cell->character);
+      if( (i + 1) % (COLUMNS) == 0){
+        printf("\n");
+      }
     }
-    
-
-
-//    puts("\033[2J"); /*Clear the terminal*/
-//    for (src = __data; src < (__data + TOTAL_DATA - 1); src += COLUMNS)
-//    {
-//      memcpy(dest, src, COLUMNS);
-//      /* printf("%s\n", dest); */
-//      for (i = 0; i < COLUMNS; i++)
-//      {
-//        if (dest[i] == BG_CHAR)
-//        {
-//          printf("%s%c\033[0m", frame_color_to_string(color), dest[i]); /* fg:blue(34);bg:blue(44) */
-//        }
-//        else
-//        {
-//          printf("\033[0;30;47m%c\033[0m", dest[i]); /* fg:black(30);bg:white(47)*/
-//        }
-//      }
-//      printf("\n");
-//    }
   }
 }
 
