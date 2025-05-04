@@ -334,6 +334,12 @@ Status game_reader_create_save_file(char *save_file, Game *game, char *original_
     object_save_on_file(collection_get_element_at(game_get_objects(game), i), Psave_file);
   }
 
+  /*Saves attacks to the file*/
+  size = collection_length(game_get_attacks(game));
+  for(i = 0; i < size; i++){
+    object_save_on_file(collection_get_element_at(game_get_objects(game), i), Psave_file);
+  }
+
   fclose(Psave_file);
 
 
