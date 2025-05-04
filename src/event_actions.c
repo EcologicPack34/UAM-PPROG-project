@@ -222,8 +222,9 @@ bool event_trigger_combat(Event *event, Game *game){
     command_get_as_string(game_get_last_command(game), str);
 
     sprintf(strAux, "You were attack while doing %s", str);
-    game_add_log_message(game, MESSAGE_LOG, strAux);
-    game_combat_start(game);
+    
+    if(game_combat_start(game) == OK)
+        game_add_log_message(game, MESSAGE_LOG, strAux);
     return true;
 }
 
@@ -273,7 +274,7 @@ bool event_trigger_npc_rand_move(Event *event, Game *game){
         npc = collection_get_element_at(npcs, i);
 
         /*if ally doesn't try to move as it follows player*/
-        if(npc_get_status(npc) == ALLY){
+        if(npc_get_status(npc) == ALLY || entity_get_health(npc_get_entity(npc)) <= 0){
             continue;
         } 
         /*Checks a probability, if not, it doesnt move the entity*/

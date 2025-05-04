@@ -57,8 +57,42 @@ DS:2
 2
 Well well... Can i go with you?
 I can fight pretty well!
-3
+4
 Let's slay those bastards!:4:3
+Let's see the store:3:2
+I hate you! DIE!!:2:0
+No, i can't let you in.:1:2
+
+DS:3
+1
+Do you want me to stay around here?
+2
+Yes, keep guarding these zone.:5:2
+No, i can't let you in.(Leave):1:3
+
+DS:0
+1
+I don't have anything to tell you
+1
+Have a nice day!:1:0
+
+ID:2
+DS:1
+3
+Hello Traveler!
+What are you doing here?
+I thought you were attacked by those bandits
+2
+Hello old man!:0:2
+Bye!:1:1
+
+DS:2
+2
+Well well... Can i go with you?
+I can fight pretty well!
+4
+Let's slay those bastards!:4:3
+Let's see the store:3:2
 I hate you! DIE!!:2:0
 No, i can't let you in.:1:2
 

@@ -393,4 +393,16 @@ int entity_get_defense(Entity *entity);
  */
 int entity_get_magicLevel(Entity *entity);
 
+/**
+ * @brief Compares the ids of two entities
+ * @author Maksym Polyak
+ * 
+ * @param ent1 contains all the information related to the entity 1
+ * @param ent2 contains all the information related to the entity 2
+ * @return int > 0 if ent1 id is greater than ent2 id,
+ * int < 0 if ent2 id is greater than ent1 id
+ * int = 0 if ent1 id is equal to ent1 id
+ */
+int entity_compare(void *ent1, void *ent2);
+
 #endif

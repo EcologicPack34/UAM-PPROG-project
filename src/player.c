@@ -17,6 +17,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "equipment.h"
+#include "leveling.h"
 
 /**
  * @brief Player
@@ -26,9 +27,11 @@
 struct _Player {
     Entity *entity;                     /*!< Entity type of the player */
 
-    NPC *followers[NPC_MAX_ALLIES - 1]; /*!< Pointer with all the actual followers allies*/
+    Collection *followers;              /*!< Saves the entities of the followers of the player*/
 
     Equipment *equipment;               /*!< Equipment of the player*/
+
+    Leveling *leveling;                 /*!< Leveling info of the player*/
 
     int money;                          /*!< Money quantity of the player*/
 
@@ -61,9 +64,8 @@ Status player_set_entity(Player *player, Entity *entity){
    Game interface implementation
 */
 
-Player *player_create(char *name, Id identity, Id location){
+Player *player_create(char *name, Id identity, Id location, int money, int xp, int next_xp, int level, int skill_points){
     Player *player = NULL;
-    int i;
 
     if(!(player = (Player *)malloc(sizeof(Player))))
         return NULL;
@@ -79,16 +81,23 @@ Player *player_create(char *name, Id identity, Id location){
         free(player);
     }
 
-    player->money = 0;
-
-    for(i = 0; i < NPC_MAX_FOLLOWERS; i++){
-        player->followers[i] = NULL;
+    if((player->leveling = leveling_create(xp, next_xp, level, skill_points)) == ERROR){
+        entity_destroy(player->entity);
+        equipment_destroy(player->equipment);
+        free(player);
     }
+
+    player->money = money;
+
+    player->followers = collection_create(NPC_MAX_FOLLOWERS, true, true, entity_compare, NULL);
+    if(!player->followers) return NULL;
 
     player->cmdData = command_info_create();
     if(!(player->cmdData)){
+        collection_destroy(player->followers);
         entity_destroy(player->entity);
         equipment_destroy(player->equipment);
+        leveling_destroy(player->leveling);
         free(player);
     }
     
@@ -99,8 +108,10 @@ void player_destroy(Player *player){
     if(!player)
         return;
 
+    collection_destroy(player->followers);
     entity_destroy(player_get_entity(player));
     equipment_destroy(player->equipment);
+    leveling_destroy(player->leveling);
     command_info_destroy(player->cmdData);
     free(player);
 }
@@ -123,12 +134,27 @@ Equipment *player_get_equipment(Player *player){
 
 Status player_get_str_desc(Player *player, char *str){
     Entity *ent = NULL;
+    char aux_str[LINE_LENGTH] = "";
     
     if(!player || !str)
         return ERROR;
 
     ent = player_get_entity(player);
-    sprintf(str, "%s (%s): H:%.1lf/%.1lf,L:%ld (%ld)", entity_get_graphic_description(ent), entity_get_name(ent), entity_get_health(ent), entity_get_max_health(ent),entity_get_location(ent), entity_get_id(ent));
+    sprintf(str, "%s (%s): H:%.1lf/%.1lf,L:%ld,M:%d, Lev:%d", entity_get_graphic_description(ent), entity_get_name(ent), entity_get_health(ent), entity_get_max_health(ent),entity_get_location(ent), player_get_money(player), leveling_get_level(player->leveling));
+
+    if(leveling_check_level_up(player->leveling) == true){
+        strcpy(aux_str, " LEVEL UP!");
+        strcat(str, aux_str);
+    } else {
+        sprintf(aux_str, " XP:%d/%d", leveling_get_XP(player->leveling), leveling_get_next_XP(player->leveling));
+        strcat(str, aux_str);
+    }
+
+    sprintf(aux_str, " SP:%d", leveling_get_skill_points(player->leveling));
+    strcat(str, aux_str);
+
+    sprintf(aux_str, " (%ld)", entity_get_id(ent));
+    strcat(str, aux_str);
 
     return OK;
 }
@@ -137,6 +163,12 @@ int player_get_money(Player *player){
     if(!player) return -1;
 
     return player->money;
+}
+
+Leveling *player_get_leveling(Player *player){
+    if(!player) return NULL;
+
+    return player->leveling;
 }
 
 CommandInfo *player_get_cmdData(Player *player){
@@ -220,57 +252,28 @@ Status player_unequip_piece(Player *player, char *data){
     return OK;
 }
 
-Status player_add_follower(Player *player, NPC *npc){
-    int i, index = -1;
+Status player_add_follower(Player *player, Entity *entity){
+    if(!player || !entity) return ERROR;
 
-    if(!player || !npc || (npc_get_can_follow(npc) == false)) return ERROR;
-
-    if(npc_get_player_following_id(npc) != NO_ID)
-        return ERROR;
-
-    /*Checks if its already a follower and saves the first NULL index*/
-    for(i = 0; i < NPC_MAX_FOLLOWERS; i++){
-        if(npc_cmp(npc, player->followers[i]) == 0)
-            return OK;
-        if(player->followers[i] == NULL)
-            index = i;
-    }
-
-    /*If an empty pointer wasn't found then followers are full*/
-    if(index == -1) return ERROR;
-
-    npc_set_status(npc, ALLY);
-    npc_set_player_following_id(npc, entity_get_id(player_get_entity(player)));
-
-    player->followers[index] = npc;
-
-    return OK;
+    return collection_add(player->followers, (void *)entity);
 }
 
-Status player_remove_follower_by_name(Player *player, char *npc_name){
-    int i;
+Status player_remove_follower_by_pointer(Player *player, Entity *entity){
+    if(!player || !entity) return ERROR;
 
-    if(!player || !npc_name) return ERROR;
-
-    /*Searches by name and removes it*/
-    for(i = 0; i < NPC_MAX_FOLLOWERS; i++){
-        if(player->followers[i] != NULL && strcmp(entity_get_name(npc_get_entity(player->followers[i])), npc_name) == 0){
-            npc_set_player_following_id(player->followers[i], NO_ID);
-            npc_set_status(player->followers[i], NEUTRAL);
-            player->followers[i] = NULL;
-            return OK;
-        }
-    }
-
-    /*If not found then its removed*/
-    return ERROR;
+    return collection_remove(player->followers, entity);
 }
 
-NPC **player_get_followers(Player *player){
-    
+Entity *player_get_follower_at(Player *player, int i){
     if(!player) return NULL;
 
-    return player->followers;
+    return collection_get_element_at(player->followers, i);
+}
+
+int player_get_follower_num(Player *player){
+    if(!player) return -1;
+
+    return collection_length(player->followers);
 }
 
 Status player_save_to_file(FILE *file, Player *p){
@@ -281,28 +284,35 @@ Status player_save_to_file(FILE *file, Player *p){
     long mH,h,bD;
     int str,def,magicLvl;
     int n_followers,i;
-    Id allys[NPC_MAX_ALLIES-1];
+    Entity *allys[NPC_MAX_FOLLOWERS];
     char id_aux[WORD_SIZE]="";
+    int xp,next_xp,lvl,sp;
 
     if(!file || !p) return ERROR;
 
+    for(i = 0; i<NPC_MAX_FOLLOWERS; i++){
+        allys[i] = NULL;
+    }
 
     id = entity_get_id(p->entity);
     location = entity_get_location(p->entity);
     name = entity_get_name(p->entity);
     Gdesc = entity_get_graphic_description(p->entity);
+    n_followers = collection_length(p->followers);
 
-    for(i=0, n_followers=0; i<NPC_MAX_ALLIES; i++){
-        if(p->followers[i] != NULL){
-            n_followers++;
-            allys[i]= entity_get_id(npc_get_entity(p->followers[i]));
-        } 
+    xp = leveling_get_XP(p->leveling);
+    next_xp = leveling_get_next_XP(p->leveling);
+    lvl = leveling_get_level(p->leveling);
+    sp = leveling_get_skill_points(p->leveling);
+
+    for(i=0; i<n_followers; i++){
+            allys[i]= (collection_get_element_at(p->followers, i));
     }
 
-    /*#p:1|Hero1|11|mO^";money;n_followers;id_following1;id_following2...*/
-    sprintf(aux, "#p:%ld|%s|%ld|%s;%d;%d",id,name,location,Gdesc,p->money,n_followers);
+    /*#p:1|Hero1|11|mO^";money;xp;next_xp;lvl;SP;n_followers;id_following1-type;id_following2-type...*/
+    sprintf(aux, "#p:%ld|%s|%ld|%s;%d;%d;%d;%d;%d;%d",id,name,location,Gdesc,p->money,xp,next_xp,lvl,sp,n_followers);
     for(i=0;i<n_followers;i++){
-        sprintf(id_aux, ";%ld", allys[i]);
+        sprintf(id_aux, ";%ld-%d", entity_get_id(allys[i]), entity_get_entityType(allys[i]));
         strcat(aux, id_aux);
     }
     strcat(aux, "\n");
