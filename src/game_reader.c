@@ -293,11 +293,11 @@ Status game_reader_create_save_file(char *save_file, Game *game, char *original_
     return ERROR;
   }
 
-  /*ActivePlayerIndex;NumOfPlayers;Is_Turn_Valid;N_spaces;N_links;godmode;finished;procedural*/
-  fprintf(Psave_file, "%d;%d;%d;%d;%d;%d;%d;%d\n", \
+  /*ActivePlayerIndex;NumOfPlayers;Is_Turn_Valid;N_spaces;N_links;godmode;finished;procedural;GameState*/
+  fprintf(Psave_file, "%d;%d;%d;%d;%d;%d;%d;%d;%d\n", \
     game_get_active_player_index(game), game_get_n_players(game), (int)game_get_is_turn_valid(game)\
      ,game_get_n_spaces(game), game_get_n_links(game), (int)game_get_god_mode(game),\
-     (int)game_get_finished(game), (int)game_get_is_procedural(game));
+     (int)game_get_finished(game), (int)game_get_is_procedural(game), (int)game_get_state(game));
   
   /*GDESC SAVE*/
   while(fgets(line, WORD_SIZE, Poriginal)){
