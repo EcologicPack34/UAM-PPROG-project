@@ -239,6 +239,7 @@ void screen_area_puts(Area* area, char *str){
           tag[tagLen] = *tagE;
         }
         if(*tagE == ']'){
+          tag[tagLen] = '\0';
           cColor = color_tag_to_color(tag);
           if(cColor == NO_TAG){
             cColor = BLACK;
