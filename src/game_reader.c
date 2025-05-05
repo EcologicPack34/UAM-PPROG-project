@@ -172,8 +172,9 @@ bool game_reader_generate_procedural();
  * @param game 
  * @param filename 
  * @return Status 
+ * @note this function loads objects, attacks.
  */
-Status game_reader_load_objects_from_save_file(Game *game, char *filename);
+Status game_reader_load_others_from_save_file(Game *game, char *filename);
 
 /*
 * Public functions implementation
@@ -335,7 +336,7 @@ Status game_reader_create_from_save_file(Game **game, char *filename){
     debug_log(LOG_ERROR, "Error loading stats at: game_reader_create_from_file(Game*, char*) in game_reader.c");
     return ERROR;
   }
-  if(game_reader_load_objects_from_save_file(*game, filename) == ERROR){
+  if(game_reader_load_others_from_save_file(*game, filename) == ERROR){
     debug_log(LOG_ERROR, "Error loading stats at: game_reader_create_from_file(Game*, char*) in game_reader.c");
     return ERROR;
   }
@@ -429,13 +430,6 @@ Status game_reader_create_save_file(char *save_file, Game *game, char *original_
     attack_save_on_file(collection_get_element_at(game_get_attacks(game), i), Psave_file);
   }
 
-  /*Saves effects to the file*/
-  size = collection_length(effect_manager_get_effects(game_get_effect_manager(game)));
-  fprintf(Psave_file,"%d\n", size);
-  for(i=0; i < size; i++){
-    effect_save_to_file(Psave_file, collection_get_element_at(effect_manager_get_effects(game_get_effect_manager(game)),i));
-  }
-
   /*Saves events to the file*/
   event_manager_save_on_file(game_get_event_manager(game), Psave_file);
 
@@ -444,6 +438,13 @@ Status game_reader_create_save_file(char *save_file, Game *game, char *original_
 
   /*Saves command to the file*/
   command_save_on_file(game_get_last_command(game),Psave_file);
+
+  /*Saves effects to the file*/
+  size = collection_length(effect_manager_get_effects(game_get_effect_manager(game)));
+  fprintf(Psave_file,"%d\n", size);
+  for(i=0; i < size; i++){
+    effect_save_to_file(Psave_file, collection_get_element_at(effect_manager_get_effects(game_get_effect_manager(game)),i));
+  }
 
   fclose(Psave_file);
 
@@ -1593,12 +1594,14 @@ Status game_reader_load_gdesc(Game *game, char *filename){
   return OK;
 }
 
-Status game_reader_load_objects_from_save_file(Game *game, char *filename){
+Status game_reader_load_others_from_save_file(Game *game, char *filename){
   FILE *fIN=NULL;
   char str[WORD_SIZE]="";
   char *toks=NULL;
-  int n_obj,i;
+  int size,i;
   Object *obj=NULL;
+  Attack *at=NULL;
+  Status status=OK;
 
   if(!game || !filename) return ERROR;
 
@@ -1615,9 +1618,9 @@ Status game_reader_load_objects_from_save_file(Game *game, char *filename){
   }
   if(toks == NULL) return ERROR;
 
-  fscanf(fIN, "%d\n", &n_obj);
-
-  for(i=0; i<n_obj; i++){
+  /*object & equipment load*/
+  fscanf(fIN, "%d\n", &size);
+  for(i=0; i<size; i++){
     obj = object_create_from_file(fIN);    
     
     if(game_add_object(game, obj) == ERROR) return ERROR;
@@ -1627,5 +1630,31 @@ Status game_reader_load_objects_from_save_file(Game *game, char *filename){
       player_get_equipment(game_get_player_by_id(game, object_get_location(obj))), obj);
     }
   }
-  return OK;
+
+  /*attack load*/
+  fscanf(fIN, "%d\n", &size);
+  for(i=0; i<size; i++){
+    at = attack_create_from_file(fIN);
+    
+    if(collection_add(game_get_attacks(game), at) == ERROR) return ERROR;
+  }
+
+  /*event load*/
+  if(event_manager_read_from_file(game_get_event_manager(game), fIN) == ERROR) return ERROR;
+
+  /*ability load*/
+  if(ability_manager_read_from_file(game_get_ability_manager(game), fIN) == ERROR) return ERROR;
+
+  /*event load*/
+  if(command_read_from_file(game_get_last_command(game), fIN) == ERROR) return ERROR;
+
+
+  if (ferror(fIN)) {
+    status = ERROR;
+    debug_log(LOG_ERROR, "Error in file at: game_reader_load_effects(Game*, char*) in game_reader.c");
+  }
+
+  fclose(fIN);
+  
+  return status;
 }
