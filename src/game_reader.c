@@ -263,15 +263,26 @@ Status game_reader_create_from_file(Game **game, char *filename){
 }
 
 Status game_reader_create_from_save_file(Game **game, char *filename){
+  int active_player_index, n_player, is_turn_valid, godmode, current_state, finished, procedural;
+  FILE *fIN = NULL;
+  int i, size;
+
   if(!game || !filename) return ERROR;
 
   if (game_create(game) == ERROR){
-    debug_log(LOG_ERROR, "Error creating game at: game_reader_create_from_file(Game*, char*) in game_reader.c");
+    debug_log(LOG_ERROR, "Error creating game at: game_reader_create_from_save_file in game_reader.c");
     printf("%c[2J", 27);
     printf("Fatal error. Check the log for details\n");
     debug_force_global_fclose();
     abort();
   }
+
+  
+  fscanf(fIN, "%d;%d;%d;%d;%d;%d;%d\n", &active_player_index, &n_player,\
+    &is_turn_valid, &godmode, &finished, &procedural, &current_state);
+ 
+  game_set_basic_info(*game, active_player_index, n_player, is_turn_valid,\
+   godmode, finished, procedural, current_state);
   /*Loads settings*/
   
   if(game_reader_load_commandInfo(*game) == ERROR){
@@ -288,7 +299,7 @@ Status game_reader_create_from_save_file(Game **game, char *filename){
   }  
   
   if(game_reader_load_gdesc(*game, filename) == ERROR){
-    debug_log(LOG_ERROR, "Error loading graphic descriptions at: game_reader_create_from_file(Game*, char*) in game_reader.c");
+    debug_log(LOG_ERROR, "Error loading graphic descriptions at: game_reader_create_from_save_file in game_reader.c");
     return ERROR;
   }
 
@@ -316,71 +327,19 @@ Status game_reader_create_from_save_file(Game **game, char *filename){
     debug_log(LOG_ERROR, "Error loading stats at: game_reader_create_from_file(Game*, char*) in game_reader.c");
     return ERROR;
   }
+
+  
   
 
   return OK;
 }
 
-Status game_reader_load_from_save_file(Game **game, char *save_file){
-  int active_player_index, n_player, is_turn_valid, n_spaces, n_links, godmode, current_state, finished, procedural;
-  FILE *fIN = NULL;
-  int i, size;
-
-  if(!save_file) abort();
-
-  if (game_create(game) == ERROR){
-    debug_log(LOG_ERROR, "Error creating game at: game_reader_load_from_save_file in game_reader.c");
-    printf("%c[2J", 27);
-    printf("Fatal error. Check the log for details\n");
-    debug_force_global_fclose();
-    abort();
-  }
-
-  fIN = fopen(save_file, "r");
-  if(!fIN){
-    debug_log(LOG_ERROR, "Error opening save file at: game_reader_load_from_save_file in game_reader.c");
-    printf("%c[2J", 27);
-    printf("Fatal error. Check the log for details\n");
-    debug_force_global_fclose();
-    abort();
-  }
-
-  fscanf(fIN, "%d;%d;%d;%d;%ld;%d;%d;%d;%d\n", &active_player_index, &n_player,\
-     &is_turn_valid, &n_spaces, &n_links, &godmode, &finished, &procedural, &current_state);
-  
-  game_set_basic_info(*game, active_player_index, n_player, is_turn_valid,\
-    godmode, finished, procedural, current_state);
-
-  fscanf(fIN, "%d\n", &size);
-  for(i = 0; i < size; i++){
-    game_add_gdesc(*game, gdesc_create_from_file(fIN));
-  }
-  
-  for(i = 0; i < n_links; i++){
-    game_add_link(*game, link_create_from_file(fIN));
-  }
-
-  for(i = 0; i < n_spaces; i++){
-    game_add_space(*game, space_create_from_file(fIN, game_get_gdescs(*game), game_get_links(game), n_links));
-  }
-
-  fscanf(fIN, "%d\n", &size);
-  for(i = 0; i < size; i++){
-    /*game_add_npc(game, aa) FINISHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH*/
-  }
-    
-}
-
 Status game_reader_create_save_file(char *save_file, Game *game, char *original_file){
   FILE *Poriginal=NULL;
   FILE *Psave_file=NULL;
-  char line[WORD_SIZE]="";
-  char aux[WORD_SIZE]="";
-  char *toks=NULL;
-  int gdesc_hight=0;
-  int i;
-  Id aux_id;
+  int i, gdesc_height;
   int size=0; /*aux size variable for multiple uses*/
+  char line[WORD_SIZE] = "", aux[WORD_SIZE] = "", *toks = NULL;
 
   if(!save_file || !game || !original_file) return ERROR;
 
@@ -398,18 +357,33 @@ Status game_reader_create_save_file(char *save_file, Game *game, char *original_
      ,game_get_n_spaces(game), game_get_n_links(game), (int)game_get_god_mode(game),\
      (int)game_get_finished(game), (int)game_get_is_procedural(game), (int)game_get_state(game));
   
-  /*GDESC SAVE*/
-  size = collection_length(game_get_gdescs(game));
-  fprintf(Psave_file,"%d\n", &size);
-  for(i=0; i<size; i++){
-    gdesc_save_on_file(Psave_file, game_get_gdesc_at(game, i));
-  }
+  /*GDESC SAVE (gathered from the original file, as they aren't modified)*/
+  fprintf(Psave_file, "\n\n");
+  while(fgets(line, WORD_SIZE, Poriginal)){
+    if(strncmp("#gd:", line, 4) == 0){
+      strcpy(aux,line);
+      toks = strtok(aux+4,"|");
+      toks = strtok(NULL, "|");
+      gdesc_height = atoi(toks);
+      fprintf(Psave_file, "%s", line);
+
+      for(i=0; i<gdesc_height; i++){
+        fgets(line, WORD_SIZE, Poriginal);
+        fprintf(Psave_file, "%s", line);
+      }
+      fprintf(Psave_file, "----------\n");
+    }
+
+      
+    }
+    fprintf(Psave_file, "\n\n");
+    fclose(Poriginal);
 
   /*Saves links to the file*/
   size = game_get_n_links(game);
   for(i=0; i<size; i++){
     link_save_to_file(Psave_file, game_get_link_at(game, i));
-  }
+  } 
 
   /*Saves spaces to the file*/
   size = game_get_n_spaces(game);
@@ -419,7 +393,7 @@ Status game_reader_create_save_file(char *save_file, Game *game, char *original_
 
   /*Saves npcs to the file*/
   size = collection_length(game_get_npcs(game));
-  fprintf(Psave_file,"%d\n", &size);
+  fprintf(Psave_file,"%d\n", size);
   for(i=0; i<size; i++){
     npc_save_to_file(Psave_file, collection_get_element_at(game_get_npcs(game), i));
   }
@@ -445,7 +419,7 @@ Status game_reader_create_save_file(char *save_file, Game *game, char *original_
 
   /*Saves effects to the file*/
   size = collection_length(effect_manager_get_effects(game_get_effect_manager(game)));
-  fprintf(Psave_file,"%d\n", &size);
+  fprintf(Psave_file,"%d\n", size);
   for(i=0; i < size; i++){
     effect_save_to_file(Psave_file, collection_get_element_at(effect_manager_get_effects(game_get_effect_manager(game)),i));
   }

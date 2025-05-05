@@ -488,10 +488,11 @@ Status space_save_to_file(FILE *file, Space *s){
   up = link_get_id(space_get_up(s));
   down = link_get_id(space_get_down(s));
   
-  /*ID|Name|gdescId|northLink|eastLink|southLink|westLink|upLink|downLink|isDiscovered*/
-  /*Nombre*/
-  fprintf(file, "%ld|%s|%ld|%ld|%ld|%ld|%ld|%ld|%ld|%d\n", space_get_id(s), space_get_name(s),\
+  /*#s:ID|Name|gdescId|northLink|eastLink|southLink|westLink|upLink|downLink|isDiscovered*/
+  fprintf(file, "#s:%ld|%s|%ld|%ld|%ld|%ld|%ld|%ld|%ld|%d\n", space_get_id(s), space_get_name(s),\
   gdesc_get_id(space_get_graphic_description(s)), north, east, south, west, up, down, space_get_isDiscovered(s));
+
+  
   return OK;
 }
 
@@ -507,7 +508,7 @@ Space *space_create_from_file(FILE *fIN, Collection *gdescs, Link **links, int n
 
   fgets(str, WORD_SIZE, fIN);
   toks = strtok(str,"|");
-  id = atol(id);
+  id = atol(toks);
 
   space = space_create(id);
 

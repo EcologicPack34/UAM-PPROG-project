@@ -90,9 +90,8 @@ int gdesc_save_on_file(GDesc *gdesc, FILE *fOUT){
 
     if(!gdesc ||!fOUT) return -1;
 
-    count += fprintf(fOUT, "%ld|%d|%d|%d\n", gdesc->id, gdesc->height, gdesc->width, gdesc->type);
+    count += fprintf(fOUT, "#g:%ld|%d|%d|%d\n", gdesc->id, gdesc->height, gdesc->width, gdesc->type);
     for(i = 0; i < gdesc->height; i++){
-        string_remove_newline_escape_sequence_on_end(gdesc->description[i]);
         count += fprintf(fOUT, "%s\n", gdesc->description[i]);
     }
 

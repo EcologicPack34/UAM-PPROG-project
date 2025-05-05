@@ -12,6 +12,7 @@
 #define GDESC_H
 
 #include "types.h"
+#include <stdio.h>
 
 typedef enum {NO_DESC = 0, SPACE_DESC, ENTITY_DESC} GDescType;
 

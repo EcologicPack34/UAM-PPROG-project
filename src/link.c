@@ -255,10 +255,10 @@ int link_cmp(void *e1, void *e2){
 Status link_save_to_file(FILE *file, Link *l){
     if(!l || !file) return ERROR;
 
-/*ID|Space1|Space2|adjacent|locked*/
-/*1|11|121|1|0*/
+/*#l:ID|Space1|Space2|adjacent|locked*/
+/*#l:1|11|121|1|0*/
 
-    fprintf(file, "%ld|%ld|%ld|%d|%d\n",l->id,l->space1,l->space2,l->adjacent,l->locked);
+    fprintf(file, "#l:%ld|%ld|%ld|%d|%d\n",l->id,l->space1,l->space2,l->adjacent,l->locked);
     return OK;
 }
 

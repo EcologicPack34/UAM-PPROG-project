@@ -1356,7 +1356,7 @@ GDesc *game_get_gdesc_at(Game *game, int i){
   return collection_get_element_at(game->gdescs, i);
 }
 
-Collection *game_get_links(Game *game){
+Link **game_get_links(Game *game){
   if(!game) return NULL;
 
   return game->links;

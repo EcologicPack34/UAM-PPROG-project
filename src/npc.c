@@ -191,11 +191,11 @@ Status npc_save_to_file(FILE *file, NPC *p){
     Gdesc = entity_get_graphic_description(p->entity);
 
     /*
-   #n:ID|Dialogue State - 1 means initial - 0 means no dialogue|Nombre|LocationID|is_follower|Status|Gdesc
-    #n:1|1|NPC1|11|1|1|^0m"
+    ID|Dialogue State - 1 means initial - 0 means no dialogue|Nombre|LocationID|is_follower|Status|Gdesc
+    1|1|NPC1|11|1|1|^0m"
     */
     
-    sprintf(aux, "#n:%ld|%d|%s|%ld|%d|%d|%s\n",id,p->dialogue_state,name,location,p->can_follow,p->status,Gdesc);
+    sprintf(aux, "%ld|%d|%s|%ld|%d|%d|%s\n",id,p->dialogue_state,name,location,p->can_follow,p->status,Gdesc);
     fprintf(file, "%s", aux);
 
     mH=entity_get_max_health(p->entity);
@@ -210,4 +210,14 @@ Status npc_save_to_file(FILE *file, NPC *p){
     fprintf(file, "%s", aux);
 
     return OK;
+}
+
+NPC *npc_create_from_file(FILE *fIN){
+    Id id;
+    int dialogue_state, can_follow, status;
+
+
+    if(!fIN) return NULL;
+
+    return NULL;
 }
