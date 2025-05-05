@@ -265,9 +265,6 @@ Status game_reader_create_from_file(Game **game, char *filename){
 Status game_reader_create_from_save_file(Game **game, char *filename){
   int active_player_index, n_player, is_turn_valid, godmode, current_state, finished, procedural;
   FILE *fIN = NULL;
-  int i, size;
-
-  char str[WORD_SIZE] = "", *toks ;
 
   if(!game || !filename) return ERROR;
 
@@ -330,21 +327,7 @@ Status game_reader_create_from_save_file(Game **game, char *filename){
     return ERROR;
   }
 
-<<<<<<< Updated upstream
-  fIN = fopen(filename, "r");
-  if(!fIN){
-    debug_log(LOG_ERROR, "Error on filename at: game_reader_create_from_save_file in game_reader.c");
-    return ERROR;
-  }
-=======
-  /*lectura objetos*/
-
->>>>>>> Stashed changes
   
-  toks = fgets(str, WORD_SIZE, fIN);
-  while(strncmp(str,"OBJ\n",4) != 0 && toks != NULL){
-    toks = fgets(str, WORD_SIZE, fIN);
-  }
 
   return OK;
 }
@@ -1598,20 +1581,38 @@ Status game_reader_load_gdesc(Game *game, char *filename){
 }
 
 Status game_reader_load_objects_from_save_file(Game *game, char *filename){
-  FILE *file=NULL;
+  FILE *fIN=NULL;
+  char str[WORD_SIZE]="";
+  char *toks=NULL;
+  int n_obj,i;
+  Object *obj=NULL;
 
   if(!game || !filename) return ERROR;
 
-  if (!filename) {
-    debug_log(LOG_ERROR, "Missing file name at: game_reader_load_effects(Game*, char*) in game_reader.c");
+
+  fIN = fopen(filename, "r");
+  if(!fIN){
+    debug_log(LOG_ERROR, "Error on filename at: game_reader_create_from_save_file in game_reader.c");
     return ERROR;
   }
-
-  file = fopen(filename, "r");
-  if (file == NULL) {
-    debug_log(LOG_ERROR, "Error in file at: game_reader_load_effects(Game*, char*) in game_reader.c");
-    return ERROR;
+  
+  toks = fgets(str, WORD_SIZE, fIN);
+  while(strncmp(str,"OBJ\n",4) != 0 && toks != NULL){
+    toks = fgets(str, WORD_SIZE, fIN);
   }
+  if(toks == NULL) return ERROR;
 
-  while(fgets())
+  fscanf(fIN, "%d\n", &n_obj);
+
+  for(i=0; i<n_obj; i++){
+    obj = object_create_from_file(fIN);    
+    
+    if(game_add_object(game, obj) == ERROR) return ERROR;
+
+    if(object_get_is_equipped(obj)){
+      equipment_add_piece(player_get_entity(game_get_player_by_id(game, object_get_location(obj))),\
+      player_get_equipment(game_get_player_by_id(game, object_get_location(obj))), obj);
+    }
+  }
+  return OK;
 }

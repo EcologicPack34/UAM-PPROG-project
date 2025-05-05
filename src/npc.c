@@ -211,13 +211,3 @@ Status npc_save_to_file(FILE *file, NPC *p){
 
     return OK;
 }
-
-NPC *npc_create_from_file(FILE *fIN){
-    Id id;
-    int dialogue_state, can_follow, status;
-
-
-    if(!fIN) return NULL;
-
-    return NULL;
-}
