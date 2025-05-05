@@ -1180,7 +1180,7 @@ Status game_actions_follow(Game *game){
 Status game_actions_save(Game *game){
   char **args = NULL;
   int n_args;
-  char filename[WORD_SIZE]="";
+  char filename[LINE_LENGTH]="";
   Command *comm = NULL;
 
   if(!game) return ERROR;
@@ -1195,9 +1195,7 @@ Status game_actions_save(Game *game){
   if(!args) return ERROR;
 
 
-  strcpy(filename, args[0]);
-  strcat(filename, ".dat");
+  sprintf(filename, "AntAmnesia/saves/%s.dat", args[0]);
 
-  //ADD ARGUMENTS CONTROL
   return game_reader_create_save_file(filename, game);
 }
