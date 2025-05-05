@@ -34,20 +34,21 @@ Generic command for moving. Needs one argument (north, east, south, west). Ex: m
 Searches in the current space to obtain info about NPCs and objects.
 Tries to add a piece of equipment to the active player from the inventory. Use prototype: eq OBJECT_NAME Ex: eq HTEST
 Removes a piece of equipment. Use prototype: ue PIECE_TO_REMOVE: helmet,chest,arms,leg_armor,shoes,two_handed,one_handed1,one_handed2. Ex: ue helmet
-Inspect an object that is contained in the players inventory. Ex: inspect objectName.
+Inspect an object that is contained in the players inventory. Ex: inspect objectName. Also works on store
 Enables God Mod, gives high health, discovers all spaces...
 Moves one space up.
 Moves one space down.
 Levels up the player if he has skill points available. In level up state write lu (option you want)
+Buys the object if you have enough money
+Follows another player, can't follow someone if they have 3 followers or you have any followers. Also used for unfollowing To use: fw (Name of the player)
 -------------------
 [CmdStateTypes]
 all
-Move,North,South,East,West,Attack,Take,Drop,Chat,Exit,Help,Ability,Object_Use,Search,Equip,Unequip,Inspect,sw,up,dw,Level_Up,
+Move,North,South,East,West,Attack,Take,Drop,Chat,Exit,Help,Ability,Object_Use,Search,Equip,Unequip,Inspect,sw,up,dw,Level_Up,Follow,
 Attack,Run_Away,Exit,Help,Ability,Object_Use,Inspect,
-all
-Chat,
-Level_Up,
-Chat,
+Chat,Help,
+Level_Up,Help,
+Buy,Help,Inspect,
 ----------------
 
 

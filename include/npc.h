@@ -99,15 +99,6 @@ char *npc_get_message(NPC *npc);
 bool npc_get_can_follow(NPC *npc);
 
 /**
- * @brief Gets the id of the player its following NO_ID if error
- * @author Maksym Polyak
- * 
- * @param npc npc struct
- * @return Id or NO_ID if not following
- */
-Id npc_get_player_following_id(NPC *npc);
-
-/**
  * @brief Gets the state of the dialogue with the NPC
  * @author Maksym Polyak
  * 
@@ -147,16 +138,6 @@ Status npc_set_message(NPC *npc, char *message);
  * @return Status 
  */
 Status npc_set_is_follower(NPC *npc, bool can_follow);
-
-/**
- * @brief Sets the id of the player it has to follow
- * @author Maksym Polyak
- * 
- * @param npc npc struct
- * @param player_follower_id id of player
- * @return Status 
- */
-Status npc_set_player_following_id(NPC *npc, Id player_follower_id);
 
 /**
  * @brief Sets the NPC dialogue state

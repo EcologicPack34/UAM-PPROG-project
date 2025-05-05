@@ -132,8 +132,13 @@ Entity *entity_create(char *name, Id identity, Id idlocation, InventoryType inve
     }
     entity->n_ability = 0;
 
+    if(inventoryType == PLAYER_INVENTORY){
+        entity->entityType = PLAYER_TYPE;
+    } else if(inventoryType == NPC_INVENTORY){
+        entity->entityType = NPC_TYPE;
+    }
+
     entity_set_graphic_description(entity, "ERR");
-    entity_set_entityType(entity, UNKNOWN_ENTITY);
 
     entity_set_id(entity, identity);
     entity_set_name(entity, name);
@@ -401,4 +406,19 @@ int entity_get_magicLevel(Entity *entity){
 
     
     return entity->stats.magicLevel;
+}
+
+int entity_compare(void *ent1, void *ent2){
+    Entity *entity1 = NULL, *entity2 = NULL;
+    
+    if(!ent1 || !ent2) return 0;
+
+    entity1 = (Entity *)ent1;
+    entity2 = (Entity *)ent2;
+
+    if(entity1->entityType != entity2->entityType){
+        return strcmp(entity1->name, entity2->name);
+    }
+
+    return entity1->id - entity2->id;
 }

@@ -23,7 +23,6 @@ struct _NPC{
     int dialogue_state;             /*!< Determines the state of the dialogue in general*/
 
     bool can_follow;                /*!< Determines if the NPC can follow the player or not*/
-    Id player_following_id;         /*!< Saves the id of the player its following*/
     NPC_status status;              /*!< Determines if the NPC is an ALLY, ENEMY or NEUTRAL towards players*/
 };
 
@@ -51,7 +50,6 @@ NPC *npc_create(NPC_status status, bool can_follow, int dialogue_state, char *na
 
     npc->status = status;
     npc->can_follow = can_follow;
-    npc->player_following_id = NO_ID;
     npc->dialogue_state = dialogue_state;
 
     /*by default, all stats are set to level 1*/
@@ -94,12 +92,6 @@ bool npc_get_can_follow(NPC *npc){
     return npc->can_follow;
 }
 
-Id npc_get_player_following_id(NPC *npc){
-    if(!npc) return false;
-
-    return npc->player_following_id;
-}
-
 int npc_get_dialogue_state(NPC *npc){
     if(!npc) return -1;
 
@@ -121,14 +113,6 @@ Status npc_set_is_follower(NPC *npc, bool can_follow){
     if(!npc) return ERROR;
 
     npc->can_follow = can_follow;
-
-    return OK;
-}
-
-Status npc_set_player_following_id(NPC *npc, Id player_follower_id){
-    if(!npc) return ERROR;
-
-    npc->can_follow = player_follower_id;
 
     return OK;
 }
