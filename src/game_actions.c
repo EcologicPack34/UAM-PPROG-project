@@ -240,6 +240,7 @@ Status game_actions_update(Game *game, Command *command) {
   }
 
   if(!command_current_type_valid_by_state(game_get_last_command(game), game_get_state(game))){
+    game_add_log_message(game, MESSAGE_ERROR, "Command not valid for gamestate");
     command_set_status(game_get_last_command(game), ERROR);
     debug_log(LOG_WARNING, "Introduced command was not valid for current game state (state: %d)", game_get_state(game) - ERROR_STATE);
     return ERROR;
@@ -502,8 +503,11 @@ Status game_actions_take(Game *game){
 
   object = inventory_get_object_by_name(spaceInventory, arguments[0]);
 
-  if(!object)
+  if(!object){
+    sprintf(str, "Object %s not found", arguments[0]);
+    game_add_log_message(game, MESSAGE_ERROR, str);
     return ERROR;
+  }
 
   player = player_get_entity(game_get_player(game));
 
@@ -541,6 +545,8 @@ Status game_actions_drop(Game *game){
   Inventory *spaceInventory = NULL, *playerInventory = NULL;
   char **arguments = NULL;
   Command *cmd = NULL;
+  char str[WORD_SIZE] = "";
+
 
   cmd = game_get_last_command(game);
 
@@ -552,8 +558,11 @@ Status game_actions_drop(Game *game){
   
   object = inventory_get_object_by_name(playerInventory, arguments[0]);
 
-  if(!object)
+  if(!object){
+    sprintf(str, "Object %s not found", arguments[0]);
+    game_add_log_message(game, MESSAGE_ERROR, str);  
     return ERROR;
+  }
 
   spaceInventory = space_get_inventory(game_get_space(game, game_get_player_location(game)));
 
@@ -575,6 +584,7 @@ Status game_actions_chat(Game *game){
   Dialogue *dialogue = NULL;
   Player *player = NULL;
   Status status;
+  char str[WORD_SIZE] = "";
 
   if(!game)
     return ERROR;
@@ -591,14 +601,23 @@ Status game_actions_chat(Game *game){
   if(game_get_state(game) != DIALOGUE){
 
     npc = space_get_NPC_by_name(space, arguments[0]);
-    if(npc == NULL)
+    if(npc == NULL){
+      sprintf(str, "NPC %s not found", arguments[0]);
+      game_add_log_message(game, MESSAGE_ERROR, str);  
       return ERROR;
+    }
 
-    if(npc_get_status(npc) == ENEMY)
+    if(npc_get_status(npc) == ENEMY){
+      sprintf(str, "You tried chatting with the wrong guy");
+      game_add_log_message(game, MESSAGE_LOG, str);  
       return game_combat_start(game);
+    }
 
-    if(entity_get_health(npc_get_entity(npc)) <= 0)
+    if(entity_get_health(npc_get_entity(npc)) <= 0){
+      sprintf(str, "NPC %s is dead", arguments[0]);
+      game_add_log_message(game, MESSAGE_ERROR, str);  
       return ERROR;
+    }
 
     if((dialogue = game_get_dialogue(game)) == NULL)
       return game_dialogue_init(game, npc);
@@ -786,8 +805,10 @@ Status game_actions_use_ability(Game *game){
   if(!game) return ERROR;
 
   n_arg = command_get_arguments_count(game_get_last_command(game));
-  if(n_arg != 1  &&  n_arg != 2)
+  if(n_arg != 1  &&  n_arg != 2){
+    game_add_log_message(game, ERROR, "Invalid number of arguments.");
     return ERROR;
+  }
 
   arguments = command_get_arguments(game_get_last_command(game));
 
@@ -798,14 +819,20 @@ Status game_actions_use_ability(Game *game){
   entity = player_get_entity(game_get_player(game));
 
   ability = entity_get_ability_at(entity, index - 1);
-  if(!ability)
+  if(!ability){
+    game_add_log_message(game, ERROR, "Error using ability");
     return ERROR;
+  }
 
-  if(ability_manager_use_ability(game_get_ability_manager(game), ability) == ERROR)
+  if(ability_manager_use_ability(game_get_ability_manager(game), ability) == ERROR){
+    game_add_log_message(game, ERROR, "Error using ability");
     return ERROR;
+  }
 
-  if(ability_actions_use_ability(game) == ERROR)
+  if(ability_actions_use_ability(game) == ERROR){
+    game_add_log_message(game, ERROR, "Error using ability");
     return ERROR;
+  }
 
   return OK;
 }
@@ -877,32 +904,45 @@ Status game_actions_equip(Game *game){
 
   comm = game_get_last_command(game);
 
-  if(command_get_arguments_count(comm) != 1) return ERROR;
+  if(command_get_arguments_count(comm) != 1){
+    game_add_log_message(game, ERROR, "Invalid number of arguments");
+    return ERROR;
+  }
 
   player = game_get_player(game);
   inventory = entity_get_inventory(player_get_entity(player));
   object = inventory_get_object_by_name(inventory, command_get_arguments(comm)[0]);
-  if(!object) return ERROR;
+  if(!object){
+    game_add_log_message(game, ERROR, "Object not found");
+    return ERROR;
+  }
 
   return player_equip_piece(player, object);
 }
 
 
 Status game_actions_unequip(Game *game){
-    Player *player = NULL;
-    Command *comm = NULL;
-    
-    if(!game) return ERROR;
-  
-    comm = game_get_last_command(game);
-  
-    if(command_get_arguments_count(comm) != 1) return ERROR;
-  
-    player = game_get_player(game);
-    
-    if(player_unequip_piece(player, command_get_arguments(comm)[0]) == ERROR) return ERROR;
+  Player *player = NULL;
+  Command *comm = NULL;
 
-    return OK;
+  if (!game)
+    return ERROR;
+
+  comm = game_get_last_command(game);
+
+  if (command_get_arguments_count(comm) != 1){
+    game_add_log_message(game, ERROR, "Invalid number of arguments");
+    return ERROR;
+  }
+
+  player = game_get_player(game);
+
+  if (player_unequip_piece(player, command_get_arguments(comm)[0]) == ERROR){
+    game_add_log_message(game, ERROR, "Couldn't unequip piece");
+    return ERROR;
+  }
+
+  return OK;
 }
 
 Status game_actions_inspect(Game *game){
@@ -915,7 +955,10 @@ Status game_actions_inspect(Game *game){
 
   cmd = game_get_last_command(game);
 
-  if(command_get_arguments_count(cmd) != 1) return ERROR;
+  if(command_get_arguments_count(cmd) != 1){
+    game_add_log_message(game, ERROR, "Invalid number of arguments");
+    return ERROR;
+  }
 
   /*Tries to check if its in the inventory or in the actual space*/
   playerInv = entity_get_inventory(player_get_entity(game_get_player(game)));
@@ -925,7 +968,10 @@ Status game_actions_inspect(Game *game){
     obj = inventory_get_object_by_name(spaceInv, command_get_arguments(cmd)[0]);
   }
 
-  if(!obj) return ERROR;
+  if(!obj){
+    game_add_log_message(game, ERROR, "Object not found");
+    return ERROR;
+  }
 
   return game_add_log_message(game, MESSAGE_INSPECT, object_get_descr(obj));
 }
@@ -962,7 +1008,10 @@ Status game_actions_level_up(Game *game){
     if(!args) return ERROR;
 
     n_args = command_get_arguments_count(game_get_last_command(game));
-    if(n_args <= 0 || n_args >= 2) return ERROR;
+    if(n_args <= 0 || n_args >= 2){
+      game_add_log_message(game, ERROR, "Invalid number of arguments");
+      return ERROR;
+    }
 
     entity = player_get_entity(player);
 
@@ -1029,7 +1078,10 @@ Status game_actions_buy(Game *game){
   args = command_get_arguments(comm);
   n_args = command_get_arguments_count(comm);
 
-  if(n_args <= 0) return ERROR;
+  if(n_args <= 0){
+    game_add_log_message(game, ERROR, "Invalid number of arguments");
+    return ERROR;
+  }
 
   index = atoi(args[0]) - 1;
 
@@ -1097,7 +1149,10 @@ Status game_actions_follow(Game *game){
   if(!comm) return ERROR;
 
   n_args = command_get_arguments_count(comm);
-  if(n_args < 0 || n_args > 1) return ERROR;
+  if(n_args < 0 || n_args > 1){
+    game_add_log_message(game, ERROR, "Invalid number of arguments");
+    return ERROR;
+  }
 
   args = command_get_arguments(comm);
   if(!args) return ERROR;
