@@ -1180,6 +1180,7 @@ Status game_actions_follow(Game *game){
 Status game_actions_save(Game *game){
   char **args = NULL;
   int n_args;
+  char filename[WORD_SIZE]="";
   Command *comm = NULL;
 
   if(!game) return ERROR;
@@ -1193,6 +1194,10 @@ Status game_actions_save(Game *game){
 
   if(!args) return ERROR;
 
+
+  strcpy(filename, args[0]);
+  strcat(filename, ".dat");
+
   //ADD ARGUMENTS CONTROL
-  return game_reader_create_save_file("TESTSAVE.dat", game);
+  return game_reader_create_save_file(filename, game);
 }

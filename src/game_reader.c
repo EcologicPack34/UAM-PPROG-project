@@ -115,9 +115,10 @@ Status game_reader_load_commandStateTypes(Game *game);
  * 
  * @param game struct that saves all information related to the game
  * @param filename string that stores the data file name
+ * @param fromSaveFile a bool that determines if the load is form a save file or a new file
  * @return Status 
  */
-Status game_reader_load_stats(Game *game, char *filename);
+Status game_reader_load_stats(Game *game, char *filename, bool fromSaveFile);
 
 /**
  * @brief Reads the file to load all ability
@@ -282,7 +283,7 @@ Status game_reader_create_from_file(Game **game, char *filename){
     debug_log(LOG_ERROR, "Error loading player at: game_reader_create_from_file(Game*, char*) in game_reader.c");
     return ERROR;
   }
-  if(game_reader_load_stats(*game, filename) == ERROR){
+  if(game_reader_load_stats(*game, filename, false) == ERROR){
     debug_log(LOG_ERROR, "Error loading stats at: game_reader_create_from_file(Game*, char*) in game_reader.c");
     return ERROR;
   }
@@ -294,10 +295,10 @@ Status game_reader_create_from_file(Game **game, char *filename){
     debug_log(LOG_ERROR, "Error loading ability at: game_reader_create_from_file(Game*, char*) in game_reader.c");
     return ERROR;
   }
-  /*if (game_reader_load_effects(*game, filename, false) == ERROR){
+  if (game_reader_load_effects(*game, filename, false) == ERROR){
     debug_log(LOG_ERROR, "Error loading ability at: game_reader_create_from_file(Game*, char*) in game_reader.c");
     return ERROR;
-  }*/
+  }
   if(game_reader_load_attacks(*game) == ERROR) {
     debug_log(LOG_ERROR,"Error loading attacks");
     return ERROR;
@@ -383,7 +384,7 @@ Status game_reader_create_from_save_file(Game **game, char *filename){
     debug_log(LOG_ERROR, "Error loading player at: game_reader_create_from_file(Game*, char*) in game_reader.c");
     return ERROR;
   }
-  if(game_reader_load_stats(*game, filename) == ERROR){
+  if(game_reader_load_stats(*game, filename, true) == ERROR){
     debug_log(LOG_ERROR, "Error loading stats at: game_reader_create_from_file(Game*, char*) in game_reader.c");
     return ERROR;
   }
@@ -1045,7 +1046,7 @@ Status game_reader_load_npcs(Game *game, char *filename){
   return status;
 }
 
-Status game_reader_load_stats(Game *game, char *filename){
+Status game_reader_load_stats(Game *game, char *filename, bool fromSaveFile){
   FILE *file=NULL;
   void *entity=NULL;
   char line[WORD_SIZE] = "";
@@ -1121,9 +1122,12 @@ Status game_reader_load_stats(Game *game, char *filename){
       magicLevel = atoi(toks);
       
       /*For the time being, we'll reject negative stats. Can be modified in a future if needed*/
-      if((maxhealth<0) || (health < 0) || (baseDamage<0) || (strength<0) || (defense<0) || (magicLevel<0)){
-        debug_log(LOG_ERROR,"Error when adding stats (negative stats not allowed)");
-        return ERROR;
+      /*they are allowed if loaded fromSaveFile in case a resurrection mechanic is implemented*/
+      if(fromSaveFile == false){
+        if((maxhealth<0) || (health < 0) || (baseDamage<0) || (strength<0) || (defense<0) || (magicLevel<0)){
+          debug_log(LOG_ERROR,"Error when adding stats (negative stats not allowed)");
+          return ERROR;
+        }
       }
 
       if(et == PLAYER_TYPE){
@@ -1492,11 +1496,11 @@ Status game_reader_load_effects(Game *game, char *filename, bool fromSaveFile){
         printf("toks is null");
         return ERROR;
       }
-      if((toks[0] == 'p') || (toks[0] == 'P'))
+      if((toks[0] == 'p') || (toks[0] == 'P') || (toks[0] == '0'))
         EA = AFFECTS_PLAYER;
-      else if((toks[0] == 'a') || (toks[0] == 'A'))
+      else if((toks[0] == 'a') || (toks[0] == 'A') || (toks[0] == '1'))
         EA = AFFECTS_ALLY;
-      else if((toks[0] == 'e') || (toks[0] == 'E'))
+      else if((toks[0] == 'e') || (toks[0] == 'E') || (toks[0] == '2'))
         EA = AFFECTS_ENEMY;
       else{
         debug_log(LOG_ERROR,"Error creating effect when reading from file (Affected)");
@@ -1509,7 +1513,7 @@ Status game_reader_load_effects(Game *game, char *filename, bool fromSaveFile){
         return ERROR;
       }
       inf_char = atoi(toks);
-      if((inf_char == 'y') || (inf_char == 'Y'))
+      if((inf_char == 'y') || (inf_char == 'Y') || (inf_char == '1'))
         inf_turns=true;
       else
         inf_turns=false;
