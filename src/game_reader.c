@@ -267,6 +267,8 @@ Status game_reader_create_from_save_file(Game **game, char *filename){
   FILE *fIN = NULL;
   int i, size;
 
+  char str[WORD_SIZE] = "", *toks ;
+
   if(!game || !filename) return ERROR;
 
   if (game_create(game) == ERROR){
@@ -328,8 +330,16 @@ Status game_reader_create_from_save_file(Game **game, char *filename){
     return ERROR;
   }
 
+  fIN = fopen(filename, "r");
+  if(!fIN){
+    debug_log(LOG_ERROR, "Error on filename at: game_reader_create_from_save_file in game_reader.c");
+    return ERROR;
+  }
   
-  
+  toks = fgets(str, WORD_SIZE, fIN);
+  while(strncmp(str,"OBJ\n",4) != 0 && toks != NULL){
+    toks = fgets(str, WORD_SIZE, fIN);
+  }
 
   return OK;
 }
@@ -404,6 +414,7 @@ Status game_reader_create_save_file(char *save_file, Game *game, char *original_
   }
   
   /*Saves objects to the file*/
+  fprintf(Psave_file, "OBJ\n");
   size = collection_length(game_get_objects(game));
   fprintf(Psave_file, "%d\n", size);
   for(i = 0; i < size; i++){
