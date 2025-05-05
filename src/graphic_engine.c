@@ -355,14 +355,14 @@ void graphic_engine_paint_playerDesc(Graphic_engine *ge, Game *game){
 
   strcpy(str, tab);
   strcat(str, entity_get_graphic_description(entityplayer));
-  strcat(str, " | Name: ");
+  strcat(str, " [BLACK]| Name:[YELLOW] ");
   strcat(str, entity_get_name(entityplayer));
 
-  strcat(str, " | Loc: ");
+  strcat(str, " [BLACK]| Loc:[YELLOW] ");
   sprintf(strAux, "%ld", entity_get_location(entityplayer));
   strcat(str, strAux);
 
-  strcat(str, " | Money: ");
+  strcat(str, " [BLACK]| Money:[YELLOW] ");
   sprintf(strAux, "%d", player_get_money(player));
   strcat(str, strAux);
 
