@@ -386,8 +386,7 @@ void graphic_engine_paint_playerDesc(Graphic_engine *ge, Game *game){
   screen_area_puts(ge->descript2, str);// health
 
   strcpy(str, tab);
-  strcat(str, "Level: ");
-  sprintf(strAux, "%d | Skill Points: %d | XP: %d / %d", leveling_get_level(leveling), leveling_get_skill_points(leveling) ,leveling_get_XP(leveling), leveling_get_next_XP(leveling));
+  sprintf(strAux, "Level: [YELLOW]%d [BLACK]| Skill Points: [YELLOW]%d [BLACK]| XP: [YELLOW]%d / %d", leveling_get_level(leveling), leveling_get_skill_points(leveling) ,leveling_get_XP(leveling), leveling_get_next_XP(leveling));
   strcat(str, strAux);
 
   screen_area_puts(ge->descript2, str);// level, skill points, xp
@@ -419,15 +418,15 @@ void graphic_engine_paint_playerDesc(Graphic_engine *ge, Game *game){
     screen_area_puts(ge->descript2, "[RED]Player does not have abilities");
 
   for(i = 0; i < ability_count; i++){
-    sprintf(str, "%d. ", i + 1);
+    sprintf(str, "%s[YELLOW]%d.[BLACK] ", tab, i + 1);
     strcat(str, entity_get_ability_name_at(entityplayer, i));
 
     auxInt = ability_get_cooldown_length(entity_get_ability_at(entityplayer, i));
-    sprintf(strAux, " |Cool:[BLUE]%d[BLACK]", auxInt);
+    sprintf(strAux, "\n%sCooldown:[BLUE]%d[BLACK]", tab, auxInt);
     strcat(str, strAux);
 
     auxInt = ability_get_cooldown_count(entity_get_ability_at(entityplayer, i));
-    sprintf(strAux, " |Cool-Left:%s%d", (auxInt > 0)? "[RED]":"[GREEN]", auxInt);
+    sprintf(strAux, " |Cooldown-Left:%s%d", (auxInt > 0)? "[RED]":"[GREEN]", auxInt);
 
     strcat(str, strAux);
     screen_area_puts(ge->descript2, str);
