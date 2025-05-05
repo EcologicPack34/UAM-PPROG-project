@@ -76,6 +76,9 @@ link:
 run:
 	./anthill anthill.dat
 
+runsav:
+	./anthill TESTSAVE.dat
+
 runs:
 	./anthill anthill.dat -l ./debug.log -s 567123
 
@@ -88,6 +91,10 @@ debug:
 gdb:
 	make debug
 	gdb --tui --silent --args ./anthilldebug anthill.dat
+
+gdbsav:
+	make debug
+	gdb --tui --silent --args ./anthilldebug TESTSAVE.dat
 
 #To install ddd run $sudo apt install ddd
 ddd:
@@ -102,6 +109,10 @@ doxy:
 runv:
 	make debug
 	valgrind --leak-check=full --track-origins=yes --show-leak-kinds=all ./anthilldebug anthill.dat
+
+runsavv:
+	make debug
+	valgrind --leak-check=full --track-origins=yes --show-leak-kinds=all ./anthilldebug TESTSAVE.dat
 
 #tests rules
 

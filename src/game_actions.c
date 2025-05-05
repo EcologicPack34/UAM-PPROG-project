@@ -19,6 +19,7 @@
 #include "combat.h"
 #include "ability_manager.h"
 #include "ability_actions.h"
+#include "game_reader.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -214,6 +215,14 @@ Status game_actions_buy(Game *game);
 Status game_actions_follow(Game *game);
 
 /**
+ * @brief Saves the game to a datafile
+ * 
+ * @param game 
+ * @return Status 
+ */
+Status game_actions_save(Game *game);
+
+/**
    Game actions implementation
 */
 
@@ -314,6 +323,8 @@ Status game_actions_update(Game *game, Command *command) {
     case FOLLOW_PLAYER:
       status = game_actions_follow(game);
       break;
+    case SAVE:
+      status = game_actions_save(game);
     default:
       break;
   }
@@ -1153,4 +1164,24 @@ Status game_actions_follow(Game *game){
   }
 
   return OK;
+}
+
+Status game_actions_save(Game *game){
+  char **args = NULL;
+  int n_args;
+  Command *comm = NULL;
+
+  if(!game) return ERROR;
+
+  comm = game_get_last_command(game);
+
+  args = command_get_arguments(comm);
+  n_args = command_get_arguments_count(comm);
+
+  if(n_args != 1) return ERROR;
+
+  if(!args) return ERROR;
+
+  //ADD ARGUMENTS CONTROL
+  return game_reader_create_save_file("TESTSAVE.dat", game);
 }

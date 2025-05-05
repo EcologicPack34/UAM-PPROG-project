@@ -42,10 +42,9 @@ Status game_reader_create_from_save_file(Game **game, char *filename);
  * 
  * @param save_file 
  * @param game 
- * @param original_file the name of the .dat file used to create the game
  * @return Status 
  */
-Status game_reader_create_save_file(char *save_file, Game *game, char *original_file);
+Status game_reader_create_save_file(char *save_file, Game *game);
 
 
 /**
