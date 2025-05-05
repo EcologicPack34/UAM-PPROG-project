@@ -284,7 +284,7 @@ Status ability_manager_add_ability_to_cd(AbilityManager *sm, Ability *ability){
   if(ability_get_cooldown_count(ability) > 0)
     queue_push(sm->queue_cooldowns, ability);
 
-  return collection_add(sm->ability, (void *)ability);
+  return collection_add(sm->ability, (void *)ability);;
 }
 
 Status ability_manager_remove_ability_from_cd(AbilityManager *sm, Ability *ability){
@@ -340,7 +340,7 @@ Status ability_manager_read_from_file(AbilityManager *sm, FILE *fIN){
 
   fscanf(fIN,"%d\n", &size);
   for(i = 0; i < size; i++){
-    if(ability_manager_add_ability_to_cd(sm, ability_create_from_file(fIN)) == ERROR)
+    if(collection_add(sm->ability, ability_create_from_file(fIN)) == ERROR)
       return ERROR;
   }
 

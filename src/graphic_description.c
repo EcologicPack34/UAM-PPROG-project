@@ -90,7 +90,7 @@ int gdesc_save_on_file(GDesc *gdesc, FILE *fOUT){
 
     if(!gdesc ||!fOUT) return -1;
 
-    count += fprintf(fOUT, "#g:%ld|%d|%d|%d\n", gdesc->id, gdesc->height, gdesc->width, gdesc->type);
+    count += fprintf(fOUT, "#gd:%ld|%d|%d|%d\n", gdesc->id, gdesc->height, gdesc->width, gdesc->type);
     for(i = 0; i < gdesc->height; i++){
         count += fprintf(fOUT, "%s\n", gdesc->description[i]);
     }
@@ -133,7 +133,7 @@ GDesc *gdesc_create_from_file(FILE *fIN){
         gdesc_destroy(gdesc);
         return NULL;
       }
-      line[strlen(line) - 2] = 0;
+      line[strlen(line) - 1] = 0;
       if(gdesc_set_line(gdesc, i, line) == ERROR){
         gdesc_destroy(gdesc);
         return NULL;

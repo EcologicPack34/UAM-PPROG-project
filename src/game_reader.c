@@ -369,6 +369,11 @@ Status game_reader_create_from_save_file(Game **game, char *filename){
 
   game_switch_player(*game, active_player_index);
 
+  if(game_spatial_map(*game) == ERROR){
+    debug_log(LOG_ERROR,"Error maping spatialy spaces");
+    return ERROR;
+  }
+
   return OK;
 }
 
@@ -1610,7 +1615,8 @@ Status game_reader_load_gdesc(Game *game, char *filename){
         fclose(file);
         return ERROR;
       }
-      line[strlen(line) - 2] = 0;
+      string_remove_endofline_escape_sequence_on_end_to_newline(line);
+      string_remove_newline_escape_sequence_on_end(line);
       if(gdesc_set_line(gdesc, i, line) == ERROR){
         fclose(file);
         return ERROR;
@@ -1632,6 +1638,7 @@ Status game_reader_load_others_from_save_file(Game *game, char *filename){
   Object *obj=NULL;
   Attack *at=NULL;
   Status status=OK;
+  Ability *ab = NULL;
 
   if(!game || !filename) return ERROR;
 
@@ -1673,7 +1680,12 @@ Status game_reader_load_others_from_save_file(Game *game, char *filename){
   if(event_manager_read_from_file(game_get_event_manager(game), fIN) == ERROR) return ERROR;
 
   /*ability load*/
-  if(ability_manager_read_from_file(game_get_ability_manager(game), fIN) == ERROR) return ERROR;
+  fscanf(fIN,"%d\n", &size);
+  for(i = 0; i < size; i++){
+    ab = ability_create_from_file(fIN);
+    if(!ab) return ERROR;
+    game_add_ability(game, ab);
+  }
 
   /*Loads settings saved*/
   if(command_read_from_file(game_get_last_command(game), fIN) == ERROR) return ERROR;
