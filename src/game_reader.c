@@ -288,7 +288,7 @@ Status game_reader_create_from_file(Game **game, char *filename){
 }
 
 Status game_reader_create_from_save_file(Game **game, char *filename){
-  int active_player_index, n_player, is_turn_valid, godmode, current_state, finished, procedural;
+  int active_player_index, is_turn_valid, godmode, current_state, finished, procedural;
   FILE *fIN = NULL;
   char str[WORD_SIZE] = "";
 
@@ -302,13 +302,26 @@ Status game_reader_create_from_save_file(Game **game, char *filename){
     abort();
   }
 
+  if(game_reader_load_commandInfo(*game) == ERROR){
+    printf("%c[2J", 27);
+    printf("Fatal error. Check the log for details\n");
+    debug_force_global_fclose();
+    abort();
+  }
+  if(game_reader_load_commandStateTypes(*game) == ERROR){
+    printf("%c[2J", 27);
+    printf("Fatal error. Check the log for details\n");
+    debug_force_global_fclose();
+    abort();
+  }  
+
   if((fIN = fopen(filename, "r")) == NULL) return ERROR;
 
   fgets(str,WORD_SIZE, fIN);
-  fscanf(fIN, "%d;%d;%d;%d;%d;%d;%d\n", &active_player_index, &n_player,\
+  fscanf(fIN, "%d;%d;%d;%d;%d;%d\n", &active_player_index,\
     &is_turn_valid, &godmode, &finished, &procedural, &current_state);
  
-  game_set_basic_info(*game, active_player_index, n_player, is_turn_valid,\
+  game_set_basic_info(*game, active_player_index, is_turn_valid,\
    godmode, finished, procedural, current_state);
 
   fclose(fIN);
@@ -347,7 +360,7 @@ Status game_reader_create_from_save_file(Game **game, char *filename){
     return ERROR;
   }
 
-  
+  game_switch_player(*game, active_player_index);
 
   return OK;
 }
@@ -367,11 +380,11 @@ Status game_reader_create_save_file(char *save_file, Game *game){
 
   fprintf(Psave_file, "SAVE\n");
 
-  /*ActivePlayerIndex;NumOfPlayers;Is_Turn_Valid;N_spaces;N_links;godmode;finished;procedural;GameState*/
-  fprintf(Psave_file, "%d;%d;%d;%d;%ld;%d;%d;%d;%d\n", \
-    game_get_active_player_index(game), game_get_n_players(game), (int)game_get_is_turn_valid(game)\
-     ,game_get_n_spaces(game), game_get_n_links(game), (int)game_get_god_mode(game),\
-     (int)game_get_finished(game), (int)game_get_is_procedural(game), (int)game_get_state(game));
+  /*ActivePlayerIndex;Is_Turn_Valid;godmode;finished;procedural;GameState*/
+  fprintf(Psave_file, "%d;%d;%d;%d;%d;%d\n", \
+    game_get_active_player_index(game), (int)game_get_is_turn_valid(game),\
+    (int)game_get_god_mode(game), (int)game_get_finished(game), \
+    (int)game_get_is_procedural(game), (int)game_get_state(game));
   
   /*Saves gdescs to the file*/
   size = collection_length(game_get_gdescs(game));

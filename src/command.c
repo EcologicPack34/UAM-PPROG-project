@@ -586,10 +586,10 @@ int command_save_on_file(Command *command, FILE *fOUT){
 }
 
 Status command_read_from_file(Command *command, FILE *fIN){
-  int i, j, size;
+  /*int i, j, size;*/
   CommandInfo *ci = NULL;
-  char str[WORD_SIZE] = "", *toks = NULL;;
-  CommandCode *code = NULL;
+  char str[WORD_SIZE] = "";/**toks = NULL;;*/
+  /*CommandCode *code = NULL;*/
 
   if(!command || !fIN) return ERROR;
 
@@ -606,6 +606,8 @@ Status command_read_from_file(Command *command, FILE *fIN){
 
   fgets(str, WORD_SIZE, fIN);
 
+  /*
+    //READ BY SETTINGS.dat
   for(i = 0; i < N_CMD; i++){
     fgets(str, WORD_SIZE, fIN);
     string_remove_newline_escape_sequence_on_end(str);
@@ -625,7 +627,7 @@ Status command_read_from_file(Command *command, FILE *fIN){
       if(!code) return ERROR;
       *code = (CommandCode)atoi(toks);
     }
-  }
+  }*/
 
   return OK;
 }

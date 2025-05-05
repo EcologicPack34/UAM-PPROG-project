@@ -674,7 +674,6 @@ int game_get_combat_money(Combat *combat, Game *game);
  * 
  * @param game game struct
  * @param api active player index
- * @param nplay number of players
  * @param isturnvalid is turn valid
  * @param godmode bool godmode
  * @param finished bool finished
@@ -682,7 +681,7 @@ int game_get_combat_money(Combat *combat, Game *game);
  * @param currstate currentstate
  * @return Status 
  */
-Status game_set_basic_info(Game *game, int api, int nplay, int isturnvalid, int godmode, int finished, int proced, int currstate);
+Status game_set_basic_info(Game *game, int api, int isturnvalid, int godmode, int finished, int proced, int currstate);
 
 /**
  * @brief Gets the collection with the gdescs

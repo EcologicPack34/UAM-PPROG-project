@@ -1329,12 +1329,11 @@ int game_get_combat_money(Combat *combat, Game *game){
   return money;
 }
 
-Status game_set_basic_info(Game *game, int api, int nplay, int isturnvalid, int godmode, int finished, int proced, int currstate){
+Status game_set_basic_info(Game *game, int api, int isturnvalid, int godmode, int finished, int proced, int currstate){
 
   if(!game) return ERROR;
 
   game->active_player_index = api;
-  game->n_players = nplay;
   game->is_turn_valid = isturnvalid;
   game->godmode = godmode;
   game->finished = finished;
