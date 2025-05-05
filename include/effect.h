@@ -115,6 +115,17 @@ Status effect_manager_add_effect(EffectManager *em, Effect *effect);
 Status effect_add_affected(Effect *e, Entity *ent);
 
 /**
+ * @brief This funtion adds an effect to an entity for n_turns, ignoring the data field.
+ * This function has its utility in creating a game from a save file
+ * @author Aaron Charameli Mair
+ * 
+ * @param e a pointer to the effect
+ * @param ent a pointer to the entity/affected
+ * @return Status 
+ */
+Status effect_add_affected_n_turns(Effect *e, Entity*ent, int n_turns);
+
+/**
  * @brief This function checks if an entity is affected by an effect
  * @author Aaron Charameli Mair
  * 

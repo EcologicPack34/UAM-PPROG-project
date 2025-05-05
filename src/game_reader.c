@@ -135,7 +135,7 @@ Status game_reader_load_ability(Game *game, char *filename);
  * @param filename 
  * @return Status 
  */
-Status game_reader_load_effects(Game *game, char *filename);
+Status game_reader_load_effects(Game *game, char *filename, bool fromSaveFile);
 
 /**
  * @brief Reads the file settings to load the attacks
@@ -263,7 +263,7 @@ Status game_reader_create_from_file(Game **game, char *filename){
     debug_log(LOG_ERROR, "Error loading ability at: game_reader_create_from_file(Game*, char*) in game_reader.c");
     return ERROR;
   }
-  if (game_reader_load_effects(*game, filename) == ERROR){
+  if (game_reader_load_effects(*game, filename, false) == ERROR){
     debug_log(LOG_ERROR, "Error loading ability at: game_reader_create_from_file(Game*, char*) in game_reader.c");
     return ERROR;
   }
@@ -357,6 +357,13 @@ Status game_reader_create_from_save_file(Game **game, char *filename){
   }
   if(game_reader_load_others_from_save_file(*game, filename) == ERROR){
     debug_log(LOG_ERROR, "Error loading stats at: game_reader_create_from_file(Game*, char*) in game_reader.c");
+    return ERROR;
+  }
+
+
+
+  if(game_reader_load_effects(*game, filename, true) == ERROR){
+    debug_log(LOG_ERROR, "Error loading player at: game_reader_create_from_file(Game*, char*) in game_reader.c");
     return ERROR;
   }
 
@@ -1381,7 +1388,7 @@ Status game_reader_load_commandStateTypes(Game *game){
   return OK;
 }
 
-Status game_reader_load_effects(Game *game, char *filename){
+Status game_reader_load_effects(Game *game, char *filename, bool fromSaveFile){
   FILE *file=NULL;
   char line[WORD_SIZE]="";
   char name[WORD_SIZE]="";
@@ -1389,8 +1396,10 @@ Status game_reader_load_effects(Game *game, char *filename){
   char *toks=NULL;
   bool inf_turns;
   char inf_char; /*infinite turns y/N char*/
-  int default_turns;
+  int i,default_turns,n_affecteds;
 
+  Entity *ent=NULL;
+  EntityType EntT;
   Effect *effect=NULL;
   Id id;
   EffectType ET;
@@ -1484,6 +1493,25 @@ Status game_reader_load_effects(Game *game, char *filename){
         debug_log(LOG_ERROR,"Error creating effect when reading from file");
         return ERROR;
       }
+
+      if(fromSaveFile){
+        fscanf(file, "%d\n", &n_affecteds);
+        for(i=0; i<n_affecteds; i++){
+          fscanf("%ld|%d|%d\n", &id, &EntT, &default_turns);
+          switch (EntT)
+          {
+          case PLAYER_TYPE:
+            ent = player_get_entity(game_get_player_by_id(game, id));
+            break;
+          case NPC_TYPE:
+            ent = npc_get_entity(game_get_NPC_by_id(game, id));
+          default:
+            break;
+          }
+          effect_add_affected_n_turns(effect, ent, default_turns);
+        }
+        }
+  
 
       if(game_add_effect(game, effect) == ERROR){
         debug_log(LOG_ERROR,"Error adding effect to effect manager");

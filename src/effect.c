@@ -214,7 +214,25 @@ Status effect_add_affected(Effect *e, Entity *ent){
             st = collection_add(e->affecteds,a);
         }
     else{
+        a = _effect_get_affected(e, ent);
+        a->turns += e->default_turns;
+    }
+    
+    return st;
+}
 
+Status effect_add_affected_n_turns(Effect *e, Entity*ent, int n_turns){
+    Status st = OK;
+    Affected *a=NULL;
+    if(!e || !ent || (n_turns<0)) return ERROR;
+    if(effect_has_affected(e, ent) == false){
+        if((a = _affected_create(ent,e->default_turns)) == NULL) return ERROR;
+            st = collection_add(e->affecteds,a);
+            a->turns = n_turns;
+        }
+    else{
+        a = _effect_get_affected(e, ent);
+        a->turns += e->default_turns;
     }
     
     return st;
@@ -260,7 +278,8 @@ Status effect_update(Effect *effect, Stats *ent_stats, int ent_count){
 
 Status effect_save_to_file(FILE *file, Effect *effect){
     /*
-    #ef:Id|N|name|EffectType|EffectAffects|InfiniteTurns|DefaultNumberOfTurns|data
+    #ef:Id|name|EffectType|EffectAffects|InfiniteTurns|DefaultNumberOfTurns|data
+    N
     Entity1Id|Entity1Type|turns
     Entity2Id|Entity2Type|turns
     EntityNId|EntityNType|turns*/
@@ -271,9 +290,10 @@ Status effect_save_to_file(FILE *file, Effect *effect){
 
     if((N = collection_length(effect->affecteds)) == -1) return ERROR;
 
-    fprintf(file, "#ef:%ld|%d|%s|%d|%d|%d|%d|%s\n",effect->id, N, effect->name, effect->ET, effect->EA, effect->inf_turns\
+    fprintf(file, "#ef:%ld|%s|%d|%d|%d|%d|%s\n",effect->id, effect->name, effect->ET, effect->EA, effect->inf_turns\
     ,effect->default_turns, effect->data);
 
+    fprintf(file, "%d\n", N);
     for(i=0; i<N; i++){
         aux = collection_get_element_at(effect->affecteds,i);
         fprintf(file,"%ld|%d|%d\n", entity_get_id(aux->ent), entity_get_entityType(aux->ent), aux->turns);
