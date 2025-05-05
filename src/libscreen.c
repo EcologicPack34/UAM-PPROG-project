@@ -191,25 +191,41 @@ void screen_area_puts(Area* area, char *str){
   Frame_color bColor = WHITE;
 
   Cell *cell = NULL;
+  Cell *cAux = NULL;
   short skipT = 0;
 
 
   if(!area || !str) return;
 
   if(area->cY >= area->height){
-    area->cY = 0;
-  }
-//  if (screen_area_cursor_is_out_of_bounds(area)){
-//    screen_area_scroll_up(area);
-//  }
 
+    for (area->cY = 0 ; area->cY < area->height - 1; area->cY++)
+    {
+      for (area->cX = 0; area->cX < area->width; (area->cX)++)
+      {
+        cell = ACCESS(__data, area->x + area->cX , area->y + area->cY);
+        cAux = ACCESS(__data, area->x + area->cX , area->y + area->cY + 1);
+        cell->character = cAux->character;
+        cell->background = cAux->background;
+        cell->charColor = cAux->charColor;
+      }
+    }
+    area->cY = area->height - 1;
+  }
   screen_utils_replaces_special_chars(str);
 
   ptr = str;
   len = strlen(str);
   
   while(*ptr != '\0' && ptr <= str + len && area->cY < area->height){
-    for (area->cX = 0; area->cX < area->width && ptr <= str + len; (area->cX)++ , ptr++)
+    for (area->cX = 0; area->cX < area->width; (area->cX)++)
+    {
+      cell = ACCESS(__data, area->x + area->cX , area->y + area->cY);
+      cell->character = FG_CHAR;
+      cell->background = WHITE;
+      cell->charColor = BLACK;
+    }
+    for (area->cX = 0; area->cX < area->width && ptr <= str + len && *ptr != '\0'; (area->cX)++ , ptr++)
     {
       if(*ptr == '[' && !skipT){
         strcpy(tag, "");
@@ -223,6 +239,7 @@ void screen_area_puts(Area* area, char *str){
           if(cColor == NO_TAG){
             cColor = BLACK;
             ptr--;
+            area->cX--;
             skipT = 1;
           }else{
             ptr = tagE;
@@ -242,13 +259,6 @@ void screen_area_puts(Area* area, char *str){
     }
     area->cY++;
   }
-
-//  for (ptr = str; ptr < (str + strlen(str)); ptr+=area->width){
-//    memset(area->cursor, FG_CHAR, area->width);
-//    len = (strlen(ptr) < area->width)? strlen(ptr) : area->width;
-//    memcpy(area->cursor, ptr, len);
-//    area->cursor += COLUMNS;
-//  }
 }
 
 int screen_area_cursor_is_out_of_bounds(Area* area){
@@ -269,7 +279,7 @@ void screen_utils_replaces_special_chars(char* str){
   char *pch = NULL;
 
   /* Replaces acutes and tilde with '??' */
-  while ((pch = strpbrk (str, "ÁÉÍÓÚÑáéíóúñ")))
+  while ((pch = strpbrk (str, "ÁÉÍÓÚÑáéíóúñ\r\n")))
     memcpy(pch, "??", 2);
 }
 
