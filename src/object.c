@@ -314,11 +314,14 @@ Object *object_create_from_file(FILE *fIN){
 
     fscanf(fIN, "%ld;%ld;%d;%ld;%d;%d;%d;%d\n", &id, &location, &type, &dependency, &is_movable, &is_consumable, &is_equipped, &cost);
     fgets(name,WORD_SIZE,fIN);
+    string_remove_endofline_escape_sequence_on_end_to_newline(name);
     string_remove_newline_escape_sequence_on_end(name);
     fgets(data,OBJECT_MAX_DATA_SIZE,fIN);
+    string_remove_endofline_escape_sequence_on_end_to_newline(data);
     string_remove_newline_escape_sequence_on_end(data);
     fgets(descr,WORD_SIZE,fIN);
-    string_remove_newline_escape_sequence_on_end(descr);
+    string_remove_endofline_escape_sequence_on_end_to_newline(data);
+    string_remove_newline_escape_sequence_on_end(data);
 
 
     obj = object_create(id, name, data, descr, cost, dependency, (bool)is_movable, (bool)is_consumable, location, type);

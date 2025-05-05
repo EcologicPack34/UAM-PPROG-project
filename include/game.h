@@ -674,7 +674,6 @@ int game_get_combat_money(Combat *combat, Game *game);
  * 
  * @param game game struct
  * @param api active player index
- * @param nplay number of players
  * @param isturnvalid is turn valid
  * @param godmode bool godmode
  * @param finished bool finished
@@ -682,8 +681,7 @@ int game_get_combat_money(Combat *combat, Game *game);
  * @param currstate currentstate
  * @return Status 
  */
-Status game_set_basic_info(Game *game, int api, int nplay, int isturnvalid, int godmode, int finished, int proced, int currstate);
-
+Status game_set_basic_info(Game *game, int api, int isturnvalid, int godmode, int finished, int proced, int currstate);
 /**
  * @brief Gets the collection with the gdescs
  * @author Maksym Polyak
@@ -711,5 +709,23 @@ GDesc *game_get_gdesc_at(Game *game, int i);
  * @return Collection* or NULL if error
  */
 Link **game_get_links(Game *game);
+
+/**
+ * @brief Sets the filename of the game
+ * 
+ * @param game game struct
+ * @param filename filename --> Static
+ * @return Status 
+ */
+Status game_set_filename(Game *game, char *filename);
+  
+/**
+ * @brief Gets the filename of the .dat that initiated the game
+ * @author Maksym Polyak
+ * 
+ * @param game game struct
+ * @return char* or NULL if error
+ */
+char *game_get_filename(Game *game);
 
 #endif

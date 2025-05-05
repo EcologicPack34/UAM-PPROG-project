@@ -112,7 +112,8 @@ int main(int argc, char *argv[]){
 
     game_loop_run(game, gengine);
 
-    game_reader_create_save_file("save1.dat", game, argv[1]);
+    if(false)
+      game_reader_create_save_file("save1.dat", game, argv[1]);
 
     game_loop_cleanup(game, gengine);
 
@@ -137,7 +138,7 @@ int game_loop_init(Game **game, Graphic_engine **gengine, char *file_name, int s
     srand((unsigned)seed);
   }
 
-  if (game_reader_create_from_file(game, file_name) == ERROR)
+  if (game_reader_create_from_file(game, file_name, true) == ERROR)
   {
     fprintf(stderr, "Error while initializing game.\n");
     game_loop_cleanup(*game, *gengine);

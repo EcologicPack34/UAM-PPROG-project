@@ -70,6 +70,7 @@ struct _Game {
   bool finished;                      /*!< bool that determines if the game has finished*/
   
   bool procedural;                    /*!< Stores if the game is generated prceduraly or not*/
+  char *filename;                     /*!< Stores the original .dat used for initializing the game*/
 };
 
 /*-----PRIVATE FUNCTIONS-----*/
@@ -1329,12 +1330,11 @@ int game_get_combat_money(Combat *combat, Game *game){
   return money;
 }
 
-Status game_set_basic_info(Game *game, int api, int nplay, int isturnvalid, int godmode, int finished, int proced, int currstate){
+Status game_set_basic_info(Game *game, int api, int isturnvalid, int godmode, int finished, int proced, int currstate){
 
   if(!game) return ERROR;
 
   game->active_player_index = api;
-  game->n_players = nplay;
   game->is_turn_valid = isturnvalid;
   game->godmode = godmode;
   game->finished = finished;
@@ -1360,4 +1360,18 @@ Link **game_get_links(Game *game){
   if(!game) return NULL;
 
   return game->links;
+}
+
+Status game_set_filename(Game *game, char *filename){
+  if(!game || !filename) return ERROR;
+
+  game->filename = filename;
+
+  return OK;
+}
+
+char *game_get_filename(Game *game){
+  if(!game) return NULL;
+
+  return game->filename;
 }
