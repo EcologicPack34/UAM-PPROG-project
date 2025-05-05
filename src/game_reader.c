@@ -330,11 +330,16 @@ Status game_reader_create_from_save_file(Game **game, char *filename){
     return ERROR;
   }
 
+<<<<<<< Updated upstream
   fIN = fopen(filename, "r");
   if(!fIN){
     debug_log(LOG_ERROR, "Error on filename at: game_reader_create_from_save_file in game_reader.c");
     return ERROR;
   }
+=======
+  /*lectura objetos*/
+
+>>>>>>> Stashed changes
   
   toks = fgets(str, WORD_SIZE, fIN);
   while(strncmp(str,"OBJ\n",4) != 0 && toks != NULL){
@@ -1590,4 +1595,23 @@ Status game_reader_load_gdesc(Game *game, char *filename){
   }
   fclose(file);
   return OK;
+}
+
+Status game_reader_load_objects_from_save_file(Game *game, char *filename){
+  FILE *file=NULL;
+
+  if(!game || !filename) return ERROR;
+
+  if (!filename) {
+    debug_log(LOG_ERROR, "Missing file name at: game_reader_load_effects(Game*, char*) in game_reader.c");
+    return ERROR;
+  }
+
+  file = fopen(filename, "r");
+  if (file == NULL) {
+    debug_log(LOG_ERROR, "Error in file at: game_reader_load_effects(Game*, char*) in game_reader.c");
+    return ERROR;
+  }
+
+  while(fgets())
 }
