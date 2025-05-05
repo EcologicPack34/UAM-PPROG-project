@@ -60,15 +60,6 @@ struct _Graphic_engine {
 
 /**
  * @brief Paints a string with newlines in a designated screen area
- * @author Daniel Gómez
- * 
- * @param area where the print is done
- * @param string string to be printed
- */
-void graphic_engine_newline_print(Area *area, char *string);
-
-/**
- * @brief Paints a string with newlines in a designated screen area
  * but at the start adds the extra string
  * @author Maksym Polyak
  * 
@@ -236,22 +227,6 @@ void graphic_engine_paint_game(Graphic_engine *ge, Game *game){
 
 /*--------PRIVATE IMPLENTATIONS--------*/
 
-void graphic_engine_newline_print(Area *area, char *string){
-  char str[WORD_SIZE];
-  char *toks = NULL;
-
-  if(!area || !string) return;
-
-  strcpy(str, string);
-
-  toks = strtok(str,"\n");
-
-  while(toks){
-    screen_area_puts(area, toks);
-    toks = strtok(NULL,"\n");
-  }
-}
-
 void graphic_engine_newline_print_with_extra(Area *area, char *string, char *extra){
   char str[WORD_SIZE], aux_str[WORD_SIZE];
   char *toks = NULL;
@@ -312,7 +287,7 @@ void graphic_engine_paint_map(Graphic_engine *ge, Game *game){
   graphic_engine_paint_space(game, directionSpace, NE, map, space);
   
   for(i = 0; i < SPACE_HEIGHT; i++){
-    graphic_engine_newline_print(ge->map, map[i]);
+    screen_area_puts(ge->map, map[i]);
   }
 
   /*Prints Middle spaces*/
@@ -328,7 +303,7 @@ void graphic_engine_paint_map(Graphic_engine *ge, Game *game){
   directionSpace = space_get_neighbour(currentSpace, E);
   graphic_engine_paint_space(game, directionSpace, E, map, space);
   for(i = 0; i < SPACE_HEIGHT; i++){
-    graphic_engine_newline_print(ge->map, map[i]);
+    screen_area_puts(ge->map, map[i]);
   }
 
   /*Prints Bottom spaces*/
@@ -346,7 +321,7 @@ void graphic_engine_paint_map(Graphic_engine *ge, Game *game){
   graphic_engine_paint_space(game, directionSpace, SE, map, space);
   
   for(i = 0; i < SPACE_HEIGHT; i++){
-    graphic_engine_newline_print(ge->map, map[i]);
+    screen_area_puts(ge->map, map[i]);
   }
 
 }
@@ -359,6 +334,7 @@ void graphic_engine_paint_playerDesc(Graphic_engine *ge, Game *game){
   Leveling *leveling = NULL;
 
   int i;
+  int auxInt;
 
   char tab[5] = "    ";
   char str[WORD_SIZE] = "";
@@ -404,7 +380,7 @@ void graphic_engine_paint_playerDesc(Graphic_engine *ge, Game *game){
     strcat(str, "[GREEN]");
   }
 
-  sprintf(strAux, "%.2lf [BLACK]/ %.2lf", entity_get_health(entityplayer), entity_get_max_health(entityplayer));
+  sprintf(strAux, "%.2lf / %.2lf", entity_get_health(entityplayer), entity_get_max_health(entityplayer));
   strcat(str, strAux);
 
   screen_area_puts(ge->descript2, str);// health
@@ -416,6 +392,46 @@ void graphic_engine_paint_playerDesc(Graphic_engine *ge, Game *game){
 
   screen_area_puts(ge->descript2, str);// level, skill points, xp
 
+  screen_area_puts(ge->descript2, "\nInventory: ");
+
+  if(inventorysize == 0){
+    strcpy(str, tab);
+    strcat(str, "[RED]No Objects in Player Inventory");
+    screen_area_puts(ge->descript2, str);
+  }
+  else{
+    for(i = 0; i < inventorysize && i < MAX_PRINT_PLAYER_INVENTORY; i++){
+      inventory_get_object_str_at(playerInventory, strAux, i);
+      
+      strcpy(str,tab);
+      strcat(str, strAux);
+
+      screen_area_puts(ge->descript2, str);
+    }
+  }
+
+  entityplayer = player_get_entity(game_get_player(game));
+  ability_count = entity_get_n_abilities(entityplayer);
+
+  screen_area_puts(ge->descript2, "\nPlayer abilities:");
+
+  if(ability_count <= 0) 
+    screen_area_puts(ge->descript2, "[RED]Player does not have abilities");
+
+  for(i = 0; i < ability_count; i++){
+    sprintf(str, "%d. ", i + 1);
+    strcat(str, entity_get_ability_name_at(entityplayer, i));
+
+    auxInt = ability_get_cooldown_length(entity_get_ability_at(entityplayer, i));
+    sprintf(strAux, " |Cool:[BLUE]%d[BLACK]", auxInt);
+    strcat(str, strAux);
+
+    auxInt = ability_get_cooldown_count(entity_get_ability_at(entityplayer, i));
+    sprintf(strAux, " |Cool-Left:%s%d", (auxInt > 0)? "[RED]":"[GREEN]", auxInt);
+
+    strcat(str, strAux);
+    screen_area_puts(ge->descript2, str);
+  }
 
 }
 
@@ -448,52 +464,8 @@ void graphic_engine_paint_generalDesc(Graphic_engine *ge, Game *game){
   inventorysize = inventory_get_size(playerInventory);
   spaceInventory = space_get_inventory(currentSpace);
   
-  /*Paints player info*/
-  strcpy(str, "Players:");
-  screen_area_puts(ge->descript, str);
 
-  size = game_get_n_players(game);
-  for(i = 0; i < size; i++){
-    player = game_get_player_at(game, i);
-    if(game_get_player_location(game) == entity_get_location(player_get_entity(player))){
-      player_get_str_desc(player, strAux);
-      strcpy(str, "   ");
-      strcat(str, strAux);
-      screen_area_puts(ge->descript, str);
-    }
-  }
 
-  strcpy(str, "Player inventory:");
-  screen_area_puts(ge->descript, str);
-
-  if(inventorysize == 0){
-    screen_area_puts(ge->descript, "    No Objects in Player Inventory");
-  }
-  else{
-    for(i = 0; i < inventorysize && i < MAX_PRINT_PLAYER_INVENTORY; i++){
-      inventory_get_object_str_at(playerInventory, strAux, i);
-      
-      strcpy(str,"    ");
-      strcat(str, strAux);
-
-      screen_area_puts(ge->descript, str);
-    }
-  }
-  screen_area_puts(ge->descript, " ");
-
-  entityplayer = player_get_entity(game_get_player(game));
-  ability_count = entity_get_n_abilities(entityplayer);
-  screen_area_puts(ge->descript, "Player abilities:");
-  if(ability_count <= 0) 
-    screen_area_puts(ge->descript, "Player does not have abilities");
-
-  for(i = 0; i < ability_count; i++){
-    sprintf(str, "%d. ", i + 1);
-    strcat(str, entity_get_ability_name_at(entityplayer, i));
-    sprintf(strAux, " | Cd: %d", ability_get_cooldown_count(entity_get_ability_at(entityplayer, i)));
-    strcat(str, strAux);
-    screen_area_puts(ge->descript, str);
-  }
 
   screen_area_puts(ge->descript, " ");
 
@@ -548,7 +520,7 @@ void graphic_engine_paint_generalDesc(Graphic_engine *ge, Game *game){
   while(game_log_hasMessage(game)){
     game_get_log_message(game, str);
     //screen_area_puts(ge->descript, str);
-    graphic_engine_newline_print(ge->descript,str);
+    screen_area_puts(ge->descript,str);
   }
 
   
@@ -856,16 +828,16 @@ void graphic_engine_paint_dialogue(Graphic_engine *ge, Game *game){
   screen_area_clear(ge->map);
 
   /*Paints the dialogue on the map*/
-  graphic_engine_newline_print(ge->map," \n \n \n \n \n \n \n");
-  graphic_engine_newline_print(ge->map,"  Dialogue:\n");
+  screen_area_puts(ge->map," \n \n \n \n \n \n \n");
+  screen_area_puts(ge->map,"  Dialogue:\n");
 
   text = dialogue_get_npc_text(dialogue);
   if(!text) return;
 
   graphic_engine_newline_print_with_extra(ge->map, text, "   ");
 
-  graphic_engine_newline_print(ge->map," \n \n");
-  graphic_engine_newline_print(ge->map,"  Possible replies:\n");
+  screen_area_puts(ge->map," \n \n");
+  screen_area_puts(ge->map,"  Possible replies:\n");
 
   player_replies = dialogue_get_player_replies(dialogue);
   n_player_replies = dialogue_get_num_player_replies(dialogue);
@@ -886,14 +858,14 @@ void graphic_engine_paint_level_up(Graphic_engine *ge, Game *game){
 
   graphic_engine_paint_generalDesc(ge, game);
 
-  graphic_engine_newline_print(ge->map," \n \n \n \n \n \n \n");
-  graphic_engine_newline_print(ge->map,"  Options to level up:\n");
+  screen_area_puts(ge->map," \n \n \n \n \n \n \n");
+  screen_area_puts(ge->map,"  Options to level up:\n");
 
-  graphic_engine_newline_print(ge->map,"   1. (1 SP) Level up your strength\n    and crush your enemies!\n");
-  graphic_engine_newline_print(ge->map,"   2. (1 SP) Level up your magic level\n    and strengthen your abilities!\n");
-  graphic_engine_newline_print(ge->map,"   3. (1 SP) Level up your maximum health\n    and overcome your obstacles!\n");
-  graphic_engine_newline_print(ge->map,"   4. (1 SP) Level up your defense\n    and ignore those weaklings!\n");
-  graphic_engine_newline_print(ge->map,"   5. Exit level up menu\n");
+  screen_area_puts(ge->map,"   1. (1 SP) Level up your strength\n    and crush your enemies!\n");
+  screen_area_puts(ge->map,"   2. (1 SP) Level up your magic level\n    and strengthen your abilities!\n");
+  screen_area_puts(ge->map,"   3. (1 SP) Level up your maximum health\n    and overcome your obstacles!\n");
+  screen_area_puts(ge->map,"   4. (1 SP) Level up your defense\n    and ignore those weaklings!\n");
+  screen_area_puts(ge->map,"   5. Exit level up menu\n");
 
 }
 
@@ -920,15 +892,15 @@ void graphic_engine_paint_store(Graphic_engine *ge, Game *game){
 
   obj_num = inventory_get_size(inventory);
 
-  graphic_engine_newline_print(ge->map," \n \n \n");
-  graphic_engine_newline_print(ge->map,"  (Enter 'by 0' to exit the store \n   or 'by (NUMBER OF ITEM)' to buy\n   You can also use i (NUMBER OF ITEM)\n   to see description)\n \n");
+  screen_area_puts(ge->map," \n \n \n");
+  screen_area_puts(ge->map,"  (Enter 'by 0' to exit the store \n   or 'by (NUMBER OF ITEM)' to buy\n   You can also use i (NUMBER OF ITEM)\n   to see description)\n \n");
   sprintf(str, "  %s: This is all I can offer:\n", entity_get_name(npc_get_entity(seller)));
-  graphic_engine_newline_print(ge->map,str);
+  screen_area_puts(ge->map,str);
 
   for(i = 0; i < obj_num && obj_num < MAX_PRINT_INVENTORY; i++){
     obj = inventory_get_object_at(inventory, i);
     sprintf(str, "%d -> Cost: %d - %s - %s\n", i +1, object_get_cost(obj), object_get_name(obj), object_get_descr(obj));
-    graphic_engine_newline_print(ge->map,str);
+    screen_area_puts(ge->map,str);
   }
 }
                                                      

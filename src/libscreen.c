@@ -227,6 +227,10 @@ void screen_area_puts(Area* area, char *str){
     }
     for (area->cX = 0; area->cX < area->width && ptr <= str + len && *ptr != '\0'; (area->cX)++ , ptr++)
     {
+      if(*ptr == '\n'){
+        ptr++;
+        break;
+      }
       if(*ptr == '[' && !skipT){
         strcpy(tag, "");
 
@@ -279,7 +283,7 @@ void screen_utils_replaces_special_chars(char* str){
   char *pch = NULL;
 
   /* Replaces acutes and tilde with '??' */
-  while ((pch = strpbrk (str, "ÁÉÍÓÚÑáéíóúñ\r\n")))
+  while ((pch = strpbrk (str, "ÁÉÍÓÚÑáéíóúñ\r")))
     memcpy(pch, "??", 2);
 }
 
