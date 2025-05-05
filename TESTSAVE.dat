@@ -1,5 +1,5 @@
 SAVE
-0;0;0;0;0;1
+0;1;0;0;0;1
 #gd:1|5|9|1
 esto
 es
@@ -57,7 +57,7 @@ a
 #n:8|0|Spider-(not)-man|123|0|3|/o\
 #st:8|2|100|100|10|2|2|2
 #p:1|Hero1|11|100|0|100|1|1|mO^|0
-26;0;0
+-1;0;0
 #st:1|1|100|100|25|1|1|1
 #p:2|Hero2|14|100|0|100|1|0|m1^|0
 -1;0;0
@@ -199,7 +199,7 @@ Poison Bomb
 1
 26;0;1
 1
-26;0;0
+-1;0;0
 Error code for commands. Doesn
 Code for unkown commands.
 Exits the game.
@@ -240,10 +240,4 @@ Saves the game instance to a file.
 23,14,
 3
 24,14,19,
-3
-#ef:1|Poison|2|2|0|10|3
-0
-#ef:2|Fire|3|2|0|10|1
-0
-#ef:3|Regeneration|1|0|0|4|5
 0
