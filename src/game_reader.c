@@ -166,6 +166,15 @@ Status game_reader_load_gdesc(Game *game, char *filename);
  */
 bool game_reader_generate_procedural();
 
+/**
+ * @brief Reads the filename to load all objects from a file in a different format as usual, for saved game files
+ * 
+ * @param game 
+ * @param filename 
+ * @return Status 
+ */
+Status game_reader_load_objects_from_save_file(Game *game, char *filename);
+
 /*
 * Public functions implementation
 */
@@ -323,6 +332,10 @@ Status game_reader_create_from_save_file(Game **game, char *filename){
     return ERROR;
   }
   if(game_reader_load_stats(*game, filename) == ERROR){
+    debug_log(LOG_ERROR, "Error loading stats at: game_reader_create_from_file(Game*, char*) in game_reader.c");
+    return ERROR;
+  }
+  if(game_reader_load_objects_from_save_file(*game, filename) == ERROR){
     debug_log(LOG_ERROR, "Error loading stats at: game_reader_create_from_file(Game*, char*) in game_reader.c");
     return ERROR;
   }
@@ -1592,7 +1605,7 @@ Status game_reader_load_objects_from_save_file(Game *game, char *filename){
 
   fIN = fopen(filename, "r");
   if(!fIN){
-    debug_log(LOG_ERROR, "Error on filename at: game_reader_create_from_save_file in game_reader.c");
+    debug_log(LOG_ERROR, "Error on filename at: game_reader_load_objects_from_save_file in game_reader.c");
     return ERROR;
   }
   
