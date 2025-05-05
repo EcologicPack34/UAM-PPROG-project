@@ -1396,7 +1396,7 @@ Status game_reader_load_effects(Game *game, char *filename, bool fromSaveFile){
   char *toks=NULL;
   bool inf_turns;
   char inf_char; /*infinite turns y/N char*/
-  int i,default_turns,n_affecteds;
+  int i,default_turns,n_affecteds,aux;
 
   Entity *ent=NULL;
   EntityType EntT;
@@ -1497,7 +1497,9 @@ Status game_reader_load_effects(Game *game, char *filename, bool fromSaveFile){
       if(fromSaveFile){
         fscanf(file, "%d\n", &n_affecteds);
         for(i=0; i<n_affecteds; i++){
-          fscanf("%ld|%d|%d\n", &id, &EntT, &default_turns);
+          fscanf(file, "%ld|%d|%d\n", &id, &aux, &default_turns);
+          EntT=aux;
+
           switch (EntT)
           {
           case PLAYER_TYPE:
