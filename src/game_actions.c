@@ -19,7 +19,6 @@
 #include "combat.h"
 #include "ability_manager.h"
 #include "ability_actions.h"
-#include "game_reader.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -215,15 +214,6 @@ Status game_actions_buy(Game *game);
 Status game_actions_follow(Game *game);
 
 /**
- * @brief Action for saving the game to the filename written
- * @author Maksym Polyak
- * 
- * @param game game struct
- * @return Status 
- */
-Status game_actions_save(Game *game);
-
-/**
    Game actions implementation
 */
 
@@ -323,9 +313,6 @@ Status game_actions_update(Game *game, Command *command) {
       break;
     case FOLLOW_PLAYER:
       status = game_actions_follow(game);
-      break;
-    case SAVE:
-      status = game_actions_save(game);
       break;
     default:
       break;
@@ -1166,14 +1153,4 @@ Status game_actions_follow(Game *game){
   }
 
   return OK;
-}
-
-Status game_actions_save(Game *game){
-  char **args = NULL;
-  int n_args;
-
-  if(!game) return ERROR;
-
-  /////FIX THE FILENAME ERROR-->SAVE FILE HAS TO SAVE ORIGINAL FILENAME ALSO TO BE ABLE TO SAVE FURTHER
-  return game_reader_create_save_file(args[0], game, game_get_filename(game));
 }
