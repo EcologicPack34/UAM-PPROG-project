@@ -522,33 +522,6 @@ Status combat_allies_turn(Combat *cmb){
     }
     
     return OK;
-    /*for (i = 1; i < numAl; i++)
-    {
-        randomNumEnemy = rand()%numEn;
-        randomNumAttack = rand()%MAX_ATTACKS + 1;
-
-        switch (randomNumAttack)
-        {
-        case 1:
-            combat_attack_light(&stAl[i], &stEn[randomNumEnemy]);
-            break;
-        case 2:
-            combat_attack_strong(&stAl[i], &stEn[randomNumEnemy]);
-            break;
-        case 3:
-            combat_attack_quick(&stAl[i], &stEn[randomNumEnemy]);
-            break;
-        case 4:
-            combat_attack_swift(&stAl[i], stEn, numEn);
-            break;
-
-        default:
-            break;
-        }
-
-        combat_update_deaths(cmb);
-    } 
-    return OK;*/
 }
 
 Status combat_update_player_attack(Combat *cmb, Command *last_cmd){
@@ -588,38 +561,6 @@ Status combat_update_player_attack(Combat *cmb, Command *last_cmd){
         stEn = combat_get_enemies_stats(cmb);
         combat_attack_all(atc, player, stEn, cmb->enemies_count);
     }
-
-    /*Checks if only one argument, and the posible combat options for it*/
-    /*if(command_get_arguments_count(last_cmd) == 1){
-        if(strcmp(args[0], "swift") == 0)
-        {
-            return combat_attack_swift(&cmb->allies_stats[0], stEn, enemycount);
-        }
-    }*/
-
-    /*Checks the combat options which need to specify a target*/
-
-    
-    /*Checks if number of arguments is 2: format= attackName targetNum*/
-    /*if(command_get_arguments_count(last_cmd) != 2) return ERROR;
-    numEnemy = atoi(args[1]);
-
-
-    if(numEnemy < 1 || numEnemy > enemycount) return ERROR;
-
-    if(strcmp(args[0], "light") == 0)
-    {
-        return combat_attack_light(&cmb->allies_stats[0], &stEn[numEnemy - 1]);
-    }
-    else if(strcmp(args[0], "strong") == 0)
-    {
-        return combat_attack_strong(&cmb->allies_stats[0], &stEn[numEnemy - 1]);
-    }
-    else if(strcmp(args[0], "quick") == 0)
-    {
-        return combat_attack_quick(&cmb->allies_stats[0], &stEn[numEnemy - 1]);
-    }
-    */
     return OK;
 }
 

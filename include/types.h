@@ -15,7 +15,7 @@
 
 #define NO_NAME ""                  /*!< String that represents an empty name string*/
 
-#define WORD_SIZE 500               /*!< Maximum word size */
+#define WORD_SIZE 700               /*!< Maximum word size */
 #define NO_ID -1                    /*!< ERROR ID value */
 #define UNDEFINED_ID 0              /*!< Value of a non assigned ID, usefull to not confuse errors with intended behaviour*/
 #define DIRECTION_NUMBER 8          /*!< Number of directions implemented on the game*/
@@ -44,7 +44,7 @@
 #define N_GAME_STATES 6             /*!< Number of game states*/
 #define MAX_SKILLS_ENTITY 5         /*!< Maximum number of skils per entity*/
 
-#define LINE_LENGTH 50              /*!< Max length of a line of dialogue*/
+#define LINE_LENGTH 100              /*!< Max length of a line of dialogue*/
 #define LINE_MAX 4                  /*!< Maximum number of lines in a dialogue*/
 
 /**

@@ -10,8 +10,6 @@
 
 #include "graphic_engine.h"
 
-#include "ansi_colors.h"
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -176,7 +174,15 @@ Graphic_engine *graphic_engine_create() {
   ge->messages = screen_area_init(1, MAP_HEIGHT + 3, MAP_WIDTH + DESCRIPT_WIDTH + 1, MESSAGES_HEIGHT);
   ge->help = screen_area_init(1, MAP_HEIGHT + MESSAGES_HEIGHT + 3 + HELP_BANNER_HEIGHT, MAP_WIDTH + DESCRIPT_WIDTH + 1, HELP_HEIGHT);
   ge->feedback = screen_area_init(1, MAP_HEIGHT + 1 + MESSAGES_HEIGHT + 1 + HELP_BANNER_HEIGHT + 1 + HELP_HEIGHT + 1, MAP_WIDTH + DESCRIPT_WIDTH + 1, CMD_HISTORY_HEIGHT);
-
+  
+  area_set_color(ge->descript2, BLACK, WHITE);
+  area_set_color(ge->descript, BLACK, WHITE);
+  //area_set_color(ge->map, BLACK, WHITE);
+  //area_set_color(ge->banner, BLACK, WHITE);
+  //area_set_color(ge->messages, BLACK, WHITE);
+  //area_set_color(ge->help, BLACK, WHITE);
+  //area_set_color(ge->feedback, BLACK, WHITE);
+  //area_set_color(ge->help, GREEN, BLACK);
   return ge;
 }
 
@@ -328,10 +334,12 @@ void graphic_engine_paint_map(Graphic_engine *ge, Game *game){
 
 void graphic_engine_paint_playerDesc(Graphic_engine *ge, Game *game){
   Inventory *playerInventory = NULL;
-  int inventorysize, size;
+  int inventorysize;
   Entity *entityplayer = NULL;
   Player *player = NULL;
   Leveling *leveling = NULL;
+  Equipment *equipment = NULL;
+  Object *eqObj = NULL;
 
   int i;
   int auxInt;
@@ -355,14 +363,14 @@ void graphic_engine_paint_playerDesc(Graphic_engine *ge, Game *game){
 
   strcpy(str, tab);
   strcat(str, entity_get_graphic_description(entityplayer));
-  strcat(str, " [BLACK]| Name:[YELLOW] ");
+  strcat(str, " [RESET]| Name:[YELLOW] ");
   strcat(str, entity_get_name(entityplayer));
 
-  strcat(str, " [BLACK]| Loc:[YELLOW] ");
+  strcat(str, " [RESET]| Loc:[YELLOW] ");
   sprintf(strAux, "%ld", entity_get_location(entityplayer));
   strcat(str, strAux);
 
-  strcat(str, " [BLACK]| Money:[YELLOW] ");
+  strcat(str, " [RESET]| Money:[YELLOW] ");
   sprintf(strAux, "%d", player_get_money(player));
   strcat(str, strAux);
 
@@ -386,10 +394,17 @@ void graphic_engine_paint_playerDesc(Graphic_engine *ge, Game *game){
   screen_area_puts(ge->descript2, str);// health
 
   strcpy(str, tab);
-  sprintf(strAux, "Level: [YELLOW]%d [BLACK]| Skill Points: [YELLOW]%d [BLACK]| XP: [YELLOW]%d / %d", leveling_get_level(leveling), leveling_get_skill_points(leveling) ,leveling_get_XP(leveling), leveling_get_next_XP(leveling));
+  sprintf(strAux, "Level: [YELLOW]%d [RESET]| Skill Points: [YELLOW]%d [RESET]| XP: [YELLOW]%d / %d", leveling_get_level(leveling), leveling_get_skill_points(leveling) ,leveling_get_XP(leveling), leveling_get_next_XP(leveling));
+  strcat(str, strAux);
+  
+  screen_area_puts(ge->descript2, str);// level, skill points, xp
+  
+  strcpy(str, tab);
+  sprintf(strAux, "BaseD:[YELLOW]%.1lf [RESET]| Strength:[YELLOW]%d [RESET]| Defense:[YELLOW]%d [RESET]", entity_get_baseDamage(entityplayer), entity_get_strength(entityplayer), entity_get_defense(entityplayer));
   strcat(str, strAux);
 
   screen_area_puts(ge->descript2, str);// level, skill points, xp
+
 
   screen_area_puts(ge->descript2, "\nInventory: ");
 
@@ -412,24 +427,71 @@ void graphic_engine_paint_playerDesc(Graphic_engine *ge, Game *game){
   entityplayer = player_get_entity(game_get_player(game));
   ability_count = entity_get_n_abilities(entityplayer);
 
-  screen_area_puts(ge->descript2, "\nPlayer abilities:");
+  screen_area_puts(ge->descript2, "\nAbilities:");
 
-  if(ability_count <= 0) 
-    screen_area_puts(ge->descript2, "[RED]Player does not have abilities");
+  if(ability_count <= 0) {
+    sprintf(str, "%s[RED]Player has no abilities", tab);
+    screen_area_puts(ge->descript2, str);
+  }
 
   for(i = 0; i < ability_count; i++){
-    sprintf(str, "%s[YELLOW]%d.[BLACK] ", tab, i + 1);
+    sprintf(str, "%s[YELLOW]%d.[RESET] ", tab, i + 1);
     strcat(str, entity_get_ability_name_at(entityplayer, i));
 
     auxInt = ability_get_cooldown_length(entity_get_ability_at(entityplayer, i));
-    sprintf(strAux, "\n%sCooldown:[BLUE]%d[BLACK]", tab, auxInt);
+    sprintf(strAux, "\n%s%sCooldown:[BLUE]%d[RESET]", tab, tab, auxInt);
     strcat(str, strAux);
 
     auxInt = ability_get_cooldown_count(entity_get_ability_at(entityplayer, i));
-    sprintf(strAux, " |Cooldown-Left:%s%d", (auxInt > 0)? "[RED]":"[GREEN]", auxInt);
+    sprintf(strAux, " | Cooldown-Left:%s%d", (auxInt > 0)? "[RED]":"[GREEN]", auxInt);
 
     strcat(str, strAux);
     screen_area_puts(ge->descript2, str);
+  }
+
+  screen_area_puts(ge->descript2, "\nEquipment:");
+  equipment = player_get_equipment(player);
+
+  /*equipment checks*/
+  eqObj = equipment_get_piece(entityplayer, equipment, HELMET);
+  if(eqObj){
+    sprintf(strAux, "%sHelmet: ID:[YELLOW]%ld [RESET]| Name: [YELLOW]%s", tab, object_get_id(eqObj), object_get_name(eqObj));
+    screen_area_puts(ge->descript2, strAux);
+  }
+  eqObj = equipment_get_piece(entityplayer, equipment, CHEST);
+  if(eqObj){
+    sprintf(strAux, "%sChestplate: ID:[YELLOW]%ld [RESET]| Name: [YELLOW]%s", tab, object_get_id(eqObj), object_get_name(eqObj));
+    screen_area_puts(ge->descript2, strAux);
+  }
+  eqObj = equipment_get_piece(entityplayer, equipment, ARMS);
+  if(eqObj){
+    sprintf(strAux, "%sArms: ID:[YELLOW]%ld [RESET]| Name: [YELLOW]%s", tab, object_get_id(eqObj), object_get_name(eqObj));
+    screen_area_puts(ge->descript2, strAux);
+  }
+  eqObj = equipment_get_piece(entityplayer, equipment, LEG_ARMOR);
+  if(eqObj){
+    sprintf(strAux, "%sLeg Armor: ID:[YELLOW]%ld [RESET]| Name: [YELLOW]%s", tab, object_get_id(eqObj), object_get_name(eqObj));
+    screen_area_puts(ge->descript2, strAux);
+  }
+  eqObj = equipment_get_piece(entityplayer, equipment, SHOES);
+  if(eqObj){
+    sprintf(strAux, "%sShoes: ID:[YELLOW]%ld [RESET]| Name: [YELLOW]%s", tab, object_get_id(eqObj), object_get_name(eqObj));
+    screen_area_puts(ge->descript2, strAux);
+  }
+  eqObj = equipment_get_piece(entityplayer, equipment, TWO_HANDED);
+  if(eqObj){
+    sprintf(strAux, "%sBoth Hands: ID:[YELLOW]%ld [RESET]| Name: [YELLOW]%s", tab, object_get_id(eqObj), object_get_name(eqObj));
+    screen_area_puts(ge->descript2, strAux);
+  }
+  eqObj = equipment_get_piece(entityplayer, equipment, HANDL);
+  if(eqObj){
+    sprintf(strAux, "%sLeft Hand: ID:[YELLOW]%ld [RESET]| Name: [YELLOW]%s", tab, object_get_id(eqObj), object_get_name(eqObj));
+    screen_area_puts(ge->descript2, strAux);
+  }
+  eqObj = equipment_get_piece(entityplayer, equipment, HANDR);
+  if(eqObj){
+    sprintf(strAux, "%sRight Hand: ID:[YELLOW]%ld [RESET]| Name: [YELLOW]%s", tab, object_get_id(eqObj), object_get_name(eqObj));
+    screen_area_puts(ge->descript2, strAux);
   }
 
 }
@@ -437,8 +499,6 @@ void graphic_engine_paint_playerDesc(Graphic_engine *ge, Game *game){
 void graphic_engine_paint_generalDesc(Graphic_engine *ge, Game *game){
   Inventory *spaceInventory = NULL, *playerInventory = NULL;
   int inventorysize, size;
-  Entity *entityplayer = NULL;
-  Player *player = NULL;
   
 
   int i, printedNPCs = 0;
@@ -447,10 +507,6 @@ void graphic_engine_paint_generalDesc(Graphic_engine *ge, Game *game){
   char strAux[WORD_SIZE] = "";
   Space *currentSpace;
   bool spaceDiscovered = false;
-
-  int ability_count = 0;
-
-
 
   screen_area_clear(ge->descript);
 
@@ -546,7 +602,18 @@ void graphic_engine_paint_commandInfo(Graphic_engine *ge, Game *game){
   
   /*Paints commands*/
   last_cmd = game_get_last_command(game);
+
+  if(game_has_request_switch(game)){
+    screen_area_clear(ge->feedback);
+  }
+
   str[0] = 0;
+  if(command_get_status(last_cmd) == ERROR){
+    strcpy(str, "[RED]");
+  }else{
+    strcpy(str, "[GREEN]");
+  }
+
   command_get_as_string(last_cmd, str);
   screen_area_puts(ge->feedback, str);
   
