@@ -28,6 +28,11 @@
 #include <stdlib.h>
 #include <string.h>
 
+/*
+ * Used for dialogue reading wether the game is running from a save file or a .dat
+*/
+extern char *dialogue_filename;
+
 #define COLLECTION_INITIAL_SIZE 10  /*!< Collection initial size*/
 
 /**
@@ -272,6 +277,9 @@ Status game_destroy(Game *game) {
   {
     free(game_get_link_at(game,i));
   }
+
+  /*Destroys the global variable for dialogue*/
+  free(dialogue_filename);
 
   free(game);
   return OK;
@@ -1013,7 +1021,7 @@ Status game_dialogue_init(Game *game, NPC *npc){
   
   if(!game) return ERROR;
 
-  fIN = fopen(DIALOGUE_FILENAME,"r");
+  fIN = fopen(dialogue_filename,"r");
   if(!fIN) return ERROR;
 
   game->dialogue = dialogue_create(npc, fIN);

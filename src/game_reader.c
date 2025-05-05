@@ -23,6 +23,8 @@
 #include "effect.h"
 #include "attack.h"
 
+#define TEMP_DIALOGUE_FILENAME "tempdiag.txt"
+
 /*
 * Declaration of private functions
 */
@@ -186,10 +188,39 @@ Status game_reader_load_others_from_save_file(Game *game, char *filename);
  */
 bool game_reader_is_save_file(char *filename);
 
+/**
+ * @brief Creates a temp file to save dialogue from a save_file
+ * @author Maksym Polyak
+ * 
+ * @param game game struct
+ * @param filename filename
+ * @return Status 
+ */
+Status game_reader_create_temp_dialogue_save(Game *game, char *filename);
+
+/**
+ * @brief Private function to write on fOUT the temp dialogue content
+ * consumes the temp dialogue file
+ * @author Maksym Polyak
+ * 
+ * @param fOUT file stream output
+ * @return Status 
+ */
+Status game_reader_temp_dialogue_use(FILE *fOUT);
+
+/*
+ *  Used for saving the dialogue related to a save accordingly when saving a game 
+ */
+extern char *dialogue_filename;
+
 /*
 * Public functions implementation
 */
 Status game_reader_create_from_file(Game **game, char *filename){
+
+  /*Creates memory for the global variable dialogue_filename */
+  dialogue_filename = (char *)malloc(WORD_SIZE*sizeof(char));
+  if(!dialogue_filename) return ERROR;
   
   if(game_reader_is_save_file(filename) == true){
     return game_reader_create_from_save_file(game, filename);
@@ -283,6 +314,7 @@ Status game_reader_create_from_file(Game **game, char *filename){
   /*Initialization*/
   /*Sets the actual player as the first one read in the .dat*/
   game_switch_player(*game, 0);
+  strcpy(dialogue_filename, "dialogue.txt");
 
   return OK;
 }
@@ -367,7 +399,9 @@ Status game_reader_create_from_save_file(Game **game, char *filename){
     return ERROR;
   }
 
+  /*Initialization*/
   game_switch_player(*game, active_player_index);
+  strcpy(dialogue_filename, filename);
 
   if(game_spatial_map(*game) == ERROR){
     debug_log(LOG_ERROR,"Error maping spatialy spaces");
@@ -384,6 +418,8 @@ Status game_reader_create_save_file(char *save_file, Game *game){
   int size=0; /*aux size variable for multiple uses*/
 
   if(!save_file || !game) return ERROR;
+
+  if(game_reader_create_temp_dialogue_save(game, save_file) == ERROR) return ERROR;
 
   if((Psave_file = fopen(save_file, "w")) == NULL){
     fclose(Poriginal);
@@ -458,6 +494,8 @@ Status game_reader_create_save_file(char *save_file, Game *game){
   for(i=0; i < size; i++){
     effect_save_to_file(Psave_file, collection_get_element_at(effect_manager_get_effects(game_get_effect_manager(game)),i));
   }
+
+  if(game_reader_temp_dialogue_use(Psave_file) == ERROR) return ERROR;
 
   fclose(Psave_file);
 
@@ -1723,4 +1761,64 @@ bool game_reader_is_save_file(char *filename){
   fclose(fIN);
 
   return false;
+}
+
+Status game_reader_create_temp_dialogue_save(Game *game, char *filename){
+  FILE *fIN = NULL, *fOUT = NULL;;
+  char str[WORD_SIZE] = "", *toks = NULL;
+  char filename_aux[WORD_SIZE] = "";
+  Id id;
+
+  if(strcmp(dialogue_filename, "dialogue.txt") == 0){
+    strcpy(filename_aux, "dialogue.txt");
+  }else{
+    strcpy(filename_aux, filename);
+  }
+  
+  if((fIN = fopen(filename_aux, "r")) == NULL){
+    return ERROR;
+  }
+
+  toks = fgets(str,WORD_SIZE,fIN);
+  while(toks != NULL && strncmp(str, "ID:", 3) != 0){
+    toks = fgets(str,WORD_SIZE,fIN);
+  }
+
+  if(toks == NULL) return ERROR;
+
+  sscanf(str, "ID:%ld\n", &id);
+
+  if((fOUT = fopen(TEMP_DIALOGUE_FILENAME, "w")) == NULL){
+    return ERROR;
+  }
+
+  fprintf(fOUT, "ID:%ld\n", id);
+  while(fgets(str,WORD_SIZE,fIN) != NULL){
+    fprintf(fOUT, "%s", str);
+  }
+
+  fclose(fOUT);
+  fclose(fIN);
+
+  return OK;
+}
+
+Status game_reader_temp_dialogue_use(FILE *fOUT){
+  FILE *fIN = NULL;
+  char str[WORD_SIZE] = "";
+
+  if(!fOUT) return ERROR;
+
+  fIN = fopen(TEMP_DIALOGUE_FILENAME, "r");
+  if(!fIN) return ERROR;
+
+  while(fgets(str,WORD_SIZE,fIN) != NULL){
+    fprintf(fOUT, "%s", str);
+  }
+
+  fclose(fIN);
+
+  remove(TEMP_DIALOGUE_FILENAME);
+
+  return OK;
 }

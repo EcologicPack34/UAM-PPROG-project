@@ -917,8 +917,9 @@ Status game_actions_unequip(Game *game){
 }
 
 Status game_actions_inspect(Game *game){
-  Inventory *playerInv = NULL, *spaceInv = NULL;
-  Object *obj;
+  Inventory *playerInv = NULL, *spaceInv = NULL, *sellerInv = NULL;
+  Object *obj = NULL;
+  NPC *npc = NULL;
 
   Command *cmd = NULL;
 
@@ -934,6 +935,16 @@ Status game_actions_inspect(Game *game){
   if(!obj){
     spaceInv = space_get_inventory(game_get_space(game, game_get_player_location(game)));
     obj = inventory_get_object_by_name(spaceInv, command_get_arguments(cmd)[0]);
+  }
+
+  if(game_get_state(game) == STORE_STATE){
+    npc = dialogue_get_NPC(game_get_dialogue(game));
+    if(!npc) return ERROR;
+
+    sellerInv = entity_get_inventory(npc_get_entity(npc));
+    if(!sellerInv) return ERROR;
+
+    obj = inventory_get_object_by_name(sellerInv, command_get_arguments(cmd)[0]);
   }
 
   if(!obj) return ERROR;
