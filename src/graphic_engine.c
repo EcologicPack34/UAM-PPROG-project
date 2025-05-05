@@ -698,6 +698,7 @@ void graphic_engine_paint_combat(Graphic_engine *ge, Game *game){
   int ability_count = 0;
 
   Collection *attacks = NULL;
+  Attack *attack = NULL;
 
   heightDiv = (MAP_HEIGHT - 4 + 1)/3;
 
@@ -1007,6 +1008,34 @@ void graphic_engine_paint_combat(Graphic_engine *ge, Game *game){
 
   screen_area_clear(ge->descript);
 
+  attacks = game_get_attacks(game);
+  auxInt = collection_length(attacks);
+
+  screen_area_puts(ge->descript, "Attacks:");
+
+  for (i = 0; i < auxInt; i++)
+  {
+    attack = (Attack *)collection_get_element_at(attacks, i);
+    strcpy(str, "");
+
+    sprintf(strAux, "[BLUE]%s[RESET]: D.Mult: [YELLOW]%.1lf[RESET] | Fail%%:", attack_get_name(attack), attack_get_damage_multiplicator(attack));
+    strcat(str, strAux);
+
+    if(100 - attack_get_success_chance(attack) >= 15){
+      strcat(str, "[YELLOW]");
+    }
+    if(100 - attack_get_success_chance(attack) >= 50){
+      strcat(str, "[RED]");
+    }else if (100 - attack_get_success_chance(attack) < 15){
+      strcat(str, "[GREEN]");
+    }
+    sprintf(strAux, " %.1lf[RESET] | Area: %s", 100 - attack_get_success_chance(attack), (attack_get_target_bool(attack)) ? "[BLUE]false[RESET]" : "[GREEN]true[RESET]");
+    strcat(str, strAux);
+
+
+    screen_area_puts(ge->descript, str);
+  }
+  
 
 }
 
