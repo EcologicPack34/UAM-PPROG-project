@@ -186,8 +186,8 @@ Graphic_engine *graphic_engine_create() {
   
   area_set_color(ge->descript2, BLACK, WHITE);
   area_set_color(ge->descript, BLACK, WHITE);
-  //area_set_color(ge->map, BLACK, WHITE);
-  //area_set_color(ge->banner, BLACK, WHITE);
+  area_set_color(ge->map, BLACK, WHITE);
+  area_set_color(ge->banner, BLACK, WHITE);
   area_set_color(ge->messages, BLACK, WHITE);
   area_set_color(ge->feedback, BLACK, WHITE);
   area_set_color(ge->help, BLACK, WHITE);
@@ -861,7 +861,7 @@ void graphic_engine_paint_combat(Graphic_engine *ge, Game *game){
   {
     strcat(spacing, " ");
   }
-  strcat(str, spacing);
+  strcpy(str, spacing);
   if(ally_count == 1) strcat(str, "  ");
 
   /*------PLAYER HBAR------*/
@@ -930,27 +930,27 @@ void graphic_engine_paint_combat(Graphic_engine *ge, Game *game){
   {
     if(entity_get_entityType(stats[i].entity) != PLAYER_TYPE) continue;
     strcpy(str, tab);
-    strcat(str, entity_get_graphic_description(stats[0].entity));
+    strcat(str, entity_get_graphic_description(stats[i].entity));
     strcat(str, " [RESET]| Name:[YELLOW] ");
-    strcat(str, entity_get_name(stats[0].entity));
+    strcat(str, entity_get_name(stats[i].entity));
     
     strcat(str, " [RESET]| Health: ");
     
-    if(stats[0].stats.health/stats[0].stats.maxhealth <= .5){
+    if(stats[0].stats.health/stats[i].stats.maxhealth <= .5){
       strcat(str, "[YELLOW]");
     }
-    if(stats[0].stats.health/stats[0].stats.maxhealth <= .2){
+    if(stats[0].stats.health/stats[i].stats.maxhealth <= .2){
       strcat(str, "[RED]");
     }else{
       strcat(str, "[GREEN]");
     }
     
-    sprintf(strAux, "%.2lf / %.2lf", stats[0].stats.health, stats[0].stats.maxhealth);
+    sprintf(strAux, "%.2lf / %.2lf", stats[i].stats.health, stats[i].stats.maxhealth);
     strcat(str, strAux);
     screen_area_puts(ge->descript2, str);//Gdes, name, location, money
   
     strcpy(str, tab);
-    sprintf(strAux, "BaseD:[YELLOW]%.1lf [RESET]| Strength:[YELLOW]%d [RESET]| Defense:[YELLOW]%d [RESET]", stats[0].stats.baseDamage, stats[0].stats.strength, stats[0].stats.defense);
+    sprintf(strAux, "BaseD:[YELLOW]%.1lf [RESET]| Strength:[YELLOW]%d [RESET]| Defense:[YELLOW]%d [RESET]", stats[i].stats.baseDamage, stats[i].stats.strength, stats[i].stats.defense);
     strcat(str, strAux);
   
     screen_area_puts(ge->descript2, str);// damage, strength, defense
@@ -963,7 +963,7 @@ void graphic_engine_paint_combat(Graphic_engine *ge, Game *game){
 
   
   entityplayer = stats[0].entity;
-  playerInventory = entity_get_inventory(entityplayer);
+  playerInventory = entity_get_inventory(player_get_entity(game_get_player(game)));
 
   inventorysize = inventory_get_size(playerInventory);
 
@@ -995,13 +995,13 @@ void graphic_engine_paint_combat(Graphic_engine *ge, Game *game){
 
   for(i = 0; i < ability_count; i++){
     sprintf(str, "%s[YELLOW]%d.[RESET] ", tab, i + 1);
-    strcat(str, entity_get_ability_name_at(entityplayer, i));
+    strcat(str, entity_get_ability_name_at(player_get_entity(game_get_player(game)), i));
 
-    auxInt = ability_get_cooldown_length(entity_get_ability_at(entityplayer, i));
+    auxInt = ability_get_cooldown_length(entity_get_ability_at(player_get_entity(game_get_player(game)), i));
     sprintf(strAux, "\n%s%sCooldown:[BLUE]%d[RESET]", tab, tab, auxInt);
     strcat(str, strAux);
 
-    auxInt = ability_get_cooldown_count(entity_get_ability_at(entityplayer, i));
+    auxInt = ability_get_cooldown_count(entity_get_ability_at(player_get_entity(game_get_player(game)), i));
     sprintf(strAux, " | Cooldown-Left:%s%d", (auxInt > 0)? "[RED]":"[GREEN]", auxInt);
 
     strcat(str, strAux);
@@ -1171,11 +1171,11 @@ void graphic_engine_paint_level_up(Graphic_engine *ge, Game *game){
   screen_area_puts(ge->map," \n \n \n \n \n \n \n");
   screen_area_puts(ge->map,"  Options to level up:\n");
 
-  screen_area_puts(ge->map,"   1. (1 SP) Level up your strength\n    and crush your enemies!\n");
-  screen_area_puts(ge->map,"   2. (1 SP) Level up your magic level\n    and strengthen your abilities!\n");
-  screen_area_puts(ge->map,"   3. (1 SP) Level up your maximum health\n    and overcome your obstacles!\n");
-  screen_area_puts(ge->map,"   4. (1 SP) Level up your defense\n    and ignore those weaklings!\n");
-  screen_area_puts(ge->map,"   5. Exit level up menu\n");
+  screen_area_puts(ge->map,"   [BLUE]1[RESET]. ([YELLOW]1 SP[RESET]) [GREEN]Level up your strength\n    and crush your enemies!\n");
+  screen_area_puts(ge->map,"   [BLUE]2[RESET]. ([YELLOW]1 SP[RESET]) [GREEN]Level up your magic level\n    and strengthen your abilities!\n");
+  screen_area_puts(ge->map,"   [BLUE]3[RESET]. ([YELLOW]1 SP[RESET]) [GREEN]Level up your maximum health\n    and overcome your obstacles!\n");
+  screen_area_puts(ge->map,"   [BLUE]4[RESET]. ([YELLOW]1 SP[RESET]) [GREEN]Level up your defense\n    and ignore those weaklings!\n");
+  screen_area_puts(ge->map,"   [BLUE]5[RESET]. [RED]Exit level up menu\n");
 
 }
 
