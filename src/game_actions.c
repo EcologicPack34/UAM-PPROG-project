@@ -230,6 +230,7 @@ Status game_actions_update(Game *game, Command *command) {
   CommandCode cmd;
   Status status = ERROR;
   char str[WORD_SIZE] = "";
+  int turn, n_players;
 
   Entity *player = NULL;
 
@@ -329,9 +330,6 @@ Status game_actions_update(Game *game, Command *command) {
     default:
       break;
   }
-
-
-  
   
   if(status == ERROR){
     game_set_is_turn_valid(game, NOT_VALID);
@@ -356,7 +354,12 @@ Status game_actions_update(Game *game, Command *command) {
 
   if(player){
     debug_log(PRINT,"Executed command: %s; by player %d:%s",str , entity_get_id(player), entity_get_name(player));
+    n_players = combat_get_n_players(game_get_combat(game));
+
   }
+  turn = (combat_get_turn((game_get_combat(game))) + 1)%n_players;
+  combat_set_turn(game_get_combat(game), turn);
+  game_switch_player(game, turn);
   
   return status;
 }
@@ -700,7 +703,6 @@ Status game_actions_attack(Game *game){
     /*If game starts then the first action isn't valid so combat doesnt update*/
     return ERROR;
   }
-  
 
   return OK;
 }
