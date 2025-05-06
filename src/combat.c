@@ -38,8 +38,12 @@ struct _Combat{
     Stats allies_stats[NPC_MAX_ALLIES];     /*!< Stats of the allies*/
     int allies_count;                       /*!< Number of allies*/
     int players_count;                      /*!< Number of players*/
+    int players_turn;                       /*!<Turn of the players*/
     Stats enemies_stats[NPC_MAX_ENEMIES];   /*!< Stats of the enemies*/
     int enemies_count;                      /*!< Number of enemies*/
+
+    Player *pl1;                            /*!< Pointer of player 1*/
+    Player *pl2;                            /*!< Pointer of the other player*/
 
     Stats dead_entities[COMBAT_MAX_ENTITIES - 1];   /*!< Stores the dead entities*/
     int n_dead_entities;                            /*!< Count of how many dead entities are*/
@@ -732,25 +736,35 @@ Stats *combat_get_last_alive(Combat *cmb, int mode){
     * PUBLIC FUNCTIONS
 */
 
-Combat *combat_initialize(Space *space, Player **players, CommandCode code, Collection *attacks, int num_players){
+Combat *combat_initialize(Space *space, Player *pl1, Player *pl2, CommandCode code, Collection *attacks, int num_players){
     Combat *combat = NULL;
     NPC *npc = NULL;
-    int i, npc_count = 0, npc_allies = 1, npc_enemies = 0;
+    int i, npc_count = 0, npc_allies = 1, npc_enemies = 0, followerNum, playerNum = 0;;
+    Entity *ent = NULL;
 
-    if(!space || !players)
+    if(!space || !pl1)
         return NULL;
-
     
     combat = (Combat *)calloc(1,sizeof(Combat));
     if(!combat) return NULL;
     /*Saves the player stats on the combat struct*/
-    for (i = 0; i < num_players; i++)
+    if (pl2)
     {
-        combat_copy_entity_stats(player_get_entity(players[i]), &(combat->allies_stats[i]));
+        combat->pl2 = pl2;
+        combat_copy_entity_stats(player_get_entity(pl2), &(combat->allies_stats[1]));
+        npc_allies++;
+        playerNum++;
     }
-    
+
+    combat->pl1 = pl1;
+
+    combat_copy_entity_stats(player_get_entity(pl1), &(combat->allies_stats[0]));
+    playerNum++;
+
+    combat->players_count = playerNum;
+
     npc_count = space_get_npc_count(space);
-    npc_allies = i;
+    followerNum = player_get_follower_num(pl1);
     /*Saves the first four enemies and the first three allies on the combat struct*/
     for(i = 0; i < npc_count; i++){
         npc = space_get_NPC_at(space, i);
@@ -762,19 +776,21 @@ Combat *combat_initialize(Space *space, Player **players, CommandCode code, Coll
             combat_copy_entity_stats(npc_get_entity(npc), &(combat->enemies_stats[npc_enemies]));
             npc_enemies++;
         }
-        if(npc_get_status(npc) == ALLY && npc_allies < (3+i)){
-            if(entity_get_health(npc_get_entity(npc)) <= 0){
-                continue;
-            } 
+    }
 
-            combat_copy_entity_stats(npc_get_entity(npc), &(combat->allies_stats[npc_allies]));
-            npc_allies++;
+    for (i = 0; i < followerNum && npc_allies <= NPC_MAX_ALLIES; i++)
+    {
+        ent  = player_get_follower_at(pl1, i);
+
+        if (entity_get_entityType(ent) == NPC_TYPE)
+        {
+            combat_copy_entity_stats(ent, &(combat->allies_stats[npc_allies++]));
         }
     }
     
     combat->enemies_count = npc_enemies;
     combat->allies_count = npc_allies;
-    combat->players_count = num_players;
+    combat->players_turn = 0;
 
     if(combat->enemies_count == 0){
         free(combat);
@@ -830,6 +846,10 @@ Status combat_update(Combat *combat, Command *last_cmd){
     if(st == ERROR){
         return ERROR;
     }
+    if ((combat->players_turn == 0) && (combat->players_count == 2)){
+        return OK;
+    }
+    
     combat_update_deaths(combat);
     
     
@@ -926,6 +946,7 @@ Status combat_release_dead_loot(Combat *cmb, Stats *st) {
     int inventory_size;
     long i;
     Object *obj = NULL;
+    Id space_id;
 
     if (!cmb || !st)
         return ERROR;
@@ -934,7 +955,9 @@ Status combat_release_dead_loot(Combat *cmb, Stats *st) {
     if(!(space_inventory = space_get_inventory(cmb->space))) {
         return ERROR;
     }
+    
     inventory_size = inventory_get_size(inv);
+    space_id = space_get_id(cmb->space);
 
     for (i = 0; i < inventory_size; i++)
     {
@@ -942,7 +965,7 @@ Status combat_release_dead_loot(Combat *cmb, Stats *st) {
             return ERROR;
         }
         objID = object_get_id(obj);
-        object_set_location(obj, spaceID);
+        object_set_location(obj, space_id);
         inventory_move_object(inv, space_inventory, objID);
     }
 
@@ -961,4 +984,29 @@ Entity *combat_get_dead_entity_at(Combat *combat, int i){
     if(!combat || i < 0 || i >= combat_get_dead_entities_num(combat)) return NULL;
 
     return combat->dead_entities[i].entity;
+}
+
+int combat_get_turn(Combat *cmb) {
+
+    if (!cmb)
+        return -1;
+        
+    return cmb->players_turn;
+}
+
+Status combat_set_turn(Combat *cmb, int i) {
+
+    if (!cmb)
+        return ERROR;
+
+    cmb->players_turn = i;   
+    return OK;
+}
+
+int combat_get_n_players(Combat *cmb) {
+
+    if (!cmb)
+        return -1;
+    
+    return cmb->players_count;
 }
