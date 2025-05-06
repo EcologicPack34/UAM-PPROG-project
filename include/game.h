@@ -720,4 +720,45 @@ GDesc *game_get_gdesc_at(Game *game, int i);
  */
 Link **game_get_links(Game *game);
 
+/**
+ * @brief Drops the inventory if the entity is dead
+ * @author Maksym Polyak
+ * 
+ * @param game game struct
+ * @param entity entity struct
+ * @return Status 
+ */
+Status game_dead_entity_drop_inv(Game *game, Entity *entity);
+
+/**
+ * @brief Updates the followers, checking if they died,
+ * if they did then unfollows everyone
+ * @author Maksym Polyak
+ * 
+ * @param game game struct
+ * @return Status 
+ */
+Status game_update_unfollows(Game *game);
+
+/**
+ * @brief Checks if the combat log has messages
+ * @author Maksym Polyak
+ * 
+ * @param game game struct
+ * @return true if it has at least one message
+ * @return false if it does not have message
+ */
+bool game_combat_log_hasMessage(Game *game);
+
+/**
+ * @brief Copies the content of the first message on a queue
+ * to the str received
+ * @author Maksym Polyak
+ * 
+ * @param game game struct
+ * @param str string where message content is copied
+ * @return Status 
+ */
+Status game_get_combat_log_message(Game *game, char *str);
+
 #endif

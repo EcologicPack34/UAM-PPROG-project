@@ -330,35 +330,35 @@ Status game_actions_update(Game *game, Command *command) {
       break;
   }
 
-  command_set_status(command, status);
 
-  command_get_as_string(game_get_last_command(game), str);
-
-  player = player_get_entity(game_get_player(game));
-
-  if(player){
-    debug_log(PRINT,"Executed command: %s; by player %d:%s",str , entity_get_id(player), entity_get_name(player));
-  }
-
-  if(command_get_code(command) != SWITCH 
-  || (command_get_code(command) == SWITCH && strncmp("list", command_get_arguments(command)[0], 5) == 0) ){
-    command_update_player_data(command);
-  }
-
+  
+  
   if(status == ERROR){
     game_set_is_turn_valid(game, NOT_VALID);
   } else {
     game_set_is_turn_valid(game, VALID);
   }
-
+  
   if(game_get_state(game) == COMBAT && game_get_is_turn_valid(game) == VALID){
-    if(combat_update(game_get_combat(game), game_get_last_command(game)) == ERROR)
-      return ERROR;
+    if(combat_update(game_get_combat(game), game_get_last_command(game)) == ERROR){
+      game_set_is_turn_valid(game, NOT_VALID);
+      status = ERROR;
+    }
+  }
+  command_set_status(command, game_get_is_turn_valid(game) == VALID ? OK : ERROR);
+  if(command_get_code(command) != SWITCH 
+  || (command_get_code(command) == SWITCH && strncmp("list", command_get_arguments(command)[0], 5) == 0) ){
+    command_update_player_data(command);
+  }
+  command_get_as_string(game_get_last_command(game), str);
+  
+  player = player_get_entity(game_get_player(game));
 
-    
+  if(player){
+    debug_log(PRINT,"Executed command: %s; by player %d:%s",str , entity_get_id(player), entity_get_name(player));
   }
   
-  return OK;
+  return status;
 }
 
 /**

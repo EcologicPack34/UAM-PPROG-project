@@ -13,6 +13,7 @@
 #include "attack.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include "message.h"
 
 #define MAX_LVL 999999      /*!< Maximum level the stats should take*/
 
@@ -48,6 +49,7 @@ struct _Combat{
 
     bool endCombat;                         /*!< if true means combat has ended*/
 
+    Queue *messages;                        /*!< Saves the messages of the actions on the queue*/
 
     Collection *attacks;                     /*!< array of attacks*/
     int attacks_count;                       /*!< number of attacks*/
@@ -122,23 +124,27 @@ Status combat_attack_quick(Stats *attacker, Stats *victim);
  * @brief Tries to make a generic attack
  * @author Sofía Calvo
  * 
+ * @param cmb combat struct
+ * @param at attack struct
  * @param attacker stats of the attacker
  * @param victim stats of the victim
  * @return Status 
  */
-Status combat_attack(Attack *at, Stats *attacker, Stats *victim);
+Status combat_attack(Combat *cmb, Attack *at, Stats *attacker, Stats *victim);
 
 /**
  * @brief Tries to make a generic attack
  * @author Sofía Calvo
  * 
+ * @param cmb combat struct
+ * @param at attack struct
  * @param attacker stats of the attacker
  * @param victims stats of all the victims (array)
  * @param num_victims number of victims
  * @return Status 
  */
-Status combat_attack_all(Attack *at, Stats *attacker, Stats *victims, int num_victims);
-/**
+Status combat_attack_all(Combat *cmb, Attack *at, Stats *attacker, Stats *victims, int n_victims);
+    /**
  * @brief Tries to make a strong attack from the attacker to the victim
  * @author Sofía Calvo
  * 
@@ -241,7 +247,29 @@ double stats_get_strength_dmg_multiplier(EntityStats *stats);
  */
 double stats_get_defense_reduced_damage_multiplier(EntityStats *stats);
 
+/**
+ * @brief Adds a message to the log
+ * @author Maksym Polyak
+ * 
+ * @param combat combat struct
+ * @param level level of the message
+ * @param content content of the message
+ * @return Status 
+ */
+Status combat_add_message_log(Combat *combat, MessageType level, char *content);
+
 /*-----------IMPLENTATIONS-------------*/
+
+Status combat_add_message_log(Combat *combat, MessageType level, char *content){
+    Message *mess = NULL;
+    
+    if(!combat || level < 0 || !content) return ERROR;
+
+    mess = message_new(level, content);
+    if(!mess) return ERROR;
+
+    return queue_push(combat->messages, (void *)mess);
+}
 
 double stats_get_strength_dmg_multiplier(EntityStats *stats){
     int strength;
@@ -409,30 +437,46 @@ Status combat_attack_light(Stats *attacker, Stats *victim){
     return combat_entity_received_damage(victim, LIGHT_ATTACK*(attacker->stats.baseDamage));
 }
 
-Status combat_attack(Attack *at, Stats *attacker, Stats *victim) {
+Status combat_attack(Combat *cmb, Attack *at, Stats *attacker, Stats *victim) {
 
     double damage;
     double chance;
+    char str[WORD_SIZE] = "";
 
     if (!attacker || !victim || !at)
         return ERROR;
     
     chance = rand()%100;
-    if (chance > attack_get_success_chance(at))
+    if (chance > attack_get_success_chance(at)){
+        sprintf(str,"%s failed to attack %s!", entity_get_name(attacker->entity), entity_get_name(victim->entity));
+        combat_add_message_log(cmb, MESSAGE_LOG, str);
         return OK;
+    }
     
     damage = attacker->stats.baseDamage*attack_get_damage_multiplicator(at)*stats_get_strength_dmg_multiplier(&(attacker->stats));
     combat_entity_received_damage(victim, damage);
+    
+    sprintf(str,"%s dealt %.2lf of damage to %s!", entity_get_name(attacker->entity), damage, entity_get_name(victim->entity));
+    combat_add_message_log(cmb, MESSAGE_LOG, str);
+
     return OK;
 }
 
-Status combat_attack_all(Attack *at, Stats *attacker, Stats *victims, int n_victims) {
+Status combat_attack_all(Combat *cmb, Attack *at, Stats *attacker, Stats *victims, int n_victims) {
 
     int i;
-    double damage;
+    double damage, chance;
+    char str[WORD_SIZE] = "";
 
-    if (!at || !attacker || !victims)
+    if (!cmb || !at || !attacker || !victims)
         return ERROR;
+
+    chance = rand()%100;
+    if (chance > attack_get_success_chance(at)){
+        sprintf(str,"%s failed to attack everyone!", entity_get_name(attacker->entity));
+        combat_add_message_log(cmb, MESSAGE_LOG, str);
+        return OK;
+    }
     
     damage = attacker->stats.baseDamage*attack_get_damage_multiplicator(at);
 
@@ -440,6 +484,9 @@ Status combat_attack_all(Attack *at, Stats *attacker, Stats *victims, int n_vict
     {
         combat_entity_received_damage(&victims[i], damage);
     }
+
+    sprintf(str,"%s dealt everyone %.2lf of damage!", entity_get_name(attacker->entity), damage);
+    combat_add_message_log(cmb, MESSAGE_LOG, str);
     
     return OK;
 }
@@ -474,11 +521,11 @@ Status combat_enemies_turn(Combat *cmb) {
         needs_target = attack_get_target_bool(at);
         if (needs_target == true)
         {
-            combat_attack(at, &stEn[i], &stAl[randomNumAll]);
+            combat_attack(cmb, at, &stEn[i], &stAl[randomNumAll]);
         }
         else
         {
-            combat_attack_all(at, &stEn[i], stAl, cmb->allies_count);
+            combat_attack_all(cmb, at, &stEn[i], stAl, cmb->allies_count);
         }  
         combat_update_deaths(cmb);
     }
@@ -512,11 +559,11 @@ Status combat_allies_turn(Combat *cmb){
         needs_target = attack_get_target_bool(at);
         if (needs_target == true)
         {
-            combat_attack(at, &stAl[i], &stEn[randomNumEnemy]);
+            combat_attack(cmb, at, &stAl[i], &stEn[randomNumEnemy]);
         }
         else
         {
-            combat_attack_all(at, &stAl[i], stEn, cmb->enemies_count);
+            combat_attack_all(cmb, at, &stAl[i], stEn, cmb->enemies_count);
         } 
         combat_update_deaths(cmb);
     }
@@ -554,12 +601,12 @@ Status combat_update_player_attack(Combat *cmb, Command *last_cmd){
         if(numEnemy < 0 || numEnemy >= combat_get_enemies_count(cmb)) return ERROR;
 
         stEn = combat_get_enemies_stats_at(cmb, numEnemy);
-        combat_attack(atc, player, stEn);
+        combat_attack(cmb, atc, player, stEn);
     }
     else
     {
         stEn = combat_get_enemies_stats(cmb);
-        combat_attack_all(atc, player, stEn, cmb->enemies_count);
+        combat_attack_all(cmb, atc, player, stEn, cmb->enemies_count);
     }
     return OK;
 }
@@ -736,6 +783,11 @@ Combat *combat_initialize(Space *space, Player *player, CommandCode code, Collec
     combat->attacks_count = collection_length(attacks);
     printf("%d", combat->allies_count);
 
+    combat->messages = queue_create();
+    if(!combat->messages){
+        free(combat);
+    }
+
     return combat;
 }
 
@@ -743,6 +795,7 @@ void combat_free(Combat *combat){
     if(!combat)
         return;
 
+    queue_destroy(combat->messages);
     free(combat);
 }
 
@@ -896,4 +949,10 @@ Entity *combat_get_dead_entity_at(Combat *combat, int i){
     if(!combat || i < 0 || i >= combat_get_dead_entities_num(combat)) return NULL;
 
     return combat->dead_entities[i].entity;
+}
+
+Queue *combat_get_messages(Combat *combat){
+    if(!combat) return NULL;
+
+    return combat->messages;
 }

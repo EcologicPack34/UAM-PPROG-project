@@ -1035,8 +1035,13 @@ void graphic_engine_paint_combat(Graphic_engine *ge, Game *game){
 
     screen_area_puts(ge->descript, str);
   }
-  
 
+  strcpy(str, "Turn:");
+  screen_area_puts(ge->descript, str);
+  while(game_combat_log_hasMessage(game)){
+    game_get_combat_log_message(game, str);
+    screen_area_puts(ge->descript, str);
+  }
 }
 
 void graphic_engine_paint_dialogue(Graphic_engine *ge, Game *game){

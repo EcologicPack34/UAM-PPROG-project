@@ -1380,3 +1380,98 @@ Link **game_get_links(Game *game){
 
   return game->links;
 }
+
+Status game_dead_entity_drop_inv(Game *game, Entity *entity){
+  Space *space = NULL;
+  Inventory *inv = NULL, *space_inv = NULL; 
+  int size, i;
+  Object *obj = NULL;
+
+
+  if(!game || !entity) return ERROR;
+
+  if(entity_is_dead(entity) == false) return OK;
+
+  space = game_get_space(game, entity_get_location(entity));
+  if(!space) return ERROR;
+
+  space_inv = space_get_inventory(space);
+  if(!space_inv) return ERROR;
+
+  inv = entity_get_inventory(entity);
+  if(!inv) return ERROR;
+
+  size = inventory_get_size(inv);
+  for(i = 0; i < size; i++){
+    obj = inventory_get_object_at(inv, i);
+    if(!obj) return ERROR;
+
+    inventory_move_object(inv, space_inv, object_get_id(obj));
+  }
+
+  return OK;
+}
+
+Status game_update_unfollows(Game *game){
+  int size, i, j, n_followers;
+  Player *player = NULL, *aux_player = NULL;
+  Entity *ent = NULL;
+
+  size = game_get_n_players(game);
+  for(i = 0; i < size; i++){
+    player = game_get_player_at(game, i);
+    if(!player) return ERROR;
+
+    n_followers = player_get_follower_num(player);
+    for(j = 0; j < n_followers; j++){
+      ent = player_get_follower_at(player, j);
+      if(!ent) return ERROR;
+
+      if(entity_is_dead(ent) == true){
+        if(entity_get_entityType(ent) == PLAYER_TYPE){
+          aux_player = game_get_player_by_id(game, entity_get_id(ent));
+          if(!aux_player) return ERROR;
+
+          player_remove_follower_by_pointer(aux_player, player_get_entity(player));
+          player_remove_follower_by_pointer(player, ent);
+        } else if(entity_get_entityType(ent) == NPC_TYPE){
+          player_remove_follower_by_pointer(player, ent);
+        }
+      }
+    }
+  }
+
+  return OK;
+}
+
+bool game_combat_log_hasMessage(Game *game){
+  Combat *cmb = NULL;
+  Queue *queue = NULL;
+  
+  if(!game) return false;
+
+  if((cmb = game_get_combat(game)) == NULL || game_get_state(game) != COMBAT) return false;
+
+  queue = combat_get_messages(cmb);
+
+  return !queue_isEmpty(queue);
+}
+
+Status game_get_combat_log_message(Game *game, char *str){
+  Combat *cmb = NULL;
+  Queue *queue = NULL;
+  Message *mess = NULL;
+  
+  if(!game || !str) return ERROR;
+
+  if((cmb = game_get_combat(game)) == NULL || game_get_state(game) != COMBAT) return ERROR;
+
+  queue = combat_get_messages(cmb);
+
+  mess = queue_pop(queue);
+  if(!mess) return ERROR;
+
+  message_get_str(mess, str);
+
+  return OK;
+}

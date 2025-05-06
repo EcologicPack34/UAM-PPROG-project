@@ -65,8 +65,6 @@ bool event_trigger_player_death(Event *event, Game *game);
  */
 bool event_trigger_end_combat(Game *game);
 
-bool event_trigger_end_dialoge(Game *game);
-
 /**
  * @brief Checks for all npcs and move them randomly
  * @author Daniel Gómez
@@ -88,6 +86,15 @@ bool event_trigger_npc_rand_move(Event *event, Game *game);
  * @return false 
  */
 bool event_trigger_effects(Event *event, Game *game);
+
+/**
+ * @brief Updates deaths on DEFAULT game state
+ * 
+ * @param game game struct
+ * @return true if entity
+ * @return false 
+ */
+bool event_trigger_update_deaths(Game *game);
 
 /*---------PUBLIC FUNCTIONS----------*/
 void event_actions_trigger_events(Game *game){
@@ -134,6 +141,9 @@ void event_actions_trigger_events(Game *game){
     /*Always checked events*/
     if(game_get_state(game) == COMBAT)
         triggered = event_trigger_end_combat(game);
+
+    if(game_get_state(game) == DEFAULT)
+        triggered = event_trigger_update_deaths(game);
 
     triggered = event_trigger_player_death(event, game);
 }
@@ -384,5 +394,42 @@ bool event_trigger_effects(Event *event, Game *game){
             break;
         }
     }
+    return true;
+}
+
+bool event_trigger_update_deaths(Game *game){
+    Player *player = NULL;
+    NPC *npc = NULL;
+    Entity *ent = NULL;
+    int i, size;
+    Collection *coll = NULL;
+
+    if(!game) return false;
+
+    /*Updates follows if NPCs or players died*/
+    game_update_unfollows(game);
+
+    coll = game_get_npcs(game);
+    if(!coll) return false;
+    size = collection_length(coll);
+    for(i = 0; i < size; i++){
+        npc = collection_get_element_at(coll, i);
+        ent = npc_get_entity(npc);
+        if(!npc) return false;
+
+        game_dead_entity_drop_inv(game, ent);
+    }
+
+    size = game_get_n_players(game);
+    for(i = 0; i < size; i++){
+        player = game_get_player_at(game, i);
+        if(!player) return false;
+
+        ent = player_get_entity(player);
+        if(!ent) return false;
+
+        game_dead_entity_drop_inv(game, ent);
+    }
+
     return true;
 }
