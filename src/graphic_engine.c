@@ -76,7 +76,7 @@ void graphic_engine_newline_print_with_extra(Area *area, char *string, char *ext
  * @param map char array with the map
  * @param spaceStr graphical description of the space
  */
-void graphic_engine_paint_space(Game *game, Space *space, Direction direction,char map[SPACE_HEIGHT + 1][MAP_WIDTH + 33], char spaceStr[SPACE_HEIGHT + 1][SPACE_WIDTH+10]);
+void graphic_engine_paint_space(Game *game, Space *space, Direction direction,char map[SPACE_HEIGHT + 1][MAP_WIDTH + 150], char spaceStr[SPACE_HEIGHT + 1][SPACE_WIDTH+50]);
 
 /**
  * @brief Paints map in map area
@@ -268,20 +268,20 @@ void graphic_engine_newline_print_with_extra(Area *area, char *string, char *ext
 void graphic_engine_paint_map(Graphic_engine *ge, Game *game){
   Space *currentSpace = NULL;
   Space *directionSpace = NULL;
-  char space[SPACE_HEIGHT + 1][SPACE_WIDTH+10];
-  char map[SPACE_HEIGHT + 1][MAP_WIDTH + 33];
+  char space[SPACE_HEIGHT + 1][SPACE_WIDTH+50];
+  char map[SPACE_HEIGHT + 1][MAP_WIDTH + 150];
   
   int i;
   
-  strcpy(space[0], "+------%c%c%c------+");
+  strcpy(space[0], "+------%c%s%c------+");
   strcpy(space[1], "|%-3s %6s %4ld|");/*player npcs id*/
   strcpy(space[2], "|%-9s      |");
-  strcpy(space[3], "%c%-9s   %c  %c");
-  strcpy(space[4], "%c%-9s   %c  %c");
+  strcpy(space[3], "%c%-9s   %s  %c");
+  strcpy(space[4], "%s%-9s   %s  %s");
   strcpy(space[5], "%c%-9s      %c");
   strcpy(space[6], "|%-9s      |");
   strcpy(space[7], "|%-15s|");
-  strcpy(space[8], "+------%c%c%c------+");
+  strcpy(space[8], "+------%c%s%c------+");
   
   
   screen_area_clear(ge->map);
@@ -1214,13 +1214,13 @@ void graphic_engine_paint_store(Graphic_engine *ge, Game *game){
   }
 }
                                                      
-void graphic_engine_paint_space(Game *game, Space *space, Direction direction,char map[SPACE_HEIGHT + 1][MAP_WIDTH + 33], char spaceStr[SPACE_HEIGHT + 1][SPACE_WIDTH+10]){
+void graphic_engine_paint_space(Game *game, Space *space, Direction direction,char map[SPACE_HEIGHT + 1][MAP_WIDTH + 150], char spaceStr[SPACE_HEIGHT + 1][SPACE_WIDTH+50]){
   int i;
   char str[WORD_SIZE];
   char strAux[WORD_SIZE];
   char player[WORD_SIZE];
   Link *link1 = NULL, *link2 = NULL, *link3 = NULL;
-  char link1Char, link2Char, link3Char;
+  char link1Char[30], link2Char[30], link3Char[30];
 
   GDesc *gdesc = NULL;
   char gdescAux[2] = "";
@@ -1235,11 +1235,11 @@ void graphic_engine_paint_space(Game *game, Space *space, Direction direction,ch
 
     /*Determines the state of the top conexion*/
     link1 = space_get_north(space);
-    link1Char = '-';
+    strcpy(link1Char, "-");
     if(link1){
-      if(link_is_locked(link1)) link1Char = '-';
-      else if(link_is_adjacent(link1) == false) link1Char = 'o';
-      else link1Char = ' ';
+      if(link_is_locked(link1)) strcpy(link1Char, "[RED]-[RESET]");
+      else if(link_is_adjacent(link1) == false) strcpy(link1Char, "[BLUE]o[RESET]");
+      else strcpy(link1Char, " ");
     }
     sprintf(str, spaceStr[0], (link1) ? '|' : '-', link1Char, (link1) ? '|' : '-');
     strcat(map[0],str);
@@ -1256,35 +1256,35 @@ void graphic_engine_paint_space(Game *game, Space *space, Direction direction,ch
     /*Determines the state of the lateral conexion between spaces*/
     link1 = space_get_east(space);
     link2 = space_get_west(space);
-    link1Char = '|';
+    strcpy(link1Char, "|");
     if(link1){
-      if(link_is_locked(link1)) link1Char = '|';
-      else if(link_is_adjacent(link1) == false) link1Char = 'o';
-      else link1Char = ' ';
+      if(link_is_locked(link1)) strcpy(link1Char, "[RED]|[RESET]");
+      else if(link_is_adjacent(link1) == false) strcpy(link1Char, "[BLUE]o[RESET]");
+      else strcpy(link1Char, " ");
     }
-    link2Char = '|';
+    strcpy(link2Char, "|");
     if(link2){
-      if(link_is_locked(link2)) link2Char = '|';
-      else if(link_is_adjacent(link2) == false) link2Char = 'o';
-      else link2Char = ' ';
+      if(link_is_locked(link2)) strcpy(link2Char, "[RED]|[RESET]");
+      else if(link_is_adjacent(link2) == false) strcpy(link2Char, "[BLUE]o[RESET]");
+      else strcpy(link2Char, " ");
     }
 
     link3 = space_get_up(space);
-    link3Char = ' ';
+    strcpy(link3Char, " ");
     if(link3){
-      if(link_is_locked(link3)) link3Char = '-';
-      else if(link_is_adjacent(link3) == false) link3Char = 'o';
-      else link3Char = '^';
+      if(link_is_locked(link3)) strcpy(link3Char, "[RED]x[RESET]");
+      else if(link_is_adjacent(link3) == false) strcpy(link3Char, "[BLUE]o[RESET]");
+      else strcpy(link3Char, "^");
     }
     sprintf(str, spaceStr[3], (link2) ? '-' : '|', (gdesc) ? gdesc_get_line(gdesc, 1) : gdescAux, link3Char ,(link1) ? '-' : '|');
     strcat(map[3],str);
 
     link3 = space_get_down(space);
-    link3Char = ' ';
+    strcpy(link3Char, " ");
     if(link3){
-      if(link_is_locked(link3)) link3Char = '-';
-      else if(link_is_adjacent(link3) == false) link3Char = 'o';
-      else link3Char = '^';
+      if(link_is_locked(link3)) strcpy(link3Char, "[RED]x[RESET]");
+      else if(link_is_adjacent(link3) == false) strcpy(link3Char, "[BLUE]o[RESET]");
+      else strcpy(link3Char, "v");
     }
     sprintf(str, spaceStr[4], link2Char, (gdesc) ? gdesc_get_line(gdesc, 2) : gdescAux, link3Char,link1Char);
     strcat(map[4],str);
@@ -1303,14 +1303,11 @@ void graphic_engine_paint_space(Game *game, Space *space, Direction direction,ch
 
     /*Determines the state of the top conexion*/
     link1 = space_get_south(space);
-    link1Char = '-';
-    if (link1){
-      if (link_is_locked(link1))
-        link1Char = '-';
-      else if (link_is_adjacent(link1) == false)
-        link1Char = 'o';
-      else
-        link1Char = ' ';
+    strcpy(link1Char, "-");
+    if(link1){
+      if(link_is_locked(link1)) strcpy(link1Char, "[RED]-[RESET]");
+      else if(link_is_adjacent(link1) == false) strcpy(link1Char, "[BLUE]o[RESET]");
+      else strcpy(link1Char, " ");
     }
     sprintf(str, spaceStr[8], (link1) ? '|' : '-', link1Char, (link1) ? '|' : '-');
     strcat(map[8],str);
