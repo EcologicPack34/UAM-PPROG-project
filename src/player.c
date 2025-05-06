@@ -91,6 +91,7 @@ Player *player_create(char *name, Id identity, Id location, int money, int xp, i
 
     player->followers = collection_create(NPC_MAX_FOLLOWERS, true, true, entity_compare, NULL);
     if(!player->followers) return NULL;
+
     player->cmdData = command_info_create();
     if(!(player->cmdData)){
         collection_destroy(player->followers);
@@ -270,7 +271,7 @@ Entity *player_get_follower_at(Player *player, int i){
 }
 
 int player_get_follower_num(Player *player){
-    if(!player) return 0;
+    if(!player) return -1;
 
     return collection_length(player->followers);
 }

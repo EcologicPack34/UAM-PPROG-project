@@ -52,7 +52,7 @@ typedef struct _Combat Combat;
  * @param code last cmd 
  * @return Combat* or NULL if ERROR
  */
-Combat *combat_initialize(Space *space, Player *pl1, Player *pl2, CommandCode code, Collection *attacks, int num_players);
+Combat *combat_initialize(Space *space, Player *player, CommandCode code, Collection *attacks);
 
 /**
  * @brief Ends the combat and frees all the memory related to it
@@ -222,11 +222,5 @@ Entity *combat_get_dead_entity_at(Combat *combat, int i);
  * @return Queue* or NULL if error
  */
 Queue *combat_get_messages(Combat *combat);
-
-int combat_get_turn(Combat *cmb);
-
-Status combat_set_turn(Combat *cmb, int i);
-
-int combat_get_n_players(Combat *cmb);
 
 #endif
