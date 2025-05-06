@@ -1209,7 +1209,7 @@ void graphic_engine_paint_store(Graphic_engine *ge, Game *game){
 
   for(i = 0; i < obj_num && obj_num < MAX_PRINT_INVENTORY; i++){
     obj = inventory_get_object_at(inventory, i);
-    sprintf(str, "    [BLUE]%d[RESET]: [YELLOW]%s [RESET]| [YELLOW]%s [RESET]| Cost: [GREEN]%d", object_get_cost(obj), object_get_name(obj), object_get_descr(obj), i + 1);
+    sprintf(str, "    [BLUE]%d[RESET]: [YELLOW]%s [RESET]| [YELLOW]%s [RESET]| Cost: [GREEN]%d", i + 1, object_get_name(obj), object_get_descr(obj), object_get_cost(obj));
     screen_area_puts(ge->map,str);
   }
 }

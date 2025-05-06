@@ -219,7 +219,7 @@ void screen_area_puts(Area* area, char *str){
   short skipS = 0;
   short skipSt = 0;
 
-  int i,j;
+  int i;
 
   if(!area || !str) return;
 
@@ -258,17 +258,18 @@ void screen_area_puts(Area* area, char *str){
     /*Print the actual line to data*/
     for (area->cX = 0; area->cX < area->width && ptr <= str + len && *ptr != '\0'; (area->cX)++ , ptr++)
     { 
-      if(*ptr == ' ' && skipS) {
-        skipS = 0;
-      }
       /*Searches if word can be put in line or needs to be moved to next line*/
       for (i = 0, tagE = ptr; i < area->width && *tagE != ' ' && *tagE != '\0' && tagE < str + len && !skipS; i++)
       {
         /*ignores tags when counting length*/
         if(*tagE == '[' && !skipSt){
           strcpy(tag, "");
-          for (tagLen = 0, tagE++; tagLen + 1 < 20 && *tagE != ']' && tagE <= str + len; tagLen++, tagE++){
+          for (tagLen = 0, tagE++; tagLen + 1 < 20 && *tagE != ']' && *tagE != '[' && tagE <= str + len; tagLen++, tagE++){
             tag[tagLen] = *tagE;
+          }
+          if(*tagE == '['){
+            tagE-= tagLen;
+            skipSt = 1;
           }
           if(*tagE == ']'){
             tag[tagLen] = '\0';
@@ -290,6 +291,9 @@ void screen_area_puts(Area* area, char *str){
         i = 0;
         break;
       }
+      if(*ptr == ' ' && skipS) {
+        skipS = 0;
+      }
 
       if(*ptr == '\n'){
         ptr++;
@@ -301,10 +305,15 @@ void screen_area_puts(Area* area, char *str){
 
         /*copy content between [ ] */
         tagE = ptr + 1;
-        for (tagLen = 0; tagLen + 1 < 20 && *tagE != ']' && tagE <= str + len; tagLen++, tagE++){
+        for (tagLen = 0; tagLen + 1 < 20 && *tagE != ']' && *tagE != '[' && tagE <= str + len; tagLen++, tagE++){
           tag[tagLen] = *tagE;
         }
         /*Checks if closing bracket exits*/
+        if(*tagE == '['){
+          ptr--;
+          skipT = 1;
+          area->cX--;
+        }
         if(*tagE == ']'){
           tag[tagLen] = '\0';
           cColor = color_tag_to_color(tag);
