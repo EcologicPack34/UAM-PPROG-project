@@ -10,8 +10,6 @@
 
 #include "graphic_engine.h"
 
-#include "ansi_colors.h"
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -27,8 +25,8 @@
 
 #define MAP_WIDTH 53                  /*!< Width of the map part*/
 #define MAP_HEIGHT 29                 /*!< Height of the map part*/
-#define DESCRIPT_WIDTH 50            /*!< Width of the description part*/
-#define DESCRIPT_WIDTH2 50            /*!< Width of the description part*/
+#define DESCRIPT_WIDTH 53            /*!< Width of the description part*/
+#define DESCRIPT_WIDTH2 53            /*!< Width of the description part*/
 #define HELP_BANNER_HEIGHT 1          /*!< Height of the help banner part*/
 #define HELP_BANNER_WIDTH 23          /*!< Width of the help banner part*/
 #define HELP_HEIGHT 4                 /*!< Height of the help banner*/
@@ -57,15 +55,6 @@ struct _Graphic_engine {
   Area *feedback;   /*!< Feedback of the graphic engine*/
   Area *messages;   /*!< Area which displays game messages*/
 };
-
-/**
- * @brief Paints a string with newlines in a designated screen area
- * @author Daniel Gómez
- * 
- * @param area where the print is done
- * @param string string to be printed
- */
-void graphic_engine_newline_print(Area *area, char *string);
 
 /**
  * @brief Paints a string with newlines in a designated screen area
@@ -161,6 +150,15 @@ void graphic_engine_paint_playerDesc(Graphic_engine *ge, Game *game);
  */
 void graphic_engine_paint_commandInfo(Graphic_engine *ge, Game *game);
 
+/**
+ * @brief Paints game messages
+ * @author Daniel Gómez
+ * 
+ * @param ge 
+ * @param game 
+ */
+void graphic_engine_paint_messages(Graphic_engine *ge, Game *game);
+
 Graphic_engine *graphic_engine_create() {
   static Graphic_engine *ge = NULL;
 
@@ -185,7 +183,14 @@ Graphic_engine *graphic_engine_create() {
   ge->messages = screen_area_init(1, MAP_HEIGHT + 3, MAP_WIDTH + DESCRIPT_WIDTH + 1, MESSAGES_HEIGHT);
   ge->help = screen_area_init(1, MAP_HEIGHT + MESSAGES_HEIGHT + 3 + HELP_BANNER_HEIGHT, MAP_WIDTH + DESCRIPT_WIDTH + 1, HELP_HEIGHT);
   ge->feedback = screen_area_init(1, MAP_HEIGHT + 1 + MESSAGES_HEIGHT + 1 + HELP_BANNER_HEIGHT + 1 + HELP_HEIGHT + 1, MAP_WIDTH + DESCRIPT_WIDTH + 1, CMD_HISTORY_HEIGHT);
-
+  
+  area_set_color(ge->descript2, BLACK, WHITE);
+  area_set_color(ge->descript, BLACK, WHITE);
+  //area_set_color(ge->map, BLACK, WHITE);
+  //area_set_color(ge->banner, BLACK, WHITE);
+  area_set_color(ge->messages, BLACK, WHITE);
+  area_set_color(ge->feedback, BLACK, WHITE);
+  area_set_color(ge->help, BLACK, WHITE);
   return ge;
 }
 
@@ -220,37 +225,28 @@ void graphic_engine_paint_game(Graphic_engine *ge, Game *game){
   }
   else if(gameState == COMBAT){
     graphic_engine_paint_combat(ge, game);
-  } else if(gameState == DIALOGUE){
+  } 
+  else if(gameState == DIALOGUE){
     graphic_engine_paint_dialogue(ge, game);
-  } else if(gameState == LEVEL_UP_STATE){
+    graphic_engine_paint_playerDesc(ge, game);
+  } 
+  else if(gameState == LEVEL_UP_STATE){
     graphic_engine_paint_level_up(ge, game);
-  } else if(gameState == STORE_STATE){
+    graphic_engine_paint_playerDesc(ge, game);
+  } 
+  else if(gameState == STORE_STATE){
     graphic_engine_paint_store(ge, game);
+    graphic_engine_paint_playerDesc(ge, game);
   }
   
   /* Paint in the banner area */
+  graphic_engine_paint_messages(ge, game);
   graphic_engine_paint_commandInfo(ge, game);
   
   return;
 }
 
 /*--------PRIVATE IMPLENTATIONS--------*/
-
-void graphic_engine_newline_print(Area *area, char *string){
-  char str[WORD_SIZE];
-  char *toks = NULL;
-
-  if(!area || !string) return;
-
-  strcpy(str, string);
-
-  toks = strtok(str,"\n");
-
-  while(toks){
-    screen_area_puts(area, toks);
-    toks = strtok(NULL,"\n");
-  }
-}
 
 void graphic_engine_newline_print_with_extra(Area *area, char *string, char *extra){
   char str[WORD_SIZE], aux_str[WORD_SIZE];
@@ -312,7 +308,7 @@ void graphic_engine_paint_map(Graphic_engine *ge, Game *game){
   graphic_engine_paint_space(game, directionSpace, NE, map, space);
   
   for(i = 0; i < SPACE_HEIGHT; i++){
-    graphic_engine_newline_print(ge->map, map[i]);
+    screen_area_puts(ge->map, map[i]);
   }
 
   /*Prints Middle spaces*/
@@ -328,7 +324,7 @@ void graphic_engine_paint_map(Graphic_engine *ge, Game *game){
   directionSpace = space_get_neighbour(currentSpace, E);
   graphic_engine_paint_space(game, directionSpace, E, map, space);
   for(i = 0; i < SPACE_HEIGHT; i++){
-    graphic_engine_newline_print(ge->map, map[i]);
+    screen_area_puts(ge->map, map[i]);
   }
 
   /*Prints Bottom spaces*/
@@ -346,25 +342,29 @@ void graphic_engine_paint_map(Graphic_engine *ge, Game *game){
   graphic_engine_paint_space(game, directionSpace, SE, map, space);
   
   for(i = 0; i < SPACE_HEIGHT; i++){
-    graphic_engine_newline_print(ge->map, map[i]);
+    screen_area_puts(ge->map, map[i]);
   }
 
 }
 
 void graphic_engine_paint_playerDesc(Graphic_engine *ge, Game *game){
   Inventory *playerInventory = NULL;
-  int inventorysize, size;
-  Entity *entityplayer = NULL;
+  int inventorysize;
+  Entity *entityplayer = NULL, *follower = NULL;
   Player *player = NULL;
   Leveling *leveling = NULL;
+  Equipment *equipment = NULL;
+  Object *eqObj = NULL;
 
   int i;
+  int auxInt;
 
   char tab[5] = "    ";
   char str[WORD_SIZE] = "";
   char strAux[WORD_SIZE] = "";
 
   int ability_count = 0;
+  int followeCount = 0;
 
   screen_area_clear(ge->descript2);
 
@@ -379,14 +379,14 @@ void graphic_engine_paint_playerDesc(Graphic_engine *ge, Game *game){
 
   strcpy(str, tab);
   strcat(str, entity_get_graphic_description(entityplayer));
-  strcat(str, " | Name: ");
+  strcat(str, " [RESET]| Name:[YELLOW] ");
   strcat(str, entity_get_name(entityplayer));
 
-  strcat(str, " | Loc: ");
+  strcat(str, " [RESET]| Loc:[YELLOW] ");
   sprintf(strAux, "%ld", entity_get_location(entityplayer));
   strcat(str, strAux);
 
-  strcat(str, " | Money: ");
+  strcat(str, " [RESET]| Money:[YELLOW] ");
   sprintf(strAux, "%d", player_get_money(player));
   strcat(str, strAux);
 
@@ -395,47 +395,170 @@ void graphic_engine_paint_playerDesc(Graphic_engine *ge, Game *game){
   strcpy(str, tab);
   strcat(str, "Health: ");
 
-  if(entity_get_health(entityplayer) <= 50){
+  if(entity_get_health(entityplayer)/entity_get_max_health(entityplayer) <= .5){
     strcat(str, "[YELLOW]");
   }
-  else if(entity_get_health(entityplayer) <= 10){
+  if(entity_get_health(entityplayer)/entity_get_max_health(entityplayer) <= .2){
     strcat(str, "[RED]");
   }else{
     strcat(str, "[GREEN]");
   }
 
-  sprintf(strAux, "%.2lf [BLACK]/ %.2lf", entity_get_health(entityplayer), entity_get_max_health(entityplayer));
+  sprintf(strAux, "%.2lf / %.2lf", entity_get_health(entityplayer), entity_get_max_health(entityplayer));
   strcat(str, strAux);
 
   screen_area_puts(ge->descript2, str);// health
 
   strcpy(str, tab);
-  strcat(str, "Level: ");
-  sprintf(strAux, "%d | Skill Points: %d | XP: %d / %d", leveling_get_level(leveling), leveling_get_skill_points(leveling) ,leveling_get_XP(leveling), leveling_get_next_XP(leveling));
+  sprintf(strAux, "Level: [YELLOW]%d [RESET]| Skill Points: [YELLOW]%d [RESET]| XP: [YELLOW]%d / %d", leveling_get_level(leveling), leveling_get_skill_points(leveling) ,leveling_get_XP(leveling), leveling_get_next_XP(leveling));
+  strcat(str, strAux);
+  
+  screen_area_puts(ge->descript2, str);// level, skill points, xp
+  
+  strcpy(str, tab);
+  sprintf(strAux, "BaseD:[YELLOW]%.1lf [RESET]| Strength:[YELLOW]%d [RESET]| Defense:[YELLOW]%d [RESET]", entity_get_baseDamage(entityplayer), entity_get_strength(entityplayer), entity_get_defense(entityplayer));
   strcat(str, strAux);
 
-  screen_area_puts(ge->descript2, str);// level, skill points, xp
+  screen_area_puts(ge->descript2, str);// damage, strength, defense
 
 
+  /*INVENTORY*/
+  screen_area_puts(ge->descript2, "\nInventory: ");
+
+  if(inventorysize == 0){
+    strcpy(str, tab);
+    strcat(str, "[RED]No Objects in Player Inventory");
+    screen_area_puts(ge->descript2, str);
+  }
+  else{
+    for(i = 0; i < inventorysize && i < MAX_PRINT_PLAYER_INVENTORY; i++){
+      inventory_get_object_str_at(playerInventory, strAux, i);
+      
+      strcpy(str,tab);
+      strcat(str, strAux);
+
+      screen_area_puts(ge->descript2, str);
+    }
+  }
+
+  entityplayer = player_get_entity(game_get_player(game));
+  ability_count = entity_get_n_abilities(entityplayer);
+
+  /*ABILITIES*/
+  screen_area_puts(ge->descript2, "\nAbilities:");
+
+  if(ability_count <= 0) {
+    sprintf(str, "%s[RED]Player has no abilities", tab);
+    screen_area_puts(ge->descript2, str);
+  }
+
+  for(i = 0; i < ability_count; i++){
+    sprintf(str, "%s[YELLOW]%d.[RESET] ", tab, i + 1);
+    strcat(str, entity_get_ability_name_at(entityplayer, i));
+
+    auxInt = ability_get_cooldown_length(entity_get_ability_at(entityplayer, i));
+    sprintf(strAux, "\n%s%sCooldown:[BLUE]%d[RESET]", tab, tab, auxInt);
+    strcat(str, strAux);
+
+    auxInt = ability_get_cooldown_count(entity_get_ability_at(entityplayer, i));
+    sprintf(strAux, " | Cooldown-Left:%s%d", (auxInt > 0)? "[RED]":"[GREEN]", auxInt);
+
+    strcat(str, strAux);
+    screen_area_puts(ge->descript2, str);
+  }
+
+  /*EQUIPMENT */
+  screen_area_puts(ge->descript2, "\nEquipment:");
+  equipment = player_get_equipment(player);
+
+  auxInt = 0;
+  /*equipment checks*/
+  eqObj = equipment_get_piece(entityplayer, equipment, HELMET);
+  if(eqObj){
+    sprintf(strAux, "%sHelmet: ID:[YELLOW]%ld [RESET]| Name: [YELLOW]%s", tab, object_get_id(eqObj), object_get_name(eqObj));
+    screen_area_puts(ge->descript2, strAux);
+    auxInt++;
+  }
+  eqObj = equipment_get_piece(entityplayer, equipment, CHEST);
+  if(eqObj){
+    sprintf(strAux, "%sChestplate: ID:[YELLOW]%ld [RESET]| Name: [YELLOW]%s", tab, object_get_id(eqObj), object_get_name(eqObj));
+    screen_area_puts(ge->descript2, strAux);
+    auxInt++;
+  }
+  eqObj = equipment_get_piece(entityplayer, equipment, ARMS);
+  if(eqObj){
+    sprintf(strAux, "%sArms: ID:[YELLOW]%ld [RESET]| Name: [YELLOW]%s", tab, object_get_id(eqObj), object_get_name(eqObj));
+    screen_area_puts(ge->descript2, strAux);
+    auxInt++;
+  }
+  eqObj = equipment_get_piece(entityplayer, equipment, LEG_ARMOR);
+  if(eqObj){
+    sprintf(strAux, "%sLeg Armor: ID:[YELLOW]%ld [RESET]| Name: [YELLOW]%s", tab, object_get_id(eqObj), object_get_name(eqObj));
+    screen_area_puts(ge->descript2, strAux);
+    auxInt++;
+  }
+  eqObj = equipment_get_piece(entityplayer, equipment, SHOES);
+  if(eqObj){
+    sprintf(strAux, "%sShoes: ID:[YELLOW]%ld [RESET]| Name: [YELLOW]%s", tab, object_get_id(eqObj), object_get_name(eqObj));
+    screen_area_puts(ge->descript2, strAux);
+    auxInt++;
+  }
+  eqObj = equipment_get_piece(entityplayer, equipment, TWO_HANDED);
+  if(eqObj){
+    sprintf(strAux, "%sBoth Hands: ID:[YELLOW]%ld [RESET]| Name: [YELLOW]%s", tab, object_get_id(eqObj), object_get_name(eqObj));
+    screen_area_puts(ge->descript2, strAux);
+    auxInt++;
+  }
+  eqObj = equipment_get_piece(entityplayer, equipment, HANDL);
+  if(eqObj){
+    sprintf(strAux, "%sLeft Hand: ID:[YELLOW]%ld [RESET]| Name: [YELLOW]%s", tab, object_get_id(eqObj), object_get_name(eqObj));
+    screen_area_puts(ge->descript2, strAux);
+    auxInt++;
+  }
+  eqObj = equipment_get_piece(entityplayer, equipment, HANDR);
+  if(eqObj){
+    sprintf(strAux, "%sRight Hand: ID:[YELLOW]%ld [RESET]| Name: [YELLOW]%s", tab, object_get_id(eqObj), object_get_name(eqObj));
+    screen_area_puts(ge->descript2, strAux);
+    auxInt++;
+  }
+  if(auxInt == 0){
+    sprintf(str, "%s[RED]Nothing equiped", tab);
+    screen_area_puts(ge->descript2, str);
+  }
+
+  /*Followers*/
+  screen_area_puts(ge->descript2, "\nFollowers:");
+
+  followeCount = player_get_follower_num(player);
+  if(followeCount == 0){
+    sprintf(str, "%s[RED]No followers", tab);
+    screen_area_puts(ge->descript2, str);
+  }
+  for (i = 0, auxInt = 1; i < followeCount; i++)
+  {
+    follower = player_get_follower_at(player, i);
+    if(!follower) continue;
+    if(entity_is_dead(follower)) continue;
+
+    sprintf(str, "%s%d. ID: [YELLOW]%ld [RESET]| Name: [YELLOW]%s", tab, auxInt, entity_get_id(follower), entity_get_name(follower));
+    screen_area_puts(ge->descript2, str);
+
+    auxInt++;
+  }
 }
 
 void graphic_engine_paint_generalDesc(Graphic_engine *ge, Game *game){
   Inventory *spaceInventory = NULL, *playerInventory = NULL;
   int inventorysize, size;
-  Entity *entityplayer = NULL;
-  Player *player = NULL;
   
 
   int i, printedNPCs = 0;
 
+  char tab[5] = "    ";
   char str[WORD_SIZE] = "";
   char strAux[WORD_SIZE] = "";
   Space *currentSpace;
   bool spaceDiscovered = false;
-
-  int ability_count = 0;
-
-
 
   screen_area_clear(ge->descript);
 
@@ -447,53 +570,6 @@ void graphic_engine_paint_generalDesc(Graphic_engine *ge, Game *game){
   playerInventory = entity_get_inventory(player_get_entity(game_get_player(game)));
   inventorysize = inventory_get_size(playerInventory);
   spaceInventory = space_get_inventory(currentSpace);
-  
-  /*Paints player info*/
-  strcpy(str, "Players:");
-  screen_area_puts(ge->descript, str);
-
-  size = game_get_n_players(game);
-  for(i = 0; i < size; i++){
-    player = game_get_player_at(game, i);
-    if(game_get_player_location(game) == entity_get_location(player_get_entity(player))){
-      player_get_str_desc(player, strAux);
-      strcpy(str, "   ");
-      strcat(str, strAux);
-      screen_area_puts(ge->descript, str);
-    }
-  }
-
-  strcpy(str, "Player inventory:");
-  screen_area_puts(ge->descript, str);
-
-  if(inventorysize == 0){
-    screen_area_puts(ge->descript, "    No Objects in Player Inventory");
-  }
-  else{
-    for(i = 0; i < inventorysize && i < MAX_PRINT_PLAYER_INVENTORY; i++){
-      inventory_get_object_str_at(playerInventory, strAux, i);
-      
-      strcpy(str,"    ");
-      strcat(str, strAux);
-
-      screen_area_puts(ge->descript, str);
-    }
-  }
-  screen_area_puts(ge->descript, " ");
-
-  entityplayer = player_get_entity(game_get_player(game));
-  ability_count = entity_get_n_abilities(entityplayer);
-  screen_area_puts(ge->descript, "Player abilities:");
-  if(ability_count <= 0) 
-    screen_area_puts(ge->descript, "Player does not have abilities");
-
-  for(i = 0; i < ability_count; i++){
-    sprintf(str, "%d. ", i + 1);
-    strcat(str, entity_get_ability_name_at(entityplayer, i));
-    sprintf(strAux, " | Cd: %d", ability_get_cooldown_count(entity_get_ability_at(entityplayer, i)));
-    strcat(str, strAux);
-    screen_area_puts(ge->descript, str);
-  }
 
   screen_area_puts(ge->descript, " ");
 
@@ -504,13 +580,17 @@ void graphic_engine_paint_generalDesc(Graphic_engine *ge, Game *game){
   screen_area_puts(ge->descript, str);
 
   if(!spaceDiscovered){
-    screen_area_puts(ge->descript, "Space hasn't been explored");
+    sprintf(str, "%s[RED]Spaces hasn't been explored", tab);
+    screen_area_puts(ge->descript, str);
   }else{
     if(inventorysize == 0){
-      screen_area_puts(ge->descript, "No Objects in Space Inventory");
+      sprintf(str, "%s[RED]No objects", tab);
+      screen_area_puts(ge->descript, str);
     }else{
       for(i = 0; i < inventorysize && i < MAX_PRINT_INVENTORY; i++){
-        inventory_get_object_str_at(spaceInventory, str, i);
+        strcpy(str, tab);
+        inventory_get_object_str_at(spaceInventory, strAux, i);
+        strcat(str, strAux);
         screen_area_puts(ge->descript, str);
       }
     }
@@ -523,35 +603,34 @@ void graphic_engine_paint_generalDesc(Graphic_engine *ge, Game *game){
   screen_area_puts(ge->descript, "NPCs:");
 
   if(!spaceDiscovered){
-    screen_area_puts(ge->descript, "Space hasn't been explored");
+    sprintf(str, "%s[RED]Spaces hasn't been explored", tab);
+    screen_area_puts(ge->descript, str);
   }else{
     for(i = 0; i < size && printedNPCs < MAX_PRINT_SPACE_NPCS; i++){
       if(entity_is_dead(npc_get_entity(space_get_NPC_at(currentSpace, i)))){
         continue;
       }
   
-      strcpy(str, "   ");
+      strcpy(str, tab);
       npc_get_str_descr(space_get_NPC_at(currentSpace, i), strAux, i + 1);
       strcat(str,strAux);
       screen_area_puts(ge->descript, str);
       printedNPCs++;
     }
   }
+}
 
-  screen_area_puts(ge->descript, " ");
+void graphic_engine_paint_messages(Graphic_engine *ge, Game *game){
+  char str[WORD_SIZE] = "";
 
-  /*Paints game messages*/
-  if(game_log_hasMessage(game)){
-    strcpy(str, "Messages:");
-    screen_area_puts(ge->descript, str);
-  }
+  screen_area_clear(ge->messages);
+  strcpy(str, "Messages:");
+  screen_area_puts(ge->messages, str);
   while(game_log_hasMessage(game)){
     game_get_log_message(game, str);
     //screen_area_puts(ge->descript, str);
-    graphic_engine_newline_print(ge->descript,str);
+    screen_area_puts(ge->messages,str);
   }
-
-  
 }
 
 void graphic_engine_paint_commandInfo(Graphic_engine *ge, Game *game){
@@ -575,7 +654,18 @@ void graphic_engine_paint_commandInfo(Graphic_engine *ge, Game *game){
   
   /*Paints commands*/
   last_cmd = game_get_last_command(game);
+
+  if(game_has_request_switch(game)){
+    screen_area_clear(ge->feedback);
+  }
+
   str[0] = 0;
+  if(command_get_status(last_cmd) == ERROR){
+    strcpy(str, "[RED]");
+  }else{
+    strcpy(str, "[GREEN]");
+  }
+
   command_get_as_string(last_cmd, str);
   screen_area_puts(ge->feedback, str);
   
@@ -592,8 +682,10 @@ void graphic_engine_paint_combat(Graphic_engine *ge, Game *game){
   int div;
   int bar;
   char hbarChar;
+  char tab[5] = "    ";
 
   int heightDiv;
+  int auxInt;
 
   int enemy_count = 0, ally_count = 0;
   Stats *stats = NULL;
@@ -604,6 +696,9 @@ void graphic_engine_paint_combat(Graphic_engine *ge, Game *game){
 
   Entity *entityplayer;
   int ability_count = 0;
+
+  Collection *attacks = NULL;
+  Attack *attack = NULL;
 
   heightDiv = (MAP_HEIGHT - 4 + 1)/3;
 
@@ -656,7 +751,16 @@ void graphic_engine_paint_combat(Graphic_engine *ge, Game *game){
     sprintf(strAux, "%d.", i+1);
     strcat(str, strAux);
     strcat(str, "[");
-    bar = stats[i].stats.health / entity_get_max_health(stats[i].entity) * HEALTH_BAR_WIDTH;
+    bar = stats[i].stats.health/stats[i].stats.maxhealth * HEALTH_BAR_WIDTH;
+    if(bar < 4){
+      strcat(str, "[YELLOW]");
+    }
+    if(bar < 2){
+      strcat(str, "[RED]");
+    }else{
+      strcat(str, "[GREEN]");
+    }
+
     if(bar == 0){
       hbarChar = '_';
     }else{
@@ -667,7 +771,7 @@ void graphic_engine_paint_combat(Graphic_engine *ge, Game *game){
       if(j <= bar) strncat(str, &hbarChar, 1);
       else strcat(str, "_");
     }
-    strcat(str, "]");
+    strcat(str, "[RESET]]");
     
     if(i != enemy_count -1) strcat(str, spacing);
   }
@@ -717,9 +821,17 @@ void graphic_engine_paint_combat(Graphic_engine *ge, Game *game){
   strcat(str, spacing);
   if(ally_count == 1) strcat(str, "  ");
 
-  /*player health bar*/
+  /*------PLAYER HBAR------*/
   strcat(str, "[");
-  bar = playerStats->stats.health / entity_get_max_health(playerStats->entity) * HEALTH_BAR_WIDTH;
+  bar = stats[0].stats.health/stats[0].stats.maxhealth * HEALTH_BAR_WIDTH;
+  if(bar < 4){
+    strcat(str, "[YELLOW]");
+  }
+  if(bar < 2){
+    strcat(str, "[RED]");
+  }else{
+    strcat(str, "[GREEN]");
+  }
   if(bar == 0){
     hbarChar = '_';
   }else{
@@ -730,15 +842,25 @@ void graphic_engine_paint_combat(Graphic_engine *ge, Game *game){
     if(j <= bar) strncat(str, &hbarChar, 1);
     else strcat(str, "_");
   }
-  strcat(str, "]");
+  strcat(str, "[RESET]]");
   
   strcat(str, spacing);
-  /*allies health bar*/
+
+
+  /*--------ALLIES HBAR----------*/
   for (i = 1; i < ally_count; i++)
   {
     //sprintf(strAux, "[%.2lf]", stats[i].stats.health);
     strcat(str, "[");
-    bar = stats[i].stats.health / entity_get_max_health(stats[i].entity) * HEALTH_BAR_WIDTH;
+    bar = stats[i].stats.health/stats[i].stats.maxhealth * HEALTH_BAR_WIDTH;
+    if(bar < 4){
+      strcat(str, "[YELLOW]");
+    }
+    if(bar < 2){
+      strcat(str, "[RED]");
+    }else{
+      strcat(str, "[GREEN]");
+    }
     if(bar == 0){
       hbarChar = '_';
     }else{
@@ -749,92 +871,198 @@ void graphic_engine_paint_combat(Graphic_engine *ge, Game *game){
       if(j <= bar) strncat(str, &hbarChar, 1);
       else strcat(str, "_");
     }
-    strcat(str, "]");
+    strcat(str, "[RESET]]");
     
     if(i != ally_count - 1) strcat(str, spacing);
   }
   screen_area_puts(ge->map, str);
 
+  /*^^^^^^^^`HEALTHBARS^^^^^^^^^`*/
+
   /*paints description*/
-  screen_area_clear(ge->descript);
+  screen_area_clear(ge->descript2);
   strcpy(str, "Player:");
-  screen_area_puts(ge->descript, str);
+  screen_area_puts(ge->descript2, str);
 
-  strcpy(str, "   ");
-  strcat(str, entity_get_graphic_description(playerStats->entity));
-  sprintf(strAux, ": Health: %.1lf/%.1lf", playerStats->stats.health, playerStats->stats.maxhealth);
-  strcat(str, strAux);
-  screen_area_puts(ge->descript, str);
-
-  if(ally_count > 1){
-    strcpy(str, "Allies:");
-    screen_area_puts(ge->descript, str);
-    stats = combat_get_allies_stats(combat);
-    for (i = 1; i < ally_count; i++)
-    {
-      strcpy(str, "   ");
-      strcat(str, entity_get_graphic_description(stats[i].entity));
-      sprintf(strAux, ": Health: %.1lf/%.1lf", stats[i].stats.health, stats[i].stats.maxhealth);
-      strcat(str, strAux);
-      screen_area_puts(ge->descript, str);
-    }
+  strcpy(str, tab);
+  strcat(str, entity_get_graphic_description(stats[0].entity));
+  strcat(str, " [RESET]| Name:[YELLOW] ");
+  strcat(str, entity_get_name(stats[0].entity));
+  
+  strcat(str, " [RESET]|Health: ");
+  
+  if(stats[0].stats.health/stats[0].stats.maxhealth <= .5){
+    strcat(str, "[YELLOW]");
+  }
+  if(stats[0].stats.health/stats[0].stats.maxhealth <= .2){
+    strcat(str, "[RED]");
+  }else{
+    strcat(str, "[GREEN]");
   }
   
-  strcpy(str, "Enemies:");
-  screen_area_puts(ge->descript, str);
-  stats = combat_get_enemies_stats(combat);
-  for (i = 0; i < enemy_count; i++)
-  {
-    strcpy(str, "   ");
-    strcat(str, entity_get_graphic_description(stats[i].entity));
-    sprintf(strAux, ": Health: %.1lf/%.1lf", stats[i].stats.health, stats[i].stats.maxhealth);
-    strcat(str, strAux);
-    screen_area_puts(ge->descript, str);
-  }
+  sprintf(strAux, "%.2lf / %.2lf", stats[0].stats.health, stats[0].stats.maxhealth);
+  strcat(str, strAux);
+  screen_area_puts(ge->descript2, str);//Gdes, name, location, money
 
-  entityplayer = player_get_entity(game_get_player(game));
-  ability_count = entity_get_n_abilities(entityplayer);
-  screen_area_puts(ge->descript, "Player abilities:");
-  if(ability_count <= 0) 
-    screen_area_puts(ge->descript, "Player does not have abilities");
+  strcpy(str, tab);
+  sprintf(strAux, "BaseD:[YELLOW]%.1lf [RESET]| Strength:[YELLOW]%d [RESET]| Defense:[YELLOW]%d [RESET]", stats[0].stats.baseDamage, stats[0].stats.strength, stats[0].stats.defense);
+  strcat(str, strAux);
 
-  for(i = 0; i < ability_count; i++){
-    sprintf(str, "%d. ", i + 1);
-    strcat(str, entity_get_ability_name_at(entityplayer, i));
-    sprintf(strAux, " | Cd: %d", ability_get_cooldown_count(entity_get_ability_at(entityplayer, i)));
-    strcat(str, strAux);
-    screen_area_puts(ge->descript, str);
-  }
+  screen_area_puts(ge->descript2, str);// damage, strength, defense
 
-  playerInventory = entity_get_inventory(player_get_entity(game_get_player(game)));
+  /*INVENTORY*/
+  screen_area_puts(ge->descript2, "\nInventory: ");
+
+  
+  entityplayer = stats[0].entity;
+  playerInventory = entity_get_inventory(entityplayer);
+
   inventorysize = inventory_get_size(playerInventory);
 
-  strcpy(str, "Player inventory:");
-  screen_area_puts(ge->descript, str);
-
   if(inventorysize == 0){
-    screen_area_puts(ge->descript, "    No Objects in Player Inventory");
+    strcpy(str, tab);
+    strcat(str, "[RED]No Objects in Player Inventory");
+    screen_area_puts(ge->descript2, str);
   }
   else{
     for(i = 0; i < inventorysize && i < MAX_PRINT_PLAYER_INVENTORY; i++){
       inventory_get_object_str_at(playerInventory, strAux, i);
       
-      strcpy(str,"    ");
+      strcpy(str,tab);
       strcat(str, strAux);
 
-      screen_area_puts(ge->descript, str);
+      screen_area_puts(ge->descript2, str);
     }
   }
-  screen_area_puts(ge->descript, " ");
-  /*Paints game messages*/
-  if(game_log_hasMessage(game)){
-    strcpy(str, "Messages:");
+
+  ability_count = entity_get_n_abilities(entityplayer);
+
+  /*ABILITIES*/
+  screen_area_puts(ge->descript2, "\nAbilities:");
+
+  if(ability_count <= 0) {
+    sprintf(str, "%s[RED]Player has no abilities", tab);
+    screen_area_puts(ge->descript2, str);
+  }
+
+  for(i = 0; i < ability_count; i++){
+    sprintf(str, "%s[YELLOW]%d.[RESET] ", tab, i + 1);
+    strcat(str, entity_get_ability_name_at(entityplayer, i));
+
+    auxInt = ability_get_cooldown_length(entity_get_ability_at(entityplayer, i));
+    sprintf(strAux, "\n%s%sCooldown:[BLUE]%d[RESET]", tab, tab, auxInt);
+    strcat(str, strAux);
+
+    auxInt = ability_get_cooldown_count(entity_get_ability_at(entityplayer, i));
+    sprintf(strAux, " | Cooldown-Left:%s%d", (auxInt > 0)? "[RED]":"[GREEN]", auxInt);
+
+    strcat(str, strAux);
+    screen_area_puts(ge->descript2, str);
+  }
+
+  /*^^^^^^`PLAYER INFO^^^^^^*/
+
+  if(ally_count > 1){
+    screen_area_puts(ge->descript2,  "\nAllies:");
+    stats = combat_get_allies_stats(combat);
+    for (i = 1; i < ally_count; i++)
+    {
+      strcpy(str, tab);
+      strcat(str, entity_get_graphic_description(stats[i].entity));
+      strcat(str, ": Health: ");
+      if(stats[i].stats.health/stats[i].stats.maxhealth <= .5){
+        strcat(str, "[YELLOW]");
+      }
+      if(stats[i].stats.health/stats[i].stats.maxhealth <= .2){
+        strcat(str, "[RED]");
+      }else{
+        strcat(str, "[GREEN]");
+      }
+  
+      sprintf(strAux, "%.1lf/%.1lf[RESET] | BaseD:[YELLOW]%.1lf[RESET] | St:[YELLOW]%d[RESET]", stats[i].stats.health, stats[i].stats.maxhealth, stats[i].stats.baseDamage, stats[i].stats.strength);
+      strcat(str, strAux);
+      screen_area_puts(ge->descript2, str);
+    }
+  }
+  
+  screen_area_puts(ge->descript2, "\nAllies:");
+  stats = combat_get_allies_stats(combat);
+  if(ally_count == 1){
+    screen_area_puts(ge->descript2, "    [RED]No allies");
+  }
+  for (i = 1; i < ally_count; i++)
+  {
+    strcpy(str, tab);
+    strcat(str, entity_get_graphic_description(stats[i].entity));
+    strcat(str, ": Health: ");
+    if(stats[i].stats.health/stats[i].stats.maxhealth <= .5){
+      strcat(str, "[YELLOW]");
+    }
+    if(stats[i].stats.health/stats[i].stats.maxhealth <= .2){
+      strcat(str, "[RED]");
+    }else{
+      strcat(str, "[GREEN]");
+    }
+
+    sprintf(strAux, "%.1lf/%.1lf[RESET] | BaseD:[YELLOW]%.1lf[RESET] | St:[YELLOW]%d[RESET]", stats[i].stats.health, stats[i].stats.maxhealth, stats[i].stats.baseDamage, stats[i].stats.strength);
+    strcat(str, strAux);
+    screen_area_puts(ge->descript2, str);
+  }
+
+  screen_area_clear(ge->descript);
+
+  screen_area_puts(ge->descript2, "\nEnemies:");
+  stats = combat_get_enemies_stats(combat);
+  for (i = 0; i < enemy_count; i++)
+  {
+    strcpy(str, tab);
+    strcat(str, entity_get_graphic_description(stats[i].entity));
+    strcat(str, ": Health: ");
+    if(stats[i].stats.health/stats[i].stats.maxhealth <= .5){
+      strcat(str, "[YELLOW]");
+    }
+    if(stats[i].stats.health/stats[i].stats.maxhealth <= .2){
+      strcat(str, "[RED]");
+    }else{
+      strcat(str, "[GREEN]");
+    }
+
+    sprintf(strAux, "%.1lf/%.1lf[RESET] | BaseD:[YELLOW]%.1lf[RESET] | St:[YELLOW]%d[RESET]", stats[i].stats.health, stats[i].stats.maxhealth, stats[i].stats.baseDamage, stats[i].stats.strength);
+    strcat(str, strAux);
+    screen_area_puts(ge->descript2, str);
+  }
+
+  screen_area_clear(ge->descript);
+
+  attacks = game_get_attacks(game);
+  auxInt = collection_length(attacks);
+
+  screen_area_puts(ge->descript, "Attacks:");
+
+  for (i = 0; i < auxInt; i++)
+  {
+    attack = (Attack *)collection_get_element_at(attacks, i);
+    strcpy(str, "");
+
+    sprintf(strAux, "[BLUE]%s[RESET]: D.Mult: [YELLOW]%.1lf[RESET] | Fail%%:", attack_get_name(attack), attack_get_damage_multiplicator(attack));
+    strcat(str, strAux);
+
+    if(100 - attack_get_success_chance(attack) >= 15){
+      strcat(str, "[YELLOW]");
+    }
+    if(100 - attack_get_success_chance(attack) >= 50){
+      strcat(str, "[RED]");
+    }else if (100 - attack_get_success_chance(attack) < 15){
+      strcat(str, "[GREEN]");
+    }
+    sprintf(strAux, " %.1lf[RESET] | Area: %s", 100 - attack_get_success_chance(attack), (attack_get_target_bool(attack)) ? "[BLUE]false[RESET]" : "[GREEN]true[RESET]");
+    strcat(str, strAux);
+
+
     screen_area_puts(ge->descript, str);
   }
-  while(game_log_hasMessage(game)){
-    game_get_log_message(game, str);
-    screen_area_puts(ge->descript, str);
-  }
+  
+
 }
 
 void graphic_engine_paint_dialogue(Graphic_engine *ge, Game *game){
@@ -856,16 +1084,16 @@ void graphic_engine_paint_dialogue(Graphic_engine *ge, Game *game){
   screen_area_clear(ge->map);
 
   /*Paints the dialogue on the map*/
-  graphic_engine_newline_print(ge->map," \n \n \n \n \n \n \n");
-  graphic_engine_newline_print(ge->map,"  Dialogue:\n");
+  screen_area_puts(ge->map," \n \n \n \n \n \n \n");
+  screen_area_puts(ge->map,"  Dialogue:\n");
 
   text = dialogue_get_npc_text(dialogue);
   if(!text) return;
 
   graphic_engine_newline_print_with_extra(ge->map, text, "   ");
 
-  graphic_engine_newline_print(ge->map," \n \n");
-  graphic_engine_newline_print(ge->map,"  Possible replies:\n");
+  screen_area_puts(ge->map," \n \n");
+  screen_area_puts(ge->map,"  Possible replies:\n");
 
   player_replies = dialogue_get_player_replies(dialogue);
   n_player_replies = dialogue_get_num_player_replies(dialogue);
@@ -886,14 +1114,14 @@ void graphic_engine_paint_level_up(Graphic_engine *ge, Game *game){
 
   graphic_engine_paint_generalDesc(ge, game);
 
-  graphic_engine_newline_print(ge->map," \n \n \n \n \n \n \n");
-  graphic_engine_newline_print(ge->map,"  Options to level up:\n");
+  screen_area_puts(ge->map," \n \n \n \n \n \n \n");
+  screen_area_puts(ge->map,"  Options to level up:\n");
 
-  graphic_engine_newline_print(ge->map,"   1. (1 SP) Level up your strength\n    and crush your enemies!\n");
-  graphic_engine_newline_print(ge->map,"   2. (1 SP) Level up your magic level\n    and strengthen your abilities!\n");
-  graphic_engine_newline_print(ge->map,"   3. (1 SP) Level up your maximum health\n    and overcome your obstacles!\n");
-  graphic_engine_newline_print(ge->map,"   4. (1 SP) Level up your defense\n    and ignore those weaklings!\n");
-  graphic_engine_newline_print(ge->map,"   5. Exit level up menu\n");
+  screen_area_puts(ge->map,"   1. (1 SP) Level up your strength\n    and crush your enemies!\n");
+  screen_area_puts(ge->map,"   2. (1 SP) Level up your magic level\n    and strengthen your abilities!\n");
+  screen_area_puts(ge->map,"   3. (1 SP) Level up your maximum health\n    and overcome your obstacles!\n");
+  screen_area_puts(ge->map,"   4. (1 SP) Level up your defense\n    and ignore those weaklings!\n");
+  screen_area_puts(ge->map,"   5. Exit level up menu\n");
 
 }
 
@@ -920,15 +1148,15 @@ void graphic_engine_paint_store(Graphic_engine *ge, Game *game){
 
   obj_num = inventory_get_size(inventory);
 
-  graphic_engine_newline_print(ge->map," \n \n \n");
-  graphic_engine_newline_print(ge->map,"  (Enter 'by 0' to exit the store \n   or 'by (NUMBER OF ITEM)' to buy\n   You can also use i (NUMBER OF ITEM)\n   to see description)\n \n");
+  screen_area_puts(ge->map," \n \n \n");
+  screen_area_puts(ge->map,"  (Enter 'by 0' to exit the store \n   or 'by (NUMBER OF ITEM)' to buy\n   You can also use i (NUMBER OF ITEM)\n   to see description)\n \n");
   sprintf(str, "  %s: This is all I can offer:\n", entity_get_name(npc_get_entity(seller)));
-  graphic_engine_newline_print(ge->map,str);
+  screen_area_puts(ge->map,str);
 
   for(i = 0; i < obj_num && obj_num < MAX_PRINT_INVENTORY; i++){
     obj = inventory_get_object_at(inventory, i);
-    sprintf(str, "%d -> Cost: %d - %s - %s\n", i +1, object_get_cost(obj), object_get_name(obj), object_get_descr(obj));
-    graphic_engine_newline_print(ge->map,str);
+    sprintf(str, "    [BLUE]%d[RESET]: [YELLOW]%s [RESET]| [YELLOW]%s [RESET]| Cost: [GREEN]%d", object_get_cost(obj), object_get_name(obj), object_get_descr(obj), i + 1);
+    screen_area_puts(ge->map,str);
   }
 }
                                                      

@@ -165,12 +165,27 @@ void npc_print(void *npc){
 
 Status npc_get_str_descr(NPC *npc, char *str, int index){
     Entity *ent = NULL;
+    char strAux[WORD_SIZE] = "";
     
     if(!npc || !str)
         return ERROR;
 
     ent = npc_get_entity(npc);
-    sprintf(str, "%s (%s): H:%.1lf,L:%ld (%ld)", entity_get_graphic_description(ent), entity_get_name(ent), entity_get_health(ent),entity_get_location(ent), entity_get_id(ent));
+    sprintf(str, "%s ([YELLOW]%s[RESET]):", entity_get_graphic_description(ent), entity_get_name(ent));
+
+    if(entity_get_health(ent)/entity_get_max_health(ent) <= .5){
+        strcat(str, "[YELLOW]");
+    }
+    if(entity_get_health(ent)/entity_get_max_health(ent) <= .2){
+        strcat(str, "[RED]");
+    }else{
+        strcat(str, "[GREEN]");
+    }
+    sprintf(strAux, " H: %.1lf/%.1lf[RESET]", entity_get_health(ent), entity_get_max_health(ent));
+    strcat(str, strAux);
+
+    sprintf(strAux, " Loc:[YELLOW]%ld[RESET] ([BLUE]%ld[RESET])", entity_get_location(ent), entity_get_id(ent));
+    strcat(str, strAux);
 
     return OK;
 }

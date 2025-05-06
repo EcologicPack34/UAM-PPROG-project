@@ -21,7 +21,7 @@
 /**
  * @brief enum to determine which piece of equipment is being treated
  */
-typedef enum {EQUIPMENT_ERROR, HELMET, CHEST, ARMS, LEG_ARMOR, SHOES, TWO_HANDED, ONE_HANDED_1, ONE_HANDED_2} EquipmentCode;
+typedef enum {EQUIPMENT_ERROR, HELMET, CHEST, ARMS, LEG_ARMOR, SHOES, TWO_HANDED, HANDL, HANDR} EquipmentCode;
 
 /**
  * @brief Equipment ADT that stores all the pieces of equipment of an entity, also modifies their stats
@@ -78,5 +78,16 @@ Status equipment_add_piece(Entity *entity, Equipment *equipment, Object *object)
  * @return Object* or NULL if error
  */
 Object *equipment_remove_piece(Entity *entity, Equipment *equipment, char *data);
+
+/**
+ * @brief Gets object in certain equipment slot
+ * @author Daniel Gómez
+ * 
+ * @param entity 
+ * @param equipment 
+ * @param code 
+ * @return Object* 
+ */
+Object *equipment_get_piece(Entity *entity, Equipment *equipment, EquipmentCode code);
 
 #endif

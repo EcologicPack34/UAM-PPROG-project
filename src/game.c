@@ -69,6 +69,8 @@ struct _Game {
   Command *last_cmd;                  /*!< string with the last command */
   bool finished;                      /*!< bool that determines if the game has finished*/
   
+  bool requestSwitch;
+
   bool procedural;                    /*!< Stores if the game is generated prceduraly or not*/
 };
 
@@ -179,6 +181,8 @@ Status game_create(Game **game) {
   (*game)->active_player = NULL; /*Player creation is controlled by game_reader*/
   (*game)->n_players = 0;
   (*game)->objects = collection_create(COLLECTION_INITIAL_SIZE, false, true, object_isEqual, object_print);
+
+  (*game)->requestSwitch = false;
 
   (*game)->npcs = collection_create(COLLECTION_INITIAL_SIZE, false, true, npc_cmp, npc_print); /*TEMPORAL PRINT*/
   if(!((*game)->npcs)){
@@ -968,11 +972,19 @@ int game_switch_player(Game *game, int player){
     }
     game->active_player_index = player;
   } 
-  
+  game->requestSwitch = true;
   game->active_player = game->players[game->active_player_index];
   command_set_player_data(game->last_cmd, player_get_cmdData(game->active_player));
 
   return 0;
+}
+
+bool game_has_request_switch(Game *game){
+  bool state;
+  if(!game) return false;
+  state = game->requestSwitch;
+  game->requestSwitch = false;
+  return state;
 }
 
 AbilityManager *game_get_ability_manager(Game *game){

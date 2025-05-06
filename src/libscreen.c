@@ -26,6 +26,8 @@ struct _Area{
   int x, y, width, height;
   Cell *cursor;
   int cX, cY;
+  Frame_color backgroudColor;
+  Frame_color charColor;
 };
 
 
@@ -85,12 +87,30 @@ void screen_paint(Frame_color color){
       if(cell->character == BG_CHAR){
         cell->charColor = color;
         cell->background = color;
-      }else{
-        cell->background = WHITE;
       }
       printf("%s%c\033[0m", color_to_ansi(cell->charColor, cell->background), cell->character);
       if( (i + 1) % (COLUMNS) == 0){
         printf("\n");
+      }
+    }
+  }
+}
+
+void area_set_color(Area *area, Frame_color backGround, Frame_color charColor){
+  int i,j;
+  Cell *cell;
+  if(backGround == NO_TAG || backGround == RESET) backGround = WHITE;
+  if(charColor == NO_TAG || charColor == RESET) charColor = WHITE;
+  if(area){
+    area->backgroudColor = backGround;
+    area->charColor = charColor;
+    for (i = 0; i < area->height; i++)
+    {
+      for (j = 0; j < area->width; j++)
+      {
+        cell = ACCESS(__data, area->x + j, area->y + i);
+        cell->charColor = charColor;
+        cell->background = backGround;
       }
     }
   }
@@ -113,6 +133,7 @@ Frame_color color_tag_to_color(const char *tag){
   if(strcmp(tag, "PURPLE") == 0) return PURPLE;
   if(strcmp(tag, "CYAN") == 0) return CYAN;
   if(strcmp(tag, "WHITE") == 0) return WHITE;
+  if(strcmp(tag, "RESET") == 0) return RESET;
   return NO_TAG;
 }
 
@@ -130,6 +151,8 @@ Area* screen_area_init(int x, int y, int width, int height){
   area->cY = 0;
   area->width = width;
   area->height = height;
+  area->backgroudColor = WHITE;
+  area->charColor = BLACK;
   area->cursor =  ACCESS(__data, x, y);
 
   for (i = 0; i < height; i++)
@@ -166,8 +189,8 @@ void screen_area_clear(Area* area){
         /*Reset characters to default color and character*/
         cell = ACCESS(__data, area->x + j , area->y + i);
         cell->character = FG_CHAR;
-        cell->charColor = BLACK;
-        cell->background = WHITE;
+        cell->charColor = area->charColor;
+        cell->background = area->backgroudColor;
       }
     }
   }
@@ -193,9 +216,15 @@ void screen_area_puts(Area* area, char *str){
   Cell *cell = NULL;
   Cell *cAux = NULL;
   short skipT = 0;
+  short skipS = 0;
+  short skipSt = 0;
 
+  int i,j;
 
   if(!area || !str) return;
+
+  bColor = area->backgroudColor;
+  cColor = area->charColor;
 
   if(area->cY >= area->height){
 
@@ -206,7 +235,7 @@ void screen_area_puts(Area* area, char *str){
         cell = ACCESS(__data, area->x + area->cX , area->y + area->cY);
         cAux = ACCESS(__data, area->x + area->cX , area->y + area->cY + 1);
         cell->character = cAux->character;
-        cell->background = cAux->background;
+        cell->background = bColor;
         cell->charColor = cAux->charColor;
       }
     }
@@ -218,45 +247,94 @@ void screen_area_puts(Area* area, char *str){
   len = strlen(str);
   
   while(*ptr != '\0' && ptr <= str + len && area->cY < area->height){
+    /*Clear line*/
     for (area->cX = 0; area->cX < area->width; (area->cX)++)
     {
       cell = ACCESS(__data, area->x + area->cX , area->y + area->cY);
       cell->character = FG_CHAR;
-      cell->background = WHITE;
-      cell->charColor = BLACK;
+      cell->background = bColor;
+      cell->charColor = cColor;
     }
+    /*Print the actual line to data*/
     for (area->cX = 0; area->cX < area->width && ptr <= str + len && *ptr != '\0'; (area->cX)++ , ptr++)
-    {
+    { 
+      if(*ptr == ' ' && skipS) {
+        skipS = 0;
+      }
+      /*Searches if word can be put in line or needs to be moved to next line*/
+      for (i = 0, tagE = ptr; i < area->width && *tagE != ' ' && *tagE != '\0' && tagE < str + len && !skipS; i++)
+      {
+        /*ignores tags when counting length*/
+        if(*tagE == '[' && !skipSt){
+          strcpy(tag, "");
+          for (tagLen = 0, tagE++; tagLen + 1 < 20 && *tagE != ']' && tagE <= str + len; tagLen++, tagE++){
+            tag[tagLen] = *tagE;
+          }
+          if(*tagE == ']'){
+            tag[tagLen] = '\0';
+            if(color_tag_to_color(tag) == NO_TAG){
+              tagE -= tagLen;
+              skipSt = 1;
+            }else{
+              tagE++;
+            }
+          }
+          i--;
+          if(i < 0) i = 0;
+        }
+        tagE++;
+        if(skipSt) skipSt = 0;
+      }
+      if(i > area->width - area->cX){
+        skipS = 1;
+        i = 0;
+        break;
+      }
+
+      if(*ptr == '\n'){
+        ptr++;
+        break;
+      }
+      /*Looks for tag*/
       if(*ptr == '[' && !skipT){
         strcpy(tag, "");
 
+        /*copy content between [ ] */
         tagE = ptr + 1;
         for (tagLen = 0; tagLen + 1 < 20 && *tagE != ']' && tagE <= str + len; tagLen++, tagE++){
           tag[tagLen] = *tagE;
         }
+        /*Checks if closing bracket exits*/
         if(*tagE == ']'){
+          tag[tagLen] = '\0';
           cColor = color_tag_to_color(tag);
+          /*Checks if tag is valid, if not go back to [ */
           if(cColor == NO_TAG){
             cColor = BLACK;
             ptr--;
-            area->cX--;
             skipT = 1;
-          }else{
-            ptr = tagE;
-            area->cX--;
           }
+          /*If tag is RESET color sets to default*/
+          else{
+            if(cColor == RESET){
+              cColor = area->charColor;
+            }
+            ptr = tagE;
+          }
+          area->cX--;
         }
         continue;
       }
       if(ptr > str + len) break;
 
       if(skipT) skipT = 0;
-
+      /*writes actual data*/
       cell = ACCESS(__data, area->x + area->cX , area->y + area->cY);
       cell->character = *ptr;
       cell->charColor = cColor;
       cell->background = bColor;
     }
+    /*move one line*/
     area->cY++;
   }
 }
@@ -279,7 +357,7 @@ void screen_utils_replaces_special_chars(char* str){
   char *pch = NULL;
 
   /* Replaces acutes and tilde with '??' */
-  while ((pch = strpbrk (str, "ÁÉÍÓÚÑáéíóúñ\r\n")))
+  while ((pch = strpbrk (str, "ÁÉÍÓÚÑáéíóúñ\r")))
     memcpy(pch, "??", 2);
 }
 

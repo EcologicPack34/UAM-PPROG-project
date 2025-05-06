@@ -19,7 +19,7 @@ typedef struct _Area Area;
 /**
  * @brief Colors enum for the frame
  */
-typedef enum {BLACK = 0, RED, GREEN, YELLOW, BLUE, PURPLE, CYAN, WHITE, NO_TAG} Frame_color;
+typedef enum {BLACK = 0, RED, GREEN, YELLOW, BLUE, PURPLE, CYAN, WHITE, NO_TAG, RESET} Frame_color;
 
 
 
@@ -45,7 +45,7 @@ void screen_destroy();
 
 /**
  * @brief It paints in the terminal the actual screen composition
- * @author Profesores PPROG
+ * @author Daniel Gómez
  *
  * This function should be called when some updates
  *  in the screen want to be shown.
@@ -54,7 +54,7 @@ void screen_paint(Frame_color color);
 
 /**
  * @brief It creates a new area inside a screen
- * @author Profesores PPROG
+ * @author Daniel Gómez
  *
  * screen_area_init allocates memory for a new area
  *  and initializes its members.
@@ -65,6 +65,16 @@ void screen_paint(Frame_color color);
  * @return a new area, initialized
  */
 Area* screen_area_init(int x, int y, int width, int height);
+
+/**
+ * @brief sets the background color of an area
+ * @author Daniel Gómez
+ * 
+ * @param area 
+ * @param background
+ * @param charColor
+ */
+void area_set_color(Area *area, Frame_color background, Frame_color charColor);
 
 /**
  * @brief It destroys a new screen area
@@ -78,7 +88,7 @@ void screen_area_destroy(Area* area);
 
 /**
  * @brief It cleares an area, eraising all its content
- * @author Profesores PPROG
+ * @author Daniel Gómez
  *
  * This function should be called for earaising all the information in an area,
  *  before introducing a new state of it.
@@ -97,7 +107,7 @@ void screen_area_reset_cursor(Area* area);
 
 /**
  * @brief It introduces some information inside an area
- * @author Profesores PPROG
+ * @author Daniel Gómez
  *
  * This function sets the string that will be shown in an area.
  *  Each string introduced will be a line in the specified area.

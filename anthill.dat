@@ -130,15 +130,15 @@ Formato NPC: #n:ID|Dialogue State - 1 means initial - 0 means no dialogue|Nombre
 
 Formato Ability: #sk:Id|Type|Name|Entityid(ObjectId)|is_player_ability|is_object_use|cd_init|cd_max|data
 
-#sk:1|heal_self|Heal self 50 HP Maximum CD: 8|1|1|0|0|8|50
+#sk:1|heal_self|Heal self 50 HP Maximum|1|1|0|0|8|50
 #sk:2|effect_self|Self Regeneration Spell|1|1|0|0|2|3
 #sk:3|effect_ally|Ally Regeneration Spell|1|1|0|0|3|3
-#sk:4|heal_self|Heal self 5 HP  Maximum CD: 0|6|0|1|0|0|5
-#sk:5|money_bag|Adds 20 coins   Maximum CD: 0|8|0|1|0|0|20
+#sk:4|heal_self|Heal self 5 HP  Maximum|6|0|1|0|0|5
+#sk:5|money_bag|Adds 20 coins   Maximum|8|0|1|0|0|20
 #sk:6|link_unlock|Unlocks link between 123 and 124|9|0|1|0|0|4
 #sk:7|effect_enemy|FireBall Launcher|1|1|0|0|0|2
 #sk:8|effect_enemy|Poison Bomb|1|1|0|0|6|1
-sk:9|heal_self|Heal self 20 HP Maximum CD: 0|5|0|1|0|0|20
+sk:9|heal_self|Heal self 20 HP Maximum|5|0|1|0|0|20
 
 
 
