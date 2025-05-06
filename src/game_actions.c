@@ -230,7 +230,6 @@ Status game_actions_update(Game *game, Command *command) {
   CommandCode cmd;
   Status status = ERROR;
   char str[WORD_SIZE] = "";
-  int turn, n_players;
 
   Entity *player = NULL;
 
