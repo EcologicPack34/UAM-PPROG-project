@@ -182,6 +182,10 @@ Status game_create(Game **game) {
   (*game)->n_players = 0;
   (*game)->objects = collection_create(COLLECTION_INITIAL_SIZE, false, true, object_isEqual, object_print);
 
+  for(i = 0; i < MAX_PLAYERS; i++){
+    (*game)->players[i] = NULL;
+  }
+
   (*game)->requestSwitch = false;
 
   (*game)->npcs = collection_create(COLLECTION_INITIAL_SIZE, false, true, npc_cmp, npc_print); /*TEMPORAL PRINT*/
@@ -875,7 +879,7 @@ bool game_log_hasMessage(Game *game){
 Status game_combat_start(Game *game){
   
   int size, i, j, player_num;
-  Player *pl1, *pl2;
+  Player *pl1 = NULL, *pl2 = NULL;
   Entity *follower;
   Id id;
 
