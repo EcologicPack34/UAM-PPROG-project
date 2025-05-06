@@ -296,7 +296,7 @@ Status effect_save_to_file(FILE *file, Effect *effect){
     fprintf(file, "%d\n", N);
     for(i=0; i<N; i++){
         aux = collection_get_element_at(effect->affecteds,i);
-        fprintf(file,"%ld|%d|%d\n", entity_get_id(aux->ent), entity_get_entityType(aux->ent), aux->turns);
+        fprintf(file,"%ld|%d|%d\n", entity_get_id(aux->ent), entity_get_entityType(aux->ent), (aux->turns+1));
     }
 
     return OK;

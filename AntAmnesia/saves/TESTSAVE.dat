@@ -1,5 +1,5 @@
 SAVE
-0;0;0;0;0;1
+0;0;1;0;0;1
 #gd:1|5|9|1
 esto
 es
@@ -27,7 +27,7 @@ a
 #l:1|11|121|1|0
 #l:2|121|122|1|0
 #l:3|122|123|1|0
-#l:4|123|124|1|1
+#l:4|123|124|1|0
 #l:5|124|13|1|0
 #l:6|122|125|1|0
 #l:7|125|126|1|0
@@ -35,16 +35,16 @@ a
 #l:9|127|14|1|0
 #l:10|14|13|0|0
 #l:11|11|14|0|0
-#s:11|Entry|1|-1|-1|1|-1|11|-1|0
-#s:121|Corridor1|-1|1|-1|2|-1|-1|-1|0
-#s:122|Corridor2|-1|2|6|3|-1|-1|-1|0
-#s:123|Corridor3|-1|3|-1|4|-1|-1|-1|0
-#s:124|Corridor4|-1|4|-1|5|-1|-1|-1|0
-#s:13|Pantry|-1|5|-1|-1|-1|-1|-1|0
-#s:125|Corridor5|-1|-1|7|-1|6|-1|-1|0
-#s:126|Corridor6|-1|-1|8|-1|7|-1|-1|0
-#s:127|Corridor7|-1|-1|9|-1|8|-1|-1|0
-#s:14|Hole|-1|-1|-1|10|9|-1|11|0
+#s:11|Entry|1|-1|-1|1|-1|11|-1|1
+#s:121|Corridor1|-1|1|-1|2|-1|-1|-1|1
+#s:122|Corridor2|-1|2|6|3|-1|-1|-1|1
+#s:123|Corridor3|-1|3|-1|4|-1|-1|-1|1
+#s:124|Corridor4|-1|4|-1|5|-1|-1|-1|1
+#s:13|Pantry|-1|5|-1|-1|-1|-1|-1|1
+#s:125|Corridor5|-1|-1|7|-1|6|-1|-1|1
+#s:126|Corridor6|-1|-1|8|-1|7|-1|-1|1
+#s:127|Corridor7|-1|-1|9|-1|8|-1|-1|1
+#s:14|Hole|-1|-1|-1|10|9|-1|11|1
 8
 #n:1|1|NPC1|11|1|1|^0m
 #st:1|2|100|100|10|2|2|2
@@ -54,19 +54,19 @@ a
 #st:3|2|100|100|10|2|2|2
 #n:4|0|Enemy1|11|0|3|^3m
 #st:4|2|100|1|10|2|2|2
-#n:5|0|Enemy2|121|0|3|^4m
-#st:5|2|100|100|10|2|2|2
-#n:6|0|Enemy3|121|0|3|^5m
+#n:5|0|Enemy2|11|0|3|^4m
+#st:5|2|100|99|10|2|2|2
+#n:6|0|Enemy3|11|0|3|^5m
 #st:6|2|100|100|10|2|2|2
 #n:7|0|Enemy4|11|0|3|^6m
 #st:7|2|100|100|10|2|2|2
-#n:8|0|Spider-(not)-man|122|0|3|/o\
+#n:8|0|Spider-(not)-man|123|0|3|/o\
 #st:8|2|100|100|10|2|2|2
-#p:1|Hero1|126|100|0|100|1|1|mO^|1;2-1
+#p:1|Hero1|11|100|0|100|1|1|mO^|0
 26;0;0
-#st:1|1|100|100|25|1|1|1
-#p:2|Hero2|126|100|0|100|1|0|m1^|1;1-1
-5;1;0
+#st:1|1|999999|999975|999999|999999|999999|999999
+#p:2|Hero2|14|100|0|100|1|0|m1^|0
+2;-942816176;0
 #st:2|1|100|100|25|1|1|1
 OBJ
 20
@@ -204,7 +204,7 @@ FireBall Launcher
 Poison Bomb
 1
 26;0;1
-TESTSAVE
+TESTSAV
 26;0;0
 Error code for commands. Doesn
 Code for unkown commands.
@@ -250,7 +250,8 @@ Saves the game instance to a file.
 #ef:1|Poison|2|2|0|10|3
 0
 #ef:2|Fire|3|2|0|10|1
-0
+1
+5|2|9
 #ef:3|Regeneration|1|0|0|4|5
 0
 ID:1
@@ -258,7 +259,7 @@ DS:1
 3
 Hello Traveler!
 What are you doing here?
-I thought you were attacked by those bandits
+I thought you were attacked by those [RED]bandits
 2
 Hello old man!:0:2
 Bye!:1:1
@@ -268,9 +269,9 @@ DS:2
 Well well... Can i go with you?
 I can fight pretty well!
 4
-Let's slay those bastards!:4:3
-Let's see the store:3:2
-I hate you! DIE!!:2:0
+[GREEN]Let's slay those bastards!:4:3
+[YELLOW]Let's see the store:3:2
+I hate you! [RED]DIE!!:2:0
 No, i can't let you in.:1:2
 
 DS:3
