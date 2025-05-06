@@ -21,7 +21,7 @@
 /**
  * @brief Array of strings to save the text references to each piece type
  */
-char *equip_to_str[N_PIECES] = {"","helmet","chest","arms","leg_armor","shoes","two_handed","one_handed1","one_handed2"};
+char *equip_to_str[N_PIECES] = {"","helmet","chest","arms","leg_armor","shoes","two_handed","handl","handr"};
 
 /**
  * @brief Array of strings to save the text references to each stat
@@ -155,14 +155,14 @@ Status equipment_equip_from_code(Equipment *equipment, EquipmentCode code, Objec
             return OK;
         }
         break;
-    case ONE_HANDED_1:
+    case HANDL:
         if(equipment->weapon1_one_hand == NULL && equipment->weapon_two_hands == NULL){
             equipment->weapon1_one_hand = object;
             equipment->is_two_handed = false;
             return OK;
         } 
         break;
-    case ONE_HANDED_2:
+    case HANDR:
         if(equipment->weapon2_one_hand == NULL && equipment->weapon_two_hands == NULL){
             equipment->weapon2_one_hand = object;
             equipment->is_two_handed = false;
@@ -209,11 +209,11 @@ Object *equipment_unequip_from_code(Equipment *equipment, EquipmentCode code){
         object = equipment->weapon_two_hands;
         equipment->weapon_two_hands = NULL;
         return object;
-    case ONE_HANDED_1:
+    case HANDL:
         object = equipment->weapon1_one_hand;
         equipment->weapon1_one_hand = NULL;
         return object;
-    case ONE_HANDED_2:
+    case HANDR:
         object = equipment->weapon2_one_hand;
         equipment->weapon2_one_hand = NULL;
         return object;
@@ -423,5 +423,14 @@ Object *equipment_remove_piece(Entity *entity, Equipment *equipment, char *data)
     return retobject;
 }
 
+Object *equipment_get_piece(Entity *entity, Equipment *equipment, EquipmentCode code){
+    Object *retobject = NULL;
+    
+    if(!equipment) return NULL;
 
+    retobject = equipment_unequip_from_code(equipment, code);
+    equipment_equip_from_code(equipment, code, retobject);
+
+    return retobject;
+}
 

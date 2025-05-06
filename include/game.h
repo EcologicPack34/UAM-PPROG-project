@@ -390,6 +390,15 @@ Status game_set_is_turn_valid(Game *game, TurnValidation value);
 /*----------OTHERS----------*/
 
 /**
+ * @brief Checks if game have switched players recently
+ * 
+ * @param game 
+ * @return true 
+ * @return false 
+ */
+bool game_has_request_switch(Game *game);
+
+/**
  * @brief Assigns a position to all the spaces based on the first space added to the game
  *          Requires that the first spaces is adjascent to all the other ones, if not it wont work as intended
  * @author Daniel Gómez
