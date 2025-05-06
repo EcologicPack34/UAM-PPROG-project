@@ -670,6 +670,7 @@ Status game_reader_load_objects(Game *game, char *filename){
   long objectid, objectlocation;
   Id dependency_object = NO_ID;
   InventoryType objectlocationtype;
+  Entity *ent = NULL;
   Object *object = NULL;
 
   int is_consumable = 0, is_movable = 0, cost;
