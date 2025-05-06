@@ -25,8 +25,8 @@
 
 #define MAP_WIDTH 53                  /*!< Width of the map part*/
 #define MAP_HEIGHT 29                 /*!< Height of the map part*/
-#define DESCRIPT_WIDTH 50            /*!< Width of the description part*/
-#define DESCRIPT_WIDTH2 50            /*!< Width of the description part*/
+#define DESCRIPT_WIDTH 53            /*!< Width of the description part*/
+#define DESCRIPT_WIDTH2 53            /*!< Width of the description part*/
 #define HELP_BANNER_HEIGHT 1          /*!< Height of the help banner part*/
 #define HELP_BANNER_WIDTH 23          /*!< Width of the help banner part*/
 #define HELP_HEIGHT 4                 /*!< Height of the help banner*/
@@ -985,6 +985,32 @@ void graphic_engine_paint_combat(Graphic_engine *ge, Game *game){
     }
   }
   
+  screen_area_puts(ge->descript2, "\nAllies:");
+  stats = combat_get_allies_stats(combat);
+  if(ally_count == 1){
+    screen_area_puts(ge->descript2, "    [RED]No allies");
+  }
+  for (i = 1; i < ally_count; i++)
+  {
+    strcpy(str, tab);
+    strcat(str, entity_get_graphic_description(stats[i].entity));
+    strcat(str, ": Health: ");
+    if(stats[i].stats.health/stats[i].stats.maxhealth <= .5){
+      strcat(str, "[YELLOW]");
+    }
+    if(stats[i].stats.health/stats[i].stats.maxhealth <= .2){
+      strcat(str, "[RED]");
+    }else{
+      strcat(str, "[GREEN]");
+    }
+
+    sprintf(strAux, "%.1lf/%.1lf[RESET] | BaseD:[YELLOW]%.1lf[RESET] | St:[YELLOW]%d[RESET]", stats[i].stats.health, stats[i].stats.maxhealth, stats[i].stats.baseDamage, stats[i].stats.strength);
+    strcat(str, strAux);
+    screen_area_puts(ge->descript2, str);
+  }
+
+  screen_area_clear(ge->descript);
+
   screen_area_puts(ge->descript2, "\nEnemies:");
   stats = combat_get_enemies_stats(combat);
   for (i = 0; i < enemy_count; i++)

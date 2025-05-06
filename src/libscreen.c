@@ -217,8 +217,9 @@ void screen_area_puts(Area* area, char *str){
   Cell *cAux = NULL;
   short skipT = 0;
   short skipS = 0;
+  short skipSt = 0;
 
-  int i;
+  int i,j;
 
   if(!area || !str) return;
 
@@ -257,35 +258,38 @@ void screen_area_puts(Area* area, char *str){
     /*Print the actual line to data*/
     for (area->cX = 0; area->cX < area->width && ptr <= str + len && *ptr != '\0'; (area->cX)++ , ptr++)
     { 
+      if(*ptr == ' ' && skipS) {
+        skipS = 0;
+      }
       /*Searches if word can be put in line or needs to be moved to next line*/
-      for (i = 0, tagE = ptr; i < area->width && *tagE != ' ' && *tagE != '\0' && !skipS; i++)
+      for (i = 0, tagE = ptr; i < area->width && *tagE != ' ' && *tagE != '\0' && tagE < str + len && !skipS; i++)
       {
         /*ignores tags when counting length*/
-        if(*tagE == '['){
+        if(*tagE == '[' && !skipSt){
           strcpy(tag, "");
-          for (tagLen = 0; tagLen + 1 < 20 && *tagE != ']' && tagE <= str + len; tagLen++, tagE++){
+          for (tagLen = 0, tagE++; tagLen + 1 < 20 && *tagE != ']' && tagE <= str + len; tagLen++, tagE++){
             tag[tagLen] = *tagE;
           }
           if(*tagE == ']'){
             tag[tagLen] = '\0';
             if(color_tag_to_color(tag) == NO_TAG){
               tagE -= tagLen;
+              skipSt = 1;
+            }else{
+              tagE++;
             }
-            tagE++;
-            i -= 2;
-            if(i < 0) i = 0;
           }
+          i--;
+          if(i < 0) i = 0;
         }
         tagE++;
+        if(skipSt) skipSt = 0;
       }
       if(i > area->width - area->cX){
         skipS = 1;
+        i = 0;
         break;
       }
-      if(*ptr == ' ' && skipS) {
-        skipS = 0;
-      }
-      
 
       if(*ptr == '\n'){
         ptr++;
