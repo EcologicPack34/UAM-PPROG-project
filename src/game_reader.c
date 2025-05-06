@@ -745,13 +745,13 @@ Status game_reader_load_objects(Game *game, char *filename){
 
 Status game_reader_load_player(Game *game, char *filename, bool fromSaveFile){
   FILE *file = NULL;
-  Player *player = NULL;
+  Player *player = NULL, *foll_play = NULL;
   char line[WORD_SIZE] = "";
   char name[WORD_SIZE] = "";
   char *toks = NULL;
   long playerid, startinglocation;
-  int xp, next_xp, level, skill_points, money, size;
-  int i,n_followers=0;
+  int xp, next_xp, level, skill_points, money;
+  int i,n_followers=0, count = 0;
   Id aux_id=NO_ID;
   EntityType ET;
   
@@ -830,45 +830,43 @@ Status game_reader_load_player(Game *game, char *filename, bool fromSaveFile){
     }
   }
 
-    if(fromSaveFile){
-    rewind(file);
-      size = game_get_n_players(game);
-    while (fgets(line, WORD_SIZE, file)) {
-      if (strncmp("#p:", line, 3) == 0){
-       for(i = 0; i < size; i++){
-      /*#p:ID|Nombre|LocationID|Money|XP actual|XP siguiente nvl|nivel|skill points|gdesc|n_followers;id_following1-type;id_following2-type...*/
-        /*adding followers*/
-        toks = strtok(line + 3, "|");
-        toks = strtok(NULL, "|");
-        toks = strtok(NULL, "|");
-        toks = strtok(NULL, "|");
-        toks = strtok(NULL, "|");
-        toks = strtok(NULL, "|");
-        toks = strtok(NULL, "|");
-        toks = strtok(NULL, "|");
-        toks = strtok(NULL, "|");
+  if(fromSaveFile){
+  rewind(file);
+  while (fgets(line, WORD_SIZE, file)) {
+    if (strncmp("#p:", line, 3) == 0){
+      foll_play = game_get_player_at(game, count++);
+    /*#p:ID|Nombre|LocationID|Money|XP actual|XP siguiente nvl|nivel|skill points|gdesc|n_followers;id_following1-type;id_following2-type...*/
+      /*adding followers*/
+      toks = strtok(line + 3, "|");
+      toks = strtok(NULL, "|");
+      toks = strtok(NULL, "|");
+      toks = strtok(NULL, "|");
+      toks = strtok(NULL, "|");
+      toks = strtok(NULL, "|");
+      toks = strtok(NULL, "|");
+      toks = strtok(NULL, "|");
+      toks = strtok(NULL, "|");
+      toks = strtok(NULL, ";");
+
+      n_followers = atoi(toks);
+
+      for(i=0; i<n_followers; i++){
+        toks = strtok(NULL, "-");
+        aux_id = atol(toks);
         toks = strtok(NULL, ";");
+        ET = atoi(toks);
 
-        n_followers = atoi(toks);
-
-        for(i=0; i<n_followers; i++){
-          toks = strtok(NULL, "-");
-          aux_id = atol(toks);
-          toks = strtok(NULL, ";");
-          ET = atoi(toks);
-
-          if(ET == PLAYER_TYPE){
-            if(player_add_follower(player, player_get_entity(game_get_player_by_id(game, aux_id))) == ERROR){
-              status = ERROR;
-              break;
-            }
+        if(ET == PLAYER_TYPE){
+          if(player_add_follower(foll_play, player_get_entity(game_get_player_by_id(game, aux_id))) == ERROR){
+            status = ERROR;
+            break;
           }
-          else if(ET == NPC_TYPE){
-            if(player_add_follower(player, npc_get_entity(game_get_NPC_by_id(game, aux_id))) == ERROR){
-              status = ERROR;
-              break;
-            }
-            }
+        }
+        else if(ET == NPC_TYPE){
+          if(player_add_follower(foll_play, npc_get_entity(game_get_NPC_by_id(game, aux_id))) == ERROR){
+            status = ERROR;
+            break;
+          }
           }
         }
       }
