@@ -7,6 +7,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+int player_turn = -1;
+
 /*----------PRIVATE DECLARATION---------*/
 
 /**
@@ -65,6 +67,14 @@ bool event_trigger_player_death(Event *event, Game *game);
  */
 bool event_trigger_end_combat(Game *game);
 
+/**
+ * @brief Ends dialogue
+ * @author Maksym Polyak
+ * 
+ * @param game 
+ * @return true 
+ * @return false 
+ */
 bool event_trigger_end_dialoge(Game *game);
 
 /**
@@ -77,6 +87,17 @@ bool event_trigger_end_dialoge(Game *game);
  * @return false 
  */
 bool event_trigger_npc_rand_move(Event *event, Game *game);
+
+/**
+ * @brief Counts turns for player and changes player players when turn end
+ * @author Daniel Gómez
+ * 
+ * @param event 
+ * @param game 
+ * @return true 
+ * @return false 
+ */
+bool event_trigger_players_turn(Event *event, Game *game);
 
 /**
  * @brief Triggers all the effects to each affected entity in the game
@@ -125,6 +146,8 @@ void event_actions_trigger_events(Game *game){
             case TRIGGER_EFFECTS:
                 triggered = event_trigger_effects(event, game);
                 break;
+            case PLAYER_TURN:
+                triggered = event_trigger_players_turn(event, game);
             default:
                 break;
         }
@@ -383,6 +406,21 @@ bool event_trigger_effects(Event *event, Game *game){
             return false;
             break;
         }
+    }
+    return true;
+}
+
+bool event_trigger_players_turn(Event *event, Game *game){
+    if(!event || !game){
+        return false;
+    }
+    if(!event_is_cmd_valid(event, game_get_last_command(game))) return false;
+
+    if(player_turn == -1) player_turn = atoi(event_get_aux_data(event));
+    player_turn--;
+    if(player_turn == 0){
+        player_turn = atoi(event_get_aux_data(event));
+        game_switch_player(game, -1);
     }
     return true;
 }
