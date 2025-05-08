@@ -1198,7 +1198,7 @@ Status game_reader_load_ability(Game *game, char *filename){
 
   int cd_count, cd_length;
 
-  int i, len;
+  int i, len, cost;
 
   Status status = OK;
 
@@ -1252,15 +1252,18 @@ Status game_reader_load_ability(Game *game, char *filename){
       /*Reads the cd length*/
       toks = strtok(NULL, "|");
       cd_length = atoi(toks);
+      /*Reads the cost*/
+      toks = strtok(NULL, "|");
+      cost = atoi(toks);
       /*reads data*/
       toks = strtok(NULL, "|");
       
       //printf("TEST");
       
 
-      debug_log(PRINT,"Read Skill: #s:%ld|%d|%s|%ld|%d|%d|%d|%d|%s", id, type, name, entityid, is_player_ability, is_object_use, cd_count, cd_length, toks);
+      debug_log(PRINT,"Read Skill: #s:%ld|%d|%s|%ld|%d|%d|%d|%d|%d|%s", id, type, name, entityid, is_player_ability, is_object_use, cd_count, cd_length, cost, toks);
 
-      ability = ability_create(id, toks, name, type, entityid, (bool)is_player_ability, (bool)is_object_use, cd_count, cd_length);
+      ability = ability_create(id, toks, name, type, entityid, (bool)is_player_ability, (bool)is_object_use, cd_count, cd_length, cost);
 
       if(ability == NULL)
         debug_log(LOG_ERROR,"Error creating ability when reading from file");

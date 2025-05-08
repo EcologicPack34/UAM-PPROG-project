@@ -11,6 +11,7 @@
 
 #include "store.h"
 #include <stdio.h>
+#include <stdlib.h>
 
 /**
  * @brief Internal item definition
@@ -171,9 +172,11 @@ void *store_remove_item(Store *store, Id id){
     size = store_get_size(store);
     for(i = 0; i < size; i++){
         if(store_get_item_id_at(store, i) == id){
-            store_remove_item_at(store, i);
+            return store_remove_item_at(store, i);
         }
     }
+
+    return NULL;
 }
 
 void *store_get_item_element_at(Store *store, int i){
@@ -182,6 +185,7 @@ void *store_get_item_element_at(Store *store, int i){
     if(!store) return ERROR;
 
     item = _store_search_item_by_index(store, i);
+    if(!item) return NULL;
 
     return item->item;
 }
@@ -189,9 +193,10 @@ void *store_get_item_element_at(Store *store, int i){
 int store_get_item_cost_at(Store *store, int i){
     _Item *item = NULL;
 
-    if(!store) return ERROR;
+    if(!store) return -1;
 
     item = _store_search_item_by_index(store, i);
+    if(!item) return -1;
 
     return item->cost;
 }
@@ -199,9 +204,10 @@ int store_get_item_cost_at(Store *store, int i){
 Id store_get_item_id_at(Store *store, int i){
     _Item *item = NULL;
 
-    if(!store) return ERROR;
+    if(!store) return NO_ID;
 
     item = _store_search_item_by_index(store, i);
+    if(!item) return NO_ID;
 
     return item->id;
 }
@@ -212,6 +218,7 @@ void *store_remove_item_at(Store *store, int i){
     if(!store) return ERROR;
 
     ele = collection_get_element_at(store->items, i);
+    if(!ele) return NULL;
 
     collection_remove_at(store->items, i);
 
@@ -251,13 +258,15 @@ bool store_can_be_bought(Store *store, int i){
 }
 
 int store_get_page(Store *store){
-    if(!store) return NULL;
+    if(!store) return -1;
 
     return store->page;
 }
 
-Status store_set_page(Store *store){
-    if(!store) return NULL;
+Status store_set_page(Store *store, int page){
+    if(!store) return ERROR;
 
-    
+    store->page = page;
+
+    return OK;
 }

@@ -794,13 +794,23 @@ Store *game_get_store(Game *game);
 Status game_store_startup(Game *game, StoreType type, void *seller, void *client, int *money);
 
 /**
- * @brief Destroys a game store struct
+ * @brief Destroys a game store struct and sets the game to DEFAULT
  * @author Maksym Polyak
  * 
  * @param game game struct
  * @return Status 
  */
 Status game_store_destroy(Game *game);
+
+/**
+ * @brief Moves the items from the seller to the client if possible
+ * @author Maksym Polyak
+ * 
+ * @param store 
+ * @param i 
+ * @return Status 
+ */
+Status game_store_move_item_at(Store *store, int i);
 
 /**
  * @brief Adds items from a collection to a store, sets the seller as the collection
@@ -832,4 +842,83 @@ Status game_store_add_items_from_npc_inventory(Game *game, NPC *npc);
  * @return Status 
  */
 Status game_store_buy_item_at(Game *game, int i);
+
+/**
+ * @brief Gets the stat lvlup cost depending on the type received
+ * @author Maksym Polyak
+ * 
+ * @param type type of stat to level up
+ * @return int or -1 if error
+ */
+int game_store_get_stat_lvlup_cost(LevelUpTypes type);
+  
+/**
+ * @brief Gets the cost of the element depending on its type
+ * @author Maksym Polyak
+ * 
+ * @param type type of the element
+ * @param ele element
+ * @return int or -1 if error
+ */
+int game_store_get_switch_cost(StoreType type, void *ele);
+
+/**
+ * @brief Gets the Id of the element depending on its type
+ * @author Maksym Polyak
+ * 
+ * @param type type of the element
+ * @param ele element
+ * @return Id or NO_ID if error
+ */
+Id game_store_get_switch_id(StoreType type, void *ele);
+
+/**
+ * @brief Gets the description of the element
+ * @author Maksym Polyak
+ * 
+ * @param type type of the element
+ * @param ele element
+ * @return char* or NULL if error or it does not have description
+ */
+char *game_store_get_descr(StoreType type, void *ele);
+
+/**
+ * @brief Gets the name of the item
+ * @author Maksym Polyak
+ * 
+ * @param type type of the element
+ * @param ele element
+ * @return char* 
+ */
+char *game_store_get_name(StoreType type, void *ele);
+  
+/**
+ * @brief Adds a stat to the player by the type
+ * @author Maksym Polyak
+ * 
+ * @param type type 
+ * @param player player struct
+ * @return Status 
+ */
+Status game_add_stat_by_type(LevelUpTypes type, Player *player);
+  
+/**
+ * @brief Moves the item at the index from the seller to the client
+ * @author Maksym Polyak
+ * 
+ * @param store store struct
+ * @param i index
+ * @return Status 
+ */
+Status game_store_move_item_at(Store *store, int i);
+
+/**
+ * @brief Gets the cost of leveling up each stat
+ * @author Maksym Polyak
+ * 
+ * @param type type of stat
+ * @return int or -1 if error
+ */
+int game_store_get_stat_lvlup_cost(LevelUpTypes type);
+
 #endif

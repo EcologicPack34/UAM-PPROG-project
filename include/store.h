@@ -161,4 +161,23 @@ int *store_get_money(Store *store);
  */
 bool store_can_be_bought(Store *store, int i);
 
+/**
+ * @brief Gets the actual page of the store
+ * @author Maksym Polyak
+ * 
+ * @param store store struct
+ * @return int 
+ */
+int store_get_page(Store *store);
+
+/**
+ * @brief Sets the page of the store
+ * @author Maksym Polyak
+ * 
+ * @param store store struct
+ * @param page page to set
+ * @return Status 
+ */
+Status store_set_page(Store *store, int page);
+
 #endif

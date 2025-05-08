@@ -45,6 +45,8 @@ struct _Ability {
   
   int cooldown_count;     /*!< Actual cooldown of the ability*/
   int cooldown_length;    /*!< Maximum cooldown of the ability*/
+
+  int cost;               /*!< Cost in SP of the ability*/
 };
 
 /**
@@ -67,7 +69,7 @@ struct _AbilityManager{
   * Public functions
 */
 
-Ability *ability_create(Id id, char *data, char *name, AbilityType type, Id entityid, bool is_player_ability, bool is_object_use, int cd_count, int cd_length){
+Ability *ability_create(Id id, char *data, char *name, AbilityType type, Id entityid, bool is_player_ability, bool is_object_use, int cd_count, int cd_length, int cost){
   Ability *ability = NULL;
   
   if(!data) return NULL;
@@ -100,6 +102,7 @@ Ability *ability_create(Id id, char *data, char *name, AbilityType type, Id enti
   ability->id = id;
   ability->cooldown_count = cd_count;
   ability->cooldown_length = cd_length;
+  ability->cost = cost;
 
   return ability;
 }
@@ -174,6 +177,12 @@ char *ability_get_name(Ability *ability){
   if(!ability) return NULL;
 
   return ability->name;
+}
+
+int ability_get_cost(Ability *ability){
+  if(!ability) return -1;
+
+  return ability->cost;
 }
 
 Status ability_set_cooldown_to_0(Ability *ability){
@@ -352,9 +361,9 @@ int ability_save_on_file(Ability *ability, FILE *fOUT){
 
   if(!ability || !fOUT) return -1;
 
-  count += fprintf(fOUT, "%ld;%d;%ld;%d;%d;%d;%d\n", ability->id,\
+  count += fprintf(fOUT, "%ld;%d;%ld;%d;%d;%d;%d;%d\n", ability->id,\
     ability->type, ability->entityid, ability->is_player_ability,\
-    ability->is_object_use, ability->cooldown_count, ability->cooldown_length);
+    ability->is_object_use, ability->cooldown_count, ability->cooldown_length, ability->cost);
 
   count += fprintf(fOUT, "%s\n%s\n", ability->name, ability->data);
 
@@ -364,10 +373,10 @@ int ability_save_on_file(Ability *ability, FILE *fOUT){
 Ability *ability_create_from_file(FILE *fIN){
   Id id, entityid;
   char name[WORD_SIZE], data[WORD_SIZE];
-  int type, is_player_ability, is_object_use, cooldown_count, cooldown_length;
+  int type, is_player_ability, is_object_use, cooldown_count, cooldown_length, cost;
 
-  fscanf(fIN, "%ld;%d;%ld;%d;%d;%d;%d\n", &id, &type, &entityid,\
-     &is_player_ability, &is_object_use, &cooldown_count, &cooldown_length);
+  fscanf(fIN, "%ld;%d;%ld;%d;%d;%d;%d;%d\n", &id, &type, &entityid,\
+     &is_player_ability, &is_object_use, &cooldown_count, &cooldown_length, &cost);
 
   fgets(name, WORD_SIZE, fIN);
   string_remove_newline_escape_sequence_on_end(name);
@@ -375,5 +384,5 @@ Ability *ability_create_from_file(FILE *fIN){
   string_remove_newline_escape_sequence_on_end(data);
 
   return ability_create(id, data, name, type, entityid, is_player_ability,\
-     is_object_use, cooldown_count, cooldown_length);
+     is_object_use, cooldown_count, cooldown_length, cost);
 }

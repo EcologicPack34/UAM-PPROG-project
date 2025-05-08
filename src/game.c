@@ -1512,6 +1512,27 @@ Status game_get_combat_log_message(Game *game, char *str){
   return OK;
 }
 
+char *game_stat_get_name(LevelUpTypes type){
+  if(type < 0) return NULL;
+
+
+  ////////////////////////////////////////////
+  switch(type){
+    case NO_LVLUP_STAT:
+      return NULL;
+    case LVLUP_STRENGTH:
+      return NULL;
+    case LVLUP_MAXHEALTH:
+      return NULL;
+    case LVLUP_MAGICLEVEL:
+      return NULL;
+    default:
+      break;
+  }
+
+  return NULL;
+}
+
 int game_store_get_stat_lvlup_cost(LevelUpTypes type){
   switch(type){
     case NO_LVLUP_STAT:
@@ -1522,6 +1543,8 @@ int game_store_get_stat_lvlup_cost(LevelUpTypes type){
       return LVLUP_MAXHEALTH_COST;
     case LVLUP_MAGICLEVEL:
       return LVLUP_MAGICLEVEL_COST;
+    default:
+      break;
   }
 
   return -1;
@@ -1538,7 +1561,7 @@ int game_store_get_switch_cost(StoreType type, void *ele){
     case OBJECT_STORE:
       return object_get_cost((Object *)ele);
     case STAT_STORE:
-      return game_get_stat_lvlup_cost(*(LevelUpTypes *)ele);
+      return game_store_get_stat_lvlup_cost(*(LevelUpTypes *)ele);
     default:
       return -1;
   }
@@ -1546,7 +1569,7 @@ int game_store_get_switch_cost(StoreType type, void *ele){
   return -1;
 }
 
-long game_store_get_switch_id(StoreType type, void *ele){
+Id game_store_get_switch_id(StoreType type, void *ele){
   if(!ele) return NO_ID;
 
   switch(type){
@@ -1565,7 +1588,45 @@ long game_store_get_switch_id(StoreType type, void *ele){
   return NO_ID;
 }
 
-Status game_add_stat_by_type(StoreType type, Player *player){
+char *game_store_get_name(StoreType type, void *ele){
+  if(!ele) return NULL;
+
+  switch(type){
+    case ERROR_STORE:
+      return NULL;
+    case ABILITY_STORE:
+      return ability_get_name((Ability *)ele);
+    case OBJECT_STORE:
+      return object_get_name((Object *)ele);
+    case STAT_STORE:
+      return game_stat_get_name(*(LevelUpTypes *)ele);
+    default:
+      return NULL;
+  }
+
+  return NULL;
+}
+
+char *game_store_get_descr(StoreType type, void *ele){
+  if(!ele) return NULL;
+
+  switch(type){
+    case ERROR_STORE:
+      return NULL;
+    case ABILITY_STORE:
+      return NULL;
+    case OBJECT_STORE:
+      return object_get_descr((Object *)ele);
+    case STAT_STORE:
+      return NULL;
+    default:
+      return NULL;
+  }
+
+  return NULL;
+}
+
+Status game_add_stat_by_type(LevelUpTypes type, Player *player){
   Entity *entity = NULL;
   Leveling *leveling = NULL;
 
@@ -1597,7 +1658,6 @@ Status game_add_stat_by_type(StoreType type, Player *player){
 
 Status game_store_move_item_at(Store *store, int i){
   void *ele = NULL;
-  void *seller = NULL, *client = NULL;
   
   if(!store || i < 0 || i >= store_get_size(store)) return ERROR;
 
@@ -1610,8 +1670,8 @@ Status game_store_move_item_at(Store *store, int i){
       /// IN PROCESS --> ADD A COLLECTION TO ABILITY MANAGER WITH UNUSED ABILITIES
       return ERROR;
     case OBJECT_STORE:
-      ele = (Object *)store_get_item_element_at(store, i);
-      if(inventory_move_object(store_get_seller(store), store_get_client(store), ele) == ERROR)
+      ele = store_get_item_element_at(store, i);
+      if(inventory_move_object(store_get_seller(store), store_get_client(store), game_store_get_switch_id(OBJECT_STORE, ele)) == ERROR)
         return ERROR;
       store_remove_item_at(store, i);
       return OK;
@@ -1647,6 +1707,7 @@ Status game_store_destroy(Game *game){
   if(!game) return ERROR;
 
   store_destroy(game->store);
+  game_set_state(game, DEFAULT);
 
   return OK;
 }
@@ -1670,7 +1731,7 @@ Status game_store_add_items_from_collection(Game *game, Collection *collection){
   for(i = 0; i < size; i++){
     ele = collection_get_element_at(collection, i);
     if(!ele) return ERROR;
-    store_add_item(st, ele, game_get_switch_cost(st, ele), game_get_switch_id(st, ele));
+    store_add_item(st, ele, game_store_get_switch_cost(type, ele), game_store_get_switch_id(type, ele));
   }
 
   return OK;

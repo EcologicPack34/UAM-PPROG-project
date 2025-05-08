@@ -622,7 +622,7 @@ Status game_actions_chat(Game *game){
     }
 
     if(npc_get_status(npc) == ENEMY){
-      sprintf(str, "You tried chatting with the wrong guy");
+      sprintf(str, "You tried to chat with the wrong guy!");
       game_add_log_message(game, MESSAGE_LOG, str);  
       return game_combat_start(game);
     }
@@ -657,9 +657,10 @@ Status game_actions_chat(Game *game){
           game_add_log_message(game, MESSAGE_HELP, "Merchant does not have any goods to sell.");
           return OK;
         }
+        game_end_dialogue(game);
         if(game_store_startup(game, OBJECT_STORE, entity_get_inventory(npc_get_entity(npc)), entity_get_inventory(player_get_entity(player)), player_get_money_pointer(player)) == ERROR)
           game_add_log_message(game, MESSAGE_ERROR, "Failed to initialize store");
-        game_end_dialogue(game);
+        game_store_add_items_from_collection(game, inventory_get_collection(entity_get_inventory(npc_get_entity(npc))));
         return OK;
       case FOLLOW:
         if(npc_get_status(npc) == ALLY || ((status = player_add_follower(player, npc_get_entity(npc))) == ERROR))
@@ -1084,11 +1085,7 @@ Status game_actions_buy(Game *game){
   char **args = NULL;
   int n_args;
   Command *comm = NULL;
-  int index, size;
-  NPC *seller = NULL;
-  Object *obj = NULL;
-  Player *player = NULL;
-  char str[WORD_SIZE] = "";
+  int index, size, page, item_index;
   Store *st = NULL;
 
 
@@ -1112,11 +1109,62 @@ Status game_actions_buy(Game *game){
     return ERROR;
   }
 
-  index = atoi(args[0]) - 1;
-
-  if(index == -1) return ERROR;
-
   size = store_get_size(st);
+
+  if(size == 0){
+    game_add_log_message(game, MESSAGE_HELP, "There isn't anything more to buy!");
+    game_store_destroy(game);
+    return OK;
+  }
+
+  page = store_get_page(st);
+  if((strcmp(args[0],"n") == 0 || strcmp(args[0],"next") == 0)){
+    if(page >= size/STORE_PAGE_MAX + 1){
+      game_add_log_message(game, MESSAGE_HELP, "Not more pages to move forward.");
+      return ERROR;
+    }
+    store_set_page(st, page + 1);
+    return OK;
+  }
+  if((strcmp(args[0],"b") == 0 || strcmp(args[0],"back") == 0)){
+    if(page == 1){
+      game_add_log_message(game, MESSAGE_HELP, "Not more pages to move backwards.");
+      return ERROR;
+    }
+    store_set_page(st, page - 1);
+    return OK;
+  }
+  if(strcmp(args[0],"e") == 0 || strcmp(args[0],"exit") == 0){
+    game_store_destroy(game);
+    return OK;
+  }
+
+  index = atoi(args[0]);
+
+  if(index <= 0){
+    game_add_log_message(game, MESSAGE_HELP, "Not a valid index.");
+    return ERROR;
+  }
+
+  item_index = (index + (page - 1)*STORE_PAGE_MAX) - 1;
+
+  if(store_can_be_bought(st, item_index) == false){
+    game_add_log_message(game, MESSAGE_HELP, "Oohh... You don't have enough money...");
+    return OK;
+  }
+
+  if(game_store_move_item_at(st, item_index) == ERROR){
+    game_add_log_message(game, MESSAGE_ERROR, "Mmmh it seems like you don't have space for that or that index was not valid!");
+    return OK;
+  }
+
+  if(store_get_size(st) == 0){
+    game_add_log_message(game, MESSAGE_HELP, "There isn't anything more to buy!");
+    game_store_destroy(game);
+    return OK;
+  }
+
+  return OK;
   
   /*if(index == -1){
     game_end_dialogue(game);
@@ -1163,8 +1211,6 @@ Status game_actions_buy(Game *game){
     return ERROR;
   }
   */
-
-  return OK;
 }
 
 Status game_actions_follow(Game *game){
@@ -1235,7 +1281,7 @@ Status game_actions_follow(Game *game){
   }
 
   /*If player is trying to follow player_to_follow and he has maximum number of followers it returns error*/
-  if(following_the_player = false && player_get_follower_num(player) == NPC_MAX_FOLLOWERS){
+  if((following_the_player == false) && (player_get_follower_num(player) == NPC_MAX_FOLLOWERS)){
     game_add_log_message(game, MESSAGE_ERROR, "The player you are trying to follow has max amount of followers");
     return ERROR;
   }

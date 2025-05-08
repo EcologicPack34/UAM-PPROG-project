@@ -50,6 +50,7 @@
 #define LINE_MAX 4                  /*!< Maximum number of lines in a dialogue*/
 
 #define STORETYPE_ENUM_NUM 4        /*!< Number of stores implemented including the error one*/
+#define STORE_PAGE_MAX 4            /*!< Maximum number of items per page*/
 
 /**
  * @brief Id typedef
