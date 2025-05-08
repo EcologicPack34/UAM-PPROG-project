@@ -140,7 +140,7 @@ Status combat_allies_turn(Combat *cmb);
 
 /**
  * @brief Updates the deaths of enemies and the player
- * @author Sofía Calvo
+ * @author Daniel Gómez
  * 
  * @param cmb combat struct
  * @return Status 
@@ -521,52 +521,6 @@ Status combat_update_deaths(Combat *cmb){
         cmb->enemies_count--;
     }
 
-    /*for (i = 0; i < cmb->enemies_count; i++)
-    {
-        if (entity_stats_is_dead(&(cmb->enemies_stats[i].stats)))
-        {
-            //Copies enemie into dead entities array
-            combat_release_dead_loot(cmb, &(cmb->enemies_stats[i]));
-            combat_copy_stats(&(cmb->enemies_stats[i]), &(cmb->dead_entities[(cmb->n_dead_entities)++]));
-
-            //Checks if it's not the last in the array to avoid exceptions
-            if(i > (cmb->enemies_count - 1)){
-                continue;
-            }
-            last_stats = combat_get_last_alive(cmb, 1);
-            if (last_stats){
-                combat_copy_stats(last_stats, &(cmb->enemies_stats[i]));
-            }
-
-            cmb->enemies_count--;
-        }
-    }*/
-
-    /*for(i = 0; i < cmb->total_allies; i++)
-    {
-        if (entity_stats_is_dead(&(cmb->allies_stats[i].stats)))
-        {
-            if(entity_get_entityType(cmb->allies_stats[i].entity) == PLAYER_TYPE){
-                cmb->players_count--;
-                if(cmb->players_count != 0){
-                    cmb->players_turn = (cmb->players_turn - 1)%cmb->players_count;
-                }
-            }
-            combat_release_dead_loot(cmb, &(cmb->allies_stats[i]));
-            combat_copy_stats(&(cmb->allies_stats[i]), &(cmb->dead_entities[(cmb->n_dead_entities)++]));
-            if(i > (cmb->total_allies - 1)){
-                break;
-            }
-
-            last_stats = combat_get_last_alive(cmb, 0);
-            if (last_stats){
-                combat_copy_stats(last_stats, &(cmb->allies_stats[i]));
-            }
-
-            cmb->total_allies--;
-        }
-    }*/
-
     if (cmb->players_count == 0)
     {
         combat_finalize(cmb);
@@ -869,21 +823,4 @@ int combat_get_turn(Combat *cmb) {
         return -1;
         
     return cmb->players_turn;
-}
-
-Status combat_set_turn(Combat *cmb, int i) {
-
-    if (!cmb)
-        return ERROR;
-
-    cmb->players_turn = i;   
-    return OK;
-}
-
-int combat_get_n_players(Combat *cmb) {
-
-    if (!cmb)
-        return -1;
-    
-    return cmb->players_count;
 }

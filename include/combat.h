@@ -45,7 +45,7 @@ typedef struct _Combat Combat;
 
 /**
  * @brief Initializes the combat struct
- * @author Maksym Polyak
+ * @author Maksym Polyak && Daniel Gómez
  * 
  * @param space space where the combat is located
  * @param player player that is involved in the combat
@@ -214,11 +214,21 @@ int combat_get_dead_entities_num(Combat *combat);
  */
 Entity *combat_get_dead_entity_at(Combat *combat, int i);
 
+/**
+ * @brief Gets the current turn in combat
+ * @author Sofia Calvo
+ * 
+ * @param cmb 
+ * @return int 
+ */
 int combat_get_turn(Combat *cmb);
 
-Status combat_set_turn(Combat *cmb, int i);
-
-int combat_get_n_players(Combat *cmb);
-
+/**
+ * @brief Gets the number of players in the combat
+ * @author Daniel Gómez
+ * 
+ * @param cmb 
+ * @return int 
+ */
 int combat_get_player_count(Combat *cmb);
 #endif
