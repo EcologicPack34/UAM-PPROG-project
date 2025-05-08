@@ -217,7 +217,7 @@ extern char *dialogue_filename;
 /*
 * Public functions implementation
 */
-Status game_reader_create_from_file(Game **game, char *filename){
+Status game_reader_create_from_file(Game **game, char *filename, bool procedural){
 
   /*Creates memory for the global variable dialogue_filename */
   dialogue_filename = (char *)malloc(WORD_SIZE*sizeof(char));
@@ -254,7 +254,7 @@ Status game_reader_create_from_file(Game **game, char *filename){
     return ERROR;
   }
   
-  if(game_reader_generate_procedural()){
+  if(procedural){
     if(game_generate_procedural(*game) == ERROR){
       printf("%c[2J", 27);
       printf("Fatal error. Check the log for details\n");
