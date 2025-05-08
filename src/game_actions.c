@@ -345,9 +345,7 @@ Status game_actions_update(Game *game, Command *command) {
       status = ERROR;
     }
     //changes turn to active player in combat
-    game_switch_player_to_id(game, entity_get_id(combat_get_allies_stats_at(game_get_combat(game), combat_get_turn(game_get_combat(game)))->entity));
-    }
-
+  }
   command_set_status(command, game_get_is_turn_valid(game) == VALID ? OK : ERROR);
   if(command_get_code(command) != SWITCH 
   || (command_get_code(command) == SWITCH && strncmp("list", command_get_arguments(command)[0], 5) == 0) ){
@@ -355,6 +353,11 @@ Status game_actions_update(Game *game, Command *command) {
   }
   command_get_as_string(game_get_last_command(game), str);
   
+  if(game_get_state(game) == COMBAT){
+    game_switch_player_to_id(game, entity_get_id(combat_get_allies_stats_at(game_get_combat(game), combat_get_turn(game_get_combat(game)))->entity));
+  }
+
+
   player = player_get_entity(game_get_player(game));
 
   if(player){

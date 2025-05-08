@@ -486,8 +486,7 @@ Status combat_update_player_attack(Combat *cmb, Command *last_cmd){
 
     if(cmd != ATTACK) return OK; 
 
-    player = &(cmb->allies_stats[cmb->players_turn++]);
-    cmb->players_turn %= cmb->players_count;
+    player = &(cmb->allies_stats[cmb->players_turn]);
     atc = combat_find_attack_by_name(cmb, args[0]);
     if(atc == NULL) return ERROR;
 
@@ -541,8 +540,9 @@ Status combat_update_deaths(Combat *cmb){
         combat_copy_stats(&(cmb->allies_stats[i]), &(cmb->dead_entities[(cmb->n_dead_entities)++]));
         for (j = i; j < cmb->total_allies - 1; j++)
         {
-            combat_copy_stats(&(cmb->allies_stats[i + 1]), &(cmb->allies_stats[i]));
+            combat_copy_stats(&(cmb->allies_stats[j + 1]), &(cmb->allies_stats[j]));
         }
+
         cmb->total_allies--;
         if(entity_get_entityType((cmb->allies_stats[i].entity)) == PLAYER_TYPE){
             cmb->players_count--;
@@ -563,7 +563,7 @@ Status combat_update_deaths(Combat *cmb){
         combat_copy_stats(&(cmb->enemies_stats[i]), &(cmb->dead_entities[(cmb->n_dead_entities)++]));
         for (j = i; j < cmb->enemies_count - 1; j++)
         {
-            combat_copy_stats(&(cmb->enemies_stats[i + 1]), &(cmb->enemies_stats[i]));
+            combat_copy_stats(&(cmb->enemies_stats[j + 1]), &(cmb->enemies_stats[j]));
         }
         cmb->enemies_count--;
     }
@@ -730,7 +730,13 @@ Status combat_update(Combat *combat, Command *last_cmd){
     if(st == ERROR){
         return ERROR;
     }
-    if(combat->players_turn < combat->players_count - 1) return OK;
+    if(combat->players_turn % combat->players_count != combat->players_count - 1){
+        combat->players_turn++;
+        combat->players_turn %= combat->players_count;    
+        return OK;
+    }
+    combat->players_turn++;
+    combat->players_turn %= combat->players_count;
     
     combat_update_deaths(combat);
     
