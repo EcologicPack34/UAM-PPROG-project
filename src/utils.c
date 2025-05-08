@@ -20,12 +20,14 @@ Status string_remove_newline_escape_sequence_on_end(char *str){
     
     if(!str) return ERROR;
 
+    if(strcmp(str,"\n") == 0 || strcmp(str,"") == 0) return OK;
+
     strcpy(aux_str, str);
     toks = strtok(aux_str, "\n");
     size = strlen(toks);
 
     if(str[size] == '\n')
-        str[size + 1] = '\0';
+        str[size] = '\0';
 
     return OK;
 }
@@ -36,6 +38,8 @@ Status string_remove_endofline_escape_sequence_on_end_to_newline(char *str){
     char aux_str[WORD_SIZE] = "";
     
     if(!str) return ERROR;
+
+    if(strcmp(str,"\n") == 0 || strcmp(str,"") == 0) return OK;
 
     strcpy(aux_str, str);
     toks = strtok(aux_str, "\r");

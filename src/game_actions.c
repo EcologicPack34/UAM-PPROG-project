@@ -19,6 +19,7 @@
 #include "combat.h"
 #include "ability_manager.h"
 #include "ability_actions.h"
+#include "game_reader.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -214,6 +215,14 @@ Status game_actions_buy(Game *game);
 Status game_actions_follow(Game *game);
 
 /**
+ * @brief Saves the game to a datafile
+ * 
+ * @param game 
+ * @return Status 
+ */
+Status game_actions_save(Game *game);
+
+/**
    Game actions implementation
 */
 
@@ -221,7 +230,6 @@ Status game_actions_update(Game *game, Command *command) {
   CommandCode cmd;
   Status status = ERROR;
   char str[WORD_SIZE] = "";
-  int turn, n_players;
 
   Entity *player = NULL;
 
@@ -316,39 +324,44 @@ Status game_actions_update(Game *game, Command *command) {
     case FOLLOW_PLAYER:
       status = game_actions_follow(game);
       break;
+    case SAVE:
+      status = game_actions_save(game);
     default:
       break;
   }
 
-  command_set_status(command, status);
 
+  
+  
+  if(status == ERROR){
+    game_set_is_turn_valid(game, NOT_VALID);
+  } else {
+    game_set_is_turn_valid(game, VALID);
+  }
+  
+  if(game_get_state(game) == COMBAT && game_get_is_turn_valid(game) == VALID){
+    if(combat_update(game_get_combat(game), game_get_last_command(game)) == ERROR){
+      game_set_is_turn_valid(game, NOT_VALID);
+      status = ERROR;
+    }
+    //changes turn to active player in combat
+    game_switch_player_to_id(game, entity_get_id(combat_get_allies_stats_at(game_get_combat(game), combat_get_turn(game_get_combat(game)))->entity));
+    }
+
+  command_set_status(command, game_get_is_turn_valid(game) == VALID ? OK : ERROR);
+  if(command_get_code(command) != SWITCH 
+  || (command_get_code(command) == SWITCH && strncmp("list", command_get_arguments(command)[0], 5) == 0) ){
+    command_update_player_data(command);
+  }
   command_get_as_string(game_get_last_command(game), str);
-
+  
   player = player_get_entity(game_get_player(game));
 
   if(player){
     debug_log(PRINT,"Executed command: %s; by player %d:%s",str , entity_get_id(player), entity_get_name(player));
   }
 
-  if(command_get_code(command) != SWITCH || (command_get_code(command) == SWITCH && strncmp("list", command_get_arguments(command)[0], 5) == 0) ){
-    command_update_player_data(command);
-  }
-
-  if(status == ERROR){
-    game_set_is_turn_valid(game, NOT_VALID);
-  } else {
-    game_set_is_turn_valid(game, VALID);
-  }
-
-  if(game_get_state(game) == COMBAT && game_get_is_turn_valid(game) == VALID){
-    if(combat_update(game_get_combat(game), game_get_last_command(game)) == ERROR){
-      return ERROR;
-    }
-    //changes turn to active player in combat
-    game_switch_player_to_id(game, entity_get_id(combat_get_allies_stats_at(game_get_combat(game), combat_get_turn(game_get_combat(game)))->entity));
-  }
-  
-  return OK;
+  return status;
 }
 
 /**
@@ -690,6 +703,7 @@ Status game_actions_attack(Game *game){
     /*If game starts then the first action isn't valid so combat doesnt update*/
     return ERROR;
   }
+  
 
   return OK;
 }
@@ -948,8 +962,9 @@ Status game_actions_unequip(Game *game){
 }
 
 Status game_actions_inspect(Game *game){
-  Inventory *playerInv = NULL, *spaceInv = NULL;
-  Object *obj;
+  Inventory *playerInv = NULL, *spaceInv = NULL, *sellerInv = NULL;
+  Object *obj = NULL;
+  NPC *npc = NULL;
 
   Command *cmd = NULL;
 
@@ -968,6 +983,16 @@ Status game_actions_inspect(Game *game){
   if(!obj){
     spaceInv = space_get_inventory(game_get_space(game, game_get_player_location(game)));
     obj = inventory_get_object_by_name(spaceInv, command_get_arguments(cmd)[0]);
+  }
+
+  if(game_get_state(game) == STORE_STATE){
+    npc = dialogue_get_NPC(game_get_dialogue(game));
+    if(!npc) return ERROR;
+
+    sellerInv = entity_get_inventory(npc_get_entity(npc));
+    if(!sellerInv) return ERROR;
+
+    obj = inventory_get_object_by_name(sellerInv, command_get_arguments(cmd)[0]);
   }
 
   if(!obj){
@@ -1151,7 +1176,7 @@ Status game_actions_follow(Game *game){
   if(!comm) return ERROR;
 
   n_args = command_get_arguments_count(comm);
-  if(n_args < 0 || n_args > 1){
+  if(n_args <= 0 || n_args > 1){
     game_add_log_message(game, ERROR, "Invalid number of arguments");
     return ERROR;
   }
@@ -1210,4 +1235,27 @@ Status game_actions_follow(Game *game){
   }
 
   return OK;
+}
+
+Status game_actions_save(Game *game){
+  char **args = NULL;
+  int n_args;
+  char filename[LINE_LENGTH]="";
+  Command *comm = NULL;
+
+  if(!game) return ERROR;
+
+  comm = game_get_last_command(game);
+
+  args = command_get_arguments(comm);
+  n_args = command_get_arguments_count(comm);
+
+  if(n_args != 1) return ERROR;
+
+  if(!args) return ERROR;
+
+
+  sprintf(filename, "AntAmnesia/saves/%s.dat", args[0]);
+
+  return game_reader_create_save_file(filename, game);
 }

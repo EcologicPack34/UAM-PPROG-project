@@ -15,6 +15,7 @@
 #include "types.h"
 #include "stdbool.h"
 #include "queue.h"
+#include <stdio.h>
 
 #define N_SKILLS 8 /*!< Number of skills implemented on AbilityType*/
 
@@ -295,5 +296,44 @@ Status ability_manager_use_ability(AbilityManager *sm, Ability *ability);
  * @return Queue * or NULL if error
  */
 Queue *ability_manager_get_queue(AbilityManager *sm);
+
+/**
+ * @brief Saves an ability manager struct on a file
+ * @author Maksym Polyak
+ * 
+ * @param sm ability manager struct
+ * @param fOUT file stream output
+ * @return int with num of char printed or -1 if error
+ */
+int ability_manager_save_on_file(AbilityManager *sm, FILE *fOUT);
+  
+/**
+ * @brief Reads an ability manager from a file
+ * @author Maksym Polyak
+ * 
+ * @param sm ability manager struct
+ * @param fIN file stream input
+ * @return Status 
+ */
+Status ability_manager_read_from_file(AbilityManager *sm, FILE *fIN);
+  
+/**
+ * @brief Saves an ability on a file
+ * @author Maksym Polyak
+ * 
+ * @param ability ability struct
+ * @param fOUT file stream output
+ * @return int with num of char printed or -1 if error
+ */
+int ability_save_on_file(Ability *ability, FILE *fOUT);
+  
+/**
+ * @brief Creates an ability from a file
+ * @author Maksym Polyak
+ * 
+ * @param fIN file stream input
+ * @return Ability* or NULL if error
+ */
+Ability *ability_create_from_file(FILE *fIN);
 
 #endif

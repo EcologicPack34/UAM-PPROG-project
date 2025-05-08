@@ -170,4 +170,24 @@ Status link_unlock(Link *link, Entity *player);
  */
 int link_cmp(void *e1, void *e2);
 
+/**
+ * @brief this function saves a link in a string format
+ * @author Aaron
+ * 
+ * @param file a pointer to the opened file
+ * @param l a pointer to the link
+ * @return Status 
+ * @note format: ID|Space1|Space2|adjacent|locked
+ */
+Status link_save_to_file(FILE *file, Link *l);
+
+/**
+ * @brief Creates a link from a file
+ * @author Maksym Polyak
+ * 
+ * @param fIN file input stream
+ * @return Link* or NULL if error
+ */
+Link *link_create_from_file(FILE *fIN);
+
 #endif

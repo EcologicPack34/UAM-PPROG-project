@@ -239,16 +239,6 @@ EventManager *game_get_event_manager(Game *game);
 Collection *game_get_npcs(Game *game);
 
 /**
- * @brief it gets an NPC from it's id in a Game
- * @author Aaron Charameli Mair
- * 
- * @param game game struct
- * @param id the NPC's Id
- * @return NPC* or NULL if error 
- */
-NPC *game_get_npc_by_id(Game *game, Id id);
-
-/**
  * @brief Gets player by id
  * @author Aaron Charameli Mair
  * 
@@ -257,6 +247,26 @@ NPC *game_get_npc_by_id(Game *game, Id id);
  * @return Player* 
  */
 Player *game_get_player_by_id(Game *game, Id id);
+
+/**
+ * @brief Gets the link in a certain position of the game links array
+ * @author Daniel Gómez
+ * 
+ * @param game game struct
+ * @param index index where the link is located
+ * @return Link* or NULL if error
+ */
+Link *game_get_link_at(Game *game, long index);
+
+/**
+ * @brief This function gets a space from a game by its position index
+ * @author Aaron Charameli Mair
+ * 
+ * @param game a pointer to game
+ * @param ix an int containing the position index
+ * @return Space* or NULL if ERROR
+ */
+Space *game_get_space_at(Game *game, int ix);
 
 /**
  * @brief it gets the status of god mode
@@ -642,10 +652,19 @@ Collection *game_get_attacks(Game *game);
  * @brief Generates a level proceduraly
  * @author Daniel Gómez
  * 
- * @param game 
+ * @param game game struct
  * @return Status 
  */
 Status game_generate_procedural(Game *game);
+
+/**
+ * @brief Gets the index of the active player
+ * @author Maksym Polyak
+ * 
+ * @param game game struct
+ * @return int or -1 if error
+ */
+int game_get_active_player_index(Game *game);
 
 /**
  * @brief Returns the earned experience after a combat
@@ -666,5 +685,89 @@ int game_get_combat_experience(Combat *combat, Game *game);
  * @return int or 0 if error
  */
 int game_get_combat_money(Combat *combat, Game *game);
+
+/**
+ * @brief Sets basic info for save loading
+ * @author Maksym Polyak
+ * 
+ * @param game game struct
+ * @param api active player index
+ * @param isturnvalid is turn valid
+ * @param godmode bool godmode
+ * @param finished bool finished
+ * @param proced bool procedural
+ * @param currstate currentstate
+ * @return Status 
+ */
+Status game_set_basic_info(Game *game, int api, int isturnvalid, int godmode, int finished, int proced, int currstate);
+
+/**
+ * @brief Gets the collection with the gdescs
+ * @author Maksym Polyak
+ * 
+ * @param game game struct
+ * @return Collection* or NULL if error
+ */
+Collection *game_get_gdescs(Game *game);
+
+/**
+ * @brief Gets the gdesc at the index
+ * @author Maksym Polyak
+ * 
+ * @param game game struct
+ * @param i index
+ * @return GDesc* or NULL if error or index not valid
+ */
+GDesc *game_get_gdesc_at(Game *game, int i);
+
+/**
+ * @brief Gets the collection with the links
+ * @author Maksym Polyak
+ * 
+ * @param game game struct
+ * @return Collection* or NULL if error
+ */
+Link **game_get_links(Game *game);
+
+/**
+ * @brief Drops the inventory if the entity is dead
+ * @author Maksym Polyak
+ * 
+ * @param game game struct
+ * @param entity entity struct
+ * @return Status 
+ */
+Status game_dead_entity_drop_inv(Game *game, Entity *entity);
+
+/**
+ * @brief Updates the followers, checking if they died,
+ * if they did then unfollows everyone
+ * @author Maksym Polyak
+ * 
+ * @param game game struct
+ * @return Status 
+ */
+Status game_update_unfollows(Game *game);
+
+/**
+ * @brief Checks if the combat log has messages
+ * @author Maksym Polyak
+ * 
+ * @param game game struct
+ * @return true if it has at least one message
+ * @return false if it does not have message
+ */
+bool game_combat_log_hasMessage(Game *game);
+
+/**
+ * @brief Copies the content of the first message on a queue
+ * to the str received
+ * @author Maksym Polyak
+ * 
+ * @param game game struct
+ * @param str string where message content is copied
+ * @return Status 
+ */
+Status game_get_combat_log_message(Game *game, char *str);
 
 #endif

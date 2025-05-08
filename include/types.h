@@ -11,8 +11,6 @@
 #ifndef TYPES_H
 #define TYPES_H
 
-#define DIALOGUE_FILENAME "dialogue.txt"    /*!< String with the name of the dialogue txt file*/
-
 #define NO_NAME ""                  /*!< String that represents an empty name string*/
 
 #define WORD_SIZE 700               /*!< Maximum word size */

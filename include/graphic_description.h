@@ -12,6 +12,7 @@
 #define GDESC_H
 
 #include "types.h"
+#include <stdio.h>
 
 typedef enum {NO_DESC = 0, SPACE_DESC, ENTITY_DESC} GDescType;
 
@@ -92,5 +93,24 @@ GDescType gdesc_get_type(GDesc *gdesc);
  * @return negative if e1<e2, 0 if equal, positive if e1>e2
  */
 int gdesc_cmp(void *e1, void *e2);
+
+/**
+ * @brief Saves a gdesc on a file
+ * @author Maksym Polyak
+ * 
+ * @param gdesc graphic description
+ * @param fOUT file stream output
+ * @return int with num of char printed or -1 if error
+ */
+int gdesc_save_on_file(GDesc *gdesc, FILE *fOUT);
+
+/**
+ * @brief Creates a gdesc from a file stream
+ * @author Maksym Polyak
+ * 
+ * @param fIN file stream input
+ * @return GDesc* or NULL if error
+ */
+GDesc *gdesc_create_from_file(FILE *fIN);
 
 #endif

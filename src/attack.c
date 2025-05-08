@@ -15,6 +15,7 @@
 #include <stdbool.h>
 #include "attack.h"
 #include <string.h>
+#include "utils.h"
 
 /**
  * @brief Struct of the attack module to save the data of the attack
@@ -140,3 +141,35 @@ void attack_destroy(void *at) {
 }
 
 
+int attack_save_on_file(Attack *attack, FILE *fOUT){
+    int count = 0;
+
+    if(!attack || !fOUT) return ERROR;
+    
+    count += fprintf(fOUT, "%lf;%d;%lf\n", attack->damage_multiplication, attack->needs_target, attack->no_missing_chance);
+    count += fprintf(fOUT, "%s\n", attack->name);
+
+    return count;
+}
+
+Attack *attack_create_from_file(FILE *fIN){
+    Attack *attack = NULL;
+    char name[WORD_SIZE] = "";
+    double dammult, nomisschance;
+    int needs_target;
+
+    if(!fIN) return NULL;
+    
+    fscanf(fIN,"%lf;%d;%lf\n", &dammult, &needs_target, &nomisschance);
+    fgets(name,WORD_SIZE,fIN);
+    string_remove_newline_escape_sequence_on_end(name);
+
+    attack = attack_create(name);
+    if(!attack) return NULL;
+
+    attack->damage_multiplication = dammult;
+    attack->needs_target = needs_target;
+    attack->no_missing_chance = nomisschance;
+
+    return attack;
+}

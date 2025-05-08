@@ -20,9 +20,10 @@
 
 #include "types.h"
 #include <stdbool.h>
+#include <stdio.h>
 
 #define N_CMDT 2    /*!< Total number of CommandType in the enum */
-#define N_CMD 27    /*!< Total number of CommandCode in the enum */
+#define N_CMD 28    /*!< Total number of CommandCode in the enum */
 
 #define MAX_CMD_ARGS_NUM 5      /*!< Max number of arguments that can be passed to a command*/
 #define MAX_CMD_ARGS_LENGTH 20  /*!< Max length that the arguments of a command can have */
@@ -37,7 +38,7 @@ typedef enum { CMDS, CMDL } CommandType; /* CMDS: Command Short | CMDL: Command 
  */
 typedef enum { NO_CMD = -1, UNKNOWN, EXIT, SOUTH, NORTH, EAST, WEST, TAKE, DROP, CHAT,\
      ATTACK, RUN_AWAY, SWITCH, ABILITY, OBJECT_USE, HELP, MOVE, SEARCH, EQUIP, UNEQUIP, INSPECT, GM,\
-    UP, DOWN, LEVEL_UP, BUY, FOLLOW_PLAYER} CommandCode; /* All values that a command can take */
+    UP, DOWN, LEVEL_UP, BUY, FOLLOW_PLAYER, SAVE} CommandCode; /* All values that a command can take */
 
 /**
  * @brief ADT with player related information
@@ -253,5 +254,45 @@ Status command_get_list(Command *command, char *destination, GameState state, bo
  * @return int 
  */
 int command_code_isEqual(void *cmd1, void *cmd2);
+
+/**
+ * @brief Saves a command struct on a file
+ * @author Maksym Polyak
+ * 
+ * @param command command struct
+ * @param fOUT file stream output
+ * @return int with num of char printed or -1 if error
+ */
+int command_save_on_file(Command *command, FILE *fOUT);
+
+/**
+ * @brief Reads a command struct from a file
+ * @author Maksym Polyak
+ * 
+ * @param command command struct
+ * @param fIN file stream input
+ * @return Status 
+ */
+Status command_read_from_file(Command *command, FILE *fIN);
+
+/**
+ * @brief Saves a command info struct on a file
+ * @author Maksym Polyak
+ * 
+ * @param cminfo command info struct
+ * @param fOUT file stream output
+ * @return int with num of char printed or -1 if error
+ */
+int command_info_save_on_file(CommandInfo *cminfo, FILE *fOUT);
+
+/**
+ * @brief Reads a command info struct from a file
+ * @author Maksym Polyak
+ * 
+ * @param cminfo command info struct
+ * @param fIN file stream input
+ * @return Status 
+ */
+Status command_info_read_from_file(CommandInfo *cminfo, FILE *fIN);
 
 #endif

@@ -28,6 +28,11 @@
 #include <stdlib.h>
 #include <string.h>
 
+/*
+ * Used for dialogue reading wether the game is running from a save file or a .dat
+*/
+extern char *dialogue_filename;
+
 #define COLLECTION_INITIAL_SIZE 10  /*!< Collection initial size*/
 
 /**
@@ -76,22 +81,7 @@ struct _Game {
 
 /*-----PRIVATE FUNCTIONS-----*/
 
-/**
- * @brief Gets the link in a certain position of the game links array
- * @author Daniel Gómez
- * 
- * @param game game struct
- * @param index index where the link is located
- * @return Link* or NULL if error
- */
-Link *game_get_link_at(Game *game, long index){
-  if(!game) return NULL;
 
-  if(index < 0 || index >= game_get_n_links(game))
-    return NULL;
-
-  return game->links[index];
-}
 
 /**
  * @brief Maps spatially a block of spaces starting at initSpace
@@ -103,21 +93,6 @@ Link *game_get_link_at(Game *game, long index){
  * @return Status 
  */
 Status game_map_space_block(Game *game, Space *initSpace ,int block);
-
-/**
- * @brief This function gets a space in a game by its index
- * @author Aaron Charameli Mair
- * 
- * @param game a struct Game 
- * @param ix the index of the space
- * @return Space*
- */
-Space *game_get_space_at(Game *game, int ix){
-  if(!game || (ix<0)) return NULL;
-  if(ix >= game_get_n_spaces(game)) return NULL;
-
-  return game->spaces[ix];
-}
 
 /**
  * @brief Gets a random graphic description of type space
@@ -181,10 +156,6 @@ Status game_create(Game **game) {
   (*game)->active_player = NULL; /*Player creation is controlled by game_reader*/
   (*game)->n_players = 0;
   (*game)->objects = collection_create(COLLECTION_INITIAL_SIZE, false, true, object_isEqual, object_print);
-
-  for(i = 0; i < MAX_PLAYERS; i++){
-    (*game)->players[i] = NULL;
-  }
 
   (*game)->requestSwitch = false;
 
@@ -312,6 +283,9 @@ Status game_destroy(Game *game) {
     free(game_get_link_at(game,i));
   }
 
+  /*Destroys the global variable for dialogue*/
+  free(dialogue_filename);
+
   free(game);
   return OK;
 }
@@ -333,6 +307,15 @@ Link *game_get_link_by_id(Game *game, Id id){
   }
 
   return NULL;
+}
+
+Link *game_get_link_at(Game *game, long index){
+  if(!game) return NULL;
+
+  if(index < 0 || index >= game_get_n_links(game))
+    return NULL;
+
+  return game->links[index];
 }
 
 Space *game_get_space(Game *game, Id id) {
@@ -436,24 +419,6 @@ EventManager *game_get_event_manager(Game *game){
 Collection *game_get_npcs(Game *game){
   if(!game) return NULL;
   return game->npcs;
-}
-
-NPC *game_get_npc_by_id(Game *game, Id id){
-  Collection *all_npcs=NULL;
-  long i,size;
-
-  if(!game || (id == NO_ID)) return NULL;
-
-  if((all_npcs = game_get_npcs(game)) == NULL) return NULL;
-
-  size = collection_length(all_npcs);
-
-  for(i=0; i<size; i++){
-    if(entity_get_id(npc_get_entity((NPC *)collection_get_element_at(all_npcs, i))) == id)
-      return (NPC *)collection_get_element_at(all_npcs, i);
-  }
-
-  return NULL;
 }
 
 Player *game_get_player_by_id(Game *game, Id id){
@@ -789,7 +754,7 @@ Status game_add_object(Game *game, Object *object){
       status = inventory_add_object(entity_get_inventory(player_get_entity(player)), object);
       break;
     case NPC_INVENTORY:
-      npc = game_get_npc_by_id(game, object_get_location(object));
+      npc = game_get_NPC_by_id(game, object_get_location(object));
       status = inventory_add_object(entity_get_inventory(npc_get_entity(npc)), object); /*An npc inventory is being implemented*/
       break;
     case SPACE_INVENTORY:
@@ -1085,12 +1050,17 @@ Status game_add_ability(Game *game, Ability *ability){
   return ERROR;
 }
 
+Space *game_get_space_at(Game *game, int ix){
+  if(!game || (ix<0) || (ix>=game->n_spaces)) return NULL;
+  return game->spaces[ix];
+}
+
 Status game_dialogue_init(Game *game, NPC *npc){
   FILE *fIN = NULL;
   
   if(!game) return ERROR;
 
-  fIN = fopen(DIALOGUE_FILENAME,"r");
+  fIN = fopen(dialogue_filename,"r");
   if(!fIN) return ERROR;
 
   game->dialogue = dialogue_create(npc, fIN);
@@ -1370,6 +1340,12 @@ Status game_add_gdesc(Game *game, GDesc *gdesc){
   return collection_add(game->gdescs, gdesc);
 }
 
+int game_get_active_player_index(Game *game){
+  if(!game) return -1;
+
+  return game->active_player_index;
+}
+
 int game_get_combat_experience(Combat *combat, Game *game){
   Entity *ent = NULL;
   int i, XP = 0;
@@ -1377,7 +1353,7 @@ int game_get_combat_experience(Combat *combat, Game *game){
   if(!combat || !game) return 0;
 
   for(i = 0, ent = combat_get_dead_entity_at(combat, i); ent != NULL; i++, ent = combat_get_dead_entity_at(combat, i)){
-    if(npc_get_status(game_get_npc_by_id(game, entity_get_id(ent))) == ENEMY){
+    if(npc_get_status(game_get_NPC_by_id(game, entity_get_id(ent))) == ENEMY){
       XP += (XP_MINIMUM + entity_get_strength(ent)*XP_MULT + entity_get_magicLevel(ent)*XP_MULT)*(entity_get_max_health(ent)/100);
     }
   }
@@ -1392,10 +1368,137 @@ int game_get_combat_money(Combat *combat, Game *game){
   if(!combat || !game) return 0;
 
   for(i = 0, ent = combat_get_dead_entity_at(combat, i); ent != NULL; i++, ent = combat_get_dead_entity_at(combat, i)){
-    if(npc_get_status(game_get_npc_by_id(game, entity_get_id(ent))) == ENEMY){
+    if(npc_get_status(game_get_NPC_by_id(game, entity_get_id(ent))) == ENEMY){
       money += (MONEY_MIN*(entity_get_strength(ent)/100 + 1)*(entity_get_magicLevel(ent)/100 + 1))*(entity_get_max_health(ent)/100);
     }
   }
 
   return money;
+}
+
+Status game_set_basic_info(Game *game, int api, int isturnvalid, int godmode, int finished, int proced, int currstate){
+
+  if(!game) return ERROR;
+
+  game->active_player_index = api;
+  game->is_turn_valid = isturnvalid;
+  game->godmode = godmode;
+  game->finished = finished;
+  game->procedural = proced;
+  game->current_state = currstate;
+
+  return OK;
+}
+
+Collection *game_get_gdescs(Game *game){
+  if(!game) return NULL;
+
+  return game->gdescs;
+}
+
+GDesc *game_get_gdesc_at(Game *game, int i){
+  if(!game || i < 0) return NULL;
+
+  return collection_get_element_at(game->gdescs, i);
+}
+
+Link **game_get_links(Game *game){
+  if(!game) return NULL;
+
+  return game->links;
+}
+
+Status game_dead_entity_drop_inv(Game *game, Entity *entity){
+  Space *space = NULL;
+  Inventory *inv = NULL, *space_inv = NULL; 
+  int size, i;
+  Object *obj = NULL;
+
+
+  if(!game || !entity) return ERROR;
+
+  if(entity_is_dead(entity) == false) return OK;
+
+  space = game_get_space(game, entity_get_location(entity));
+  if(!space) return ERROR;
+
+  space_inv = space_get_inventory(space);
+  if(!space_inv) return ERROR;
+
+  inv = entity_get_inventory(entity);
+  if(!inv) return ERROR;
+
+  size = inventory_get_size(inv);
+  for(i = 0; i < size; i++){
+    obj = inventory_get_object_at(inv, i);
+    if(!obj) return ERROR;
+
+    inventory_move_object(inv, space_inv, object_get_id(obj));
+  }
+
+  return OK;
+}
+
+Status game_update_unfollows(Game *game){
+  int size, i, j, n_followers;
+  Player *player = NULL, *aux_player = NULL;
+  Entity *ent = NULL;
+
+  size = game_get_n_players(game);
+  for(i = 0; i < size; i++){
+    player = game_get_player_at(game, i);
+    if(!player) return ERROR;
+
+    n_followers = player_get_follower_num(player);
+    for(j = 0; j < n_followers; j++){
+      ent = player_get_follower_at(player, j);
+      if(!ent) return ERROR;
+
+      if(entity_is_dead(ent) == true){
+        if(entity_get_entityType(ent) == PLAYER_TYPE){
+          aux_player = game_get_player_by_id(game, entity_get_id(ent));
+          if(!aux_player) return ERROR;
+
+          player_remove_follower_by_pointer(aux_player, player_get_entity(player));
+          player_remove_follower_by_pointer(player, ent);
+        } else if(entity_get_entityType(ent) == NPC_TYPE){
+          player_remove_follower_by_pointer(player, ent);
+        }
+      }
+    }
+  }
+
+  return OK;
+}
+
+bool game_combat_log_hasMessage(Game *game){
+  Combat *cmb = NULL;
+  Queue *queue = NULL;
+  
+  if(!game) return false;
+
+  if((cmb = game_get_combat(game)) == NULL || game_get_state(game) != COMBAT) return false;
+
+  queue = combat_get_messages(cmb);
+
+  return !queue_isEmpty(queue);
+}
+
+Status game_get_combat_log_message(Game *game, char *str){
+  Combat *cmb = NULL;
+  Queue *queue = NULL;
+  Message *mess = NULL;
+  
+  if(!game || !str) return ERROR;
+
+  if((cmb = game_get_combat(game)) == NULL || game_get_state(game) != COMBAT) return ERROR;
+
+  queue = combat_get_messages(cmb);
+
+  mess = queue_pop(queue);
+  if(!mess) return ERROR;
+
+  message_get_str(mess, str);
+
+  return OK;
 }

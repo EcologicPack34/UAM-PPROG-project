@@ -215,6 +215,15 @@ int combat_get_dead_entities_num(Combat *combat);
 Entity *combat_get_dead_entity_at(Combat *combat, int i);
 
 /**
+ * @brief Gets the queue with the messages of the combat
+ * @author Maksym Polyak
+ * 
+ * @param combat combat struct
+ * @return Queue* or NULL if error
+ */
+Queue *combat_get_messages(Combat *combat);
+
+/**
  * @brief Gets the current turn in combat
  * @author Sofia Calvo
  * 

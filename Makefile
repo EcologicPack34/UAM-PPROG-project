@@ -1,5 +1,7 @@
 CC = gcc
 
+GAME_NAME = AntAmnesia
+
 INCLUDE = include
 LIBRARIES = libraries
 OBJ_PATH = object
@@ -32,8 +34,8 @@ OBJ = $(patsubst %,$(OBJ_PATH)/%,$(_OBJ))
 DEPENDENCIES = $(OBJ:.o=.d)
 #includes the dependencies so that they are considered when compiling
 
-EXE = anthill
-EXED = anthilldebug
+EXE = ./$(GAME_NAME)/anthill
+EXED = ./$(GAME_NAME)/anthilldebug
 
 _TEST_OBJ = entity_test.o collection_test.o space_test.o link_test.o object_test.o inventory_test.o player_test.o effect_test.o
 _TEST = entity_test collection_test space_test link_test object_test inventory_test player_test effect_test
@@ -74,25 +76,27 @@ link:
 	$(CC) $(CFLAGS) -o $(OBJ)
 
 run:
-	./anthill anthill.dat
+	./$(GAME_NAME)/anthill $(GAME_NAME)/data/anthill.dat
+
+runsav:
+	./$(GAME_NAME)/anthill $(GAME_NAME)/saves/TESTSAVE.dat
 
 runs:
-	./anthill anthill.dat -l ./debug.log -s 567123
+	./$(GAME_NAME)/anthill $(GAME_NAME)/data/anthill.dat -l ./$(GAME_NAME)/debug.log -s 567123
 
 runl:
-	./anthill anthill.dat -l ./debug.log
+	./$(GAME_NAME)/anthill $(GAME_NAME)/data/anthill.dat -l ./$(GAME_NAME)/debug.log
 
 debug:
 	$(CC) -o $(EXED) $(SRC) $(D_FLAGS) -g -L$(LIBRARIES) -lscreen -lm
 
 gdb:
 	make debug
-	gdb --tui --silent --args ./anthilldebug anthill.dat
+	gdb --tui --silent --args ./$(GAME_NAME)/anthilldebug $(GAME_NAME)/data/anthill.dat
 
-#To install ddd run $sudo apt install ddd
-ddd:
+gdbsav:
 	make debug
-	ddd --gdb --args ./anthilldebug anthill.dat
+	gdb --tui --silent --args ./$(GAME_NAME)/anthilldebug $(GAME_NAME)/saves/TESTSAVE.dat
 
 #in order for doxygen to work run $sudo apt install doxygen
 #for graphs to work it needs graphviz, to install run $sudo apt install graphviz
@@ -101,7 +105,11 @@ doxy:
 
 runv:
 	make debug
-	valgrind --leak-check=full --track-origins=yes --show-leak-kinds=all ./anthilldebug anthill.dat
+	valgrind --leak-check=full --track-origins=yes --show-leak-kinds=all ./$(GAME_NAME)/anthilldebug $(GAME_NAME)/data/anthill.dat
+
+runsavv:
+	make debug
+	valgrind --leak-check=full --track-origins=yes --show-leak-kinds=all ./$(GAME_NAME)/anthilldebug $(GAME_NAME)/saves/TESTSAVE.dat
 
 #tests rules
 

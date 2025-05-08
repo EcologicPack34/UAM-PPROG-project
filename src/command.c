@@ -19,6 +19,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <strings.h>
+#include "utils.h"
 
 #define CMD_LENGTH 500 /*!< Maximum length of a command */
 
@@ -27,7 +28,7 @@
  */
 char *cmd_to_str[N_CMD][N_CMDT] = {{"", "No command"}, {"", "Unknown"}, {"q", "Exit"}, {"s", "South"}, {"w", "North"}, {"d", "East"}, {"a", "West"},{"tk", "Take"}, {"dr", "Drop"},\
  {"ch", "Chat"}, {"at", "Attack"}, {"h", "Run_Away"}, {"sw", "Switch_Player"}, {"sk", "Ability"}, {"ou", "Object_Use"}, {"hp", "Help"}, {"m", "Move"}, {"sh","Search"},\
- {"eq", "Equip"}, {"ue", "Unequip"}, {"i", "Inspect"}, {"4444444444444444", "4444444444444444"}, {"up", "Up"}, {"dw", "Down"}, {"lu", "Level_Up"}, {"by","Buy"}, {"fw","Follow"}};
+ {"eq", "Equip"}, {"ue", "Unequip"}, {"i", "Inspect"}, {"4444444444444444", "4444444444444444"}, {"up", "Up"}, {"dw", "Down"}, {"lu", "Level_Up"}, {"by","Buy"}, {"fw","Follow"}, {"sv","Save"}};
 
 /**
 * @brief Struct containing the info of a command
@@ -556,4 +557,112 @@ bool command_current_type_valid_by_state(Command *command, GameState state){
     }
   }
   return false;
+}
+
+int command_save_on_file(Command *command, FILE *fOUT){
+  int i, j, count = 0, size;
+  CommandCode *code = NULL;
+
+  if(!command || !fOUT) return -1;
+
+  count += command_info_save_on_file(command->cmdData, fOUT);
+  count += command_info_save_on_file(command->cmdPlayerData, fOUT);
+
+  for(i = 0; i < N_CMD; i++){
+    count += fprintf(fOUT, "%s\n", command->commandInfo[i]);
+  }
+
+  for(i = 0; i < N_GAME_STATES; i++){
+    size = collection_length(command->stateCommands[i]);
+    count += fprintf(fOUT, "%d\n", size);
+    for(j = 0; j < size; j++){
+      code = collection_get_element_at(command->stateCommands[i], j);
+      count += fprintf(fOUT, "%d,", (int)*code);
+    }
+    count += fprintf(fOUT, "\n");
+  }
+
+  return count;
+}
+
+Status command_read_from_file(Command *command, FILE *fIN){
+  /*int i, j, size;*/
+  CommandInfo *ci = NULL;
+  char str[WORD_SIZE] = "";/**toks = NULL;;*/
+  /*CommandCode *code = NULL;*/
+
+  if(!command || !fIN) return ERROR;
+
+  command_info_destroy(command->cmdData);
+  ci = command_info_create();
+  if(!ci) return ERROR;
+  command_info_read_from_file(ci, fIN);
+  command->cmdData = ci;
+
+  ci = command_info_create();
+  if(!ci) return ERROR;
+  command_info_read_from_file(ci, fIN);
+  command->cmdPlayerData = ci;
+
+  fgets(str, WORD_SIZE, fIN);
+
+  /*
+    //READ BY SETTINGS.dat
+  for(i = 0; i < N_CMD; i++){
+    fgets(str, WORD_SIZE, fIN);
+    string_remove_newline_escape_sequence_on_end(str);
+    command_set_info(command, (CommandCode)i, str);
+  }
+
+  for(i = 0; i < N_GAME_STATES; i++){
+    fscanf(fIN,"%d\n", &size);
+    fgets(str,WORD_SIZE, fIN);
+    if(size > 0){
+      toks = strtok(str, ",");
+    }
+    for(j = 0; j < size; j++){
+      toks = strtok(NULL,",");
+      if(toks == NULL) return ERROR;
+      code = (CommandCode *)malloc(sizeof(CommandCode));
+      if(!code) return ERROR;
+      *code = (CommandCode)atoi(toks);
+    }
+  }*/
+
+  return OK;
+}
+
+int command_info_save_on_file(CommandInfo *cminfo, FILE *fOUT){
+  int count = 0, i;
+
+  if(!cminfo || !fOUT) return -1;
+
+  count += fprintf(fOUT,"%d;%d;%d\n", cminfo->code, cminfo->cmdStatus, cminfo->argsCount);
+  for(i = 0; i < cminfo->argsCount; i++){
+    count += fprintf(fOUT,"%s\n", cminfo->arguments[i]);
+  }
+
+  return count;
+}
+
+Status command_info_read_from_file(CommandInfo *cminfo, FILE *fIN){
+  int code, argsCount, i, cmdStatus;
+  char str[MAX_CMD_ARGS_LENGTH];
+
+  if(!cminfo || !fIN) return ERROR;
+
+  fscanf(fIN, "%d;%d;%d\n", &code, &cmdStatus, &argsCount);
+
+  cminfo->argsCount = argsCount;
+  cminfo->code = (CommandCode)code;
+  cminfo->cmdStatus = (Status)cmdStatus;
+
+  for(i = 0; i < cminfo->argsCount; i++){
+    fgets(str, MAX_CMD_ARGS_LENGTH, fIN);
+    string_remove_newline_escape_sequence_on_end(str);
+    strcpy(cminfo->arguments[i], str);
+    if(!cminfo->arguments[i]) return ERROR;
+  }
+
+  return OK;
 }
