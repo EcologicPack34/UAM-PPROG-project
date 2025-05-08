@@ -897,11 +897,11 @@ Status game_combat_start(Game *game){
       id = entity_get_id(follower);
       player_num = game->n_players;
 
-      for (j = 0; j < player_num; j++)
+      for (j = 0; i < player_num; i++)
       {
-        if (entity_get_id(player_get_entity(game->players[j])) == id)
+        if (entity_get_id(player_get_entity(game->players[i])) == id)
         {
-          pl2 = game->players[j];
+          pl2 = game->players[i];
           break;
         } 
       }
