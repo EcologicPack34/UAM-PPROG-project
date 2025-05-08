@@ -15,7 +15,7 @@
 /**
  * @brief Array of strings to relate the event types with their code
  */
-char *eventTags[N_EVENTS] = { "" , "object_on_space", "trigger_combat", "player_death","npc_rand_move", "trigger_effects","effect_area"};
+char *eventTags[N_EVENTS] = { "" , "object_on_space", "trigger_combat", "player_death","npc_rand_move", "trigger_effects","effect_area", "player_turn"};
 
 /**
  * @brief Event struct to control special interactions or triggers within the game

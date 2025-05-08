@@ -344,7 +344,10 @@ Status game_actions_update(Game *game, Command *command) {
       game_set_is_turn_valid(game, NOT_VALID);
       status = ERROR;
     }
-  }
+    //changes turn to active player in combat
+    game_switch_player_to_id(game, entity_get_id(combat_get_allies_stats_at(game_get_combat(game), combat_get_turn(game_get_combat(game)))->entity));
+    }
+
   command_set_status(command, game_get_is_turn_valid(game) == VALID ? OK : ERROR);
   if(command_get_code(command) != SWITCH 
   || (command_get_code(command) == SWITCH && strncmp("list", command_get_arguments(command)[0], 5) == 0) ){
@@ -357,7 +360,7 @@ Status game_actions_update(Game *game, Command *command) {
   if(player){
     debug_log(PRINT,"Executed command: %s; by player %d:%s",str , entity_get_id(player), entity_get_name(player));
   }
-  
+
   return status;
 }
 
@@ -755,8 +758,10 @@ Status game_actions_switch(Game *game){
     for (i = 0; i < n_players; i++)
     {
       playerEnt = player_get_entity(game_get_player_at(game, i));
-      strcat(str, "\n");
-      sprintf(strAux, "%d. ID:%ld NAME: %s", i + 1, entity_get_id(playerEnt), entity_get_name(playerEnt));
+      if(i > 0){
+        strcat(str, " | ");
+      }
+      sprintf(strAux, "[BLUE]%d[RESET]. ID:[YELLOW]%ld[RESET] NAME: [YELLOW]%s[RESET]", i + 1, entity_get_id(playerEnt), entity_get_name(playerEnt));
       strcat(str, strAux);
     }
     return game_add_log_message(game, MESSAGE_PLAYER_LIST, str);

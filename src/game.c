@@ -268,6 +268,7 @@ Status game_destroy(Game *game) {
   
   /*Frees abilities and log messages*/
   ability_manager_destroy(game->ability_manager);
+  queue_free_elements(game->screenLog, message_destroy);
   queue_destroy(game->screenLog);
 
   /*Frees combat*/
@@ -844,7 +845,7 @@ bool game_log_hasMessage(Game *game){
 Status game_combat_start(Game *game){
   if(!game) return ERROR;
 
-  game->combat = combat_initialize(game_get_space(game, game_get_player_location(game)), game->active_player, command_get_code(game->last_cmd), game->attacks);
+  game->combat = combat_initialize(game_get_space(game, game_get_player_location(game)), game_get_player(game), command_get_code(game_get_last_command(game)), game->attacks);
   if(!game->combat) return ERROR;
 
   game->current_state = COMBAT;
@@ -857,12 +858,19 @@ Status game_combat_end(Game *game){
   
   if(!game) return ERROR;
 
-  leveling = player_get_leveling(game_get_player(game));
   XP = game_get_combat_experience(game_get_combat(game), game);
   money = game_get_combat_money(game_get_combat(game), game);
 
-  leveling_set_XP(leveling, XP + leveling_get_XP(leveling));
-  player_add_money(game_get_player(game), money);
+
+
+  for (int i = 0; i < combat_get_player_count(game->combat); i++)
+  {
+    leveling = player_get_leveling(game_get_player_by_id(game, entity_get_id(combat_get_allies_stats_at(game->combat,i)->entity)));
+
+    leveling_set_XP(leveling, XP/combat_get_player_count(game->combat) + leveling_get_XP(leveling));
+    player_add_money(game_get_player_by_id(game, entity_get_id(combat_get_allies_stats_at(game->combat,i)->entity)), money);
+  }
+  
 
   combat_free(game->combat);
   game->current_state = DEFAULT;
@@ -917,6 +925,25 @@ int game_switch_player(Game *game, int player){
   command_set_player_data(game->last_cmd, player_get_cmdData(game->active_player));
 
   return 0;
+}
+
+int game_switch_player_to_id(Game *game, int playerId){
+  if(!game || playerId == NO_ID){
+    return 0;
+  }
+
+  for (int i = 0; i < game->n_players; i++)
+  {
+    if(entity_get_id(player_get_entity(game->players[i])) == playerId){
+      game->active_player = game->players[i];
+      game->active_player_index = i;
+      game->requestSwitch = true;
+      command_set_player_data(game->last_cmd, player_get_cmdData(game->active_player));
+      return 0;
+    }
+  }
+  
+  return -1;
 }
 
 bool game_has_request_switch(Game *game){

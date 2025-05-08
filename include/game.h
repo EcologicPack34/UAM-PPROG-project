@@ -546,6 +546,15 @@ Combat *game_get_combat(Game *game);
 int game_switch_player(Game *game, int player);
 
 /**
+ * @brief Switches player to the one with given Id if posible
+ * 
+ * @param game 
+ * @param playerId 
+ * @return int 
+ */
+int game_switch_player_to_id(Game *game, int playerId);
+
+/**
  * @brief Gets the ability manager struct from the game struct
  * 
  * @param game game struct

@@ -99,9 +99,10 @@ Formato Event: #e:Id|Type|cmdTriggersNum|cmdName1 , ...|removeOnTrigger|tagvalue
 #e:3|trigger_combat|2|tk,dr|0|20
 #e:4|player_death|0|0|
 #e:5|trigger_combat|1|sh|0|40
-#e:6|npc_rand_move|6|n,s,w,e,up,dw|0|20
-#e:7|effect_area|7|n,s,w,e,up,dw,sk|0|1:121
-#e:8|trigger_effects|8|n,s,w,e,up,dw,at,sk|0|0|
+#e:6|npc_rand_move|6|w,a,s,d,up,dw|0|20
+#e:7|effect_area|7|w,a,s,d,up,dw,sk|0|1:121
+#e:8|trigger_effects|8|w,a,s,d,up,dw,at,sk|0|0|
+#e:9|player_turn|9|a,s,w,d,up,dw,sk,m,sh|0|10
 
 
 Formato NPC: #n:ID|Dialogue State - 1 means initial - 0 means no dialogue|Nombre|LocationID|is_follower|Status|

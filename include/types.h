@@ -18,10 +18,10 @@
 #define UNDEFINED_ID 0              /*!< Value of a non assigned ID, usefull to not confuse errors with intended behaviour*/
 #define DIRECTION_NUMBER 8          /*!< Number of directions implemented on the game*/
 
-#define NPC_MAX_FOLLOWERS NPC_MAX_ALLIES - 1    /*!< Maximum number of followers*/
+#define NPC_MAX_FOLLOWERS (NPC_MAX_ALLIES - 1)    /*!< Maximum number of followers*/
 #define NPC_MAX_ALLIES 4            /*!< Maximum number of ally NPCs in a combat and in general(relative to the player)*/
 #define NPC_MAX_ENEMIES 4           /*!< Maximum number of enemy NPCs in a combat*/
-#define COMBAT_MAX_ENTITIES 8       /*!< Maximum number of entities in a combat*/
+#define COMBAT_MAX_ENTITIES 10       /*!< Maximum number of entities in a combat*/
 
 #define BASE_DAMAGE_MINIMUM 10      /*!< Minimum damage an entity can do if attack is succesful*/
 #define STRENGTH_DAMAGE_MULTIPLIER 1.5  /*!< Rate at which the strength affects the base damage*/

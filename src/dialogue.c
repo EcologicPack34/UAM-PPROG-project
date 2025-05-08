@@ -199,6 +199,7 @@ Status dialogue_update(Dialogue *dialogue){
     if(entityid < 0) return ERROR;
 
     fgets(str,WORD_SIZE, dialogue->dialogue_file);
+    id = -1;
     if(strncmp(str, "ID:", 3) == 0){
         sscanf(str,"ID:%ld", &id);
     }
