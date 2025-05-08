@@ -343,12 +343,6 @@ Status game_actions_update(Game *game, Command *command) {
   if(game_get_state(game) == COMBAT && game_get_is_turn_valid(game) == VALID){
     if(combat_update(game_get_combat(game), game_get_last_command(game)) == ERROR)
       return ERROR;
-
-    n_players = combat_get_n_players(game_get_combat(game));
-
-    turn = (combat_get_turn((game_get_combat(game))) + 1)%n_players;
-    combat_set_turn(game_get_combat(game), turn);
-    game_switch_player(game, turn);
   }
   
   return OK;
