@@ -215,7 +215,7 @@ Status effect_add_affected(Effect *e, Entity *ent){
         }
     else{
         a = _effect_get_affected(e, ent);
-        a->turns += e->default_turns;
+        a->turns = e->default_turns;
     }
     
     return st;
