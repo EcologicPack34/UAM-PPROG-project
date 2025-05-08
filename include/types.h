@@ -36,6 +36,10 @@
 #define XP_MINIMUM 1                        /*!< Minimum XP a dead enemy gives*/
 #define XP_MULT 10                          /*!< Multiplier for the stats to add XP when an enemy dies*/
 
+#define LVLUP_STRENGTH_COST 1               /*!< Determines the cost in SP for upgrading strength*/
+#define LVLUP_MAGICLEVEL_COST 1             /*!< Determines the cost in SP for upgrading magic level*/
+#define LVLUP_MAXHEALTH_COST 1              /*!< Determines the cost in SP for upgrading max health*/
+
 #define MONEY_MIN 10                        /*!< Minimum amount of money an enemy can yield when defeated*/
 
 
@@ -82,5 +86,11 @@ typedef enum {ERROR_STATE ,DEFAULT, COMBAT, DIALOGUE, LEVEL_UP_STATE, STORE_STAT
  * 
  */
 typedef enum {ERROR_STORE, ABILITY_STORE, OBJECT_STORE, STAT_STORE}StoreType;
+
+/**
+ * @brief Enum describing what type of stats can be leveled up with Skill Points
+ * 
+ */
+typedef enum {NO_LVLUP_STAT, LVLUP_STRENGTH, LVLUP_MAXHEALTH, LVLUP_MAGICLEVEL}LevelUpTypes;
 
 #endif

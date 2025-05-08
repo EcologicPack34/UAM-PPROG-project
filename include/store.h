@@ -14,6 +14,7 @@
 
 #include "collection.h"
 #include "types.h"
+#include <stdbool.h>
 
 /**
  * @brief Store ADT definition
@@ -40,6 +41,15 @@ Store *store_create(StoreType type, void *seller, void *buyer, int *money);
  * @param store store struct
  */
 void store_destroy(Store *store);
+
+/**
+ * @brief Gets the type of the store
+ * @author Maksym Polyak
+ * 
+ * @param store store struct
+ * @return StoreType 
+ */
+StoreType store_get_type(Store *store);
 
 /**
  * @brief Adds an item to the store
@@ -84,14 +94,24 @@ void *store_get_item_element_at(Store *store, int i);
 int store_get_item_cost_at(Store *store, int i);
 
 /**
+ * @brief Gets the id of the item at the index
+ * @author Maksym Polyak
+ * 
+ * @param store store struct
+ * @param i index
+ * @return Id with the id
+ */
+Id store_get_item_id_at(Store *store, int i);
+
+/**
  * @brief Removes an item on the store at the index
  * @author Maksym Polyak
  * 
  * @param store store struct
  * @param i index
- * @return Status 
+ * @return void * with the element
  */
-Status store_remove_item_at(Store *store, int i);
+void *store_remove_item_at(Store *store, int i);
 
 /**
  * @brief Gets the num of items on the store
@@ -119,5 +139,26 @@ void *store_get_seller(Store *store);
  * @return void* 
  */
 void *store_get_client(Store *store);
+
+/**
+ * @brief Gets where the amount of money is
+ * @author Maksym Polyak
+ * 
+ * @param store store struct
+ * @return int* 
+ */
+int *store_get_money(Store *store);
+
+/**
+ * @brief Determines if an object can be bought with the actual
+ * amount of money
+ * @author Maksym Polyak
+ * 
+ * @param store store struct
+ * @param i index
+ * @return true if can be bought
+ * @return false if it cannot be bought
+ */
+bool store_can_be_bought(Store *store, int i);
 
 #endif

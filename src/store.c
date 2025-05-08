@@ -33,6 +33,8 @@ struct _Store{
     void *seller;           /*!< Where the items are located*/
     void *client;           /*!< Where items are deposited after buy*/
     int *money;             /*!< Where the money is taken*/
+
+    int page;               /*!< Indicates the page to control view*/
 };
 
 /*
@@ -137,6 +139,7 @@ Store *store_create(StoreType type, void *seller, void *buyer, int *money){
     store->client = buyer;
     store->money = money;
     store->type = type;
+    store->page = 1;
 
     return store;
 }
@@ -148,13 +151,30 @@ void store_destroy(Store *store){
     }
 }
 
+StoreType store_get_type(Store *store){
+    if(!store) return ERROR_STORE;
+
+    return store->type;
+}
+
 Status store_add_item(Store *store, void *element, int cost, Id id){
     if(!element || cost < 0) return ERROR;
 
     return collection_add(store->items, _item_create(element, cost, id));
 }
 
-void *store_remove_item(Store *store, Id id);
+void *store_remove_item(Store *store, Id id){
+    int i, size;
+    
+    if(!store) return NULL;
+
+    size = store_get_size(store);
+    for(i = 0; i < size; i++){
+        if(store_get_item_id_at(store, i) == id){
+            store_remove_item_at(store, i);
+        }
+    }
+}
 
 void *store_get_item_element_at(Store *store, int i){
     _Item *item = NULL;
@@ -176,10 +196,26 @@ int store_get_item_cost_at(Store *store, int i){
     return item->cost;
 }
 
-Status store_remove_item_at(Store *store, int i){
+Id store_get_item_id_at(Store *store, int i){
+    _Item *item = NULL;
+
     if(!store) return ERROR;
 
-    return collection_remove_at(store->items, i);
+    item = _store_search_item_by_index(store, i);
+
+    return item->id;
+}
+
+void *store_remove_item_at(Store *store, int i){
+    void *ele = NULL;
+
+    if(!store) return ERROR;
+
+    ele = collection_get_element_at(store->items, i);
+
+    collection_remove_at(store->items, i);
+
+    return ele;
 }
 
 int store_get_size(Store *store){
@@ -204,4 +240,24 @@ int *store_get_money(Store *store){
     if(!store) return NULL;
 
     return store->money;
+}
+
+bool store_can_be_bought(Store *store, int i){
+    if(!store) return false;
+
+    if(store_get_item_cost_at(store, i) > *store_get_money(store)) return false;
+
+    return true;
+}
+
+int store_get_page(Store *store){
+    if(!store) return NULL;
+
+    return store->page;
+}
+
+Status store_set_page(Store *store){
+    if(!store) return NULL;
+
+    
 }

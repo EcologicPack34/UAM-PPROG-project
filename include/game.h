@@ -763,6 +763,15 @@ bool game_combat_log_hasMessage(Game *game);
 Status game_get_combat_log_message(Game *game, char *str);
 
 /**
+ * @brief Gets the cost to level up each type of stat
+ * @author Maksym Polyak
+ * 
+ * @param type 
+ * @return int 
+ */
+int game_get_stat_lvlup_cost(LevelUpTypes type);
+
+/**
  * @brief Gets the store at a game struct
  * @author Maksym Polyak
  * 
@@ -776,10 +785,13 @@ Store *game_get_store(Game *game);
  * @author Maksym Polyak
  * 
  * @param game game struct
- * @param type type of the store
+ * @param type type of items sold
+ * @param seller where items to be sold are saved
+ * @param client where items to be bought are dropped
+ * @param money money to control prices
  * @return Status 
  */
-Status game_store_startup(Game *game, StoreType type);
+Status game_store_startup(Game *game, StoreType type, void *seller, void *client, int *money);
 
 /**
  * @brief Destroys a game store struct

@@ -653,11 +653,13 @@ Status game_actions_chat(Game *game){
         game_combat_start(game);
         return OK;
       case STORE:
-        if(inventory_get_size(entity_get_inventory(npc_get_entity(dialogue_get_NPC(dialogue)))) <= 0){
+        if(inventory_get_size(entity_get_inventory(npc_get_entity(npc))) <= 0){
           game_add_log_message(game, MESSAGE_HELP, "Merchant does not have any goods to sell.");
           return OK;
         }
-        game_set_state(game, STORE_STATE);
+        if(game_store_startup(game, OBJECT_STORE, entity_get_inventory(npc_get_entity(npc)), entity_get_inventory(player_get_entity(player)), player_get_money_pointer(player)) == ERROR)
+          game_add_log_message(game, MESSAGE_ERROR, "Failed to initialize store");
+        game_end_dialogue(game);
         return OK;
       case FOLLOW:
         if(npc_get_status(npc) == ALLY || ((status = player_add_follower(player, npc_get_entity(npc))) == ERROR))
@@ -1082,14 +1084,17 @@ Status game_actions_buy(Game *game){
   char **args = NULL;
   int n_args;
   Command *comm = NULL;
-  int index;
+  int index, size;
   NPC *seller = NULL;
   Object *obj = NULL;
   Player *player = NULL;
   char str[WORD_SIZE] = "";
+  Store *st = NULL;
 
 
   if(!game) return ERROR;
+
+  st = game_get_store(game);
 
   if(game_get_state(game) != STORE_STATE){
     game_add_log_message(game, MESSAGE_HELP, "You're not in a shop!");
@@ -1109,7 +1114,11 @@ Status game_actions_buy(Game *game){
 
   index = atoi(args[0]) - 1;
 
-  if(index == -1){
+  if(index == -1) return ERROR;
+
+  size = store_get_size(st);
+  
+  /*if(index == -1){
     game_end_dialogue(game);
     game_set_state(game, DEFAULT);
     return OK;
@@ -1153,6 +1162,7 @@ Status game_actions_buy(Game *game){
     game_set_state(game, DEFAULT);
     return ERROR;
   }
+  */
 
   return OK;
 }

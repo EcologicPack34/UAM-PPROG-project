@@ -275,6 +275,12 @@ int player_get_follower_num(Player *player){
     return collection_length(player->followers);
 }
 
+int *player_get_money_pointer(Player *player){
+    if(!player) return NULL;
+
+    return &(player->money);
+}
+
 Status player_save_to_file(FILE *file, Player *p){
     char aux[WORD_SIZE]="";
     Id id, location;
