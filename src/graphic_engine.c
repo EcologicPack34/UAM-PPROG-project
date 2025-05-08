@@ -400,7 +400,7 @@ void graphic_engine_paint_playerDesc(Graphic_engine *ge, Game *game){
   }
   if(entity_get_health(entityplayer)/entity_get_max_health(entityplayer) <= .2){
     strcat(str, "[RED]");
-  }else{
+  }else if(entity_get_health(entityplayer)/entity_get_max_health(entityplayer) > .5){
     strcat(str, "[GREEN]");
   }
 
@@ -540,9 +540,24 @@ void graphic_engine_paint_playerDesc(Graphic_engine *ge, Game *game){
     if(!follower) continue;
     if(entity_is_dead(follower)) continue;
 
-    sprintf(str, "%s%d. ID: [YELLOW]%ld [RESET]| Name: [YELLOW]%s", tab, auxInt, entity_get_id(follower), entity_get_name(follower));
-    screen_area_puts(ge->descript2, str);
-
+    sprintf(str, "%s%d. ID: [YELLOW]%ld [RESET]| Name: [YELLOW]%s[RESET]", tab, auxInt, entity_get_id(follower), entity_get_name(follower));
+    
+    strcat(str, " | H: ");
+    
+    if(entity_get_health(follower)/entity_get_max_health(follower) <= .5){
+      strcat(str, "[YELLOW]");
+    }
+    if(entity_get_health(follower)/entity_get_max_health(follower) <= .2){
+      strcat(str, "[RED]");
+    }else if(entity_get_health(follower)/entity_get_max_health(follower) > .5){
+      strcat(str, "[GREEN]");
+    }
+    
+    sprintf(strAux, "%.2lf / %.2lf", entity_get_health(follower), entity_get_max_health(follower));
+    strcat(str, strAux);
+    
+    screen_area_puts(ge->descript2, str);// health
+    
     auxInt++;
   }
 }
@@ -796,12 +811,12 @@ void graphic_engine_paint_combat(Graphic_engine *ge, Game *game){
     strcat(str, strAux);
     strcat(str, "[");
     bar = stats[i].stats.health/stats[i].stats.maxhealth * HEALTH_BAR_WIDTH;
-    if(bar < 4){
+    if(bar < 3){
       strcat(str, "[YELLOW]");
     }
     if(bar < 2){
       strcat(str, "[RED]");
-    }else{
+    }else if(bar >= 3){
       strcat(str, "[GREEN]");
     }
 
@@ -868,12 +883,12 @@ void graphic_engine_paint_combat(Graphic_engine *ge, Game *game){
   /*------PLAYER HBAR------*/
   strcat(str, "[");
   bar = stats[0].stats.health/stats[0].stats.maxhealth * HEALTH_BAR_WIDTH;
-  if(bar < 4){
+  if(bar < 3){
     strcat(str, "[YELLOW]");
   }
   if(bar < 2){
     strcat(str, "[RED]");
-  }else{
+  }else if(bar >= 3){
     strcat(str, "[GREEN]");
   }
   if(bar == 0){
@@ -897,12 +912,12 @@ void graphic_engine_paint_combat(Graphic_engine *ge, Game *game){
     //sprintf(strAux, "[%.2lf]", stats[i].stats.health);
     strcat(str, "[");
     bar = stats[i].stats.health/stats[i].stats.maxhealth * HEALTH_BAR_WIDTH;
-    if(bar < 4){
+    if(bar < 3){
       strcat(str, "[YELLOW]");
     }
     if(bar < 2){
       strcat(str, "[RED]");
-    }else{
+    }else if(bar >= 3){
       strcat(str, "[GREEN]");
     }
     if(bar == 0){
@@ -942,7 +957,8 @@ void graphic_engine_paint_combat(Graphic_engine *ge, Game *game){
     }
     if(stats[i].stats.health/stats[i].stats.maxhealth <= .2){
       strcat(str, "[RED]");
-    }else{
+    }
+    if(stats[i].stats.health/stats[i].stats.maxhealth > .5){
       strcat(str, "[GREEN]");
     }
     
@@ -965,9 +981,6 @@ void graphic_engine_paint_combat(Graphic_engine *ge, Game *game){
   
   entityplayer = stats[combat_get_turn(game_get_combat(game))].entity;
   playerInventory = entity_get_inventory(player_get_entity(game_get_player(game)));
-
-  sprintf(strAux, "TURN %d" , combat_get_turn(game_get_combat(game)));
-  screen_area_puts(ge->descript2, strAux);
 
   inventorysize = inventory_get_size(playerInventory);
 
@@ -1015,37 +1028,12 @@ void graphic_engine_paint_combat(Graphic_engine *ge, Game *game){
 
   /*^^^^^^`PLAYER INFO^^^^^^*/
 
-  if(ally_count > 1){
-    screen_area_puts(ge->descript2,  "\nAllies:");
-    stats = combat_get_allies_stats(combat);
-    for (i = 1; i < ally_count; i++)
-    {
-      if(entity_get_entityType(stats[i].entity) == PLAYER_TYPE) continue;
-
-      strcpy(str, tab);
-      strcat(str, entity_get_graphic_description(stats[i].entity));
-      strcat(str, ": Health: ");
-      if(stats[i].stats.health/stats[i].stats.maxhealth <= .5){
-        strcat(str, "[YELLOW]");
-      }
-      if(stats[i].stats.health/stats[i].stats.maxhealth <= .2){
-        strcat(str, "[RED]");
-      }else{
-        strcat(str, "[GREEN]");
-      }
-  
-      sprintf(strAux, "%.1lf/%.1lf[RESET] | BaseD:[YELLOW]%.1lf[RESET] | St:[YELLOW]%d[RESET]", stats[i].stats.health, stats[i].stats.maxhealth, stats[i].stats.baseDamage, stats[i].stats.strength);
-      strcat(str, strAux);
-      screen_area_puts(ge->descript2, str);
-    }
-  }
-  
   screen_area_puts(ge->descript2, "\nAllies:");
   stats = combat_get_allies_stats(combat);
-  if(ally_count == 1){
+  if(ally_count == combat_get_player_count(combat)){
     screen_area_puts(ge->descript2, "    [RED]No allies");
   }
-  for (i = 1; i < ally_count; i++)
+  for (i = combat_get_player_count(combat); i < ally_count; i++)
   {
     strcpy(str, tab);
     strcat(str, entity_get_graphic_description(stats[i].entity));
@@ -1055,7 +1043,8 @@ void graphic_engine_paint_combat(Graphic_engine *ge, Game *game){
     }
     if(stats[i].stats.health/stats[i].stats.maxhealth <= .2){
       strcat(str, "[RED]");
-    }else{
+    }
+    if(stats[i].stats.health/stats[i].stats.maxhealth > .5){
       strcat(str, "[GREEN]");
     }
 

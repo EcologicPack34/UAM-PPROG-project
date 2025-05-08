@@ -893,12 +893,19 @@ Status game_combat_end(Game *game){
   
   if(!game) return ERROR;
 
-  leveling = player_get_leveling(game_get_player(game));
   XP = game_get_combat_experience(game_get_combat(game), game);
   money = game_get_combat_money(game_get_combat(game), game);
 
-  leveling_set_XP(leveling, XP + leveling_get_XP(leveling));
-  player_add_money(game_get_player(game), money);
+
+
+  for (int i = 0; i < combat_get_player_count(game->combat); i++)
+  {
+    leveling = player_get_leveling(game_get_player_by_id(game, entity_get_id(combat_get_allies_stats_at(game->combat,i)->entity)));
+
+    leveling_set_XP(leveling, XP/combat_get_player_count(game->combat) + leveling_get_XP(leveling));
+    player_add_money(game_get_player_by_id(game, entity_get_id(combat_get_allies_stats_at(game->combat,i)->entity)), money);
+  }
+  
 
   combat_free(game->combat);
   game->current_state = DEFAULT;
