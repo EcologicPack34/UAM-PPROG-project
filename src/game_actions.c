@@ -344,8 +344,8 @@ Status game_actions_update(Game *game, Command *command) {
     if(combat_update(game_get_combat(game), game_get_last_command(game)) == ERROR){
       return ERROR;
     }
-    //game_switch_player_to_id(game, entity_get_id(combat_get_allies_stats_at(game_get_combat(game), combat_get_turn(game_get_combat(game)))->entity));
-    game_switch_player(game, -1);
+    //changes turn to active player in combat
+    game_switch_player_to_id(game, entity_get_id(combat_get_allies_stats_at(game_get_combat(game), combat_get_turn(game_get_combat(game)))->entity));
   }
   
   return OK;
@@ -744,8 +744,10 @@ Status game_actions_switch(Game *game){
     for (i = 0; i < n_players; i++)
     {
       playerEnt = player_get_entity(game_get_player_at(game, i));
-      strcat(str, "\n");
-      sprintf(strAux, "%d. ID:%ld NAME: %s", i + 1, entity_get_id(playerEnt), entity_get_name(playerEnt));
+      if(i > 0){
+        strcat(str, " | ");
+      }
+      sprintf(strAux, "[BLUE]%d[RESET]. ID:[YELLOW]%ld[RESET] NAME: [YELLOW]%s[RESET]", i + 1, entity_get_id(playerEnt), entity_get_name(playerEnt));
       strcat(str, strAux);
     }
     return game_add_log_message(game, MESSAGE_PLAYER_LIST, str);

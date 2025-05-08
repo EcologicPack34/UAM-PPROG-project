@@ -625,7 +625,7 @@ void graphic_engine_paint_generalDesc(Graphic_engine *ge, Game *game){
   {
     player = game_get_player_at(game, i);
     ent = player_get_entity(player);
-    if(player == game_get_player(game) || entity_get_location(ent) != game_get_player_location(game) && entity_is_dead(ent)){
+    if(player == game_get_player(game) || entity_get_location(ent) != game_get_player_location(game) || entity_is_dead(ent)){
       continue;
     }
 
@@ -726,6 +726,7 @@ void graphic_engine_paint_combat(Graphic_engine *ge, Game *game){
   int bar;
   char hbarChar;
   char tab[5] = "    ";
+  char *auxc;
 
   int heightDiv;
   int auxInt;
@@ -965,6 +966,9 @@ void graphic_engine_paint_combat(Graphic_engine *ge, Game *game){
   entityplayer = stats[combat_get_turn(game_get_combat(game))].entity;
   playerInventory = entity_get_inventory(player_get_entity(game_get_player(game)));
 
+  sprintf(strAux, "TURN %d" , combat_get_turn(game_get_combat(game)));
+  screen_area_puts(ge->descript2, strAux);
+
   inventorysize = inventory_get_size(playerInventory);
 
   if(inventorysize == 0){
@@ -995,7 +999,8 @@ void graphic_engine_paint_combat(Graphic_engine *ge, Game *game){
 
   for(i = 0; i < ability_count; i++){
     sprintf(str, "%s[YELLOW]%d.[RESET] ", tab, i + 1);
-    strcat(str, entity_get_ability_name_at(player_get_entity(game_get_player(game)), i));
+    auxc = entity_get_ability_name_at(player_get_entity(game_get_player(game)), i);
+    strcat(str, auxc ? auxc : "");
 
     auxInt = ability_get_cooldown_length(entity_get_ability_at(player_get_entity(game_get_player(game)), i));
     sprintf(strAux, "\n%s%sCooldown:[BLUE]%d[RESET]", tab, tab, auxInt);

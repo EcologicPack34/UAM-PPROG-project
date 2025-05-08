@@ -10,7 +10,7 @@ Formato STATS: #st:IDEntity|EntityType|VidaMaxima|Vida|DanoBase|Fuerza|Defensa|N
 #st:1|1|100|100|25|1|1|1
 
 #p:2|Hero2|14|100|0|100|1|0|m1^"
-#st:2|1|100|100|25|1|1|1
+#st:2|1|100|50|25|1|1|1
 
 #s:11|Entry|1|-1|-1|1|-1|11|-1
 #s:121|Corridor1|-1|1|-1|2|-1|-1|-1
@@ -99,7 +99,7 @@ Formato Event: #e:Id|Type|cmdTriggersNum|cmdName1 , ...|removeOnTrigger|tagvalue
 #e:3|trigger_combat|2|tk,dr|0|20
 #e:4|player_death|0|0|
 #e:5|trigger_combat|1|sh|0|90
-#e:6|npc_rand_move|6|w,s,a,d,up,dw|0|20
+#e:6|npc_rand_move|6|w,s,a,d,up,dw|0|1
 #e:7|trigger_effects|8|w,s,a,d,up,dw,at,sk|0||
 #e:8|player_turn|9|a,s,w,d,up,dw,sk,m,sh|0|10
 

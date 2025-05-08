@@ -963,6 +963,9 @@ int game_switch_player_to_id(Game *game, int playerId){
   {
     if(entity_get_id(player_get_entity(game->players[i])) == playerId){
       game->active_player = game->players[i];
+      game->active_player_index = i;
+      game->requestSwitch = true;
+      command_set_player_data(game->last_cmd, player_get_cmdData(game->active_player));
       return 0;
     }
   }

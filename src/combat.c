@@ -472,29 +472,64 @@ Status combat_copy_stats(Stats *stat_from, Stats *stat_to){
     stat_to->stats.magicLevel = stat_from->stats.magicLevel;
     stat_to->stats.strength = stat_from->stats.strength;
 
-    stat_from->stats.health = 0;
-
     return OK;
 }
 
 Status combat_update_deaths(Combat *cmb){
 
     /*Check if all the enemies are dead to end the combat*/
-    int i;
+    int i, j;
     Stats *last_stats = NULL;
 
-    if (!cmb)
+    if (!cmb){
         return ERROR;
+    }
 
+    for (i = 0; i < cmb->total_allies; i++)
+    {
+        if(!entity_stats_is_dead(&(cmb->allies_stats[i].stats))){
+            continue;
+        }
+        combat_release_dead_loot(cmb, &(cmb->allies_stats[i]));
+        combat_copy_stats(&(cmb->allies_stats[i]), &(cmb->dead_entities[(cmb->n_dead_entities)++]));
+        for (j = i; j < cmb->total_allies - 1; j++)
+        {
+            combat_copy_stats(&(cmb->allies_stats[i + 1]), &(cmb->allies_stats[i]));
+        }
+        cmb->total_allies--;
+        if(entity_get_entityType((cmb->allies_stats[i].entity)) == PLAYER_TYPE){
+            cmb->players_count--;
+            if(cmb->players_count > 0){
+                cmb->players_turn %= cmb->players_count;
+            }
+        }else{
+            cmb->allies_count--;
+        }
+    }
+    
     for (i = 0; i < cmb->enemies_count; i++)
+    {
+        if(!entity_stats_is_dead(&(cmb->enemies_stats[i].stats))){
+            continue;
+        }
+        combat_release_dead_loot(cmb, &(cmb->enemies_stats[i]));
+        combat_copy_stats(&(cmb->enemies_stats[i]), &(cmb->dead_entities[(cmb->n_dead_entities)++]));
+        for (j = i; j < cmb->enemies_count - 1; j++)
+        {
+            combat_copy_stats(&(cmb->enemies_stats[i + 1]), &(cmb->enemies_stats[i]));
+        }
+        cmb->enemies_count--;
+    }
+
+    /*for (i = 0; i < cmb->enemies_count; i++)
     {
         if (entity_stats_is_dead(&(cmb->enemies_stats[i].stats)))
         {
-            /*Copies enemie into dead entities array*/
+            //Copies enemie into dead entities array
             combat_release_dead_loot(cmb, &(cmb->enemies_stats[i]));
             combat_copy_stats(&(cmb->enemies_stats[i]), &(cmb->dead_entities[(cmb->n_dead_entities)++]));
 
-            /*Checks if it's not the last in the array to avoid exceptions*/
+            //Checks if it's not the last in the array to avoid exceptions
             if(i > (cmb->enemies_count - 1)){
                 continue;
             }
@@ -505,9 +540,9 @@ Status combat_update_deaths(Combat *cmb){
 
             cmb->enemies_count--;
         }
-    }
+    }*/
 
-    for(i = 0; i < cmb->total_allies; i++)
+    /*for(i = 0; i < cmb->total_allies; i++)
     {
         if (entity_stats_is_dead(&(cmb->allies_stats[i].stats)))
         {
@@ -530,7 +565,7 @@ Status combat_update_deaths(Combat *cmb){
 
             cmb->total_allies--;
         }
-    }
+    }*/
 
     if (cmb->players_count == 0)
     {
