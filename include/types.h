@@ -45,6 +45,8 @@
 #define LINE_LENGTH 100              /*!< Max length of a line of dialogue*/
 #define LINE_MAX 4                  /*!< Maximum number of lines in a dialogue*/
 
+#define STORETYPE_ENUM_NUM 4        /*!< Number of stores implemented including the error one*/
+
 /**
  * @brief Id typedef
  */
@@ -74,5 +76,11 @@ typedef enum {UNKNOWN_INVENTORY, PLAYER_INVENTORY, NPC_INVENTORY, SPACE_INVENTOR
  * @brief Enum describing the different game states
  */
 typedef enum {ERROR_STATE ,DEFAULT, COMBAT, DIALOGUE, LEVEL_UP_STATE, STORE_STATE}GameState;
+
+/**
+ * @brief Enum describing differents store available
+ * 
+ */
+typedef enum {ERROR_STORE, ABILITY_STORE, OBJECT_STORE, STAT_STORE}StoreType;
 
 #endif

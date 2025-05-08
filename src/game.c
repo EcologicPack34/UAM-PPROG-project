@@ -23,6 +23,7 @@
 #include "dialogue.h"
 #include "effect.h"
 #include "attack.h"
+#include "store.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -63,6 +64,7 @@ struct _Game {
   EventManager *event_manager;        /*!< Struct containing the info about the events that can happen*/
   EffectManager *effect_manager;      /*!< Struct containing effects and allows to manage them*/
   Queue *screenLog;                   /*!< Queue containing a list of messages to print on screen*/
+  Store *store;                       /*!< Pointer to save stores created*/
   bool godmode;                       /*!< bool that determines if god mode is activated*/
 
   /*Combat*/
@@ -221,6 +223,7 @@ Status game_create(Game **game) {
 
 
   (*game)->combat = NULL;
+  (*game)->store = NULL;
 
   return OK;
 }
@@ -1508,3 +1511,32 @@ Status game_get_combat_log_message(Game *game, char *str){
 
   return OK;
 }
+
+Store *game_get_store(Game *game){
+  if(!game) return ERROR;
+
+  return game->store;
+}
+
+Status game_store_startup(Game *game, StoreType type, void *seller, void *client, int *money){
+  if(!game) return ERROR;
+
+  game->store = store_create(type, seller, client, money);
+  if(!game->store) return ERROR;
+
+  return OK;
+}
+
+Status game_store_destroy(Game *game){
+  if(!game) return ERROR;
+
+  store_destroy(game->store);
+
+  return OK;
+}
+
+Status game_store_add_items_from_collection(Game *game, Collection *collection);
+
+Status game_store_add_items_from_npc_inventory(Game *game, NPC *npc);
+
+Status game_store_buy_item_at(Game *game, int i);

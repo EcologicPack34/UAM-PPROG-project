@@ -1172,6 +1172,7 @@ Status game_actions_follow(Game *game){
   comm = game_get_last_command(game);
   if(!comm) return ERROR;
 
+  /*Checks if arguments count is valid*/
   n_args = command_get_arguments_count(comm);
   if(n_args < 0 || n_args > 1){
     game_add_log_message(game, ERROR, "Invalid number of arguments");
@@ -1181,11 +1182,13 @@ Status game_actions_follow(Game *game){
   args = command_get_arguments(comm);
   if(!args) return ERROR;
 
+  /*Controls if player is trying to follow himself*/
   if(strcmp(entity_get_name(player_get_entity(player)), args[0]) == 0){
     game_add_log_message(game, MESSAGE_ERROR, "You cannot follow yourself...");
     return ERROR;
   }
 
+  /*Gets the player to try to follow*/
   for(i = 0, size = game_get_n_players(game); i < size; i++){
     player_to_follow = game_get_player_at(game, i);
     if(player_to_follow){
@@ -1194,11 +1197,13 @@ Status game_actions_follow(Game *game){
     }
   }
 
+  /*If the player to follow isn't on the location or wasn't found controls error*/
   if(player_to_follow == NULL || entity_get_location(player_get_entity(player)) != entity_get_location(player_get_entity(player_to_follow))){
     game_add_log_message(game, MESSAGE_ERROR, "Not found that player, or he is not with you");
     return ERROR;
   }
 
+  /*Checks if the player is already following another player and checks following_the_player as true*/
   for(i = 0, size = player_get_follower_num(player_to_follow); (i < size) && (following_the_player == false); i++){
     entity = player_get_follower_at(player_to_follow, i);
     if(entity_get_id(entity) == entity_get_id(player_get_entity(player))){
@@ -1206,6 +1211,7 @@ Status game_actions_follow(Game *game){
     }
   }
 
+  /*If the initial player isn't following the player_to_follow, checks if he is already following another player*/
   if(following_the_player == false){
     for(i = 0, size = player_get_follower_num(player_to_follow); i < size; i++){
       entity = player_get_follower_at(player_to_follow, i);
@@ -1218,11 +1224,13 @@ Status game_actions_follow(Game *game){
     }
   }
 
-  if(player_get_follower_num(player) == NPC_MAX_FOLLOWERS){
+  /*If player is trying to follow player_to_follow and he has maximum number of followers it returns error*/
+  if(following_the_player = false && player_get_follower_num(player) == NPC_MAX_FOLLOWERS){
     game_add_log_message(game, MESSAGE_ERROR, "The player you are trying to follow has max amount of followers");
     return ERROR;
   }
 
+  /*Follows the player or unfollows him according to the actual state of following*/
   if(following_the_player == false){
     player_add_follower(player_to_follow, player_get_entity(player));
     player_add_follower(player, player_get_entity(player_to_follow));

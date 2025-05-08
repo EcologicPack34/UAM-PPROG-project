@@ -31,6 +31,7 @@
 #include "dialogue.h"
 #include "effect.h"
 #include "graphic_description.h"
+#include "store.h"
 
 #include <stdbool.h>
 
@@ -761,4 +762,62 @@ bool game_combat_log_hasMessage(Game *game);
  */
 Status game_get_combat_log_message(Game *game, char *str);
 
+/**
+ * @brief Gets the store at a game struct
+ * @author Maksym Polyak
+ * 
+ * @param game game struct
+ * @return Store* or NULL if error or not found
+ */
+Store *game_get_store(Game *game);
+
+/**
+ * @brief Initializes a game store depending on the type
+ * @author Maksym Polyak
+ * 
+ * @param game game struct
+ * @param type type of the store
+ * @return Status 
+ */
+Status game_store_startup(Game *game, StoreType type);
+
+/**
+ * @brief Destroys a game store struct
+ * @author Maksym Polyak
+ * 
+ * @param game game struct
+ * @return Status 
+ */
+Status game_store_destroy(Game *game);
+
+/**
+ * @brief Adds items from a collection to a store, sets the seller as the collection
+ * @author Maksym Polyak
+ * 
+ * @param game game struct
+ * @param collection collection with the items
+ * @return Status 
+ */
+Status game_store_add_items_from_collection(Game *game, Collection *collection);
+
+/**
+ * @brief Adds items from an NPC inventory to a store, sets the collection as the npc inventory
+ * @author Maksym Polyak
+ * 
+ * @param game game struct
+ * @param npc npc to check inventory
+ * @return Status 
+ */
+Status game_store_add_items_from_npc_inventory(Game *game, NPC *npc);
+
+/**
+ * @brief Removes an object from the store, adds it to the location of the client
+ * and removes corresponding money
+ * @author Maksym Polyak
+ * 
+ * @param game game struct
+ * @param i index
+ * @return Status 
+ */
+Status game_store_buy_item_at(Game *game, int i);
 #endif
