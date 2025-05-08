@@ -297,6 +297,7 @@ Status game_destroy(Game *game) {
   
   /*Frees abilities and log messages*/
   ability_manager_destroy(game->ability_manager);
+  queue_free_elements(game->screenLog, message_destroy);
   queue_destroy(game->screenLog);
 
   /*Frees combat*/
