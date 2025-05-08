@@ -739,7 +739,6 @@ void graphic_engine_paint_combat(Graphic_engine *ge, Game *game){
 
   Entity *entityplayer;
   int ability_count = 0;
-  Player *pl = NULL;
 
   Collection *attacks = NULL;
   Attack *attack = NULL;
@@ -833,20 +832,7 @@ void graphic_engine_paint_combat(Graphic_engine *ge, Game *game){
   div = (MAP_WIDTH - COMBAT_OFFSET) / (ally_count + 1);
 
   stats = combat_get_allies_stats(combat);
-
-  pl = game_get_player(game);
-  entityplayer = player_get_entity(pl);
-
-  for (i = 0; i < combat_get_n_players(combat); i++)
-  {
-    entityplayer = player_get_entity(pl);
-
-    if (entity_get_id(entityplayer) == entity_get_id(combat_get_player_entity_at(combat, i)))
-    {
-      playerStats = combat_get_allies_stats_at(combat, i);
-      break;
-    } 
-  }
+  playerStats = combat_get_player_stats(combat);
 
   for (i = 0; i < div - (ENTITY_GRAPHIC_LENGTH)/2; i++)
   {
@@ -969,19 +955,14 @@ void graphic_engine_paint_combat(Graphic_engine *ge, Game *game){
   
     screen_area_puts(ge->descript2, str);// damage, strength, defense
   }
+  
+
 
   /*INVENTORY*/
   screen_area_puts(ge->descript2, "\nInventory: ");
 
-  for (i = 0; i < combat_get_n_players(combat); i++)
-  {
-    entityplayer = player_get_entity(pl);
-
-    if (entity_get_id(entityplayer) == entity_get_id(combat_get_player_entity_at(combat, i)))
-    {
-      break;
-    } 
-  }
+  
+  entityplayer = stats[0].entity;
   playerInventory = entity_get_inventory(player_get_entity(game_get_player(game)));
 
   inventorysize = inventory_get_size(playerInventory);
@@ -1014,7 +995,10 @@ void graphic_engine_paint_combat(Graphic_engine *ge, Game *game){
 
   for(i = 0; i < ability_count; i++){
     sprintf(str, "%s[YELLOW]%d.[RESET] ", tab, i + 1);
-    strcat(str, entity_get_ability_name_at(player_get_entity(game_get_player(game)),i));
+    if (entity_get_ability_name_at(player_get_entity(game_get_player(game)),i))
+    {
+      strcat(str, entity_get_ability_name_at(player_get_entity(game_get_player(game)),i));
+    }
 
     auxInt = ability_get_cooldown_length(entity_get_ability_at(player_get_entity(game_get_player(game)), i));
     sprintf(strAux, "\n%s%sCooldown:[BLUE]%d[RESET]", tab, tab, auxInt);

@@ -219,6 +219,4 @@ int combat_get_turn(Combat *cmb);
 Status combat_set_turn(Combat *cmb, int i);
 
 int combat_get_n_players(Combat *cmb);
-
-Entity *combat_get_player_entity_at(Combat *combat, int index);
 #endif
