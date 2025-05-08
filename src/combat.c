@@ -951,3 +951,10 @@ int combat_get_n_players(Combat *cmb) {
     
     return cmb->players_count;
 }
+
+Entity *combat_get_player_entity_at(Combat *combat, int index){
+
+    if (!combat)
+        return NULL;
+    return combat->allies_stats[index].entity;
+}
