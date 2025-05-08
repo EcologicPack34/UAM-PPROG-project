@@ -43,7 +43,7 @@ struct _Combat{
     Stats enemies_stats[NPC_MAX_ENEMIES];   /*!< Stats of the enemies*/
     int enemies_count;                      /*!< Number of enemies*/
 
-    Stats dead_entities[COMBAT_MAX_ENTITIES - 1];   /*!< Stores the dead entities*/
+    Stats dead_entities[COMBAT_MAX_ENTITIES];   /*!< Stores the dead entities*/
     int n_dead_entities;                            /*!< Count of how many dead entities are*/
 
     bool is_player_turn;                    /*!< Determines who starts, true --> player party, false --> enemy party*/
@@ -251,7 +251,9 @@ void combat_finalize(Combat *combat){
     int i;
     combat->endCombat = true;
 
-    for (i = 0; i < combat->allies_count; i++)
+
+
+    for (i = 0; i < combat->total_allies; i++)
     {
         entity_set_health(combat->allies_stats[i].entity ,combat->allies_stats[i].stats.health);
     }
@@ -370,7 +372,7 @@ Status combat_enemies_turn(Combat *cmb) {
         }
         else
         {
-            combat_attack_all(at, &stEn[i], stAl, cmb->allies_count);
+            combat_attack_all(at, &stEn[i], stAl, cmb->total_allies);
         }  
         combat_update_deaths(cmb);
     }
@@ -509,13 +511,11 @@ Status combat_update_deaths(Combat *cmb){
     {
         if (entity_stats_is_dead(&(cmb->allies_stats[i].stats)))
         {
-            if(entity_get_entityType(cmb->allies_stats[i].entity)){
+            if(entity_get_entityType(cmb->allies_stats[i].entity) == PLAYER_TYPE){
                 cmb->players_count--;
-                if(cmb->players_count == 0){
-                    combat_finalize(cmb);
-                    return OK;
+                if(cmb->players_count != 0){
+                    cmb->players_turn = (cmb->players_turn - 1)%cmb->players_count;
                 }
-                cmb->players_turn = (cmb->players_turn - 1)%cmb->players_count;
             }
             combat_release_dead_loot(cmb, &(cmb->allies_stats[i]));
             combat_copy_stats(&(cmb->allies_stats[i]), &(cmb->dead_entities[(cmb->n_dead_entities)++]));
@@ -729,6 +729,11 @@ int combat_get_enemies_count(Combat *combat){
 int combat_get_allies_count(Combat *combat){
     if(!combat) return 0;
     return combat->total_allies;
+}
+
+int combat_get_player_count(Combat *cmb){
+    if(!cmb) return 0;
+    return cmb->players_count;
 }
 
 Stats *combat_get_enemies_stats_at(Combat *combat, int index){

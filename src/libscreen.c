@@ -76,7 +76,7 @@ void screen_paint(Frame_color color){
   int i=0;
   Cell *cell;
 
-  //printf("\033[2J");
+  printf("\033[2J");
   if (__data){
     /* puts(__data); */ /*Dump data directly to the terminal*/
     /*It works fine if the terminal window has the right size*/

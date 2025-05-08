@@ -105,7 +105,7 @@ Formato Event: #e:Id|Type|cmdTriggersNum|cmdName1 , ...|removeOnTrigger|tagvalue
 
 Formato NPC: #n:ID|Dialogue State - 1 means initial - 0 means no dialogue|Nombre|LocationID|is_follower|Status|
 #n:1|1|NPC1|11|1|1|^0m"
-#st:1|2|100|100|10|2|2|2|
+#st:1|2|100|10|10|2|2|2|
 
 #n:2|1|NPC2|11|1|1|^1m"
 #st:2|2|100|100|10|2|2|2|

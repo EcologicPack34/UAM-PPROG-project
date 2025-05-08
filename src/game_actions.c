@@ -341,8 +341,11 @@ Status game_actions_update(Game *game, Command *command) {
   }
 
   if(game_get_state(game) == COMBAT && game_get_is_turn_valid(game) == VALID){
-    if(combat_update(game_get_combat(game), game_get_last_command(game)) == ERROR)
+    if(combat_update(game_get_combat(game), game_get_last_command(game)) == ERROR){
       return ERROR;
+    }
+    //game_switch_player_to_id(game, entity_get_id(combat_get_allies_stats_at(game_get_combat(game), combat_get_turn(game_get_combat(game)))->entity));
+    game_switch_player(game, -1);
   }
   
   return OK;

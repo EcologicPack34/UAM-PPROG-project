@@ -625,7 +625,7 @@ void graphic_engine_paint_generalDesc(Graphic_engine *ge, Game *game){
   {
     player = game_get_player_at(game, i);
     ent = player_get_entity(player);
-    if(player == game_get_player(game) || entity_get_location(ent) != game_get_player_location(game)){
+    if(player == game_get_player(game) || entity_get_location(ent) != game_get_player_location(game) && entity_is_dead(ent)){
       continue;
     }
 
@@ -936,10 +936,10 @@ void graphic_engine_paint_combat(Graphic_engine *ge, Game *game){
     
     strcat(str, " [RESET]| Health: ");
     
-    if(stats[0].stats.health/stats[i].stats.maxhealth <= .5){
+    if(stats[i].stats.health/stats[i].stats.maxhealth <= .5){
       strcat(str, "[YELLOW]");
     }
-    if(stats[0].stats.health/stats[i].stats.maxhealth <= .2){
+    if(stats[i].stats.health/stats[i].stats.maxhealth <= .2){
       strcat(str, "[RED]");
     }else{
       strcat(str, "[GREEN]");
@@ -962,7 +962,7 @@ void graphic_engine_paint_combat(Graphic_engine *ge, Game *game){
   screen_area_puts(ge->descript2, "\nInventory: ");
 
   
-  entityplayer = stats[0].entity;
+  entityplayer = stats[combat_get_turn(game_get_combat(game))].entity;
   playerInventory = entity_get_inventory(player_get_entity(game_get_player(game)));
 
   inventorysize = inventory_get_size(playerInventory);

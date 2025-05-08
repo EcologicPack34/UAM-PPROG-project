@@ -219,4 +219,6 @@ int combat_get_turn(Combat *cmb);
 Status combat_set_turn(Combat *cmb, int i);
 
 int combat_get_n_players(Combat *cmb);
+
+int combat_get_player_count(Combat *cmb);
 #endif

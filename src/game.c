@@ -954,6 +954,22 @@ int game_switch_player(Game *game, int player){
   return 0;
 }
 
+int game_switch_player_to_id(Game *game, int playerId){
+  if(!game || playerId == NO_ID){
+    return 0;
+  }
+
+  for (int i = 0; i < game->n_players; i++)
+  {
+    if(entity_get_id(player_get_entity(game->players[i])) == playerId){
+      game->active_player = game->players[i];
+      return 0;
+    }
+  }
+  
+  return -1;
+}
+
 bool game_has_request_switch(Game *game){
   bool state;
   if(!game) return false;
