@@ -1176,7 +1176,7 @@ Status game_actions_follow(Game *game){
   if(!comm) return ERROR;
 
   n_args = command_get_arguments_count(comm);
-  if(n_args < 0 || n_args > 1){
+  if(n_args <= 0 || n_args > 1){
     game_add_log_message(game, ERROR, "Invalid number of arguments");
     return ERROR;
   }

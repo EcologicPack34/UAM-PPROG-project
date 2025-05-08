@@ -125,7 +125,7 @@ Status combat_attack(Combat *cmb, Attack *at, Stats *attacker, Stats *victim);
  * @param num_victims number of victims
  * @return Status 
  */
-Status combat_attack_all(Attack *at, Stats *attacker, Stats *victims, int num_victims);
+Status combat_attack_all(Combat *cmb, Attack *at, Stats *attacker, Stats *victims, int n_victims);
 
 /**
  * @brief Manages enemies turn with random attacks to random allies
@@ -332,7 +332,7 @@ Status combat_entity_received_damage(Stats *stats, double damage){
     return OK;
 }
 
-Status combat_attack(Attack *at, Stats *attacker, Stats *victim) {
+Status combat_attack(Combat * cmb, Attack *at, Stats *attacker, Stats *victim) {
 
     double damage;
     double chance;
@@ -527,7 +527,6 @@ Status combat_update_deaths(Combat *cmb){
 
     /*Check if all the enemies are dead to end the combat*/
     int i, j;
-    Stats *last_stats = NULL;
 
     if (!cmb){
         return ERROR;
@@ -618,7 +617,6 @@ Combat *combat_initialize(Space *space, Player *pl, CommandCode code, Collection
 
     if(!space || !pl)
         return NULL;
-
     
     combat = (Combat *)calloc(1,sizeof(Combat));
     if(!combat) return NULL;
@@ -649,10 +647,7 @@ Combat *combat_initialize(Space *space, Player *pl, CommandCode code, Collection
             combat_copy_entity_stats(npc_get_entity(npc), &(combat->enemies_stats[npc_enemies]));
             npc_enemies++;
         }
-        if(npc_get_status(npc) == ALLY && npc_allies < 3){
-            if(entity_get_health(npc_get_entity(npc)) <= 0){
-                continue;
-            } 
+    }
 
     npc_allies = 0;
     for (i = 0; i < followerNum && npc_allies + combat->players_count <= NPC_MAX_ALLIES; i++)
@@ -676,6 +671,12 @@ Combat *combat_initialize(Space *space, Player *pl, CommandCode code, Collection
         free(combat);
         return NULL;
     }
+
+    combat->messages = queue_create();
+    if(!combat->messages){
+        free(combat);
+        return NULL;
+    }
     
     /*Initializes turns and the space where the combat is located*/
     
@@ -696,11 +697,6 @@ Combat *combat_initialize(Space *space, Player *pl, CommandCode code, Collection
     combat->attacks_count = collection_length(attacks);
     //printf("%d", combat->allies_count);
 
-    combat->messages = queue_create();
-    if(!combat->messages){
-        free(combat);
-    }
-
     return combat;
 }
 
@@ -708,6 +704,8 @@ void combat_free(Combat *combat){
     if(!combat)
         return;
 
+    
+    queue_free_elements(combat->messages, message_destroy);
     queue_destroy(combat->messages);
     free(combat);
 }

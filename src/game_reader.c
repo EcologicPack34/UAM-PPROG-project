@@ -813,14 +813,6 @@ Status game_reader_load_player(Game *game, char *filename, bool fromSaveFile){
         status = ERROR;
         break;
       }
-        
-        /*adding command*/
-        
-        if(command_info_read_from_file(player_get_cmdData(player), file) == ERROR){
-          status = ERROR;
-          break;
-        }
-
 
       if (game_add_player(game, player) == ERROR){
         player_destroy(player);
@@ -838,6 +830,7 @@ Status game_reader_load_player(Game *game, char *filename, bool fromSaveFile){
     /*#p:ID|Nombre|LocationID|Money|XP actual|XP siguiente nvl|nivel|skill points|gdesc|n_followers;id_following1-type;id_following2-type...*/
       /*adding followers*/
       toks = strtok(line + 3, "|");
+      playerid = atoi(toks);
       toks = strtok(NULL, "|");
       toks = strtok(NULL, "|");
       toks = strtok(NULL, "|");
@@ -869,6 +862,8 @@ Status game_reader_load_player(Game *game, char *filename, bool fromSaveFile){
           }
           }
         }
+
+        command_info_read_from_file(player_get_cmdData(game_get_player_by_id(game, playerid)), file);
       }
     }
   }
