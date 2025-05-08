@@ -995,7 +995,10 @@ void graphic_engine_paint_combat(Graphic_engine *ge, Game *game){
 
   for(i = 0; i < ability_count; i++){
     sprintf(str, "%s[YELLOW]%d.[RESET] ", tab, i + 1);
-    strcat(str, entity_get_ability_name_at(player_get_entity(game_get_player(game)), i));
+    if (entity_get_ability_name_at(player_get_entity(game_get_player(game)),i))
+    {
+      strcat(str, entity_get_ability_name_at(player_get_entity(game_get_player(game)),i));
+    }
 
     auxInt = ability_get_cooldown_length(entity_get_ability_at(player_get_entity(game_get_player(game)), i));
     sprintf(strAux, "\n%s%sCooldown:[BLUE]%d[RESET]", tab, tab, auxInt);
