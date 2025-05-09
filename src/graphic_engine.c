@@ -633,9 +633,12 @@ void graphic_engine_paint_generalDesc(Graphic_engine *ge, Game *game)
 
   screen_area_puts(ge->descript, " ");
 
+  sprintf(str, "Room: [YELLOW]%s", space_get_name(currentSpace));
+  screen_area_puts(ge->descript, str);
+
   /*Paints space inventory info*/
   inventorysize = inventory_get_size(spaceInventory);
-  strcpy(str, "Space inventory:");
+  strcpy(str, "\nSpace Objects:");
   screen_area_puts(ge->descript, str);
 
   if (!spaceDiscovered)
@@ -689,7 +692,7 @@ void graphic_engine_paint_generalDesc(Graphic_engine *ge, Game *game)
       printedNPCs++;
     }
   }
-  screen_area_puts(ge->descript, "Other Players:");
+  screen_area_puts(ge->descript, "\nOther Players:");
 
   size = game_get_n_players(game);
   for (i = 0, printedNPCs = 0; i < size; i++)

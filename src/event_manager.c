@@ -15,7 +15,7 @@
 /**
  * @brief Array of strings to relate the event types with their code
  */
-char *eventTags[N_EVENTS] = { "" , "object_on_space", "trigger_combat", "player_death","npc_rand_move", "trigger_effects","effect_area", "player_turn"};
+char *eventTags[N_EVENTS] = { "" , "object_on_space", "trigger_combat", "player_death","npc_rand_move", "trigger_effects","effect_area", "player_turn", "unlock_with_object_inv"};
 
 /**
  * @brief Event struct to control special interactions or triggers within the game
@@ -41,7 +41,7 @@ Event *event_create(Id id, EventType type, CommandCode *commands, int cmdNum, ch
     Event *event = NULL;
     int i;
     
-    if(!data || cmdNum < 0){
+    if(cmdNum < 0){
         debug_log(LOG_ERROR,"Invalid data or cmdNum when creating event");
         return NULL;
     }
@@ -53,11 +53,13 @@ Event *event_create(Id id, EventType type, CommandCode *commands, int cmdNum, ch
         return NULL;
     } 
 
-    event->data = (char*)calloc(strlen(data) +1 , sizeof(char));
-    if(!(event->data)){
-        free(event);
-        debug_log(LOG_ERROR,"Couldn't allocate memory when creating event");
-        return NULL;
+    if(data != NULL){
+        event->data = (char*)calloc(strlen(data) +1 , sizeof(char));
+        if(!(event->data)){
+            free(event);
+            debug_log(LOG_ERROR,"Couldn't allocate memory when creating event");
+            return NULL;
+        }
     }
 
     strcpy(event->data, data);
@@ -109,7 +111,7 @@ EventType event_type_from_str(char *string){
     if(!string) return NO_EVENT;
 
     for (i = 0; i < N_EVENTS; i++)
-    {
+    {   
         if(strcmp(string, eventTags[i]) == 0)
             return i + NO_EVENT;
     }

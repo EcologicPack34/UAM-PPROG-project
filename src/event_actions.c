@@ -120,6 +120,7 @@ bool event_trigger_update_deaths(Game *game);
  */
 bool event_trigger_effect_area(Event *event, Game *game);
 
+
 /*---------PUBLIC FUNCTIONS----------*/
 void event_actions_trigger_events(Game *game){
     int i, eventCount;

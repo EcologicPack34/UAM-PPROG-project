@@ -730,6 +730,8 @@ Status combat_update(Combat *combat, Command *last_cmd){
     if(st == ERROR){
         return ERROR;
     }
+    combat_update_deaths(combat);
+    
     if(combat->players_turn % combat->players_count != combat->players_count - 1){
         combat->players_turn++;
         combat->players_turn %= combat->players_count;    
@@ -738,7 +740,6 @@ Status combat_update(Combat *combat, Command *last_cmd){
     combat->players_turn++;
     combat->players_turn %= combat->players_count;
     
-    combat_update_deaths(combat);
     
     
     if(combat->is_player_turn == false){

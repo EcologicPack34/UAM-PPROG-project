@@ -75,12 +75,10 @@ void screen_destroy(){
 void screen_paint(Frame_color color){
   int i=0;
   Cell *cell;
-
+  
   printf("\033[2J");
+  printf("\r");
   if (__data){
-    /* puts(__data); */ /*Dump data directly to the terminal*/
-    /*It works fine if the terminal window has the right size*/
-
     for (i = 0; i < TOTAL_DATA - 1; i++)
     {
       cell = __data + i;

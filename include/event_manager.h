@@ -21,7 +21,7 @@
 /**
  * @brief Enum storing the different types of events 
  */
-typedef enum {NO_EVENT, OBJECT_ON_SPACE, TRIGGER_COMBAT, PLAYER_DEATH, NPC_RAND_MOVE, TRIGGER_EFFECTS, EFFECT_AREA, PLAYER_TURN}EventType;
+typedef enum {NO_EVENT, OBJECT_ON_SPACE, TRIGGER_COMBAT, PLAYER_DEATH, NPC_RAND_MOVE, TRIGGER_EFFECTS, EFFECT_AREA, PLAYER_TURN, UNLOCK_WITH_OBJECT_INV}EventType;
 
 /**
  * @brief ADT containing basic info about event

@@ -2,18 +2,21 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <string.h>
+#include <time.h>
 
-#define PROGRAM_NAME "anthill"
+#define PROGRAM_NAME "AntAmnesia/anthill"
 #define SAVE_DIR "./AntAmnesia/saves"
 #define DATA_DIR "./AntAmnesia/data"
 
 int main(){
     int seed;
     bool procedural;
+    bool logFile;
     int loadSave;
     int input;
-    char cmd[500];
+    char cmd[1500];
     char save[500];
+    char aux[1500];
     char c;
 
     FILE *file;
@@ -59,9 +62,9 @@ int main(){
     }
     
     printf("Your files are:\n ");
-    while(fgets(cmd, 500, file)){
+    while(fgets(save, 500, file)){
         n_files++;
-        printf("%d. %s", n_files , 1 + cmd + strlen((loadSave == 1) ? DATA_DIR : SAVE_DIR));
+        printf("%d. %s", n_files , save);
     }
     do{
         printf("input> ");
@@ -71,17 +74,23 @@ int main(){
         }
     }while(input < 1 || input > n_files);
     
-    rewind(file);
+    pclose(file);
+    file = popen(cmd, "r");
+    if(!file){
+        printf("Error finding files");
+        return -1;
+    }
+
+
     for (i = 0; i < input; i++)
     {
         fgets(save, 500, file);
     }
-    save[strlen(save) - 1] = 0;
-
+    save[strcspn(save, "\n")] = 0;
     if(loadSave == 1){
         do{
             printf("\nGenerate procedural(y/n): ");
-            scanf("%c", &c);
+            while((c = getchar()) == '\n');
             if((c != 'y' && c != 'n')){
                 for (int i = 0; i < 1; i++)
                 {
@@ -91,8 +100,30 @@ int main(){
             }
         }while(c != 'y' && c != 'n');
         procedural = c == 'y';
-    }
+        printf("\nIntroduce a seed (0 for random): ");
+        scanf("%d", &seed);
+        if(seed == 0){
+            srand((unsigned int)time(NULL));
+            seed = rand();
+        }
 
+        printf("Compiling game..\n");
+
+        system("make");
+
+        printf("\nLaunching game...");
+
+        strcpy(cmd, "valgrind --leak-check=full --track-origins=yes --show-leak-kinds=all ./");
+        strcat(cmd, PROGRAM_NAME);
+        sprintf(aux ," %s -s %d %s", save, seed, (procedural == true) ? "-proced" : "");
+        strcat(cmd, aux);
+    }else{
+        strcpy(cmd, "./");
+        strcat(cmd, PROGRAM_NAME);
+        sprintf(aux ," %s", save);
+        strcat(cmd, aux);
+    }
+    system(cmd);
     pclose(file);
     return 0;
 }
