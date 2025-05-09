@@ -125,7 +125,7 @@ _Item *_store_search_item_by_index(Store *store, int i){
 Store *store_create(StoreType type, void *seller, void *buyer, int *money){
     Store *store = NULL;
 
-    if(type < 0 || type >= STORETYPE_ENUM_NUM) return NULL;
+    if(type < 0 || type >= STORETYPE_ENUM_NUM || !money) return NULL;
 
     store = (Store *)malloc(sizeof(Store));
     if(!store) return NULL;

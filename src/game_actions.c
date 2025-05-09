@@ -962,19 +962,58 @@ Status game_actions_unequip(Game *game){
 }
 
 Status game_actions_inspect(Game *game){
-  Inventory *playerInv = NULL, *spaceInv = NULL, *sellerInv = NULL;
+  Inventory *playerInv = NULL, *spaceInv;
   Object *obj = NULL;
-  NPC *npc = NULL;
+  int i, size;
 
   Command *cmd = NULL;
+  char **args;
+
+  void *ele = NULL;
+  Store *st = NULL;
+  StoreType type;
+  char *paux = NULL;
 
   if(!game) return ERROR;
 
   cmd = game_get_last_command(game);
+  if(!cmd) return ERROR;
+
+  args = command_get_arguments(cmd);
+  if(!args) return ERROR;
 
   if(command_get_arguments_count(cmd) != 1){
     game_add_log_message(game, ERROR, "Invalid number of arguments");
     return ERROR;
+  }
+
+  if(game_get_state(game) == STORE_STATE){
+    st = game_get_store(game);
+    if(!st) return ERROR;
+
+    type = store_get_type(st);
+    if(type == ERROR_STORE) return ERROR;
+
+    size = store_get_size(st);
+    for(i = 0; i < size; i++){
+      ele = store_get_item_element_at(st, i);
+      if(!ele) return ERROR;
+      paux = game_store_get_name(type, ele);
+      if(!paux) continue;
+
+      if(strcmp(args[0],paux) == 0){
+        paux = game_store_get_descr(type, ele);
+        if(!paux){
+          game_add_log_message(game, MESSAGE_INSPECT, "What you tried to inspect does not have a description.");
+          return OK;
+        }
+        game_add_log_message(game, MESSAGE_INSPECT, paux);
+        return OK;
+      }
+    }
+
+    game_add_log_message(game, MESSAGE_INSPECT, "What you are searching for isn't on the store");
+    return OK;
   }
 
   /*Tries to check if its in the inventory or in the actual space*/
@@ -983,16 +1022,6 @@ Status game_actions_inspect(Game *game){
   if(!obj){
     spaceInv = space_get_inventory(game_get_space(game, game_get_player_location(game)));
     obj = inventory_get_object_by_name(spaceInv, command_get_arguments(cmd)[0]);
-  }
-
-  if(game_get_state(game) == STORE_STATE){
-    npc = dialogue_get_NPC(game_get_dialogue(game));
-    if(!npc) return ERROR;
-
-    sellerInv = entity_get_inventory(npc_get_entity(npc));
-    if(!sellerInv) return ERROR;
-
-    obj = inventory_get_object_by_name(sellerInv, command_get_arguments(cmd)[0]);
   }
 
   if(!obj){
@@ -1005,80 +1034,33 @@ Status game_actions_inspect(Game *game){
 
 Status game_actions_level_up(Game *game){
   Player *player = NULL;
-  char **args = NULL;
-  int n_args, index;
-  Entity *entity = NULL;
-  Leveling *leveling = NULL;
+  Leveling *lvl = NULL;
+  int *SP = NULL;
+
 
   if(!game) return ERROR;
 
   player = game_get_player(game);
   if(!player) return ERROR;
+  lvl = player_get_leveling(player);
+  if(!lvl) return ERROR;
 
-  leveling = player_get_leveling(player);
-  if(!leveling) return ERROR;
-
-  leveling_update_level_up(leveling);
-
-  if(game_get_state(game) != LEVEL_UP_STATE){
-
-    if((leveling_check_level_up(leveling) == false) && (leveling_get_skill_points(leveling) <= 0)){
-      game_add_log_message(game, MESSAGE_HELP, "You don't have skill points. Try to level up!");
-      return ERROR;
-    }
-
-    game_set_state(game, LEVEL_UP_STATE);
-    return OK;
-  }else{
-    
-    args = command_get_arguments(game_get_last_command(game));
-    if(!args) return ERROR;
-
-    n_args = command_get_arguments_count(game_get_last_command(game));
-    if(n_args <= 0 || n_args >= 2){
-      game_add_log_message(game, ERROR, "Invalid number of arguments");
-      return ERROR;
-    }
-
-    entity = player_get_entity(player);
-
-    index = atoi(args[0]);
-
-    switch(index){
-      case 1:
-        entity_set_strength(entity, entity_get_strength(entity) + 1);
-        leveling_set_skill_points(leveling, leveling_get_skill_points(leveling) - 1);
-        break;
-      case 2:
-        entity_set_magicLevel(entity, entity_get_magicLevel(entity) + 1);
-        leveling_set_skill_points(leveling, leveling_get_skill_points(leveling) - 1);
-        break;
-      case 3:
-        entity_set_max_health(entity, entity_get_max_health(entity) + 10);
-        leveling_set_skill_points(leveling, leveling_get_skill_points(leveling) - 1);
-        break;
-      case 4:
-        entity_set_defense(entity, entity_get_defense(entity) + 1);
-        leveling_set_skill_points(leveling, leveling_get_skill_points(leveling) - 1);
-        break;
-      case 5:
-        game_set_state(game, DEFAULT);
-        return OK;
-      default:
-        game_add_log_message(game, MESSAGE_LOG, "Not a valid option.");
-        return ERROR;
-    }
-
-    if(leveling_get_skill_points(leveling) <= 0){
-      game_set_state(game, DEFAULT);
-      game_add_log_message(game, MESSAGE_LOG, "You ran out of skill points");
-      return OK;
-    }
-
+  if(leveling_check_level_up(lvl) == false && leveling_get_skill_points(lvl) <= 0){
+    game_add_log_message(game, MESSAGE_HELP, "You have not leveled up and you don't have SP(Skill Points) to spend.");
     return OK;
   }
 
-  return ERROR;
+  leveling_update_level_up(lvl);
+
+  SP = leveling_get_SP_pointer(lvl);
+  if(!SP) return ERROR;
+
+  if(game_store_startup(game, STAT_STORE, NULL, player, SP) == ERROR){
+    game_add_log_message(game, MESSAGE_ERROR, "Could not initialize store.");
+    return ERROR;
+  }
+
+  return OK;
 }
 
 Status game_actions_buy(Game *game){
@@ -1087,17 +1069,20 @@ Status game_actions_buy(Game *game){
   Command *comm = NULL;
   int index, size, page, item_index;
   Store *st = NULL;
+  StoreType type;
 
 
   if(!game) return ERROR;
 
   st = game_get_store(game);
 
+  /*Checks if the game state is STORE_STATE*/
   if(game_get_state(game) != STORE_STATE){
     game_add_log_message(game, MESSAGE_HELP, "You're not in a shop!");
     return ERROR;
   }
 
+  /*Gets the arguments of the last command*/
   comm = game_get_last_command(game);
   if(!comm) return ERROR;
 
@@ -1109,17 +1094,18 @@ Status game_actions_buy(Game *game){
     return ERROR;
   }
 
+  /*If there are no items to buy in the store then leaves the store*/
   size = store_get_size(st);
-
   if(size == 0){
     game_add_log_message(game, MESSAGE_HELP, "There isn't anything more to buy!");
     game_store_destroy(game);
     return OK;
   }
 
+  /*Checks if the last cmd argument was n, b or e to control page movement and exit*/
   page = store_get_page(st);
   if((strcmp(args[0],"n") == 0 || strcmp(args[0],"next") == 0)){
-    if(page >= size/STORE_PAGE_MAX + 1){
+    if(page >= (size - 1)/STORE_PAGE_MAX + 1){
       game_add_log_message(game, MESSAGE_HELP, "Not more pages to move forward.");
       return ERROR;
     }
@@ -1139,30 +1125,44 @@ Status game_actions_buy(Game *game){
     return OK;
   }
 
+  /*Tries to get the index of the item to buy*/
   index = atoi(args[0]);
-
   if(index <= 0){
     game_add_log_message(game, MESSAGE_HELP, "Not a valid index.");
     return ERROR;
   }
 
+  /*Variable with the index on the store array*/
   item_index = (index + (page - 1)*STORE_PAGE_MAX) - 1;
 
+  /*Checks if player has enough money to buy the item*/
   if(store_can_be_bought(st, item_index) == false){
     game_add_log_message(game, MESSAGE_HELP, "Oohh... You don't have enough money...");
     return OK;
   }
 
-  if(game_store_move_item_at(st, item_index) == ERROR){
-    game_add_log_message(game, MESSAGE_ERROR, "Mmmh it seems like you don't have space for that or that index was not valid!");
+  type = store_get_type(st);
+  /*Tries to buy the item from the seller location to the player according to the type*/
+  if(game_store_buy_item_at(game, item_index) == ERROR){
+    game_add_log_message(game, MESSAGE_HELP, "Maybe you don't have enough money, you don't have space for that item or that index was not valid!");
     return OK;
   }
+  
+  /*Checks if store has got into another store*/
+  if(store_get_type(st) != type) return OK;
+  if(st == NULL) return OK;
 
-  if(store_get_size(st) == 0){
+  /*Checks if the store has run out of items after buying the last one*/
+  size = store_get_size(st);
+  if(size == 0){
     game_add_log_message(game, MESSAGE_HELP, "There isn't anything more to buy!");
     game_store_destroy(game);
     return OK;
   }
+
+  /*Checks if the page has to go backwards because there are not enough items on store to stay on last page*/
+  if(size % STORE_PAGE_MAX == 0)
+    store_set_page(st, size/STORE_PAGE_MAX);
 
   return OK;
   

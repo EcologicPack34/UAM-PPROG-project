@@ -806,11 +806,11 @@ Status game_store_destroy(Game *game);
  * @brief Moves the items from the seller to the client if possible
  * @author Maksym Polyak
  * 
- * @param store 
- * @param i 
+ * @param game game struct 
+ * @param i index
  * @return Status 
  */
-Status game_store_move_item_at(Store *store, int i);
+Status game_store_move_item_at(Game *game, int i);
 
 /**
  * @brief Adds items from a collection to a store, sets the seller as the collection
@@ -847,10 +847,10 @@ Status game_store_buy_item_at(Game *game, int i);
  * @brief Gets the stat lvlup cost depending on the type received
  * @author Maksym Polyak
  * 
- * @param type type of stat to level up
+ * @param text text of the stat
  * @return int or -1 if error
  */
-int game_store_get_stat_lvlup_cost(LevelUpTypes type);
+int game_store_get_stat_lvlup_cost(char *text);
   
 /**
  * @brief Gets the cost of the element depending on its type
@@ -896,29 +896,10 @@ char *game_store_get_name(StoreType type, void *ele);
  * @brief Adds a stat to the player by the type
  * @author Maksym Polyak
  * 
- * @param type type 
+ * @param text text of the stat
  * @param player player struct
  * @return Status 
  */
-Status game_add_stat_by_type(LevelUpTypes type, Player *player);
-  
-/**
- * @brief Moves the item at the index from the seller to the client
- * @author Maksym Polyak
- * 
- * @param store store struct
- * @param i index
- * @return Status 
- */
-Status game_store_move_item_at(Store *store, int i);
-
-/**
- * @brief Gets the cost of leveling up each stat
- * @author Maksym Polyak
- * 
- * @param type type of stat
- * @return int or -1 if error
- */
-int game_store_get_stat_lvlup_cost(LevelUpTypes type);
+Status game_add_stat_by_type(char *text, Player *player);
 
 #endif

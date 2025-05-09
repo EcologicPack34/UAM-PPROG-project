@@ -16,6 +16,7 @@
 #include "stdbool.h"
 #include "queue.h"
 #include <stdio.h>
+#include "collection.h"
 
 #define N_SKILLS 8 /*!< Number of skills implemented on AbilityType*/
 
@@ -247,6 +248,35 @@ Status ability_manager_add_evaluated_ability(AbilityManager *sm, Ability *abilit
  * @return Ability * or NULL if error
  */
 Ability *ability_manager_get_evaluated_ability(AbilityManager *sm);
+
+/**
+ * @brief Gets the unused abilities collection
+ * @author Maksym Polyak
+ * 
+ * @param sm ability manager struct
+ * @return Collection* 
+ */
+Collection *ability_manager_get_unused_abilities(AbilityManager *sm);
+
+/**
+ * @brief Moves an ability from unused to used abilities
+ * @author Maksym Polyak
+ * 
+ * @param sm ability manager struct
+ * @param ability ability struct
+ * @return Status 
+ */
+Status ability_manager_move_ability_to_used(AbilityManager *sm, Ability *ability);
+
+/**
+ * @brief Gets the ability at the index of unused abilities
+ * @author Maksym Polyak
+ * 
+ * @param sm ability manager struct
+ * @param i index
+ * @return Ability* 
+ */
+Ability *ability_manager_get_unused_ability_at(AbilityManager *sm, int i);
 
 /**
  * @brief Adds a ability to the ability manager collection

@@ -230,10 +230,6 @@ void graphic_engine_paint_game(Graphic_engine *ge, Game *game){
     graphic_engine_paint_dialogue(ge, game);
     graphic_engine_paint_playerDesc(ge, game);
   } 
-  else if(gameState == LEVEL_UP_STATE){
-    graphic_engine_paint_level_up(ge, game);
-    graphic_engine_paint_playerDesc(ge, game);
-  } 
   else if(gameState == STORE_STATE){
     graphic_engine_paint_store(ge, game);
     graphic_engine_paint_playerDesc(ge, game);
@@ -1164,26 +1160,6 @@ void graphic_engine_paint_dialogue(Graphic_engine *ge, Game *game){
   graphic_engine_paint_generalDesc(ge, game);
 }
 
-void graphic_engine_paint_level_up(Graphic_engine *ge, Game *game){
-
-  if(!ge || !game) return;
-
-  screen_area_clear(ge->map);
-  screen_area_clear(ge->descript);
-
-  graphic_engine_paint_generalDesc(ge, game);
-
-  screen_area_puts(ge->map," \n \n \n \n \n \n \n");
-  screen_area_puts(ge->map,"  Options to level up:\n");
-
-  screen_area_puts(ge->map,"   [BLUE]1[RESET]. ([YELLOW]1 SP[RESET]) [GREEN]Level up your strength\n    and crush your enemies!\n");
-  screen_area_puts(ge->map,"   [BLUE]2[RESET]. ([YELLOW]1 SP[RESET]) [GREEN]Level up your magic level\n    and strengthen your abilities!\n");
-  screen_area_puts(ge->map,"   [BLUE]3[RESET]. ([YELLOW]1 SP[RESET]) [GREEN]Level up your maximum health\n    and overcome your obstacles!\n");
-  screen_area_puts(ge->map,"   [BLUE]4[RESET]. ([YELLOW]1 SP[RESET]) [GREEN]Level up your defense\n    and ignore those weaklings!\n");
-  screen_area_puts(ge->map,"   [BLUE]5[RESET]. [RED]Exit level up menu\n");
-
-}
-
 void graphic_engine_paint_store(Graphic_engine *ge, Game *game){
   int i, item_index, page, cost, size;
   char str[WORD_SIZE] = "";
@@ -1208,13 +1184,13 @@ void graphic_engine_paint_store(Graphic_engine *ge, Game *game){
   graphic_engine_paint_generalDesc(ge, game);
 
   screen_area_puts(ge->map," \n ");
-  screen_area_puts(ge->map,"  (Enter 'by e' or 'by exit' to exit the store or \n'by (NUMBER OF ITEM)' to buy. You can also use i (NUMBER OF ITEM) to see description)\n Use 'by n' to move to next page\n Or use 'by b' to move to the previous page\n");
+  screen_area_puts(ge->map,"  (Enter 'by e' or 'by exit' to exit the store or  'by (NUMBER OF ITEM)' to buy. You can also use i (NUMBER OF ITEM) to see description)\n Use 'by n' to move to next page\n Or use 'by b' to move to the previous page\n");
   
   size = store_get_size(st);
   page = store_get_page(st);
   item_index = (page - 1)*STORE_PAGE_MAX;
 
-  sprintf(str, "  Page number: %d out of %d\n \n", page, size/STORE_PAGE_MAX + 1);
+  sprintf(str, " \n  Page number: %d out of %d\n \n", page, (size - 1)/STORE_PAGE_MAX + 1);
   screen_area_puts(ge->map,str);
 
   switch(type){

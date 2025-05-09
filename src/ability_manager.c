@@ -57,6 +57,7 @@ struct _AbilityManager{
   Queue *queue_cooldowns;     /*!< Queue to control cooldowns*/
   Ability *evaluated_ability; /*!< Ability to evaluate*/
 
+  Collection *unused_abilities; /*!< Collection with abilities that are not assigned*/
 };
 
 /*
@@ -260,11 +261,21 @@ AbilityManager *ability_manager_create(){
     return NULL;
   }
 
+  sm->unused_abilities = collection_create(INITIAL_SKILLS_SIZE, false, true, ability_compare, NULL);
+  if(!sm->unused_abilities){
+    queue_destroy(sm->queue_cooldowns);
+    collection_destroy(sm->ability);
+    free(sm);
+    return NULL;
+  }
+
   return sm;
 }
 
 void ability_manager_destroy(AbilityManager *sm){
   if(sm){
+    collection_free_elements(sm->unused_abilities, ability_destroy);
+    collection_destroy(sm->ability);
     collection_free_elements(sm->ability, ability_destroy);
     collection_destroy(sm->ability);
     queue_destroy(sm->queue_cooldowns);
@@ -290,10 +301,14 @@ Ability *ability_manager_get_evaluated_ability(AbilityManager *sm){
 Status ability_manager_add_ability_to_cd(AbilityManager *sm, Ability *ability){
   if(!sm || !ability) return ERROR;
 
+  if(ability_get_id(ability) == NO_ID){
+    return collection_add(sm->unused_abilities, (void *)ability);
+  }
+
   if(ability_get_cooldown_count(ability) > 0)
     queue_push(sm->queue_cooldowns, ability);
 
-  return collection_add(sm->ability, (void *)ability);;
+  return collection_add(sm->ability, (void *)ability);
 }
 
 Status ability_manager_remove_ability_from_cd(AbilityManager *sm, Ability *ability){
@@ -354,6 +369,26 @@ Status ability_manager_read_from_file(AbilityManager *sm, FILE *fIN){
   }
 
   return OK;
+}
+
+Collection *ability_manager_get_unused_abilities(AbilityManager *sm){
+  if(!sm) return NULL;
+
+  return sm->unused_abilities;
+}
+
+Status ability_manager_move_ability_to_used(AbilityManager *sm, Ability *ability){
+  if(!sm || !ability) return ERROR;
+
+  collection_remove(sm->unused_abilities, ability);
+
+  return collection_add(sm->ability, ability);
+}
+
+Ability *ability_manager_get_unused_ability_at(AbilityManager *sm, int i){
+  if(!sm) return NULL;
+
+  return collection_get_element_at(sm->unused_abilities, i);
 }
 
 int ability_save_on_file(Ability *ability, FILE *fOUT){
