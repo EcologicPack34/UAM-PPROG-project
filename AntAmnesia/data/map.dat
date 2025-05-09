@@ -1,3 +1,6 @@
+#p:1|Hero1|11|100|0|100|1|1|mO^"
+#st:1|1|100|100|25|1|1|1
+
 Formato Space: #s:ID|Nombre|gdescId|northLink|eastLink|southLink|westLink|upLink|downLink
 
 #s:11|Entry|1|-1|1|-1|-1|-1|1
@@ -6,17 +9,46 @@ Formato Space: #s:ID|Nombre|gdescId|northLink|eastLink|southLink|westLink|upLink
 #s:13|Hall1|1|4|-1|3|-1|-1|-1
 #s:14|Lobby2|1|-1|10|4|5|-1|-1
 #s:15|tmp|1|-1|5|-1|6|-1|-1
-#s:16|ememies|1|7|6|8|-1|-1|-1
-#s:17|sword|1|8|-1|-1|-1|-1|-1
-#s:18|tmp|1|9|-1|7|-1|-1|-1
-#s:19|Portal 1|1|-1|-1|9|-1|-1|17
+#s:16|tmp|1|-1|6|-1|18|-1|-1
+#s:17|ememies|1|7|18|8|-1|-1|-1
+#s:18|sword|1|8|-1|-1|-1|-1|-1
+#s:19|tmp|1|9|-1|7|-1|-1|-1
+#s:20|Portal 1|1|-1|-1|9|-1|17|-1
 
-#s:19|tmp|1|-1|9|s|w|u|d
-#s:20|tmp|1|n|e|s|w|u|d
-#s:21|tmp|1|n|e|s|w|u|d
-#s:22|tmp|1|n|e|s|w|u|d
-#s:23|tmp|1|n|e|s|w|u|d
-#s:24|tmp|1|n|e|s|w|u|d
-#s:25|tmp|1|n|e|s|w|u|d
-#s:26|tmp|1|n|e|s|w|u|d
-#s:27|tmp|1|n|e|s|w|u|d
+#s:21|MoneyBag|1|-1|11|-1|10|-1|-1
+#s:22|Ally|1|12|-1|-1|11|-1|-1
+#s:23|tmp|1|14|-1|12|-1|13|-1
+#s:24|Medallion|1|-1|-1|-1|-1|-1|13
+#s:25|Helmet|1|-1|-1|14|15|-1|-1
+#s:26|Enemies|1|-1|15|-1|16|-1|-1
+#s:27|Key|1|-1|16|-1|-1|-1|17
+
+Formato Link: #l:ID|Space1|Space2|adjacent|locked //Recordar añadir en cada espacio sus links adyacentes
+
+#l:1|11|12|1|0
+#l:2|12|100|1|1
+#l:3|12|13|1|0
+#l:4|13|14|1|0
+#l:5|14|15|1|0
+#l:6|15|16|1|0
+#l:18|16|17|1|0
+#l:7|17|19|1|0
+#l:8|17|18|1|0
+#l:9|19|20|1|0
+#l:10|14|21|1|0
+#l:11|21|22|1|0
+#l:12|22|23|1|0
+#l:13|23|24|1|0
+#l:14|23|25|1|0
+#l:15|25|26|1|0
+#l:16|26|27|1|0
+#l:17|20|27|0|0
+
+
+#gd:1|5|9|1
+esto
+es
+un
+test
+description
+----------
