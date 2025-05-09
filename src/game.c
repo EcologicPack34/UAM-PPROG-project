@@ -57,6 +57,8 @@ struct _Game {
   int n_spaces;                       /*!< int with the number of spaces on *spaces */
   Link *links[MAX_LINKS];             /*!< Array with all the links in the map*/
   int n_links;                        /*!< Number of links on the links array*/
+  int maxDistToCenter;                  
+  char minimap[MINIMAP_MAX_SIZE][MINIMAP_MAX_SIZE + 1];   
 
   /*Others*/
   Dialogue *dialogue;                  /*!< Dialogue struct*/
@@ -214,7 +216,6 @@ Status game_create(Game **game) {
     debug_log(LOG_ERROR,"Error creating event screenLog");
     return ERROR;
   } 
-
 
   (*game)->combat = NULL;
 
@@ -629,10 +630,11 @@ Status game_map_space_block(Game *game, Space *initSpace ,int block){
         infoAux->pos = info->pos;
         vector2_add(&(infoAux->pos), auxVector);
         infoAux->space = game_get_space(game, auxId);
-
-
+        
         /*Checks if spaces has already beign processed, if not mark it, set position and add to queue*/
         if(!space_get_isMapped(infoAux->space)){
+          if(abs(infoAux->pos.x) > game->maxDistToCenter) game->maxDistToCenter = infoAux->pos.x;
+          if(abs(infoAux->pos.y) > game->maxDistToCenter) game->maxDistToCenter = infoAux->pos.y;
           space_set_isMapped(infoAux->space,true);
           space_set_map_block(infoAux->space, block);
           space_set_position(infoAux->space, infoAux->pos.x, infoAux->pos.y);
@@ -699,6 +701,7 @@ Status game_map_space_block(Game *game, Space *initSpace ,int block){
   }
 
   queue_destroy(queueAux);
+
   return OK;
 }
 
@@ -923,6 +926,10 @@ int game_switch_player(Game *game, int player){
   game->requestSwitch = true;
   game->active_player = game->players[game->active_player_index];
   command_set_player_data(game->last_cmd, player_get_cmdData(game->active_player));
+
+  if(player < 0){
+    game_add_log_message(game, MESSAGE_LOG, "Changed player turn");
+  }
 
   return 0;
 }
@@ -1501,4 +1508,74 @@ Status game_get_combat_log_message(Game *game, char *str){
   message_get_str(mess, str);
 
   return OK;
+}
+
+char **game_get_minimap(Game *game, int *height){
+  struct SpaceInfo{
+    Space *space;
+    Direction originDir;
+    int x,y;
+  };
+ 
+ 
+  int i;
+  int mid;
+  Id location;
+
+  Queue *q = NULL;
+  struct SpaceInfo *info, *infoAux;
+  Link *link;
+
+  if(!game || !height) return NULL;
+
+  mid = MINIMAP_MAX_SIZE / 2;
+
+  /*Resets map*/
+  for (i = 0; i < MINIMAP_MAX_SIZE; i++)
+  {
+    memset(game->minimap[i], ' ', (MINIMAP_MAX_SIZE) * sizeof(char));
+    game->minimap[i][MINIMAP_MAX_SIZE] = 0;
+  }
+  
+  q = queue_create();
+  if(!q) return NULL;
+
+  info = (struct SpaceInfo *)malloc(sizeof(struct SpaceInfo));
+  if(!info) return NULL;
+
+  info->space = game_get_space(game, game_get_player_location(game));
+  info->originDir = NO_DIR;
+  info->x = info->y = mid;
+
+  queue_push(q, info);
+
+  for (i = 0; i < game->n_spaces; i++)
+  {
+    space_set_isMapped(game->spaces[i], false);
+  }
+  
+
+  while(!queue_isEmpty(q)){
+    info = (struct SpaceInfo *)queue_pop(q);
+    space_set_isMapped(info->space, true);
+
+    for (i = 0; i < 4; i++)
+    {
+      if(i == 0){
+        link = space_get_north(info->space);
+      }else if(i == 1){
+        link = space_get_east(info->space);
+      }else if(i == 2){
+        link = space_get_south(info->space);
+      }else{
+        link = space_get_west(info->space);
+      }
+      if(!link) continue;
+
+    }
+    
+
+
+  }
+
 }

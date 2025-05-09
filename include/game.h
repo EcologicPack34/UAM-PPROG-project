@@ -40,6 +40,8 @@
 
 #define MAX_PROCEDURAL_SIZE 50
 
+#define MINIMAP_MAX_SIZE 40
+
 /**
  * @brief Game struct, defines all the information of the game
  */
@@ -571,6 +573,8 @@ AbilityManager *game_get_ability_manager(Game *game);
  * @return Player* or NULL if error or not found
  */
 Player *game_get_player_by_id(Game *game, Id id);
+
+char **game_get_minimap(Game *game, int *height);
 
 /**
  * @brief Gets a NPC by its id on game struct
