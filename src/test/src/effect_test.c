@@ -61,10 +61,10 @@ int main(int argc, char** argv) {
 }
 
 void test1_effect_write_affected_save_data(){
-    Effect *e = effect_create(1,"test","5",POISON,false,3);
-    Player *p1 = player_create("test",10,1);
-    Player *p2 = player_create("test",11,1);
-    Player *p3 = player_create("test",12,1);
+    Effect *e = effect_create(1,"test","5",POISON,FFECT_ENEMY,false,3);
+    Player *p1 = player_create("test",10,1,1,1,1,1,1);
+    Player *p2 = player_create("test",11,1,1,1,1,1,1);
+    Player *p3 = player_create("test",12,1,1,1,1,1,1);
     NPC *npc1 = npc_create(NEUTRAL, true, "hi", "test", 21, 1);
     effect_add_affected(e,player_get_entity(p1));
     effect_add_affected(e,player_get_entity(p2));
