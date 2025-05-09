@@ -91,6 +91,7 @@ Player *player_create(char *name, Id identity, Id location, int money, int xp, i
 
     player->followers = collection_create(NPC_MAX_FOLLOWERS, true, true, entity_compare, NULL);
     if(!player->followers) return NULL;
+
     player->cmdData = command_info_create();
     if(!(player->cmdData)){
         collection_destroy(player->followers);
@@ -270,7 +271,66 @@ Entity *player_get_follower_at(Player *player, int i){
 }
 
 int player_get_follower_num(Player *player){
-    if(!player) return 0;
+    if(!player) return -1;
 
     return collection_length(player->followers);
+}
+
+Status player_save_to_file(FILE *file, Player *p){
+    char aux[WORD_SIZE]="";
+    Id id, location;
+    char *name=NULL;
+    char *Gdesc=NULL;
+    long mH,h,bD;
+    int str,def,magicLvl;
+    int n_followers,i;
+    Entity *allys[NPC_MAX_FOLLOWERS];
+    char id_aux[WORD_SIZE]="";
+    int xp,next_xp,lvl,sp;
+
+    if(!file || !p) return ERROR;
+
+    for(i = 0; i<NPC_MAX_FOLLOWERS; i++){
+        allys[i] = NULL;
+    }
+
+    id = entity_get_id(p->entity);
+    location = entity_get_location(p->entity);
+    name = entity_get_name(p->entity);
+    Gdesc = entity_get_graphic_description(p->entity);
+    n_followers = collection_length(p->followers);
+
+    xp = leveling_get_XP(p->leveling);
+    next_xp = leveling_get_next_XP(p->leveling);
+    lvl = leveling_get_level(p->leveling);
+    sp = leveling_get_skill_points(p->leveling);
+
+    for(i=0; i<n_followers; i++){
+            allys[i]= (collection_get_element_at(p->followers, i));
+    }
+
+    /*#p:ID|Nombre|LocationID|Money|XP actual|XP siguiente nvl|nivel|skill points|gdesc|n_followers;id_following1-type;id_following2-type...*/
+    /*#p:1|Hero1|11|mO^";money;xp;next_xp;lvl;SP;n_followers;id_following1-type;id_following2-type...*/
+    sprintf(aux, "#p:%ld|%s|%ld|%d|%d|%d|%d|%d|%s|%d",id,name,location,p->money,xp,next_xp,lvl,sp,Gdesc,n_followers);
+    for(i=0;i<n_followers;i++){
+        sprintf(id_aux, ";%ld-%d", entity_get_id(allys[i]), entity_get_entityType(allys[i]));
+        strcat(aux, id_aux);
+    }
+
+    fprintf(file, "%s\n", aux);
+
+    command_info_save_on_file(p->cmdData, file);
+
+    /*stats print*/
+    mH=entity_get_max_health(p->entity);
+    h=entity_get_health(p->entity);
+    bD=entity_get_baseDamage(p->entity);
+    str=entity_get_strength(p->entity);
+    def=entity_get_defense(p->entity);
+    magicLvl=entity_get_magicLevel(p->entity);
+
+    /*#st:IDEntity|EntityType|VidaMaxima|Vida|DanoBase|Fuerza|Defensa|NivelMagia*/
+    sprintf(aux, "#st:%ld|1|%ld|%ld|%ld|%d|%d|%d\n",id,mH,h,bD,str,def,magicLvl);
+    fprintf(file, "%s", aux);
+    return OK;
 }

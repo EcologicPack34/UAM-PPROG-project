@@ -41,10 +41,11 @@ Moves one space down.
 Levels up the player if he has skill points available. In level up state write lu (option you want)
 Buys the object if you have enough money
 Follows another player, can't follow someone if they have 3 followers or you have any followers. Also used for unfollowing To use: fw (Name of the player)
+Saves the game instance to a file.
 -------------------
 [CmdStateTypes]
 all
-Move,North,South,East,West,Attack,Take,Drop,Chat,Exit,Help,Ability,Object_Use,Search,Equip,Unequip,Inspect,sw,up,dw,Level_Up,Follow,
+Move,North,South,East,West,Attack,Take,Drop,Chat,Exit,Help,Ability,Object_Use,Search,Equip,Unequip,Inspect,sw,up,dw,Level_Up,Follow,Save,
 Attack,Run_Away,Exit,Help,Ability,Object_Use,Inspect,
 Chat,Help,
 Level_Up,Help,

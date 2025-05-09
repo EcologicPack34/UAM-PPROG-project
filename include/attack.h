@@ -137,4 +137,23 @@ void attack_print(void *at);
  */
 void attack_destroy(void *at);
 
+/**
+ * @brief Saves an attack struct info on a file
+ * @author Maksym Polyak
+ * 
+ * @param attack attack struct
+ * @param fOUT file stream output
+ * @return int with num of char printed or -1 if error
+ */
+int attack_save_on_file(Attack *attack, FILE *fOUT);
+
+/**
+ * @brief Creates an attack struct from a file
+ * @author Maksym Polyak
+ * 
+ * @param fIN file stream input
+ * @return Attack* or NULL if error
+ */
+Attack *attack_create_from_file(FILE *fIN);
+
 #endif

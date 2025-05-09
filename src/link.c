@@ -19,6 +19,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 /**
  * @brief Link internal struct
@@ -249,4 +250,25 @@ Status link_unlock(Link *link, Entity *player){
 
 int link_cmp(void *e1, void *e2){
     return ((Link *)e1)->id - ((Link*)e2)->id;
+}
+
+Status link_save_to_file(FILE *file, Link *l){
+    if(!l || !file) return ERROR;
+
+/*#l:ID|Space1|Space2|adjacent|locked*/
+/*#l:1|11|121|1|0*/
+
+    fprintf(file, "#l:%ld|%ld|%ld|%d|%d\n",l->id,l->space1,l->space2,l->adjacent,l->locked);
+    return OK;
+}
+
+Link *link_create_from_file(FILE *fIN){
+    Id id, space1, space2;
+    int adjacent, locked;
+    
+    if(!fIN) return NULL;
+
+    fscanf(fIN, "%ld|%ld|%ld|%d|%d\n", &id, &space1, &space2, &adjacent, &locked);
+
+    return link_create(id, space1, space2, adjacent, locked);
 }

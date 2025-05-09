@@ -208,5 +208,15 @@ Entity *player_get_follower_at(Player *player, int i);
  */
 int player_get_follower_num(Player *player);
 
+/**
+ * @brief saves all the data related to a player in a file
+ * @author Aaron Charameli Mair
+ * 
+ * @param file 
+ * @param p 
+ * @return Status 
+ */
+Status player_save_to_file(FILE *file, Player *p);
+
 
 #endif

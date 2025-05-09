@@ -189,3 +189,40 @@ Status npc_get_str_descr(NPC *npc, char *str, int index){
 
     return OK;
 }
+
+Status npc_save_to_file(FILE *file, NPC *p){
+    char aux[WORD_SIZE]="";
+    Id id, location;
+    char *name=NULL;
+    char *Gdesc=NULL;
+    long mH,h,bD;
+    int str,def,magicLvl;
+
+    if(!file || !p) return ERROR;
+
+    id = entity_get_id(p->entity);
+    location = entity_get_location(p->entity);
+    name = entity_get_name(p->entity);
+    Gdesc = entity_get_graphic_description(p->entity);
+
+    /*
+    ID|Dialogue State - 1 means initial - 0 means no dialogue|Nombre|LocationID|is_follower|Status|Gdesc
+    1|1|NPC1|11|1|1|^0m"
+    */
+    
+    sprintf(aux, "#n:%ld|%d|%s|%ld|%d|%d|%s\n",id,p->dialogue_state,name,location,p->can_follow,p->status,Gdesc);
+    fprintf(file, "%s", aux);
+
+    mH=entity_get_max_health(p->entity);
+    h=entity_get_health(p->entity);
+    bD=entity_get_baseDamage(p->entity);
+    str=entity_get_strength(p->entity);
+    def=entity_get_defense(p->entity);
+    magicLvl=entity_get_magicLevel(p->entity);
+
+    /*#st:IDEntity|EntityType|VidaMaxima|Vida|DanoBase|Fuerza|Defensa|NivelMagia*/
+    sprintf(aux, "#st:%ld|2|%ld|%ld|%ld|%d|%d|%d\n",id,mH,h,bD,str,def,magicLvl);
+    fprintf(file, "%s", aux);
+
+    return OK;
+}

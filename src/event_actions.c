@@ -68,16 +68,6 @@ bool event_trigger_player_death(Event *event, Game *game);
 bool event_trigger_end_combat(Game *game);
 
 /**
- * @brief Ends dialogue
- * @author Maksym Polyak
- * 
- * @param game 
- * @return true 
- * @return false 
- */
-bool event_trigger_end_dialoge(Game *game);
-
-/**
  * @brief Checks for all npcs and move them randomly
  * @author Daniel Gómez
  * 
@@ -109,6 +99,26 @@ bool event_trigger_players_turn(Event *event, Game *game);
  * @return false 
  */
 bool event_trigger_effects(Event *event, Game *game);
+
+/**
+ * @brief Updates deaths on DEFAULT game state
+ * 
+ * @param game game struct
+ * @return true if entity
+ * @return false 
+ */
+bool event_trigger_update_deaths(Game *game);
+
+/**
+ * @brief Applies poison effect to all entities in a space
+ * 
+ * @param event
+ * @param game
+ * @return true 
+ * @return false 
+ * @note data is EffectID:SpaceID
+ */
+bool event_trigger_effect_area(Event *event, Game *game);
 
 /*---------PUBLIC FUNCTIONS----------*/
 void event_actions_trigger_events(Game *game){
@@ -146,8 +156,12 @@ void event_actions_trigger_events(Game *game){
             case TRIGGER_EFFECTS:
                 triggered = event_trigger_effects(event, game);
                 break;
+            case EFFECT_AREA:
+                triggered = event_trigger_effect_area(event, game);
+                break;
             case PLAYER_TURN:
                 triggered = event_trigger_players_turn(event, game);
+                break;
             default:
                 break;
         }
@@ -157,6 +171,9 @@ void event_actions_trigger_events(Game *game){
     /*Always checked events*/
     if(game_get_state(game) == COMBAT)
         triggered = event_trigger_end_combat(game);
+
+    if(game_get_state(game) == DEFAULT)
+        triggered = event_trigger_update_deaths(game);
 
     triggered = event_trigger_player_death(event, game);
 }
@@ -410,6 +427,79 @@ bool event_trigger_effects(Event *event, Game *game){
     return true;
 }
 
+bool event_trigger_update_deaths(Game *game){
+    Player *player = NULL;
+    NPC *npc = NULL;
+    Entity *ent = NULL;
+    int i, size;
+    Collection *coll = NULL;
+
+    if(!game) return false;
+
+    /*Updates follows if NPCs or players died*/
+    game_update_unfollows(game);
+
+    coll = game_get_npcs(game);
+    if(!coll) return false;
+    size = collection_length(coll);
+    for(i = 0; i < size; i++){
+        npc = collection_get_element_at(coll, i);
+        ent = npc_get_entity(npc);
+        if(!npc) return false;
+
+        game_dead_entity_drop_inv(game, ent);
+    }
+
+    size = game_get_n_players(game);
+    for(i = 0; i < size; i++){
+        player = game_get_player_at(game, i);
+        if(!player) return false;
+
+        ent = player_get_entity(player);
+        if(!ent) return false;
+
+        game_dead_entity_drop_inv(game, ent);
+    }
+
+    return true;
+}
+
+bool event_trigger_effect_area(Event *event, Game *game){
+    char data[WORD_SIZE];
+    char *toks=NULL;
+    int i,n_player,n_npc;
+    Effect *effect = NULL;
+    Id effectId,location;
+    if(!game || !event) return false;
+
+    strcpy(data,event_get_aux_data(event));
+
+    toks = strtok(data, ":");
+    if(!toks) return false;
+    effectId = atol(toks);
+
+    toks = strtok(NULL, "\n\r");
+    if(!toks) return false;
+    location = atol(toks);
+
+    effect = game_get_effect_by_id(game, effectId);
+    if(!effect) return false;
+
+
+    n_player = game_get_n_players(game);
+    n_npc = collection_length(game_get_npcs(game));
+
+    for(i = 0; i < n_player; i++){
+        if(entity_get_location(player_get_entity(game_get_player_at(game, i))) == location)
+            effect_add_affected(effect, player_get_entity(game_get_player_at(game, i)));
+    }
+    for(i = 0; i < n_npc; i++){
+        if(entity_get_location(npc_get_entity(collection_get_element_at(game_get_npcs(game), i))) == location)
+            effect_add_affected(effect, npc_get_entity(collection_get_element_at(game_get_npcs(game), i)));
+    }
+
+    return true;
+}
 bool event_trigger_players_turn(Event *event, Game *game){
     if(!event || !game){
         return false;

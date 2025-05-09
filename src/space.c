@@ -16,6 +16,7 @@
 
 #include "collection.h"
 #include "vector2.h"
+#include "utils.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -474,4 +475,125 @@ bool space_is_discovered(Space *space){
 
 int space_cmp(void *e1, void *e2){
   return ((Space *)e1)->id - ((Space *)e2)->id;
+}
+
+Status space_save_to_file(FILE *file, Space *s){
+  Id north,south,west,east,up,down;
+  if(!file || !s) return ERROR;
+
+  north = link_get_id(space_get_north(s));
+  south = link_get_id(space_get_south(s));
+  east = link_get_id(space_get_east(s));
+  west = link_get_id(space_get_west(s));
+  up = link_get_id(space_get_up(s));
+  down = link_get_id(space_get_down(s));
+  
+  /*#s:ID|Name|gdescId|northLink|eastLink|southLink|westLink|upLink|downLink|isDiscovered*/
+  fprintf(file, "#s:%ld|%s|%ld|%ld|%ld|%ld|%ld|%ld|%ld|%d\n", space_get_id(s), space_get_name(s),\
+  gdesc_get_id(space_get_graphic_description(s)), north, east, south, west, up, down, space_get_isDiscovered(s));
+
+  
+  return OK;
+}
+
+Space *space_create_from_file(FILE *fIN, Collection *gdescs, Link **links, int n_links){
+  Space *space = NULL;
+  Id id, aux_id;
+  GDesc *gdesc = NULL;
+  Link *link = NULL;
+  int i, size;
+  char str[WORD_SIZE] = "", *toks = NULL;
+
+  if(!fIN || !gdescs || !links) return NULL;
+
+  fgets(str, WORD_SIZE, fIN);
+  toks = strtok(str,"|");
+  id = atol(toks);
+
+  space = space_create(id);
+
+  toks = strtok(NULL,"|");
+  aux_id = atol(toks);
+  
+  size = collection_length(gdescs);
+  for(i = 0; i < size; i++){
+    gdesc = collection_get_element_at(gdescs, i);
+    if(gdesc_get_id(gdesc) == aux_id){
+      space->gdesc = gdesc;
+      break;
+    }
+  }
+
+  toks = strtok(NULL,"|");
+  aux_id = atol(toks);
+  
+  for(i = 0; i < n_links; i++){
+    link = links[i];
+    if(link_get_id(link) == aux_id){
+      space->north = link;
+      break;
+    }
+  }
+
+  toks = strtok(NULL,"|");
+  aux_id = atol(toks);
+  
+  for(i = 0; i < n_links; i++){
+    link = links[i];
+    if(link_get_id(link) == aux_id){
+      space->east = link;
+      break;
+    }
+  }
+
+  toks = strtok(NULL,"|");
+  aux_id = atol(toks);
+  
+  for(i = 0; i < n_links; i++){
+    link = links[i];
+    if(link_get_id(link) == aux_id){
+      space->south = link;
+      break;
+    }
+  }
+
+  toks = strtok(NULL,"|");
+  aux_id = atol(toks);
+  
+  for(i = 0; i < n_links; i++){
+    link = links[i];
+    if(link_get_id(link) == aux_id){
+      space->west = link;
+      break;
+    }
+  }
+
+  toks = strtok(NULL,"|");
+  aux_id = atol(toks);
+  
+  for(i = 0; i < n_links; i++){
+    link = links[i];
+    if(link_get_id(link) == aux_id){
+      space->up = link;
+      break;
+    }
+  }
+
+  toks = strtok(NULL,"|");
+  aux_id = atol(toks);
+  
+  for(i = 0; i < n_links; i++){
+    link = links[i];
+    if(link_get_id(link) == aux_id){
+      space->down = link;
+      break;
+    }
+  }
+
+  toks = strtok(NULL,"|");
+  size = atoi(toks);
+
+  space->discovered = size;
+
+  return space;
 }

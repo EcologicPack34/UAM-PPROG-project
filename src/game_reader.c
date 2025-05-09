@@ -23,6 +23,8 @@
 #include "effect.h"
 #include "attack.h"
 
+#define TEMP_DIALOGUE_FILENAME "tempdiag.txt"
+
 /*
 * Declaration of private functions
 */
@@ -33,9 +35,10 @@
  *
  * @param game struct that saves all information related to the game
  * @param filename string that stores the data file name
+ * @param fromSaveFile bool to indicate if the spaces are loading from a save file or a new file
  * @return OK if everything goes well or ERROR if there was some error
  */
-Status game_reader_load_spaces(Game *game, char *filename);
+Status game_reader_load_spaces(Game *game, char *filename, bool fromSaveFile);
 
 /**
  * @brief Reads the filename to load all links between spaces
@@ -63,9 +66,10 @@ Status game_reader_load_objects(Game *game, char *filename);
  * 
  * @param game struct that saves all information related to the game
  * @param filename string that stores the data file name
+ * @param fromSaveFile bool to indicate if the spaces are loading from a save file or a new file
  * @return OK if everything goes well or ERROR if there was some error
  */
-Status game_reader_load_player(Game *game, char *filename);
+Status game_reader_load_player(Game *game, char *filename, bool fromSaveFile);
 
 /**
  * @brief Reads the file to load all events
@@ -111,9 +115,10 @@ Status game_reader_load_commandStateTypes(Game *game);
  * 
  * @param game struct that saves all information related to the game
  * @param filename string that stores the data file name
+ * @param fromSaveFile a bool that determines if the load is form a save file or a new file
  * @return Status 
  */
-Status game_reader_load_stats(Game *game, char *filename);
+Status game_reader_load_stats(Game *game, char *filename, bool fromSaveFile);
 
 /**
  * @brief Reads the file to load all ability
@@ -133,7 +138,7 @@ Status game_reader_load_ability(Game *game, char *filename);
  * @param filename 
  * @return Status 
  */
-Status game_reader_load_effects(Game *game, char *filename);
+Status game_reader_load_effects(Game *game, char *filename, bool fromSaveFile);
 
 /**
  * @brief Reads the file settings to load the attacks
@@ -164,10 +169,64 @@ Status game_reader_load_gdesc(Game *game, char *filename);
  */
 bool game_reader_generate_procedural();
 
+/**
+ * @brief Reads the filename to load all objects from a file in a different format as usual, for saved game files
+ * 
+ * @param game 
+ * @param filename 
+ * @return Status 
+ * @note this function loads objects, attacks.
+ */
+Status game_reader_load_others_from_save_file(Game *game, char *filename);
+
+/**
+ * @brief Private function to determine if the file is a save file or not
+ * @author Maksym Polyak
+ * 
+ * @param filename filename
+ * @return true if it is a save file
+ * @return false if it is not a save file
+ */
+bool game_reader_is_save_file(char *filename);
+
+/**
+ * @brief Creates a temp file to save dialogue from a save_file
+ * @author Maksym Polyak
+ * 
+ * @param game game struct
+ * @param filename filename
+ * @return Status 
+ */
+Status game_reader_create_temp_dialogue_save(Game *game, char *filename);
+
+/**
+ * @brief Private function to write on fOUT the temp dialogue content
+ * consumes the temp dialogue file
+ * @author Maksym Polyak
+ * 
+ * @param fOUT file stream output
+ * @return Status 
+ */
+Status game_reader_temp_dialogue_use(FILE *fOUT);
+
+/*
+ *  Used for saving the dialogue related to a save accordingly when saving a game 
+ */
+extern char *dialogue_filename;
+
 /*
 * Public functions implementation
 */
-Status game_reader_create_from_file(Game **game, char *filename){
+Status game_reader_create_from_file(Game **game, char *filename, bool procedural){
+
+  /*Creates memory for the global variable dialogue_filename */
+  dialogue_filename = (char *)malloc(WORD_SIZE*sizeof(char));
+  if(!dialogue_filename) return ERROR;
+  
+  if(game_reader_is_save_file(filename) == true){
+    return game_reader_create_from_save_file(game, filename);
+  }
+  
   if (game_create(game) == ERROR){
     debug_log(LOG_ERROR, "Error creating game at: game_reader_create_from_file(Game*, char*) in game_reader.c");
     printf("%c[2J", 27);
@@ -195,7 +254,7 @@ Status game_reader_create_from_file(Game **game, char *filename){
     return ERROR;
   }
   
-  if(game_reader_generate_procedural()){
+  if(procedural){
     if(game_generate_procedural(*game) == ERROR){
       printf("%c[2J", 27);
       printf("Fatal error. Check the log for details\n");
@@ -207,7 +266,7 @@ Status game_reader_create_from_file(Game **game, char *filename){
       debug_log(LOG_ERROR, "Error loading links at: game_reader_create_from_file(Game*, char*) in game_reader.c");
       return ERROR;
     }
-    if (game_reader_load_spaces(*game, filename) == ERROR){
+    if (game_reader_load_spaces(*game, filename, false) == ERROR){
       debug_log(LOG_ERROR, "Error loading spaces at: game_reader_create_from_file(Game*, char*) in game_reader.c");
       return ERROR;
     }
@@ -220,11 +279,11 @@ Status game_reader_create_from_file(Game **game, char *filename){
     debug_log(LOG_ERROR, "Error loading npcs at: game_reader_create_from_file(Game*, char*) in game_reader.c");
     return ERROR;
   }
-  if(game_reader_load_player(*game, filename) == ERROR){
+  if(game_reader_load_player(*game, filename, false) == ERROR){
     debug_log(LOG_ERROR, "Error loading player at: game_reader_create_from_file(Game*, char*) in game_reader.c");
     return ERROR;
   }
-  if(game_reader_load_stats(*game, filename) == ERROR){
+  if(game_reader_load_stats(*game, filename, false) == ERROR){
     debug_log(LOG_ERROR, "Error loading stats at: game_reader_create_from_file(Game*, char*) in game_reader.c");
     return ERROR;
   }
@@ -236,7 +295,7 @@ Status game_reader_create_from_file(Game **game, char *filename){
     debug_log(LOG_ERROR, "Error loading ability at: game_reader_create_from_file(Game*, char*) in game_reader.c");
     return ERROR;
   }
-  if (game_reader_load_effects(*game, filename) == ERROR){
+  if (game_reader_load_effects(*game, filename, false) == ERROR){
     debug_log(LOG_ERROR, "Error loading ability at: game_reader_create_from_file(Game*, char*) in game_reader.c");
     return ERROR;
   }
@@ -256,53 +315,191 @@ Status game_reader_create_from_file(Game **game, char *filename){
   /*Initialization*/
   /*Sets the actual player as the first one read in the .dat*/
   game_switch_player(*game, 0);
+  strcpy(dialogue_filename, "dialogue.txt");
 
   return OK;
 }
 
 Status game_reader_create_from_save_file(Game **game, char *filename){
-  if(game || !filename) return ERROR;
-  return ERROR;
+  int active_player_index, is_turn_valid, godmode, current_state, finished, procedural;
+  FILE *fIN = NULL;
+  char str[WORD_SIZE] = "";
+
+  if(!game || !filename) return ERROR;
+
+  if (game_create(game) == ERROR){
+    debug_log(LOG_ERROR, "Error creating game at: game_reader_create_from_save_file in game_reader.c");
+    printf("%c[2J", 27);
+    printf("Fatal error. Check the log for details\n");
+    debug_force_global_fclose();
+    abort();
+  }
+
+  if(game_reader_load_commandInfo(*game) == ERROR){
+    printf("%c[2J", 27);
+    printf("Fatal error. Check the log for details\n");
+    debug_force_global_fclose();
+    abort();
+  }
+  if(game_reader_load_commandStateTypes(*game) == ERROR){
+    printf("%c[2J", 27);
+    printf("Fatal error. Check the log for details\n");
+    debug_force_global_fclose();
+    abort();
+  }  
+
+  if((fIN = fopen(filename, "r")) == NULL) return ERROR;
+
+  fgets(str,WORD_SIZE, fIN);
+  fscanf(fIN, "%d;%d;%d;%d;%d;%d\n", &active_player_index,\
+    &is_turn_valid, &godmode, &finished, &procedural, &current_state);
+ 
+  game_set_basic_info(*game, active_player_index, is_turn_valid,\
+   godmode, finished, procedural, current_state);
+
+  fclose(fIN);
+  
+  if(game_reader_load_gdesc(*game, filename) == ERROR){
+    debug_log(LOG_ERROR, "Error loading graphic descriptions at: game_reader_create_from_save_file in game_reader.c");
+    return ERROR;
+  }
+
+  if(game_reader_load_links(*game, filename) == ERROR){
+      debug_log(LOG_ERROR, "Error loading links at: game_reader_create_from_file(Game*, char*) in game_reader.c");
+      return ERROR;
+    }
+
+  if(game_reader_load_spaces(*game, filename, true) == ERROR){
+      debug_log(LOG_ERROR, "Error loading links at: game_reader_create_from_file(Game*, char*) in game_reader.c");
+      return ERROR;
+    }
+
+  /*aqui van los eventos*/
+
+  if (game_reader_load_npcs(*game, filename) == ERROR){
+    debug_log(LOG_ERROR, "Error loading npcs at: game_reader_create_from_file(Game*, char*) in game_reader.c");
+    return ERROR;
+  }
+  if(game_reader_load_player(*game, filename, true) == ERROR){
+    debug_log(LOG_ERROR, "Error loading player at: game_reader_create_from_file(Game*, char*) in game_reader.c");
+    return ERROR;
+  }
+  if(game_reader_load_stats(*game, filename, true) == ERROR){
+    debug_log(LOG_ERROR, "Error loading stats at: game_reader_create_from_file(Game*, char*) in game_reader.c");
+    return ERROR;
+  }
+  if(game_reader_load_others_from_save_file(*game, filename) == ERROR){
+    debug_log(LOG_ERROR, "Error loading stats at: game_reader_create_from_file(Game*, char*) in game_reader.c");
+    return ERROR;
+  }
+
+
+
+  if(game_reader_load_effects(*game, filename, true) == ERROR){
+    debug_log(LOG_ERROR, "Error loading player at: game_reader_create_from_file(Game*, char*) in game_reader.c");
+    return ERROR;
+  }
+
+  /*Initialization*/
+  game_switch_player(*game, active_player_index);
+  strcpy(dialogue_filename, filename);
+
+  if(game_spatial_map(*game) == ERROR){
+    debug_log(LOG_ERROR,"Error maping spatialy spaces");
+    return ERROR;
+  }
+
+  return OK;
 }
 
-Status game_reader_create_save_file(char *save_file, Game *game, char *original_file){
+Status game_reader_create_save_file(char *save_file, Game *game){
   FILE *Poriginal=NULL;
   FILE *Psave_file=NULL;
-  char line[WORD_SIZE]="";
-  char aux[WORD_SIZE]="";
-  char *toks=NULL;
-  int gdesc_hight=0;
   int i;
+  int size=0; /*aux size variable for multiple uses*/
 
-  if(!save_file || !game || !original_file) return ERROR;
+  if(!save_file || !game) return ERROR;
 
+  if(game_reader_create_temp_dialogue_save(game, save_file) == ERROR) return ERROR;
 
-
-  if((Poriginal = fopen(original_file, "r")) == NULL) return ERROR;
   if((Psave_file = fopen(save_file, "w")) == NULL){
     fclose(Poriginal);
     return ERROR;
   }
-  
-  /*GDESC SAVE*/
-  while(fgets(line, WORD_SIZE, Poriginal)){
-    if(strncmp("#gd:", line, 4) == 0){
-      strcpy(aux,line);
-      toks = strtok(aux+4,"|");
-      toks = strtok(NULL, "|");
-      gdesc_hight = atoi(toks);
-      fprintf(Psave_file, "%s", line);
 
-      for(i=0; i<gdesc_hight; i++){
-        fgets(line, WORD_SIZE, Poriginal);
-        fprintf(Psave_file, "%s", line);
-      }
-      fprintf(Psave_file, "----------");
-    }
+  fprintf(Psave_file, "SAVE\n");
+
+  /*ActivePlayerIndex;Is_Turn_Valid;godmode;finished;procedural;GameState*/
+  fprintf(Psave_file, "%d;%d;%d;%d;%d;%d\n", \
+    game_get_active_player_index(game), (int)game_get_is_turn_valid(game),\
+    (int)game_get_god_mode(game), (int)game_get_finished(game), \
+    (int)game_get_is_procedural(game), (int)game_get_state(game));
+  
+  /*Saves gdescs to the file*/
+  size = collection_length(game_get_gdescs(game));
+  for(i = 0; i < size; i++){
+    gdesc_save_on_file(game_get_gdesc_at(game, i), Psave_file);
   }
 
-  fclose(Poriginal);
+  /*Saves links to the file*/
+  size = game_get_n_links(game);
+  for(i=0; i<size; i++){
+    link_save_to_file(Psave_file, game_get_link_at(game, i));
+  } 
+
+  /*Saves spaces to the file*/
+  size = game_get_n_spaces(game);
+  for(i=0; i<size; i++){
+    space_save_to_file(Psave_file, game_get_space_at(game, i));
+  }
+
+  /*Saves npcs to the file*/
+  size = collection_length(game_get_npcs(game));
+  fprintf(Psave_file,"%d\n", size);
+  for(i=0; i<size; i++){
+    npc_save_to_file(Psave_file, collection_get_element_at(game_get_npcs(game), i));
+  }
+
+  /*Saves players to the file*/
+  for(i=0; i<MAX_PLAYERS; i++){
+    player_save_to_file(Psave_file, game_get_player_at(game, i));
+  }
+  
+  /*Saves objects to the file*/
+  fprintf(Psave_file, "OBJ\n");
+  size = collection_length(game_get_objects(game));
+  fprintf(Psave_file, "%d\n", size);
+  for(i = 0; i < size; i++){
+    object_save_on_file(collection_get_element_at(game_get_objects(game), i), Psave_file);
+  }
+
+  /*Saves attacks to the file*/
+  size = collection_length(game_get_attacks(game));
+  fprintf(Psave_file, "%d\n", size);
+  for(i = 0; i < size; i++){
+    attack_save_on_file(collection_get_element_at(game_get_attacks(game), i), Psave_file);
+  }
+
+  /*Saves events to the file*/
+  event_manager_save_on_file(game_get_event_manager(game), Psave_file);
+
+  /*Saves abilities to the file*/
+  ability_manager_save_on_file(game_get_ability_manager(game), Psave_file);
+
+  /*Saves command to the file*/
+  command_save_on_file(game_get_last_command(game),Psave_file);
+
+  /*Saves effects to the file*/
+  size = collection_length(effect_manager_get_effects(game_get_effect_manager(game)));
+  fprintf(Psave_file,"%d\n", size);
+  for(i=0; i < size; i++){
+    effect_save_to_file(Psave_file, collection_get_element_at(effect_manager_get_effects(game_get_effect_manager(game)),i));
+  }
+
+  if(game_reader_temp_dialogue_use(Psave_file) == ERROR) return ERROR;
+
   fclose(Psave_file);
+
 
 return OK;
 }
@@ -367,7 +564,7 @@ Status game_reader_load_links(Game *game, char *filename){
 }
 
 
-Status game_reader_load_spaces(Game *game, char *filename) {
+Status game_reader_load_spaces(Game *game, char *filename, bool fromSaveFile) {
   FILE *file = NULL;
 
   char line[WORD_SIZE] = "";
@@ -376,6 +573,7 @@ Status game_reader_load_spaces(Game *game, char *filename) {
   char name[WORD_SIZE] = "";
   Id id = NO_ID, north = NO_ID, east = NO_ID, south = NO_ID, west = NO_ID, up = NO_ID, down = NO_ID;
   Id gdesc = NO_ID;
+  bool isDiscovered=false;
   
   Space *space = NULL;
   Status status = OK;
@@ -423,6 +621,11 @@ Status game_reader_load_spaces(Game *game, char *filename) {
       toks = strtok(NULL, "|");
       down = atol(toks);
 
+      if(fromSaveFile){
+        toks = strtok(NULL, ";");
+        isDiscovered = (bool) atoi(toks);
+      }
+
       debug_log(PRINT,"Read Space: #s:%ld|%s|%ld|%ld|%ld|%ld|gdesc", id, name, north, east, south, west);
 
       /*Creates a space with space_create, and sets the ID on that space
@@ -441,6 +644,7 @@ Status game_reader_load_spaces(Game *game, char *filename) {
       space_set_up(space, game_get_link_by_id(game, up));
       space_set_down(space, game_get_link_by_id(game, down));
       space_set_graphic_description(space, game_get_gdesc_by_id(game, gdesc));
+      space_set_isDiscovered(space, isDiscovered);
 
       game_add_space(game, space);
     }
@@ -466,7 +670,6 @@ Status game_reader_load_objects(Game *game, char *filename){
   long objectid, objectlocation;
   Id dependency_object = NO_ID;
   InventoryType objectlocationtype;
-  Entity *ent = NULL;
   Object *object = NULL;
 
   int is_consumable = 0, is_movable = 0, cost;
@@ -540,14 +743,18 @@ Status game_reader_load_objects(Game *game, char *filename){
   return status;
 }
 
-Status game_reader_load_player(Game *game, char *filename){
+Status game_reader_load_player(Game *game, char *filename, bool fromSaveFile){
   FILE *file = NULL;
-  Player *player = NULL;
+  Player *player = NULL, *foll_play = NULL;
   char line[WORD_SIZE] = "";
   char name[WORD_SIZE] = "";
   char *toks = NULL;
   long playerid, startinglocation;
   int xp, next_xp, level, skill_points, money;
+  int i,n_followers=0, count = 0;
+  Id aux_id=NO_ID;
+  EntityType ET;
+  
 
   Status status = OK;
 
@@ -602,7 +809,10 @@ Status game_reader_load_player(Game *game, char *filename){
         break;
       }
 
-      entity_set_graphic_description(player_get_entity(player), toks);
+      if(entity_set_graphic_description(player_get_entity(player), toks) == ERROR){
+        status = ERROR;
+        break;
+      }
 
       if (game_add_player(game, player) == ERROR){
         player_destroy(player);
@@ -612,6 +822,51 @@ Status game_reader_load_player(Game *game, char *filename){
     }
   }
 
+  if(fromSaveFile){
+  rewind(file);
+  while (fgets(line, WORD_SIZE, file)) {
+    if (strncmp("#p:", line, 3) == 0){
+      foll_play = game_get_player_at(game, count++);
+    /*#p:ID|Nombre|LocationID|Money|XP actual|XP siguiente nvl|nivel|skill points|gdesc|n_followers;id_following1-type;id_following2-type...*/
+      /*adding followers*/
+      toks = strtok(line + 3, "|");
+      playerid = atoi(toks);
+      toks = strtok(NULL, "|");
+      toks = strtok(NULL, "|");
+      toks = strtok(NULL, "|");
+      toks = strtok(NULL, "|");
+      toks = strtok(NULL, "|");
+      toks = strtok(NULL, "|");
+      toks = strtok(NULL, "|");
+      toks = strtok(NULL, "|");
+      toks = strtok(NULL, ";");
+
+      n_followers = atoi(toks);
+
+      for(i=0; i<n_followers; i++){
+        toks = strtok(NULL, "-");
+        aux_id = atol(toks);
+        toks = strtok(NULL, ";");
+        ET = atoi(toks);
+
+        if(ET == PLAYER_TYPE){
+          if(player_add_follower(foll_play, player_get_entity(game_get_player_by_id(game, aux_id))) == ERROR){
+            status = ERROR;
+            break;
+          }
+        }
+        else if(ET == NPC_TYPE){
+          if(player_add_follower(foll_play, npc_get_entity(game_get_NPC_by_id(game, aux_id))) == ERROR){
+            status = ERROR;
+            break;
+          }
+          }
+        }
+
+        command_info_read_from_file(player_get_cmdData(game_get_player_by_id(game, playerid)), file);
+      }
+    }
+  }
 
   if (ferror(file)) {
     status = ERROR;
@@ -621,6 +876,7 @@ Status game_reader_load_player(Game *game, char *filename){
   fclose(file);
 
   return status;
+  
 }
 
 Status game_reader_load_events(Game *game, char *filename){
@@ -679,7 +935,7 @@ Status game_reader_load_events(Game *game, char *filename){
       toks = strtok(NULL, "|");
       removeOnTrigger = atoi(toks);
       /*reads data*/
-      toks = strtok(NULL, "|");
+      toks = strtok(NULL, "|\r\n");
       
       debug_log(PRINT,"Read Event: #e:%ld|%d|%d|...|%d|%s", id, type, numTriggers, removeOnTrigger,toks);
 
@@ -800,7 +1056,7 @@ Status game_reader_load_npcs(Game *game, char *filename){
   return status;
 }
 
-Status game_reader_load_stats(Game *game, char *filename){
+Status game_reader_load_stats(Game *game, char *filename, bool fromSaveFile){
   FILE *file=NULL;
   void *entity=NULL;
   char line[WORD_SIZE] = "";
@@ -876,16 +1132,19 @@ Status game_reader_load_stats(Game *game, char *filename){
       magicLevel = atoi(toks);
       
       /*For the time being, we'll reject negative stats. Can be modified in a future if needed*/
-      if((maxhealth<0) || (health < 0) || (baseDamage<0) || (strength<0) || (defense<0) || (magicLevel<0)){
-        debug_log(LOG_ERROR,"Error when adding stats (negative stats not allowed)");
-        return ERROR;
+      /*they are allowed if loaded fromSaveFile in case a resurrection mechanic is implemented*/
+      if(fromSaveFile == false){
+        if((maxhealth<0) || (health < 0) || (baseDamage<0) || (strength<0) || (defense<0) || (magicLevel<0)){
+          debug_log(LOG_ERROR,"Error when adding stats (negative stats not allowed)");
+          return ERROR;
+        }
       }
 
       if(et == PLAYER_TYPE){
         entity = player_get_entity(game_get_player_by_id(game, id));
       }
       else if(et == NPC_TYPE){
-        entity = npc_get_entity(game_get_npc_by_id(game, id));
+        entity = npc_get_entity(game_get_NPC_by_id(game, id));
       }
       else
         entity = NULL;
@@ -1186,7 +1445,7 @@ Status game_reader_load_commandStateTypes(Game *game){
   return OK;
 }
 
-Status game_reader_load_effects(Game *game, char *filename){
+Status game_reader_load_effects(Game *game, char *filename, bool fromSaveFile){
   FILE *file=NULL;
   char line[WORD_SIZE]="";
   char name[WORD_SIZE]="";
@@ -1194,8 +1453,10 @@ Status game_reader_load_effects(Game *game, char *filename){
   char *toks=NULL;
   bool inf_turns;
   char inf_char; /*infinite turns y/N char*/
-  int default_turns;
+  int i,default_turns,n_affecteds,aux;
 
+  Entity *ent=NULL;
+  EntityType EntT;
   Effect *effect=NULL;
   Id id;
   EffectType ET;
@@ -1245,11 +1506,11 @@ Status game_reader_load_effects(Game *game, char *filename){
         printf("toks is null");
         return ERROR;
       }
-      if((toks[0] == 'p') || (toks[0] == 'P'))
+      if((toks[0] == 'p') || (toks[0] == 'P') || (toks[0] == '0'))
         EA = AFFECTS_PLAYER;
-      else if((toks[0] == 'a') || (toks[0] == 'A'))
+      else if((toks[0] == 'a') || (toks[0] == 'A') || (toks[0] == '1'))
         EA = AFFECTS_ALLY;
-      else if((toks[0] == 'e') || (toks[0] == 'E'))
+      else if((toks[0] == 'e') || (toks[0] == 'E') || (toks[0] == '2'))
         EA = AFFECTS_ENEMY;
       else{
         debug_log(LOG_ERROR,"Error creating effect when reading from file (Affected)");
@@ -1262,7 +1523,7 @@ Status game_reader_load_effects(Game *game, char *filename){
         return ERROR;
       }
       inf_char = atoi(toks);
-      if((inf_char == 'y') || (inf_char == 'Y'))
+      if((inf_char == 'y') || (inf_char == 'Y') || (inf_char == '1'))
         inf_turns=true;
       else
         inf_turns=false;
@@ -1274,7 +1535,7 @@ Status game_reader_load_effects(Game *game, char *filename){
       }
       default_turns = atoi(toks);
 
-      toks = strtok(NULL, "|");
+      toks = strtok(NULL, "|\r\n");
       if(!toks){
         printf("toks is null");
         return ERROR;
@@ -1289,6 +1550,27 @@ Status game_reader_load_effects(Game *game, char *filename){
         debug_log(LOG_ERROR,"Error creating effect when reading from file");
         return ERROR;
       }
+
+      if(fromSaveFile){
+        fscanf(file, "%d\n", &n_affecteds);
+        for(i=0; i<n_affecteds; i++){
+          fscanf(file, "%ld|%d|%d\n", &id, &aux, &default_turns);
+          EntT=aux;
+
+          switch (EntT)
+          {
+          case PLAYER_TYPE:
+            ent = player_get_entity(game_get_player_by_id(game, id));
+            break;
+          case NPC_TYPE:
+            ent = npc_get_entity(game_get_NPC_by_id(game, id));
+          default:
+            break;
+          }
+          effect_add_affected_n_turns(effect, ent, default_turns);
+        }
+        }
+  
 
       if(game_add_effect(game, effect) == ERROR){
         debug_log(LOG_ERROR,"Error adding effect to effect manager");
@@ -1385,7 +1667,8 @@ Status game_reader_load_gdesc(Game *game, char *filename){
         fclose(file);
         return ERROR;
       }
-      line[strlen(line) - 2] = 0;
+      string_remove_endofline_escape_sequence_on_end_to_newline(line);
+      string_remove_newline_escape_sequence_on_end(line);
       if(gdesc_set_line(gdesc, i, line) == ERROR){
         fclose(file);
         return ERROR;
@@ -1396,5 +1679,160 @@ Status game_reader_load_gdesc(Game *game, char *filename){
 
   }
   fclose(file);
+  return OK;
+}
+
+Status game_reader_load_others_from_save_file(Game *game, char *filename){
+  FILE *fIN=NULL;
+  char str[WORD_SIZE]="";
+  char *toks=NULL;
+  int size,i;
+  Object *obj=NULL;
+  Attack *at=NULL;
+  Status status=OK;
+  Ability *ab = NULL;
+
+  if(!game || !filename) return ERROR;
+
+
+  fIN = fopen(filename, "r");
+  if(!fIN){
+    debug_log(LOG_ERROR, "Error on filename at: game_reader_load_objects_from_save_file in game_reader.c");
+    return ERROR;
+  }
+  
+  toks = fgets(str, WORD_SIZE, fIN);
+  while(strncmp(str,"OBJ\n",4) != 0 && toks != NULL){
+    toks = fgets(str, WORD_SIZE, fIN);
+  }
+  if(toks == NULL) return ERROR;
+
+  /*object & equipment load*/
+  fscanf(fIN, "%d\n", &size);
+  for(i=0; i<size; i++){
+    obj = object_create_from_file(fIN);    
+    
+    if(game_add_object(game, obj) == ERROR) return ERROR;
+
+    if(object_get_is_equipped(obj)){
+      equipment_add_piece(player_get_entity(game_get_player_by_id(game, object_get_location(obj))),\
+      player_get_equipment(game_get_player_by_id(game, object_get_location(obj))), obj);
+    }
+  }
+
+  /*attack load*/
+  fscanf(fIN, "%d\n", &size);
+  for(i=0; i<size; i++){
+    at = attack_create_from_file(fIN);
+    
+    if(collection_add(game_get_attacks(game), at) == ERROR) return ERROR;
+  }
+
+  /*event load*/
+  if(event_manager_read_from_file(game_get_event_manager(game), fIN) == ERROR) return ERROR;
+
+  /*ability load*/
+  fscanf(fIN,"%d\n", &size);
+  for(i = 0; i < size; i++){
+    ab = ability_create_from_file(fIN);
+    if(!ab) return ERROR;
+    game_add_ability(game, ab);
+  }
+
+  /*Loads settings saved*/
+  if(command_read_from_file(game_get_last_command(game), fIN) == ERROR) return ERROR;
+
+
+  if (ferror(fIN)) {
+    status = ERROR;
+    debug_log(LOG_ERROR, "Error in file at: game_reader_load_effects(Game*, char*) in game_reader.c");
+  }
+
+  fclose(fIN);
+  
+  return status;
+}
+
+bool game_reader_is_save_file(char *filename){
+  FILE *fIN = NULL;
+  char str[WORD_SIZE] = "";
+
+  if(!filename) return false;
+
+  fIN = fopen(filename,"r");
+  if(!fIN) return false;
+
+  if(fgets(str,WORD_SIZE,fIN) == NULL){
+    fclose(fIN);
+    return false;
+  }
+
+  if(strncmp(str, "SAVE", 4) == 0){
+    fclose(fIN);
+    return true;
+  }
+
+  fclose(fIN);
+
+  return false;
+}
+
+Status game_reader_create_temp_dialogue_save(Game *game, char *filename){
+  FILE *fIN = NULL, *fOUT = NULL;;
+  char str[WORD_SIZE] = "", *toks = NULL;
+  char filename_aux[WORD_SIZE] = "";
+  Id id;
+
+  if(strcmp(dialogue_filename, "dialogue.txt") == 0){
+    strcpy(filename_aux, "dialogue.txt");
+  }else{
+    strcpy(filename_aux, filename);
+  }
+  
+  if((fIN = fopen(filename_aux, "r")) == NULL){
+    return ERROR;
+  }
+
+  toks = fgets(str,WORD_SIZE,fIN);
+  while(toks != NULL && strncmp(str, "ID:", 3) != 0){
+    toks = fgets(str,WORD_SIZE,fIN);
+  }
+
+  if(toks == NULL) return ERROR;
+
+  sscanf(str, "ID:%ld\n", &id);
+
+  if((fOUT = fopen(TEMP_DIALOGUE_FILENAME, "w")) == NULL){
+    return ERROR;
+  }
+
+  fprintf(fOUT, "ID:%ld\n", id);
+  while(fgets(str,WORD_SIZE,fIN) != NULL){
+    fprintf(fOUT, "%s", str);
+  }
+
+  fclose(fOUT);
+  fclose(fIN);
+
+  return OK;
+}
+
+Status game_reader_temp_dialogue_use(FILE *fOUT){
+  FILE *fIN = NULL;
+  char str[WORD_SIZE] = "";
+
+  if(!fOUT) return ERROR;
+
+  fIN = fopen(TEMP_DIALOGUE_FILENAME, "r");
+  if(!fIN) return ERROR;
+
+  while(fgets(str,WORD_SIZE,fIN) != NULL){
+    fprintf(fOUT, "%s", str);
+  }
+
+  fclose(fIN);
+
+  remove(TEMP_DIALOGUE_FILENAME);
+
   return OK;
 }

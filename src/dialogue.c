@@ -15,7 +15,17 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+/**
+ * @brief Char array with the string output related to the Dialogue_Outputs
+ * 
+ */
 char doutput_to_str[DOUTPUTS_NUM][LINE_LENGTH] = {"Nothing...", "Stop Dialogue", "Fight!", "Access Store", "Follow", "Unfollow"};
+
+/**
+ * @brief Global variable to save where are the dialogues located
+ * 
+ */
+char *dialogue_filename = NULL;
 
 /**
  * @brief Dialogue ADT implementation
@@ -189,6 +199,7 @@ Status dialogue_update(Dialogue *dialogue){
     if(entityid < 0) return ERROR;
 
     fgets(str,WORD_SIZE, dialogue->dialogue_file);
+    id = -1;
     if(strncmp(str, "ID:", 3) == 0){
         sscanf(str,"ID:%ld", &id);
     }

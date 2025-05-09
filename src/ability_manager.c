@@ -17,6 +17,7 @@
 #include "types.h"
 #include "collection.h"
 #include "queue.h"
+#include "utils.h"
 
 #include "debug_printing.h"
 
@@ -280,7 +281,10 @@ Ability *ability_manager_get_evaluated_ability(AbilityManager *sm){
 Status ability_manager_add_ability_to_cd(AbilityManager *sm, Ability *ability){
   if(!sm || !ability) return ERROR;
 
-  return collection_add(sm->ability, (void *)ability);
+  if(ability_get_cooldown_count(ability) > 0)
+    queue_push(sm->queue_cooldowns, ability);
+
+  return collection_add(sm->ability, (void *)ability);;
 }
 
 Status ability_manager_remove_ability_from_cd(AbilityManager *sm, Ability *ability){
@@ -313,4 +317,63 @@ Queue *ability_manager_get_queue(AbilityManager *sm){
   if(!sm) return ERROR;
 
   return sm->queue_cooldowns;
+}
+
+int ability_manager_save_on_file(AbilityManager *sm, FILE *fOUT){
+  int i, count = 0, size;
+
+  if(!sm || !fOUT) return -1;
+
+  size = collection_length(sm->ability);
+  count += fprintf(fOUT,"%d\n", size);
+  for(i = 0; i < size; i++){
+    count += ability_save_on_file(collection_get_element_at(sm->ability, i), fOUT);
+  }
+
+  return count;
+}
+
+Status ability_manager_read_from_file(AbilityManager *sm, FILE *fIN){
+  int i, size;
+
+  if(!sm || !fIN) return ERROR;
+
+  fscanf(fIN,"%d\n", &size);
+  for(i = 0; i < size; i++){
+    if(collection_add(sm->ability, ability_create_from_file(fIN)) == ERROR)
+      return ERROR;
+  }
+
+  return OK;
+}
+
+int ability_save_on_file(Ability *ability, FILE *fOUT){
+  int count = 0;
+
+  if(!ability || !fOUT) return -1;
+
+  count += fprintf(fOUT, "%ld;%d;%ld;%d;%d;%d;%d\n", ability->id,\
+    ability->type, ability->entityid, ability->is_player_ability,\
+    ability->is_object_use, ability->cooldown_count, ability->cooldown_length);
+
+  count += fprintf(fOUT, "%s\n%s\n", ability->name, ability->data);
+
+  return count;
+}
+
+Ability *ability_create_from_file(FILE *fIN){
+  Id id, entityid;
+  char name[WORD_SIZE], data[WORD_SIZE];
+  int type, is_player_ability, is_object_use, cooldown_count, cooldown_length;
+
+  fscanf(fIN, "%ld;%d;%ld;%d;%d;%d;%d\n", &id, &type, &entityid,\
+     &is_player_ability, &is_object_use, &cooldown_count, &cooldown_length);
+
+  fgets(name, WORD_SIZE, fIN);
+  string_remove_newline_escape_sequence_on_end(name);
+  fgets(data, WORD_SIZE, fIN);
+  string_remove_newline_escape_sequence_on_end(data);
+
+  return ability_create(id, data, name, type, entityid, is_player_ability,\
+     is_object_use, cooldown_count, cooldown_length);
 }

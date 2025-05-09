@@ -14,13 +14,14 @@
 #include <stdbool.h>
 #include "command.h"
 #include "types.h"
+#include <stdio.h>
 
-#define N_EVENTS 8 /*!< Number of events implemented*/
+#define N_EVENTS 9 /*!< Number of events implemented*/
 
 /**
  * @brief Enum storing the different types of events 
  */
-typedef enum {NO_EVENT, OBJECT_ON_SPACE, TRIGGER_COMBAT, PLAYER_DEATH, NPC_RAND_MOVE, TRIGGER_EFFECTS, PLAYER_TURN}EventType;
+typedef enum {NO_EVENT, OBJECT_ON_SPACE, TRIGGER_COMBAT, PLAYER_DEATH, NPC_RAND_MOVE, TRIGGER_EFFECTS, EFFECT_AREA, PLAYER_TURN}EventType;
 
 /**
  * @brief ADT containing basic info about event
@@ -197,5 +198,44 @@ long event_manager_get_event_count(EventManager *manager);
  * @return Event* or NULL if not found
  */
 Event *event_manager_get_event(EventManager *manager, long index);
+
+/**
+ * @brief Saves an event manager struct on a file
+ * @author Maksym Polyak
+ * 
+ * @param manager event manager struct
+ * @param fOUT file stream output
+ * @return int with num of char printed or -1 if error
+ */
+int event_manager_save_on_file(EventManager *manager, FILE *fOUT);
+
+/**
+ * @brief Reads an event manager struct from a file
+ * @author Maksym Polyak
+ * 
+ * @param manager event manager struct
+ * @param fIN file stream input
+ * @return Status 
+ */
+Status event_manager_read_from_file(EventManager *manager, FILE *fIN);
+
+/**
+ * @brief Saves an event on a file stream
+ * @author Maksym Polyak
+ * 
+ * @param event event struct
+ * @param fOUT file stream output
+ * @return int with num of char printed or -1 if error
+ */
+int event_save_on_file(Event *event, FILE *fOUT);
+
+/**
+ * @brief Creates an event struct from a file
+ * @author Maksym Polyak
+ * 
+ * @param fIN file stream input
+ * @return Event* or NULL if error
+ */
+Event *event_create_from_file(FILE *fIN);
 
 #endif

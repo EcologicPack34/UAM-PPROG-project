@@ -21,6 +21,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
+#include "utils.h"
 
 #define OBJECT_MAX_DATA_SIZE 200 /*!< Max data size of an object*/
 
@@ -284,4 +285,46 @@ Status object_add_object_effect(Object *object, Ability *ability){
     object->object_effect = ability;
 
     return OK;
+}
+
+int object_save_on_file(Object *object, FILE *fOUT){
+    int count = 0;
+
+    if(!object || !fOUT) return -1;
+
+    /*objectid;locationid;inventorytype;dependencyid;is_movable;is_consumable;is_equipped;cost*/
+    count += fprintf(fOUT, "%ld;%ld;%d;%ld;%d;%d;%d;%d\n", \
+    object_get_id(object), object_get_location(object), object_get_type(object), \
+    object_get_dependency(object), object_get_is_movable(object), object_get_is_consumable(object),\
+    object_get_is_equipped(object), object_get_cost(object));
+
+    /*name;data;descr*/
+    count += fprintf(fOUT, "%s\n%s\n%s\n", object_get_name(object), object_get_data(object), object_get_descr(object));
+
+    return count;
+}
+
+Object *object_create_from_file(FILE *fIN){
+    Object *obj = NULL;
+    Id id, location, dependency;
+    int type, is_movable, is_consumable, is_equipped, cost;
+    char name[WORD_SIZE] = "", descr[WORD_SIZE] = "", data[OBJECT_MAX_DATA_SIZE] = "";
+
+    if(!fIN) return NULL;
+
+    fscanf(fIN, "%ld;%ld;%d;%ld;%d;%d;%d;%d\n", &id, &location, &type, &dependency, &is_movable, &is_consumable, &is_equipped, &cost);
+    fgets(name,WORD_SIZE,fIN);
+    string_remove_newline_escape_sequence_on_end(name);
+    fgets(data,OBJECT_MAX_DATA_SIZE,fIN);
+    string_remove_newline_escape_sequence_on_end(data);
+    fgets(descr,WORD_SIZE,fIN);
+    string_remove_newline_escape_sequence_on_end(descr);
+
+
+    obj = object_create(id, name, data, descr, cost, dependency, (bool)is_movable, (bool)is_consumable, location, type);
+    if(!obj) return NULL;
+
+    object_set_is_equipped(obj, (bool)is_equipped);
+
+    return obj;
 }

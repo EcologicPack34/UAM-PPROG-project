@@ -26,7 +26,7 @@
  * @param filename string with the name of the data file
  * @return OK if everything goes well or ERROR if there was some mistake
  */
-Status game_reader_create_from_file(Game **game, char *filename);
+Status game_reader_create_from_file(Game **game, char *filename, bool procedural);
 
 /**
  * @brief Initializes a game from a save file
@@ -42,10 +42,9 @@ Status game_reader_create_from_save_file(Game **game, char *filename);
  * 
  * @param save_file 
  * @param game 
- * @param original_file the name of the .dat file used to create the game
  * @return Status 
  */
-Status game_reader_create_save_file(char *save_file, Game *game, char *original_file);
+Status game_reader_create_save_file(char *save_file, Game *game);
 
 
 /**
