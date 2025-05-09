@@ -310,7 +310,9 @@ Attack *combat_find_attack_by_name(Combat *cmb, char *name) {
     {
         at = (Attack *)collection_get_element_at(cmb->attacks, i);
         if (strcmp(attack_get_name(at), name) == 0)
+        {
             boolean = 0;
+        }
     }
 
     if (boolean == 1)
@@ -503,6 +505,7 @@ Status combat_update_player_attack(Combat *cmb, Command *last_cmd){
     }
     return OK;
 }
+
 
 Status combat_copy_stats(Stats *stat_from, Stats *stat_to){
     if(!stat_from || !stat_to) return ERROR;
