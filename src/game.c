@@ -908,7 +908,7 @@ Status game_combat_start(Game *game){
     }
   }
 
-  game->combat = combat_initialize(game_get_space(game, game_get_player_location(game)), pl1, pl2, command_get_code(game->last_cmd), game->attacks, game->n_players);
+  game->combat = combat_initialize(game_get_space(game, game_get_player_location(game)), pl1, pl2, command_get_code(game->last_cmd), game->attacks, game->n_players, game->active_player_index);
   if(!game->combat) return ERROR;
 
   game->current_state = COMBAT;

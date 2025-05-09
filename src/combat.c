@@ -322,9 +322,7 @@ Attack *combat_find_attack_by_name(Combat *cmb, char *name) {
     {
         at = (Attack *)collection_get_element_at(cmb->attacks, i);
         if (strcmp(attack_get_name(at), name) == 0)
-        {
             boolean = 0;
-        }
     }
 
     if (boolean == 1)
@@ -569,7 +567,6 @@ Status combat_update_player_attack(Combat *cmb, Command *last_cmd){
     return OK;
 }
 
-
 Status combat_copy_stats(Stats *stat_from, Stats *stat_to){
     if(!stat_from || !stat_to) return ERROR;
 
@@ -677,7 +674,7 @@ Stats *combat_get_last_alive(Combat *cmb, int mode){
     * PUBLIC FUNCTIONS
 */
 
-Combat *combat_initialize(Space *space, Player *pl1, Player *pl2, CommandCode code, Collection *attacks, int num_players){
+Combat *combat_initialize(Space *space, Player *pl1, Player *pl2, CommandCode code, Collection *attacks, int num_players, int initialTurn){
     Combat *combat = NULL;
     NPC *npc = NULL;
     int i, npc_count = 0, npc_allies = 1, npc_enemies = 0, followerNum, playerNum = 0;;
@@ -731,7 +728,7 @@ Combat *combat_initialize(Space *space, Player *pl1, Player *pl2, CommandCode co
     
     combat->enemies_count = npc_enemies;
     combat->allies_count = npc_allies;
-    combat->players_turn = 0;
+    combat->players_turn = initialTurn;
 
     if(combat->enemies_count == 0){
         free(combat);
