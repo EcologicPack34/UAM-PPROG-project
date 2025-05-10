@@ -1161,7 +1161,7 @@ Status game_actions_buy(Game *game){
   }
 
   /*Checks if the page has to go backwards because there are not enough items on store to stay on last page*/
-  if(size % STORE_PAGE_MAX == 0)
+  if(size % STORE_PAGE_MAX == 0 && store_get_page(st) > 1)
     store_set_page(st, size/STORE_PAGE_MAX);
 
   return OK;

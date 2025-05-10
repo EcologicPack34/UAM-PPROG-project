@@ -275,7 +275,7 @@ AbilityManager *ability_manager_create(){
 void ability_manager_destroy(AbilityManager *sm){
   if(sm){
     collection_free_elements(sm->unused_abilities, ability_destroy);
-    collection_destroy(sm->ability);
+    collection_destroy(sm->unused_abilities);
     collection_free_elements(sm->ability, ability_destroy);
     collection_destroy(sm->ability);
     queue_destroy(sm->queue_cooldowns);
@@ -301,7 +301,7 @@ Ability *ability_manager_get_evaluated_ability(AbilityManager *sm){
 Status ability_manager_add_ability_to_cd(AbilityManager *sm, Ability *ability){
   if(!sm || !ability) return ERROR;
 
-  if(ability_get_id(ability) == NO_ID){
+  if(ability_get_entityid(ability) == NO_ID){
     return collection_add(sm->unused_abilities, (void *)ability);
   }
 

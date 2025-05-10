@@ -1190,7 +1190,23 @@ void graphic_engine_paint_store(Graphic_engine *ge, Game *game){
   page = store_get_page(st);
   item_index = (page - 1)*STORE_PAGE_MAX;
 
-  sprintf(str, " \n  Page number: %d out of %d\n \n", page, (size - 1)/STORE_PAGE_MAX + 1);
+  sprintf(str, " \n  Page number: %d out of %d\n", page, (size - 1)/STORE_PAGE_MAX + 1);
+  screen_area_puts(ge->map,str);
+
+  switch(type){
+    case ABILITY_STORE:
+      sprintf(str, "  Skill Points available: %d\n", *store_get_money(st));
+      break;
+    case OBJECT_STORE:
+      sprintf(str, "  Money available: %d\n", *store_get_money(st));
+      break;
+    case STAT_STORE:
+      sprintf(str, "  Skill Points available: %d\n", *store_get_money(st));
+      break;
+    default:
+      sprintf(str, "  ERROR:\n");
+      break;
+  }
   screen_area_puts(ge->map,str);
 
   switch(type){
@@ -1207,7 +1223,6 @@ void graphic_engine_paint_store(Graphic_engine *ge, Game *game){
       sprintf(str, "  ERROR:\n");
       break;
   }
-
   screen_area_puts(ge->map,str);
 
   for(i = 0; i < STORE_PAGE_MAX && (i + (page - 1)*STORE_PAGE_MAX  < size); i++){

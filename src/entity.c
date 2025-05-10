@@ -330,7 +330,7 @@ EntityType entity_get_entityType(Entity *entity){
 Status entity_add_ability(Entity *entity, Ability *ability){
     int i;
     
-    if(!entity || !ability || entity->n_ability > MAX_SKILLS_ENTITY || entity->n_ability < 0) 
+    if(!entity || !ability || entity->n_ability >= MAX_SKILLS_ENTITY || entity->n_ability < 0) 
         return ERROR;
 
     for(i = 0; i < MAX_SKILLS_ENTITY; i++){

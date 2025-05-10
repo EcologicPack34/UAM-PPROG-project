@@ -43,6 +43,17 @@ Store *store_create(StoreType type, void *seller, void *buyer, int *money);
 void store_destroy(Store *store);
 
 /**
+ * @brief Frees an element according to a generic free_element function
+ * NOTE: MAKES STORE UNUSABLE, ONLY USE ON DESTROY
+ * @author Maksym Polyak
+ * 
+ * @param store store struct
+ * @param i index
+ * @param free_element generic free function for the element inside the item
+ */
+void store_free_item_at(Store *store, int i, void (*free_element)(void *));
+
+/**
  * @brief Gets the type of the store
  * @author Maksym Polyak
  * 
@@ -68,10 +79,9 @@ Status store_add_item(Store *store, void *element, int cost, Id id);
  * @author Maksym Polyak
  * 
  * @param store store struct
- * @param element element to add
- * @return void * of the element removed 
+ * @param id id of the element
  */
-void *store_remove_item(Store *store, Id id);
+void store_remove_item(Store *store, Id id);
 
 /**
  * @brief Gets the item that is being selled at the index
@@ -109,9 +119,8 @@ Id store_get_item_id_at(Store *store, int i);
  * 
  * @param store store struct
  * @param i index
- * @return void * with the element
  */
-void *store_remove_item_at(Store *store, int i);
+void store_remove_item_at(Store *store, int i);
 
 /**
  * @brief Gets the num of items on the store

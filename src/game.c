@@ -135,7 +135,10 @@ Status game_store_special_startup(Game *game, StoreType type){
 
         strcpy(text, store_stat_text[i - 1]);
         cost = game_store_get_stat_lvlup_cost(text);
-        store_add_item(game->store, text, cost, i + 1);
+        if(store_add_item(game->store, text, cost, i + 1) == ERROR){
+          free(text);
+          return ERROR;
+        }
       }
       return OK;
     default:
@@ -158,8 +161,8 @@ Status game_store_special_destroy(Game *game, StoreType type){
     case OBJECT_STORE:
       return OK;
     case STAT_STORE:
-      for(i = 0; i < LVLUP_TYPES_NUM; i++){
-        free(store_remove_item_at(game->store, i));
+      for(i = 0; i <= LVLUP_TYPES_NUM; i++){
+        store_free_item_at(game->store, i, free);
       }
       return OK;
     default:
@@ -349,6 +352,11 @@ Status game_destroy(Game *game) {
   /*Frees abilities and log messages*/
   ability_manager_destroy(game->ability_manager);
   queue_destroy(game->screenLog);
+
+  /*Frees store*/
+  if(game->store){
+    game_store_destroy(game);
+  }
 
   /*Frees combat*/
   if(game->combat){
@@ -1733,20 +1741,32 @@ Status game_store_move_item_at(Game *game, int i){
   Store *store = NULL;
   Player *player = NULL;
   
-  if(!game || i < 0 || i >= store_get_size(store)) return ERROR;
+  if(!game || i < 0) return ERROR;
 
   store = game->store;
+  if(!store) return ERROR;
+
+  if(i >= store_get_size(store)) return ERROR;
 
   switch(store_get_type(store)){
     case ERROR_STORE:
       return ERROR;
     case ABILITY_STORE:
-      ele = (Ability *)store_remove_item_at(store, i);
+      ele = (Ability *)store_get_item_element_at(store, i);
       if(!ele) return ERROR;
       player = store_get_client(store);
       if(!player) return ERROR;
+
+      if(entity_add_ability(player_get_entity(player), (Ability *)ele) == ERROR){
+        game_add_log_message(game, MESSAGE_HELP, "You already have the maximum amount of abilities!");
+        return ERROR;
+      }
+
+      store_remove_item_at(store, i);
+
+      if(ability_manager_move_ability_to_used(game->ability_manager, (Ability *)ele) == ERROR) return ERROR;
       
-      return entity_add_ability(player_get_entity(player), (Ability *)ele);
+      return OK;
     case OBJECT_STORE:
       ele = store_get_item_element_at(store, i);
       if(inventory_move_object(store_get_seller(store), store_get_client(store), game_store_get_switch_id(OBJECT_STORE, ele)) == ERROR)
@@ -1755,7 +1775,12 @@ Status game_store_move_item_at(Game *game, int i){
       return OK;
     case STAT_STORE:
     /*Initializes ability store*/
-      if(i == LVLUP_TYPES_NUM + 1){
+      if(i == LVLUP_TYPES_NUM){
+        if(collection_length(ability_manager_get_unused_abilities(game->ability_manager)) <= 0){
+          game_add_log_message(game, MESSAGE_HELP, "There are no more abilities to get on the game!");
+          return OK;
+        }
+        
         game_store_destroy(game);
         game_store_startup(game, ABILITY_STORE, ability_manager_get_unused_abilities(game->ability_manager), game_get_player(game), leveling_get_SP_pointer(player_get_leveling(game_get_player(game))));
         game_store_add_items_from_collection(game, ability_manager_get_unused_abilities(game->ability_manager));
@@ -1871,11 +1896,12 @@ Status game_store_buy_item_at(Game *game, int i){
   if(!money) return ERROR;
 
   cost = store_get_item_cost_at(st, i);
-  if(cost == -1) return ERROR;
+  if(cost < -1) return ERROR;
 
   if(game_store_move_item_at(game, i) == ERROR) return ERROR;
 
-  *money -= cost;
+  if(cost > 0)
+    *money -= cost;
 
   return OK;
 }

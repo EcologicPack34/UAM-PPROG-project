@@ -59,7 +59,7 @@ _Item *_item_create(void *element, int cost, Id id);
  * 
  * @param item item struct
  */
-void _item_destroy(_Item *item);
+void _item_destroy(void *item);
 
 /**
  * @brief Compares two items ids
@@ -84,7 +84,7 @@ _Item *_store_search_item_by_index(Store *store, int i);
 _Item *_item_create(void *element, int cost, Id id){
     _Item *item = NULL;
 
-    if(!element || cost < 0) return NULL;
+    if(!element) return NULL;
 
     item = (_Item *)malloc(sizeof(_Item));
     if(!item) return NULL;
@@ -96,7 +96,7 @@ _Item *_item_create(void *element, int cost, Id id){
     return item;
 }
 
-void _item_destroy(_Item *item){
+void _item_destroy(void *item){
     if(item) free(item);
 }
 
@@ -147,8 +147,19 @@ Store *store_create(StoreType type, void *seller, void *buyer, int *money){
 
 void store_destroy(Store *store){
     if(store){
+        collection_free_elements(store->items, _item_destroy);
         collection_destroy(store->items);
         free(store);
+    }
+}
+
+void store_free_item_at(Store *store, int i, void (*free_element)(void *)){
+    _Item *item = NULL;
+
+    if(store){
+        item = collection_get_element_at(store->items, i);
+        if(!item) return;
+        free_element(item->item);
     }
 }
 
@@ -159,24 +170,25 @@ StoreType store_get_type(Store *store){
 }
 
 Status store_add_item(Store *store, void *element, int cost, Id id){
-    if(!element || cost < 0) return ERROR;
+    if(!element) return ERROR;
 
     return collection_add(store->items, _item_create(element, cost, id));
 }
 
-void *store_remove_item(Store *store, Id id){
+void store_remove_item(Store *store, Id id){
     int i, size;
     
-    if(!store) return NULL;
+    if(!store) return;
 
     size = store_get_size(store);
     for(i = 0; i < size; i++){
         if(store_get_item_id_at(store, i) == id){
-            return store_remove_item_at(store, i);
+            store_remove_item_at(store, i);
+            return;
         }
     }
 
-    return NULL;
+    return;
 }
 
 void *store_get_item_element_at(Store *store, int i){
@@ -212,17 +224,17 @@ Id store_get_item_id_at(Store *store, int i){
     return item->id;
 }
 
-void *store_remove_item_at(Store *store, int i){
+void store_remove_item_at(Store *store, int i){
     void *ele = NULL;
 
-    if(!store) return ERROR;
+    if(!store) return;
 
     ele = collection_get_element_at(store->items, i);
-    if(!ele) return NULL;
+    if(!ele) return;
 
     collection_remove_at(store->items, i);
 
-    return ele;
+    _item_destroy(ele);
 }
 
 int store_get_size(Store *store){
