@@ -43,10 +43,10 @@ Status string_remove_newline_escape_sequence_on_end(char *str);
 Status string_remove_endofline_escape_sequence_on_end_to_newline(char *str);
 
 /**
- * @brief Removes "\n" and "\r" and replaces by \0
+ * @brief Removes "newline escape sequence" and "\r" and replaces by \0
  * @author Daniel Gómez 
  * 
- * @param str 
+ * @param str to evaluate
  * @return Status 
  */
 Status string_remove_n_r_on_end(char *str);

@@ -666,6 +666,7 @@ void graphic_engine_paint_generalDesc(Graphic_engine *ge, Game *game)
   char strAux[WORD_SIZE] = "";
   Space *currentSpace;
   bool spaceDiscovered = false;
+  char *descr = NULL;
 
   screen_area_clear(ge->descript);
 
@@ -686,16 +687,27 @@ void graphic_engine_paint_generalDesc(Graphic_engine *ge, Game *game)
 
   /*Paints space inventory info*/
   inventorysize = inventory_get_size(spaceInventory);
-  strcpy(str, "\nSpace Objects:");
-  screen_area_puts(ge->descript, str);
 
   if (!spaceDiscovered)
   {
-    sprintf(str, "%s[RED]Spaces hasn't been explored", tab);
+    strcpy(str, "\nSpace Objects:");
+    screen_area_puts(ge->descript, str);
+    sprintf(str, "%s[RED]Space hasn't been explored", tab);
     screen_area_puts(ge->descript, str);
   }
   else
   {
+    if((descr = space_get_description(currentSpace)) != NULL){
+      sprintf(str, "Space description: [CYAN]");
+      if(strcmp(descr,"\0") == 0){
+        strcat(str, "[RED]No description[RESET]");
+      } else {
+        strcat(str, descr);
+      }
+      screen_area_puts(ge->descript, str);
+    }
+    strcpy(str, "\nSpace Objects:");
+    screen_area_puts(ge->descript, str);
     if (inventorysize == 0)
     {
       sprintf(str, "%s[RED]No objects", tab);

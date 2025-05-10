@@ -571,6 +571,7 @@ Status game_reader_load_spaces(Game *game, char *filename, bool fromSaveFile) {
   char *toks = NULL;
   
   char name[WORD_SIZE] = "";
+  char descr[WORD_SIZE] = "";
   Id id = NO_ID, north = NO_ID, east = NO_ID, south = NO_ID, west = NO_ID, up = NO_ID, down = NO_ID;
   Id gdesc = NO_ID;
   bool isDiscovered=false;
@@ -621,12 +622,15 @@ Status game_reader_load_spaces(Game *game, char *filename, bool fromSaveFile) {
       toks = strtok(NULL, "|");
       down = atol(toks);
 
+      toks = strtok(NULL, "|");
+      strcpy(descr, toks);
+
       if(fromSaveFile){
         toks = strtok(NULL, ";");
         isDiscovered = (bool) atoi(toks);
       }
 
-      debug_log(PRINT,"Read Space: #s:%ld|%s|%ld|%ld|%ld|%ld|gdesc", id, name, north, east, south, west);
+      debug_log(PRINT,"Read Space: #s:%ld|%s|%ld|%ld|%ld|%ld|%s|gdesc", id, name, north, east, south, west, descr);
 
       /*Creates a space with space_create, and sets the ID on that space
       then saves it on the game with game_add_space*/
@@ -645,6 +649,8 @@ Status game_reader_load_spaces(Game *game, char *filename, bool fromSaveFile) {
       space_set_down(space, game_get_link_by_id(game, down));
       space_set_graphic_description(space, game_get_gdesc_by_id(game, gdesc));
       space_set_isDiscovered(space, isDiscovered);
+      string_remove_n_r_on_end(descr);
+      space_set_description(space, descr);
 
       game_add_space(game, space);
     }
