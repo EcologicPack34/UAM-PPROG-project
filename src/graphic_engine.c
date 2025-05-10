@@ -537,7 +537,7 @@ void graphic_engine_paint_playerDesc(Graphic_engine *ge, Game *game)
     strcat(str, entity_get_ability_name_at(entityplayer, i));
 
     auxInt = ability_get_cooldown_length(entity_get_ability_at(entityplayer, i));
-    sprintf(strAux, "\n%s%sCooldown:[BLUE]%d[RESET]", tab, tab, auxInt);
+    sprintf(strAux, "\n%s%sCooldown:[CYAN]%d[RESET]", tab, tab, auxInt);
     strcat(str, strAux);
 
     auxInt = ability_get_cooldown_count(entity_get_ability_at(entityplayer, i));
@@ -1142,7 +1142,7 @@ void graphic_engine_paint_combat(Graphic_engine *ge, Game *game){
     strcat(str, auxc ? auxc : "");
 
     auxInt = ability_get_cooldown_length(entity_get_ability_at(player_get_entity(game_get_player(game)), i));
-    sprintf(strAux, "\n%s%sCooldown:[BLUE]%d[RESET]", tab, tab, auxInt);
+    sprintf(strAux, "\n%s%sCooldown:[CYAN]%d[RESET]", tab, tab, auxInt);
     strcat(str, strAux);
 
     auxInt = ability_get_cooldown_count(entity_get_ability_at(player_get_entity(game_get_player(game)), i));
@@ -1218,7 +1218,7 @@ void graphic_engine_paint_combat(Graphic_engine *ge, Game *game){
     attack = (Attack *)collection_get_element_at(attacks, i);
     strcpy(str, "");
 
-    sprintf(strAux, "[BLUE]%s[RESET]: D.Mult: [YELLOW]%.1lf[RESET] | Fail%%:", attack_get_name(attack), attack_get_damage_multiplicator(attack));
+    sprintf(strAux, "[CYAN]%s[RESET]: D.Mult: [YELLOW]%.1lf[RESET] | Fail%%:", attack_get_name(attack), attack_get_damage_multiplicator(attack));
     strcat(str, strAux);
 
     if(100 - attack_get_success_chance(attack) >= 15){
@@ -1229,7 +1229,7 @@ void graphic_engine_paint_combat(Graphic_engine *ge, Game *game){
     }else if (100 - attack_get_success_chance(attack) < 15){
       strcat(str, "[GREEN]");
     }
-    sprintf(strAux, " %.1lf[RESET] | Area: %s", 100 - attack_get_success_chance(attack), (attack_get_target_bool(attack)) ? "[BLUE]false[RESET]" : "[GREEN]true[RESET]");
+    sprintf(strAux, " %.1lf[RESET] | Area: %s", 100 - attack_get_success_chance(attack), (attack_get_target_bool(attack)) ? "[CYAN]false[RESET]" : "[GREEN]true[RESET]");
     strcat(str, strAux);
 
 
@@ -1347,7 +1347,7 @@ void graphic_engine_paint_store(Graphic_engine *ge, Game *game)
   for (i = 0; i < obj_num && obj_num < MAX_PRINT_INVENTORY; i++)
   {
     obj = inventory_get_object_at(inventory, i);
-    sprintf(str, "    [BLUE]%d[RESET]: [YELLOW]%s [RESET]| [YELLOW]%s [RESET]| Cost: [GREEN]%d", object_get_cost(obj), object_get_name(obj), object_get_descr(obj), i + 1);
+    sprintf(str, "    [CYAN]%d[RESET]: [YELLOW]%s [RESET]| [YELLOW]%s [RESET]| Cost: [GREEN]%d", object_get_cost(obj), object_get_name(obj), object_get_descr(obj), i + 1);
     screen_area_puts(ge->map, str);
   }
 }
@@ -1380,7 +1380,7 @@ void graphic_engine_paint_space(Game *game, Space *space, Direction direction, c
       if (link_is_locked(link1))
         strcpy(link1Char, "[RED]-[RESET]");
       else if (link_is_adjacent(link1) == false)
-        strcpy(link1Char, "[BLUE]o[RESET]");
+        strcpy(link1Char, "[CYAN]o[RESET]");
       else
         strcpy(link1Char, " ");
     }
@@ -1405,7 +1405,7 @@ void graphic_engine_paint_space(Game *game, Space *space, Direction direction, c
       if (link_is_locked(link1))
         strcpy(link1Char, "[RED]|[RESET]");
       else if (link_is_adjacent(link1) == false)
-        strcpy(link1Char, "[BLUE]o[RESET]");
+        strcpy(link1Char, "[CYAN]o[RESET]");
       else
         strcpy(link1Char, " ");
     }
@@ -1415,7 +1415,7 @@ void graphic_engine_paint_space(Game *game, Space *space, Direction direction, c
       if (link_is_locked(link2))
         strcpy(link2Char, "[RED]|[RESET]");
       else if (link_is_adjacent(link2) == false)
-        strcpy(link2Char, "[BLUE]o[RESET]");
+        strcpy(link2Char, "[CYAN]o[RESET]");
       else
         strcpy(link2Char, " ");
     }
@@ -1427,7 +1427,7 @@ void graphic_engine_paint_space(Game *game, Space *space, Direction direction, c
       if (link_is_locked(link3))
         strcpy(link3Char, "[RED]x[RESET]");
       else if (link_is_adjacent(link3) == false)
-        strcpy(link3Char, "[BLUE]o[RESET]");
+        strcpy(link3Char, "[CYAN]o[RESET]");
       else
         strcpy(link3Char, "^");
     }
@@ -1441,7 +1441,7 @@ void graphic_engine_paint_space(Game *game, Space *space, Direction direction, c
       if (link_is_locked(link3))
         strcpy(link3Char, "[RED]x[RESET]");
       else if (link_is_adjacent(link3) == false)
-        strcpy(link3Char, "[BLUE]o[RESET]");
+        strcpy(link3Char, "[CYAN]o[RESET]");
       else
         strcpy(link3Char, "v");
     }
@@ -1467,7 +1467,7 @@ void graphic_engine_paint_space(Game *game, Space *space, Direction direction, c
       if (link_is_locked(link1))
         strcpy(link1Char, "[RED]-[RESET]");
       else if (link_is_adjacent(link1) == false)
-        strcpy(link1Char, "[BLUE]o[RESET]");
+        strcpy(link1Char, "[CYAN]o[RESET]");
       else
         strcpy(link1Char, " ");
     }

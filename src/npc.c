@@ -184,7 +184,7 @@ Status npc_get_str_descr(NPC *npc, char *str, int index){
     sprintf(strAux, " H: %.1lf/%.1lf[RESET]", entity_get_health(ent), entity_get_max_health(ent));
     strcat(str, strAux);
 
-    sprintf(strAux, " Loc:[YELLOW]%ld[RESET] ([BLUE]%ld[RESET])", entity_get_location(ent), entity_get_id(ent));
+    sprintf(strAux, " Loc:[YELLOW]%ld[RESET] ([CYAN]%ld[RESET])", entity_get_location(ent), entity_get_id(ent));
     strcat(str, strAux);
 
     return OK;

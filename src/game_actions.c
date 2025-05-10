@@ -773,7 +773,7 @@ Status game_actions_switch(Game *game){
       if(i > 0){
         strcat(str, " | ");
       }
-      sprintf(strAux, "[BLUE]%d[RESET]. ID:[YELLOW]%ld[RESET] NAME: [YELLOW]%s[RESET]", i + 1, entity_get_id(playerEnt), entity_get_name(playerEnt));
+      sprintf(strAux, "[CYAN]%d[RESET]. ID:[YELLOW]%ld[RESET] NAME: [YELLOW]%s[RESET]", i + 1, entity_get_id(playerEnt), entity_get_name(playerEnt));
       strcat(str, strAux);
     }
     return game_add_log_message(game, MESSAGE_PLAYER_LIST, str);

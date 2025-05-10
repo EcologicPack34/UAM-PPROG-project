@@ -53,9 +53,7 @@ Status gdesc_set_line(GDesc *gdesc, int line, char *content){
     if(!gdesc || !content) return ERROR;
     if(line < 0 || line >= gdesc->height) return ERROR;
 
-    if(content[strlen(content) - 2] == '\r'){
-        content[strlen(content) - 2] = 0;
-    }
+    string_remove_n_r_on_end(content);
 
     gdesc->description[line] = (char *)calloc(gdesc->width + 2, sizeof(char));
     if(!(gdesc->description[line])) return ERROR;
