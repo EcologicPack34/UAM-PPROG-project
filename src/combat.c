@@ -30,7 +30,7 @@
 #define HEAVY_PROB 50       /*!< Probability for a heavy attack to be succesful*/
 #define QUICK_PROB 98       /*!< Probability for a quick attack to be succesful*/
 #define SWIFT_PROB 40       /*!< Probability for a swift attack to be succesful*/
-#define RUN_AWAY_PROB 50
+#define RUN_AWAY_PROB 80    /*!< Probability to run away without failing in combat*/
 
 /**
  * @brief Internal struct that holds all the information related to the combat
