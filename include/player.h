@@ -170,6 +170,17 @@ Status player_equip_piece(Player *player, Object *object);
 Status player_unequip_piece(Player *player, char *data);
 
 /**
+ * @brief Checks if a player has an object in their inventory
+ * @author Aaron Charameli Mair
+ * 
+ * @param player a pointer to the player
+ * @param obj_id the id of the object
+ * @return true 
+ * @return false 
+ */
+bool player_has_object(Player *player, Id obj_id);
+
+/**
  * @brief Adds a follower to the player
  * @author Maksym Polyak
  * 

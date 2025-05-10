@@ -111,6 +111,7 @@ bool event_trigger_update_deaths(Game *game);
 
 /**
  * @brief Applies poison effect to all entities in a space
+ * @author Aaron Charameli Mair
  * 
  * @param event
  * @param game
@@ -119,6 +120,17 @@ bool event_trigger_update_deaths(Game *game);
  * @note data is EffectID:SpaceID
  */
 bool event_trigger_effect_area(Event *event, Game *game);
+
+/**
+ * @brief This function fusions 2 objects into 1 that can open a link by using it
+ * 
+ * @param event 
+ * @param game 
+ * @return true 
+ * @return false
+ * @note data will be "idObj1:idObj2;obj:ID;Name;Data;Description;LinkId
+ */
+bool event_trigger_objects_fusion2key(Event *event, Game *game);
 
 
 /*---------PUBLIC FUNCTIONS----------*/
@@ -163,11 +175,17 @@ void event_actions_trigger_events(Game *game){
             case PLAYER_TURN:
                 triggered = event_trigger_players_turn(event, game);
                 break;
+            case OBJECTS_FUSION:
+                triggered = event_trigger_objects_fusion2key(event, game);
+                break;
             default:
                 break;
         }
-        if(triggered && event_get_removeOnTrigger(event))
+        if(triggered && event_get_removeOnTrigger(event)){
             event_manager_remove_event(manager, event);
+            event_destroy(event);
+        }
+            
     }
     /*Always checked events*/
     if(game_get_state(game) == COMBAT)
@@ -514,4 +532,137 @@ bool event_trigger_players_turn(Event *event, Game *game){
         game_switch_player(game, -1);
     }
     return true;
+}
+
+bool event_trigger_objects_fusion2key(Event *event, Game *game){
+    int i, n_players=0;
+    char data[WORD_SIZE]=""; /*correct format is expected*/
+    char *toks = NULL;
+    Player *player = NULL;
+    Id player_id=NO_ID,id_obj1=NO_ID, id_obj2=NO_ID;
+    Object *obj1=NULL,*obj2=NULL;
+    bool has_objs = false; /*if a player has both objects to fusion*/
+
+    Object *obj=NULL;
+    Id id = NO_ID, ability_id=NO_ID;
+    char name[WORD_SIZE]="";
+    char description[WORD_SIZE]="";
+    char link_id[WORD_SIZE]=""; /*saved as string as it will by the ability's data (the ability that unlocks the link)*/
+
+    Ability *ability=NULL;
+
+    /*in case the object is usable*/
+
+    if(!event || !game) return false;
+
+    if(!event_get_aux_data(event)) return false;
+    strcpy(data,event_get_aux_data(event));
+
+    /*gets objects to fusion id's*/
+
+    toks = strtok(data, ":");
+    if(toks)
+        id_obj1=atol(toks);
+    
+    toks = strtok(NULL, ";");
+    if(toks)
+        id_obj2=atol(toks);
+
+    /*#obj:ID;Nombre;Descripcion;abilityId;LinkId*/
+
+    /*shred data's information*/
+
+    toks = strtok(NULL, ":");
+    toks = strtok(NULL, ";");
+    if(!toks){
+        debug_log(LOG_ERROR, "Toks is NULL at: event_tringger_objects_fusion2key(Event *, Game*) in event_actions.c");
+        return false;
+    }
+        id=atol(toks);
+
+    toks = strtok(NULL, ";");
+    if(!toks){
+        debug_log(LOG_ERROR, "Toks is NULL at: event_tringger_objects_fusion2key(Event *, Game*) in event_actions.c");
+        return false;
+    }
+        strcpy(name,toks);
+        
+    toks = strtok(NULL, ";");
+    if(!toks){
+        debug_log(LOG_ERROR, "Toks is NULL at: event_tringger_objects_fusion2key(Event *, Game*) in event_actions.c");
+        return false;
+    }
+        strcpy(description,toks);
+
+    toks = strtok(NULL, ";");
+    if(!toks){
+        debug_log(LOG_ERROR, "Toks is NULL at: event_tringger_objects_fusion2key(Event *, Game*) in event_actions.c");
+        return false;
+    }
+        ability_id=atol(toks);
+
+    toks = strtok(NULL, ";\n\r");
+    if(!toks){
+        debug_log(LOG_ERROR, "Toks is NULL at: event_tringger_objects_fusion2key(Event *, Game*) in event_actions.c");
+        return false;
+    }
+        strcpy(link_id,toks);
+
+    
+    /*gets players an checks they have the objects*/
+
+    n_players = game_get_n_players(game);
+
+    for(i=0; (i < n_players) && (has_objs==false); i++){
+        player = game_get_player_at(game, i);
+        if(player_has_object(player, id_obj1) && player_has_object(player, id_obj2)){
+            has_objs=true;
+        }
+    }
+    if(has_objs==false){
+        return false;
+    }
+
+    player_id = entity_get_id(player_get_entity(player));
+    
+    
+
+    obj = object_create(id, name, data, description, 0, -1, true, true, player_id, PLAYER_INVENTORY);
+    if(!obj){
+        debug_log(LOG_ERROR, "Error creating an object at: event_tringger_objects_fusion2key(Event *, Game*) in event_actions.c");
+        return false;
+    }
+
+    /*delete two objets to fusion*/
+
+    obj1 = game_get_object_by_id(game, id_obj1);
+    obj2 = game_get_object_by_id(game, id_obj2);
+
+    inventory_remove_object(entity_get_inventory(player_get_entity(player)), obj1);
+    inventory_remove_object(entity_get_inventory(player_get_entity(player)), obj2);
+
+    collection_remove(game_get_objects(game), obj1);
+    collection_remove(game_get_objects(game), obj2);
+
+    object_destroy(obj1);
+    object_destroy(obj2);
+
+    /*add new object with its link unlock ability*/
+
+    if(game_add_object(game, obj) == ERROR){
+        object_destroy(obj);
+        debug_log(LOG_ERROR, "Error adding an object to game at: event_tringger_objects_fusion2key(Event *, Game*) in event_actions.c");
+        return false;
+    }
+
+    ability = ability_create(ability_id,link_id,"unlocks_link_with_fusioned_obj",LINK_UNLOCK,id,0,1,0,0,0);
+    if(!ability){
+        inventory_remove_object(entity_get_inventory(player_get_entity(player)), obj);
+        collection_remove(game_get_objects(game), obj);
+        object_destroy(obj);
+        debug_log(LOG_ERROR, "Error creating an ability at: event_tringger_objects_fusion2key(Event *, Game*) in event_actions.c");
+        return false;
+    }
+
+    return game_add_ability(game, ability);
 }
