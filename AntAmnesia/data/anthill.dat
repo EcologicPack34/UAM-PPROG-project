@@ -12,7 +12,7 @@ Formato STATS: #st:IDEntity|EntityType|VidaMaxima|Vida|DanoBase|Fuerza|Defensa|N
 #p:2|Hero2|14|100|0|100|1|0|m1^"
 #st:2|1|100|100|25|1|1|1
 
-#s:11|Entry|1|-1|-1|1|-1|11|-1|THIS IS A TEST DESCRIPTION
+#s:11|Entry|1|-1|-1|1|-1|11|-1|abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789
 #s:121|Corridor1|-1|1|-1|2|-1|-1|-1|DESCR
 #s:122|Corridor2|-1|2|6|3|-1|-1|-1|DESCR
 #s:123|Corridor3|-1|3|-1|4|-1|-1|-1|DESCR

@@ -329,6 +329,7 @@ void screen_area_puts(Area* area, char *str){
       cell->background = bColor;
       cell->charColor = cColor;
     }
+    skipS = 0;
     /*Print the actual line to data*/
     for (area->cX = 0; area->cX < area->width && ptr <= str + len && *ptr != '\0'; (area->cX)++ , ptr++)
     { 
