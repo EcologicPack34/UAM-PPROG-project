@@ -29,6 +29,9 @@
 #include <stdlib.h>
 #include <string.h>
 
+#define MINIAUDIO_IMPLEMENTATION
+#include "miniaudio.h"
+
 /*
  * Used for dialogue reading wether the game is running from a save file or a .dat
 */
@@ -81,6 +84,10 @@ struct _Game {
   bool requestSwitch;                 /*!< bool that stores if game switched player so graphic engine can clear commands*/
 
   bool procedural;                    /*!< Stores if the game is generated prceduraly or not*/
+
+  ma_result audio_resutl;
+  ma_engine audio_engine;
+  ma_sound test;
 };
 
 /*-----PRIVATE FUNCTIONS-----*/
@@ -224,13 +231,22 @@ GDesc *_game_get_randomSpaceDesc(Game *game){
 */
 
 Status game_create(Game **game) {
-  int i;
   *game = (Game*)calloc(1,sizeof(Game));
   if(!(*game)) return ERROR;
 
-  for (i = 0; i < MAX_SPACES; i++) {
-    (*game)->spaces[i] = NULL;
+  (*game)->audio_resutl = ma_engine_init(NULL, &((*game)->audio_engine));
+  if((*game)->audio_resutl != MA_SUCCESS){
+    debug_log(LOG_ERROR, "Error initializing audio engine");
+    return ERROR;
   }
+  ma_engine_set_volume(&((*game)->audio_engine), 1.0f);
+  const ma_device* device = ma_engine_get_device(&((*game)->audio_engine));
+  printf("Using device: %s\n", device->playback.name);
+  if(ma_engine_play_sound(&((*game)->audio_engine), "sounds/skyrim.wav", NULL) != MA_SUCCESS){
+    return ERROR;
+  }
+  //ma_sound_init_from_file(&((*game)->audio_engine), "./sounds/skyrim.mp3", 0, NULL, NULL , &((*game)->test));
+  //ma_sound_start(&(*game)->test);
 
   (*game)->n_spaces = 0;
   (*game)->active_player = NULL; /*Player creation is controlled by game_reader*/
@@ -306,6 +322,8 @@ Status game_destroy(Game *game) {
   int i = 0;
   int count;
   Collection *atcs = NULL;
+
+  ma_engine_uninit(&  (game->audio_engine));
 
   /*Destroys all spaces*/
   for (i = 0; i < game->n_spaces; i++) {
