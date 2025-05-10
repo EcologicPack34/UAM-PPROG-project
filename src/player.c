@@ -252,6 +252,12 @@ Status player_unequip_piece(Player *player, char *data){
     return OK;
 }
 
+bool player_has_object(Player *player, Id obj_id){
+    if(!player || (obj_id<=UNDEFINED_ID)) return false;
+
+    return inventory_contains_object(entity_get_inventory(player->entity), obj_id);
+}
+
 Status player_add_follower(Player *player, Entity *entity){
     if(!player || !entity) return ERROR;
 

@@ -1,48 +1,37 @@
 #p:1|Hero1|11|100|0|100|1|1|mO^"
 #st:1|1|100|100|25|1|1|1
 
-Formato Space: #s:ID|Nombre|gdescId|northLink|eastLink|southLink|westLink|upLink|downLink
+Formato Space: #s:ID|Nombre|gdescId|northLink|eastLink|southLink|westLink|upLink|downLink|descr
 
-#s:11|Entry|1|-1|1|-1|-1|-1|1
-#s:12|Lobby|1|3|2|19|1|-1|-1
-#s:100|BossRoom|1|-1|-1|-1|2|-1|-1
-#s:13|Hall1|1|4|-1|3|-1|-1|-1
-#s:14|Lobby2|1|-1|10|4|5|-1|-1
-#s:15|tmp|1|-1|5|-1|6|-1|-1
-#s:16|tmp|1|-1|6|-1|18|-1|-1
-#s:17|ememies|1|7|18|8|-1|-1|-1
-#s:18|sword|1|8|-1|-1|-1|-1|-1
-#s:19|tmp|1|9|-1|7|-1|-1|-1
-#s:20|Portal 1|1|-1|-1|9|-1|17|-1
+#s:11|Entry|1|-1|1|-1|-1|-1|1|
+#s:12|Lobby|1|3|2|19|1|-1|-1|
+#s:100|BossRoom|1|-1|-1|-1|2|-1|-1|
+#s:13|Hall1|1|4|-1|3|-1|-1|-1|
+#s:14|Lobby2|1|-1|10|4|5|-1|-1|
+#s:15|tmp|1|-1|5|-1|6|-1|-1|
+#s:16|tmp|1|-1|6|-1|18|-1|-1|
+#s:17|ememies|1|7|18|8|-1|-1|-1|
+#s:18|sword|1|8|-1|-1|-1|-1|-1|
+#s:19|tmp|1|9|-1|7|-1|-1|-1|
+#s:20|Portal 1|1|-1|-1|9|-1|17|-1|
 
-#s:21|MoneyBag|1|-1|11|-1|10|-1|-1
-#s:22|Ally|1|12|-1|-1|11|-1|-1
-#s:23|tmp|1|14|-1|12|-1|13|-1
-#s:24|Medallion|1|-1|-1|-1|-1|-1|13
-#s:25|Helmet|1|-1|-1|14|15|-1|-1
-#s:26|Enemies|1|-1|15|-1|16|-1|-1
-#s:27|Key|1|-1|16|-1|-1|-1|17
+#s:21|MoneyBag|1|-1|11|-1|10|-1|-1|
+#s:22|Ally|1|12|-1|-1|11|-1|-1|
+#s:23|tmp|1|14|-1|12|-1|13|-1|
+#s:24|Medallion|1|-1|-1|-1|-1|-1|13|
+#s:25|Helmet|1|-1|-1|14|15|-1|-1|
+#s:26|Enemies|1|-1|15|-1|16|-1|-1|
+#s:27|Key|1|-1|16|-1|-1|-1|17|
 
-#s:30|Room1|1|19|23|-1|22|-1|-1
-#s:31|Maze|1|26|22|24|25|-1|-1
-#s:32|Maze|1|23|24|26|29|-1|-1
-#s:33|Maze|1|28|-1|32|-1|-1|-1
-#s:34|Maze|1|-1|27|28|25|-1|-1
-#s:35|Maze|1|32|-1|30|-1|-1|-1
-#s:36|Maze|1|29|-1|31|-1|-1|-1
-#s:37|Maze|1|31|-1|-1|-1|-1|-1
+#s:30|Room1|1|19|23|-1|22|-1|-1|
+#s:31|Maze|1|26|22|24|25|-1|-1|
+#s:32|Maze|1|23|24|26|29|-1|-1|
+#s:33|Maze|1|28|-1|32|-1|-1|-1|
+#s:34|Maze|1|-1|27|28|25|-1|-1|
+#s:35|Maze|1|32|-1|30|-1|-1|-1|
+#s:36|Maze|1|29|-1|31|-1|-1|-1|
+#s:37|Maze|1|31|-1|-1|-1|-1|-1|
 
-#l:22|30|31|0|0
-#l:23|30|32|0|0
-#l:24|31|32|0|0
-#l:25|31|34|0|0
-#l:26|32|31|0|0
-#l:27|34|30|0|0
-#l:28|34|33|0|0
-#l:29|32|36|0|0
-#l:30|35|30|0|0
-#l:31|36|37|1|0
-#l:32|33|35|1|0
 
 Formato Link: #l:ID|Space1|Space2|adjacent|locked //Recordar añadir en cada espacio sus links adyacentes
 
@@ -65,6 +54,17 @@ Formato Link: #l:ID|Space1|Space2|adjacent|locked //Recordar añadir en cada esp
 #l:16|26|27|1|0
 #l:17|20|27|0|0
 #l:19|12|30|1|0
+#l:22|30|31|0|0
+#l:23|30|32|0|0
+#l:24|31|32|0|0
+#l:25|31|34|0|0
+#l:26|32|31|0|0
+#l:27|34|30|0|0
+#l:28|34|33|0|0
+#l:29|32|36|0|0
+#l:30|35|30|0|0
+#l:31|36|37|1|0
+#l:32|33|35|1|0
 
 
 #gd:1|5|9|1
@@ -74,3 +74,19 @@ un
 test
 description
 ----------
+
+Formato Object: #o:ID|Nombre|Data|Descripcion|cost|Dependency_id|is_movable|is_consumable|LocationID|InventoryType
+Use dependency_id = -1 for no dependency
+InventoryType = {UNKNOWN_INVENTORY == 0, PLAYER_INVENTORY == 1, NPC_INVENTORY == 2, SPACE_INVENTORY == 3}
+
+#o:1|north_med|NONE|Collect the other Medallion to open the boss gate|0|-1|1|0|24|3
+#o:2|south_med|NONE|Collect the other Medallion to open the boss gate|0|-1|1|0|35|3
+
+
+Formato Event: #e:Id|Type|cmdTriggersNum|cmdName1 , ...|removeOnTrigger|tagvalue1:tagvalue2,...
+
+data string for objects_fusion is id1:id2;obj:ID;Name;Description;abilityId;LinkId
+
+#e:1|objects_fusion|5|tk,w,a,s,d|1|1:2;obj:100;Silver_Medallion;use this medallion to open a gate;1;2
+
+Formato Ability: #sk:Id|Type|Name|Entityid(ObjectId) Es -1 si no esta asignado --> A la tienda|is_player_ability|is_object_use|cd_init|cd_max|cost|data

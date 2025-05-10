@@ -66,7 +66,7 @@ Formato Link: #l:ID|Space1|Space2|adjacent|locked //Recordar añadir en cada esp
 #l:10|14|13|0|0
 #l:11|11|14|0|0
 
-Formato Object: #o:ID|Nombre|Data|Descripcion|Dependency_id|is_movable|is_consumable|LocationID|InventoryType
+Formato Object: #o:ID|Nombre|Data|Descripcion|cost|Dependency_id|is_movable|is_consumable|LocationID|InventoryType
 Use dependency_id = -1 for no dependency
 InventoryType = {UNKNOWN_INVENTORY == 0, PLAYER_INVENTORY == 1, NPC_INVENTORY == 2, SPACE_INVENTORY == 3}
 
