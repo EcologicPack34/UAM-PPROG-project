@@ -50,7 +50,6 @@ Move,North,South,East,West,Attack,Take,Drop,Chat,Exit,Help,Ability,Object_Use,Se
 Attack,Run_Away,Exit,Help,Ability,Object_Use,Inspect,
 Chat,Help,Exit,
 Buy,Help,Exit,
-Buy,Help,Inspect,Exit,
 map,
 ----------------
 

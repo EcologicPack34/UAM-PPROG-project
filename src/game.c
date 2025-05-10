@@ -1787,7 +1787,7 @@ Status game_store_move_item_at(Game *game, int i){
         game_store_destroy(game);
         game_store_startup(game, ABILITY_STORE, ability_manager_get_unused_abilities(game->ability_manager), game_get_player(game), leveling_get_SP_pointer(player_get_leveling(game_get_player(game))));
         game_store_add_items_from_collection(game, ability_manager_get_unused_abilities(game->ability_manager));
-        return ERROR;
+        return OK;
       }
       if(game_add_stat_by_type(store_get_item_element_at(store, i), (Player *)store_get_client(store)) == ERROR)
         return ERROR;
