@@ -43,7 +43,7 @@ typedef struct _Object Object;
  * @param data data with the effects of the object and if it can be weared
  * @param description description of the object
  * @param cost cost of the object if it is in a store
- * @param dependend_object_id id of the object which is needed to move that object
+ * @param dependent_object_id id of the object which is needed to move that object
  * @param is_movable true if object can be moved or false if it cannot
  * @param is_consumable if object is removed after use or not
  * @param location id where the object is located
@@ -148,8 +148,8 @@ Status object_set_is_equipped(Object *object, bool value);
  * @brief Sets if an object is movable or not, true means movable, false means not movable
  * @author Maksym Polyak
  * 
- * @param object 
- * @param value 
+ * @param object object to modify
+ * @param value true if movable false if not movable
  * @return Status 
  */
 Status object_set_is_movable(Object *object, bool value);

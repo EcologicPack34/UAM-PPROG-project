@@ -35,14 +35,14 @@
 
 #include <stdbool.h>
 
-#define MAX_SPACES 100  /*!< Maximum number of spaces on the map */
-#define MAX_LINKS (MAX_SPACES * 6)   /*!< Maximum number of links on the map */
-#define MAX_PLAYERS 4   /*!< Maximum number of players*/
+#define MAX_SPACES 100                  /*!< Maximum number of spaces on the map */
+#define MAX_LINKS (MAX_SPACES * 6)      /*!< Maximum number of links on the map */
+#define MAX_PLAYERS 4                   /*!< Maximum number of players*/
 
-#define MAX_PROCEDURAL_SIZE 50
+#define MAX_PROCEDURAL_SIZE 50          /*!< Maximum size of the square where the procedural option can expand*/
 
-#define MINIMAP_MAX_WIDTH 40
-#define MINIMAP_MAX_HEIGHT 25
+#define MINIMAP_MAX_WIDTH 40            /*!< Maximum width of the minimap*/
+#define MINIMAP_MAX_HEIGHT 25           /*!< Maximum height of the minimap*/
 
 /**
  * @brief Game struct, defines all the information of the game
@@ -241,16 +241,6 @@ EventManager *game_get_event_manager(Game *game);
  * @return Collection* or NULL if error
  */
 Collection *game_get_npcs(Game *game);
-
-/**
- * @brief Gets player by id
- * @author Aaron Charameli Mair
- * 
- * @param game 
- * @param id 
- * @return Player* 
- */
-Player *game_get_player_by_id(Game *game, Id id);
 
 /**
  * @brief Gets the link in a certain position of the game links array
@@ -924,8 +914,9 @@ Status game_add_stat_by_type(char *text, Player *player);
 
 /**
  * @brief Crossfades the music between combat and defualt state
+ * @author Daniel Gómez
  * 
- * @param game 
+ * @param game game struct
  */
 void game_crossfade_music(Game *game);
 

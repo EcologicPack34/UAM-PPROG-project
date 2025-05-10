@@ -1,8 +1,7 @@
 /**
  * @file ability_manager.h
  * @author Maksym Polyak
- * @brief This module controls player special interactions with the environment,
- * specially in combat throught the use of ability.
+ * @brief This module controls ability and ability manager creation for their use on game.
  * @version 0.1
  * @date 2025-03-25
  * 
@@ -23,7 +22,7 @@
 /**
  * @brief Enum storing the different types of events 
  */
-typedef enum {NO_SKILL, HEAL_SELF, HEAL_ALLY, MONEY_BAG, LINK_UNLOCK, EFFECT_SELF, EFFECT_ENEMY, EFFECT_ALLY}AbilityType; /*!< Type to determine the effect of an ability*/
+typedef enum {NO_SKILL, HEAL_SELF, HEAL_ALLY, MONEY_BAG, LINK_UNLOCK, EFFECT_SELF, EFFECT_ENEMY, EFFECT_ALLY}AbilityType;
 
 /**
  * @brief Ability ADT that contains all the information about the ability
@@ -212,6 +211,25 @@ int ability_compare(void * e1, void *e2);
  */
 AbilityType ability_type_from_str(char *string);
 
+/**
+ * @brief Saves an ability on a file
+ * @author Maksym Polyak
+ * 
+ * @param ability ability struct
+ * @param fOUT file stream output
+ * @return int with num of char printed or -1 if error
+ */
+int ability_save_on_file(Ability *ability, FILE *fOUT);
+  
+/**
+ * @brief Creates an ability from a file
+ * @author Maksym Polyak
+ * 
+ * @param fIN file stream input
+ * @return Ability* or NULL if error
+ */
+Ability *ability_create_from_file(FILE *fIN);
+
 /* SKILLS MANAGER */
 
 /**
@@ -356,24 +374,5 @@ int ability_manager_save_on_file(AbilityManager *sm, FILE *fOUT);
  * @return Status 
  */
 Status ability_manager_read_from_file(AbilityManager *sm, FILE *fIN);
-  
-/**
- * @brief Saves an ability on a file
- * @author Maksym Polyak
- * 
- * @param ability ability struct
- * @param fOUT file stream output
- * @return int with num of char printed or -1 if error
- */
-int ability_save_on_file(Ability *ability, FILE *fOUT);
-  
-/**
- * @brief Creates an ability from a file
- * @author Maksym Polyak
- * 
- * @param fIN file stream input
- * @return Ability* or NULL if error
- */
-Ability *ability_create_from_file(FILE *fIN);
 
 #endif

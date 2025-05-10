@@ -23,7 +23,8 @@
 #include "effect.h"
 #include "attack.h"
 
-#define TEMP_DIALOGUE_FILENAME "tempdiag.txt"
+#define TEMP_DIALOGUE_FILENAME "tempdiag.txt" /*!< Name of the temporal dialogue filename for moving dialogue to a save*/
+#define DIALOGUE_INIT_PATH "dialogue.txt"     /*!< Name of the location with the txt with dialogues for generic initialization*/
 
 /*
 * Declaration of private functions
@@ -134,8 +135,10 @@ Status game_reader_load_ability(Game *game, char *filename);
  * @brief Reats the file to load all effects
  * @author Aaron Charameli Mair
  * 
- * @param game 
- * @param filename 
+ * @param game game struct
+ * @param filename string that stores the data file name
+ * @param fromSaveFile determines if the loading has to be done as a save or
+ * as an initial .dat
  * @return Status 
  */
 Status game_reader_load_effects(Game *game, char *filename, bool fromSaveFile);
@@ -145,7 +148,6 @@ Status game_reader_load_effects(Game *game, char *filename, bool fromSaveFile);
  * @author Sofía Calvo
  *
  * @param game struct that saves all information related to the game
- * @param filename string that stores the data file name
  * @return Status 
 */
 Status game_reader_load_attacks(Game *game);
@@ -154,7 +156,8 @@ Status game_reader_load_attacks(Game *game);
  * @brief Reads the file to load all graphic descriptions
  * @author Daniel Gómez
  * 
- * @param game 
+ * @param game game struct
+ * @param filename string that stores the data file name
  * @return Status 
  */
 Status game_reader_load_gdesc(Game *game, char *filename);
@@ -315,7 +318,7 @@ Status game_reader_create_from_file(Game **game, char *filename, bool procedural
   /*Initialization*/
   /*Sets the actual player as the first one read in the .dat*/
   game_switch_player(*game, 0);
-  strcpy(dialogue_filename, "dialogue.txt");
+  strcpy(dialogue_filename, DIALOGUE_INIT_PATH);
 
   return OK;
 }
@@ -1792,8 +1795,8 @@ Status game_reader_create_temp_dialogue_save(Game *game, char *filename){
   char filename_aux[WORD_SIZE] = "";
   Id id;
 
-  if(strcmp(dialogue_filename, "dialogue.txt") == 0){
-    strcpy(filename_aux, "dialogue.txt");
+  if(strcmp(dialogue_filename, DIALOGUE_INIT_PATH) == 0){
+    strcpy(filename_aux, DIALOGUE_INIT_PATH);
   }else{
     strcpy(filename_aux, filename);
   }

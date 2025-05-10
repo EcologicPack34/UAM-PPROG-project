@@ -21,11 +21,10 @@
  * @brief Struct of the attack module to save the data of the attack
  */
 struct _Attack{
-
-    char name[WORD_SIZE];
-    double damage_multiplication;
-    bool needs_target;
-    double no_missing_chance;
+    char name[WORD_SIZE];           /*!< Name of the attack*/
+    double damage_multiplication;   /*!< Damage multiplicator of the attack*/
+    bool needs_target;              /*!< Bool to check if attack needs a target or not*/
+    double no_missing_chance;       /*!< Chance to succesfully make an attack*/
 };
 
 Attack *attack_create(char *name) {

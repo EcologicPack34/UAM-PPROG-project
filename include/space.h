@@ -40,7 +40,7 @@
 #define SPACE_GRAPHIC_HEIGHT 5          /*!< Height of a space graphical description*/
 #define SPACE_GRAPHIC_WIDTH 9           /*!< Width of a space graphical description*/
 
-#define SPACE_DIRECTIONS 6
+#define SPACE_DIRECTIONS 6              /*!< Number of total directions implemented in the game*/
 
 /**
  * @brief ADT with all the information related to a space
@@ -465,8 +465,8 @@ bool space_is_discovered(Space *space);
 /**
  * @brief Compares to spaces
  * 
- * @param e1 
- * @param e2 
+ * @param e1 space struct
+ * @param e2 space struct
  * @return negative if e1<e2, 0 if equal, positive if e1>e2
  */
 int space_cmp(void *e1, void *e2);

@@ -38,24 +38,24 @@
 struct _Combat{
     Stats allies_stats[NPC_MAX_ALLIES];     /*!< Stats of the allies*/
     int allies_count;                       /*!< Number of allies*/
-    int total_allies;
+    int total_allies;                       /*!< Total number of allies*/
     int players_count;                      /*!< Number of players*/
     int players_turn;                       /*!<Turn of the players*/
     Stats enemies_stats[NPC_MAX_ENEMIES];   /*!< Stats of the enemies*/
     int enemies_count;                      /*!< Number of enemies*/
 
     Stats dead_entities[COMBAT_MAX_ENTITIES];   /*!< Stores the dead entities*/
-    int n_dead_entities;                            /*!< Count of how many dead entities are*/
+    int n_dead_entities;                        /*!< Count of how many dead entities are*/
 
     bool is_player_turn;                    /*!< Determines who starts, true --> player party, false --> enemy party*/
     Space *space;                           /*!< Space where the combat is located*/
 
-    bool endCombat;                         /*!< if true means combat has ended*/
+    bool endCombat;                         /*!< True means combat has ended*/
 
     Queue *messages;                        /*!< Saves the messages of the actions on the queue*/
 
-    Collection *attacks;                     /*!< array of attacks*/
-    int attacks_count;                       /*!< number of attacks*/
+    Collection *attacks;                    /*!< array of attacks*/
+    int attacks_count;                      /*!< number of attacks*/
 };
 
 
@@ -122,7 +122,7 @@ Status combat_attack(Combat *cmb, Attack *at, Stats *attacker, Stats *victim);
  * @param at attack struct
  * @param attacker stats of the attacker
  * @param victims stats of all the victims (array)
- * @param num_victims number of victims
+ * @param n_victims number of victims
  * @return Status 
  */
 Status combat_attack_all(Combat *cmb, Attack *at, Stats *attacker, Stats *victims, int n_victims);

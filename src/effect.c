@@ -1,9 +1,7 @@
 /**
  * @brief It implements the effect_manager module
- * 
- * 
  *
- * @file effect_manager.c
+ * @file effect.c
  * @author Aaron Charameli Mair
  * @version 0
  * @date 30-04-2025
@@ -22,53 +20,64 @@
 #define EFFECT_MANAGER_INIT_SIZE 10 /*!< Effects manager collection initial size*/
 #define INIT_AFFECTED 10 /*!< Initial size of affecteds collection in an effect (irrelevant for the game functionality)*/
 
+/**
+ * @brief Struct that stores an entity and the number of turns that it suffers an effect
+ * 
+ */
 typedef struct{
-    Entity *ent;
-    int turns; /*a counter of turns that the effect is applied to the entity*/
+    Entity *ent;        /*!< Entity affected*/
+    int turns;          /*!< Counter with the turns that the effect is applied to the entity*/
+}Affected;
 
-}Affected; /*<! Struct that stores an entity and the number of turns that it suffers an effect*/
-
+/**
+ * @brief Effects ADT implementation
+ * 
+ */
 struct _Effect{
-    Id id;
-    Collection *affecteds; /*!< stores the affecteds that have a certain effect*/
-    char *name; /*!< a string containing the effect's name*/
-    char *data; /*!< a string containing data related to the effect. A function will use the data to apply the effect*/
-    bool inf_turns; /*!< a boolean describing if the effect is applied for an infinite amount of turns or not*/
-    int default_turns; /*!< an int with the default value of turns an effect is applied to an enemy for. e.g.: if an entity is applied an effect twice, he'll have this amount x2 of turns left with the effect*/
-    EffectType ET; /*!< a type that defines the effect so it can be identified and applied*/
-    EffectAffects EA;
+    Id id;                  /*!< Id of the effect*/
+    Collection *affecteds;  /*!< Stores the affecteds that have a certain effect*/
+    char *name;             /*!< String containing the effect's name*/
+    char *data;             /*!< String containing data related to the effect. A function will use the data to apply the effect*/
+    bool inf_turns;         /*!< Boolean describing if the effect is applied for an infinite amount of turns or not*/
+    int default_turns;      /*!< Int with the default value of turns an effect is applied to an enemy for. e.g.: if an entity is applied an effect twice, he'll have this amount x2 of turns left with the effect*/
+    EffectType ET;          /*!< Type that defines the effect so it can be identified and applied*/
+    EffectAffects EA;       /*!< Type of entity affected*/
 };
 
+/**
+ * @brief Effects Manager ADT implementation 
+ * 
+ */
 struct _EffectsManager{
-    Collection *effects; /*!< an effects collection*/
+    Collection *effects;    /*!< Effects collection*/
 };
 
 /*--------------------------------------------------------------------------------------------------------------------------*/
 /*PRIVATE FUNCTIONS HEADERS*/
 
 /**
- * @brief this function applies an effect of type poison to an entity
+ * @brief This function applies an effect of type poison to an entity
  * @author Aaron Charameli Mair
  * 
- * @param effect a pointer to the effect
- * @param affected a pointer to the affected (that contains the entity)
- * @param enemy_stats an array of enemy stats needed if in combat. Otherwise, leave as NULL
- * @param enemy_count an int describing the number of elements in the enemy Stats array
+ * @param effect pointer to the effect
+ * @param affected pointer to the affected (that contains the entity)
+ * @param enemy_stats array of enemy stats needed if in combat. Otherwise, leave as NULL
+ * @param enemy_count int describing the number of elements in the enemy Stats array
  * @return Status 
- * @note data string will be "DamageTaken" (a number with the number of damage dealt per turn)
+ * @note Data string will be "DamageTaken" (a number with the number of damage dealt per turn)
  */
 Status _effect_apply_poison(Effect*effect, Affected*affected, Stats*enemy_stats, int enemy_count);
 
 /**
- * @brief this function applies an effect of type fire to an entity
+ * @brief This function applies an effect of type fire to an entity
  * @author Aaron Charameli Mair
  * 
- * @param effect a pointer to the effect
- * @param affected a pointer to the affected (that contains the entity)
- * @param enemy_stats an array of enemy stats needed if in combat. Otherwise, leave as NULL
- * @param enemy_count an int describing the number of elements in the enemy Stats array
+ * @param effect pointer to the effect
+ * @param affected pointer to the affected (that contains the entity)
+ * @param enemy_stats array of enemy stats needed if in combat. Otherwise, leave as NULL
+ * @param enemy_count int describing the number of elements in the enemy Stats array
  * @return Status 
- * @note data string will be "DamageTaken" (a number with the number of damage dealt per turn)
+ * @note Data string will be "DamageTaken" (a number with the number of damage dealt per turn)
  */
 Status _effect_apply_fire(Effect*effect, Affected*affected, Stats*enemy_stats, int enemy_count);
 
@@ -76,12 +85,12 @@ Status _effect_apply_fire(Effect*effect, Affected*affected, Stats*enemy_stats, i
  * @brief This function applies an effect of type regeneration to an entity
  * @author Aaron Charameli Mair
  * 
- * @param effect a pointer to the effect
- * @param affected a pointer to the affected (that contains the entity)
- * @param ally_stats an array of ally Stats, needed if in combat. Otherwise, leave as NULL
- * @param ally_count an int describing the number of elements in the ally Stats array
+ * @param effect pointer to the effect
+ * @param affected pointer to the affected (that contains the entity)
+ * @param ally_stats array of ally Stats, needed if in combat. Otherwise, leave as NULL
+ * @param ally_count int describing the number of elements in the ally Stats array
  * @return Status 
- * @note data string will be a number with the number of health regenerated per turn
+ * @note Data string will be a number with the number of health regenerated per turn
  */
 Status _effect_apply_regeneration(Effect*effect, Affected*affected, Stats*ally_stats, int ally_count);
 
@@ -89,8 +98,8 @@ Status _effect_apply_regeneration(Effect*effect, Affected*affected, Stats*ally_s
  * @brief This function gets the affected struct of an effect given its entity
  * @author Aaron Charameli Mair
  * 
- * @param effect a pointer to the effet
- * @param ent a pointer to the entity
+ * @param effect pointer to the effet
+ * @param ent pointer to the entity
  * @return Affected* or NULL if not fount or ERROR
  */
 Affected *_effect_get_affected(Effect *effect, Entity *ent);
@@ -99,18 +108,18 @@ Affected *_effect_get_affected(Effect *effect, Entity *ent);
  * @brief this function creates an affected
  * @author Aaron Charameli Mair
  * 
- * @param ent a pointer to the entity that will be affected
- * @param turns the number of turns the affected will suffer an effect
+ * @param ent pointer to the entity that will be affected
+ * @param turns number of turns the affected will suffer an effect
  * @return Affected* 
  */
 Affected *_affected_create(Entity *ent, int turns);
 
 /**
- * @brief this function frees the allocated memory of an affected struct
+ * @brief This function frees the allocated memory of an affected struct
  * @author Aaron Charameli Mair
  * 
- * @param a a pointer to the affected
- * @note this function doesn't free the memory of the entity in the affected struct
+ * @param a pointer to the affected
+ * @note This function doesn't free the memory of the entity in the affected struct
  */
 void _affected_destroy(void *a);
 

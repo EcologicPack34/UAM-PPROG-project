@@ -24,6 +24,8 @@
  *
  * @param game struct that saves all information related to the game
  * @param filename string with the name of the data file
+ * @param procedural true if game is generated procedurally or false if game is totally
+ * loaded from a file
  * @return OK if everything goes well or ERROR if there was some mistake
  */
 Status game_reader_create_from_file(Game **game, char *filename, bool procedural);
@@ -31,8 +33,8 @@ Status game_reader_create_from_file(Game **game, char *filename, bool procedural
 /**
  * @brief Initializes a game from a save file
  * 
- * @param game 
- * @param filename 
+ * @param game game struct
+ * @param filename filename of the file to load the game
  * @return Status 
  */
 Status game_reader_create_from_save_file(Game **game, char *filename);
@@ -40,20 +42,10 @@ Status game_reader_create_from_save_file(Game **game, char *filename);
 /**
  * @brief Saves all the data from a game to a file
  * 
- * @param save_file 
- * @param game 
+ * @param save_file name of the save file to create
+ * @param game game struct
  * @return Status 
  */
 Status game_reader_create_save_file(char *save_file, Game *game);
-
-
-/**
- * @brief Initializes the attacks, saving them in combat when it starts
- * @author Sofía Calvo
- *
- * @param game struct that saves all information related to the game
- * @return OK if everything goes well or ERROR if there was some mistake
- */
-Status game_reader_load_attacks(Game *game);
 
 #endif

@@ -8,7 +8,8 @@
  * from the space and the player.
  * 
  * Combat is based on turns, player turn and enemies turn, player can choose to run away
- * or attack in their turn.
+ * or attack in their turn. Also multiplayer combat is implemented but limited for two players
+ * that are following each other.
  * 
  * @version 0.1
  * @date 2025-03-07
@@ -31,7 +32,7 @@
 #include "attack.h"
 
 /**
- * @brief Struct of the combat module to save the stats of an NPC, public for the graphic_engine
+ * @brief Struct of the combat module to save the stats of an NPC, public for graphic_engine
  */
 typedef struct {
     EntityStats stats;             /*!< Copy of the stats in order to buff/debuff and not modify the original stats*/
@@ -44,13 +45,14 @@ typedef struct {
 typedef struct _Combat Combat;
 
 /**
- * @brief Initializes the combat struct
+ * @brief Initializes a combat struct by the info received
  * @author Maksym Polyak && Daniel Gómez
  * 
- * @param space space where the combat is located
- * @param player player that is involved in the combat
- * @param code last cmd 
- * @return Combat* or NULL if ERROR
+ * @param space space where the combat takes place
+ * @param pl player that initiated the combat
+ * @param code last command of the player
+ * @param attacks collection with attacks implemented on game
+ * @return Combat* 
  */
 Combat *combat_initialize(Space *space, Player *pl, CommandCode code, Collection *attacks);
 
@@ -170,15 +172,6 @@ Stats *combat_get_player_stats(Combat *combat);
  * @author Sofía Calvo
  * 
  * @param combat combat struct
- * @return Attack* 
- */
-Attack *combat_get_attack_in_position(Combat *combat, int pos);
-
-/**
- * @brief Gets the attack in a certain position
- * @author Sofía Calvo
- * 
- * @param combat combat struct
  * @param attack attack struct
  * @param pos position in the array
  * @return Status
@@ -190,8 +183,8 @@ Status combat_set_attack_in_position(Combat *combat, Attack *attack, int pos);
  * @brief Finds the attack in certain position of an array
  * @author Sofía Calvo
  * 
- * @param combat combat struct
- * @param pos position in the array
+ * @param cmb combat struct
+ * @param name name of the attack
  * @return Attack structure
  */
 Attack *combat_find_attack_by_name(Combat *cmb, char *name);

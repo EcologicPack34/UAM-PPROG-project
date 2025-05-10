@@ -90,12 +90,12 @@ CommandInfo *player_get_cmdData(Player *player);
  * @brief Aaron Charameli Mair
  * 
  * @param p a pointer to Player 
- * @param maxhealth 
- * @param health 
- * @param baseDamage 
- * @param strength 
- * @param defense 
- * @param magicLevel
+ * @param maxhealth maximum health to set
+ * @param health health to set
+ * @param baseDamage base damage to set
+ * @param strength strength to set
+ * @param defense defense to set
+ * @param magicLevel magic level to set
  *  
  * @return Status 
  */
@@ -232,8 +232,8 @@ int *player_get_money_pointer(Player *player);
  * @brief saves all the data related to a player in a file
  * @author Aaron Charameli Mair
  * 
- * @param file 
- * @param p 
+ * @param file file pointer output
+ * @param p player to save
  * @return Status 
  */
 Status player_save_to_file(FILE *file, Player *p);

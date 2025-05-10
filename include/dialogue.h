@@ -1,7 +1,9 @@
 /**
  * @file dialogue.h
  * @author Maksym Polyak
- * @brief 
+ * @brief ADT that controls dialogue outputs, if the game is not reading from
+ * a save takes the dialogues from the DIALOGUE_INIT_PATH on game reader.
+ * If reading from a save, then enters the save file and gets the dialogues.
  * @version 0.1
  * @date 2025-04-24
  * 
@@ -19,7 +21,7 @@
 #define DOUTPUTS_NUM 6          /*!< Number of dialogue_outputs implemented*/
 
 /**
- * @brief Dialogue outputs enum
+ * @brief Dialogue outputs types enum
  * 
  */
 typedef enum{NO_OUTPUT, DIALOGUE_STOP, FIGHT, STORE, FOLLOW, UNFOLLOW}Dialogue_Outputs;

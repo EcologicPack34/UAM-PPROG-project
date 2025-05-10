@@ -182,8 +182,8 @@ Status npc_get_str_descr(NPC *npc, char *str, int index);
  * @brief saves all the data related to an npc in a file
  * @author Aaron Charameli Mair
  * 
- * @param file 
- * @param p 
+ * @param file file pointer output
+ * @param p NPC to save
  * @return Status 
  */
 Status npc_save_to_file(FILE *file, NPC *p);

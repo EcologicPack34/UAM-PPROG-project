@@ -6,30 +6,53 @@
 
 #pragma GCC diagnostic ignored "-Wpedantic"
 
-/* Global variables */
+/**
+ * @brief Global variable with the rows for libscreen
+ * 
+ */
 int ROWS=23;
+
+/**
+ * @brief Global variable with the columns for libscreen
+ * 
+ */
 int COLUMNS=80;
 
-#define TOTAL_DATA (ROWS * COLUMNS) + 1
+#define TOTAL_DATA (ROWS * COLUMNS) + 1               
 #define BG_CHAR '~'
 #define FG_CHAR ' '
 #define ACCESS(d, x, y) (d + ((y) * COLUMNS) + (x))
 
-
+/**
+ * @brief Cell ADT implementation
+ * 
+ */
 typedef struct{
-  char character;
-  Frame_color background;
-  Frame_color charColor;
+  char character;         /*!< Character of the cell*/
+  Frame_color background; /*!< Color of the background for the cell*/
+  Frame_color charColor;  /*!< Color of the car for the cell*/
 }Cell;
 
+/**
+ * @brief Area ADT implementation
+ * 
+ */
 struct _Area{
-  int x, y, width, height;
-  Cell *cursor;
-  int cX, cY;
-  Frame_color backgroudColor;
-  Frame_color charColor;
+  int x;                      /*!< Value for horizontal area dimension*/
+  int y;                      /*!< Value for vertical area dimension*/
+  int width;                  /*!< Width of the area*/
+  int height;                 /*!< Height of the area*/
+  Cell *cursor;               /*!< Cell general information*/
+  int cX;                     /*!< Horizontal coordinate of the area*/
+  int cY;                     /*!< Vertical coordinate of the area*/
+  Frame_color backgroudColor; /*!< Background color of the area*/
+  Frame_color charColor;      /*!< Color of the characters on the area*/
 };
 
+/**
+ * @brief Global variable with generic cell data
+ * 
+ */
 Cell *__data;
 
 /****************************/
@@ -40,7 +63,7 @@ Cell *__data;
  * @brief Replaces some special characters of a string
  * @author Profesores PProg
  * 
- * @param str 
+ * @param str str to modify
  */
 void screen_utils_replaces_special_chars(char* str);
 
@@ -48,7 +71,7 @@ void screen_utils_replaces_special_chars(char* str);
  * @brief Converts color enum to ansi code for character color and its background
  * @author Daniel Gómez 
  * 
- * @param frame 
+ * @param frame
  * @param chararacter 
  * @return const char* 
  */

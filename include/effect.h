@@ -1,9 +1,9 @@
 /**
  * @brief It defines the effects module interface
  *
- * 
+ * Enables the game to add effects to affect entities.
  *
- * @file effect_manager.h
+ * @file effect.h
  * @author Aaron Charameli Mair
  * @version 0
  * @date 10-04-2025
@@ -20,9 +20,17 @@
 #include "combat.h"
 #include <stdio.h>
 
-typedef enum{UNKNOWN_EFFECT, REGENERATION, POISON, FIRE}EffectType; /*!< The type of effect*/
+/**
+ * @brief Type of effects implemented
+ * 
+ */
+typedef enum{UNKNOWN_EFFECT, REGENERATION, POISON, FIRE}EffectType;
 
-typedef enum{NO_EFFECT=-1 ,AFFECTS_PLAYER, AFFECTS_ALLY, AFFECTS_ENEMY}EffectAffects; /*!< The type of entity affected by an effect in a combat*/
+/**
+ * @brief The type of entity affected by an effect in a combat
+ * 
+ */
+typedef enum{NO_EFFECT=-1 ,AFFECTS_PLAYER, AFFECTS_ALLY, AFFECTS_ENEMY}EffectAffects;
 
 /**
  * @brief ADT containing basic info about effect
@@ -121,6 +129,7 @@ Status effect_add_affected(Effect *e, Entity *ent);
  * 
  * @param e a pointer to the effect
  * @param ent a pointer to the entity/affected
+ * @param n_turns number of turns to add
  * @return Status 
  */
 Status effect_add_affected_n_turns(Effect *e, Entity*ent, int n_turns);
@@ -216,7 +225,7 @@ int effect_cmp(void*e1, void*e2);
  * @brief This function prints an effect
  * @author Aaron Charameli Mair
  * 
- * @param effect 
+ * @param effect effect struct
  * @note the effect is printed in stdout
  */
 void effect_print(void*effect);

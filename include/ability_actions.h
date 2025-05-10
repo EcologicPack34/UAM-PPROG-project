@@ -1,7 +1,7 @@
 /**
  * @file ability_actions.h
  * @author Maksym Polyak
- * @brief 
+ * @brief Module to control the ability module effects on the game
  * @version 0.1
  * @date 2025-03-25
  * 

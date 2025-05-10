@@ -423,7 +423,7 @@ Object *equipment_remove_piece(Entity *entity, Equipment *equipment, char *data)
     return retobject;
 }
 
-Object *equipment_get_piece(Entity *entity, Equipment *equipment, EquipmentCode code){
+Object *equipment_get_piece(Equipment *equipment, EquipmentCode code){
     Object *retobject = NULL;
     
     if(!equipment) return NULL;

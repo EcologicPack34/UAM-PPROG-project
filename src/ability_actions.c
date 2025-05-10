@@ -77,8 +77,24 @@ Status ability_unlock_link(Ability *ability, Game *game);
  */
 Status ability_effect_enemy(Ability *ability, Game *game);
 
+/**
+ * @brief Ability to apply an effect on the player that used it
+ * @author Aaron Charameli Mair
+ * 
+ * @param ability ability struct
+ * @param game game struct
+ * @return Status 
+ */
 Status ability_effect_self(Ability *ability, Game *game);
 
+/**
+ * @brief Ability to apply an effect on an ally on combat
+ * @author Aaron Charameli Mair
+ * 
+ * @param ability ability struct
+ * @param game game struct
+ * @return Status 
+ */
 Status ability_effect_ally(Ability *ability, Game *game);
 
 Status ability_heal_self(Ability *ability, Game *game){
@@ -285,6 +301,7 @@ Status ability_effect_enemy(Ability *ability, Game *game){
 
     return effect_add_affected(effect, ent);
 }
+
 Status ability_effect_ally(Ability *ability, Game *game){
     Combat *combat=NULL;
     Stats *st;
@@ -315,6 +332,7 @@ Status ability_effect_ally(Ability *ability, Game *game){
 
     return effect_add_affected(effect, ent);
 }
+
 Status ability_effect_self(Ability *ability, Game *game){
     Entity *ent=NULL;
     Id effect_id;

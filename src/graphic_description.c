@@ -5,12 +5,16 @@
 #include <string.h>
 #include "utils.h"
 
+/**
+ * @brief Graphic description ADT implementation
+ * 
+ */
 struct _GDesc{
-    Id id;
-    GDescType type;
+    Id id;                  /*!< Id of the graphic description*/
+    GDescType type;         /*!< Type of graphic description*/
     int height;             /*!< Height of the description*/
     int width;              /*!< Width of the description*/
-    char **description;    /*!< Array containing each line of the description*/
+    char **description;     /*!< Array containing each line of the description*/
 };
 
 GDesc *gdesc_create(Id id, int height, int width, GDescType type){

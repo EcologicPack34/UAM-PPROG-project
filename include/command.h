@@ -38,7 +38,7 @@ typedef enum { CMDS, CMDL } CommandType; /* CMDS: Command Short | CMDL: Command 
  */
 typedef enum { NO_CMD = -1, UNKNOWN, EXIT, SOUTH, NORTH, EAST, WEST, TAKE, DROP, CHAT,\
      ATTACK, RUN_AWAY, SWITCH, ABILITY, OBJECT_USE, HELP, MOVE, SEARCH, EQUIP, UNEQUIP, INSPECT, GM,\
-    UP, DOWN, LEVEL_UP, BUY, FOLLOW_PLAYER, SAVE, MINIMAP} CommandCode; /* All values that a command can take */
+    UP, DOWN, LEVEL_UP, BUY, FOLLOW_PLAYER, SAVE, MINIMAP} CommandCode;
 
 /**
  * @brief ADT with player related information

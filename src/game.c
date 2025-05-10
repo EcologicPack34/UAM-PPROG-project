@@ -31,15 +31,13 @@
 #include <pthread.h>
 #include <unistd.h>
 
-#define MINIAUDIO_IMPLEMENTATION
+#define MINIAUDIO_IMPLEMENTATION  /*!< Macro to prevent miniaudio header to be added multiple times*/
 #include "miniaudio.h"
 
 /*
  * Used for dialogue reading wether the game is running from a save file or a .dat
 */
 extern char *dialogue_filename;
-
-#define COLLECTION_INITIAL_SIZE 10  /*!< Collection initial size*/
 
 /**
  * @brief Struct with all the information of the game, main bridge of main functionalities for the game to work
@@ -59,15 +57,15 @@ struct _Game {
   Collection *attacks;                /*!< Contains all the information related to the attacks */
 
   /*Space related*/
-  Space *spaces[MAX_SPACES];          /*!< Array with all the spaces of the map */
-  int n_spaces;                       /*!< int with the number of spaces on *spaces */
-  Link *links[MAX_LINKS];             /*!< Array with all the links in the map*/
-  int n_links;                        /*!< Number of links on the links array*/
-  int maxDistToCenter;                  
-  char minimap[MINIMAP_MAX_HEIGHT][MINIMAP_MAX_WIDTH + 1];   
+  Space *spaces[MAX_SPACES];                                /*!< Array with all the spaces of the map */
+  int n_spaces;                                             /*!< int with the number of spaces on *spaces */
+  Link *links[MAX_LINKS];                                   /*!< Array with all the links in the map*/
+  int n_links;                                              /*!< Number of links on the links array*/
+  int maxDistToCenter;                                      /*!< Maximum distance to the center*/
+  char minimap[MINIMAP_MAX_HEIGHT][MINIMAP_MAX_WIDTH + 1];  /*!< Minimap information*/
 
   /*Others*/
-  Dialogue *dialogue;                  /*!< Dialogue struct*/
+  Dialogue *dialogue;                 /*!< Dialogue struct*/
   EventManager *event_manager;        /*!< Struct containing the info about the events that can happen*/
   EffectManager *effect_manager;      /*!< Struct containing effects and allows to manage them*/
   Queue *screenLog;                   /*!< Queue containing a list of messages to print on screen*/
@@ -87,13 +85,13 @@ struct _Game {
 
   bool procedural;                    /*!< Stores if the game is generated prceduraly or not*/
 
-  ma_result audio_resutl;
-  ma_engine audio_engine;
-  ma_sound defualt_music;
-  ma_sound combat_music;
-  pthread_t crossfade;
-  bool crosfadeInit;
-  GameState musicState;
+  ma_result audio_resutl;             /*!< Audio output*/
+  ma_engine audio_engine;             /*!< Audio internal engine*/
+  ma_sound default_music;             /*!< Music to play on DEFAULT game state*/
+  ma_sound combat_music;              /*!< Music to play on COMBAT game state*/
+  pthread_t crossfade;                /*!< Audio threading needed*/
+  bool crosfadeInit;                  /*!< Bool to determine if threading has to be initiated*/
+  GameState musicState;               /*!< State of the music*/
 };
 
 /*-----PRIVATE FUNCTIONS-----*/
@@ -129,6 +127,15 @@ Status game_store_special_destroy(Game *game, StoreType type);
  */
 Status game_map_space_block(Game *game, Space *initSpace ,int block);
 
+/**
+ * @brief Enables music transition
+ * @author Daniel Gómez
+ * 
+ * @param arg argument
+ * @return void* 
+ */
+void *game_cross_fade_music_local(void *arg);
+
 void *game_cross_fade_music_local(void *arg){
   Game *game;
   game = (Game *)arg;
@@ -143,24 +150,24 @@ void *game_cross_fade_music_local(void *arg){
     volume = (float)i/(float)steps;
     //printf("%f\n", volume);
     if(game->musicState == COMBAT){
-      ma_sound_set_volume(&(game->defualt_music), 1 - volume);
+      ma_sound_set_volume(&(game->default_music), 1 - volume);
       ma_sound_set_volume(&(game->combat_music), volume);
       usleep(duration * 1e6);//conversion to microseconds
     }
     if(game->musicState == DEFAULT){
       ma_sound_set_volume(&(game->combat_music), 1 - volume);
-      ma_sound_set_volume(&(game->defualt_music), volume);
+      ma_sound_set_volume(&(game->default_music), volume);
       usleep(duration * 1e6);//conversion to microseconds
     }
   }
 
   if(game->musicState == COMBAT){
-    ma_sound_stop(&(game->defualt_music));
+    ma_sound_stop(&(game->default_music));
     ma_sound_set_volume(&(game->combat_music), 1);
   }
   if(game->musicState == DEFAULT){
     ma_sound_stop(&(game->combat_music));
-    ma_sound_set_volume(&(game->defualt_music), 1);
+    ma_sound_set_volume(&(game->default_music), 1);
   }
   return NULL;
 }
@@ -173,11 +180,11 @@ void game_crossfade_music(Game *game){
     ma_sound_start(&(game->combat_music));
     ma_sound_seek_to_pcm_frame(&game->combat_music, 0);//rewinds combat music
     ma_sound_set_volume(&(game->combat_music), 0);
-    ma_sound_set_volume(&(game->defualt_music),1);
+    ma_sound_set_volume(&(game->default_music),1);
   }
   if(game->musicState == DEFAULT){
-    ma_sound_start(&(game->defualt_music));
-    ma_sound_set_volume(&(game->defualt_music), 0);
+    ma_sound_start(&(game->default_music));
+    ma_sound_set_volume(&(game->default_music), 0);
     ma_sound_set_volume(&(game->combat_music), 1);
   }
 
@@ -306,11 +313,11 @@ Status game_create(Game **game) {
     return ERROR;
   }
   ma_engine_set_volume(&((*game)->audio_engine), 1.0f);
-  ma_sound_init_from_file(&((*game)->audio_engine), "./sounds/skyrim.mp3", 0, NULL, NULL , &((*game)->defualt_music));
+  ma_sound_init_from_file(&((*game)->audio_engine), "./sounds/skyrim.mp3", 0, NULL, NULL , &((*game)->default_music));
   ma_sound_init_from_file(&((*game)->audio_engine), "./sounds/combat.mp3", 0, NULL, NULL , &((*game)->combat_music));
   ma_sound_stop(&((*game)->combat_music));
-  ma_sound_start(&((*game)->defualt_music));
-  ma_sound_set_looping(&(*game)->defualt_music, MA_TRUE);
+  ma_sound_start(&((*game)->default_music));
+  ma_sound_set_looping(&(*game)->default_music, MA_TRUE);
   ma_sound_set_looping(&(*game)->combat_music, MA_TRUE);
 
   (*game)->musicState = DEFAULT;
@@ -391,9 +398,9 @@ Status game_destroy(Game *game) {
   Collection *atcs = NULL;
 
   ma_sound_stop(&(game->combat_music));
-  ma_sound_stop(&(game->defualt_music));
+  ma_sound_stop(&(game->default_music));
   ma_sound_uninit(&(game->combat_music));
-  ma_sound_uninit(&(game->defualt_music));
+  ma_sound_uninit(&(game->default_music));
   ma_engine_uninit(&(game->audio_engine));
 
   /*Destroys all spaces*/
@@ -1287,13 +1294,14 @@ Collection *game_get_attacks(Game *game) {
   return game->attacks;
 }
 
-#define RANDOM_WALK_ITERATIONS 6
-#define RANDOM_WALK_STEPS 10
-#define RANDOM_WALK_STEP_DIR_MAX 4
-#define RANDOM_WALK_STEP_DIR_MIN 2
+#define RANDOM_WALK_ITERATIONS 6    /*!< Number of iterations for the random walk*/
+#define RANDOM_WALK_STEPS 10        /*!< Number of steps for the random walk*/
+#define RANDOM_WALK_STEP_DIR_MAX 4  /*!< Maximum number of directions a random walk can take*/
+#define RANDOM_WALK_STEP_DIR_MIN 2  /*!< Minimum number of directions a random walk can take*/
 
-/*Note: if this functions fails the game must abort, so there is no point on taking care of memory in case of error*/
+
 Status game_generate_procedural(Game *game){
+  /*Note: if this functions fails the game must abort, so there is no point on taking care of memory in case of error*/
   typedef enum {NO_SPACE = 0, MARKED}SpaceStatus;
   
   /**
