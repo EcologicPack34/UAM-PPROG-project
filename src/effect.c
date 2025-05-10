@@ -270,8 +270,10 @@ Status effect_update(Effect *effect, Stats *ent_stats, int ent_count){
 
     for(i=n-1; i>=0 ; i--){
         aux = collection_get_element_at(effect->affecteds, i);
-        if(aux->turns == 0)
+        if(aux->turns == 0){
             collection_remove(effect->affecteds, aux);
+            _affected_destroy(aux);
+        }
     }
     return OK;
 }
