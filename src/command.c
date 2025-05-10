@@ -28,7 +28,8 @@
  */
 char *cmd_to_str[N_CMD][N_CMDT] = {{"", "No command"}, {"", "Unknown"}, {"q", "Exit"}, {"s", "South"}, {"w", "North"}, {"d", "East"}, {"a", "West"},{"tk", "Take"}, {"dr", "Drop"},\
  {"ch", "Chat"}, {"at", "Attack"}, {"h", "Run_Away"}, {"sw", "Switch_Player"}, {"sk", "Ability"}, {"ou", "Object_Use"}, {"hp", "Help"}, {"m", "Move"}, {"sh","Search"},\
- {"eq", "Equip"}, {"ue", "Unequip"}, {"i", "Inspect"}, {"4444444444444444", "4444444444444444"}, {"up", "Up"}, {"dw", "Down"}, {"lu", "Level_Up"}, {"by","Buy"}, {"fw","Follow"}, {"sv","Save"}};
+ {"eq", "Equip"}, {"ue", "Unequip"}, {"i", "Inspect"}, {"4444444444444444", "4444444444444444"}, {"up", "Up"}, {"dw", "Down"}, {"lu", "Level_Up"}, {"by","Buy"}, {"fw","Follow"},\
+  {"sv","Save"}, {"map","Minimap"}};
 
 /**
 * @brief Struct containing the info of a command
@@ -598,11 +599,6 @@ Status command_read_from_file(Command *command, FILE *fIN){
   if(!ci) return ERROR;
   command_info_read_from_file(ci, fIN);
   command->cmdData = ci;
-
-  ci = command_info_create();
-  if(!ci) return ERROR;
-  command_info_read_from_file(ci, fIN);
-  command->cmdPlayerData = ci;
 
   fgets(str, WORD_SIZE, fIN);
 

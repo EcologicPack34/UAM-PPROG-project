@@ -45,14 +45,14 @@ typedef struct _Combat Combat;
 
 /**
  * @brief Initializes the combat struct
- * @author Maksym Polyak
+ * @author Maksym Polyak && Daniel Gómez
  * 
  * @param space space where the combat is located
  * @param player player that is involved in the combat
  * @param code last cmd 
  * @return Combat* or NULL if ERROR
  */
-Combat *combat_initialize(Space *space, Player *pl1, Player *pl2, CommandCode code, Collection *attacks, int num_players);
+Combat *combat_initialize(Space *space, Player *pl, CommandCode code, Collection *attacks);
 
 /**
  * @brief Ends the combat and frees all the memory related to it
@@ -223,9 +223,21 @@ Entity *combat_get_dead_entity_at(Combat *combat, int i);
  */
 Queue *combat_get_messages(Combat *combat);
 
+/**
+ * @brief Gets the current turn in combat
+ * @author Sofia Calvo
+ * 
+ * @param cmb 
+ * @return int 
+ */
 int combat_get_turn(Combat *cmb);
 
-Status combat_set_turn(Combat *cmb, int i);
-
-int combat_get_n_players(Combat *cmb);
+/**
+ * @brief Gets the number of players in the combat
+ * @author Daniel Gómez
+ * 
+ * @param cmb 
+ * @return int 
+ */
+int combat_get_player_count(Combat *cmb);
 #endif

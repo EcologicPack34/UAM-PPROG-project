@@ -7,6 +7,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+int player_turn = -1;
+
 /*----------PRIVATE DECLARATION---------*/
 
 /**
@@ -77,6 +79,17 @@ bool event_trigger_end_combat(Game *game);
 bool event_trigger_npc_rand_move(Event *event, Game *game);
 
 /**
+ * @brief Counts turns for player and changes player players when turn end
+ * @author Daniel Gómez
+ * 
+ * @param event 
+ * @param game 
+ * @return true 
+ * @return false 
+ */
+bool event_trigger_players_turn(Event *event, Game *game);
+
+/**
  * @brief Triggers all the effects to each affected entity in the game
  * @author Aaron Charameli Mair
  * 
@@ -95,6 +108,18 @@ bool event_trigger_effects(Event *event, Game *game);
  * @return false 
  */
 bool event_trigger_update_deaths(Game *game);
+
+/**
+ * @brief Applies poison effect to all entities in a space
+ * 
+ * @param event
+ * @param game
+ * @return true 
+ * @return false 
+ * @note data is EffectID:SpaceID
+ */
+bool event_trigger_effect_area(Event *event, Game *game);
+
 
 /*---------PUBLIC FUNCTIONS----------*/
 void event_actions_trigger_events(Game *game){
@@ -131,6 +156,12 @@ void event_actions_trigger_events(Game *game){
                 break;
             case TRIGGER_EFFECTS:
                 triggered = event_trigger_effects(event, game);
+                break;
+            case EFFECT_AREA:
+                triggered = event_trigger_effect_area(event, game);
+                break;
+            case PLAYER_TURN:
+                triggered = event_trigger_players_turn(event, game);
                 break;
             default:
                 break;
@@ -431,5 +462,56 @@ bool event_trigger_update_deaths(Game *game){
         game_dead_entity_drop_inv(game, ent);
     }
 
+    return true;
+}
+
+bool event_trigger_effect_area(Event *event, Game *game){
+    char data[WORD_SIZE];
+    char *toks=NULL;
+    int i,n_player,n_npc;
+    Effect *effect = NULL;
+    Id effectId,location;
+    if(!game || !event) return false;
+
+    strcpy(data,event_get_aux_data(event));
+
+    toks = strtok(data, ":");
+    if(!toks) return false;
+    effectId = atol(toks);
+
+    toks = strtok(NULL, "\n\r");
+    if(!toks) return false;
+    location = atol(toks);
+
+    effect = game_get_effect_by_id(game, effectId);
+    if(!effect) return false;
+
+
+    n_player = game_get_n_players(game);
+    n_npc = collection_length(game_get_npcs(game));
+
+    for(i = 0; i < n_player; i++){
+        if(entity_get_location(player_get_entity(game_get_player_at(game, i))) == location)
+            effect_add_affected(effect, player_get_entity(game_get_player_at(game, i)));
+    }
+    for(i = 0; i < n_npc; i++){
+        if(entity_get_location(npc_get_entity(collection_get_element_at(game_get_npcs(game), i))) == location)
+            effect_add_affected(effect, npc_get_entity(collection_get_element_at(game_get_npcs(game), i)));
+    }
+
+    return true;
+}
+bool event_trigger_players_turn(Event *event, Game *game){
+    if(!event || !game){
+        return false;
+    }
+    if(!event_is_cmd_valid(event, game_get_last_command(game))) return false;
+
+    if(player_turn == -1) player_turn = atoi(event_get_aux_data(event));
+    player_turn--;
+    if(player_turn == 0){
+        player_turn = atoi(event_get_aux_data(event));
+        game_switch_player(game, -1);
+    }
     return true;
 }

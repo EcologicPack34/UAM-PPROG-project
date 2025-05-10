@@ -58,6 +58,8 @@ struct _Game {
   int n_spaces;                       /*!< int with the number of spaces on *spaces */
   Link *links[MAX_LINKS];             /*!< Array with all the links in the map*/
   int n_links;                        /*!< Number of links on the links array*/
+  int maxDistToCenter;                  
+  char minimap[MINIMAP_MAX_HEIGHT][MINIMAP_MAX_WIDTH + 1];   
 
   /*Others*/
   Dialogue *dialogue;                  /*!< Dialogue struct*/
@@ -235,10 +237,6 @@ Status game_create(Game **game) {
   (*game)->n_players = 0;
   (*game)->objects = collection_create(COLLECTION_INITIAL_SIZE, false, true, object_isEqual, object_print);
 
-  for(i = 0; i < MAX_PLAYERS; i++){
-    (*game)->players[i] = NULL;
-  }
-
   (*game)->requestSwitch = false;
 
   (*game)->npcs = collection_create(COLLECTION_INITIAL_SIZE, false, true, npc_cmp, npc_print); /*TEMPORAL PRINT*/
@@ -297,7 +295,6 @@ Status game_create(Game **game) {
     return ERROR;
   } 
 
-
   (*game)->combat = NULL;
   (*game)->store = NULL;
 
@@ -351,6 +348,7 @@ Status game_destroy(Game *game) {
   
   /*Frees abilities and log messages*/
   ability_manager_destroy(game->ability_manager);
+  queue_free_elements(game->screenLog, message_destroy);
   queue_destroy(game->screenLog);
 
   /*Frees store*/
@@ -716,10 +714,11 @@ Status game_map_space_block(Game *game, Space *initSpace ,int block){
         infoAux->pos = info->pos;
         vector2_add(&(infoAux->pos), auxVector);
         infoAux->space = game_get_space(game, auxId);
-
-
+        
         /*Checks if spaces has already beign processed, if not mark it, set position and add to queue*/
         if(!space_get_isMapped(infoAux->space)){
+          if(abs(infoAux->pos.x) > game->maxDistToCenter) game->maxDistToCenter = infoAux->pos.x;
+          if(abs(infoAux->pos.y) > game->maxDistToCenter) game->maxDistToCenter = infoAux->pos.y;
           space_set_isMapped(infoAux->space,true);
           space_set_map_block(infoAux->space, block);
           space_set_position(infoAux->space, infoAux->pos.x, infoAux->pos.y);
@@ -786,6 +785,7 @@ Status game_map_space_block(Game *game, Space *initSpace ,int block){
   }
 
   queue_destroy(queueAux);
+
   return OK;
 }
 
@@ -930,38 +930,9 @@ bool game_log_hasMessage(Game *game){
 }
 
 Status game_combat_start(Game *game){
-  
-  int size, i, j, player_num;
-  Player *pl1 = NULL, *pl2 = NULL;
-  Entity *follower;
-  Id id;
-
   if(!game) return ERROR;
 
-  pl1 = game_get_player(game);
-  size = player_get_follower_num(pl1);
-
-  for (i = 0; i < size; i++)
-  {
-    follower = player_get_follower_at(pl1, i);
-    if (entity_get_entityType(follower) == PLAYER_TYPE)
-    {
-      id = entity_get_id(follower);
-      player_num = game->n_players;
-
-      for (j = 0; i < player_num; i++)
-      {
-        if (entity_get_id(player_get_entity(game->players[i])) == id)
-        {
-          pl2 = game->players[i];
-          break;
-        } 
-      }
-      break;
-    }
-  }
-
-  game->combat = combat_initialize(game_get_space(game, game_get_player_location(game)), pl1, pl2, command_get_code(game->last_cmd), game->attacks, game->n_players);
+  game->combat = combat_initialize(game_get_space(game, game_get_player_location(game)), game_get_player(game), command_get_code(game_get_last_command(game)), game->attacks);
   if(!game->combat) return ERROR;
 
   game->current_state = COMBAT;
@@ -974,12 +945,19 @@ Status game_combat_end(Game *game){
   
   if(!game) return ERROR;
 
-  leveling = player_get_leveling(game_get_player(game));
   XP = game_get_combat_experience(game_get_combat(game), game);
   money = game_get_combat_money(game_get_combat(game), game);
 
-  leveling_set_XP(leveling, XP + leveling_get_XP(leveling));
-  player_add_money(game_get_player(game), money);
+
+
+  for (int i = 0; i < combat_get_player_count(game->combat); i++)
+  {
+    leveling = player_get_leveling(game_get_player_by_id(game, entity_get_id(combat_get_allies_stats_at(game->combat,i)->entity)));
+
+    leveling_set_XP(leveling, XP/combat_get_player_count(game->combat) + leveling_get_XP(leveling));
+    player_add_money(game_get_player_by_id(game, entity_get_id(combat_get_allies_stats_at(game->combat,i)->entity)), money);
+  }
+  
 
   combat_free(game->combat);
   game->current_state = DEFAULT;
@@ -1033,7 +1011,30 @@ int game_switch_player(Game *game, int player){
   game->active_player = game->players[game->active_player_index];
   command_set_player_data(game->last_cmd, player_get_cmdData(game->active_player));
 
+  if(player < 0){
+    game_add_log_message(game, MESSAGE_LOG, "Changed player turn");
+  }
+
   return 0;
+}
+
+int game_switch_player_to_id(Game *game, int playerId){
+  if(!game || playerId == NO_ID){
+    return 0;
+  }
+
+  for (int i = 0; i < game->n_players; i++)
+  {
+    if(entity_get_id(player_get_entity(game->players[i])) == playerId){
+      game->active_player = game->players[i];
+      game->active_player_index = i;
+      game->requestSwitch = true;
+      command_set_player_data(game->last_cmd, player_get_cmdData(game->active_player));
+      return 0;
+    }
+  }
+  
+  return -1;
 }
 
 bool game_has_request_switch(Game *game){
@@ -1906,4 +1907,131 @@ Status game_store_buy_item_at(Game *game, int i){
     *money -= cost;
 
   return OK;
+}
+
+char (*game_get_minimap(Game *game))[MINIMAP_MAX_WIDTH + 1]{
+  struct SpaceInfo{
+    Space *space;
+    int x,y;
+  };
+ 
+ 
+  int i;
+  int midX, midY;
+  int dirX, dirY;
+  char linkChar;
+
+  Queue *q = NULL;
+  struct SpaceInfo *info, *infoAux;
+  Link *link;
+  Space *auxSpace;
+
+  bool exit = false;
+
+  if(!game) return NULL;
+
+  midX = MINIMAP_MAX_WIDTH / 2;
+  midY = MINIMAP_MAX_HEIGHT / 2;
+
+  /*Resets map*/
+  for (i = 0; i < MINIMAP_MAX_HEIGHT; i++)
+  {
+    memset(game->minimap[i], ' ', (MINIMAP_MAX_WIDTH) * sizeof(char));
+    game->minimap[i][MINIMAP_MAX_WIDTH] = 0;
+  }
+  
+  q = queue_create();
+  if(!q) return NULL;
+
+  info = (struct SpaceInfo *)malloc(sizeof(struct SpaceInfo));
+  if(!info) return NULL;
+
+  info->space = game_get_space(game, game_get_player_location(game));
+  info->x = midX;
+  info->y = midY;
+
+  queue_push(q, info);
+
+  for (i = 0; i < game->n_spaces; i++)
+  {
+    space_set_isMapped(game->spaces[i], false);
+  }
+  
+
+  while(!queue_isEmpty(q)  && !exit){
+    info = (struct SpaceInfo *)queue_pop(q);
+    space_set_isMapped(info->space, true);
+
+    if(info->x >= 0 && info->x < MINIMAP_MAX_WIDTH && info->y >= 0 && info->y < MINIMAP_MAX_HEIGHT){
+      if(game->minimap[info->y][info->x] == ' '){
+        if(space_get_id(info->space) == game_get_player_location(game)){
+          game->minimap[info->y][info->x] = '0';
+        }else{
+          game->minimap[info->y][info->x] = space_get_isDiscovered(info->space) ? 'O' : 'o';//square
+        }
+      }
+    }
+
+
+    for (i = 0; i < 4; i++)
+    {
+      if(i == 0){
+        link = space_get_north(info->space);
+        dirX = 0;
+        dirY = -1;
+        linkChar = '|';
+      }else if(i == 1){
+        link = space_get_east(info->space);
+        dirX = 1;
+        dirY = 0;
+        linkChar = '-';
+      }else if(i == 2){
+        link = space_get_south(info->space);
+        dirX = 0;
+        dirY = 1;
+        linkChar = '|';
+      }else{
+        link = space_get_west(info->space);
+        dirX = -1;
+        dirY = 0;
+        linkChar = '-';
+      }
+      if(!link) continue;
+
+      if(link_is_locked(link)) linkChar = 'x';
+
+      if(!(info->x + dirX < 0 || info->x + dirX >= MINIMAP_MAX_WIDTH || info->y + dirY < 0 || info->y + dirY >= MINIMAP_MAX_HEIGHT)){
+        if(game->minimap[info->y + dirY][info->x + dirX] == ' '){
+          game->minimap[info->y + dirY][info->x + dirX] = linkChar;//square
+          if(!link_is_adjacent(link)){
+            game->minimap[info->y + dirY][info->x + dirX] = '^';
+            continue;
+          }
+        }
+      }
+      auxSpace = game_get_space(game, link_get_oposite_space(link, space_get_id(info->space)));
+      if(space_get_isMapped(auxSpace)) continue;
+
+      infoAux = (struct SpaceInfo *)malloc(sizeof(struct SpaceInfo));
+      if(!infoAux){
+        exit = true;
+        break;//get out of the for loop
+      }
+      infoAux->x = info->x + dirX * 2;
+      infoAux->y = info->y + dirY * 2;
+      infoAux->space = auxSpace;
+
+      queue_push(q, infoAux);
+    }
+
+    free(info);
+
+    if(exit) break;
+  }
+  while(!queue_isEmpty(q)){
+    info = (struct SpaceInfo *)queue_pop(q);
+    free(info);
+  }
+  queue_destroy(q);
+  return game->minimap;
 }

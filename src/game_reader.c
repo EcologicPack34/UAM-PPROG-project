@@ -217,7 +217,7 @@ extern char *dialogue_filename;
 /*
 * Public functions implementation
 */
-Status game_reader_create_from_file(Game **game, char *filename){
+Status game_reader_create_from_file(Game **game, char *filename, bool procedural){
 
   /*Creates memory for the global variable dialogue_filename */
   dialogue_filename = (char *)malloc(WORD_SIZE*sizeof(char));
@@ -254,7 +254,7 @@ Status game_reader_create_from_file(Game **game, char *filename){
     return ERROR;
   }
   
-  if(game_reader_generate_procedural()){
+  if(procedural){
     if(game_generate_procedural(*game) == ERROR){
       printf("%c[2J", 27);
       printf("Fatal error. Check the log for details\n");
@@ -670,7 +670,6 @@ Status game_reader_load_objects(Game *game, char *filename){
   long objectid, objectlocation;
   Id dependency_object = NO_ID;
   InventoryType objectlocationtype;
-  Entity *ent = NULL;
   Object *object = NULL;
 
   int is_consumable = 0, is_movable = 0, cost;
@@ -814,14 +813,6 @@ Status game_reader_load_player(Game *game, char *filename, bool fromSaveFile){
         status = ERROR;
         break;
       }
-        
-        /*adding command*/
-        
-        if(command_info_read_from_file(player_get_cmdData(player), file) == ERROR){
-          status = ERROR;
-          break;
-        }
-
 
       if (game_add_player(game, player) == ERROR){
         player_destroy(player);
@@ -839,6 +830,7 @@ Status game_reader_load_player(Game *game, char *filename, bool fromSaveFile){
     /*#p:ID|Nombre|LocationID|Money|XP actual|XP siguiente nvl|nivel|skill points|gdesc|n_followers;id_following1-type;id_following2-type...*/
       /*adding followers*/
       toks = strtok(line + 3, "|");
+      playerid = atoi(toks);
       toks = strtok(NULL, "|");
       toks = strtok(NULL, "|");
       toks = strtok(NULL, "|");
@@ -870,6 +862,8 @@ Status game_reader_load_player(Game *game, char *filename, bool fromSaveFile){
           }
           }
         }
+
+        command_info_read_from_file(player_get_cmdData(game_get_player_by_id(game, playerid)), file);
       }
     }
   }
@@ -1312,7 +1306,7 @@ Status game_reader_load_commandInfo(Game *game){
       {
         if(!isalnum(line[j]) && line[j] != ' ' && line[j] != ',' 
         && line[j] != '.' && line[j] != ':' && line[j] != '_' && line[j] != '-'
-        && line[j] != '(' && line[j] != ')' && line[j] != '\"') break;
+        && line[j] != '(' && line[j] != ')' && line[j] != '\"' && line[j] != '=') break;
         str[j] = line[j];
       }
       str[j] = 0;
@@ -1754,7 +1748,7 @@ Status game_reader_load_others_from_save_file(Game *game, char *filename){
 
   if (ferror(fIN)) {
     status = ERROR;
-    debug_log(LOG_ERROR, "Error in file at: game_reader_load_effects(Game*, char*) in game_reader.c");
+    debug_log(LOG_ERROR, "Error in file at: game_reader_load_others_from_save_file(Game*, char*) in game_reader.c");
   }
 
   fclose(fIN);

@@ -41,6 +41,9 @@
 
 #define MAX_PROCEDURAL_SIZE 50
 
+#define MINIMAP_MAX_WIDTH 40
+#define MINIMAP_MAX_HEIGHT 25
+
 /**
  * @brief Game struct, defines all the information of the game
  */
@@ -547,6 +550,15 @@ Combat *game_get_combat(Game *game);
 int game_switch_player(Game *game, int player);
 
 /**
+ * @brief Switches player to the one with given Id if posible
+ * 
+ * @param game 
+ * @param playerId 
+ * @return int 
+ */
+int game_switch_player_to_id(Game *game, int playerId);
+
+/**
  * @brief Gets the ability manager struct from the game struct
  * 
  * @param game game struct
@@ -563,6 +575,14 @@ AbilityManager *game_get_ability_manager(Game *game);
  * @return Player* or NULL if error or not found
  */
 Player *game_get_player_by_id(Game *game, Id id);
+
+/**
+ * @brief Construct a new char object
+ * @author Daniel Gómez
+ * 
+ * @return char array[][]
+ */
+char (*game_get_minimap(Game *game))[MINIMAP_MAX_WIDTH + 1];
 
 /**
  * @brief Gets a NPC by its id on game struct

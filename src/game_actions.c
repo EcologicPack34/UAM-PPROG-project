@@ -230,7 +230,6 @@ Status game_actions_update(Game *game, Command *command) {
   CommandCode cmd;
   Status status = ERROR;
   char str[WORD_SIZE] = "";
-  int turn, n_players;
 
   Entity *player = NULL;
 
@@ -251,7 +250,12 @@ Status game_actions_update(Game *game, Command *command) {
 
   if(!command_current_type_valid_by_state(game_get_last_command(game), game_get_state(game))){
     game_add_log_message(game, MESSAGE_ERROR, "Command not valid for gamestate");
-    command_set_status(game_get_last_command(game), ERROR);
+    game_set_is_turn_valid(game, NOT_VALID);
+    command_set_status(command, game_get_is_turn_valid(game) == VALID ? OK : ERROR);
+    if(command_get_code(command) != SWITCH 
+    || (command_get_code(command) == SWITCH && strncmp("list", command_get_arguments(command)[0], 5) == 0) ){
+      command_update_player_data(command);
+    }
     debug_log(LOG_WARNING, "Introduced command was not valid for current game state (state: %d)", game_get_state(game) - ERROR_STATE);
     return ERROR;
   }
@@ -327,6 +331,10 @@ Status game_actions_update(Game *game, Command *command) {
       break;
     case SAVE:
       status = game_actions_save(game);
+      break;
+    case MINIMAP:
+      status = game_set_state(game, game_get_state(game) == DEFAULT ? MINIMAP_STATE : DEFAULT);
+      break;
     default:
       break;
   }
@@ -342,6 +350,7 @@ Status game_actions_update(Game *game, Command *command) {
       game_set_is_turn_valid(game, NOT_VALID);
       status = ERROR;
     }
+    //changes turn to active player in combat
   }
   command_set_status(command, game_get_is_turn_valid(game) == VALID ? OK : ERROR);
   if(command_get_code(command) != SWITCH 
@@ -350,17 +359,17 @@ Status game_actions_update(Game *game, Command *command) {
   }
   command_get_as_string(game_get_last_command(game), str);
   
+  if(game_get_state(game) == COMBAT){
+    game_switch_player_to_id(game, entity_get_id(combat_get_allies_stats_at(game_get_combat(game), combat_get_turn(game_get_combat(game)))->entity));
+  }
+
+
   player = player_get_entity(game_get_player(game));
 
   if(player){
     debug_log(PRINT,"Executed command: %s; by player %d:%s",str , entity_get_id(player), entity_get_name(player));
-    n_players = combat_get_n_players(game_get_combat(game));
-
   }
-  turn = (combat_get_turn((game_get_combat(game))) + 1)%n_players;
-  combat_set_turn(game_get_combat(game), turn);
-  game_switch_player(game, turn);
-  
+
   return status;
 }
 
@@ -706,6 +715,7 @@ Status game_actions_attack(Game *game){
     /*If game starts then the first action isn't valid so combat doesnt update*/
     return ERROR;
   }
+  
 
   return OK;
 }
@@ -760,8 +770,10 @@ Status game_actions_switch(Game *game){
     for (i = 0; i < n_players; i++)
     {
       playerEnt = player_get_entity(game_get_player_at(game, i));
-      strcat(str, "\n");
-      sprintf(strAux, "%d. ID:%ld NAME: %s", i + 1, entity_get_id(playerEnt), entity_get_name(playerEnt));
+      if(i > 0){
+        strcat(str, " | ");
+      }
+      sprintf(strAux, "[CYAN]%d[RESET]. ID:[YELLOW]%ld[RESET] NAME: [YELLOW]%s[RESET]", i + 1, entity_get_id(playerEnt), entity_get_name(playerEnt));
       strcat(str, strAux);
     }
     return game_add_log_message(game, MESSAGE_PLAYER_LIST, str);
@@ -1195,7 +1207,7 @@ Status game_actions_follow(Game *game){
 
   /*Checks if arguments count is valid*/
   n_args = command_get_arguments_count(comm);
-  if(n_args < 0 || n_args > 1){
+  if(n_args <= 0 || n_args > 1){
     game_add_log_message(game, ERROR, "Invalid number of arguments");
     return ERROR;
   }

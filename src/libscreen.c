@@ -75,12 +75,10 @@ void screen_destroy(){
 void screen_paint(Frame_color color){
   int i=0;
   Cell *cell;
-
+  
   printf("\033[2J");
+  printf("\r");
   if (__data){
-    /* puts(__data); */ /*Dump data directly to the terminal*/
-    /*It works fine if the terminal window has the right size*/
-
     for (i = 0; i < TOTAL_DATA - 1; i++)
     {
       cell = __data + i;
@@ -202,6 +200,45 @@ void screen_area_reset_cursor(Area* area){
   }
 }
 
+int word_length(const char *word, int maxLen){
+  int visible = 0;
+  char tag[50];
+  int len;
+
+  Frame_color color;
+
+  len = strlen(word);
+
+  for (int i = 0, j = 0; i < maxLen && word[i] != 0 && word[i] != ' ' && word[i] != '\n'; i++)
+  {
+    if(word[i] == '['){
+      for (j = i + 1; j < len; j++)
+      {
+        if(word[j] == '[' || word[j] == ']'){
+          break;
+        }
+        tag[j - i - 1] = word[j];
+      }
+      tag[j - i - 1] = 0;
+      if(word[j] == '['){
+        visible++;
+        continue;
+      }
+      if(word[j] == ']'){
+        color = color_tag_to_color(tag);
+        if(color == NO_TAG){
+          visible++;
+          continue;
+        }
+        i = j;
+      }
+    }
+    visible++;
+  }
+  
+  return visible;
+}
+
 void screen_area_puts(Area* area, char *str){
   int len = 0;
   char *ptr = NULL;
@@ -217,9 +254,6 @@ void screen_area_puts(Area* area, char *str){
   Cell *cAux = NULL;
   short skipT = 0;
   short skipS = 0;
-  short skipSt = 0;
-
-  int i;
 
   if(!area || !str) return;
 
@@ -258,37 +292,8 @@ void screen_area_puts(Area* area, char *str){
     /*Print the actual line to data*/
     for (area->cX = 0; area->cX < area->width && ptr <= str + len && *ptr != '\0'; (area->cX)++ , ptr++)
     { 
-      /*Searches if word can be put in line or needs to be moved to next line*/
-      for (i = 0, tagE = ptr; i < area->width && *tagE != ' ' && *tagE != '\0' && tagE < str + len && !skipS; i++)
-      {
-        /*ignores tags when counting length*/
-        if(*tagE == '[' && !skipSt){
-          strcpy(tag, "");
-          for (tagLen = 0, tagE++; tagLen + 1 < 20 && *tagE != ']' && *tagE != '[' && tagE <= str + len; tagLen++, tagE++){
-            tag[tagLen] = *tagE;
-          }
-          if(*tagE == '['){
-            tagE-= tagLen;
-            skipSt = 1;
-          }
-          if(*tagE == ']'){
-            tag[tagLen] = '\0';
-            if(color_tag_to_color(tag) == NO_TAG){
-              tagE -= tagLen;
-              skipSt = 1;
-            }else{
-              tagE++;
-            }
-          }
-          i--;
-          if(i < 0) i = 0;
-        }
-        tagE++;
-        if(skipSt) skipSt = 0;
-      }
-      if(i > area->width - area->cX){
+      if(word_length(ptr, area->width) > area->width - area->cX){
         skipS = 1;
-        i = 0;
         break;
       }
       if(*ptr == ' ' && skipS) {

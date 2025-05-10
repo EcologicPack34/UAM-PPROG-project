@@ -37,6 +37,8 @@ DEPENDENCIES = $(OBJ:.o=.d)
 EXE = ./$(GAME_NAME)/anthill
 EXED = ./$(GAME_NAME)/anthilldebug
 
+LAUNCHER = game_launcher
+
 _TEST_OBJ = entity_test.o collection_test.o space_test.o link_test.o object_test.o inventory_test.o player_test.o effect_test.o
 _TEST = entity_test collection_test space_test link_test object_test inventory_test player_test effect_test
 
@@ -44,7 +46,7 @@ TEST = $(patsubst %,$(TEST_EXE_PATH)/%,$(_TEST))
 TEST_OBJ = $(patsubst %,$(OBJ_PATH)/%,$(_TEST_OBJ))
 
 
-all: $(EXE)
+all: $(EXE) $(LAUNCHER)
 
 $(OBJ_PATH):
 	mkdir -p $(OBJ_PATH)
@@ -56,6 +58,9 @@ $(EXE):	$(OBJ)
 #Rule to compile each .c file into its .o file
 $(OBJ_PATH)/%.o: $(SRC_PATH)/%.c | $(OBJ_PATH)
 	$(CC) -c -o $@ $< $(CFLAGS)
+
+$(LAUNCHER): $(SRC_PATH)/$(LAUNCHER).c
+	gcc -Wall -pedantic -o $(LAUNCHER)  $(SRC_PATH)/$(LAUNCHER).c
 
 -include $(DEPENDENCIES)
 

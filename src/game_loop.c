@@ -37,7 +37,7 @@
  * @param file_name string with the name of the filename with the game information
  * @return 0 if everything goes well or 1 if there was some mistake
  */
-int game_loop_init(Game **game, Graphic_engine **gengine, char *file_name, int seed);
+int game_loop_init(Game **game, Graphic_engine **gengine, char *file_name, int seed, bool procedural);
 
 /**
  * @brief Essential function, receives last command, while the command isn't EXIT
@@ -74,6 +74,7 @@ int main(int argc, char *argv[]){
   
   int i;
   int seed = -1;
+  bool procedural = false;
 
   /*Checks if num of arguments if correct, if not stops the programm*/
   if (argc < 2)
@@ -102,11 +103,14 @@ int main(int argc, char *argv[]){
         fprintf(stderr, "Invalid format for -s argument. Use \"-s <positive number>\"");
       }
     }
+    if(i < (argc) && strcmp(argv[i], "-proced") == 0){
+      procedural = true;
+    }
   }
 
 
   /*Initializes and runs the game */
-  if (!game_loop_init(&game, &gengine, argv[1], seed))
+  if (!game_loop_init(&game, &gengine, argv[1], seed, procedural))
   {
     debug_log(PRINT, "Game Initialized correctly");
 
@@ -127,7 +131,7 @@ int main(int argc, char *argv[]){
 }
 
 
-int game_loop_init(Game **game, Graphic_engine **gengine, char *file_name, int seed){
+int game_loop_init(Game **game, Graphic_engine **gengine, char *file_name, int seed, bool procedural){
   if(seed < 0){
     srand((unsigned) time(NULL));
   }
@@ -135,7 +139,7 @@ int game_loop_init(Game **game, Graphic_engine **gengine, char *file_name, int s
     srand((unsigned)seed);
   }
 
-  if (game_reader_create_from_file(game, file_name) == ERROR)
+  if (game_reader_create_from_file(game, file_name, procedural) == ERROR)
   {
     fprintf(stderr, "Error while initializing game.\n");
     game_loop_cleanup(*game, *gengine);

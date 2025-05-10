@@ -8,7 +8,7 @@
 /**
  * @brief Array of names for each message type
  */
-char msg_type_to_name[MESSAGE_TYPE_COUNT][WORD_SIZE] = {"", "[BLUE]Log[RESET]", "[RED]Error", "NPC", "Players", "[GREEN]Help[RESET]", "[YELLOW]Inspection[RESET]"};
+char msg_type_to_name[MESSAGE_TYPE_COUNT][WORD_SIZE] = {"", "[CYAN]Log[RESET]", "[RED]Error", "NPC", "Players", "[GREEN]Help[RESET]", "[YELLOW]Inspection[RESET]"};
 
 /**
  * @brief Internal struct of Message

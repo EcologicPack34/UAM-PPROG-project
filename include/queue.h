@@ -22,6 +22,11 @@
 typedef struct _Queue Queue;
 
 /**
+ * @brief Generic free function type
+ */
+typedef void (*P_free_ele)(void*);
+
+/**
  * @brief Initializes and allocates memory for a queue
  * @author Daniel Gómez
  * 
@@ -92,5 +97,15 @@ long queue_size(Queue *q);
  * @return false 
  */
 bool queue_isEmpty(Queue *q);
+
+/**
+ * @brief Frees the elements of a queue with the ele_free function
+ * @author Maksym Polyak
+ * 
+ * @param q queue struct
+ * @param ele_free generic free function
+ * @return Status 
+ */
+Status queue_free_elements(Queue *q, P_free_ele ele_free);
 
 #endif

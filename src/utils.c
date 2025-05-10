@@ -52,3 +52,14 @@ Status string_remove_endofline_escape_sequence_on_end_to_newline(char *str){
 
     return OK;
 }
+
+Status string_remove_n_r_on_end(char *str){
+    char *pch = NULL;
+
+    if(!str) return ERROR;
+
+    while ((pch = strpbrk (str, "\n\r"))){
+        *pch = 0;
+    }
+    return OK;
+}

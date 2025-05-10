@@ -18,10 +18,10 @@
 #define UNDEFINED_ID 0              /*!< Value of a non assigned ID, usefull to not confuse errors with intended behaviour*/
 #define DIRECTION_NUMBER 8          /*!< Number of directions implemented on the game*/
 
-#define NPC_MAX_FOLLOWERS NPC_MAX_ALLIES - 1    /*!< Maximum number of followers*/
+#define NPC_MAX_FOLLOWERS (NPC_MAX_ALLIES - 1)    /*!< Maximum number of followers*/
 #define NPC_MAX_ALLIES 4            /*!< Maximum number of ally NPCs in a combat and in general(relative to the player)*/
 #define NPC_MAX_ENEMIES 4           /*!< Maximum number of enemy NPCs in a combat*/
-#define COMBAT_MAX_ENTITIES 8       /*!< Maximum number of entities in a combat*/
+#define COMBAT_MAX_ENTITIES 10       /*!< Maximum number of entities in a combat*/
 
 #define BASE_DAMAGE_MINIMUM 10      /*!< Minimum damage an entity can do if attack is succesful*/
 #define STRENGTH_DAMAGE_MULTIPLIER 1.5  /*!< Rate at which the strength affects the base damage*/
@@ -51,7 +51,7 @@
 #define MONEY_MIN 10                        /*!< Minimum amount of money an enemy can yield when defeated*/
 
 
-#define N_GAME_STATES 5             /*!< Number of game states*/
+#define N_GAME_STATES 6             /*!< Number of game states*/
 #define MAX_SKILLS_ENTITY 5         /*!< Maximum number of skils per entity*/
 
 #define LINE_LENGTH 100              /*!< Max length of a line of dialogue*/
@@ -88,7 +88,7 @@ typedef enum {UNKNOWN_INVENTORY, PLAYER_INVENTORY, NPC_INVENTORY, SPACE_INVENTOR
 /**
  * @brief Enum describing the different game states
  */
-typedef enum {ERROR_STATE ,DEFAULT, COMBAT, DIALOGUE, STORE_STATE}GameState;
+typedef enum {ERROR_STATE ,DEFAULT, COMBAT, DIALOGUE, STORE_STATE, MINIMAP_STATE}GameState;
 
 /**
  * @brief Enum describing differents store available
