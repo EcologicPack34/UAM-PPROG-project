@@ -73,12 +73,47 @@ void screen_destroy(){
 }
 
 void screen_paint(Frame_color color){
-  int i=0;
   Cell *cell;
+
+  int y,x;
+  int pos = 0;
+
+  Frame_color cChar = NO_TAG;
+  Frame_color cBack = NO_TAG;
+
+  char line[COLUMNS + 1000];
   
+  if(!__data) return;
+
   printf("\033[2J");
   printf("\r");
-  if (__data){
+
+  for (y = 0; y < ROWS; y++)
+  {
+    pos = 0;
+    cChar = NO_TAG;
+    cBack = NO_TAG;
+    for (x = 0; x < COLUMNS; x++)
+    {
+      cell = ACCESS(__data, x, y);
+      if(cell->character == BG_CHAR){
+        cell->charColor = color;
+        cell->background = color;
+      }
+      if(cell->background != cBack || cChar != cell->charColor){
+        cChar = cell->charColor;
+        cBack = cell->background;
+        pos += sprintf(line + pos,"%s",color_to_ansi(cChar, cBack));
+      }
+      line[pos++] = cell->character;
+    }
+    line[pos] = 0;
+    printf("%s", line);
+    printf("\033[0m\n");
+  }
+  
+
+  /*if (__data){
     for (i = 0; i < TOTAL_DATA - 1; i++)
     {
       cell = __data + i;
@@ -91,7 +126,7 @@ void screen_paint(Frame_color color){
         printf("\n");
       }
     }
-  }
+  }*/
 }
 
 void area_set_color(Area *area, Frame_color backGround, Frame_color charColor){
