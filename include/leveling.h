@@ -78,6 +78,15 @@ int leveling_get_level(Leveling *leveling);
 int leveling_get_skill_points(Leveling *leveling);
 
 /**
+ * @brief Gets a pointer to where the SP are located
+ * @author Maksym Polyak
+ * 
+ * @param leveling 
+ * @return int* 
+ */
+int *leveling_get_SP_pointer(Leveling *leveling);
+
+/**
  * @brief Sets the XP of a leveling struct
  * @author Maksym Polyak
  * 

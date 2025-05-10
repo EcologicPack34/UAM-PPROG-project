@@ -16,6 +16,7 @@
 #include "stdbool.h"
 #include "queue.h"
 #include <stdio.h>
+#include "collection.h"
 
 #define N_SKILLS 8 /*!< Number of skills implemented on AbilityType*/
 
@@ -47,9 +48,10 @@ typedef struct _AbilityManager AbilityManager;
  * @param is_object_use true if an object has the ability
  * @param cd_count counter to manage how many turns left the entity/object can't use the ability
  * @param cd_length maxmimum length of the cooldown
+ * @param cost cost of the ability on SPs
  * @return Ability* or NULL if error
  */
-Ability *ability_create(Id id, char *data, char *name, AbilityType type, Id entityid, bool is_player_ability, bool is_object_use, int cd_count, int cd_length);
+Ability *ability_create(Id id, char *data, char *name, AbilityType type, Id entityid, bool is_player_ability, bool is_object_use, int cd_count, int cd_length, int cost);
 
 /**
  * @brief Destroys a ability struct
@@ -142,6 +144,15 @@ Id ability_get_entityid(Ability *ability);
  * @return char* or NULL if error
  */
 char *ability_get_name(Ability *ability);
+
+/**
+ * @brief Gets the cost of the ability
+ * @author Maksym Polyak
+ * 
+ * @param ability ability struct
+ * @return int or -1 if error
+ */
+int ability_get_cost(Ability *ability);
 
 /*SETTERS*/
 
@@ -237,6 +248,35 @@ Status ability_manager_add_evaluated_ability(AbilityManager *sm, Ability *abilit
  * @return Ability * or NULL if error
  */
 Ability *ability_manager_get_evaluated_ability(AbilityManager *sm);
+
+/**
+ * @brief Gets the unused abilities collection
+ * @author Maksym Polyak
+ * 
+ * @param sm ability manager struct
+ * @return Collection* 
+ */
+Collection *ability_manager_get_unused_abilities(AbilityManager *sm);
+
+/**
+ * @brief Moves an ability from unused to used abilities
+ * @author Maksym Polyak
+ * 
+ * @param sm ability manager struct
+ * @param ability ability struct
+ * @return Status 
+ */
+Status ability_manager_move_ability_to_used(AbilityManager *sm, Ability *ability);
+
+/**
+ * @brief Gets the ability at the index of unused abilities
+ * @author Maksym Polyak
+ * 
+ * @param sm ability manager struct
+ * @param i index
+ * @return Ability* 
+ */
+Ability *ability_manager_get_unused_ability_at(AbilityManager *sm, int i);
 
 /**
  * @brief Adds a ability to the ability manager collection

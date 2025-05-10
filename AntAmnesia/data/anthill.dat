@@ -6,7 +6,7 @@ Formato STATS: #st:IDEntity|EntityType|VidaMaxima|Vida|DanoBase|Fuerza|Defensa|N
 
 
 
-#p:1|Hero1|11|100|0|100|1|1|mO^"
+#p:1|Hero1|11|100|0|100|1|100|mO^"
 #st:1|1|100|100|25|1|1|1
 
 #p:2|Hero2|14|100|0|100|1|0|m1^"
@@ -130,17 +130,22 @@ Formato NPC: #n:ID|Dialogue State - 1 means initial - 0 means no dialogue|Nombre
 #st:8|2|100|100|10|2|2|2|
 
 
-Formato Ability: #sk:Id|Type|Name|Entityid(ObjectId)|is_player_ability|is_object_use|cd_init|cd_max|data
+Formato Ability: #sk:Id|Type|Name|Entityid(ObjectId) Es -1 si no esta asignado --> A la tienda|is_player_ability|is_object_use|cd_init|cd_max|cost|data
 
-#sk:1|heal_self|Heal self 50 HP|1|1|0|0|8|50
-#sk:2|effect_self|Self Regeneration Spell|1|1|0|0|2|3
-#sk:3|effect_ally|Ally Regeneration Spell|1|1|0|0|3|3
-#sk:4|heal_self|Heal self 5 HP  Maximum CD: 0|6|0|1|0|0|5
-#sk:5|money_bag|Adds 20 coins   Maximum CD: 0|7|0|1|0|0|20
-#sk:6|link_unlock|Unlocks link between 123 and 124|8|0|1|0|0|4
-#sk:7|effect_enemy|FireBall Launcher|1|1|0|0|0|2
-#sk:8|effect_enemy|Poison Bomb|1|1|0|0|6|1
-#sk:9|heal_self|Heal self 20 HP Maximum CD: 0|5|0|1|0|0|20
+#sk:1|heal_self|Heal self 50 HP|1|1|0|0|8|9|50
+#sk:2|effect_self|Self Regeneration Spell|-1|1|0|0|2|8|3
+#sk:3|effect_ally|Ally Regeneration Spell|-1|1|0|0|3|7|3
+#sk:4|heal_self|Heal self 5 HP  Maximum CD: 0|6|0|1|0|0|6|5
+#sk:5|money_bag|Adds 20 coins   Maximum CD: 0|7|0|1|0|0|5|20
+#sk:6|link_unlock|Unlocks link between 123 and 124|8|0|1|0|0|4|4
+#sk:7|effect_enemy|FireBall Launcher|-1|1|0|0|0|3|2
+#sk:8|effect_enemy|Poison Bomb|-1|1|0|0|6|2|1
+#sk:9|heal_self|Heal self 20 HP Maximum CD: 0|5|0|1|0|0|1|20
+#sk:10|effect_enemy|Poison Bomb TEST1|-1|1|0|0|6|2|1
+#sk:11|effect_enemy|Poison Bomb TEST2|-1|1|0|0|6|2|1
+#sk:12|effect_enemy|Poison Bomb TEST3|-1|1|0|0|6|2|1
+#sk:13|effect_enemy|Poison Bomb TEST4|-1|1|0|0|6|2|1
+#sk:14|effect_enemy|Poison Bomb TEST5|-1|1|0|0|6|2|1
 
 
 

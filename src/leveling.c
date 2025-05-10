@@ -71,6 +71,12 @@ int leveling_get_skill_points(Leveling *leveling){
     return leveling->skill_points;
 }
 
+int *leveling_get_SP_pointer(Leveling *leveling){
+    if(!leveling) return NULL;
+
+    return &(leveling->skill_points);
+}
+
 Status leveling_set_XP(Leveling *leveling, int XP){
     if(!leveling || XP < 0) return ERROR;
 

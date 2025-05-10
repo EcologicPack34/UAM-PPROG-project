@@ -209,6 +209,15 @@ Entity *player_get_follower_at(Player *player, int i);
 int player_get_follower_num(Player *player);
 
 /**
+ * @brief Gets the money pointer of the player
+ * @author Maksym Polyak
+ * 
+ * @param player player struct
+ * @return int* or NULL if error
+ */
+int *player_get_money_pointer(Player *player);
+
+/**
  * @brief saves all the data related to a player in a file
  * @author Aaron Charameli Mair
  * 

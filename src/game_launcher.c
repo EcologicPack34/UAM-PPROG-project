@@ -11,7 +11,6 @@
 int main(){
     int seed;
     bool procedural;
-    bool logFile;
     int loadSave;
     int input;
     char cmd[1500];
