@@ -1,6 +1,6 @@
 CC = gcc
 
-GAME_NAME = AntAmnesia
+GAME_NAME = AntHell
 
 INCLUDE = include
 LIBRARIES = libraries

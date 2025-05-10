@@ -4,9 +4,9 @@
 #include <string.h>
 #include <time.h>
 
-#define PROGRAM_NAME "AntAmnesia/anthill"
-#define SAVE_DIR "./AntAmnesia/saves"
-#define DATA_DIR "./AntAmnesia/data"
+#define PROGRAM_NAME "AntHell/anthill"
+#define SAVE_DIR "./AntHell/saves"
+#define DATA_DIR "./AntHell/data"
 
 int main(){
     int seed;
@@ -60,10 +60,10 @@ int main(){
         return -1;
     }
     
-    printf("Your files are:\n ");
+    printf("Your files are:\n");
     while(fgets(save, 500, file)){
         n_files++;
-        printf("%d. %s", n_files , save + 1 + ((loadSave == 1) ? strlen(DATA_DIR) : strlen(SAVE_DIR)));
+        printf(" %d. %s", n_files , save + 1 + ((loadSave == 1) ? strlen(DATA_DIR) : strlen(SAVE_DIR)));
     }
     do{
         printf("input> ");
