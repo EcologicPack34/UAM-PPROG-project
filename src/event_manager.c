@@ -296,10 +296,9 @@ Event *event_create_from_file(FILE *fIN){
     string_remove_newline_escape_sequence_on_end(data);
 
     event = event_create(id, type, commands, cmdNum, data, removeOnTrigger);
-    if(!event){
-        free(commands);
-        return NULL;
-    }
+    
+    /*event_create allocs another _Struct CommandCode to copy this one's information*/
+    free(commands);
 
     return event;
 }

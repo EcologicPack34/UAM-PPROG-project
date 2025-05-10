@@ -599,11 +599,6 @@ Status command_read_from_file(Command *command, FILE *fIN){
   command_info_read_from_file(ci, fIN);
   command->cmdData = ci;
 
-  ci = command_info_create();
-  if(!ci) return ERROR;
-  command_info_read_from_file(ci, fIN);
-  command->cmdPlayerData = ci;
-
   fgets(str, WORD_SIZE, fIN);
 
   /*

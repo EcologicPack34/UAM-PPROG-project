@@ -1745,7 +1745,7 @@ Status game_reader_load_others_from_save_file(Game *game, char *filename){
 
   if (ferror(fIN)) {
     status = ERROR;
-    debug_log(LOG_ERROR, "Error in file at: game_reader_load_effects(Game*, char*) in game_reader.c");
+    debug_log(LOG_ERROR, "Error in file at: game_reader_load_others_from_save_file(Game*, char*) in game_reader.c");
   }
 
   fclose(fIN);
