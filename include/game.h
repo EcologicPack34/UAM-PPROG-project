@@ -922,4 +922,11 @@ char *game_store_get_name(StoreType type, void *ele);
  */
 Status game_add_stat_by_type(char *text, Player *player);
 
+/**
+ * @brief Crossfades the music between combat and defualt state
+ * 
+ * @param game 
+ */
+void game_crossfade_music(Game *game);
+
 #endif

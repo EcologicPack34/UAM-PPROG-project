@@ -53,7 +53,7 @@ $(OBJ_PATH):
 
 #Rule to link all the objects with libraries
 $(EXE):	$(OBJ)
-	$(CC) $(CFLAGS) -o $(EXE) $(OBJ) -L$(LIBRARIES) -lm
+	$(CC) $(CFLAGS) -o $(EXE) $(OBJ) -L$(LIBRARIES) -lm -ldl -lpthread
 
 #Rule to compile each .c file into its .o file
 $(OBJ_PATH)/%.o: $(SRC_PATH)/%.c | $(OBJ_PATH)

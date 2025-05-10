@@ -28,6 +28,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <pthread.h>
+#include <unistd.h>
+
+#define MINIAUDIO_IMPLEMENTATION
+#include "miniaudio.h"
 
 /*
  * Used for dialogue reading wether the game is running from a save file or a .dat
@@ -81,6 +86,14 @@ struct _Game {
   bool requestSwitch;                 /*!< bool that stores if game switched player so graphic engine can clear commands*/
 
   bool procedural;                    /*!< Stores if the game is generated prceduraly or not*/
+
+  ma_result audio_resutl;
+  ma_engine audio_engine;
+  ma_sound defualt_music;
+  ma_sound combat_music;
+  pthread_t crossfade;
+  bool crosfadeInit;
+  GameState musicState;
 };
 
 /*-----PRIVATE FUNCTIONS-----*/
@@ -115,6 +128,66 @@ Status game_store_special_destroy(Game *game, StoreType type);
  * @return Status 
  */
 Status game_map_space_block(Game *game, Space *initSpace ,int block);
+
+void *game_cross_fade_music_local(void *arg){
+  Game *game;
+  game = (Game *)arg;
+
+  int steps = 500;
+  float duration = 2/(float)steps;
+  float volume;
+
+
+  for (int i = 0; i < steps && game->crosfadeInit; i++)
+  {
+    volume = (float)i/(float)steps;
+    //printf("%f\n", volume);
+    if(game->musicState == COMBAT){
+      ma_sound_set_volume(&(game->defualt_music), 1 - volume);
+      ma_sound_set_volume(&(game->combat_music), volume);
+      usleep(duration * 1e6);//conversion to microseconds
+    }
+    if(game->musicState == DEFAULT){
+      ma_sound_set_volume(&(game->combat_music), 1 - volume);
+      ma_sound_set_volume(&(game->defualt_music), volume);
+      usleep(duration * 1e6);//conversion to microseconds
+    }
+  }
+
+  if(game->musicState == COMBAT){
+    ma_sound_stop(&(game->defualt_music));
+    ma_sound_set_volume(&(game->combat_music), 1);
+  }
+  if(game->musicState == DEFAULT){
+    ma_sound_stop(&(game->combat_music));
+    ma_sound_set_volume(&(game->defualt_music), 1);
+  }
+  return NULL;
+}
+
+void game_crossfade_music(Game *game){
+  //pthread_t thread;
+  if(!game) return;
+
+  if(game->musicState == COMBAT){
+    ma_sound_start(&(game->combat_music));
+    ma_sound_seek_to_pcm_frame(&game->combat_music, 0);//rewinds combat music
+    ma_sound_set_volume(&(game->combat_music), 0);
+    ma_sound_set_volume(&(game->defualt_music),1);
+  }
+  if(game->musicState == DEFAULT){
+    ma_sound_start(&(game->defualt_music));
+    ma_sound_set_volume(&(game->defualt_music), 0);
+    ma_sound_set_volume(&(game->combat_music), 1);
+  }
+
+  if(game->crosfadeInit){
+    game->crosfadeInit = false;
+  }
+  pthread_create(&game->crossfade, NULL, game_cross_fade_music_local, game);
+  pthread_detach(game->crossfade);
+  game->crosfadeInit = true;
+}
 
 Status game_store_special_startup(Game *game, StoreType type){
   int i, cost;
@@ -224,13 +297,23 @@ GDesc *_game_get_randomSpaceDesc(Game *game){
 */
 
 Status game_create(Game **game) {
-  int i;
   *game = (Game*)calloc(1,sizeof(Game));
   if(!(*game)) return ERROR;
 
-  for (i = 0; i < MAX_SPACES; i++) {
-    (*game)->spaces[i] = NULL;
+  (*game)->audio_resutl = ma_engine_init(NULL, &((*game)->audio_engine));
+  if((*game)->audio_resutl != MA_SUCCESS){
+    debug_log(LOG_ERROR, "Error initializing audio engine");
+    return ERROR;
   }
+  ma_engine_set_volume(&((*game)->audio_engine), 1.0f);
+  ma_sound_init_from_file(&((*game)->audio_engine), "./sounds/skyrim.mp3", 0, NULL, NULL , &((*game)->defualt_music));
+  ma_sound_init_from_file(&((*game)->audio_engine), "./sounds/combat.mp3", 0, NULL, NULL , &((*game)->combat_music));
+  ma_sound_stop(&((*game)->combat_music));
+  ma_sound_start(&((*game)->defualt_music));
+  ma_sound_set_looping(&(*game)->defualt_music, MA_TRUE);
+  ma_sound_set_looping(&(*game)->combat_music, MA_TRUE);
+
+  (*game)->musicState = DEFAULT;
 
   (*game)->n_spaces = 0;
   (*game)->active_player = NULL; /*Player creation is controlled by game_reader*/
@@ -306,6 +389,12 @@ Status game_destroy(Game *game) {
   int i = 0;
   int count;
   Collection *atcs = NULL;
+
+  ma_sound_stop(&(game->combat_music));
+  ma_sound_stop(&(game->defualt_music));
+  ma_sound_uninit(&(game->combat_music));
+  ma_sound_uninit(&(game->defualt_music));
+  ma_engine_uninit(&(game->audio_engine));
 
   /*Destroys all spaces*/
   for (i = 0; i < game->n_spaces; i++) {
@@ -564,7 +653,18 @@ Status game_set_player_location(Game *game, Id id){
 
 Status game_set_state(Game *game, GameState state){
   if(!game) return ERROR;
+  if(state == DEFAULT && game->musicState != DEFAULT){
+    game->current_state = state;
+    game->musicState = DEFAULT;
+    game_crossfade_music(game);
+  }
+  if(state == COMBAT && game->musicState != COMBAT){
+    game->current_state = state;
+    game->musicState = COMBAT;
+    game_crossfade_music(game);
+  }
   game->current_state = state;
+
   return OK;
 }
 
@@ -935,7 +1035,7 @@ Status game_combat_start(Game *game){
   game->combat = combat_initialize(game_get_space(game, game_get_player_location(game)), game_get_player(game), command_get_code(game_get_last_command(game)), game->attacks);
   if(!game->combat) return ERROR;
 
-  game->current_state = COMBAT;
+  game_set_state(game, COMBAT);
   return OK;
 }
 
@@ -957,10 +1057,9 @@ Status game_combat_end(Game *game){
     leveling_set_XP(leveling, XP/combat_get_player_count(game->combat) + leveling_get_XP(leveling));
     player_add_money(game_get_player_by_id(game, entity_get_id(combat_get_allies_stats_at(game->combat,i)->entity)), money);
   }
-  
 
   combat_free(game->combat);
-  game->current_state = DEFAULT;
+  game_set_state(game, DEFAULT);  
   game->combat = NULL;
   return OK;
 }
