@@ -250,7 +250,12 @@ Status game_actions_update(Game *game, Command *command) {
 
   if(!command_current_type_valid_by_state(game_get_last_command(game), game_get_state(game))){
     game_add_log_message(game, MESSAGE_ERROR, "Command not valid for gamestate");
-    command_set_status(game_get_last_command(game), ERROR);
+    game_set_is_turn_valid(game, NOT_VALID);
+    command_set_status(command, game_get_is_turn_valid(game) == VALID ? OK : ERROR);
+    if(command_get_code(command) != SWITCH 
+    || (command_get_code(command) == SWITCH && strncmp("list", command_get_arguments(command)[0], 5) == 0) ){
+      command_update_player_data(command);
+    }
     debug_log(LOG_WARNING, "Introduced command was not valid for current game state (state: %d)", game_get_state(game) - ERROR_STATE);
     return ERROR;
   }
@@ -326,6 +331,10 @@ Status game_actions_update(Game *game, Command *command) {
       break;
     case SAVE:
       status = game_actions_save(game);
+      break;
+    case MINIMAP:
+      status = game_set_state(game, game_get_state(game) == DEFAULT ? MINIMAP_STATE : DEFAULT);
+      break;
     default:
       break;
   }

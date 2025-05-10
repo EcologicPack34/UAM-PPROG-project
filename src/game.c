@@ -58,7 +58,7 @@ struct _Game {
   Link *links[MAX_LINKS];             /*!< Array with all the links in the map*/
   int n_links;                        /*!< Number of links on the links array*/
   int maxDistToCenter;                  
-  char minimap[MINIMAP_MAX_SIZE][MINIMAP_MAX_SIZE + 1];   
+  char minimap[MINIMAP_MAX_HEIGHT][MINIMAP_MAX_WIDTH + 1];   
 
   /*Others*/
   Dialogue *dialogue;                  /*!< Dialogue struct*/
@@ -1510,31 +1510,35 @@ Status game_get_combat_log_message(Game *game, char *str){
   return OK;
 }
 
-char **game_get_minimap(Game *game, int *height){
+char (*game_get_minimap(Game *game))[MINIMAP_MAX_WIDTH + 1]{
   struct SpaceInfo{
     Space *space;
-    Direction originDir;
     int x,y;
   };
  
  
   int i;
-  int mid;
-  Id location;
+  int midX, midY;
+  int dirX, dirY;
+  char linkChar;
 
   Queue *q = NULL;
   struct SpaceInfo *info, *infoAux;
   Link *link;
+  Space *auxSpace;
 
-  if(!game || !height) return NULL;
+  bool exit = false;
 
-  mid = MINIMAP_MAX_SIZE / 2;
+  if(!game) return NULL;
+
+  midX = MINIMAP_MAX_WIDTH / 2;
+  midY = MINIMAP_MAX_HEIGHT / 2;
 
   /*Resets map*/
-  for (i = 0; i < MINIMAP_MAX_SIZE; i++)
+  for (i = 0; i < MINIMAP_MAX_HEIGHT; i++)
   {
-    memset(game->minimap[i], ' ', (MINIMAP_MAX_SIZE) * sizeof(char));
-    game->minimap[i][MINIMAP_MAX_SIZE] = 0;
+    memset(game->minimap[i], ' ', (MINIMAP_MAX_WIDTH) * sizeof(char));
+    game->minimap[i][MINIMAP_MAX_WIDTH] = 0;
   }
   
   q = queue_create();
@@ -1544,8 +1548,8 @@ char **game_get_minimap(Game *game, int *height){
   if(!info) return NULL;
 
   info->space = game_get_space(game, game_get_player_location(game));
-  info->originDir = NO_DIR;
-  info->x = info->y = mid;
+  info->x = midX;
+  info->y = midY;
 
   queue_push(q, info);
 
@@ -1555,27 +1559,80 @@ char **game_get_minimap(Game *game, int *height){
   }
   
 
-  while(!queue_isEmpty(q)){
+  while(!queue_isEmpty(q)  && !exit){
     info = (struct SpaceInfo *)queue_pop(q);
     space_set_isMapped(info->space, true);
+
+    if(info->x >= 0 && info->x < MINIMAP_MAX_WIDTH && info->y >= 0 && info->y < MINIMAP_MAX_HEIGHT){
+      if(game->minimap[info->y][info->x] == ' '){
+        if(space_get_id(info->space) == game_get_player_location(game)){
+          game->minimap[info->y][info->x] = '0';
+        }else{
+          game->minimap[info->y][info->x] = space_get_isDiscovered(info->space) ? 'O' : 'o';//square
+        }
+      }
+    }
+
 
     for (i = 0; i < 4; i++)
     {
       if(i == 0){
         link = space_get_north(info->space);
+        dirX = 0;
+        dirY = -1;
+        linkChar = '|';
       }else if(i == 1){
         link = space_get_east(info->space);
+        dirX = 1;
+        dirY = 0;
+        linkChar = '-';
       }else if(i == 2){
         link = space_get_south(info->space);
+        dirX = 0;
+        dirY = 1;
+        linkChar = '|';
       }else{
         link = space_get_west(info->space);
+        dirX = -1;
+        dirY = 0;
+        linkChar = '-';
       }
       if(!link) continue;
 
+      if(link_is_locked(link)) linkChar = 'x';
+
+      if(!(info->x + dirX < 0 || info->x + dirX >= MINIMAP_MAX_WIDTH || info->y + dirY < 0 || info->y + dirY >= MINIMAP_MAX_HEIGHT)){
+        if(game->minimap[info->y + dirY][info->x + dirX] == ' '){
+          game->minimap[info->y + dirY][info->x + dirX] = linkChar;//square
+          if(!link_is_adjacent(link)){
+            game->minimap[info->y + dirY][info->x + dirX] = '^';
+            continue;
+          }
+        }
+      }
+      auxSpace = game_get_space(game, link_get_oposite_space(link, space_get_id(info->space)));
+      if(space_get_isMapped(auxSpace)) continue;
+
+      infoAux = (struct SpaceInfo *)malloc(sizeof(struct SpaceInfo));
+      if(!infoAux){
+        exit = true;
+        break;//get out of the for loop
+      }
+      infoAux->x = info->x + dirX * 2;
+      infoAux->y = info->y + dirY * 2;
+      infoAux->space = auxSpace;
+
+      queue_push(q, infoAux);
     }
-    
 
+    free(info);
 
+    if(exit) break;
   }
-
+  while(!queue_isEmpty(q)){
+    info = (struct SpaceInfo *)queue_pop(q);
+    free(info);
+  }
+  queue_destroy(q);
+  return game->minimap;
 }

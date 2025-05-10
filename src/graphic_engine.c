@@ -67,6 +67,8 @@ struct _Graphic_engine
  */
 void graphic_engine_newline_print_with_extra(Area *area, char *string, char *extra);
 
+void graphic_engine_paint_minimap(Graphic_engine *ge, Game *game);
+
 /**
  * @brief Paints a space in map area
  * @author Daniel Gómez
@@ -224,9 +226,13 @@ void graphic_engine_paint_game(Graphic_engine *ge, Game *game)
     return;
   gameState = game_get_state(game);
 
-  if (gameState == DEFAULT)
+  if (gameState == DEFAULT || gameState == MINIMAP_STATE)
   {
-    graphic_engine_paint_map(ge, game);
+    if(gameState == MINIMAP_STATE){
+      graphic_engine_paint_minimap(ge, game);
+    }else{
+      graphic_engine_paint_map(ge, game);
+    }
     graphic_engine_paint_generalDesc(ge, game);
     graphic_engine_paint_playerDesc(ge, game);
   }
@@ -277,6 +283,54 @@ void graphic_engine_newline_print_with_extra(Area *area, char *string, char *ext
     screen_area_puts(area, aux_str);
     toks = strtok(NULL, "\n");
   }
+}
+
+void graphic_engine_paint_minimap(Graphic_engine *ge, Game *game){
+  char (*minimap)[MINIMAP_MAX_WIDTH + 1];
+  char line[(MINIMAP_MAX_WIDTH + 1) + WORD_SIZE];
+  char aux[2];
+  
+  int i = 0,j;
+  char space[WORD_SIZE];
+  
+  minimap = game_get_minimap(game);
+
+  screen_area_clear(ge->map);
+  
+  for (i = 0; i < (MAP_HEIGHT - MINIMAP_MAX_HEIGHT) / 2; i++)
+  {
+    screen_area_puts(ge->map, "");
+  }
+
+  for (i = 0; i < (MAP_WIDTH - MINIMAP_MAX_WIDTH) / 3; i++)
+  {
+    space[i] = ' ';
+  }
+  space[i] = 0;
+
+  for (i = 0, j = 0; i < MINIMAP_MAX_HEIGHT; i++)
+  {
+    strcpy(line,space);
+    for (j = 0; j < MINIMAP_MAX_WIDTH; j++)
+    {
+      if(minimap[i][j] == '0'){
+        strcat(line, "[GREEN]");
+      }else if(minimap[i][j] == 'o'){
+        strcat(line, "[PURPLE]");
+      }else if(minimap[i][j] == 'O'){
+        strcat(line, "[YELLOW]");
+      }else if(minimap[i][j] == 'x'){
+        strcat(line, "[RED]");
+      }else if(minimap[i][j] == '^'){
+        strcat(line, "[CYAN]");
+      }
+      sprintf(aux, "%c", minimap[i][j]);
+      strcat(line, aux);
+      strcat(line,"[RESET]");
+    }
+    screen_area_puts(ge->map, line);
+  }
+  
 }
 
 void graphic_engine_paint_map(Graphic_engine *ge, Game *game)

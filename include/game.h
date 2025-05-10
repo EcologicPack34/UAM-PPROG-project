@@ -40,7 +40,8 @@
 
 #define MAX_PROCEDURAL_SIZE 50
 
-#define MINIMAP_MAX_SIZE 40
+#define MINIMAP_MAX_WIDTH 40
+#define MINIMAP_MAX_HEIGHT 25
 
 /**
  * @brief Game struct, defines all the information of the game
@@ -574,7 +575,13 @@ AbilityManager *game_get_ability_manager(Game *game);
  */
 Player *game_get_player_by_id(Game *game, Id id);
 
-char **game_get_minimap(Game *game, int *height);
+/**
+ * @brief Construct a new char object
+ * @author Daniel Gómez
+ * 
+ * @return char array[][]
+ */
+char (*game_get_minimap(Game *game))[MINIMAP_MAX_WIDTH + 1];
 
 /**
  * @brief Gets a NPC by its id on game struct

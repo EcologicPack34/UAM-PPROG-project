@@ -64,7 +64,7 @@ int main(){
     printf("Your files are:\n ");
     while(fgets(save, 500, file)){
         n_files++;
-        printf("%d. %s", n_files , save);
+        printf("%d. %s", n_files , save + 1 + ((loadSave == 1) ? strlen(DATA_DIR) : strlen(SAVE_DIR)));
     }
     do{
         printf("input> ");
@@ -113,7 +113,7 @@ int main(){
 
         printf("\nLaunching game...");
 
-        strcpy(cmd, "valgrind --leak-check=full --track-origins=yes --show-leak-kinds=all ./");
+        strcpy(cmd, "./");
         strcat(cmd, PROGRAM_NAME);
         sprintf(aux ," %s -s %d %s", save, seed, (procedural == true) ? "-proced" : "");
         strcat(cmd, aux);
