@@ -58,7 +58,7 @@ Status string_remove_n_r_on_end(char *str){
 
     if(!str) return ERROR;
 
-    while ((pch = strpbrk (str, "\n\r"))){
+    while ((pch = strpbrk (str, "\r\n"))){
         *pch = 0;
     }
     return OK;

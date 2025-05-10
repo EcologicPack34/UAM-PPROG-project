@@ -45,6 +45,8 @@ struct _Space {
   Space *neighbours[DIRECTION_NUMBER];  /*!< Adjacent spaces to the original space*/
 
   Inventory *inventory;                 /*!< Inventory of the space*/
+
+  char description[WORD_SIZE];                     /*!< Description of the place that the space represents*/
   
   Collection *npcs;                     /*!< Collection of npcs in the given space*/
 };
@@ -120,6 +122,13 @@ Inventory *space_get_inventory(Space *space){
   return space->inventory;
 }
 
+char *space_get_description(Space *space){
+  if(!space){
+    return NULL;
+  }
+  return space->description;
+}
+
 /*Space SETTERS*/
 
 Status space_set_name(Space* space, char* name) {
@@ -130,6 +139,14 @@ Status space_set_name(Space* space, char* name) {
   if (!strcpy(space->name, name)) {
     return ERROR;
   }
+  return OK;
+}
+
+Status space_set_description(Space *space, char *descr){
+  if(!space || !descr) return ERROR;
+
+  strcpy(space->description, descr);
+
   return OK;
 }
 
@@ -488,9 +505,9 @@ Status space_save_to_file(FILE *file, Space *s){
   up = link_get_id(space_get_up(s));
   down = link_get_id(space_get_down(s));
   
-  /*#s:ID|Name|gdescId|northLink|eastLink|southLink|westLink|upLink|downLink|isDiscovered*/
-  fprintf(file, "#s:%ld|%s|%ld|%ld|%ld|%ld|%ld|%ld|%ld|%d\n", space_get_id(s), space_get_name(s),\
-  gdesc_get_id(space_get_graphic_description(s)), north, east, south, west, up, down, space_get_isDiscovered(s));
+  /*#s:ID|Name|gdescId|northLink|eastLink|southLink|westLink|upLink|downLink|descr|isDiscovered*/
+  fprintf(file, "#s:%ld|%s|%ld|%ld|%ld|%ld|%ld|%ld|%ld|%s|%d\n", space_get_id(s), space_get_name(s),\
+  gdesc_get_id(space_get_graphic_description(s)), north, east, south, west, up, down, space_get_description(s), space_get_isDiscovered(s));
 
   
   return OK;

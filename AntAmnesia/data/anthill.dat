@@ -1,4 +1,4 @@
-Formato Space: #s:ID|Nombre|gdescId|northLink|eastLink|southLink|westLink|upLink|downLink
+Formato Space: #s:ID|Nombre|gdescId|northLink|eastLink|southLink|westLink|upLink|downLink|descr
 la longitud de gdescLine esta limitidad por el codigo, es decir, si es mas larga de lo debido se ignorara. Si hay mas lineas de descripcion de lo debido tambien se ignoran
 
 Formato Player: #p:ID|Nombre|LocationID|Money|XP actual|XP del siguiente nivel 100 si nivel es 1|nivel|skill points|gdesc
@@ -12,16 +12,16 @@ Formato STATS: #st:IDEntity|EntityType|VidaMaxima|Vida|DanoBase|Fuerza|Defensa|N
 #p:2|Hero2|14|100|0|100|1|0|m1^"
 #st:2|1|100|100|25|1|1|1
 
-#s:11|Entry|1|-1|-1|1|-1|11|-1
-#s:121|Corridor1|-1|1|-1|2|-1|-1|-1
-#s:122|Corridor2|-1|2|6|3|-1|-1|-1
-#s:123|Corridor3|-1|3|-1|4|-1|-1|-1
-#s:124|Corridor4|-1|4|-1|5|-1|-1|-1
-#s:13|Pantry|-1|5|-1|-1|-1|-1|-1
-#s:125|Corridor5|-1|-1|7|-1|6|-1|-1
-#s:126|Corridor6|-1|-1|8|-1|7|-1|-1
-#s:127|Corridor7|-1|-1|9|-1|8|-1|-1
-#s:14|Hole|-1|-1|-1|10|9|-1|11
+#s:11|Entry|1|-1|-1|1|-1|11|-1|THIS IS A TEST DESCRIPTION
+#s:121|Corridor1|-1|1|-1|2|-1|-1|-1|DESCR
+#s:122|Corridor2|-1|2|6|3|-1|-1|-1|DESCR
+#s:123|Corridor3|-1|3|-1|4|-1|-1|-1|DESCR
+#s:124|Corridor4|-1|4|-1|5|-1|-1|-1|DESCR
+#s:13|Pantry|-1|5|-1|-1|-1|-1|-1|DESCR
+#s:125|Corridor5|-1|-1|7|-1|6|-1|-1|DESCR
+#s:126|Corridor6|-1|-1|8|-1|7|-1|-1|DESCR
+#s:127|Corridor7|-1|-1|9|-1|8|-1|-1|DESCR
+#s:14|Hole|-1|-1|-1|10|9|-1|11|DESCR
 
 Formato Graphic description:
 -#gd:ID|height|width|type

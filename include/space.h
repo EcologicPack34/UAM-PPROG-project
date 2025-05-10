@@ -70,6 +70,16 @@ Status space_destroy(Space *space);
 /*Space SETTERS*/
 
 /**
+ * @brief Sets the description of a space
+ * @author Maksym Polyak
+ * 
+ * @param space space struct
+ * @param descr descr char *
+ * @return Status 
+ */
+Status space_set_description(Space *space, char *descr);
+
+/**
  * @brief It sets the name of a space
  * @author Profesores PPROG
  *
@@ -222,6 +232,15 @@ bool space_get_isDiscovered(Space *space);
  * @return GDesc* or NULL if error
  */
 GDesc *space_get_graphic_description(Space *space);
+
+/**
+ * @brief Gets the description of the space
+ * @author Maksym Polyak
+ * 
+ * @param space space struct
+ * @return char* 
+ */
+char *space_get_description(Space *space);
 
 /**
  * @brief Gets the pointer to the vector2 storing the position of the space
