@@ -1183,25 +1183,25 @@ void graphic_engine_paint_store(Graphic_engine *ge, Game *game){
 
   graphic_engine_paint_generalDesc(ge, game);
 
-  screen_area_puts(ge->map," \n ");
-  screen_area_puts(ge->map,"  (Enter 'by e' or 'by exit' to exit the store or  'by (NUMBER OF ITEM)' to buy. You can also use i (NUMBER OF ITEM) to see description)\n Use 'by n' to move to next page\n Or use 'by b' to move to the previous page\n");
+  screen_area_puts(ge->map," \n  [WHITE]How to use store menu:[RESET]\n");
+  screen_area_puts(ge->map," [GREEN]Enter 'by e' or 'by exit' to exit the store\n or 'by (NUMBER OF ITEM)' to buy.\n Use 'by n' to move to next page\n Or use 'by b' to move to the previous page[RESET]\n");
   
   size = store_get_size(st);
   page = store_get_page(st);
   item_index = (page - 1)*STORE_PAGE_MAX;
 
-  sprintf(str, " \n  Page number: %d out of %d\n", page, (size - 1)/STORE_PAGE_MAX + 1);
+  sprintf(str, " \n  [CYAN]Page number:[RESET] %d [GREEN]out of[RESET] %d\n", page, (size - 1)/STORE_PAGE_MAX + 1);
   screen_area_puts(ge->map,str);
 
   switch(type){
     case ABILITY_STORE:
-      sprintf(str, "  Skill Points available: %d\n", *store_get_money(st));
+      sprintf(str, "  [CYAN]Skill Points available:[RESET] %d\n", *store_get_money(st));
       break;
     case OBJECT_STORE:
-      sprintf(str, "  Money available: %d\n", *store_get_money(st));
+      sprintf(str, "  [CYAN]Money available:[RESET] %d\n", *store_get_money(st));
       break;
     case STAT_STORE:
-      sprintf(str, "  Skill Points available: %d\n", *store_get_money(st));
+      sprintf(str, "  [CYAN]Skill Points available:[RESET] %d\n", *store_get_money(st));
       break;
     default:
       sprintf(str, "  ERROR:\n");
@@ -1211,19 +1211,21 @@ void graphic_engine_paint_store(Graphic_engine *ge, Game *game){
 
   switch(type){
     case ABILITY_STORE:
-      sprintf(str, "  These are all the abilities offered:\n");
+      sprintf(str, "  [WHITE]These are all the abilities offered:[RESET]\n");
       break;
     case OBJECT_STORE:
-      sprintf(str, "  This is all I can offer:\n");
+      sprintf(str, "  [WHITE]This is all I can offer:[RESET]\n");
       break;
     case STAT_STORE:
-      sprintf(str, "  This is all you can level up!\n");
+      sprintf(str, "  [WHITE]This is all you can level up:[RESET]\n");
       break;
     default:
       sprintf(str, "  ERROR:\n");
       break;
   }
   screen_area_puts(ge->map,str);
+
+  screen_area_puts(ge->map," \n");
 
   for(i = 0; i < STORE_PAGE_MAX && (i + (page - 1)*STORE_PAGE_MAX  < size); i++){
     sprintf(aux_str,"    %d - ", i + 1);

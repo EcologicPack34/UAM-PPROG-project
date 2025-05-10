@@ -964,15 +964,9 @@ Status game_actions_unequip(Game *game){
 Status game_actions_inspect(Game *game){
   Inventory *playerInv = NULL, *spaceInv;
   Object *obj = NULL;
-  int i, size;
 
   Command *cmd = NULL;
   char **args;
-
-  void *ele = NULL;
-  Store *st = NULL;
-  StoreType type;
-  char *paux = NULL;
 
   if(!game) return ERROR;
 
@@ -985,35 +979,6 @@ Status game_actions_inspect(Game *game){
   if(command_get_arguments_count(cmd) != 1){
     game_add_log_message(game, ERROR, "Invalid number of arguments");
     return ERROR;
-  }
-
-  if(game_get_state(game) == STORE_STATE){
-    st = game_get_store(game);
-    if(!st) return ERROR;
-
-    type = store_get_type(st);
-    if(type == ERROR_STORE) return ERROR;
-
-    size = store_get_size(st);
-    for(i = 0; i < size; i++){
-      ele = store_get_item_element_at(st, i);
-      if(!ele) return ERROR;
-      paux = game_store_get_name(type, ele);
-      if(!paux) continue;
-
-      if(strcmp(args[0],paux) == 0){
-        paux = game_store_get_descr(type, ele);
-        if(!paux){
-          game_add_log_message(game, MESSAGE_INSPECT, "What you tried to inspect does not have a description.");
-          return OK;
-        }
-        game_add_log_message(game, MESSAGE_INSPECT, paux);
-        return OK;
-      }
-    }
-
-    game_add_log_message(game, MESSAGE_INSPECT, "What you are searching for isn't on the store");
-    return OK;
   }
 
   /*Tries to check if its in the inventory or in the actual space*/

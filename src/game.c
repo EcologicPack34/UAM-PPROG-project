@@ -1596,9 +1596,9 @@ Status game_get_combat_log_message(Game *game, char *str){
 int game_store_get_stat_lvlup_cost(char *text){
   LevelUpTypes type = NO_LVLUP_STAT;
   int i;
-  char store_stat_text[LVLUP_TYPES_NUM][WORD_SIZE] = {LVLUP_STRENGTH_TEXT, LVLUP_MAX_HEALTH_TEXT, LVLUP_MAGIC_LEVEL_TEXT};
+  char store_stat_text[LVLUP_TYPES_NUM + 1][WORD_SIZE] = {LVLUP_STRENGTH_TEXT, LVLUP_MAX_HEALTH_TEXT, LVLUP_MAGIC_LEVEL_TEXT, LVLUP_TO_ABILITY_STORE_TEXT};
 
-  for(i = 0; i < LVLUP_TYPES_NUM && type == NO_LVLUP_STAT; i++){
+  for(i = 0; i < LVLUP_TYPES_NUM + 1 && type == NO_LVLUP_STAT; i++){
     if(strcmp(text, store_stat_text[i]) == 0){
       type = i + 1;
     }
@@ -1615,6 +1615,8 @@ int game_store_get_stat_lvlup_cost(char *text){
       return LVLUP_MAXHEALTH_COST;
     case LVLUP_MAGICLEVEL:
       return LVLUP_MAGICLEVEL_COST;
+    case LVLUP_ABILITYSTORE:
+      return 0;
     default:
       break;
   }

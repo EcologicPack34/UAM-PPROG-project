@@ -100,6 +100,6 @@ typedef enum {ERROR_STORE, ABILITY_STORE, OBJECT_STORE, STAT_STORE}StoreType;
  * @brief Enum describing what type of stats can be leveled up with Skill Points
  * 
  */
-typedef enum {NO_LVLUP_STAT, LVLUP_STRENGTH, LVLUP_MAXHEALTH, LVLUP_MAGICLEVEL}LevelUpTypes;
+typedef enum {NO_LVLUP_STAT, LVLUP_STRENGTH, LVLUP_MAXHEALTH, LVLUP_MAGICLEVEL, LVLUP_ABILITYSTORE}LevelUpTypes;
 
 #endif
