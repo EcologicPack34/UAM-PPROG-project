@@ -85,8 +85,7 @@ void screen_paint(Frame_color color){
   
   if(!__data) return;
 
-  printf("\033[2J");
-  printf("\r");
+  printf("\r\033[2J");
 
   for (y = 0; y < ROWS; y++)
   {
@@ -108,8 +107,7 @@ void screen_paint(Frame_color color){
       line[pos++] = cell->character;
     }
     line[pos] = 0;
-    printf("%s", line);
-    printf("\033[0m\n");
+    printf("%s\033[0m\n", line);
   }
   
 
