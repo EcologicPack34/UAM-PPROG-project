@@ -78,7 +78,7 @@ struct _Game {
   Command *last_cmd;                  /*!< string with the last command */
   bool finished;                      /*!< bool that determines if the game has finished*/
   
-  bool requestSwitch;
+  bool requestSwitch;                 /*!< bool that stores if game switched player so graphic engine can clear commands*/
 
   bool procedural;                    /*!< Stores if the game is generated prceduraly or not*/
 };

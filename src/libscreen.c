@@ -30,21 +30,48 @@ struct _Area{
   Frame_color charColor;
 };
 
-
 Cell *__data;
-
-
 
 /****************************/
 /*     Private functions    */
 /****************************/
-int  screen_area_cursor_is_out_of_bounds(Area* area);
-void screen_area_scroll_up(Area* area);
+
+/**
+ * @brief Replaces some special characters of a string
+ * @author Profesores PProg
+ * 
+ * @param str 
+ */
 void screen_utils_replaces_special_chars(char* str);
-char *frame_color_to_string(Frame_color color);
+
+/**
+ * @brief Converts color enum to ansi code for character color and its background
+ * @author Daniel Gómez 
+ * 
+ * @param frame 
+ * @param chararacter 
+ * @return const char* 
+ */
 const char* color_to_ansi(Frame_color frame, Frame_color chararacter);
+
+/**
+ * @brief Converts a tag to a frame color enum
+ * @author Daniel Gómez
+ * 
+ * @param tag 
+ * @return Frame_color 
+ */
 Frame_color color_tag_to_color(const char *tag);
 
+/**
+ * @brief Finds the length of a word till the next space or end of string, ignoring color tags
+ * @author Daniel Gómez
+ * 
+ * @param word 
+ * @param maxLen maximum length before stop counting
+ * @return int 
+ */
+int word_length(const char *word, int maxLen);
 
 /****************************/
 /* Functions implementation */
@@ -109,29 +136,13 @@ void screen_paint(Frame_color color){
     line[pos] = 0;
     printf("%s\033[0m\n", line);
   }
-  
-
-  /*if (__data){
-    for (i = 0; i < TOTAL_DATA - 1; i++)
-    {
-      cell = __data + i;
-      if(cell->character == BG_CHAR){
-        cell->charColor = color;
-        cell->background = color;
-      }
-      printf("%s%c\033[0m", color_to_ansi(cell->charColor, cell->background), cell->character);
-      if( (i + 1) % (COLUMNS) == 0){
-        printf("\n");
-      }
-    }
-  }*/
 }
 
 void area_set_color(Area *area, Frame_color backGround, Frame_color charColor){
   int i,j;
   Cell *cell;
-  if(backGround == NO_TAG || backGround == RESET) backGround = WHITE;
-  if(charColor == NO_TAG || charColor == RESET) charColor = WHITE;
+  if(backGround == NO_TAG || backGround == RESET) return;
+  if(charColor == NO_TAG || charColor == RESET) return;
   if(area){
     area->backgroudColor = backGround;
     area->charColor = charColor;
@@ -227,12 +238,6 @@ void screen_area_clear(Area* area){
   }
 }
 
-void screen_area_reset_cursor(Area* area){
-  if (area){
-    area->cursor = ACCESS(__data, area->x, area->y);
-  }
-}
-
 int word_length(const char *word, int maxLen){
   int visible = 0;
   char tag[50];
@@ -275,6 +280,8 @@ int word_length(const char *word, int maxLen){
 void screen_area_puts(Area* area, char *str){
   int len = 0;
   char *ptr = NULL;
+
+  int wordLen = 0;
 
   char *tagE = str;
   int tagLen;
@@ -325,7 +332,10 @@ void screen_area_puts(Area* area, char *str){
     /*Print the actual line to data*/
     for (area->cX = 0; area->cX < area->width && ptr <= str + len && *ptr != '\0'; (area->cX)++ , ptr++)
     { 
-      if(word_length(ptr, area->width) > area->width - area->cX){
+      if(!skipS){
+        wordLen = word_length(ptr, area->width + 1);
+      }
+      if(wordLen > area->width - area->cX && wordLen < area->width){
         skipS = 1;
         break;
       }
@@ -383,20 +393,6 @@ void screen_area_puts(Area* area, char *str){
     }
     /*move one line*/
     area->cY++;
-  }
-}
-
-int screen_area_cursor_is_out_of_bounds(Area* area){
-  return area->cursor > ACCESS(__data,
-			       area->x + area->width,
-			       area->y + area->height - 1);
-}
-
-void screen_area_scroll_up(Area* area){
-  for(area->cursor = ACCESS(__data, area->x, area->y);
-      area->cursor < ACCESS(__data, area->x + area->width, area->y + area->height - 2);
-      area->cursor += COLUMNS){
-    memcpy(area->cursor, area->cursor+COLUMNS, area->width);
   }
 }
 

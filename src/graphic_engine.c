@@ -67,6 +67,13 @@ struct _Graphic_engine
  */
 void graphic_engine_newline_print_with_extra(Area *area, char *string, char *extra);
 
+/**
+ * @brief Paints the minimap in screen
+ * @author Daniel Gómez
+ * 
+ * @param ge 
+ * @param game 
+ */
 void graphic_engine_paint_minimap(Graphic_engine *ge, Game *game);
 
 /**

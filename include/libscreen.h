@@ -25,7 +25,7 @@ typedef enum {BLACK = 0, RED, GREEN, YELLOW, BLUE, PURPLE, CYAN, WHITE, NO_TAG, 
 
 /**
  * @brief It creates a new screen
- * @author Profesores PPROG
+ * @author Profesores PPROG : Modified by Daniel Gómez
  *
  * This function should be called at the beginning of the program,
  *  so the complete screen is allocated before starting defining areas.
