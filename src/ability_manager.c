@@ -45,6 +45,8 @@ struct _Ability {
   
   int cooldown_count;     /*!< Actual cooldown of the ability*/
   int cooldown_length;    /*!< Maximum cooldown of the ability*/
+
+  int cost;               /*!< Cost in SP of the ability*/
 };
 
 /**
@@ -55,6 +57,7 @@ struct _AbilityManager{
   Queue *queue_cooldowns;     /*!< Queue to control cooldowns*/
   Ability *evaluated_ability; /*!< Ability to evaluate*/
 
+  Collection *unused_abilities; /*!< Collection with abilities that are not assigned*/
 };
 
 /*
@@ -67,7 +70,7 @@ struct _AbilityManager{
   * Public functions
 */
 
-Ability *ability_create(Id id, char *data, char *name, AbilityType type, Id entityid, bool is_player_ability, bool is_object_use, int cd_count, int cd_length){
+Ability *ability_create(Id id, char *data, char *name, AbilityType type, Id entityid, bool is_player_ability, bool is_object_use, int cd_count, int cd_length, int cost){
   Ability *ability = NULL;
   
   if(!data) return NULL;
@@ -100,6 +103,7 @@ Ability *ability_create(Id id, char *data, char *name, AbilityType type, Id enti
   ability->id = id;
   ability->cooldown_count = cd_count;
   ability->cooldown_length = cd_length;
+  ability->cost = cost;
 
   return ability;
 }
@@ -174,6 +178,12 @@ char *ability_get_name(Ability *ability){
   if(!ability) return NULL;
 
   return ability->name;
+}
+
+int ability_get_cost(Ability *ability){
+  if(!ability) return -1;
+
+  return ability->cost;
 }
 
 Status ability_set_cooldown_to_0(Ability *ability){
@@ -251,11 +261,21 @@ AbilityManager *ability_manager_create(){
     return NULL;
   }
 
+  sm->unused_abilities = collection_create(INITIAL_SKILLS_SIZE, false, true, ability_compare, NULL);
+  if(!sm->unused_abilities){
+    queue_destroy(sm->queue_cooldowns);
+    collection_destroy(sm->ability);
+    free(sm);
+    return NULL;
+  }
+
   return sm;
 }
 
 void ability_manager_destroy(AbilityManager *sm){
   if(sm){
+    collection_free_elements(sm->unused_abilities, ability_destroy);
+    collection_destroy(sm->unused_abilities);
     collection_free_elements(sm->ability, ability_destroy);
     collection_destroy(sm->ability);
     queue_destroy(sm->queue_cooldowns);
@@ -281,10 +301,14 @@ Ability *ability_manager_get_evaluated_ability(AbilityManager *sm){
 Status ability_manager_add_ability_to_cd(AbilityManager *sm, Ability *ability){
   if(!sm || !ability) return ERROR;
 
+  if(ability_get_entityid(ability) == NO_ID){
+    return collection_add(sm->unused_abilities, (void *)ability);
+  }
+
   if(ability_get_cooldown_count(ability) > 0)
     queue_push(sm->queue_cooldowns, ability);
 
-  return collection_add(sm->ability, (void *)ability);;
+  return collection_add(sm->ability, (void *)ability);
 }
 
 Status ability_manager_remove_ability_from_cd(AbilityManager *sm, Ability *ability){
@@ -347,14 +371,34 @@ Status ability_manager_read_from_file(AbilityManager *sm, FILE *fIN){
   return OK;
 }
 
+Collection *ability_manager_get_unused_abilities(AbilityManager *sm){
+  if(!sm) return NULL;
+
+  return sm->unused_abilities;
+}
+
+Status ability_manager_move_ability_to_used(AbilityManager *sm, Ability *ability){
+  if(!sm || !ability) return ERROR;
+
+  collection_remove(sm->unused_abilities, ability);
+
+  return collection_add(sm->ability, ability);
+}
+
+Ability *ability_manager_get_unused_ability_at(AbilityManager *sm, int i){
+  if(!sm) return NULL;
+
+  return collection_get_element_at(sm->unused_abilities, i);
+}
+
 int ability_save_on_file(Ability *ability, FILE *fOUT){
   int count = 0;
 
   if(!ability || !fOUT) return -1;
 
-  count += fprintf(fOUT, "%ld;%d;%ld;%d;%d;%d;%d\n", ability->id,\
+  count += fprintf(fOUT, "%ld;%d;%ld;%d;%d;%d;%d;%d\n", ability->id,\
     ability->type, ability->entityid, ability->is_player_ability,\
-    ability->is_object_use, ability->cooldown_count, ability->cooldown_length);
+    ability->is_object_use, ability->cooldown_count, ability->cooldown_length, ability->cost);
 
   count += fprintf(fOUT, "%s\n%s\n", ability->name, ability->data);
 
@@ -364,10 +408,10 @@ int ability_save_on_file(Ability *ability, FILE *fOUT){
 Ability *ability_create_from_file(FILE *fIN){
   Id id, entityid;
   char name[WORD_SIZE], data[WORD_SIZE];
-  int type, is_player_ability, is_object_use, cooldown_count, cooldown_length;
+  int type, is_player_ability, is_object_use, cooldown_count, cooldown_length, cost;
 
-  fscanf(fIN, "%ld;%d;%ld;%d;%d;%d;%d\n", &id, &type, &entityid,\
-     &is_player_ability, &is_object_use, &cooldown_count, &cooldown_length);
+  fscanf(fIN, "%ld;%d;%ld;%d;%d;%d;%d;%d\n", &id, &type, &entityid,\
+     &is_player_ability, &is_object_use, &cooldown_count, &cooldown_length, &cost);
 
   fgets(name, WORD_SIZE, fIN);
   string_remove_newline_escape_sequence_on_end(name);
@@ -375,5 +419,5 @@ Ability *ability_create_from_file(FILE *fIN){
   string_remove_newline_escape_sequence_on_end(data);
 
   return ability_create(id, data, name, type, entityid, is_player_ability,\
-     is_object_use, cooldown_count, cooldown_length);
+     is_object_use, cooldown_count, cooldown_length, cost);
 }

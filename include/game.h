@@ -31,6 +31,7 @@
 #include "dialogue.h"
 #include "effect.h"
 #include "graphic_description.h"
+#include "store.h"
 
 #include <stdbool.h>
 
@@ -780,5 +781,145 @@ bool game_combat_log_hasMessage(Game *game);
  * @return Status 
  */
 Status game_get_combat_log_message(Game *game, char *str);
+
+/**
+ * @brief Gets the cost to level up each type of stat
+ * @author Maksym Polyak
+ * 
+ * @param type 
+ * @return int 
+ */
+int game_get_stat_lvlup_cost(LevelUpTypes type);
+
+/**
+ * @brief Gets the store at a game struct
+ * @author Maksym Polyak
+ * 
+ * @param game game struct
+ * @return Store* or NULL if error or not found
+ */
+Store *game_get_store(Game *game);
+
+/**
+ * @brief Initializes a game store depending on the type
+ * @author Maksym Polyak
+ * 
+ * @param game game struct
+ * @param type type of items sold
+ * @param seller where items to be sold are saved
+ * @param client where items to be bought are dropped
+ * @param money money to control prices
+ * @return Status 
+ */
+Status game_store_startup(Game *game, StoreType type, void *seller, void *client, int *money);
+
+/**
+ * @brief Destroys a game store struct and sets the game to DEFAULT
+ * @author Maksym Polyak
+ * 
+ * @param game game struct
+ * @return Status 
+ */
+Status game_store_destroy(Game *game);
+
+/**
+ * @brief Moves the items from the seller to the client if possible
+ * @author Maksym Polyak
+ * 
+ * @param game game struct 
+ * @param i index
+ * @return Status 
+ */
+Status game_store_move_item_at(Game *game, int i);
+
+/**
+ * @brief Adds items from a collection to a store, sets the seller as the collection
+ * @author Maksym Polyak
+ * 
+ * @param game game struct
+ * @param collection collection with the items
+ * @return Status 
+ */
+Status game_store_add_items_from_collection(Game *game, Collection *collection);
+
+/**
+ * @brief Adds items from an NPC inventory to a store, sets the collection as the npc inventory
+ * @author Maksym Polyak
+ * 
+ * @param game game struct
+ * @param npc npc to check inventory
+ * @return Status 
+ */
+Status game_store_add_items_from_npc_inventory(Game *game, NPC *npc);
+
+/**
+ * @brief Removes an object from the store, adds it to the location of the client
+ * and removes corresponding money
+ * @author Maksym Polyak
+ * 
+ * @param game game struct
+ * @param i index
+ * @return Status 
+ */
+Status game_store_buy_item_at(Game *game, int i);
+
+/**
+ * @brief Gets the stat lvlup cost depending on the type received
+ * @author Maksym Polyak
+ * 
+ * @param text text of the stat
+ * @return int or -1 if error
+ */
+int game_store_get_stat_lvlup_cost(char *text);
+  
+/**
+ * @brief Gets the cost of the element depending on its type
+ * @author Maksym Polyak
+ * 
+ * @param type type of the element
+ * @param ele element
+ * @return int or -1 if error
+ */
+int game_store_get_switch_cost(StoreType type, void *ele);
+
+/**
+ * @brief Gets the Id of the element depending on its type
+ * @author Maksym Polyak
+ * 
+ * @param type type of the element
+ * @param ele element
+ * @return Id or NO_ID if error
+ */
+Id game_store_get_switch_id(StoreType type, void *ele);
+
+/**
+ * @brief Gets the description of the element
+ * @author Maksym Polyak
+ * 
+ * @param type type of the element
+ * @param ele element
+ * @return char* or NULL if error or it does not have description
+ */
+char *game_store_get_descr(StoreType type, void *ele);
+
+/**
+ * @brief Gets the name of the item
+ * @author Maksym Polyak
+ * 
+ * @param type type of the element
+ * @param ele element
+ * @return char* 
+ */
+char *game_store_get_name(StoreType type, void *ele);
+  
+/**
+ * @brief Adds a stat to the player by the type
+ * @author Maksym Polyak
+ * 
+ * @param text text of the stat
+ * @param player player struct
+ * @return Status 
+ */
+Status game_add_stat_by_type(char *text, Player *player);
 
 #endif

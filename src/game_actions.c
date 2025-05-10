@@ -338,9 +338,6 @@ Status game_actions_update(Game *game, Command *command) {
     default:
       break;
   }
-
-
-  
   
   if(status == ERROR){
     game_set_is_turn_valid(game, NOT_VALID);
@@ -634,7 +631,7 @@ Status game_actions_chat(Game *game){
     }
 
     if(npc_get_status(npc) == ENEMY){
-      sprintf(str, "You tried chatting with the wrong guy");
+      sprintf(str, "You tried to chat with the wrong guy!");
       game_add_log_message(game, MESSAGE_LOG, str);  
       return game_combat_start(game);
     }
@@ -665,11 +662,14 @@ Status game_actions_chat(Game *game){
         game_combat_start(game);
         return OK;
       case STORE:
-        if(inventory_get_size(entity_get_inventory(npc_get_entity(dialogue_get_NPC(dialogue)))) <= 0){
+        if(inventory_get_size(entity_get_inventory(npc_get_entity(npc))) <= 0){
           game_add_log_message(game, MESSAGE_HELP, "Merchant does not have any goods to sell.");
           return OK;
         }
-        game_set_state(game, STORE_STATE);
+        game_end_dialogue(game);
+        if(game_store_startup(game, OBJECT_STORE, entity_get_inventory(npc_get_entity(npc)), entity_get_inventory(player_get_entity(player)), player_get_money_pointer(player)) == ERROR)
+          game_add_log_message(game, MESSAGE_ERROR, "Failed to initialize store");
+        game_store_add_items_from_collection(game, inventory_get_collection(entity_get_inventory(npc_get_entity(npc))));
         return OK;
       case FOLLOW:
         if(npc_get_status(npc) == ALLY || ((status = player_add_follower(player, npc_get_entity(npc))) == ERROR))
@@ -974,15 +974,19 @@ Status game_actions_unequip(Game *game){
 }
 
 Status game_actions_inspect(Game *game){
-  Inventory *playerInv = NULL, *spaceInv = NULL, *sellerInv = NULL;
+  Inventory *playerInv = NULL, *spaceInv;
   Object *obj = NULL;
-  NPC *npc = NULL;
 
   Command *cmd = NULL;
+  char **args;
 
   if(!game) return ERROR;
 
   cmd = game_get_last_command(game);
+  if(!cmd) return ERROR;
+
+  args = command_get_arguments(cmd);
+  if(!args) return ERROR;
 
   if(command_get_arguments_count(cmd) != 1){
     game_add_log_message(game, ERROR, "Invalid number of arguments");
@@ -997,16 +1001,6 @@ Status game_actions_inspect(Game *game){
     obj = inventory_get_object_by_name(spaceInv, command_get_arguments(cmd)[0]);
   }
 
-  if(game_get_state(game) == STORE_STATE){
-    npc = dialogue_get_NPC(game_get_dialogue(game));
-    if(!npc) return ERROR;
-
-    sellerInv = entity_get_inventory(npc_get_entity(npc));
-    if(!sellerInv) return ERROR;
-
-    obj = inventory_get_object_by_name(sellerInv, command_get_arguments(cmd)[0]);
-  }
-
   if(!obj){
     game_add_log_message(game, ERROR, "Object not found");
     return ERROR;
@@ -1017,100 +1011,55 @@ Status game_actions_inspect(Game *game){
 
 Status game_actions_level_up(Game *game){
   Player *player = NULL;
-  char **args = NULL;
-  int n_args, index;
-  Entity *entity = NULL;
-  Leveling *leveling = NULL;
+  Leveling *lvl = NULL;
+  int *SP = NULL;
+
 
   if(!game) return ERROR;
 
   player = game_get_player(game);
   if(!player) return ERROR;
+  lvl = player_get_leveling(player);
+  if(!lvl) return ERROR;
 
-  leveling = player_get_leveling(player);
-  if(!leveling) return ERROR;
-
-  leveling_update_level_up(leveling);
-
-  if(game_get_state(game) != LEVEL_UP_STATE){
-
-    if((leveling_check_level_up(leveling) == false) && (leveling_get_skill_points(leveling) <= 0)){
-      game_add_log_message(game, MESSAGE_HELP, "You don't have skill points. Try to level up!");
-      return ERROR;
-    }
-
-    game_set_state(game, LEVEL_UP_STATE);
-    return OK;
-  }else{
-    
-    args = command_get_arguments(game_get_last_command(game));
-    if(!args) return ERROR;
-
-    n_args = command_get_arguments_count(game_get_last_command(game));
-    if(n_args <= 0 || n_args >= 2){
-      game_add_log_message(game, ERROR, "Invalid number of arguments");
-      return ERROR;
-    }
-
-    entity = player_get_entity(player);
-
-    index = atoi(args[0]);
-
-    switch(index){
-      case 1:
-        entity_set_strength(entity, entity_get_strength(entity) + 1);
-        leveling_set_skill_points(leveling, leveling_get_skill_points(leveling) - 1);
-        break;
-      case 2:
-        entity_set_magicLevel(entity, entity_get_magicLevel(entity) + 1);
-        leveling_set_skill_points(leveling, leveling_get_skill_points(leveling) - 1);
-        break;
-      case 3:
-        entity_set_max_health(entity, entity_get_max_health(entity) + 10);
-        leveling_set_skill_points(leveling, leveling_get_skill_points(leveling) - 1);
-        break;
-      case 4:
-        entity_set_defense(entity, entity_get_defense(entity) + 1);
-        leveling_set_skill_points(leveling, leveling_get_skill_points(leveling) - 1);
-        break;
-      case 5:
-        game_set_state(game, DEFAULT);
-        return OK;
-      default:
-        game_add_log_message(game, MESSAGE_LOG, "Not a valid option.");
-        return ERROR;
-    }
-
-    if(leveling_get_skill_points(leveling) <= 0){
-      game_set_state(game, DEFAULT);
-      game_add_log_message(game, MESSAGE_LOG, "You ran out of skill points");
-      return OK;
-    }
-
+  if(leveling_check_level_up(lvl) == false && leveling_get_skill_points(lvl) <= 0){
+    game_add_log_message(game, MESSAGE_HELP, "You have not leveled up and you don't have SP(Skill Points) to spend.");
     return OK;
   }
 
-  return ERROR;
+  leveling_update_level_up(lvl);
+
+  SP = leveling_get_SP_pointer(lvl);
+  if(!SP) return ERROR;
+
+  if(game_store_startup(game, STAT_STORE, NULL, player, SP) == ERROR){
+    game_add_log_message(game, MESSAGE_ERROR, "Could not initialize store.");
+    return ERROR;
+  }
+
+  return OK;
 }
 
 Status game_actions_buy(Game *game){
   char **args = NULL;
   int n_args;
   Command *comm = NULL;
-  int index;
-  NPC *seller = NULL;
-  Object *obj = NULL;
-  Player *player = NULL;
-  char str[WORD_SIZE] = "";
+  int index, size, page, item_index;
+  Store *st = NULL;
+  StoreType type;
 
 
   if(!game) return ERROR;
 
+  st = game_get_store(game);
+
+  /*Checks if the game state is STORE_STATE*/
   if(game_get_state(game) != STORE_STATE){
     game_add_log_message(game, MESSAGE_HELP, "You're not in a shop!");
     return ERROR;
   }
 
+  /*Gets the arguments of the last command*/
   comm = game_get_last_command(game);
   if(!comm) return ERROR;
 
@@ -1122,9 +1071,79 @@ Status game_actions_buy(Game *game){
     return ERROR;
   }
 
-  index = atoi(args[0]) - 1;
+  /*If there are no items to buy in the store then leaves the store*/
+  size = store_get_size(st);
+  if(size == 0){
+    game_add_log_message(game, MESSAGE_HELP, "There isn't anything more to buy!");
+    game_store_destroy(game);
+    return OK;
+  }
 
-  if(index == -1){
+  /*Checks if the last cmd argument was n, b or e to control page movement and exit*/
+  page = store_get_page(st);
+  if((strcmp(args[0],"n") == 0 || strcmp(args[0],"next") == 0)){
+    if(page >= (size - 1)/STORE_PAGE_MAX + 1){
+      game_add_log_message(game, MESSAGE_HELP, "Not more pages to move forward.");
+      return ERROR;
+    }
+    store_set_page(st, page + 1);
+    return OK;
+  }
+  if((strcmp(args[0],"b") == 0 || strcmp(args[0],"back") == 0)){
+    if(page == 1){
+      game_add_log_message(game, MESSAGE_HELP, "Not more pages to move backwards.");
+      return ERROR;
+    }
+    store_set_page(st, page - 1);
+    return OK;
+  }
+  if(strcmp(args[0],"e") == 0 || strcmp(args[0],"exit") == 0){
+    game_store_destroy(game);
+    return OK;
+  }
+
+  /*Tries to get the index of the item to buy*/
+  index = atoi(args[0]);
+  if(index <= 0){
+    game_add_log_message(game, MESSAGE_HELP, "Not a valid index.");
+    return ERROR;
+  }
+
+  /*Variable with the index on the store array*/
+  item_index = (index + (page - 1)*STORE_PAGE_MAX) - 1;
+
+  /*Checks if player has enough money to buy the item*/
+  if(store_can_be_bought(st, item_index) == false){
+    game_add_log_message(game, MESSAGE_HELP, "Oohh... You don't have enough money...");
+    return OK;
+  }
+
+  type = store_get_type(st);
+  /*Tries to buy the item from the seller location to the player according to the type*/
+  if(game_store_buy_item_at(game, item_index) == ERROR){
+    game_add_log_message(game, MESSAGE_HELP, "Maybe you don't have enough money, you don't have space for that item or that index was not valid!");
+    return OK;
+  }
+  
+  /*Checks if store has got into another store*/
+  if(store_get_type(st) != type) return OK;
+  if(st == NULL) return OK;
+
+  /*Checks if the store has run out of items after buying the last one*/
+  size = store_get_size(st);
+  if(size == 0){
+    game_add_log_message(game, MESSAGE_HELP, "There isn't anything more to buy!");
+    game_store_destroy(game);
+    return OK;
+  }
+
+  /*Checks if the page has to go backwards because there are not enough items on store to stay on last page*/
+  if(size % STORE_PAGE_MAX == 0 && store_get_page(st) > 1)
+    store_set_page(st, size/STORE_PAGE_MAX);
+
+  return OK;
+  
+  /*if(index == -1){
     game_end_dialogue(game);
     game_set_state(game, DEFAULT);
     return OK;
@@ -1168,8 +1187,7 @@ Status game_actions_buy(Game *game){
     game_set_state(game, DEFAULT);
     return ERROR;
   }
-
-  return OK;
+  */
 }
 
 Status game_actions_follow(Game *game){
@@ -1187,6 +1205,7 @@ Status game_actions_follow(Game *game){
   comm = game_get_last_command(game);
   if(!comm) return ERROR;
 
+  /*Checks if arguments count is valid*/
   n_args = command_get_arguments_count(comm);
   if(n_args <= 0 || n_args > 1){
     game_add_log_message(game, ERROR, "Invalid number of arguments");
@@ -1196,11 +1215,13 @@ Status game_actions_follow(Game *game){
   args = command_get_arguments(comm);
   if(!args) return ERROR;
 
+  /*Controls if player is trying to follow himself*/
   if(strcmp(entity_get_name(player_get_entity(player)), args[0]) == 0){
     game_add_log_message(game, MESSAGE_ERROR, "You cannot follow yourself...");
     return ERROR;
   }
 
+  /*Gets the player to try to follow*/
   for(i = 0, size = game_get_n_players(game); i < size; i++){
     player_to_follow = game_get_player_at(game, i);
     if(player_to_follow){
@@ -1209,11 +1230,13 @@ Status game_actions_follow(Game *game){
     }
   }
 
+  /*If the player to follow isn't on the location or wasn't found controls error*/
   if(player_to_follow == NULL || entity_get_location(player_get_entity(player)) != entity_get_location(player_get_entity(player_to_follow))){
     game_add_log_message(game, MESSAGE_ERROR, "Not found that player, or he is not with you");
     return ERROR;
   }
 
+  /*Checks if the player is already following another player and checks following_the_player as true*/
   for(i = 0, size = player_get_follower_num(player_to_follow); (i < size) && (following_the_player == false); i++){
     entity = player_get_follower_at(player_to_follow, i);
     if(entity_get_id(entity) == entity_get_id(player_get_entity(player))){
@@ -1221,6 +1244,7 @@ Status game_actions_follow(Game *game){
     }
   }
 
+  /*If the initial player isn't following the player_to_follow, checks if he is already following another player*/
   if(following_the_player == false){
     for(i = 0, size = player_get_follower_num(player_to_follow); i < size; i++){
       entity = player_get_follower_at(player_to_follow, i);
@@ -1233,11 +1257,13 @@ Status game_actions_follow(Game *game){
     }
   }
 
-  if(player_get_follower_num(player) == NPC_MAX_FOLLOWERS){
+  /*If player is trying to follow player_to_follow and he has maximum number of followers it returns error*/
+  if((following_the_player == false) && (player_get_follower_num(player) == NPC_MAX_FOLLOWERS)){
     game_add_log_message(game, MESSAGE_ERROR, "The player you are trying to follow has max amount of followers");
     return ERROR;
   }
 
+  /*Follows the player or unfollows him according to the actual state of following*/
   if(following_the_player == false){
     player_add_follower(player_to_follow, player_get_entity(player));
     player_add_follower(player, player_get_entity(player_to_follow));

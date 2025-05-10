@@ -244,14 +244,8 @@ void graphic_engine_paint_game(Graphic_engine *ge, Game *game)
   {
     graphic_engine_paint_dialogue(ge, game);
     graphic_engine_paint_playerDesc(ge, game);
-  }
-  else if (gameState == LEVEL_UP_STATE)
-  {
-    graphic_engine_paint_level_up(ge, game);
-    graphic_engine_paint_playerDesc(ge, game);
-  }
-  else if (gameState == STORE_STATE)
-  {
+  } 
+  else if(gameState == STORE_STATE){
     graphic_engine_paint_store(ge, game);
     graphic_engine_paint_playerDesc(ge, game);
   }
@@ -1292,64 +1286,97 @@ void graphic_engine_paint_dialogue(Graphic_engine *ge, Game *game)
   graphic_engine_paint_generalDesc(ge, game);
 }
 
-void graphic_engine_paint_level_up(Graphic_engine *ge, Game *game)
-{
-
-  if (!ge || !game)
-    return;
-
-  screen_area_clear(ge->map);
-  screen_area_clear(ge->descript);
-
-  graphic_engine_paint_generalDesc(ge, game);
-
-  screen_area_puts(ge->map, " \n \n \n \n \n \n \n");
-  screen_area_puts(ge->map, "  Options to level up:\n");
-
-  screen_area_puts(ge->map, "   1. (1 SP) Level up your strength\n    and crush your enemies!\n");
-  screen_area_puts(ge->map, "   2. (1 SP) Level up your magic level\n    and strengthen your abilities!\n");
-  screen_area_puts(ge->map, "   3. (1 SP) Level up your maximum health\n    and overcome your obstacles!\n");
-  screen_area_puts(ge->map, "   4. (1 SP) Level up your defense\n    and ignore those weaklings!\n");
-  screen_area_puts(ge->map, "   5. Exit level up menu\n");
-}
-
-void graphic_engine_paint_store(Graphic_engine *ge, Game *game)
-{
-  int i, obj_num;
-  Object *obj = NULL;
-  Inventory *inventory = NULL;
-  NPC *seller = NULL;
+void graphic_engine_paint_store(Graphic_engine *ge, Game *game){
+  int i, item_index, page, cost, size;
   char str[WORD_SIZE] = "";
+  char aux_str[LINE_LENGTH] = "";
+  Store *st = NULL;
+  StoreType type;
+  void *ele = NULL;
+  char *auxaux = NULL;
 
   if (!ge || !game)
     return;
+
+  st = game_get_store(game);
+  if(!st) return;
+
+  type = store_get_type(st);
+  if(type == ERROR_STORE);
 
   screen_area_clear(ge->map);
   screen_area_clear(ge->descript);
 
   graphic_engine_paint_generalDesc(ge, game);
 
-  seller = dialogue_get_NPC(game_get_dialogue(game));
-  if (!seller)
-    return;
+  screen_area_puts(ge->map," \n  [WHITE]How to use store menu:[RESET]\n");
+  screen_area_puts(ge->map," [GREEN]Enter 'by e' or 'by exit' to exit the store\n or 'by (NUMBER OF ITEM)' to buy.\n Use 'by n' to move to next page\n Or use 'by b' to move to the previous page[RESET]\n");
+  
+  size = store_get_size(st);
+  page = store_get_page(st);
+  item_index = (page - 1)*STORE_PAGE_MAX;
 
-  inventory = entity_get_inventory(npc_get_entity(seller));
-  if (!inventory)
-    return;
+  sprintf(str, " \n  [CYAN]Page number:[RESET] %d [GREEN]out of[RESET] %d\n", page, (size - 1)/STORE_PAGE_MAX + 1);
+  screen_area_puts(ge->map,str);
 
-  obj_num = inventory_get_size(inventory);
-
-  screen_area_puts(ge->map, " \n \n \n");
-  screen_area_puts(ge->map, "  (Enter 'by 0' to exit the store \n   or 'by (NUMBER OF ITEM)' to buy\n   You can also use i (NUMBER OF ITEM)\n   to see description)\n \n");
-  sprintf(str, "  %s: This is all I can offer:\n", entity_get_name(npc_get_entity(seller)));
-  screen_area_puts(ge->map, str);
-
-  for (i = 0; i < obj_num && obj_num < MAX_PRINT_INVENTORY; i++)
-  {
-    obj = inventory_get_object_at(inventory, i);
-    sprintf(str, "    [CYAN]%d[RESET]: [YELLOW]%s [RESET]| [YELLOW]%s [RESET]| Cost: [GREEN]%d", object_get_cost(obj), object_get_name(obj), object_get_descr(obj), i + 1);
-    screen_area_puts(ge->map, str);
+  switch(type){
+    case ABILITY_STORE:
+      sprintf(str, "  [CYAN]Skill Points available:[RESET] %d\n", *store_get_money(st));
+      break;
+    case OBJECT_STORE:
+      sprintf(str, "  [CYAN]Money available:[RESET] %d\n", *store_get_money(st));
+      break;
+    case STAT_STORE:
+      sprintf(str, "  [CYAN]Skill Points available:[RESET] %d\n", *store_get_money(st));
+      break;
+    default:
+      sprintf(str, "  ERROR:\n");
+      break;
   }
+  screen_area_puts(ge->map,str);
+
+  switch(type){
+    case ABILITY_STORE:
+      sprintf(str, "  [WHITE]These are all the abilities offered:[RESET]\n");
+      break;
+    case OBJECT_STORE:
+      sprintf(str, "  [WHITE]This is all I can offer:[RESET]\n");
+      break;
+    case STAT_STORE:
+      sprintf(str, "  [WHITE]This is all you can level up:[RESET]\n");
+      break;
+    default:
+      sprintf(str, "  ERROR:\n");
+      break;
+  }
+  screen_area_puts(ge->map,str);
+
+  screen_area_puts(ge->map," \n");
+
+  for(i = 0; i < STORE_PAGE_MAX && (i + (page - 1)*STORE_PAGE_MAX  < size); i++){
+    sprintf(aux_str,"    %d - ", i + 1);
+    strcpy(str,aux_str);
+    ele = store_get_item_element_at(st, item_index + i);
+
+    auxaux = game_store_get_name(type, ele);
+    if(!auxaux) return;
+    sprintf(aux_str, "[YELLOW]%s[RESET] |", auxaux);
+    strcat(str, aux_str);
+
+    auxaux = game_store_get_descr(type, ele);
+    if(auxaux != NULL){
+      sprintf(aux_str, "[YELLOW]%s[RESET]|", auxaux);
+      strcat(str, aux_str);
+    }
+
+    cost = game_store_get_switch_cost(type, ele);
+    sprintf(aux_str, " Cost: [GREEN]%d\n", cost);
+    strcat(str, aux_str);
+
+    screen_area_puts(ge->map,str);
+  }
+
+  graphic_engine_paint_generalDesc(ge, game);
 }
 
 void graphic_engine_paint_space(Game *game, Space *space, Direction direction, char map[SPACE_HEIGHT + 1][MAP_WIDTH + 150], char spaceStr[SPACE_HEIGHT + 1][SPACE_WIDTH + 50])

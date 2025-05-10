@@ -23,6 +23,7 @@
 #include "dialogue.h"
 #include "effect.h"
 #include "attack.h"
+#include "store.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -65,6 +66,7 @@ struct _Game {
   EventManager *event_manager;        /*!< Struct containing the info about the events that can happen*/
   EffectManager *effect_manager;      /*!< Struct containing effects and allows to manage them*/
   Queue *screenLog;                   /*!< Queue containing a list of messages to print on screen*/
+  Store *store;                       /*!< Pointer to save stores created*/
   bool godmode;                       /*!< bool that determines if god mode is activated*/
 
   /*Combat*/
@@ -83,7 +85,25 @@ struct _Game {
 
 /*-----PRIVATE FUNCTIONS-----*/
 
+/**
+ * @brief Initializes a store according to the type of store
+ * @author Maksym Polyak
+ * 
+ * @param game game struct
+ * @param type type of the struct
+ * @return Status 
+ */
+Status game_store_special_startup(Game *game, StoreType type);
 
+/**
+ * @brief Frees special adjustments according to the store
+ * @author Maksym Polyak
+ * 
+ * @param game game struct
+ * @param type type of the struct
+ * @return Status 
+ */
+Status game_store_special_destroy(Game *game, StoreType type);
 
 /**
  * @brief Maps spatially a block of spaces starting at initSpace
@@ -95,6 +115,64 @@ struct _Game {
  * @return Status 
  */
 Status game_map_space_block(Game *game, Space *initSpace ,int block);
+
+Status game_store_special_startup(Game *game, StoreType type){
+  int i, cost;
+  char *text = NULL;
+  char store_stat_text[LVLUP_TYPES_NUM + 1][WORD_SIZE] = {LVLUP_STRENGTH_TEXT, LVLUP_MAX_HEALTH_TEXT, LVLUP_MAGIC_LEVEL_TEXT, LVLUP_TO_ABILITY_STORE_TEXT};
+
+  if(!game) return ERROR;
+
+  switch(type){
+    case ERROR_STORE:
+      return ERROR;
+    case ABILITY_STORE:
+      return OK;
+    case OBJECT_STORE:
+      return OK;
+    case STAT_STORE:
+      for(i = 1; i <= LVLUP_TYPES_NUM + 1; i++){
+        text = (char *)malloc(WORD_SIZE*sizeof(char));
+        if(!text) return ERROR;
+
+        strcpy(text, store_stat_text[i - 1]);
+        cost = game_store_get_stat_lvlup_cost(text);
+        if(store_add_item(game->store, text, cost, i + 1) == ERROR){
+          free(text);
+          return ERROR;
+        }
+      }
+      return OK;
+    default:
+      break;
+  }
+
+  return ERROR;
+}
+
+Status game_store_special_destroy(Game *game, StoreType type){
+  int i;
+  
+  if(!game) return ERROR;
+
+  switch(type){
+    case ERROR_STORE:
+      return ERROR;
+    case ABILITY_STORE:
+      return OK;
+    case OBJECT_STORE:
+      return OK;
+    case STAT_STORE:
+      for(i = 0; i <= LVLUP_TYPES_NUM; i++){
+        store_free_item_at(game->store, i, free);
+      }
+      return OK;
+    default:
+      break;
+  }
+
+  return ERROR;
+}
 
 /**
  * @brief Gets a random graphic description of type space
@@ -218,6 +296,7 @@ Status game_create(Game **game) {
   } 
 
   (*game)->combat = NULL;
+  (*game)->store = NULL;
 
   return OK;
 }
@@ -271,6 +350,11 @@ Status game_destroy(Game *game) {
   ability_manager_destroy(game->ability_manager);
   queue_free_elements(game->screenLog, message_destroy);
   queue_destroy(game->screenLog);
+
+  /*Frees store*/
+  if(game->store){
+    game_store_destroy(game);
+  }
 
   /*Frees combat*/
   if(game->combat){
@@ -1506,6 +1590,321 @@ Status game_get_combat_log_message(Game *game, char *str){
   if(!mess) return ERROR;
 
   message_get_str(mess, str);
+
+  return OK;
+}
+
+int game_store_get_stat_lvlup_cost(char *text){
+  LevelUpTypes type = NO_LVLUP_STAT;
+  int i;
+  char store_stat_text[LVLUP_TYPES_NUM + 1][WORD_SIZE] = {LVLUP_STRENGTH_TEXT, LVLUP_MAX_HEALTH_TEXT, LVLUP_MAGIC_LEVEL_TEXT, LVLUP_TO_ABILITY_STORE_TEXT};
+
+  for(i = 0; i < LVLUP_TYPES_NUM + 1 && type == NO_LVLUP_STAT; i++){
+    if(strcmp(text, store_stat_text[i]) == 0){
+      type = i + 1;
+    }
+  }
+
+  if(type == NO_LVLUP_STAT) return -1;
+
+  switch(type){
+    case NO_LVLUP_STAT:
+      return -1;
+    case LVLUP_STRENGTH:
+      return LVLUP_STRENGTH_COST;
+    case LVLUP_MAXHEALTH:
+      return LVLUP_MAXHEALTH_COST;
+    case LVLUP_MAGICLEVEL:
+      return LVLUP_MAGICLEVEL_COST;
+    case LVLUP_ABILITYSTORE:
+      return 0;
+    default:
+      break;
+  }
+
+  return -1;
+}
+
+int game_store_get_switch_cost(StoreType type, void *ele){
+  if(!ele) return -1;
+
+  switch(type){
+    case ERROR_STORE:
+      return -1;
+    case ABILITY_STORE:
+      return ability_get_cost((Ability *)ele);
+    case OBJECT_STORE:
+      return object_get_cost((Object *)ele);
+    case STAT_STORE:
+      return game_store_get_stat_lvlup_cost((char *)ele);
+    default:
+      return -1;
+  }
+
+  return -1;
+}
+
+Id game_store_get_switch_id(StoreType type, void *ele){
+  if(!ele) return NO_ID;
+
+  switch(type){
+    case ERROR_STORE:
+      return NO_ID;
+    case ABILITY_STORE:
+      return ability_get_id((Ability *)ele);
+    case OBJECT_STORE:
+      return object_get_id((Object *)ele);
+    case STAT_STORE:
+      return *(long *)ele;
+    default:
+      return NO_ID;
+  }
+
+  return NO_ID;
+}
+
+char *game_store_get_name(StoreType type, void *ele){
+  if(!ele) return NULL;
+
+  switch(type){
+    case ERROR_STORE:
+      return NULL;
+    case ABILITY_STORE:
+      return ability_get_name((Ability *)ele);
+    case OBJECT_STORE:
+      return object_get_name((Object *)ele);
+    case STAT_STORE:
+      return (char *)ele;
+    default:
+      return NULL;
+  }
+
+  return NULL;
+}
+
+char *game_store_get_descr(StoreType type, void *ele){
+  if(!ele) return NULL;
+
+  switch(type){
+    case ERROR_STORE:
+      return NULL;
+    case ABILITY_STORE:
+      return NULL;
+    case OBJECT_STORE:
+      return object_get_descr((Object *)ele);
+    case STAT_STORE:
+      return NULL;
+    default:
+      return NULL;
+  }
+
+  return NULL;
+}
+
+Status game_add_stat_by_type(char *text, Player *player){
+  Entity *entity = NULL;
+  Leveling *leveling = NULL;
+  LevelUpTypes type = NO_LVLUP_STAT;
+  int i;
+  char store_stat_text[LVLUP_TYPES_NUM][WORD_SIZE] = {LVLUP_STRENGTH_TEXT, LVLUP_MAX_HEALTH_TEXT, LVLUP_MAGIC_LEVEL_TEXT};
+
+  if(!player) return ERROR;
+
+  entity = player_get_entity(player);
+  leveling = player_get_leveling(player);
+  if(!entity || !leveling) return ERROR;
+
+  for(i = 0; i < LVLUP_TYPES_NUM && type == NO_LVLUP_STAT; i++){
+    if(strcmp(text, store_stat_text[i]) == 0){
+      type = i + 1;
+    }
+  }
+
+  if(type == NO_LVLUP_STAT) return -1;
+
+  switch(type){
+    case LVLUP_STRENGTH:
+      entity_set_strength(entity, entity_get_strength(entity) + LVLUP_STRENGTH_AMOUNT);
+      return OK;
+    case LVLUP_MAGICLEVEL:
+      entity_set_magicLevel(entity, entity_get_magicLevel(entity) + LVLUP_MAGICLEVEL_AMOUNT);
+      return OK;
+    case LVLUP_MAXHEALTH:
+      entity_set_max_health(entity, entity_get_max_health(entity) + LVLUP_MAXHEALTH_AMOUNT);
+      return OK;
+    default:
+      return ERROR;
+  }
+
+  return ERROR;
+}
+
+Status game_store_move_item_at(Game *game, int i){
+  void *ele = NULL;
+  Store *store = NULL;
+  Player *player = NULL;
+  
+  if(!game || i < 0) return ERROR;
+
+  store = game->store;
+  if(!store) return ERROR;
+
+  if(i >= store_get_size(store)) return ERROR;
+
+  switch(store_get_type(store)){
+    case ERROR_STORE:
+      return ERROR;
+    case ABILITY_STORE:
+      ele = (Ability *)store_get_item_element_at(store, i);
+      if(!ele) return ERROR;
+      player = store_get_client(store);
+      if(!player) return ERROR;
+
+      if(entity_add_ability(player_get_entity(player), (Ability *)ele) == ERROR){
+        game_add_log_message(game, MESSAGE_HELP, "You already have the maximum amount of abilities!");
+        return ERROR;
+      }
+
+      store_remove_item_at(store, i);
+
+      if(ability_manager_move_ability_to_used(game->ability_manager, (Ability *)ele) == ERROR) return ERROR;
+      
+      return OK;
+    case OBJECT_STORE:
+      ele = store_get_item_element_at(store, i);
+      if(inventory_move_object(store_get_seller(store), store_get_client(store), game_store_get_switch_id(OBJECT_STORE, ele)) == ERROR)
+        return ERROR;
+      store_remove_item_at(store, i);
+      return OK;
+    case STAT_STORE:
+    /*Initializes ability store*/
+      if(i == LVLUP_TYPES_NUM){
+        if(collection_length(ability_manager_get_unused_abilities(game->ability_manager)) <= 0){
+          game_add_log_message(game, MESSAGE_HELP, "There are no more abilities to get on the game!");
+          return OK;
+        }
+        
+        game_store_destroy(game);
+        game_store_startup(game, ABILITY_STORE, ability_manager_get_unused_abilities(game->ability_manager), game_get_player(game), leveling_get_SP_pointer(player_get_leveling(game_get_player(game))));
+        game_store_add_items_from_collection(game, ability_manager_get_unused_abilities(game->ability_manager));
+        return OK;
+      }
+      if(game_add_stat_by_type(store_get_item_element_at(store, i), (Player *)store_get_client(store)) == ERROR)
+        return ERROR;
+      return OK;
+    default:
+      return ERROR;
+  }
+
+  return ERROR;
+}
+
+Store *game_get_store(Game *game){
+  if(!game) return ERROR;
+
+  return game->store;
+}
+
+Status game_store_startup(Game *game, StoreType type, void *seller, void *client, int *money){
+  if(!game || !money) return ERROR;
+
+  game->store = store_create(type, seller, client, money);
+  if(!game->store) return ERROR;
+
+  if(game_store_special_startup(game, type) == ERROR){
+    game_store_special_destroy(game, type);
+    store_destroy(game->store);
+    return ERROR;
+  }
+
+  game_set_state(game, STORE_STATE);
+
+  return OK;
+}
+
+Status game_store_destroy(Game *game){
+  if(!game) return ERROR;
+
+  game_store_special_destroy(game, store_get_type(game->store));
+  store_destroy(game->store);
+  game_set_state(game, DEFAULT);
+
+  game->store = NULL;
+
+  return OK;
+}
+
+Status game_store_add_items_from_collection(Game *game, Collection *collection){
+  Store *st = NULL;
+  int size, i;
+  void *ele = NULL;
+  StoreType type = ERROR_STORE;
+
+  if(!game || !collection) return ERROR;
+
+  st = game->store;
+  if(!st) return ERROR;
+
+
+  type = store_get_type(st);
+  if(type == ERROR_STORE) return ERROR;
+
+  size = collection_length(collection);
+  for(i = 0; i < size; i++){
+    ele = collection_get_element_at(collection, i);
+    if(!ele) return ERROR;
+    store_add_item(st, ele, game_store_get_switch_cost(type, ele), game_store_get_switch_id(type, ele));
+  }
+
+  return OK;
+}
+
+Status game_store_add_items_from_npc_inventory(Game *game, NPC *npc){
+  Store *st = NULL;
+  int size, i;
+  Inventory *inv = NULL;
+  Object *obj = NULL;
+  StoreType type = ERROR_STORE;
+  
+  if(!game || !npc) return ERROR;
+
+  st = game->store;
+  type = store_get_type(st);
+  inv = entity_get_inventory(npc_get_entity(npc));
+  if(!inv) return ERROR;
+
+  size = inventory_get_size(inv);
+  for(i = 0; i < size; i++){
+    obj = inventory_get_object_at(inv, i);
+    if(!obj) return ERROR;
+    if(store_add_item(st, obj, game_store_get_switch_cost(type, obj), game_store_get_switch_id(type, obj)) == ERROR)
+      return ERROR;
+  }
+
+  return OK;
+}
+
+Status game_store_buy_item_at(Game *game, int i){
+  Store *st = NULL;
+  int *money = NULL, cost;
+
+  if(!game) return ERROR;
+
+  st = game->store;
+  if(!st) return ERROR;
+
+  if(store_can_be_bought(st, i) == false) return ERROR;
+
+  money = store_get_money(st);
+  if(!money) return ERROR;
+
+  cost = store_get_item_cost_at(st, i);
+  if(cost < -1) return ERROR;
+
+  if(game_store_move_item_at(game, i) == ERROR) return ERROR;
+
+  if(cost > 0)
+    *money -= cost;
 
   return OK;
 }
