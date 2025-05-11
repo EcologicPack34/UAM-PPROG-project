@@ -450,7 +450,7 @@ Formato Event: #e:Id|Type|cmdTriggersNum|cmdName1 , ...|removeOnTrigger|tagvalue
 data string for objects_fusion is id1:id2;obj:ID;Name;Description;abilityId;LinkId
 
 #e:1|objects_fusion|5|tk,w,a,s,d|1|1:2;obj:100;Silver_Medallion;use this medallion to open a gate;1;2
-#e:2|npc_rand_move|6|w,a,s,d,up,dw|0|10
+#e:2|npc_rand_move|6|w,a,s,d,up,dw|0|5
 #e:3|trigger_combat|2|tk,dr|0|20
 #e:4|trigger_combat|3|sh,ou,sk|0|50
 #e:5|trigger_effects|9|w,a,s,d,up,dw,at,sk,ou|0|0
