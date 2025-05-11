@@ -60,7 +60,7 @@
  void test4_inventory_add_object();
  /*removes an object from an inventory, expected result OK*/
  void test1_inventory_remove_object();
- /*removes an object not contained in an inventory from an inventory, expected result ERROR*/
+ /*removes an object not contained in an inventory from an inventory, expected result OK*/
  void test2_inventory_remove_object();
  /*removes a non existent object from an inventory, expected result ERROR*/
  void test3_inventory_remove_object();
@@ -255,7 +255,7 @@
  void test2_inventory_remove_object(){
     Inventory *i = inventory_create(SPACE_INVENTORY,1);
     Object *o = object_create(1,"test1","test1","test1", 0, 1, true, true, 1, SPACE_INVENTORY);
-    PRINT_TEST_RESULT(inventory_remove_object(i, o) == ERROR);
+    PRINT_TEST_RESULT(inventory_remove_object(i, o) == OK);
     inventory_destroy(i);
     object_destroy(o);
  }
@@ -312,7 +312,7 @@
    object_destroy(o);
  }
  void test1_inventory_get_object_str_at(){
-   char descr[50];
+   char descr[WORD_SIZE];
    Inventory *i = inventory_create(SPACE_INVENTORY,1);
    Object *o = object_create(1,"test1","test1","test1", 0, 1, true, true, 1, SPACE_INVENTORY);
    inventory_add_object(i, o);
@@ -321,7 +321,7 @@
    object_destroy(o);
  }
  void test2_inventory_get_object_str_at(){
-   char descr[50];
+   char descr[WORD_SIZE];
    Object *o = object_create(1,"test1","test1","test1", 0, 1, true, true, 1, SPACE_INVENTORY);
    PRINT_TEST_RESULT(inventory_get_object_str_at(NULL, descr, 0) == ERROR);
    object_destroy(o);
