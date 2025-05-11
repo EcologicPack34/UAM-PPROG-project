@@ -916,6 +916,10 @@ Status game_actions_god_mode(Game *game){
     if(entity_stats_set_all(&(stat->stats), MAX_LVL, MAX_LVL, MAX_LVL, MAX_LVL, MAX_LVL, MAX_LVL) == ERROR)
       return ERROR;
   }
+
+  player_add_money(pl,MAX_LVL);
+  leveling_set_level(player_get_leveling(pl), MAX_LVL);
+  leveling_set_skill_points(player_get_leveling(pl), MAX_LVL);
   
   return OK;
 }
