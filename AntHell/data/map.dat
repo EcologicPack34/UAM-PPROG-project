@@ -1,9 +1,9 @@
 PLAYERS
 Formato Player: #p:ID|Nombre|LocationID|Money|XP actual|XP del siguiente nivel 100 si nivel es 1|nivel|skill points|gdesc
 Formato STATS: #st:IDEntity|EntityType|VidaMaxima|Vida|DanoBase|Fuerza|Defensa|NivelMagia
-#p:1|Hero1|11|50|0|100|1|0|mO^"
+#p:1|Traveler1|11|50|0|100|1|0|mO^"
 #st:1|1|100|100|25|1|1|1
-#p:2|Hero2|11|50|0|100|1|0|m1^"
+#p:2|Traveler2|11|50|0|100|1|0|m1^"
 #st:2|1|100|100|25|1|1|1
 
 Formato Space: #s:ID|Nombre|gdescId|northLink|eastLink|southLink|westLink|upLink|downLink|descr
@@ -11,8 +11,8 @@ Formato Space: #s:ID|Nombre|gdescId|northLink|eastLink|southLink|westLink|upLink
 Initial/final rooms
 #s:11|Entry|14|-1|1|-1|-1|-1|-1|NODESCR
 #s:12|Lobby|19|3|2|19|1|-1|-1|NODESCR
-#s:100|Boss Room|3|-1|-1|-1|2|-1|-1|NODESCR
-#s:101|Escape tunel|21|-1|35|-1|-1|NODESCR
+#s:100|Boss Room|3|-1|35|-1|2|-1|-1|NODESCR
+#s:101|Escape tunel|21|-1|-1|-1|35|-1|-1|NODESCR
 #s:13|Hall1|9|4|-1|3|-1|-1|-1|NODESCR
 #s:14|Lobby2|19|33|10|4|5|-1|-1|NODESCR
 #s:15|Path|4|-1|5|-1|6|-1|-1|NODESCR
@@ -77,7 +77,7 @@ Formato Link: #l:ID|Space1|Space2|adjacent|locked //Recordar añadir en cada esp
 #l:32|33|35|1|0
 #l:33|28|14|1|0
 #l:34|27|28|1|0
-#l:35|100|101|1
+#l:35|100|101|1|1
 
 GRAPHIC DESCRIPTIONS
 Formato Graphic description:
@@ -294,10 +294,10 @@ ENEMIES:
 #st:17|2|110|110|15|5|5|1
 
 #n:18|0|Spider|24|0|3|/O\"
-#st:18|2|200|200|40|10|10|1
+#st:18|2|200|200|25|10|10|1
 
 #n:19|0|Spider|19|0|3|/1\"
-#st:19|2|200|200|40|10|10|1
+#st:19|2|200|200|25|10|10|1
 
 #n:20|0|Big_Ant|19|0|3|^m^"
 #st:20|2|120|120|30|5|5|1
@@ -309,7 +309,7 @@ ENEMIES:
 #st:22|2|110|110|15|5|5|1
 
 #n:23|0|Spider|19|0|3|/2\"
-#st:23|2|200|200|40|10|10|1
+#st:23|2|200|200|25|10|10|1
 
 #n:24|0|Big_Ant|25|0|3|^m^"
 #st:24|2|120|120|30|5|5|1
@@ -321,7 +321,7 @@ ENEMIES:
 #st:26|2|110|110|15|5|5|1
 
 #n:27|0|Spider|25|0|3|/2\"
-#st:27|2|200|200|40|10|10|1
+#st:27|2|200|200|25|10|10|1
 
 #n:28|1|Guide|11|0|1|GuD"
 #st:28|2|100|100|25|1|1|1
@@ -367,15 +367,15 @@ SECOND ZONE, MAZE ENEMIES
 #st:42|2|150|150|30|40|40|1
 
 #n:43|0|Mutant_Ant|31|0|3|om^"
-#st:42|2|150|150|30|40|40|1
+#st:43|2|150|150|30|40|40|1
 
-#n:44|0|Ant_Hell_King|100|0|3|om^"
+#n:44|1|Ant_Hell_King|100|0|3|HELL"
 #st:44|2|1000|1000|50|40|40|1
 
-#n:45|0|Ant_Hell_Guard|100|0|3|om^"
+#n:45|0|Ant_Hell_Guard|100|0|3|GAR^"
 #st:45|2|300|300|30|40|40|1
 
-#n:46|0|Ant_Hell_Guard|100|0|3|om^"
+#n:46|0|Ant_Hell_Guard|100|0|3|GAR"
 #st:46|2|300|300|30|40|40|1
 
 
@@ -450,12 +450,14 @@ Formato Event: #e:Id|Type|cmdTriggersNum|cmdName1 , ...|removeOnTrigger|tagvalue
 data string for objects_fusion is id1:id2;obj:ID;Name;Description;abilityId;LinkId
 
 #e:1|objects_fusion|5|tk,w,a,s,d|1|1:2;obj:100;Silver_Medallion;use this medallion to open a gate;1;2
-#e:2|npc_rand_move|6|w,a,s,d,up,dw|0|20
+#e:2|npc_rand_move|6|w,a,s,d,up,dw|0|10
 #e:3|trigger_combat|2|tk,dr|0|20
 #e:4|trigger_combat|3|sh,ou,sk|0|50
 #e:5|trigger_effects|9|w,a,s,d,up,dw,at,sk,ou|0|0
 #e:6|dialogue_complete|0|0|28;10;1
 #e:7|space_end|0|0|101
+#e:8|unlock_on_kill|0|0|44;35
+#e:9|death_dialogue|0|1|44
 
 Formato Ability: #sk:Id|Type|Name|Entityid(ObjectId) Es -1 si no esta asignado --> A la tienda|is_player_ability|is_object_use|cd_init|cd_max|cost|data
 
@@ -486,7 +488,7 @@ Store skills
 #sk:52|effect_ally|Ally Regeneration Spell|-1|1|0|0|3|1|3
 #sk:53|effect_enemy|FireBall Launcher|-1|1|0|0|0|3|2
 #sk:54|effect_enemy|Poison Bomb|-1|1|0|0|6|3|1
-#sk:55|heal_self|Heal self 20 HP Maximum CD: 0|-1|0|1|0|0|1|20
+#sk:55|heal_self|Heal self 20 HP Maximum CD: 0|-1|0|1|0|4|1|20
 #sk:56|heal_ally|Heals an ally 30 HP, not available to self|-1|1|0|0|8|3|30
 #sk:57|revive_player|Revives a player dead in your location|-1|1|0|0|25|6|NONE
 

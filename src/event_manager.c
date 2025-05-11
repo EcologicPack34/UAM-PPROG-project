@@ -16,7 +16,7 @@
  * @brief Array of strings to relate the event types with their code
  */
 char *eventTags[N_EVENTS] = { "" , "object_on_space", "trigger_combat", "player_death","npc_rand_move", "trigger_effects","effect_area", "player_turn", "unlock_with_object_inv",\
-     "objects_fusion", "end_on_kill_enemy", "death_dialogue", "dialogue_in_space", "dialogue_complete", "unlock_on_kill"};
+     "objects_fusion", "end_on_kill_enemy", "death_dialogue", "dialogue_in_space", "dialogue_complete", "unlock_on_kill", "space_end"};
 
 /**
  * @brief Event struct to control special interactions or triggers within the game
@@ -188,11 +188,10 @@ int event_save_on_file(Event *event, FILE *fOUT){
 
     if(!event || !fOUT) return -1;
 
-    count += fprintf(fOUT, "%ld;%d;%d;%d\n", event->id, event->type, event->removeOnTrigger, event->cmdNum);
+    count += fprintf(fOUT, "%ld;%d;%d;%d.", event->id, event->type, event->removeOnTrigger, event->cmdNum);
     for(i = 0; i < event->cmdNum; i++){
         count += fprintf(fOUT, "%d,", event->commands[i]);
     }
-    count += fprintf(fOUT, "\n");
 
     count += fprintf(fOUT, "%s\n", event->data);
 
@@ -203,30 +202,31 @@ Event *event_create_from_file(FILE *fIN){
     Event *event = NULL;
     Id id;
     int i, type, removeOnTrigger, cmdNum;
-    char data[WORD_SIZE] = "", *toks = NULL, aux_str[WORD_SIZE];
+    char *toks = NULL, aux_str[WORD_SIZE];
     CommandCode *commands = NULL;
 
     if(!fIN) return NULL;
 
-    fscanf(fIN, "%ld;%d;%d;%d\n", &id, &type, &removeOnTrigger, &cmdNum);
+    fgets(aux_str,WORD_SIZE,fIN);
+
+    sscanf(aux_str, "%ld;%d;%d;%d.", &id, &type, &removeOnTrigger, &cmdNum);
 
     commands = (CommandCode *)malloc(cmdNum*sizeof(CommandCode));
     if(!commands) return NULL;
 
-    fgets(aux_str,WORD_SIZE,fIN);
+    toks = strtok(aux_str,".");
     if(cmdNum > 0){
-        toks = strtok(aux_str,",");
         commands[0] = (CommandCode)atoi(toks);
     }
-    for(i = 1; i < cmdNum && toks != NULL; i++){
+    for(i = 0; i < cmdNum && toks != NULL; i++){
         toks = strtok(NULL,",");
         commands[i] = (CommandCode)atoi(toks);
     }
 
-    fgets(data, WORD_SIZE, fIN);
-    string_remove_newline_escape_sequence_on_end(data);
+    toks = strtok(NULL,"\n\r");
+    string_remove_newline_escape_sequence_on_end(toks);
 
-    event = event_create(id, type, commands, cmdNum, data, removeOnTrigger);
+    event = event_create(id, type, commands, cmdNum, toks, removeOnTrigger);
     
     /*event_create allocs another _Struct CommandCode to copy this one's information*/
     free(commands);

@@ -283,6 +283,9 @@ void event_actions_trigger_events(Game *game){
             case UNLOCK_ON_KILL:
                 triggered = event_trigger_unlock_on_kill(event, game);
                 break;
+            case SPACE_END:
+                triggered = event_trigger_reach_space_end_game(event, game);
+                break;
             default:
                 break;
         }
@@ -819,6 +822,9 @@ bool event_trigger_death_dialogue(Event *event, Game *game){
     if(entity_is_dead(npc_get_entity(npc)) == false){
         return false;
     }
+
+    npc_set_status(npc, NEUTRAL);
+    
     return game_dialogue_init(game, npc);
 }
 
@@ -905,7 +911,7 @@ bool event_trigger_unlock_on_kill(Event *event, Game *game){
 
     strcpy(str, event_get_aux_data(event));
 
-    toks = strtok(str, ":\r\n");
+    toks = strtok(str, ";\r\n");
     if(!toks) return false;
 
     enemyId = atol(toks);
@@ -942,15 +948,19 @@ bool event_trigger_reach_space_end_game(Event *event, Game *game){
     spaceid = atol(data);
     if(spaceid == 0) return false;
 
+    size = game_get_n_players(game);
     for(i = 0; i < size; i++){
         player = game_get_player_at(game, i);
         if(!player) return false;
 
         if(entity_get_location(player_get_entity(player)) == spaceid){
             game_set_finished(game, true);
+            game_add_log_message(game, MESSAGE_HELP, "Congratulations, hope you had fun!");
             return true;
         }
     }
+
+
 
     return false;
 }

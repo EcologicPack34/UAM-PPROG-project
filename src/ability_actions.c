@@ -152,7 +152,7 @@ Status ability_heal_self(Ability *ability, Game *game){
         if(max_health - health <= health_recovered){
             health_recovered = max_health - health;
         }
-        entity_set_health(entity, health + health_recovered*((stats->stats.magicLevel - 1)/100 + 1));
+        entity_set_health(entity, health + health_recovered*((entity_get_magicLevel(player_get_entity(player)) - 1)/100 + 1));
         
     }
 
