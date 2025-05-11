@@ -102,7 +102,7 @@ Formato Event: #e:Id|Type|cmdTriggersNum|cmdName1 , ...|removeOnTrigger|tagvalue
 #e:7|effect_area|7|w,a,s,d,up,dw,sk|0|1:121
 #e:8|trigger_effects|8|w,a,s,d,up,dw,at,sk|0|0
 #e:9|player_turn|9|a,s,w,d,up,dw,sk,m,sh|0|10
-
+#e:10|end_on_kill_enemy|0|0|4
 
 Formato NPC: #n:ID|Dialogue State - 1 means initial - 0 means no dialogue|Nombre|LocationID|is_follower|Status|
 #n:1|1|NPC1|11|1|1|^0m"

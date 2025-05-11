@@ -125,6 +125,7 @@ bool event_trigger_effect_area(Event *event, Game *game);
 
 /**
  * @brief This function fusions 2 objects into 1 that can open a link by using it
+ * @author Aaron Charameli Mair
  * 
  * @param event 
  * @param game 
@@ -134,6 +135,17 @@ bool event_trigger_effect_area(Event *event, Game *game);
  */
 bool event_trigger_objects_fusion2key(Event *event, Game *game);
 
+/**
+ * @brief Event taht checks if a certain enemy has been killed and end the game if so;
+ * @author Daniel Gómez
+ * 
+ * @param event 
+ * @param game 
+ * @return true 
+ * @return false 
+ * @note data will be "enemyID"
+ */
+bool event_trigger_end_on_kill_enemy(Event *event, Game *game);
 
 /*
     * Public functions
@@ -152,9 +164,23 @@ void event_actions_trigger_events(Game *game){
 
     debug_log(DEBUG, "Checking for event triggers, count %d", eventCount);
 
-    if(game_get_state(game) != STORE_STATE){
-        for (i = 0; i < eventCount; i++)
+    /*Always checked events*/
+    if(game_get_state(game) == COMBAT)
+        triggered = event_trigger_end_combat(game);
+
+    if(game_get_state(game) == DEFAULT)
+        triggered = event_trigger_update_deaths(game);
+
+    triggered = event_trigger_player_death(event, game);
+
+
+
+    for (i = 0; i < eventCount; i++)
     {
+        if(game_get_state(game) == STORE_STATE){
+            break;
+        }
+
         event = event_manager_get_event(manager, i);
         triggered = false;
 
@@ -184,6 +210,9 @@ void event_actions_trigger_events(Game *game){
             case OBJECTS_FUSION:
                 triggered = event_trigger_objects_fusion2key(event, game);
                 break;
+            case END_ON_KILL_ENEMY:
+                triggered = event_trigger_end_on_kill_enemy(event, game);
+                break;
             default:
                 break;
         }
@@ -193,15 +222,6 @@ void event_actions_trigger_events(Game *game){
         }
             
     }
-    }
-    /*Always checked events*/
-    if(game_get_state(game) == COMBAT)
-        triggered = event_trigger_end_combat(game);
-
-    if(game_get_state(game) == DEFAULT)
-        triggered = event_trigger_update_deaths(game);
-
-    triggered = event_trigger_player_death(event, game);
 }
 
 /*
@@ -674,4 +694,37 @@ bool event_trigger_objects_fusion2key(Event *event, Game *game){
     }
 
     return game_add_ability(game, ability);
+}
+
+bool event_trigger_end_on_kill_enemy(Event *event, Game *game){
+    Id id = NO_ID;
+    Collection *npcs = NULL;
+    NPC *npc;
+    Entity *ent;
+    int n_npcs;
+    char str[WORD_SIZE];
+
+    if(!event || !game) return false;
+
+    if(game_get_state(game) == COMBAT) return false;
+
+    id = atol(event_get_aux_data(event));
+    if(id <= UNDEFINED_ID) return false;
+
+    npcs = game_get_npcs(game);
+    n_npcs = collection_length(npcs);
+
+    for (int i = 0; i < n_npcs; i++)
+    {
+        npc = collection_get_element_at(npcs, i);
+        ent = npc_get_entity(npc);
+        if(entity_get_id(ent) == id && entity_is_dead(ent)){
+            sprintf(str, "You killed %s, you WON!!", entity_get_name(ent));
+            game_add_log_message(game, MESSAGE_LOG, str);
+            game_set_finished(game, true);
+            return true;
+        }
+    }
+    
+    return false;
 }
