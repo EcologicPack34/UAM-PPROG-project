@@ -46,12 +46,12 @@ if [ $# -eq 1 ] ; then
 elif [ $# -eq 2 ] ; then
     if [ $1 -eq 0 ] ; then
         echo "Running test $1"
-        make ${test_dir}$2
+        make $2
         ${test_dir}$2
         make clean_test
     elif [ $1 -eq 1 ] ; then
         echo "Running test $1"
-        make ${test_dir}$2
+        make $2
         ${valgrind}${test_dir}$2
         make clean_test
     fi
