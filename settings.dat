@@ -43,14 +43,15 @@ Buys the object if you have enough money
 Follows another player, can't follow someone if they have 3 followers or you have any followers. Also used for unfollowing To use: fw (Name of the player)
 Saves the game instance to a file.
 Shows a minimap of the game. [GREEN]Green[RESET] = current location. [YELLOW]Yellow[RESET] = Explored location. [PURPLE]Purple[RESET] = Unexplored location. Line = link. [CYAN]Cyan[RESET] = portal link. [RED]Red[RESET] = blocked link
+Sets the volume of the music to the specified value between 0 and 1
 -------------------
 [CmdStateTypes]
 all
-Move,North,South,East,West,Attack,Take,Drop,Chat,Exit,Help,Ability,Object_Use,Search,Equip,Unequip,Inspect,sw,up,dw,Level_Up,Follow,Save,Minimap,
-Attack,Run_Away,Exit,Help,Ability,Object_Use,Inspect,
-Chat,Help,Exit,
-Buy,Help,Exit,
-map,
+Move,North,South,East,West,Attack,Take,Drop,Chat,Exit,Help,Ability,Object_Use,Search,Equip,Unequip,Inspect,sw,up,dw,Level_Up,Follow,Save,Minimap,vol,
+Attack,Run_Away,Exit,Help,Ability,Object_Use,Inspect,vol,
+Chat,Help,Exit,vol,
+Buy,Help,Exit,vol,
+map,vol,
 ----------------
 
 

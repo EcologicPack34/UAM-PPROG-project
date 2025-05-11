@@ -92,6 +92,7 @@ struct _Game {
   pthread_t crossfade;                /*!< Audio threading needed*/
   bool crosfadeInit;                  /*!< Bool to determine if threading has to be initiated*/
   GameState musicState;               /*!< State of the music*/
+  float musicVolume;
 };
 
 /*-----PRIVATE FUNCTIONS-----*/
@@ -136,6 +137,14 @@ Status game_map_space_block(Game *game, Space *initSpace ,int block);
  */
 void *game_cross_fade_music_local(void *arg);
 
+/**
+ * @brief Smooth volume change using threading
+ * 
+ * @param arg 
+ * @return void* 
+ */
+void *game_change_music_volume_local(void *arg);
+
 void *game_cross_fade_music_local(void *arg){
   Game *game;
   game = (Game *)arg;
@@ -150,24 +159,24 @@ void *game_cross_fade_music_local(void *arg){
     volume = (float)i/(float)steps;
     //printf("%f\n", volume);
     if(game->musicState == COMBAT){
-      ma_sound_set_volume(&(game->default_music), 1 - volume);
-      ma_sound_set_volume(&(game->combat_music), volume);
+      ma_sound_set_volume(&(game->default_music), (1 - volume)* game->musicVolume);
+      ma_sound_set_volume(&(game->combat_music), volume* game->musicVolume);
       usleep(duration * 1e6);//conversion to microseconds
     }
     if(game->musicState == DEFAULT){
-      ma_sound_set_volume(&(game->combat_music), 1 - volume);
-      ma_sound_set_volume(&(game->default_music), volume);
+      ma_sound_set_volume(&(game->combat_music), (1 - volume)* game->musicVolume);
+      ma_sound_set_volume(&(game->default_music), volume* game->musicVolume);
       usleep(duration * 1e6);//conversion to microseconds
     }
   }
 
   if(game->musicState == COMBAT){
     ma_sound_stop(&(game->default_music));
-    ma_sound_set_volume(&(game->combat_music), 1);
+    ma_sound_set_volume(&(game->combat_music), game->musicVolume);
   }
   if(game->musicState == DEFAULT){
     ma_sound_stop(&(game->combat_music));
-    ma_sound_set_volume(&(game->default_music), 1);
+    ma_sound_set_volume(&(game->default_music), game->musicVolume);
   }
   return NULL;
 }
@@ -194,6 +203,54 @@ void game_crossfade_music(Game *game){
   pthread_create(&game->crossfade, NULL, game_cross_fade_music_local, game);
   pthread_detach(game->crossfade);
   game->crosfadeInit = true;
+}
+
+void *game_change_music_volume_local(void *arg){
+  Game *game = (Game *)arg;
+
+  int steps = 500;
+  float duration = .3/(float)steps;
+  float volume;
+
+  float originalVolume;
+
+  originalVolume = ma_sound_get_volume((game->musicState == DEFAULT) ? &(game->default_music) : &(game->combat_music));
+
+  for (int i = 0; i < steps; i++)
+  {
+    volume = (float)i/(float)steps * (game->musicVolume - originalVolume);
+    //printf("%f\n", volume);
+    if(game->musicState == COMBAT){
+      ma_sound_set_volume(&(game->combat_music), originalVolume + volume);
+      usleep(duration * 1e6);//conversion to microseconds
+    }
+    if(game->musicState == DEFAULT){
+      ma_sound_set_volume(&(game->default_music), originalVolume + volume);
+      usleep(duration * 1e6);//conversion to microseconds
+    }
+  }
+  if(game->musicState == COMBAT){
+    ma_sound_set_volume(&(game->combat_music), game->musicVolume);
+  }
+  if(game->musicState == DEFAULT){
+    ma_sound_set_volume(&(game->default_music), game->musicVolume);
+  }
+  return NULL;
+}
+
+Status game_set_music_volume(Game *game, float value){
+  pthread_t thread;
+  
+  if(!game) return ERROR;
+  if(value < 0) value = 0;
+  if(value > 1) value = 1;
+
+  game->musicVolume = value;
+
+  pthread_create(&thread, NULL, game_change_music_volume_local, game);
+  pthread_detach(thread);
+
+  return OK;
 }
 
 Status game_store_special_startup(Game *game, StoreType type){
@@ -321,6 +378,7 @@ Status game_create(Game **game) {
   ma_sound_set_looping(&(*game)->combat_music, MA_TRUE);
 
   (*game)->musicState = DEFAULT;
+  (*game)->musicVolume = .8;
 
   (*game)->n_spaces = 0;
   (*game)->active_player = NULL; /*Player creation is controlled by game_reader*/

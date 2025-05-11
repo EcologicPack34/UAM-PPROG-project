@@ -29,9 +29,9 @@
 #define DESCRIPT_WIDTH2 50   /*!< Width of the description part*/
 #define HELP_BANNER_HEIGHT 1 /*!< Height of the help banner part*/
 #define HELP_BANNER_WIDTH 23 /*!< Width of the help banner part*/
-#define HELP_HEIGHT 4        /*!< Height of the help banner*/
+#define HELP_HEIGHT 5        /*!< Height of the help banner*/
 #define CMD_HISTORY_HEIGHT 3 /*!< Height of the command history*/
-#define MESSAGES_HEIGHT 4    /*!< Height of the are for displaying messages*/
+#define MESSAGES_HEIGHT 5    /*!< Height of the are for displaying messages*/
 
 #define SPACE_HEIGHT 9 /*!< Height of a space*/
 #define SPACE_WIDTH 17 /*!< Width of a space*/

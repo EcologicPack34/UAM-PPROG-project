@@ -223,6 +223,15 @@ Status game_actions_follow(Game *game);
 Status game_actions_save(Game *game);
 
 /**
+ * @brief Changes the volume of the game
+ * @author Daniel Gómez
+ * 
+ * @param game 
+ * @return Status 
+ */
+Status game_actions_volume(Game *game);
+
+/**
    Game actions implementation
 */
 
@@ -333,6 +342,9 @@ Status game_actions_update(Game *game, Command *command) {
     case MINIMAP:
       status = game_set_state(game, game_get_state(game) == DEFAULT ? MINIMAP_STATE : DEFAULT);
       break;
+    case VOLUME:
+      status = game_actions_volume(game);
+      break;
     default:
       break;
   }
@@ -343,7 +355,7 @@ Status game_actions_update(Game *game, Command *command) {
     game_set_is_turn_valid(game, VALID);
   }
   
-  if(game_get_state(game) == COMBAT && game_get_is_turn_valid(game) == VALID){
+  if(game_get_state(game) == COMBAT && game_get_is_turn_valid(game) == VALID && cmd != VOLUME && cmd != HELP && cmd != INSPECT){
     if(combat_update(game_get_combat(game), game_get_last_command(game)) == ERROR){
       game_set_is_turn_valid(game, NOT_VALID);
       status = ERROR;
@@ -1303,4 +1315,18 @@ Status game_actions_save(Game *game){
   sprintf(filename, "AntHell/saves/%s.dat", args[0]);
 
   return game_reader_create_save_file(filename, game);
+}
+
+Status game_actions_volume(Game *game){
+  Command *cmd;
+  float value;
+  if(!game) return ERROR;
+
+  cmd = game_get_last_command(game);
+
+  if(command_get_arguments_count(cmd) != 1) return ERROR;
+
+  value = (float)atof(command_get_arguments(cmd)[0]);
+
+  return game_set_music_volume(game, value);
 }

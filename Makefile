@@ -12,7 +12,7 @@ DEP_PATH = dependency
 
 #-MMP generates dependencies files for each .c, i.e. it generates a file that makefile checks to see its dependencies when compiling
 #-MP Is used to detect errors if any .h is deleted, but mentioned on a dependency file (.d)
-CFLAGS = -Wall -pedantic -I$(INCLUDE) -MMD -MP -fno-stack-protector -fsanitize=address
+CFLAGS = -Wall -pedantic -I$(INCLUDE) -MMD -MP
 
 D_FLAGS = -Wall -pedantic -g -I$(INCLUDE)
 

@@ -920,4 +920,11 @@ Status game_add_stat_by_type(char *text, Player *player);
  */
 void game_crossfade_music(Game *game);
 
+/**
+ * @brief Sets the volume to a value between 1 and 0, if value is greater or smaller, then is set to 0 or 1
+ * 
+ * @param game 
+ * @return Status 
+ */
+Status game_set_music_volume(Game *game, float value);
 #endif
