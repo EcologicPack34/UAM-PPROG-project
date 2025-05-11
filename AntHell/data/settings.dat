@@ -41,7 +41,7 @@ Moves one space down.
 Levels up the player if he has skill points available. In level up state write lu (option you want)
 Buys the object if you have enough money
 Follows another player, can't follow someone if they have 3 followers or you have any followers. Also used for unfollowing To use: fw (Name of the player)
-Saves the game instance to a file.
+Saves the game instance to a file. use: sv NAMEOFTHEFILE
 Shows a minimap of the game. [GREEN]Green[RESET] = current location. [YELLOW]Yellow[RESET] = Explored location. [PURPLE]Purple[RESET] = Unexplored location. Line = link. [CYAN]Cyan[RESET] = portal link. [RED]Red[RESET] = blocked link
 Sets the volume of the music to the specified value between 0 and 1
 -------------------
