@@ -9,11 +9,11 @@ Formato STATS: #st:IDEntity|EntityType|VidaMaxima|Vida|DanoBase|Fuerza|Defensa|N
 Formato Space: #s:ID|Nombre|gdescId|northLink|eastLink|southLink|westLink|upLink|downLink|descr
 
 Initial/final rooms
-#s:11|Entry|2|-1|1|-1|-1|-1|-1|NODESCR
-#s:12|Lobby|5|3|2|19|1|-1|-1|NODESCR
+#s:11|Entry|14|-1|1|-1|-1|-1|-1|NODESCR
+#s:12|Lobby|19|3|2|19|1|-1|-1|NODESCR
 #s:100|Boss Room|3|-1|-1|-1|2|-1|-1|NODESCR
-#s:13|Hall1|1|4|-1|3|-1|-1|-1|NODESCR
-#s:14|Lobby2|1|33|10|4|5|-1|-1|NODESCR
+#s:13|Hall1|9|4|-1|3|-1|-1|-1|NODESCR
+#s:14|Lobby2|19|33|10|4|5|-1|-1|NODESCR
 #s:15|Path|4|-1|5|-1|6|-1|-1|NODESCR
 #s:16|Path|2|-1|6|-1|18|-1|-1|NODESCR
 #s:17|Enemy Den|1|7|18|8|-1|-1|-1|NODESCR
@@ -23,21 +23,21 @@ Initial/final rooms
 
 North rooms
 #s:21|MoneyBag|3|-1|11|-1|10|-1|-1|NODESCR
-#s:22|Ally|2|12|-1|-1|11|-1|-1|NODESCR
+#s:22|Ally|20|12|-1|-1|11|-1|-1|NODESCR
 #s:23|tmp|5|14|-1|12|-1|13|-1|NODESCR
-#s:24|Artifact Room|6|-1|-1|-1|-1|-1|13|NODESCR
+#s:24|Artifact Room|18|-1|-1|-1|-1|-1|13|NODESCR
 #s:25|Armory|3|-1|-1|14|15|-1|-1|NODESCR
 #s:26|Path|1|-1|15|-1|16|-1|-1|NODESCR
 #s:27|Portal Room|2|-1|16|34|-1|-1|17|NODESCR
-#s:28|Union Room|1|34|-1|33|-1|-1|-1|NODESCR
+#s:28|Union Room|9|34|-1|33|-1|-1|-1|NODESCR
 
 South rooms
-#s:30|Room1|1|19|23|-1|22|-1|-1|NODESCR
-#s:31|Maze1|5|26|22|24|25|-1|-1|NODESCR
-#s:32|Maze2|2|23|24|26|29|-1|-1|NODESCR
-#s:33|Maze3|1|28|-1|32|-1|-1|-1|NODESCR
-#s:34|Maze4|4|-1|27|28|25|-1|-1|NODESCR
-#s:35|Artifact Room|6|32|-1|30|-1|-1|-1|NODESCR
+#s:30|Room1|12|19|23|-1|22|-1|-1|NODESCR
+#s:31|Maze1|7|26|22|24|25|-1|-1|NODESCR
+#s:32|Maze2|12|23|24|26|29|-1|-1|NODESCR
+#s:33|Maze3|7|28|-1|32|-1|-1|-1|NODESCR
+#s:34|Maze4|12|-1|27|28|25|-1|-1|NODESCR
+#s:35|Artifact Room|17|32|-1|30|-1|-1|-1|NODESCR
 #s:36|Treasure Room|6|29|-1|31|-1|-1|-1|NODESCR
 #s:37|Treasure Room|6|31|-1|-1|-1|-1|-1|NODESCR
 
@@ -126,6 +126,104 @@ Formato Graphic description:
  .  $  .  .  
   $  $   .  
  . .  $  $  
+--------------
+#gd:7|5|9|1
+------   
+ !   ____
+ !____  !
+ !  ____!
+     !    
+--------------
+--------------
+#gd:8|5|9|1
+    A    
+  _/ \_  
+  \   /  
+    !    
+--------------
+#gd:9|5|9|1
+   \ /   
+   / \   
+  /   \  
+ !     ! 
+ \     / 
+--------------
+#gd:10|5|9|1
+  !   !  
+  !   \  
+  !    --
+  !    __
+  !   /  
+--------------
+#gd:11|5|9|1
+  . *    
+ .  ' `  
+  , . 
+  _. ,   
+   *     
+--------------
+#gd:12|5|9|1
+ ! --  -!
+ !--  --!
+ !- -  -!
+ ! ---  !
+ !- -  -!
+--------------
+#gd:13|5|9|1
+__/==\___
+    mo'\_north key
+__@  _   
+  \__/ \_
+--------------
+#gd:14|5|9|1
+_________
+ 
+ 
+_________
+
+--------------
+#gd:15|5|9|1
+    _    
+\  \___  
+\      \_
+\    _   
+ \__/ \__
+--------------
+#gd:16|5|9|1
+    _    
+  ___\  \
+ /  mo' !
+\ @  _  /
+ \__/ \__
+--------------
+#gd:17|5|9|1
+   ___   
+  / _ \  
+ | |I| | 
+  \___/  
+
+--------------
+#gd:18|5|9|1
+   ___   
+  / _ \  
+ | |I| | 
+  \___/  
+
+--------------
+#gd:19|5|9|1
+   /   /
+--/    \_    
+
+--_    --
+   \    \  
+--------------
+#gd:20|5|9|1
+  /     / 
+  /     / 
+ _/     /
+   _    / 
+ __/ \__/
+--------------
 NPCS
 Formato NPC: #n:ID|Dialogue State - 1 means initial - 0 means no dialogue|Nombre|LocationID|is_follower|Status|gdesc
 Status formato: UNKNOWN_STATUS = 0, NEUTRAL = 1, ALLY = 2, ENEMY = 3
@@ -144,9 +242,8 @@ Use dependency_id = -1 for no dependency
 InventoryType = {UNKNOWN_INVENTORY == 0, PLAYER_INVENTORY == 1, NPC_INVENTORY == 2, SPACE_INVENTORY == 3}
 
 Relevant objects
-#o:1|north_med|NONE|Collect the other Medallion to open the boss gate|0|-1|1|0|24|3
-#o:2|south_med|NONE|Collect the other Medallion to open the boss gate|0|-1|1|0|35|3
-
+#o:1|Northern_Half_Medallion|NONE|Collect the other Medallion to open the boss gate|0|-1|1|0|24|3
+#o:2|Southern_Half_Medallion|NONE|Collect the other Medallion to open the boss gate|0|-1|1|0|35|3
 Optional objects
 ----------------------------------
 
