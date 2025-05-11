@@ -128,7 +128,6 @@ INVENTORY_TEST_OBJ = ./$(OP)/inventory_test.o ./$(OP)/inventory.o ./$(OP)/collec
 ENTITY_TEST_OBJ = ./$(OP)/entity.o ./$(OP)/inventory.o ./$(OP)/object.o ./$(OP)/collection.o ./$(OP)/debug_printing.o ./$(OP)/ability_manager.o ./$(OP)/queue.o ./$(OP)/utils.o
 COLLECTION_TEST_OBJ = ./$(OP)/collection_test.o ./$(OP)/collection.o ./$(OP)/debug_printing.o ./$(OP)/utils.o
 PLAYER_TEST_OBJ = ./$(OP)/player_test.o ./$(OP)/player.o ./$(OP)/command.o ./$(OP)/equipment.o ./$(OP)/npc.o ./$(OP)/entity.o ./$(OP)/object.o ./$(OP)/debug_printing.o ./$(OP)/inventory.o ./$(OP)/collection.o ./$(OP)/ability_manager.o ./$(OP)/queue.o ./$(OP)/utils.o ./$(OP)/leveling.o
-#EFFECT_TEST_OBJ = ./$(OP)/effect_test.o ./$(OP)/effect.o ./$(OP)/entity.o ./$(OP)/player.o ./$(OP)/debug_printing.o ./$(OP)/equipment.o ./$(OP)/command.o ./$(OP)/inventory.o ./$(OP)/object.o ./$(OP)/collection.o ./$(OP)/ability_manager.o ./$(OP)/queue.o ./$(OP)/npc.o
 
 test_all: collection_test space_test link_test object_test inventory_test player_test
 
@@ -166,14 +165,9 @@ player_test:
 	make
 	$(CC) -g -Wall -pedantic -I$(INCLUDE) -c ./src/test/src/player_test.c -o ./$(OBJ_PATH)/player_test.o 
 	$(CC) $(CFLAGS) -g -o ./src/test/player_test $(PLAYER_TEST_OBJ) -lm
-
-#effect_test:
-#	make
-#	$(CC) -g -Wall -pedantic -I$(INCLUDE) -c ./src/test/src/effect_test.c -o ./$(OBJ_PATH)/effect_test.o 
-#	$(CC) $(CFLAGS) -g -o ./src/test/effect_test $(EFFECT_TEST_OBJ)
 	
 clean_test:
-	@rm -f ./src/test/player_test ./src/test/inventory_test ./src/test/object_test ./src/test/link_test\
+	@rm -f ./src/test/player_test ./src/test/inventory_test ./src/test/object_test ./src/test/link_test \
 	./src/test/space_test ./src/test/collection_test ./src/test/entity_test
 
 # $@ devuelve lo que hay a la izquierda de los :, $^ devuelve todas las dependencias

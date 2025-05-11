@@ -1300,7 +1300,7 @@ Status game_actions_save(Game *game){
   if(!args) return ERROR;
 
 
-  sprintf(filename, "AntAmnesia/saves/%s.dat", args[0]);
+  sprintf(filename, "AntHell/saves/%s.dat", args[0]);
 
   return game_reader_create_save_file(filename, game);
 }
