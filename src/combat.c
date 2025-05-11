@@ -537,10 +537,6 @@ Status combat_update_deaths(Combat *cmb){
         }
         combat_release_dead_loot(cmb, &(cmb->allies_stats[i]));
         combat_copy_stats(&(cmb->allies_stats[i]), &(cmb->dead_entities[(cmb->n_dead_entities)++]));
-        for (j = i; j < cmb->total_allies - 1; j++)
-        {
-            combat_copy_stats(&(cmb->allies_stats[j + 1]), &(cmb->allies_stats[j]));
-        }
 
         cmb->total_allies--;
         if(entity_get_entityType((cmb->allies_stats[i].entity)) == PLAYER_TYPE){
@@ -550,6 +546,11 @@ Status combat_update_deaths(Combat *cmb){
             }
         }else{
             cmb->allies_count--;
+        }
+
+        for (j = i; j < cmb->total_allies; j++)
+        {
+            combat_copy_stats(&(cmb->allies_stats[j + 1]), &(cmb->allies_stats[j]));
         }
     }
     

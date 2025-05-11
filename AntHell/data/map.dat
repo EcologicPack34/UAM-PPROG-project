@@ -2,19 +2,19 @@ PLAYERS
 Formato Player: #p:ID|Nombre|LocationID|Money|XP actual|XP del siguiente nivel 100 si nivel es 1|nivel|skill points|gdesc
 Formato STATS: #st:IDEntity|EntityType|VidaMaxima|Vida|DanoBase|Fuerza|Defensa|NivelMagia
 #p:1|Traveler1|11|50|0|100|1|0|mO^"
-#st:1|1|100|100|25|1|1|1
+#st:1|1|100|1|25|1|1|1
 #p:2|Traveler2|11|50|0|100|1|0|m1^"
 #st:2|1|100|100|25|1|1|1
 
 Formato Space: #s:ID|Nombre|gdescId|northLink|eastLink|southLink|westLink|upLink|downLink|descr
 
 Initial/final rooms
-#s:11|Entry|14|-1|1|-1|-1|-1|-1|NODESCR
-#s:12|Lobby|19|3|2|19|1|-1|-1|NODESCR
-#s:100|Boss Room|3|-1|35|-1|2|-1|-1|NODESCR
-#s:101|Escape tunel|21|-1|-1|-1|35|-1|-1|NODESCR
-#s:13|Hall1|9|4|-1|3|-1|-1|-1|NODESCR
-#s:14|Lobby2|19|33|10|4|5|-1|-1|NODESCR
+#s:11|Entry|14|-1|1|-1|-1|-1|-1|A hole in the roof far away seems to be your end...
+#s:12|Lobby|19|3|2|19|1|-1|-1|Some people pass, you see a great door with a medallion icon empty in the center
+#s:100|Boss Room|3|-1|35|-1|2|-1|-1|This is HELL, flames, and a giant ant with two of its guards...
+#s:101|Escape tunel|21|-1|-1|-1|35|-1|-1|The escape...You made it.
+#s:13|Hall1|9|4|-1|3|-1|-1|-1|A common hall, common for what a cave can be, goes to the north...
+#s:14|Lobby2|19|33|10|4|5|-1|-1|Here a merchant rests waiting for someone like you.
 #s:15|Path|4|-1|5|-1|6|-1|-1|NODESCR
 #s:16|Path|2|-1|6|-1|18|-1|-1|NODESCR
 #s:17|Enemy Den|1|7|18|8|-1|-1|-1|NODESCR
