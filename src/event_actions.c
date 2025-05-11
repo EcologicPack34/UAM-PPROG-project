@@ -797,11 +797,11 @@ bool event_trigger_dialogue_in_space(Event *event, Game *game){
     if(!toks) return false;
     id=atol(toks);
 
-    toks = strtok(data, ":\n\r"); 
+    toks = strtok(NULL, " \n\r"); 
     if(!toks) return false;
     location=atol(toks);
 
-    game_get_NPC_by_id(game, id);
+    npc = game_get_NPC_by_id(game, id);
 
     if(game_get_player_location(game) == location)
         return game_dialogue_init(game, npc);
