@@ -131,7 +131,7 @@ bool queue_isEmpty(Queue *q){
 Status queue_free_elements(Queue *q, P_free_ele ele_free){
     if(!q || !ele_free) return ERROR;
 
-    while(q->size > 0){
+    while(queue_isEmpty(q) == false){
         ele_free(queue_pop(q));
     }
 

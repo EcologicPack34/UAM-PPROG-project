@@ -95,9 +95,14 @@ description
 NPCS
 Formato NPC: #n:ID|Dialogue State - 1 means initial - 0 means no dialogue|Nombre|LocationID|is_follower|Status|gdesc
 Status formato: UNKNOWN_STATUS = 0, NEUTRAL = 1, ALLY = 2, ENEMY = 3
+Formato STATS: #st:IDEntity|EntityType|VidaMaxima|Vida|DanoBase|Fuerza|Defensa|NivelMagia
+Entitytype: UNKNOWN_ENTITY = 0, PLAYER_TYPE = 1, NPC_TYPE = 2
 #n:1|1|Old_Merchant|12|0|1|ToT"
+#st:1|2|100|100|25|1|1|1
 #n:2|1|Divine_Merchant|12|0|1|GOD"
+#st:2|2|1000|1000|1000|1000|1000|1000
 #n:3|1|Young_Merchant|12|0|1|uWu"
+#st:3|2|100|100|25|1|1|1
 
 
 Formato Object: #o:ID|Nombre|Data|Descripcion|cost|Dependency_id|is_movable|is_consumable|LocationID|InventoryType

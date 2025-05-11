@@ -943,7 +943,7 @@ void graphic_engine_paint_combat(Graphic_engine *ge, Game *game){
     strcat(spacing, " ");
   }
   strcat(str, spacing);
-  if(enemy_count == 1) strcat(str, "  ");
+  //if(enemy_count == 1) strcat(str, "  ");
   for (i = 0; i < enemy_count; i++)
   {
     //sprintf(strAux, "[%.2lf]", stats[i].stats.health);

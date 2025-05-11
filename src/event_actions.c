@@ -194,8 +194,6 @@ void event_actions_trigger_events(Game *game){
     if(game_get_state(game) == DEFAULT)
         triggered = event_trigger_update_deaths(game);
 
-    triggered = event_trigger_player_death(event, game);
-
 
 
     for (i = 0; i < eventCount; i++)
@@ -249,8 +247,8 @@ void event_actions_trigger_events(Game *game){
             event_manager_remove_event(manager, event);
             event_destroy(event);
         }
-            
     }
+    triggered = event_trigger_player_death(event, game);
 }
 
 /*
