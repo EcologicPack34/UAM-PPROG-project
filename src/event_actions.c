@@ -172,7 +172,7 @@ bool event_trigger_death_dialogue(Event *event, Game *game);
 bool event_trigger_dialogue_in_space(Event *event, Game *game);
 
 /**
- * @brief Opens all near links to the player when even is triggered
+ * @brief Opens the near link indictaed whenever is triggered
  * @author Maksym Polyak
  * 
  * @param event event struct
@@ -194,6 +194,18 @@ bool event_trigger_dialogue_completed(Event *event, Game *game);
  * @note data format: npcId:linkId
  */
 bool event_trigger_unlock_on_kill(Event *event, Game *game);
+
+/**
+ * @brief Ends the game when reaching a space
+ * @author Maksym Polyak
+ * 
+ * @param event event struct
+ * @param game game struct
+ * @return true 
+ * @return false 
+ * @note the event's data will be the SPACEID
+ */
+bool event_trigger_reach_space_end_game(Event *event, Game *game);
 
 /*
     * Public functions
@@ -270,6 +282,9 @@ void event_actions_trigger_events(Game *game){
                 break;
             case UNLOCK_ON_KILL:
                 triggered = event_trigger_unlock_on_kill(event, game);
+                break;
+            case SPACE_END:
+                triggered = event_trigger_reach_space_end_game(event, game);
                 break;
             default:
                 break;
@@ -807,6 +822,9 @@ bool event_trigger_death_dialogue(Event *event, Game *game){
     if(entity_is_dead(npc_get_entity(npc)) == false){
         return false;
     }
+
+    npc_set_status(npc, NEUTRAL);
+    
     return game_dialogue_init(game, npc);
 }
 
@@ -893,7 +911,7 @@ bool event_trigger_unlock_on_kill(Event *event, Game *game){
 
     strcpy(str, event_get_aux_data(event));
 
-    toks = strtok(str, ":\r\n");
+    toks = strtok(str, ";\r\n");
     if(!toks) return false;
 
     enemyId = atol(toks);
@@ -914,5 +932,35 @@ bool event_trigger_unlock_on_kill(Event *event, Game *game){
         link_general_unlock(link);
         return true;
     }
+
+    return false;
+}
+bool event_trigger_reach_space_end_game(Event *event, Game *game){
+    char *data = NULL;
+    Id spaceid;
+    int i, size;
+    Player *player = NULL;
+    
+    if(!event || !game) return false;
+
+    data = event_get_aux_data(event);
+    
+    spaceid = atol(data);
+    if(spaceid == 0) return false;
+
+    size = game_get_n_players(game);
+    for(i = 0; i < size; i++){
+        player = game_get_player_at(game, i);
+        if(!player) return false;
+
+        if(entity_get_location(player_get_entity(player)) == spaceid){
+            game_set_finished(game, true);
+            game_add_log_message(game, MESSAGE_HELP, "Congratulations, hope you had fun!");
+            return true;
+        }
+    }
+
+
+
     return false;
 }

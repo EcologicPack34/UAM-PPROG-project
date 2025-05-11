@@ -418,3 +418,14 @@ DS:18
 [YELLOW]money bags that u can use!
 1
 [GREEN]Thank you!:0:10
+
+AntHellKing
+ID:44
+DS:1
+4
+[YELLOW]I never thought a mortal would defeat me...
+[YELLOW]I underestimated you traveler.
+[YELLOW]But don't forget this
+[YELLOW]I always come back...
+1
+[GREEN]...:1:1
