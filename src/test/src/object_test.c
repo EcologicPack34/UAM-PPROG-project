@@ -320,7 +320,7 @@ void test2_object_get_object_effect(){
     PRINT_TEST_RESULT(object_get_object_effect(NULL) == NULL);
 }
 void test1_object_get_data(){
-    Object *obj= object_create(1,"test1","test1","test1", 0, 1, true, true, 1, SPACE_INVENTORY);
+    Object *obj= object_create(1,"test1","data","test1", 0, 1, true, true, 1, SPACE_INVENTORY);
     PRINT_TEST_RESULT((strcmp(object_get_data(obj),"data") == 0));
     object_destroy(obj);
 }

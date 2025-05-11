@@ -6,7 +6,7 @@
 #include <string.h>
 #include <stdlib.h>
 
-#define MAX_TESTS 30
+#define MAX_TESTS 32
 
 /*creates a player, expected result != NULL*/
 void test1_player_create();
@@ -64,13 +64,13 @@ void test2_player_add_follower();
 void test1_player_remove_follower_by_entity();
 /*Removes a non existent follower from the player, expected result == ERROR*/
 void test2_player_remove_follower_by_entity();
-/*Gets a follower's entity, expected result != NULL*/
+/*Gets a follower's entity at a certain position, expected result != NULL*/
 void test1_player_get_follower_at();
 /*Tries to get followers pointer but player is NULL, expected result == NULL*/
 void test2_player_get_follower_at();
-/*Gets followers double pointer without followers, expected result != NULL*/
+/*Gets a player's followers number, expected result == 1*/
 void test1_player_get_followers_num();
-/*Tries to get followers pointer but player is NULL, expected result == NULL*/
+/*Gets non existent player's followers number, expected result == -1*/
 void test2_player_get_followers_num();
 
 
@@ -120,8 +120,10 @@ int main(int argc, char** argv) {
     if (all || test == 26) test2_player_add_follower();
     if (all || test == 27) test1_player_remove_follower_by_entity();
     if (all || test == 28) test2_player_remove_follower_by_entity();
-    if (all || test == 29) test1_player_get_followers();
-    if (all || test == 30) test2_player_get_followers();
+    if (all || test == 29) test1_player_get_follower_at();
+    if (all || test == 30) test2_player_get_follower_at();
+    if (all || test == 31) test1_player_get_followers_num();
+    if (all || test == 32) test2_player_get_followers_num();
     
   
     PRINT_PASSED_PERCENTAGE;
@@ -209,14 +211,14 @@ void test2_player_add_money(){
 }
 void test1_player_equip_piece(){
   Player *p = player_create("test",1,1,1,1,1,1,1);
-  Object *o = object_create(1,"test1","test1","test1", 0, 1, true, true, 1, PLAYER_INVENTORY);
+  Object *o = object_create(1,"helmet","wearable helmet base_damage:1 strength:1 max_health:20","test1", 0, 1, true, true, 1, PLAYER_INVENTORY);
   inventory_add_object(entity_get_inventory(player_get_entity(p)), o);
   PRINT_TEST_RESULT(player_equip_piece(p, o) == OK);
   player_destroy(p);
   object_destroy(o);
 }
 void test2_player_equip_piece(){
-  Object *o = object_create(1,"test1","test1","test1", 0, 1, true, true, 1, PLAYER_INVENTORY);
+  Object *o = object_create(1,"test1","wearable helmet base_damage:1 strength:1 max_health:20","test1", 0, 1, true, true, 1, PLAYER_INVENTORY);
   PRINT_TEST_RESULT(player_equip_piece(NULL, o) == ERROR);
   object_destroy(o);
 }
@@ -232,10 +234,11 @@ void test1_player_unequip_piece(){
 }
 void test2_player_unequip_piece(){
   Player *p = player_create("test",1,1,1,1,1,1,1);
-  Object *o = object_create(1,"chest","test1","test1", 0, 1, true, true, 1, PLAYER_INVENTORY);
+  Object *o = object_create(1,"helmet","wearable helmet base_damage:1 strength:1 max_health:20","test1", 0, 1, true, true, 1, PLAYER_INVENTORY);
   inventory_add_object(entity_get_inventory(player_get_entity(p)), o);
   player_equip_piece(p, o);
-  PRINT_TEST_RESULT(player_unequip_piece(p, "chest") == OK);
+  /*player_unequip_piece argument "helmet" corresponds to the obj's data, "wearable <helmet> ...", not the obj's name*/
+  PRINT_TEST_RESULT(player_unequip_piece(p, "helmet") == OK);
   object_destroy(o);
   player_destroy(p);
 }
@@ -266,9 +269,28 @@ void test2_player_remove_follower_by_entity(){
 }
 void test1_player_get_follower_at(){
   Player *p = player_create("test",1,1,1,1,1,1,1);
-  PRINT_TEST_RESULT(player_get_followers(p) != NULL);
+  NPC *npc = npc_create(NEUTRAL, false, 0, "TEST1", 1, 1);
+  player_add_follower(p, npc_get_entity(npc));
+  PRINT_TEST_RESULT(player_get_follower_at(p, 0) == npc_get_entity(npc));
   player_destroy(p);
+  npc_destroy(npc);
 }
-void test2_player_get_followers(){
-  PRINT_TEST_RESULT(player_get_followers(NULL) == NULL);
+void test2_player_get_follower_at(){
+  PRINT_TEST_RESULT(player_get_follower_at(NULL, 1) == NULL);
+}
+void test1_player_get_followers_num(){
+  Player *p = player_create("test",1,1,1,1,1,1,1);
+  NPC *npc = npc_create(NEUTRAL, false, 0, "TEST1", 1, 1);
+  player_add_follower(p, npc_get_entity(npc));
+  PRINT_TEST_RESULT(player_get_follower_num(p) == 1);
+  player_destroy(p);
+  npc_destroy(npc);
+}
+void test2_player_get_followers_num(){
+  Player *p = player_create("test",1,1,1,1,1,1,1);
+  NPC *npc = npc_create(NEUTRAL, false, 0, "TEST1", 1, 1);
+  player_add_follower(p, npc_get_entity(npc));
+  PRINT_TEST_RESULT(player_get_follower_num(NULL) == -1);
+  player_destroy(p);
+  npc_destroy(npc);
 }
