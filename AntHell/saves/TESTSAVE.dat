@@ -1,149 +1,209 @@
 SAVE
-0;0;0;0;0;1
+0;1;0;0;0;1
 #gd:1|5|9|1
 esto
 es
 un
 test
 descripti
-#gd:2|5|9|1
-
-
-dddddd
-
-
-#gd:3|5|9|1
-
-d
-w
-a
-
-#l:1|11|121|1|0
-#l:2|121|122|1|0
-#l:3|122|123|1|0
-#l:4|123|124|1|1
-#l:5|124|13|1|0
-#l:6|122|125|1|0
-#l:7|125|126|1|0
-#l:8|126|127|1|0
-#l:9|127|14|1|0
-#l:10|14|13|0|0
-#l:11|11|14|0|0
-#s:11|Entry|1|-1|-1|1|-1|11|-1|THIS IS A TEST DESCRIPTION|1
-#s:121|Corridor1|-1|1|-1|2|-1|-1|-1|DESCR|0
-#s:122|Corridor2|-1|2|6|3|-1|-1|-1|DESCR|0
-#s:123|Corridor3|-1|3|-1|4|-1|-1|-1|DESCR|0
-#s:124|Corridor4|-1|4|-1|5|-1|-1|-1|DESCR|0
-#s:13|Pantry|-1|5|-1|-1|-1|-1|-1|DESCR|0
-#s:125|Corridor5|-1|-1|7|-1|6|-1|-1|DESCR|0
-#s:126|Corridor6|-1|-1|8|-1|7|-1|-1|DESCR|0
-#s:127|Corridor7|-1|-1|9|-1|8|-1|-1|DESCR|0
-#s:14|Hole|-1|-1|-1|10|9|-1|11|DESCR|0
-8
-#n:1|1|NPC1|11|1|1|^0m
-#st:1|2|100|100|10|2|2|2
-#n:2|1|NPC2|11|1|1|^1m
-#st:2|2|100|100|10|2|2|2
-#n:3|1|NPC3|11|1|1|^2m
-#st:3|2|100|100|10|2|2|2
-#n:4|0|Enemy1|11|0|3|^3m
-#st:4|2|100|7|10|2|2|2
-#n:5|0|Enemy2|11|0|3|^4m
-#st:5|2|100|100|10|2|2|2
-#n:6|0|Enemy3|121|0|3|^5m
-#st:6|2|100|97|10|2|2|2
-#n:7|0|Enemy4|11|0|3|^6m
-#st:7|2|100|100|10|2|2|2
-#n:8|0|Spider-(not)-man|123|0|3|/o\
-#st:8|2|100|100|10|2|2|2
-#p:1|Hero1|11|100|0|100|1|100|mO^|0
-26;0;0
-#st:1|1|100|85|25|1|1|1
-#p:2|Hero2|14|100|0|100|1|0|m1^|0
+#l:1|11|12|1|0
+#l:2|12|100|1|1
+#l:3|12|13|1|0
+#l:4|13|14|1|0
+#l:5|14|15|1|0
+#l:6|15|16|1|0
+#l:18|16|17|1|0
+#l:7|17|19|1|0
+#l:8|17|18|1|0
+#l:9|19|20|1|0
+#l:10|14|21|1|0
+#l:11|21|22|1|0
+#l:12|22|23|1|0
+#l:13|23|24|1|0
+#l:14|23|25|1|0
+#l:15|25|26|1|0
+#l:16|26|27|1|0
+#l:17|20|27|0|0
+#l:19|12|30|1|0
+#l:22|30|31|0|0
+#l:23|30|32|0|0
+#l:24|31|32|0|0
+#l:25|31|34|0|0
+#l:26|32|31|0|0
+#l:27|34|30|0|0
+#l:28|34|33|0|0
+#l:29|32|36|0|0
+#l:30|35|30|0|0
+#l:31|36|37|1|0
+#l:32|33|35|1|0
+#l:33|28|14|1|0
+#l:34|27|28|1|0
+#s:11|Entry|1|-1|1|-1|-1|-1|1|NODESCR|0
+#s:12|Lobby|1|3|2|19|1|-1|-1|NODESCR|0
+#s:100|BossRoom|1|-1|-1|-1|2|-1|-1|NODESCR|0
+#s:13|Hall1|1|4|-1|3|-1|-1|-1|NODESCR|0
+#s:14|Lobby2|1|33|10|4|5|-1|-1|NODESCR|0
+#s:15|tmp|1|-1|5|-1|6|-1|-1|NODESCR|0
+#s:16|tmp|1|-1|6|-1|18|-1|-1|NODESCR|0
+#s:17|ememies|1|7|18|8|-1|-1|-1|NODESCR|0
+#s:18|sword|1|8|-1|-1|-1|-1|-1|NODESCR|0
+#s:19|tmp|1|9|-1|7|-1|-1|-1|NODESCR|0
+#s:20|Portal 1|1|-1|-1|9|-1|17|-1|NODESCR|0
+#s:21|MoneyBag|1|-1|11|-1|10|-1|-1|NODESCR|0
+#s:22|Ally|1|12|-1|-1|11|-1|-1|NODESCR|0
+#s:23|tmp|1|14|-1|12|-1|13|-1|NODESCR|0
+#s:24|Medallion|1|-1|-1|-1|-1|-1|13|NODESCR|0
+#s:25|Helmet|1|-1|-1|14|15|-1|-1|NODESCR|0
+#s:26|Enemies|1|-1|15|-1|16|-1|-1|NODESCR|0
+#s:27|Key|1|-1|16|34|-1|-1|17|NODESCR|0
+#s:28|UnionRoom|1|34|-1|33|-1|-1|-1|NODESCR|0
+#s:30|Room1|1|19|23|-1|22|-1|-1|NODESCR|0
+#s:31|Maze|1|26|22|24|25|-1|-1|NODESCR|0
+#s:32|Maze|1|23|24|26|29|-1|-1|NODESCR|0
+#s:33|Maze|1|28|-1|32|-1|-1|-1|NODESCR|0
+#s:34|Maze|1|-1|27|28|25|-1|-1|NODESCR|0
+#s:35|Maze|1|32|-1|30|-1|-1|-1|NODESCR|0
+#s:36|Maze|1|29|-1|31|-1|-1|-1|NODESCR|0
+#s:37|Maze|1|31|-1|-1|-1|-1|-1|NODESCR|0
+3
+#n:1|1|Old_Merchant|12|0|1|ToT
+#st:1|2|100|100|25|1|1|1
+#n:2|1|Divine_Merchant|12|0|1|GOD
+#st:2|2|1000|1000|1000|1000|1000|1000
+#n:3|1|Young_Merchant|12|0|1|uWu
+#st:3|2|100|100|25|1|1|1
+#p:1|Hero1|13|100|0|100|1|1|mO^|0
+3;1;0
+#st:1|1|100|100|25|1|1|1
+#p:2|Hero2|11|100|0|100|1|1|m1^|0
 -1;0;0
 #st:2|1|100|100|25|1|1|1
 OBJ
-20
-1;11;3;9;1;0;0;100
-Grain1
+31
+1;24;3;-1;1;0;0;0
+north_med
 NONE
-Needs Pickaxe to be picked
-2;121;3;-1;0;0;0;100
-Grain2
+Collect the other Medallion to open the boss gate
+2;35;3;-1;1;0;0;0
+south_med
 NONE
-Grano2, cannot be moved
-3;4;2;-1;1;0;0;100
-Grain3
+Collect the other Medallion to open the boss gate
+100;11;3;-1;1;0;0;0
+Helmet_Of_Void
+wearable helmet base_damage:1 strength:1 max_health:10 defense:2
+Created to cover the face of the most ominous beings on this world, gives the wearer the eyes of a demon! STATS: +1 strength, +10 max health +2 defense
+101;11;3;-1;1;0;0;0
+Chest_Of_Loneliness
+wearable chest base_damage:1 strength:1 max_health:30 defense:4
+A long time has passed since someone found this relic, gives the wearer the endurance of a mountain! STATS: +2 strength, + 30 max health +4 defense
+102;11;3;-1;1;0;0;0
+Arms_Of_Hell
+wearable arms strength:2 max_health:10 defense:2
+These arms were forged in this AntHell, by the Grand master blacksmith AntGod, gives the wearer the agility to cut through their enemies! STATS: +2 strength, +10 max health +2 defense
+104;11;3;-1;1;0;0;0
+Shoes_Of_Pain
+wearable shoes strength:2 max_health:15 defense:2
+Not a regular pair of shoes, these were carried by the old Ant Slayer, gives the wearer the determination to advance! STATS: +2 strength, +15 max health +2 defense
+106;12;3;-1;1;0;0;0
+Helmet_Of_Grace
+wearable helmet magic_level:2 max_health:30 defense:5
+A decorated but resilient helmet, gives the wearer the looks of a god! STATS: +2 magic level, +30 max health +5 defense
+108;12;3;-1;1;0;0;0
+Arms_Of_Heaven
+wearable arms magic_level:2 max_health:20 defense:4
+These arms were forged on a far away forge, by the Grand master blacksmith AntGod, gives the wearer the agility to curse their enemies! STATS: +2 magic level, +20 max health +4 defense
+109;12;3;-1;1;0;0;0
+Legs_Of_Will
+wearable leg_armor magic_level:2 max_health:30 defense:8
+Legs tend to be undervalued, but they can hold the determination of the body, gives the wearer the magic power to annihilate their enemies! STATS: +2 magic_level, +30 max health +8 defense
+110;12;3;-1;1;0;0;0
+Shoes_Of_Speed
+wearable shoes magic_level:1 max_health:20 defense:5
+Speed is the base of combat, gives the wearer the magic to power its incantations! STATS: +1 magic level, +20 max health +5 defense
+111;12;3;-1;1;0;0;0
+Ant_Cataclism
+wearable handr base_damage:5 strength:3 max_health:20
+A one hand mace, give your enemies a bonk that leaves them sleepig for the rest of their lives! STATS: +5 base damage +3 strength +20 max health
+103;2;2;-1;1;0;0;0
+Legs_Of_Penance
+wearable leg_armor strength:1 max_health:20 defense:3
+Leg armor is heavy, but not as heavy as the burden of penance, gives the wearer the will to carry on! STATS: +1 strength, +20 max health +2 defense
+105;2;2;-1;1;0;0;0
+Ant_Slayer
+wearable two_handed base_damage:15 strength:5 max_health:5
+An ancient weapon... Seemingly created by the heavens, gives the wearer the power to destroy every ant! STATS: +15 base damage, +5 strength, +5 max health
+107;2;2;-1;1;0;0;0
+Chest_Of_Loyalty
+wearable chest magic_level:3 max_health:40 defense:10
+Through thousands of years, the knights of Great Lond venerated the ones who used this chest plate. Every STATS: +3 magic level, + 40 max health +10 defense
+112;2;2;-1;1;0;0;0
+Ant_Protector
+wearable handl strength:2 max_health:50 defense:7
+A shield that protects the wearer from every threat! STATS: +2 strength +50 max health +7 defense
+115;2;2;-1;1;1;0;10
+HP
 NONE
-Grano3
-4;122;3;-1;1;0;0;100
-Grain4
+Health Potion that heals 40 HP
+116;2;2;-1;1;1;0;10
+HP
 NONE
-Grano4
-5;2;2;-1;1;1;0;5
-HP1
+Health Potion that heals 40 HP
+117;2;2;-1;1;1;0;10
+HP
 NONE
-Health Potion that heals 20 HP
-6;121;3;-1;1;1;0;200
-IHP
+Health Potion that heals 40 HP
+118;2;2;-1;1;1;0;10
+HP
 NONE
-Infinite Health Potion that heals 20 HP and isn't consumed
-7;11;3;-1;1;1;0;100
-MoneyBag
+Health Potion that heals 40 HP
+119;2;2;-1;1;1;0;10
+HP
 NONE
-Bag with 20 coins
-8;11;3;1;1;1;0;100
-Key
+Health Potion that heals 40 HP
+120;2;2;-1;1;1;0;10
+HP
 NONE
-Needs Grain1 to be picked, Unlocks link between spaces 123 and 124
-9;11;3;-1;1;0;0;100
-Pickaxe
+Health Potion that heals 40 HP
+121;2;2;-1;1;1;0;10
+HP
 NONE
-Needed to pick Grain1
-10;2;2;-1;1;1;0;5
-HP2
+Health Potion that heals 40 HP
+122;2;2;-1;1;1;0;10
+HP
 NONE
-Health Potion that heals 20 HP
-11;2;2;-1;1;1;0;5
-HP3
+Health Potion that heals 40 HP
+123;2;2;-1;1;1;0;10
+HP
 NONE
-Health Potion that heals 20 HP
-12;2;2;-1;1;1;0;5
-HP4
+Health Potion that heals 40 HP
+124;2;2;-1;1;1;0;10
+HP
 NONE
-Health Potion that heals 20 HP
-13;2;2;-1;1;1;0;5
-HP5
+Health Potion that heals 40 HP
+125;2;2;-1;1;1;0;10
+HP
 NONE
-Health Potion that heals 20 HP
-14;2;2;-1;1;1;0;5
-HP6
+Health Potion that heals 40 HP
+126;2;2;-1;1;1;0;10
+HP
 NONE
-Health Potion that heals 20 HP
-15;1;2;-1;1;1;0;1
-HTEST
-wearable helmet base_damage:1 strength:1 max_health:20
-Helmet TEST
-16;1;2;-1;1;1;0;2
-CHESTTEST
-wearable chest base_damage:1 strength:1 max_health:20
-Chest TEST
-17;1;2;-1;1;1;0;3
-ARMSTEST
-wearable arms base_damage:1 strength:1 max_health:20
-Arms TEST
-18;1;2;-1;1;1;0;4
-LEGSTEST
-wearable leg_armor base_damage:1 strength:1 max_health:20
-Legs TEST
-19;1;2;-1;1;1;0;5
-SHOESTEST
-wearable shoes base_damage:1 strength:1 max_health:20
-Shoes TEST
-20;1;2;-1;1;1;0;6
-TWOHANDTEST
-wearable two_handed base_damage:1 strength:1 max_health:20
-Two Handed TEST
+Health Potion that heals 40 HP
+127;2;2;-1;1;1;0;10
+HP
+NONE
+Health Potion that heals 40 HP
+128;2;2;-1;1;1;0;10
+HP
+NONE
+Health Potion that heals 40 HP
+129;2;2;-1;1;1;0;10
+HP
+NONE
+Health Potion that heals 40 HP
+130;2;2;-1;1;1;0;10
+HP
+NONE
+Health Potion that heals 40 HP
 4
 0.800000;1;90.000000
 light
@@ -153,50 +213,62 @@ strong
 quick
 0.500000;0;50.000000
 swift
-8
-1;1;0;2
-6,7,
-1:13
-2;1;0;2
-6,7,
-2:14
-3;2;0;2
-6,7,
-20
-5;2;0;1
-16,
-40
-6;4;0;6
-3,5,2,4,21,22,
 1
-7;6;0;7
-3,5,2,4,21,22,12,
-1:121
-8;5;0;8
-3,5,2,4,21,22,9,12,
-0
-9;7;0;9
-5,2,3,4,21,22,12,15,16,
-10
-5
-1;1;1;1;0;0;8;9
-Heal self 50 HP
-50
-4;1;6;0;1;0;0;6
-Heal self 5 HP  Maximum CD: 0
-5
-5;3;7;0;1;0;0;5
-Adds 20 coins   Maximum CD: 0
-20
-6;4;8;0;1;0;0;4
-Unlocks link between 123 and 124
-4
-9;1;5;0;1;0;0;1
-Heal self 20 HP Maximum CD: 0
-20
-26;0;1
+1;9;1;5
+6,3,5,2,4,
+1:2;obj:100;Silver_Medallion;use this medallion to open a gate;1;2
+16
+115;1;115;0;1;0;1;0
+HEALTHPOTIONS
+40
+116;1;116;0;1;0;1;0
+HEALTHPOTIONS
+40
+117;1;117;0;1;0;1;0
+HEALTHPOTIONS
+40
+118;1;118;0;1;0;1;0
+HEALTHPOTIONS
+40
+119;1;119;0;1;0;1;0
+HEALTHPOTIONS
+40
+120;1;120;0;1;0;1;0
+HEALTHPOTIONS
+40
+121;1;121;0;1;0;1;0
+HEALTHPOTIONS
+40
+122;1;122;0;1;0;1;0
+HEALTHPOTIONS
+40
+123;1;123;0;1;0;1;0
+HEALTHPOTIONS
+40
+124;1;124;0;1;0;1;0
+HEALTHPOTIONS
+40
+125;1;125;0;1;0;1;0
+HEALTHPOTIONS
+40
+126;1;126;0;1;0;1;0
+HEALTHPOTIONS
+40
+127;1;127;0;1;0;1;0
+HEALTHPOTIONS
+40
+128;1;128;0;1;0;1;0
+HEALTHPOTIONS
+40
+129;1;129;0;1;0;1;0
+HEALTHPOTIONS
+40
+130;1;130;0;1;0;1;0
+HEALTHPOTIONS
+40
+26;1;1
 TESTSAVE
-26;0;0
+3;1;0
 Error code for commands. Doesn
 Code for unkown commands.
 Exits the game.
@@ -238,77 +310,56 @@ Shows a minimap of the game.
 24,14,1,
 1
 27,
-3
-#ef:1|Poison|2|2|0|10|3
-2
-1|1|9
-6|2|10
-#ef:2|Fire|3|2|0|10|1
-0
-#ef:3|Regeneration|1|0|0|4|5
 0
 ID:1
 DS:1
 3
 Hello Traveler!
-What are you doing here?
-I thought you were attacked by those [RED]bandits
-2
-Hello old man!:0:2
-Bye!:1:1
-
-DS:2
-2
-Well well... Can i go with you?
-I can fight pretty well!
-4
-[GREEN]Let's slay those bastards!:4:3
-[YELLOW]Let's see the store:3:2
-I hate you! [RED]DIE!!:2:0
-No, i can't let you in.:1:2
-
-DS:3
-1
-Do you want me to stay around here?
-2
-Yes, keep guarding these zone.:5:2
-No, i can't let you in.(Leave):1:3
+I have some nice goods for you.
+Take a look!
+3
+[GREEN]I'll buy something1333333333rf13fr13f31f13f!:3:1
+[CYAN]I'm not interested,:1:1
+[RED]I don't care, DIE!:2:0
 
 DS:0
 1
-I don't have anything to tell you
+I don't have anything to tell you!
 1
-Have a nice day!:1:0
+DIE FOR GODS SAKE!:2:0
 
+Divine_Merchant
 ID:2
 DS:1
+2
+Welcome little creature!
+Do you have some gold to trade with me?
 3
-Hello Traveler!
-What are you doing here?
-I thought you were attacked by those bandits
-2
-Hello old man!:0:2
-Bye!:1:1
-
-DS:2
-2
-Well well... Can i go with you?
-I can fight pretty well!
-4
-Let's slay those bastards!:4:3
-Let's see the store:3:2
-I hate you! DIE!!:2:0
-No, i can't let you in.:1:2
-
-DS:3
-1
-Do you want me to stay around here?
-2
-Yes, keep guarding these zone.:5:2
-No, i can't let you in.(Leave):1:3
+[GREEN]Okey...?:3:1
+[CYAN]I'm not interested,!:1:1
+[RED]You will die by my hand!:2:0
 
 DS:0
 1
-I don't have anything to tell you
+You dare to come again mortal...
 1
-Have a nice day!:1:0
+I'LL KILL YOU GOD!:2:0
+
+Young_Merchant
+ID:3
+DS:1
+4
+Hello Traveler!
+We both share a tragic fall...
+I have some nice goods for you.
+Take a look!
+3
+[GREEN]I'll take a look!:3:1
+[CYAN]I'm not interested,:1:1
+[RED]I don't care, DIE!:2:0
+
+DS:0
+1
+I don't have anything to tell you!
+1
+DIE!:2:0

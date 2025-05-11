@@ -626,10 +626,15 @@ Status game_reader_load_spaces(Game *game, char *filename, bool fromSaveFile) {
       down = atol(toks);
 
       toks = strtok(NULL, "|");
-      strcpy(descr, toks);
+      if(toks != NULL){
+        if(strcmp(toks, "NODESCR") != 0){
+          strcpy(descr, toks);
+        }
+      }
+
 
       if(fromSaveFile){
-        toks = strtok(NULL, ";");
+        toks = strtok(NULL, ";\n");
         isDiscovered = (bool) atoi(toks);
       }
 

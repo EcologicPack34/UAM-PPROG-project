@@ -9,37 +9,37 @@ Formato STATS: #st:IDEntity|EntityType|VidaMaxima|Vida|DanoBase|Fuerza|Defensa|N
 Formato Space: #s:ID|Nombre|gdescId|northLink|eastLink|southLink|westLink|upLink|downLink|descr
 
 Initial/final rooms
-#s:11|Entry|1|-1|1|-1|-1|-1|1|
-#s:12|Lobby|1|3|2|19|1|-1|-1|
-#s:100|BossRoom|1|-1|-1|-1|2|-1|-1|
-#s:13|Hall1|1|4|-1|3|-1|-1|-1|
-#s:14|Lobby2|1|33|10|4|5|-1|-1|
-#s:15|tmp|1|-1|5|-1|6|-1|-1|
-#s:16|tmp|1|-1|6|-1|18|-1|-1|
-#s:17|ememies|1|7|18|8|-1|-1|-1|
-#s:18|sword|1|8|-1|-1|-1|-1|-1|
-#s:19|tmp|1|9|-1|7|-1|-1|-1|
-#s:20|Portal 1|1|-1|-1|9|-1|17|-1|
+#s:11|Entry|1|-1|1|-1|-1|-1|1|NODESCR
+#s:12|Lobby|1|3|2|19|1|-1|-1|NODESCR
+#s:100|BossRoom|1|-1|-1|-1|2|-1|-1|NODESCR
+#s:13|Hall1|1|4|-1|3|-1|-1|-1|NODESCR
+#s:14|Lobby2|1|33|10|4|5|-1|-1|NODESCR
+#s:15|tmp|1|-1|5|-1|6|-1|-1|NODESCR
+#s:16|tmp|1|-1|6|-1|18|-1|-1|NODESCR
+#s:17|ememies|1|7|18|8|-1|-1|-1|NODESCR
+#s:18|sword|1|8|-1|-1|-1|-1|-1|NODESCR
+#s:19|tmp|1|9|-1|7|-1|-1|-1|NODESCR
+#s:20|Portal 1|1|-1|-1|9|-1|17|-1|NODESCR
 
 North rooms
-#s:21|MoneyBag|1|-1|11|-1|10|-1|-1|
-#s:22|Ally|1|12|-1|-1|11|-1|-1|
-#s:23|tmp|1|14|-1|12|-1|13|-1|
-#s:24|Medallion|1|-1|-1|-1|-1|-1|13|
-#s:25|Helmet|1|-1|-1|14|15|-1|-1|
-#s:26|Enemies|1|-1|15|-1|16|-1|-1|
-#s:27|Key|1|-1|16|34|-1|-1|17|
-#s:28|UnionRoom|1|34|-1|33|-1|-1|-1|
+#s:21|MoneyBag|1|-1|11|-1|10|-1|-1|NODESCR
+#s:22|Ally|1|12|-1|-1|11|-1|-1|NODESCR
+#s:23|tmp|1|14|-1|12|-1|13|-1|NODESCR
+#s:24|Medallion|1|-1|-1|-1|-1|-1|13|NODESCR
+#s:25|Helmet|1|-1|-1|14|15|-1|-1|NODESCR
+#s:26|Enemies|1|-1|15|-1|16|-1|-1|NODESCR
+#s:27|Key|1|-1|16|34|-1|-1|17|NODESCR
+#s:28|UnionRoom|1|34|-1|33|-1|-1|-1|NODESCR
 
 South rooms
-#s:30|Room1|1|19|23|-1|22|-1|-1|
-#s:31|Maze|1|26|22|24|25|-1|-1|
-#s:32|Maze|1|23|24|26|29|-1|-1|
-#s:33|Maze|1|28|-1|32|-1|-1|-1|
-#s:34|Maze|1|-1|27|28|25|-1|-1|
-#s:35|Maze|1|32|-1|30|-1|-1|-1|
-#s:36|Maze|1|29|-1|31|-1|-1|-1|
-#s:37|Maze|1|31|-1|-1|-1|-1|-1|
+#s:30|Room1|1|19|23|-1|22|-1|-1|NODESCR
+#s:31|Maze|1|26|22|24|25|-1|-1|NODESCR
+#s:32|Maze|1|23|24|26|29|-1|-1|NODESCR
+#s:33|Maze|1|28|-1|32|-1|-1|-1|NODESCR
+#s:34|Maze|1|-1|27|28|25|-1|-1|NODESCR
+#s:35|Maze|1|32|-1|30|-1|-1|-1|NODESCR
+#s:36|Maze|1|29|-1|31|-1|-1|-1|NODESCR
+#s:37|Maze|1|31|-1|-1|-1|-1|-1|NODESCR
 
 
 Formato Link: #l:ID|Space1|Space2|adjacent|locked //Recordar añadir en cada espacio sus links adyacentes
@@ -114,27 +114,34 @@ Relevant objects
 #o:2|south_med|NONE|Collect the other Medallion to open the boss gate|0|-1|1|0|35|3
 
 Optional objects
+----------------------------------
 
-Armor of DPS build
+Armor of DPS build:
 #o:100|Helmet_Of_Void|wearable helmet base_damage:1 strength:1 max_health:10 defense:2|Created to cover the face of the most ominous beings on this world, gives the wearer the eyes of a demon! STATS: +1 strength, +10 max health +2 defense|0|-1|1|0|11|3
 #o:101|Chest_Of_Loneliness|wearable chest base_damage:1 strength:1 max_health:30 defense:4|A long time has passed since someone found this relic, gives the wearer the endurance of a mountain! STATS: +2 strength, + 30 max health +4 defense|0|-1|1|0|11|3
 #o:102|Arms_Of_Hell|wearable arms strength:2 max_health:10 defense:2|These arms were forged in this AntHell, by the Grand master blacksmith AntGod, gives the wearer the agility to cut through their enemies! STATS: +2 strength, +10 max health +2 defense|0|-1|1|0|11|3
-#o:103|Legs_Of_Penance|wearable leg_armor strength:1 max_health:20 defense:3|Leg armor is heavy, but not as heavy as the burden of penance, gives the wearer the will to carry on! STATS: +1 strength, +20 max health +2 defense|0|-1|1|0|11|3
+-->Divine_merchant:#o:103|Legs_Of_Penance|wearable leg_armor strength:1 max_health:20 defense:3|Leg armor is heavy, but not as heavy as the burden of penance, gives the wearer the will to carry on! STATS: +1 strength, +20 max health +2 defense|0|-1|1|0|11|3
 #o:104|Shoes_Of_Pain|wearable shoes strength:2 max_health:15 defense:2|Not a regular pair of shoes, these were carried by the old Ant Slayer, gives the wearer the determination to advance! STATS: +2 strength, +15 max health +2 defense|0|-1|1|0|11|3
-#o:105|Ant_Slayer|wearable two_handed base_damage:15 strength:5 max_health:5|An ancient weapon... Seemingly created by the heavens, gives the wearer the power to destroy every ant! STATS: +15 base damage, +5 strength, +5 max health|0|-1|1|0|11|3
+-->Divine_merchant:#o:105|Ant_Slayer|wearable two_handed base_damage:15 strength:5 max_health:5|An ancient weapon... Seemingly created by the heavens, gives the wearer the power to destroy every ant! STATS: +15 base damage, +5 strength, +5 max health|0|-1|1|0|11|3
 
-Armor of the tank
+Armor of the tank:
 #o:106|Helmet_Of_Grace|wearable helmet magic_level:2 max_health:30 defense:5|A decorated but resilient helmet, gives the wearer the looks of a god! STATS: +2 magic level, +30 max health +5 defense|0|-1|1|0|12|3
-#o:107|Chest_Of_Loyalty|wearable chest magic_level:3 max_health:40 defense:10|Through thousands of years, the knights of Great Lond venerated the ones who used this chest plate. Every STATS: +3 magic level, + 40 max health +10 defense|0|-1|1|0|12|3
+-->Divine_merchant:#o:107|Chest_Of_Loyalty|wearable chest magic_level:3 max_health:40 defense:10|Through thousands of years, the knights of Great Lond venerated the ones who used this chest plate. Every STATS: +3 magic level, + 40 max health +10 defense|0|-1|1|0|12|3
 #o:108|Arms_Of_Heaven|wearable arms magic_level:2 max_health:20 defense:4|These arms were forged on a far away forge, by the Grand master blacksmith AntGod, gives the wearer the agility to curse their enemies! STATS: +2 magic level, +20 max health +4 defense|0|-1|1|0|12|3
 #o:109|Legs_Of_Will|wearable leg_armor magic_level:2 max_health:30 defense:8|Legs tend to be undervalued, but they can hold the determination of the body, gives the wearer the magic power to annihilate their enemies! STATS: +2 magic_level, +30 max health +8 defense|0|-1|1|0|12|3
 #o:110|Shoes_Of_Speed|wearable shoes magic_level:1 max_health:20 defense:5|Speed is the base of combat, gives the wearer the magic to power its incantations! STATS: +1 magic level, +20 max health +5 defense|0|-1|1|0|12|3
 #o:111|Ant_Cataclism|wearable handr base_damage:5 strength:3 max_health:20|A one hand mace, give your enemies a bonk that leaves them sleepig for the rest of their lives! STATS: +5 base damage +3 strength +20 max health|0|-1|1|0|12|3
-#o:112|Ant_Protector|wearable handl strength:2 max_health:50 defense:7|A shield that protects the wearer from every threat! STATS: +2 strength +50 max health +7 defense|0|-1|1|0|12|3
+-->Divine_merchant:#o:112|Ant_Protector|wearable handl strength:2 max_health:50 defense:7|A shield that protects the wearer from every threat! STATS: +2 strength +50 max health +7 defense|0|-1|1|0|12|3
 
 Store objects
+----------------------------------
+Divine_Merchant store:
+#o:103|Legs_Of_Penance|wearable leg_armor strength:1 max_health:20 defense:3|Leg armor is heavy, but not as heavy as the burden of penance, gives the wearer the will to carry on! STATS: +1 strength, +20 max health +2 defense|0|-1|1|0|2|2
+#o:105|Ant_Slayer|wearable two_handed base_damage:15 strength:5 max_health:5|An ancient weapon... Seemingly created by the heavens, gives the wearer the power to destroy every ant! STATS: +15 base damage, +5 strength, +5 max health|0|-1|1|0|2|2
+#o:107|Chest_Of_Loyalty|wearable chest magic_level:3 max_health:40 defense:10|Through thousands of years, the knights of Great Lond venerated the ones who used this chest plate. Every STATS: +3 magic level, + 40 max health +10 defense|0|-1|1|0|2|2
+#o:112|Ant_Protector|wearable handl strength:2 max_health:50 defense:7|A shield that protects the wearer from every threat! STATS: +2 strength +50 max health +7 defense|0|-1|1|0|2|2
 
-Health potions
+Health potions:
 #o:115|HP|NONE|Health Potion that heals 40 HP|10|-1|1|1|2|2
 #o:116|HP|NONE|Health Potion that heals 40 HP|10|-1|1|1|2|2
 #o:117|HP|NONE|Health Potion that heals 40 HP|10|-1|1|1|2|2

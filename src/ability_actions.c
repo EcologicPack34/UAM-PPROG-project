@@ -252,7 +252,7 @@ Status ability_unlock_link(Ability *ability, Game *game){
         linkCurrent = space_get_down(game_get_space(game, game_get_player_location(game)));
         break;    
     default:
-        game_add_log_message(game, LOG_ERROR, "Invalid argument format, spcify a valid direction. Ex: north, south");
+        game_add_log_message(game, LOG_ERROR, "Invalid argument format, specify a valid direction. Ex: north, south");
         break;
     }
 
