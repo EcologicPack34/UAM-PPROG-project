@@ -26,7 +26,7 @@
 #define N_CMD 30    /*!< Total number of CommandCode in the enum */
 
 #define MAX_CMD_ARGS_NUM 5      /*!< Max number of arguments that can be passed to a command*/
-#define MAX_CMD_ARGS_LENGTH 20  /*!< Max length that the arguments of a command can have */
+#define MAX_CMD_ARGS_LENGTH 30  /*!< Max length that the arguments of a command can have */
 
 /**
  * @brief Enum with the type of expression of a command

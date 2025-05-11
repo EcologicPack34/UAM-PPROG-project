@@ -1,8 +1,8 @@
 PLAYERS
 Formato Player: #p:ID|Nombre|LocationID|Money|XP actual|XP del siguiente nivel 100 si nivel es 1|nivel|skill points|gdesc
 Formato STATS: #st:IDEntity|EntityType|VidaMaxima|Vida|DanoBase|Fuerza|Defensa|NivelMagia
-#p:1|Traveler1|11|50|0|100|1|0|mO^"
-#st:1|1|100|1|25|1|1|1
+#p:1|Traveler1|11|150|0|100|1|0|mO^"
+#st:1|1|100|100|25|1|1|1
 #p:2|Traveler2|11|50|0|100|1|0|m1^"
 #st:2|1|100|100|25|1|1|1
 
@@ -15,19 +15,19 @@ Initial/final rooms
 #s:101|Escape tunel|21|-1|-1|-1|35|-1|-1|The escape...You made it.
 #s:13|Hall1|9|4|-1|3|-1|-1|-1|A common hall, common for what a cave can be, goes to the north...
 #s:14|Lobby2|19|33|10|4|5|-1|-1|Here a merchant rests waiting for someone like you.
-#s:15|Path|4|-1|5|-1|6|-1|-1|NODESCR
-#s:16|Path|2|-1|6|-1|18|-1|-1|NODESCR
-#s:17|Enemy Den|1|7|18|8|-1|-1|-1|NODESCR
-#s:18|Armory|5|8|-1|-1|-1|-1|-1|NODESCR
-#s:19|Path|3|9|-1|7|-1|-1|-1|NODESCR
-#s:20|Portal Room|2|-1|-1|9|-1|17|-1|NODESCR
+#s:15|Path|4|-1|5|-1|6|-1|-1|A simple but dangerous path
+#s:16|Path|2|-1|6|-1|18|-1|-1|Another simple but dangerous path
+#s:17|Enemy Den|1|7|18|8|-1|-1|-1|A lot of enemies seem to have grown here...
+#s:18|Armory|5|8|-1|-1|-1|-1|-1|An ant armory??
+#s:19|Path|3|9|-1|7|-1|-1|-1|Another another simple but dangerous path
+#s:20|Portal Room|2|-1|-1|9|-1|17|-1|A great portal stands in fron of you...
 
 North rooms
-#s:21|MoneyBag|3|-1|11|-1|10|-1|-1|NODESCR
-#s:22|Ally|20|12|-1|-1|11|-1|-1|NODESCR
-#s:23|tmp|5|14|-1|12|-1|13|-1|NODESCR
-#s:24|Artifact Room|18|-1|-1|-1|-1|-1|13|NODESCR
-#s:25|Armory|3|-1|-1|14|15|-1|-1|NODESCR
+#s:21|MoneyBag|3|-1|11|-1|10|-1|-1|Do ants even collect money? I guess mutant ants do
+#s:22|Ally|20|12|-1|-1|11|-1|-1|Look well, there are no allies here
+#s:23|tmp|5|14|-1|12|-1|13|-1|What is this a tmp file???
+#s:24|Artifact Room|18|-1|-1|-1|-1|-1|13|Great treasures await those who are strong enough to take them
+#s:25|Armory|3|-1|-1|14|15|-1|-1|Another armory??? Really???
 #s:26|Path|1|-1|15|-1|16|-1|-1|NODESCR
 #s:27|Portal Room|2|-1|16|34|-1|-1|17|NODESCR
 #s:28|Union Room|9|34|-1|33|-1|-1|-1|NODESCR
@@ -422,7 +422,7 @@ Divine_Merchant store:
 #o:132|IHP|NONE|A seamingly infinite potion, refills every time it is taken, but it does not heal that much, just 20 HP.|500|-1|1|0|2|2
 
 Old_Merchant store:
-#o:113|Crystal_Collector|NONE|Grants you the ability to extract Extakorita, a strange mineral that can't be taken or carried without this collector.|100|-1|1|0|1|2
+#o:10|Crystal_Collector|NONE|Grants you the ability to extract Extakorita, a strange mineral that can't be taken or carried without this collector.|100|-1|1|0|1|2
 #o:115|HP|NONE|Health Potion: 40 HP|30|-1|1|1|1|2
 #o:116|HP|NONE|Health Potion: 40 HP|30|-1|1|1|1|2
 #o:117|HP|NONE|Health Potion: 40 HP|30|-1|1|1|1|2
@@ -449,7 +449,7 @@ Formato Event: #e:Id|Type|cmdTriggersNum|cmdName1 , ...|removeOnTrigger|tagvalue
 
 data string for objects_fusion is id1:id2;obj:ID;Name;Description;abilityId;LinkId
 
-#e:1|objects_fusion|5|tk,w,a,s,d|1|1:2;obj:100;Silver_Medallion;use this medallion to open a gate;1;2
+#e:1|objects_fusion|5|tk,w,a,s,d|1|1:2;obj:1000;Silver_Medallion;use this medallion to open a gate;1000;2
 #e:2|npc_rand_move|6|w,a,s,d,up,dw|0|10
 #e:3|trigger_combat|2|tk,dr|0|20
 #e:4|trigger_combat|3|sh,ou,sk|0|50
