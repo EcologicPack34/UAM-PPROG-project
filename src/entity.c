@@ -39,7 +39,7 @@ struct _Entity {
 };
 
 /*
-    * PRIVATE FUNCTIONS
+    * Private functions
 */
 
 /**
@@ -282,6 +282,7 @@ bool entity_stats_is_dead(EntityStats *stats){
     if(!stats) return true;
     return stats->health <= 0;
 }
+
 bool entity_is_dead(Entity *entity){
     if(!entity) return true;
     return entity->stats.health <= 0;
@@ -407,6 +408,10 @@ int entity_get_magicLevel(Entity *entity){
     
     return entity->stats.magicLevel;
 }
+
+/*
+    * Entity general functions
+*/
 
 int entity_compare(void *ent1, void *ent2){
     Entity *entity1 = NULL, *entity2 = NULL;

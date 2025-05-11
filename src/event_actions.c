@@ -9,7 +9,9 @@
 
 int player_turn = -1;
 
-/*----------PRIVATE DECLARATION---------*/
+/*
+    * Private functions
+*/
 
 /**
  * @brief Action for NO EVENT
@@ -133,7 +135,10 @@ bool event_trigger_effect_area(Event *event, Game *game);
 bool event_trigger_objects_fusion2key(Event *event, Game *game);
 
 
-/*---------PUBLIC FUNCTIONS----------*/
+/*
+    * Public functions
+*/
+
 void event_actions_trigger_events(Game *game){
     int i, eventCount;
     Event *event = NULL;
@@ -199,7 +204,9 @@ void event_actions_trigger_events(Game *game){
     triggered = event_trigger_player_death(event, game);
 }
 
-/*-------------EVENT ACTIONS------------*/
+/*
+    * Event actions
+*/
 
 bool event_trigger_none(Event *event, Game *game){
     debug_log(DEBUG, "No event Assigned");

@@ -34,15 +34,16 @@ typedef struct _Attack Attack;
 Attack *attack_create(char *name);
 
 /**
- * @brief Frees the memory of the struct attack
+ * @brief Frees the attack
  * @author Sofía Calvo
- * 
- * @param at attack struct to free
+ *
+ * @param at pointer to the structure that contains the information of the attack
  */
-void attack_free(Attack *at);
+void attack_destroy(void *at);
 
-
-/*------SETTERS------*/
+/*
+  * Attack setters
+*/
 
 /**
  * @brief Sets the damage multiplicator of the attack
@@ -74,7 +75,9 @@ Status attack_set_target_bool(Attack *at, bool target_need);
  */
 Status attack_set_failure_chance(Attack *at, double probability);
 
-/*-------GETTERS-------*/
+/*
+  * Attack GETTERS
+*/
 
 /**
  * @brief Gets the damage multiplicator of the attack
@@ -112,6 +115,10 @@ double attack_get_success_chance(Attack *at);
  */
 char *attack_get_name(Attack *at);
 
+/*
+  * Attack general functions
+*/
+
 /**
  * @brief Compares two attacks
  * @author Sofía Calvo
@@ -129,14 +136,6 @@ int attack_compare(void *e1, void *e2);
  * @param at pointer to the structure that contains the information of the attack
  */
 void attack_print(void *at);
-
-/**
- * @brief Frees the attack
- * @author Sofía Calvo
- *
- * @param at pointer to the structure that contains the information of the attack
- */
-void attack_destroy(void *at);
 
 /**
  * @brief Saves an attack struct info on a file

@@ -52,8 +52,9 @@ struct _EffectsManager{
     Collection *effects;    /*!< Effects collection*/
 };
 
-/*--------------------------------------------------------------------------------------------------------------------------*/
-/*PRIVATE FUNCTIONS HEADERS*/
+/*
+    * Private functions
+*/
 
 /**
  * @brief This function applies an effect of type poison to an entity
@@ -123,241 +124,9 @@ Affected *_affected_create(Entity *ent, int turns);
  */
 void _affected_destroy(void *a);
 
-/*END OF PRIVATE FUNCTIONS DECLARATIONS*/
-/*--------------------------------------------------------------------------------------------------------------------------*/
-
-/*--------------------------------------------------------------------------------------------------------------------------*/
-/*PUBLIC FUNCTIONS IMPLEMENTATION*/
-
-Effect *effect_create(Id id, char *name, char *data, EffectType ET, EffectAffects EA, bool inf_turns, int default_turns){
-    Effect *e=NULL;
-    
-    if((id<=UNDEFINED_ID) || (ET == UNKNOWN_EFFECT)) return NULL;
-    if((name == NULL) || (data == NULL)) return NULL;
-    if(default_turns <= 0) return NULL;
-    
-    if((e = (Effect *)malloc(sizeof(Effect))) == NULL) return NULL;
-
-
-    e->id = id;
-    if((e->affecteds = collection_create(INIT_AFFECTED,false,true, effect_cmp, effect_print)) == NULL) return NULL;
-    e->name = strdup(name);
-    e->data = strdup(data);
-    e->ET = ET;
-    e->EA = EA;
-    e->inf_turns = inf_turns;
-    e->default_turns = default_turns;
-
-    return e;
-}
-
-EffectManager *effect_manager_create(){
-    EffectManager *em=NULL;
-
-    if((em = (EffectManager*)malloc(sizeof(EffectManager))) == ERROR) return NULL;
-
-    em->effects = collection_create(EFFECT_MANAGER_INIT_SIZE,false,true,effect_cmp,effect_print);
-    if(!em->effects) return NULL;
-
-    return em;
-}
-
-void effect_destroy(void *e){
-    Effect *aux=e;
-    if(aux){
-        if(aux->name)
-            free(aux->name);
-        if(aux->data)
-            free(aux->data);
-        if(aux->affecteds){
-            collection_free_elements(aux->affecteds, _affected_destroy);
-            collection_destroy(aux->affecteds);
-        }
-        free(e);
-    }
-    return;
-}
-
-Collection *effect_manager_get_effects(EffectManager *em){
-    if(!em) return NULL;
-    return em->effects;
-}
-
-Effect *effect_get_by_id(EffectManager *em, Id id){
-    Effect *effect=NULL;
-    int i,len;
-    if(!em || (id<UNDEFINED_ID)) return NULL;
-
-    len = collection_length(em->effects);
-
-    for(i=0;i<len;i++){
-        effect = collection_get_element_at(em->effects, i);
-        if(effect && (effect->id == id))
-            return effect;
-    }
-    return NULL;
-}
-
-void effect_manager_destroy(EffectManager *em){
-    if(em){
-        if(em->effects){
-            collection_free_elements(em->effects, effect_destroy);
-            collection_destroy(em->effects);
-        }
-        free(em);
-    }
-    return;
-}
-
-Status effect_manager_add_effect(EffectManager *em, Effect *effect){
-    if(!em || !effect) return ERROR;
-    return collection_add(em->effects, (void *)effect);
-}
-
-Status effect_add_affected(Effect *e, Entity *ent){
-    Status st = OK;
-    Affected *a=NULL;
-    if(!e || !ent) return ERROR;
-    if(effect_has_affected(e, ent) == false){
-        if((a = _affected_create(ent,e->default_turns)) == NULL) return ERROR;
-            st = collection_add(e->affecteds,a);
-        }
-    else{
-        a = _effect_get_affected(e, ent);
-        a->turns = e->default_turns;
-    }
-    
-    return st;
-}
-
-Status effect_add_affected_n_turns(Effect *e, Entity*ent, int n_turns){
-    Status st = OK;
-    Affected *a=NULL;
-    if(!e || !ent || (n_turns<0)) return ERROR;
-    if(effect_has_affected(e, ent) == false){
-        if((a = _affected_create(ent,e->default_turns)) == NULL) return ERROR;
-            st = collection_add(e->affecteds,a);
-            a->turns = n_turns;
-        }
-    else{
-        a = _effect_get_affected(e, ent);
-        a->turns += e->default_turns;
-    }
-    
-    return st;
-}
-
-bool effect_has_affected(Effect *e, Entity *ent){
-    return (_effect_get_affected(e,ent)!=NULL) ? true : false;
-}
-
-Status effect_update(Effect *effect, Stats *ent_stats, int ent_count){
-    int i,n;
-    Affected *aux=NULL;
-
-    if((ent_stats != NULL) && (ent_count<=0)) return ERROR;
-    if(!effect || ((n = collection_length(effect->affecteds)) == -1)) return ERROR;
-
-    for(i=0; i<n; i++){
-        aux = collection_get_element_at(effect->affecteds, i);
-        if(aux){
-            switch (effect->ET){
-                case POISON:
-                    _effect_apply_poison(effect, aux, ent_stats, ent_count);
-                    break;
-                case REGENERATION:
-                    _effect_apply_regeneration(effect, aux, ent_stats, ent_count);
-                    break;
-                case FIRE:
-                    _effect_apply_fire(effect, aux, ent_stats, ent_count);
-                    break;
-                default:
-                    break;
-            }
-        }
-    }
-
-    for(i=n-1; i>=0 ; i--){
-        aux = collection_get_element_at(effect->affecteds, i);
-        if(aux->turns == 0){
-            collection_remove(effect->affecteds, aux);
-            _affected_destroy(aux);
-        }
-    }
-    return OK;
-}
-
-Status effect_save_to_file(FILE *file, Effect *effect){
-    /*
-    #ef:Id|name|EffectType|EffectAffects|InfiniteTurns|DefaultNumberOfTurns|data
-    N
-    Entity1Id|Entity1Type|turns
-    Entity2Id|Entity2Type|turns
-    EntityNId|EntityNType|turns*/
-
-    int i,N; /*n represents the number of affected entities by an effect*/
-    Affected *aux=NULL;
-    if(!effect || !file) return ERROR;
-
-    if((N = collection_length(effect->affecteds)) == -1) return ERROR;
-
-    fprintf(file, "#ef:%ld|%s|%d|%d|%d|%d|%s\n",effect->id, effect->name, effect->ET, effect->EA, effect->inf_turns\
-    ,effect->default_turns, effect->data);
-
-    fprintf(file, "%d\n", N);
-    for(i=0; i<N; i++){
-        aux = collection_get_element_at(effect->affecteds,i);
-        fprintf(file,"%ld|%d|%d\n", entity_get_id(aux->ent), entity_get_entityType(aux->ent), (aux->turns+1));
-    }
-
-    return OK;
-}
-
-
-
-EffectType effect_get_effect_type(Effect *effect){
-    if(!effect) return -2;
-    return effect->ET;
-}
-
-char *effect_get_name(Effect *effect){
-    if(!effect) return NULL;
-    return effect->name;
-}
-
-char *effect_get_data(Effect *effect){
-    if(!effect) return NULL;
-    return effect->data;
-}
-
-Id effect_get_id(Effect *effect){
-    if(!effect) return NO_ID;
-    return effect->id;
-}
-
-EffectAffects effect_get_effectAffects(Effect *effect){
-    if(!effect) return NO_EFFECT;
-    return effect->EA;
-}
-
-int effect_cmp(void*e1, void*e2){
-    if(!e1 || !e2) return -2;
-    return ((Effect*)e1)->id - ((Effect*)e2)->id;
-}
-
-void effect_print(void*effect){
-    if(!effect) return;
-    /*for now this will be the print format. Can be modified in the future.*/
-    fprintf(stdout, "%s: %s", ((Effect*)effect)->name, ((Effect*)effect)->data);
-}
-
-/*END OF PUBLIC FUNCTIONS IMPLEMENTATION*/
-/*--------------------------------------------------------------------------------------------------------------------------*/
-
-
-
-/*--------------------------------------------------------------------------------------------------------------------------*/
-/*PRIVATE FUNCTIONS IMPLEMENTATION*/
+/*
+    * Private functions implementation
+*/
 
 Status _effect_apply_poison(Effect*effect, Affected*affected, Stats*enemy_stats, int enemy_count){
     double DamageTaken;
@@ -483,5 +252,250 @@ void _affected_destroy(void *a){
     return;
 }
 
-/*END OF PRIVATE FUNCTIONS IMLPEMENTATION*/
-/*--------------------------------------------------------------------------------------------------------------------------*/
+/*
+    * Effect public functions
+*/
+
+Effect *effect_create(Id id, char *name, char *data, EffectType ET, EffectAffects EA, bool inf_turns, int default_turns){
+    Effect *e=NULL;
+    
+    if((id<=UNDEFINED_ID) || (ET == UNKNOWN_EFFECT)) return NULL;
+    if((name == NULL) || (data == NULL)) return NULL;
+    if(default_turns <= 0) return NULL;
+    
+    if((e = (Effect *)malloc(sizeof(Effect))) == NULL) return NULL;
+
+
+    e->id = id;
+    if((e->affecteds = collection_create(INIT_AFFECTED,false,true, effect_cmp, effect_print)) == NULL) return NULL;
+    e->name = strdup(name);
+    e->data = strdup(data);
+    e->ET = ET;
+    e->EA = EA;
+    e->inf_turns = inf_turns;
+    e->default_turns = default_turns;
+
+    return e;
+}
+
+void effect_destroy(void *e){
+    Effect *aux=e;
+    if(aux){
+        if(aux->name)
+            free(aux->name);
+        if(aux->data)
+            free(aux->data);
+        if(aux->affecteds){
+            collection_free_elements(aux->affecteds, _affected_destroy);
+            collection_destroy(aux->affecteds);
+        }
+        free(e);
+    }
+    return;
+}
+
+/*
+    * Effect setters
+*/
+
+Status effect_add_affected(Effect *e, Entity *ent){
+    Status st = OK;
+    Affected *a=NULL;
+    if(!e || !ent) return ERROR;
+    if(effect_has_affected(e, ent) == false){
+        if((a = _affected_create(ent,e->default_turns)) == NULL) return ERROR;
+            st = collection_add(e->affecteds,a);
+        }
+    else{
+        a = _effect_get_affected(e, ent);
+        a->turns = e->default_turns;
+    }
+    
+    return st;
+}
+
+Status effect_add_affected_n_turns(Effect *e, Entity*ent, int n_turns){
+    Status st = OK;
+    Affected *a=NULL;
+    if(!e || !ent || (n_turns<0)) return ERROR;
+    if(effect_has_affected(e, ent) == false){
+        if((a = _affected_create(ent,e->default_turns)) == NULL) return ERROR;
+            st = collection_add(e->affecteds,a);
+            a->turns = n_turns;
+        }
+    else{
+        a = _effect_get_affected(e, ent);
+        a->turns += e->default_turns;
+    }
+    
+    return st;
+}
+
+/*
+    * Effect getters
+*/
+
+bool effect_has_affected(Effect *e, Entity *ent){
+    return (_effect_get_affected(e,ent)!=NULL) ? true : false;
+}
+
+EffectType effect_get_effect_type(Effect *effect){
+    if(!effect) return -2;
+    return effect->ET;
+}
+
+char *effect_get_name(Effect *effect){
+    if(!effect) return NULL;
+    return effect->name;
+}
+
+char *effect_get_data(Effect *effect){
+    if(!effect) return NULL;
+    return effect->data;
+}
+
+Id effect_get_id(Effect *effect){
+    if(!effect) return NO_ID;
+    return effect->id;
+}
+
+EffectAffects effect_get_effectAffects(Effect *effect){
+    if(!effect) return NO_EFFECT;
+    return effect->EA;
+}
+
+/*
+    * Effect general functions
+*/
+
+Status effect_update(Effect *effect, Stats *ent_stats, int ent_count){
+    int i,n;
+    Affected *aux=NULL;
+
+    if((ent_stats != NULL) && (ent_count<=0)) return ERROR;
+    if(!effect || ((n = collection_length(effect->affecteds)) == -1)) return ERROR;
+
+    for(i=0; i<n; i++){
+        aux = collection_get_element_at(effect->affecteds, i);
+        if(aux){
+            switch (effect->ET){
+                case POISON:
+                    _effect_apply_poison(effect, aux, ent_stats, ent_count);
+                    break;
+                case REGENERATION:
+                    _effect_apply_regeneration(effect, aux, ent_stats, ent_count);
+                    break;
+                case FIRE:
+                    _effect_apply_fire(effect, aux, ent_stats, ent_count);
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
+    for(i=n-1; i>=0 ; i--){
+        aux = collection_get_element_at(effect->affecteds, i);
+        if(aux->turns == 0){
+            collection_remove(effect->affecteds, aux);
+            _affected_destroy(aux);
+        }
+    }
+    return OK;
+}
+
+Status effect_save_to_file(FILE *file, Effect *effect){
+    /*
+    #ef:Id|name|EffectType|EffectAffects|InfiniteTurns|DefaultNumberOfTurns|data
+    N
+    Entity1Id|Entity1Type|turns
+    Entity2Id|Entity2Type|turns
+    EntityNId|EntityNType|turns*/
+
+    int i,N; /*n represents the number of affected entities by an effect*/
+    Affected *aux=NULL;
+    if(!effect || !file) return ERROR;
+
+    if((N = collection_length(effect->affecteds)) == -1) return ERROR;
+
+    fprintf(file, "#ef:%ld|%s|%d|%d|%d|%d|%s\n",effect->id, effect->name, effect->ET, effect->EA, effect->inf_turns\
+    ,effect->default_turns, effect->data);
+
+    fprintf(file, "%d\n", N);
+    for(i=0; i<N; i++){
+        aux = collection_get_element_at(effect->affecteds,i);
+        fprintf(file,"%ld|%d|%d\n", entity_get_id(aux->ent), entity_get_entityType(aux->ent), (aux->turns+1));
+    }
+
+    return OK;
+}
+
+int effect_cmp(void*e1, void*e2){
+    if(!e1 || !e2) return -2;
+    return ((Effect*)e1)->id - ((Effect*)e2)->id;
+}
+
+void effect_print(void*effect){
+    if(!effect) return;
+    /*for now this will be the print format. Can be modified in the future.*/
+    fprintf(stdout, "%s: %s", ((Effect*)effect)->name, ((Effect*)effect)->data);
+}
+
+/*
+    * Effect manager functions
+*/
+
+EffectManager *effect_manager_create(){
+    EffectManager *em=NULL;
+
+    if((em = (EffectManager*)malloc(sizeof(EffectManager))) == ERROR) return NULL;
+
+    em->effects = collection_create(EFFECT_MANAGER_INIT_SIZE,false,true,effect_cmp,effect_print);
+    if(!em->effects) return NULL;
+
+    return em;
+}
+
+void effect_manager_destroy(EffectManager *em){
+    if(em){
+        if(em->effects){
+            collection_free_elements(em->effects, effect_destroy);
+            collection_destroy(em->effects);
+        }
+        free(em);
+    }
+    return;
+}
+
+/*
+    * Effect manager getters
+*/
+
+Collection *effect_manager_get_effects(EffectManager *em){
+    if(!em) return NULL;
+    return em->effects;
+}
+
+Effect *effect_get_by_id(EffectManager *em, Id id){
+    Effect *effect=NULL;
+    int i,len;
+    if(!em || (id<UNDEFINED_ID)) return NULL;
+
+    len = collection_length(em->effects);
+
+    for(i=0;i<len;i++){
+        effect = collection_get_element_at(em->effects, i);
+        if(effect && (effect->id == id))
+            return effect;
+    }
+    return NULL;
+}
+
+/*
+    * Effect manager setters
+*/
+
+Status effect_manager_add_effect(EffectManager *em, Effect *effect){
+    if(!em || !effect) return ERROR;
+    return collection_add(em->effects, (void *)effect);
+}

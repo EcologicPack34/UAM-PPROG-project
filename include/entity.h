@@ -77,7 +77,9 @@ Entity *entity_create(char *name, Id identity, Id idlocation, InventoryType inve
  */
 void entity_destroy(Entity *entity);
 
-/*Entity SETTERS*/
+/*
+    * Entity setters
+*/
 
 /**
  * @brief Sets a entity name with the name argument
@@ -219,7 +221,19 @@ Status entity_set_stats(Entity *ent, double maxhealth, double health, double bas
  */
 Status entity_stats_set_all(EntityStats *es, double maxhealth, double health, double baseDamage, int strength, int defense, int magicLevel);
 
-/*Entity GETTERS*/
+/**
+ * @brief Adds a ability to the entity if it is not full
+ * @author Maksym Polyak
+ * 
+ * @param entity contains all the information related to the entity
+ * @param ability ability to add
+ * @return Status 
+ */
+Status entity_add_ability(Entity *entity, Ability *ability);
+
+/*
+    * Entity getters
+*/
 
 /**
  * @brief Gets if an entity is dead or not by its stats, used in combat module
@@ -293,19 +307,7 @@ Id entity_get_id(Entity *entity);
  * @param entity contains all the information related to the entity
  * @return EntityType or UNKNOWN_ENTITY if error
  */
-EntityType entity_get_entityType(Entity *entity);
-
-/**
- * @brief Adds a ability to the entity if it is not full
- * @author Maksym Polyak
- * 
- * @param entity contains all the information related to the entity
- * @param ability ability to add
- * @return Status 
- */
-Status entity_add_ability(Entity *entity, Ability *ability);
-
-/**
+EntityType entity_get_entityType(Entity *entity);/**
  * @brief Gets the ability at the index of the entity
  * @author Maksym Polyak
  * 
@@ -388,6 +390,10 @@ int entity_get_defense(Entity *entity);
  * @return magicLevel stat if well or -1 if wrong
  */
 int entity_get_magicLevel(Entity *entity);
+
+/*
+    * Entity general functions
+*/
 
 /**
  * @brief Compares the ids of two entities

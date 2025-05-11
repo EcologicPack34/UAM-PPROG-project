@@ -64,34 +64,9 @@ Combat *combat_initialize(Space *space, Player *pl, CommandCode code, Collection
  */
 void combat_free(Combat *combat);
 
-/**
- * @brief Updates the combat turns
- * @author Sofía Calvo && Maksym Polyak && Daniel Gómez
- * 
- * @param combat combat to update
- * @param last_cmd last command of the player in the combat
- * @return Status 
- */
-Status combat_update(Combat *combat, Command *last_cmd);
-
-/**
- * @brief Creats and reserves memory for the attacks
- * @author Sofía Calvo
- * 
- * @param combat combat to reserve memory for the array of attacks
- * @param num number of attacks needed
- * @return Status 
- */
-Status combat_set_num_attacks(Combat *combat, int num);
-
-/**
- * @brief Finalizes the combat and returns the game state to DEFAULT
- * @author Maksym Polyak && Daniel Gómez
- * 
- * @param combat combat to modify
- * @return Status 
- */
-Status combat_runaway(Combat *combat);
+/*
+    * Combat getters
+*/
 
 /**
  * @brief Gets the number of enemies on the combat
@@ -168,28 +143,6 @@ bool combat_get_isFinished(Combat *combat);
 Stats *combat_get_player_stats(Combat *combat);
 
 /**
- * @brief Gets the attack in a certain position
- * @author Sofía Calvo
- * 
- * @param combat combat struct
- * @param attack attack struct
- * @param pos position in the array
- * @return Status
- */
-Status combat_set_attack_in_position(Combat *combat, Attack *attack, int pos);
-
-
-/**
- * @brief Finds the attack in certain position of an array
- * @author Sofía Calvo
- * 
- * @param cmb combat struct
- * @param name name of the attack
- * @return Attack structure
- */
-Attack *combat_find_attack_by_name(Combat *cmb, char *name);
-
-/**
  * @brief Gets the number of dead entities of a combat
  * @author Maksym Polyak
  * 
@@ -233,4 +186,53 @@ int combat_get_turn(Combat *cmb);
  * @return int 
  */
 int combat_get_player_count(Combat *cmb);
+
+/*
+    * Combat setters
+*/
+
+/**
+ * @brief Creats and reserves memory for the attacks
+ * @author Sofía Calvo
+ * 
+ * @param combat combat to reserve memory for the array of attacks
+ * @param num number of attacks needed
+ * @return Status 
+ */
+Status combat_set_num_attacks(Combat *combat, int num);
+
+/*
+    * Combat general functions
+*/
+
+
+/**
+ * @brief Finds the attack in certain position of an array
+ * @author Sofía Calvo
+ * 
+ * @param cmb combat struct
+ * @param name name of the attack
+ * @return Attack structure
+ */
+Attack *combat_find_attack_by_name(Combat *cmb, char *name);
+
+/**
+ * @brief Updates the combat turns
+ * @author Sofía Calvo && Maksym Polyak && Daniel Gómez
+ * 
+ * @param combat combat to update
+ * @param last_cmd last command of the player in the combat
+ * @return Status 
+ */
+Status combat_update(Combat *combat, Command *last_cmd);
+
+/**
+ * @brief Finalizes the combat and returns the game state to DEFAULT
+ * @author Maksym Polyak && Daniel Gómez
+ * 
+ * @param combat combat to modify
+ * @return Status 
+ */
+Status combat_runaway(Combat *combat);
+
 #endif

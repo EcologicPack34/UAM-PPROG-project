@@ -36,11 +36,13 @@
  * @brief Internal struct that holds all the information related to the combat
  */
 struct _Combat{
+    int players_count;                      /*!< Number of players*/
+    int players_turn;                       /*!< Turn of the players*/
+    
     Stats allies_stats[NPC_MAX_ALLIES];     /*!< Stats of the allies*/
     int allies_count;                       /*!< Number of allies*/
     int total_allies;                       /*!< Total number of allies*/
-    int players_count;                      /*!< Number of players*/
-    int players_turn;                       /*!<Turn of the players*/
+
     Stats enemies_stats[NPC_MAX_ENEMIES];   /*!< Stats of the enemies*/
     int enemies_count;                      /*!< Number of enemies*/
 
@@ -60,7 +62,7 @@ struct _Combat{
 
 
 /*
-    * PRIVATE FUNCTIONS
+    * Private functions
 */
 
 /**
@@ -220,8 +222,6 @@ double stats_get_defense_reduced_damage_multiplier(EntityStats *stats);
  * @return Status 
  */
 Status combat_add_message_log(Combat *combat, MessageType level, char *content);
-
-/*-----------IMPLENTATIONS-------------*/
 
 Status combat_add_message_log(Combat *combat, MessageType level, char *content){
     Message *mess = NULL;
@@ -506,7 +506,6 @@ Status combat_update_player_attack(Combat *cmb, Command *last_cmd){
     return OK;
 }
 
-
 Status combat_copy_stats(Stats *stat_from, Stats *stat_to){
     if(!stat_from || !stat_to) return ERROR;
 
@@ -606,7 +605,7 @@ Stats *combat_get_last_alive(Combat *cmb, int mode){
 }
 
 /*
-    * PUBLIC FUNCTIONS
+    * Combat public functions
 */
 
 Combat *combat_initialize(Space *space, Player *pl, CommandCode code, Collection *attacks){
@@ -710,10 +709,108 @@ void combat_free(Combat *combat){
     free(combat);
 }
 
+/*
+    * Combat getters
+*/
+
 bool combat_get_isFinished(Combat *combat){
     if(!combat) return false;
     return combat->endCombat;
 }
+
+int combat_get_enemies_count(Combat *combat){
+    if(!combat) return 0;
+    return combat->enemies_count;
+}
+
+int combat_get_allies_count(Combat *combat){
+    if(!combat) return 0;
+    return combat->total_allies;
+}
+
+int combat_get_player_count(Combat *cmb){
+    if(!cmb) return 0;
+    return cmb->players_count;
+}
+
+Stats *combat_get_enemies_stats_at(Combat *combat, int index){
+    Stats *stats = NULL;
+    
+    if(!combat) return NULL;
+
+    stats = &(combat->enemies_stats[index]);
+    return stats;
+}
+
+Stats *combat_get_allies_stats_at(Combat *combat, int index){
+    Stats *stats = NULL;
+    
+    if(!combat) return NULL;
+
+    stats = &(combat->allies_stats[index]);
+    return stats;
+}
+
+Stats *combat_get_enemies_stats(Combat *combat){
+    if(!combat) return NULL;
+
+    return combat->enemies_stats;
+}
+
+Stats *combat_get_allies_stats(Combat *combat){
+    if(!combat) return NULL;
+
+    return combat->allies_stats;
+}
+
+Stats *combat_get_player_stats(Combat *combat){
+    if(!combat) return NULL;
+    return &(combat->allies_stats[0]);
+}
+
+int combat_get_dead_entities_num(Combat *combat){
+
+    if(!combat) return 0;
+
+    return combat->n_dead_entities;
+}
+
+Entity *combat_get_dead_entity_at(Combat *combat, int i){
+
+    if(!combat || i < 0 || i >= combat_get_dead_entities_num(combat)) return NULL;
+
+    return combat->dead_entities[i].entity;
+}
+
+Queue *combat_get_messages(Combat *combat){
+    if(!combat) return NULL;
+
+    return combat->messages;
+}
+
+int combat_get_turn(Combat *cmb){
+    if (!cmb)
+        return -1;
+        
+    return cmb->players_turn;
+}
+
+/*
+    * Combat setters
+*/
+
+Status combat_set_num_attacks(Combat *combat, int num) {
+
+    if (!combat || num <= 0)
+        return ERROR;
+    
+    combat->attacks_count = num;
+    return OK;
+}
+
+/*
+    * Combat general functions
+*/
 
 Status combat_update(Combat *combat, Command *last_cmd){
     Status st = OK;
@@ -773,65 +870,6 @@ Status combat_runaway(Combat *combat){
     return OK;
 }
 
-int combat_get_enemies_count(Combat *combat){
-    if(!combat) return 0;
-    return combat->enemies_count;
-}
-
-int combat_get_allies_count(Combat *combat){
-    if(!combat) return 0;
-    return combat->total_allies;
-}
-
-int combat_get_player_count(Combat *cmb){
-    if(!cmb) return 0;
-    return cmb->players_count;
-}
-
-Stats *combat_get_enemies_stats_at(Combat *combat, int index){
-    Stats *stats = NULL;
-    
-    if(!combat) return NULL;
-
-    stats = &(combat->enemies_stats[index]);
-    return stats;
-}
-
-Stats *combat_get_allies_stats_at(Combat *combat, int index){
-    Stats *stats = NULL;
-    
-    if(!combat) return NULL;
-
-    stats = &(combat->allies_stats[index]);
-    return stats;
-}
-
-Stats *combat_get_enemies_stats(Combat *combat){
-    if(!combat) return NULL;
-
-    return combat->enemies_stats;
-}
-
-Stats *combat_get_allies_stats(Combat *combat){
-    if(!combat) return NULL;
-
-    return combat->allies_stats;
-}
-
-Stats *combat_get_player_stats(Combat *combat){
-    if(!combat) return NULL;
-    return &(combat->allies_stats[0]);
-}
-
-Status combat_set_num_attacks(Combat *combat, int num) {
-
-    if (!combat || num <= 0)
-        return ERROR;
-    
-    combat->attacks_count = num;
-    return OK;
-}
-
 Status combat_release_dead_loot(Combat *cmb, Stats *st) {
 
     Inventory *inv = NULL;
@@ -860,31 +898,4 @@ Status combat_release_dead_loot(Combat *cmb, Stats *st) {
     }
 
     return OK; 
-}
-
-int combat_get_dead_entities_num(Combat *combat){
-
-    if(!combat) return 0;
-
-    return combat->n_dead_entities;
-}
-
-Entity *combat_get_dead_entity_at(Combat *combat, int i){
-
-    if(!combat || i < 0 || i >= combat_get_dead_entities_num(combat)) return NULL;
-
-    return combat->dead_entities[i].entity;
-}
-
-Queue *combat_get_messages(Combat *combat){
-    if(!combat) return NULL;
-
-    return combat->messages;
-}
-
-int combat_get_turn(Combat *cmb){
-    if (!cmb)
-        return -1;
-        
-    return cmb->players_turn;
 }

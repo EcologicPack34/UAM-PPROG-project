@@ -50,6 +50,10 @@ Dialogue *dialogue_create(NPC *npc, FILE *fIN);
  */
 void dialogue_destroy(Dialogue *dialogue);
 
+/*
+    * Dialogue getters
+*/
+
 /**
  * @brief Gets the NPC of a dialogue
  * 
@@ -103,6 +107,10 @@ Dialogue_Outputs dialogue_get_output_at(Dialogue *dialogue, int i);
  * @return char* or NULL if not found or error
  */
 char *dialogue_get_outcome_as_string(Dialogue_Outputs output);
+
+/*
+    * Dialogue general functions
+*/
 
 /**
  * @brief Updates dialogues to the next states and controls outcomes

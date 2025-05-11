@@ -50,7 +50,9 @@ Collection *collection_create(long initialSize, bool fixed_length, bool unique_e
  */
 void collection_destroy(Collection *collection);
 
-/*------------SETTERS------------*/
+/*
+  * Collection setters
+*/
 
 /**
  * @brief Adds an element to the collection if posible
@@ -82,7 +84,9 @@ Status collection_remove(Collection *collection, void *element);
  */
 Status collection_remove_at(Collection *collection, long index);
 
-/*------------GETTERS------------*/
+/*
+  * Collection getters
+*/
 
 /**
  * @brief Gets the element at a given index
@@ -124,7 +128,9 @@ int collection_contains(Collection *collection, void *element);
  */
 long collection_length(Collection *collection);
 
-/*----------OTHERS----------*/
+/*
+  * Collection general functions
+*/
 
 /**
  * @brief Frees all the elements of the collection using the given fucntion

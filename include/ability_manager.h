@@ -60,7 +60,10 @@ Ability *ability_create(Id id, char *data, char *name, AbilityType type, Id enti
  */
 void ability_destroy(void *ability);
 
-/*GETTERS*/
+/*
+  * Ability GETTERS
+*/
+
 /**
  * @brief Gets the id of the ability
  * @author Maksym Polyak
@@ -153,7 +156,9 @@ char *ability_get_name(Ability *ability);
  */
 int ability_get_cost(Ability *ability);
 
-/*SETTERS*/
+/*
+  * Ability general functions
+*/
 
 /**
  * @brief Sets a ability cooldown count to 0;
@@ -248,15 +253,9 @@ AbilityManager *ability_manager_create();
  */
 void ability_manager_destroy(AbilityManager *sm);
 
-/**
- * @brief Adds an ability to be evaluated by the ability_manager
- * @author Maksym Polyak    
- * 
- * @param sm ability manager struct
- * @param ability ability to be added
- * @return Status 
- */
-Status ability_manager_add_evaluated_ability(AbilityManager *sm, Ability *ability);
+/*
+  * Ability manager getters
+*/
 
 /**
  * @brief Gets the evaluated ability
@@ -277,16 +276,6 @@ Ability *ability_manager_get_evaluated_ability(AbilityManager *sm);
 Collection *ability_manager_get_unused_abilities(AbilityManager *sm);
 
 /**
- * @brief Moves an ability from unused to used abilities
- * @author Maksym Polyak
- * 
- * @param sm ability manager struct
- * @param ability ability struct
- * @return Status 
- */
-Status ability_manager_move_ability_to_used(AbilityManager *sm, Ability *ability);
-
-/**
  * @brief Gets the ability at the index of unused abilities
  * @author Maksym Polyak
  * 
@@ -295,6 +284,58 @@ Status ability_manager_move_ability_to_used(AbilityManager *sm, Ability *ability
  * @return Ability* 
  */
 Ability *ability_manager_get_unused_ability_at(AbilityManager *sm, int i);
+
+/**
+ * @brief Gets the count of ability in the collection
+ * @author Maksym Polyak
+ * 
+ * @param sm ability manager
+ * @return long or -1 if error
+ */
+long ability_manager_get_ability_count(AbilityManager *sm);
+
+/**
+ * @brief Gets the ability on the index received of the collection on ability manager struct
+ * @author Maksym Polyak
+ * 
+ * @param sm ability manager
+ * @param index where the ability is taken
+ * @return Ability* or NULL if error
+ */
+Ability *ability_manager_get_ability_at(AbilityManager *sm, long index);
+
+/**
+ * @brief Gets the queue of ability to be used of the ability manager
+ * @author Maksym Polyak
+ * 
+ * @param sm ability manager
+ * @return Queue * or NULL if error
+ */
+Queue *ability_manager_get_queue(AbilityManager *sm);
+
+/*
+  * Ability manager general functions
+*/
+
+/**
+ * @brief Adds an ability to be evaluated by the ability_manager
+ * @author Maksym Polyak    
+ * 
+ * @param sm ability manager struct
+ * @param ability ability to be added
+ * @return Status 
+ */
+Status ability_manager_add_evaluated_ability(AbilityManager *sm, Ability *ability);
+
+/**
+ * @brief Moves an ability from unused to used abilities
+ * @author Maksym Polyak
+ * 
+ * @param sm ability manager struct
+ * @param ability ability struct
+ * @return Status 
+ */
+Status ability_manager_move_ability_to_used(AbilityManager *sm, Ability *ability);
 
 /**
  * @brief Adds a ability to the ability manager collection
@@ -317,25 +358,6 @@ Status ability_manager_add_ability_to_cd(AbilityManager *sm, Ability *ability);
 Status ability_manager_remove_ability_from_cd(AbilityManager *sm, Ability *ability);
 
 /**
- * @brief Gets the count of ability in the collection
- * @author Maksym Polyak
- * 
- * @param sm ability manager
- * @return long or -1 if error
- */
-long ability_manager_get_ability_count(AbilityManager *sm);
-
-/**
- * @brief Gets the ability on the index received of the collection on ability manager struct
- * @author Maksym Polyak
- * 
- * @param sm ability manager
- * @param index where the ability is taken
- * @return Ability* or NULL if error
- */
-Ability *ability_manager_get_ability_at(AbilityManager *sm, long index);
-
-/**
  * @brief Tries to use an ability, if succesfull, adds it to the queue of abilities
  * DOES NOT COPY THE ABILITY STRUCT
  * @author Maksym Polyak
@@ -345,15 +367,6 @@ Ability *ability_manager_get_ability_at(AbilityManager *sm, long index);
  * @return Status
  */
 Status ability_manager_use_ability(AbilityManager *sm, Ability *ability);
-
-/**
- * @brief Gets the queue of ability to be used of the ability manager
- * @author Maksym Polyak
- * 
- * @param sm ability manager
- * @return Queue * or NULL if error
- */
-Queue *ability_manager_get_queue(AbilityManager *sm);
 
 /**
  * @brief Saves an ability manager struct on a file

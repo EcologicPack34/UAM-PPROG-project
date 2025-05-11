@@ -65,8 +65,8 @@ void game_loop_cleanup(Game *game, Graphic_engine *gengine);
  * @brief Checks the arguments and initializes the game.
  * @author Original: Profesores PPROG, Modified By: Daniel Gómez
  *
- * @param argc
- * @param argv
+ * @param argc number of arguments received
+ * @param argv arguments received as strings on the argv array
  * @return 0 if game execution went well or 1 if arguments check failed
  */
 int main(int argc, char *argv[]){

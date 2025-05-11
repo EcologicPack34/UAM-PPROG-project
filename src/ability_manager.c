@@ -25,7 +25,7 @@
 
 /**
  * @brief Tags related to the ability references on the .dat. Uses N_SKILLS as maximum size
- * @file ability_manager.c
+ * 
  */
 char *abilityTags[N_SKILLS] = { "" , "heal_self", "heal_ally", "money_bag","link_unlock","effect_self","effect_enemy"\
   ,"effect_ally"}; /*!< Tags related to the type | Same order as AbilityType*/
@@ -167,7 +167,6 @@ bool ability_get_is_object_use(Ability *ability){
   return ability->is_object_use;
 }
 
-
 Id ability_get_entityid(Ability *ability){
   if(!ability) return NO_ID;
 
@@ -185,6 +184,10 @@ int ability_get_cost(Ability *ability){
 
   return ability->cost;
 }
+
+/*
+  * Ability general functions
+*/
 
 Status ability_set_cooldown_to_0(Ability *ability){
   if(!ability) return ERROR;
@@ -237,7 +240,7 @@ AbilityType ability_type_from_str(char *string){
   return NO_SKILL;
 }
 
-/* SKILLS MANAGER */
+/* Ability manager functions */
 
 AbilityManager *ability_manager_create(){
   AbilityManager *sm = NULL;
@@ -284,18 +287,56 @@ void ability_manager_destroy(AbilityManager *sm){
   }
 }
 
+/*
+  * Ability manager GETTERS
+*/
+
+Ability *ability_manager_get_evaluated_ability(AbilityManager *sm){
+  if(!sm) return ERROR;
+
+  return sm->evaluated_ability;
+}
+
+Collection *ability_manager_get_unused_abilities(AbilityManager *sm){
+  if(!sm) return NULL;
+
+  return sm->unused_abilities;
+}
+
+Ability *ability_manager_get_unused_ability_at(AbilityManager *sm, int i){
+  if(!sm) return NULL;
+
+  return collection_get_element_at(sm->unused_abilities, i);
+}
+
+long ability_manager_get_ability_count(AbilityManager *sm){
+  if(!sm) return ERROR;
+
+  return collection_length(sm->ability);
+}
+
+Ability *ability_manager_get_ability_at(AbilityManager *sm, long index){
+  if(!sm) return ERROR;
+
+  return (Ability *)collection_get_element_at(sm->ability, index);
+}
+
+Queue *ability_manager_get_queue(AbilityManager *sm){
+  if(!sm) return ERROR;
+
+  return sm->queue_cooldowns;
+}
+
+/*
+  * Ability manager general functions
+*/
+
 Status ability_manager_add_evaluated_ability(AbilityManager *sm, Ability *ability){
   if(!sm || !ability) return ERROR;
 
   sm->evaluated_ability = ability;
 
   return OK;
-}
-
-Ability *ability_manager_get_evaluated_ability(AbilityManager *sm){
-  if(!sm) return ERROR;
-
-  return sm->evaluated_ability;
 }
 
 Status ability_manager_add_ability_to_cd(AbilityManager *sm, Ability *ability){
@@ -317,30 +358,12 @@ Status ability_manager_remove_ability_from_cd(AbilityManager *sm, Ability *abili
   return collection_remove(sm->ability, (void *)ability);
 }
 
-long ability_manager_get_ability_count(AbilityManager *sm){
-  if(!sm) return ERROR;
-
-  return collection_length(sm->ability);
-}
-
-Ability *ability_manager_get_ability_at(AbilityManager *sm, long index){
-  if(!sm) return ERROR;
-
-  return (Ability *)collection_get_element_at(sm->ability, index);
-}
-
 Status ability_manager_use_ability(AbilityManager *sm, Ability *ability){
   if(!sm || !ability) return ERROR;
 
   sm->evaluated_ability = ability;
 
   return OK;
-}
-
-Queue *ability_manager_get_queue(AbilityManager *sm){
-  if(!sm) return ERROR;
-
-  return sm->queue_cooldowns;
 }
 
 int ability_manager_save_on_file(AbilityManager *sm, FILE *fOUT){
@@ -371,24 +394,12 @@ Status ability_manager_read_from_file(AbilityManager *sm, FILE *fIN){
   return OK;
 }
 
-Collection *ability_manager_get_unused_abilities(AbilityManager *sm){
-  if(!sm) return NULL;
-
-  return sm->unused_abilities;
-}
-
 Status ability_manager_move_ability_to_used(AbilityManager *sm, Ability *ability){
   if(!sm || !ability) return ERROR;
 
   collection_remove(sm->unused_abilities, ability);
 
   return collection_add(sm->ability, ability);
-}
-
-Ability *ability_manager_get_unused_ability_at(AbilityManager *sm, int i){
-  if(!sm) return NULL;
-
-  return collection_get_element_at(sm->unused_abilities, i);
 }
 
 int ability_save_on_file(Ability *ability, FILE *fOUT){

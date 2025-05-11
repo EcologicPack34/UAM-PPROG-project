@@ -235,8 +235,6 @@ Status game_actions_update(Game *game, Command *command) {
 
   if(!game || !command) return ERROR;
   
-
-  
   game_set_last_command(game, command);
 
   cmd = command_get_code(command);

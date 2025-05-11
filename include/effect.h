@@ -60,41 +60,6 @@ typedef struct _EffectsManager EffectManager;
 Effect *effect_create(Id id, char *name, char *data, EffectType ET, EffectAffects EA,bool inf_turns, int default_turns);
 
 /**
- * @brief This function creates an effect manager
- * @author Aaron Charameli Mair
- * 
- * @return EffectManager* or NULL if error 
- */
-EffectManager *effect_manager_create();
-
-/**
- * @brief This function frees all the memory of an effect manager
- * @author Aaron Charameli Mair 
- * 
- * @note this function also free's the effects contained in the effect manager
- */
-void effect_manager_destroy(EffectManager *em);
-
-/**
- * @brief This function gets the effects collection of an effect manager
- * @author Aaron Charameli Mair
- * 
- * @param em a pointer to the effect manager
- * @return Collection* or NULL if error
- */
-Collection *effect_manager_get_effects(EffectManager *em);
-
-/**
- * @brief This function gets an effect by its if
- * @author Aaron Charameli Mair
- * 
- * @param em pointer to effect manager
- * @param id the id of the effect
- * @return Effect* or NULL if not found or ERROR
- */
-Effect *effect_get_by_id(EffectManager *em, Id id);
-
-/**
  * @brief This function frees all the memory of an effect
  * @author Aaron Charameli Mair
  * 
@@ -102,69 +67,9 @@ Effect *effect_get_by_id(EffectManager *em, Id id);
  */
 void effect_destroy(void *e);
 
-/**
- * @brief This function adds an effect to an effect manager
- * @author Aaron Charameli Mair
- * 
- * @param em the effect manager
- * @param effect the effect
- * @return Status 
- */
-Status effect_manager_add_effect(EffectManager *em, Effect *effect);
-
-/**
- * @brief This funtion adds an effect to an entity
- * @author Aaron Charameli Mair
- * 
- * @param e a pointer to the effect
- * @param ent a pointer to the entity/affected
- * @return Status 
- */
-Status effect_add_affected(Effect *e, Entity *ent);
-
-/**
- * @brief This funtion adds an effect to an entity for n_turns, ignoring the data field.
- * This function has its utility in creating a game from a save file
- * @author Aaron Charameli Mair
- * 
- * @param e a pointer to the effect
- * @param ent a pointer to the entity/affected
- * @param n_turns number of turns to add
- * @return Status 
- */
-Status effect_add_affected_n_turns(Effect *e, Entity*ent, int n_turns);
-
-/**
- * @brief This function checks if an entity is affected by an effect
- * @author Aaron Charameli Mair
- * 
- * @param e a pointer to the effect
- * @param ent a pointer to the entity
- * @return true 
- * @return false 
- */
-bool effect_has_affected(Effect *e, Entity *ent);
-
-/**
- * @brief This function updates the affected entities by an effect.
- * 
- * @param effect a pointer to the effect
- * @param ent_stats an array of entity Stats, needed if in combat. Otherwise, leave as NULL
- * @param ent_count an int describing the number of elements in the Stats array
- * @return Status 
- * @note If in combat, a pointer to the entities Stats will be required otherwise, NULL can be passed as argument
- */
-Status effect_update(Effect*effect, Stats* ent_stats, int ent_count);
-
-/**
- * @brief This function saves an effect's data to a save file in a specific format
- * @author Aaron Charameli Mair
- * 
- * @param file a pointer to the opened file
- * @param effect the effect to get in a string format
- * @return Status 
- */
-Status effect_save_to_file(FILE *file, Effect *effect);
+/*
+    * Effect getters
+*/
 
 /**
  * @brief This function gets the type of effect an effect is
@@ -211,6 +116,68 @@ Id effect_get_id(Effect *effect);
  */
 EffectAffects effect_get_effectAffects(Effect *effect);
 
+/*
+    * Effect setters
+*/
+
+/**
+ * @brief This funtion adds an effect to an entity
+ * @author Aaron Charameli Mair
+ * 
+ * @param e a pointer to the effect
+ * @param ent a pointer to the entity/affected
+ * @return Status 
+ */
+Status effect_add_affected(Effect *e, Entity *ent);
+
+/**
+ * @brief This funtion adds an effect to an entity for n_turns, ignoring the data field.
+ * This function has its utility in creating a game from a save file
+ * @author Aaron Charameli Mair
+ * 
+ * @param e a pointer to the effect
+ * @param ent a pointer to the entity/affected
+ * @param n_turns number of turns to add
+ * @return Status 
+ */
+Status effect_add_affected_n_turns(Effect *e, Entity*ent, int n_turns);
+
+/*
+    * Effect general functions
+*/
+
+/**
+ * @brief This function checks if an entity is affected by an effect
+ * @author Aaron Charameli Mair
+ * 
+ * @param e a pointer to the effect
+ * @param ent a pointer to the entity
+ * @return true 
+ * @return false 
+ */
+bool effect_has_affected(Effect *e, Entity *ent);
+
+/**
+ * @brief This function updates the affected entities by an effect.
+ * 
+ * @param effect a pointer to the effect
+ * @param ent_stats an array of entity Stats, needed if in combat. Otherwise, leave as NULL
+ * @param ent_count an int describing the number of elements in the Stats array
+ * @return Status 
+ * @note If in combat, a pointer to the entities Stats will be required otherwise, NULL can be passed as argument
+ */
+Status effect_update(Effect*effect, Stats* ent_stats, int ent_count);
+
+/**
+ * @brief This function saves an effect's data to a save file in a specific format
+ * @author Aaron Charameli Mair
+ * 
+ * @param file a pointer to the opened file
+ * @param effect the effect to get in a string format
+ * @return Status 
+ */
+Status effect_save_to_file(FILE *file, Effect *effect);
+
 /**
  * @brief This function compares two effects
  * @author Aaron Charameli Mair
@@ -230,8 +197,61 @@ int effect_cmp(void*e1, void*e2);
  */
 void effect_print(void*effect);
 
+/*
+    * Effect manager
+*/
 
+/**
+ * @brief This function creates an effect manager
+ * @author Aaron Charameli Mair
+ * 
+ * @return EffectManager* or NULL if error 
+ */
+EffectManager *effect_manager_create();
 
+/**
+ * @brief This function frees all the memory of an effect manager
+ * @author Aaron Charameli Mair 
+ * 
+ * @note this function also free's the effects contained in the effect manager
+ */
+void effect_manager_destroy(EffectManager *em);
 
+/*
+    * Effect manager getters
+*/
+
+/**
+ * @brief This function gets the effects collection of an effect manager
+ * @author Aaron Charameli Mair
+ * 
+ * @param em a pointer to the effect manager
+ * @return Collection* or NULL if error
+ */
+Collection *effect_manager_get_effects(EffectManager *em);
+
+/**
+ * @brief This function gets an effect by its if
+ * @author Aaron Charameli Mair
+ * 
+ * @param em pointer to effect manager
+ * @param id the id of the effect
+ * @return Effect* or NULL if not found or ERROR
+ */
+Effect *effect_get_by_id(EffectManager *em, Id id);
+
+/*
+    * Effect manager setters
+*/
+
+/**
+ * @brief This function adds an effect to an effect manager
+ * @author Aaron Charameli Mair
+ * 
+ * @param em the effect manager
+ * @param effect the effect
+ * @return Status 
+ */
+Status effect_manager_add_effect(EffectManager *em, Effect *effect);
 
 #endif
