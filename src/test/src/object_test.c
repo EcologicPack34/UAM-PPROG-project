@@ -166,36 +166,36 @@ int main(int argc, char** argv) {
 
 
 void test1_object_create(){
-    Object *obj= object_create(1,"test1","test1","test1",true,10,SPACE_INVENTORY);
+    Object *obj= object_create(1,"test1","test1","test1", 0, 1, true, true, 1, SPACE_INVENTORY);
     PRINT_TEST_RESULT(obj != NULL);
     object_destroy(obj);
 }
 void test2_object_create(){
-    Object *obj= object_create(1,NULL,"test1","test1",true,NO_ID,SPACE_INVENTORY);
+    Object *obj= object_create(1,NULL,"test1","test1", 0, 1, true, true, 1, SPACE_INVENTORY);
     PRINT_TEST_RESULT(obj == NULL);
     object_destroy(obj);
 }
 void test1_object_isEqual(){
-    Object *obj1= object_create(1,"test1","test1","test1",true,10,SPACE_INVENTORY);
-    Object *obj2= object_create(1,"test1","test1","test1",true,10,SPACE_INVENTORY);
+    Object *obj1= object_create(1,"test1","test1","test1", 0, 1, true, true, 1, SPACE_INVENTORY);
+    Object *obj2= object_create(1,"test1","test1","test1", 0, 1, true, true, 1, SPACE_INVENTORY);
     PRINT_TEST_RESULT(object_isEqual(obj1,obj2) == 0);
     object_destroy(obj1);
     object_destroy(obj2);
 }
 void test2_object_isEqual(){
-    Object *obj1= object_create(1,"test1","test1","test1",true,10,SPACE_INVENTORY);
-    Object *obj2= object_create(2,"test2","test2","test2",true,10,SPACE_INVENTORY);
+    Object *obj1= object_create(1,"test1","test1","test1", 0, 1, true, true, 1, SPACE_INVENTORY);
+    Object *obj2= object_create(2,"test1","test1","test1", 0, 1, true, true, 1, SPACE_INVENTORY);
     PRINT_TEST_RESULT(object_isEqual(obj1,obj2) != 0);
     object_destroy(obj1);
     object_destroy(obj2);
 }
 void test3_object_isEqual(){
-    Object *obj1= object_create(1,"test1","test1","test1",true,10,SPACE_INVENTORY);
+    Object *obj1= object_create(1,"test1","test1","test1", 0, 1, true, true, 1, SPACE_INVENTORY);
     PRINT_TEST_RESULT(object_isEqual(obj1,NULL) != 0);
     object_destroy(obj1);
 }
 void test1_object_set_id(){
-    Object *obj= object_create(1,"test1","test1","test1",true,10,SPACE_INVENTORY);
+    Object *obj= object_create(1,"test1","test1","test1", 0, 1, true, true, 1, SPACE_INVENTORY);
     PRINT_TEST_RESULT(object_set_id(obj, 5) == OK);
     object_destroy(obj);
 }
@@ -203,17 +203,17 @@ void test2_object_set_id(){
     PRINT_TEST_RESULT(object_set_id(NULL, 5) == ERROR);
 }
 void test3_object_set_id(){
-    Object *obj= object_create(1,"test1","test1","test1",true,10,SPACE_INVENTORY);
+    Object *obj= object_create(1,"test1","test1","test1", 0, 1, true, true, 1, SPACE_INVENTORY);
     PRINT_TEST_RESULT(object_set_id(obj, -1) == ERROR);
     object_destroy(obj);
 }
 void test1_object_set_name(){
-    Object *obj= object_create(1,"test1","test1","test1",true,10,SPACE_INVENTORY);
+    Object *obj= object_create(1,"test1","test1","test1", 0, 1, true, true, 1, SPACE_INVENTORY);
     PRINT_TEST_RESULT(object_set_name(obj, "The Game") == OK);
     object_destroy(obj);
 }
 void test2_object_set_name(){
-    Object *obj= object_create(1,"test1","test1","test1",true,10,SPACE_INVENTORY);
+    Object *obj= object_create(1,"test1","test1","test1", 0, 1, true, true, 1, SPACE_INVENTORY);
     PRINT_TEST_RESULT(object_set_name(obj, NULL) == ERROR);
     object_destroy(obj);
 }
@@ -221,12 +221,12 @@ void test3_object_set_name(){
     PRINT_TEST_RESULT(object_set_name(NULL, "The Game") == ERROR);
 }
 void test1_object_set_location(){
-    Object *obj= object_create(1,"test1","test1","test1",true,10,SPACE_INVENTORY);
+    Object *obj= object_create(1,"test1","test1","test1", 0, 1, true, true, 1, SPACE_INVENTORY);
     PRINT_TEST_RESULT(object_set_location(obj, 20) == OK);
     object_destroy(obj);
 }
 void test2_object_set_location(){
-    Object *obj= object_create(1,"test1","test1","test1",true,10,SPACE_INVENTORY);
+    Object *obj= object_create(1,"test1","test1","test1", 0, 1, true, true, 1, SPACE_INVENTORY);
     PRINT_TEST_RESULT(object_set_location(obj, NO_ID) == ERROR);
     object_destroy(obj);
 }
@@ -235,7 +235,7 @@ void test3_object_set_location(){
 
 }
 void test1_object_set_type(){
-    Object *obj= object_create(1,"test1","test1","test1",true,10,SPACE_INVENTORY);
+    Object *obj= object_create(1,"test1","test1","test1", 0, 1, true, true, 1, SPACE_INVENTORY);
     PRINT_TEST_RESULT(object_set_type(obj, PLAYER_INVENTORY) == OK);
     object_destroy(obj);
 }
@@ -243,17 +243,17 @@ void test2_object_set_type(){
     PRINT_TEST_RESULT(object_set_type(NULL, PLAYER_INVENTORY) == ERROR);
 }
 void test3_object_set_type(){
-    Object *obj= object_create(1,"test1","test1","test1",true,10,SPACE_INVENTORY);
+    Object *obj= object_create(1,"test1","test1","test1", 0, 1, true, true, 1, SPACE_INVENTORY);
     PRINT_TEST_RESULT(object_set_type(obj, UNKNOWN_INVENTORY) == OK);
     object_destroy(obj);
 }
 void test1_object_set_descr(){
-    Object *obj= object_create(1,"test1","test1","test1",true,10,SPACE_INVENTORY);
+    Object *obj= object_create(1,"test1","test1","test1", 0, 1, true, true, 1, SPACE_INVENTORY);
     PRINT_TEST_RESULT(object_set_descr(obj, "test") == OK);
     object_destroy(obj);
 }
 void test2_object_set_descr(){
-    Object *obj= object_create(1,"test1","test1","test1",true,10,SPACE_INVENTORY);
+    Object *obj= object_create(1,"test1","test1","test1", 0, 1, true, true, 1, SPACE_INVENTORY);
     PRINT_TEST_RESULT(object_set_descr(obj, NULL) == ERROR);
     object_destroy(obj);
 }
@@ -261,7 +261,7 @@ void test3_object_set_descr(){
     PRINT_TEST_RESULT(object_set_descr(NULL, "test") == ERROR);
 }
 void test1_object_get_id(){
-    Object *obj= object_create(1,"test1","test1","test1",true,10,SPACE_INVENTORY);
+    Object *obj= object_create(1,"test1","test1","test1", 0, 1, true, true, 1, SPACE_INVENTORY);
     PRINT_TEST_RESULT(object_get_id(obj) == 1);
     object_destroy(obj);
 }
@@ -269,7 +269,7 @@ void test2_object_get_id(){
     PRINT_TEST_RESULT(object_get_id(NULL) == NO_ID);
 }
 void test1_object_get_name(){
-    Object *obj= object_create(1,"name","test1","test1",true,10,SPACE_INVENTORY);
+    Object *obj= object_create(1,"name","test1","test1", 0, 1, true, true, 1, SPACE_INVENTORY);
     PRINT_TEST_RESULT((strcmp(object_get_name(obj), "name") == 0));
     object_destroy(obj);
 }
@@ -277,7 +277,7 @@ void test2_object_get_name(){
     PRINT_TEST_RESULT(object_get_name(NULL) == NULL);
 }
 void test1_object_get_location(){
-    Object *obj= object_create(1,"name","test1","test1",true,10,SPACE_INVENTORY);
+    Object *obj= object_create(1,"test1","test1","test1", 0, 1, true, true, 10, SPACE_INVENTORY);
     PRINT_TEST_RESULT(object_get_location(obj) == 10);
     object_destroy(obj);
 }
@@ -285,7 +285,7 @@ void test2_object_get_location(){
     PRINT_TEST_RESULT(object_get_location(NULL) == NO_ID);
 }
 void test1_object_get_type(){
-    Object *obj= object_create(1,"name","test1","test1",true,10,SPACE_INVENTORY);
+    Object *obj= object_create(1,"test1","test1","test1", 0, 1, true, true, 1, SPACE_INVENTORY);
     PRINT_TEST_RESULT(object_get_type(obj) == SPACE_INVENTORY);
     object_destroy(obj);
 }
@@ -293,7 +293,7 @@ void test2_object_get_type(){
     PRINT_TEST_RESULT(object_get_type(NULL) == UNKNOWN_INVENTORY);
 }
 void test1_object_is_consumable(){
-    Object *obj= object_create(1,"name","test1","test1",true,10,SPACE_INVENTORY);
+    Object *obj= object_create(1,"test1","test1","test1", 0, 1, false, true, 1, SPACE_INVENTORY);
     PRINT_TEST_RESULT(object_get_is_consumable(obj) == true);
     object_destroy(obj);
 }
@@ -301,7 +301,7 @@ void test2_object_is_consumable(){
     PRINT_TEST_RESULT(object_get_is_consumable(NULL) == false);
 }
 void test1_object_get_descr(){
-    Object *obj= object_create(1,"name","test1","descr",true,10,SPACE_INVENTORY);
+    Object *obj= object_create(1,"test1","test1","descr", 0, 1, true, true, 1, SPACE_INVENTORY);
     PRINT_TEST_RESULT((strcmp(object_get_descr(obj),"descr") == 0));
     object_destroy(obj);
 }
@@ -309,8 +309,8 @@ void test2_object_get_descr(){
     PRINT_TEST_RESULT(object_get_name(NULL) == NULL);
 }
 void test1_object_get_object_effect(){
-    Ability *a = ability_create(1, "data", "name", LINK_UNLOCK, 1, false, true, 1, 1);
-    Object *obj= object_create(1,"name","test1","test1",true,10,SPACE_INVENTORY);
+    Ability *a = ability_create(1, "data", "name", LINK_UNLOCK, 1, false, true, 1, 1, 0);
+    Object *obj= object_create(1,"test1","test1","test1", 0, 1, true, true, 1, SPACE_INVENTORY);
     object_add_object_effect(obj, a);
     PRINT_TEST_RESULT(object_get_object_effect(obj) == a);
     object_destroy(obj);
@@ -320,7 +320,7 @@ void test2_object_get_object_effect(){
     PRINT_TEST_RESULT(object_get_object_effect(NULL) == NULL);
 }
 void test1_object_get_data(){
-    Object *obj= object_create(1,"name","data","test1",true,10,SPACE_INVENTORY);
+    Object *obj= object_create(1,"test1","test1","test1", 0, 1, true, true, 1, SPACE_INVENTORY);
     PRINT_TEST_RESULT((strcmp(object_get_data(obj),"data") == 0));
     object_destroy(obj);
 }
@@ -328,19 +328,19 @@ void test2_object_get_data(){
     PRINT_TEST_RESULT(object_get_data(NULL) == NULL);
 }
 void test1_object_add_object_effect(){
-    Ability *a = ability_create(1, "data", "name", LINK_UNLOCK, 1, false, true, 1, 1);
-    Object *obj= object_create(1,"name","test1","test1",true,10,SPACE_INVENTORY);
+    Ability *a = ability_create(1, "data", "name", LINK_UNLOCK, 1, false, true, 1, 1, 0);
+    Object *obj= object_create(1,"test1","test1","test1", 0, 1, true, true, 1, SPACE_INVENTORY);
     PRINT_TEST_RESULT(object_add_object_effect(obj, a) == OK);
     object_destroy(obj);
     ability_destroy(a);
 }
 void test2_object_add_object_effect(){
-    Ability *a = ability_create(1, "data", "name", LINK_UNLOCK, 1, false, true, 1, 1);
+    Ability *a = ability_create(1, "data", "name", LINK_UNLOCK, 1, false, true, 1, 1, 0);
     PRINT_TEST_RESULT(object_add_object_effect(NULL, a) == ERROR);
     ability_destroy(a);
 }
 void test3_object_add_object_effect(){
-    Object *obj= object_create(1,"name","test1","test1",true,10,SPACE_INVENTORY);
+    Object *obj= object_create(1,"test1","test1","test1", 0, 1, true, true, 1, SPACE_INVENTORY);
     PRINT_TEST_RESULT(object_add_object_effect(obj, NULL) == ERROR);
     object_destroy(obj);
 }

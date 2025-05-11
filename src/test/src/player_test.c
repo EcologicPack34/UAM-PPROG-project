@@ -1,4 +1,5 @@
 #include "../../../include/player.h"
+#include "../../../include/npc.h"
 #include "test.h"
 
 #include <stdio.h>
@@ -60,13 +61,17 @@ void test1_player_add_follower();
 /*Adds a non existent NPC as a follower to the player, expected result == ERROR*/
 void test2_player_add_follower();
 /*Removes a follower from the player, expected result == OK*/
-void test1_player_remove_follower_by_name();
-/*Removes a follower from the player, but the name is NULL, expected result == ERROR*/
-void test2_player_remove_follower_by_name();
-/*Gets followers double pointer without followers, expected result != NULL*/
-void test1_player_get_followers();
+void test1_player_remove_follower_by_entity();
+/*Removes a non existent follower from the player, expected result == ERROR*/
+void test2_player_remove_follower_by_entity();
+/*Gets a follower's entity, expected result != NULL*/
+void test1_player_get_follower_at();
 /*Tries to get followers pointer but player is NULL, expected result == NULL*/
-void test2_player_get_followers();
+void test2_player_get_follower_at();
+/*Gets followers double pointer without followers, expected result != NULL*/
+void test1_player_get_followers_num();
+/*Tries to get followers pointer but player is NULL, expected result == NULL*/
+void test2_player_get_followers_num();
 
 
 int main(int argc, char** argv) {
@@ -113,8 +118,8 @@ int main(int argc, char** argv) {
     if (all || test == 24) test2_player_unequip_piece();
     if (all || test == 25) test1_player_add_follower();
     if (all || test == 26) test2_player_add_follower();
-    if (all || test == 27) test1_player_remove_follower_by_name();
-    if (all || test == 28) test2_player_remove_follower_by_name();
+    if (all || test == 27) test1_player_remove_follower_by_entity();
+    if (all || test == 28) test2_player_remove_follower_by_entity();
     if (all || test == 29) test1_player_get_followers();
     if (all || test == 30) test2_player_get_followers();
     
@@ -127,20 +132,20 @@ int main(int argc, char** argv) {
 
 void test1_player_create(){
   Player *p=NULL;
-  PRINT_TEST_RESULT((p = player_create("test",1,1)) != NULL);
+  PRINT_TEST_RESULT((p = player_create("test",1,1,1,1,1,1,1)) != NULL);
   player_destroy(p);
 }
 void test2_player_create(){
-  PRINT_TEST_RESULT(player_create(NULL, 1, 1) == NULL);
+  PRINT_TEST_RESULT(player_create(NULL,1,1,1,1,1,1,1) == NULL);
 }
 void test3_player_create(){
-  PRINT_TEST_RESULT(player_create("test", -1, 1) == NULL);
+  PRINT_TEST_RESULT(player_create("test",NO_ID,1,1,1,1,1,1) == NULL);
 }
 void test4_player_create(){
-  PRINT_TEST_RESULT(player_create("test", 1, -1) == NULL);
+  PRINT_TEST_RESULT(player_create("test",1,NO_ID,1,1,1,1,1) == NULL);
 }
 void test1_player_get_entity(){
-  Player *p = player_create("test",1,1);
+  Player *p = player_create("test",1,1,1,1,1,1,1);
   PRINT_TEST_RESULT(player_get_entity(p) != NULL);
   player_destroy(p);
 }
@@ -148,7 +153,7 @@ void test2_player_get_entity(){
   PRINT_TEST_RESULT(player_get_entity(NULL) == NULL);
 }
 void test1_player_get_equipment(){
-  Player *p = player_create("test",1,1);
+  Player *p = player_create("test",1,1,1,1,1,1,1);
   PRINT_TEST_RESULT(player_get_equipment(p) != NULL);
   player_destroy(p);
 }
@@ -156,7 +161,7 @@ void test2_player_get_equipment(){
   PRINT_TEST_RESULT(player_get_equipment(NULL) == NULL);
 }
 void test1_player_get_cmData(){
-  Player *p = player_create("test",1,1);
+  Player *p = player_create("test",1,1,1,1,1,1,1);
   PRINT_TEST_RESULT(player_get_cmdData(p) != NULL);
   player_destroy(p);
 }
@@ -164,7 +169,7 @@ void test2_player_get_cmData(){
   PRINT_TEST_RESULT(player_get_cmdData(NULL) == NULL);
 }
 void test1_player_set_stats(){
-  Player *p = player_create("test",1,1);
+  Player *p = player_create("test",1,1,1,1,1,1,1);
   PRINT_TEST_RESULT(player_set_stats(p,1,1,1,1,1,1) == OK);
   player_destroy(p);
 }
@@ -173,7 +178,7 @@ void test2_player_set_stats(){
 }
 void test1_player_get_str_desc(){
   char dest[50];
-  Player *p = player_create("test",1,1);
+  Player *p = player_create("test",1,1,1,1,1,1,1);
   PRINT_TEST_RESULT(player_get_str_desc(p,dest) == OK);
   player_destroy(p);
 }
@@ -182,12 +187,12 @@ void test2_player_get_str_desc(){
   PRINT_TEST_RESULT(player_get_str_desc(NULL,dest) == ERROR);
 }
 void test3_player_get_str_desc(){
-  Player *p = player_create("test",1,1);
+  Player *p = player_create("test",1,1,1,1,1,1,1);
   PRINT_TEST_RESULT(player_get_str_desc(p,NULL) == ERROR);
   player_destroy(p);
 }
 void test1_player_get_money(){
-  Player *p = player_create("test",1,1);
+  Player *p = player_create("test",1,1,1,1,1,1,1);
   PRINT_TEST_RESULT(player_get_money(p) >= 0);
   player_destroy(p);
 }
@@ -195,7 +200,7 @@ void test2_player_get_money(){
   PRINT_TEST_RESULT(player_get_money(NULL) <= 0);
 }
 void test1_player_add_money(){
-  Player *p = player_create("test",1,1);
+  Player *p = player_create("test",1,1,1,1,1,1,1);
   PRINT_TEST_RESULT(player_add_money(p, 100) == OK);
   player_destroy(p);
 }
@@ -203,31 +208,31 @@ void test2_player_add_money(){
   PRINT_TEST_RESULT(player_add_money(NULL, 100) == ERROR);
 }
 void test1_player_equip_piece(){
-  Player *p = player_create("test",1,1);
-  Object *o = object_create(1,"test","wearable helmet","test",false,1,PLAYER_INVENTORY);
+  Player *p = player_create("test",1,1,1,1,1,1,1);
+  Object *o = object_create(1,"test1","test1","test1", 0, 1, true, true, 1, PLAYER_INVENTORY);
   inventory_add_object(entity_get_inventory(player_get_entity(p)), o);
   PRINT_TEST_RESULT(player_equip_piece(p, o) == OK);
   player_destroy(p);
   object_destroy(o);
 }
 void test2_player_equip_piece(){
-  Object *o = object_create(1,"test","test","test",false,1,PLAYER_INVENTORY);
+  Object *o = object_create(1,"test1","test1","test1", 0, 1, true, true, 1, PLAYER_INVENTORY);
   PRINT_TEST_RESULT(player_equip_piece(NULL, o) == ERROR);
   object_destroy(o);
 }
 void test3_player_equip_piece(){
-  Player *p = player_create("test",1,1);
+  Player *p = player_create("test",1,1,1,1,1,1,1);
   PRINT_TEST_RESULT(player_equip_piece(p, NULL) == ERROR);
   player_destroy(p);
 }
 void test1_player_unequip_piece(){
-  Player *p = player_create("test",1,1);
+  Player *p = player_create("test",1,1,1,1,1,1,1);
   PRINT_TEST_RESULT(player_unequip_piece(p, NULL) == ERROR);
   player_destroy(p);
 }
 void test2_player_unequip_piece(){
-  Player *p = player_create("test",1,1);
-  Object *o = object_create(1,"chest","wearable chest","test",false,1,PLAYER_INVENTORY);
+  Player *p = player_create("test",1,1,1,1,1,1,1);
+  Object *o = object_create(1,"chest","test1","test1", 0, 1, true, true, 1, PLAYER_INVENTORY);
   inventory_add_object(entity_get_inventory(player_get_entity(p)), o);
   player_equip_piece(p, o);
   PRINT_TEST_RESULT(player_unequip_piece(p, "chest") == OK);
@@ -235,32 +240,32 @@ void test2_player_unequip_piece(){
   player_destroy(p);
 }
 void test1_player_add_follower(){
-  Player *p = player_create("test",1,1);
-  NPC *npc = npc_create(1, 1, "TESTMESSAGE", "NPCTEST", 1, 1);
-  PRINT_TEST_RESULT(player_add_follower(p, npc) == OK);
+  Player *p = player_create("test",1,1,1,1,1,1,1);
+  NPC *npc = npc_create(NEUTRAL, false, 0, "TEST1", 1, 1);
+  PRINT_TEST_RESULT(player_add_follower(p, npc_get_entity(npc)) == OK);
   player_destroy(p);
   npc_destroy(npc);
 }
 void test2_player_add_follower(){
-  Player *p = player_create("test",1,1);
+  Player *p = player_create("test",1,1,1,1,1,1,1);
   PRINT_TEST_RESULT(player_add_follower(p, NULL) == ERROR);
   player_destroy(p);
 }
-void test1_player_remove_follower_by_name(){
-  Player *p = player_create("test",1,1);
-  NPC *npc = npc_create(1, 1, "TESTMESSAGE", "NPCTEST", 1, 1);
-  player_add_follower(p, npc);
-  PRINT_TEST_RESULT(player_remove_follower_by_name(p, "NPCTEST") == OK);
+void test1_player_remove_follower_by_entity(){
+  Player *p = player_create("test",1,1,1,1,1,1,1);
+  NPC *npc = npc_create(NEUTRAL, false, 0, "NPCTEST1", 1, 1);
+  player_add_follower(p, npc_get_entity(npc));
+  PRINT_TEST_RESULT(player_remove_follower_by_pointer(p, npc_get_entity(npc)) == OK);
   player_destroy(p);
   npc_destroy(npc);
 }
-void test2_player_remove_follower_by_name(){
-  Player *p = player_create("test",1,1);
-  PRINT_TEST_RESULT(player_remove_follower_by_name(p, NULL) == ERROR);
+void test2_player_remove_follower_by_entity(){
+  Player *p = player_create("test",1,1,1,1,1,1,1);
+  PRINT_TEST_RESULT(player_remove_follower_by_pointer(p, NULL) == ERROR);
   player_destroy(p);
 }
-void test1_player_get_followers(){
-  Player *p = player_create("test",1,1);
+void test1_player_get_follower_at(){
+  Player *p = player_create("test",1,1,1,1,1,1,1);
   PRINT_TEST_RESULT(player_get_followers(p) != NULL);
   player_destroy(p);
 }

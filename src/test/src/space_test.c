@@ -1,4 +1,5 @@
 #include "../../../include/space.h"
+#include "../../../include/graphic_description.h"
 #include "space_test.h"
 #include "test.h"
 
@@ -268,17 +269,23 @@ void test2_space_set_neighbour(){
 void test1_space_set_graphic_description(){
     Space *space = NULL;
 
-    PRINT_TEST_RESULT(space_set_graphic_description(space, "TES", 0)== ERROR);
+    PRINT_TEST_RESULT(space_set_graphic_description(space, NULL)== ERROR);
 }
 
 void test2_space_set_graphic_description(){
     Space *space = NULL;
+    GDesc *gdesc = gdesc_create(1,5,9, SPACE_DESC);
+    
+    if(gdesc_set_line(gdesc, 0, "hola") == ERROR){
+        PRINT_TEST_RESULT(0);
+    }
 
     space = space_create(1);
 
-    PRINT_TEST_RESULT(space_set_graphic_description(space, "TES", 1) == OK);
+    PRINT_TEST_RESULT(space_set_graphic_description(space, gdesc) == OK);
 
     space_destroy(space);
+    gdesc_destroy(gdesc);
 }
 
 void test1_space_get_graphic_description(){
@@ -289,16 +296,18 @@ void test1_space_get_graphic_description(){
 
 void test2_space_get_graphic_description(){
     Space *space = NULL;
-    char **gd = NULL;
-
-    space = space_create(1);
-    space_set_graphic_description(space, "TES", 1);
+    GDesc *gdesc = gdesc_create(1,5,9, SPACE_DESC);
     
-    gd = space_get_graphic_description(space);
+    if(gdesc_set_line(gdesc, 0, "hola") == ERROR){
+        PRINT_TEST_RESULT(0);
+    }
+    space = space_create(1);
+    space_set_graphic_description(space, gdesc);
 
-    PRINT_TEST_RESULT(strcmp(gd[1], "TES") == 0);
+    PRINT_TEST_RESULT(space_get_graphic_description(space) == gdesc);
 
     space_destroy(space);
+    gdesc_destroy(gdesc);
 }
 
 void test1_space_get_position(){
@@ -540,7 +549,7 @@ void test2_space_add_NPC(){
     NPC *npc = NULL;
 
     space = space_create(1);
-    npc = npc_create(1, false, "TEST", "TEST1", 1, 1);
+    npc = npc_create(NEUTRAL, false, 0, "TEST1", 1, 1);
 
     PRINT_TEST_RESULT(space_add_NPC(space, npc) == OK);
 
@@ -560,7 +569,7 @@ void test2_space_remove_NPC(){
     NPC *npc = NULL;
 
     space = space_create(1);
-    npc = npc_create(1, false,"TEST", "TEST1", 1, 1);
+    npc = npc_create(NEUTRAL, false, 0, "TEST1", 1, 1);
     space_add_NPC(space, npc);
 
     PRINT_TEST_RESULT(space_remove_NPC(space, npc) == OK);
@@ -582,7 +591,7 @@ void test2_space_move_NPC(){
 
     space = space_create(1);
     spaceIN = space_create(2);
-    npc = npc_create(1, false, "TEST", "TEST1", 1, 1);
+    npc = npc_create(NEUTRAL, false, 0, "TEST1", 1, 1);
 
     space_add_NPC(space, npc);
 
@@ -604,7 +613,7 @@ void test2_space_get_NPC_at(){
     NPC *npc = NULL;
 
     space = space_create(1);
-    npc = npc_create(1, false, "TEST", "TEST1", 1, 1);
+    npc = npc_create(NEUTRAL, false, 0, "TEST1", 1, 1);
 
     space_add_NPC(space, npc);
 
@@ -625,7 +634,7 @@ void test2_space_get_NPC_by_name(){
     NPC *npc = NULL;
 
     space = space_create(1);
-    npc = npc_create(1, false,"TEST", "TEST1", 1, 1);
+    npc = npc_create(NEUTRAL, false, 0, "TEST1", 1, 1);
 
     space_add_NPC(space, npc);
 
@@ -648,7 +657,7 @@ void test2_space_get_NPC_list(){
     char str[100];
 
     space = space_create(1);
-    npc = npc_create(1, false, "TEST", "TEST1", 1, 1);
+    npc = npc_create(NEUTRAL, false, 0, "TEST1", 1, 1);
 
     space_add_NPC(space, npc);
 

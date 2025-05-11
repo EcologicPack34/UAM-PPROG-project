@@ -151,7 +151,7 @@
  }
  void test1_inventory_get_object_by_id(){
     Inventory *i = inventory_create(SPACE_INVENTORY,1);
-    Object *o = object_create(5, "test", "test", "test", true, 2, PLAYER_INVENTORY);
+    Object *o = object_create(5,"test1","test1","test1", 0, 1, true, true, 1, SPACE_INVENTORY);
     inventory_add_object(i, o);
     PRINT_TEST_RESULT(inventory_get_object_by_id(i, 5) == o);
     inventory_destroy(i);
@@ -163,13 +163,13 @@
     inventory_destroy(i);
  }
  void test3_inventory_get_object_by_id(){
-    Object *o = object_create(5, "test", "test", "test", true, 2, PLAYER_INVENTORY);
+    Object *o = object_create(1,"test1","test1","test1", 0, 1, true, true, 1, SPACE_INVENTORY);
     PRINT_TEST_RESULT(inventory_get_object_by_id(NULL, 5) == NULL);
     object_destroy(o);
  }
  void test1_inventory_get_object_at(){
     Inventory *i = inventory_create(SPACE_INVENTORY,1);
-    Object *o = object_create(5, "test", "test", "test", true, 2, PLAYER_INVENTORY);
+    Object *o = object_create(1,"test1","test1","test1", 0, 1, true, true, 1, SPACE_INVENTORY);
     inventory_add_object(i, o);
     PRINT_TEST_RESULT(inventory_get_object_at(i, 0) == o);
     inventory_destroy(i);
@@ -181,15 +181,15 @@
     inventory_destroy(i);
  }
  void test3_inventory_get_object_at(){
-    Object *o = object_create(5, "test", "test", "test", true, 2, PLAYER_INVENTORY);
+    Object *o = object_create(1,"test1","test1","test1", 0, 1, true, true, 1, SPACE_INVENTORY);
     PRINT_TEST_RESULT(inventory_get_object_at(NULL, 0) == NULL);
     object_destroy(o);
  }
  void test1_inventory_get_object_by_name(){
     Inventory *i = inventory_create(SPACE_INVENTORY,1);
-    Object *o = object_create(5, "test", "test", "test", true, 2, PLAYER_INVENTORY);
+    Object *o = object_create(1,"name","test1","test1", 0, 1, true, true, 1, SPACE_INVENTORY);
     inventory_add_object(i, o);
-    PRINT_TEST_RESULT(inventory_get_object_by_name(i, "test") == o);
+    PRINT_TEST_RESULT(inventory_get_object_by_name(i, "name") == o);
     inventory_destroy(i);
     object_destroy(o);
  }
@@ -199,7 +199,7 @@
     inventory_destroy(i);
  }
  void test3_inventory_get_object_by_name(){
-    Object *o = object_create(5, "test", "test", "test", true, 2, PLAYER_INVENTORY);
+    Object *o = object_create(1,"test","test1","test1", 0, 1, true, true, 1, SPACE_INVENTORY);
     PRINT_TEST_RESULT(inventory_get_object_by_name(NULL, "test") == NULL);
     object_destroy(o);
  }
@@ -221,7 +221,7 @@
  }
  void test1_inventory_add_object(){
     Inventory *i = inventory_create(SPACE_INVENTORY,1);
-    Object *o = object_create(5, "test", "test", "test", true, 2, PLAYER_INVENTORY);
+    Object *o = object_create(1,"test1","test1","test1", 0, 1, true, true, 1, SPACE_INVENTORY);
     PRINT_TEST_RESULT(inventory_add_object(i, o) == OK);
     inventory_destroy(i);
     object_destroy(o);
@@ -232,13 +232,13 @@
     inventory_destroy(i);
  }
  void test3_inventory_add_object(){
-    Object *o = object_create(5, "test", "test", "test", true, 2, PLAYER_INVENTORY);
+    Object *o = object_create(1,"test1","test1","test1", 0, 1, true, true, 1, SPACE_INVENTORY);
     PRINT_TEST_RESULT(inventory_add_object(NULL, o) == ERROR);
     object_destroy(o);
  }
  void test4_inventory_add_object(){
     Inventory *i = inventory_create(SPACE_INVENTORY,1);
-    Object *o = object_create(5, "test", "test", "test", true, 2, PLAYER_INVENTORY);
+    Object *o = object_create(1,"test1","test1","test1", 0, 1, true, true, 1, SPACE_INVENTORY);
     inventory_add_object(i, o);
     PRINT_TEST_RESULT(inventory_add_object(i, o) == OK);
     inventory_destroy(i);
@@ -246,7 +246,7 @@
  }
  void test1_inventory_remove_object(){
     Inventory *i = inventory_create(SPACE_INVENTORY,1);
-    Object *o = object_create(5, "test", "test", "test", true, 2, PLAYER_INVENTORY);
+    Object *o = object_create(1,"test1","test1","test1", 0, 1, true, true, 1, SPACE_INVENTORY);
     inventory_add_object(i, o);
     PRINT_TEST_RESULT(inventory_remove_object(i, o) == OK);
     inventory_destroy(i);
@@ -254,7 +254,7 @@
  }
  void test2_inventory_remove_object(){
     Inventory *i = inventory_create(SPACE_INVENTORY,1);
-    Object *o = object_create(5, "test", "test", "test", true, 2, PLAYER_INVENTORY);
+    Object *o = object_create(1,"test1","test1","test1", 0, 1, true, true, 1, SPACE_INVENTORY);
     PRINT_TEST_RESULT(inventory_remove_object(i, o) == ERROR);
     inventory_destroy(i);
     object_destroy(o);
@@ -265,13 +265,13 @@
     inventory_destroy(i);
  }
  void test4_inventory_remove_object(){
-    Object *o = object_create(5, "test", "test", "test", true, 2, PLAYER_INVENTORY);
+    Object *o = object_create(1,"test1","test1","test1", 0, 1, true, true, 1, SPACE_INVENTORY);
     PRINT_TEST_RESULT(inventory_remove_object(NULL, o) == ERROR);
     object_destroy(o);
  }
  void test1_inventory_contains_object(){
     Inventory *i = inventory_create(SPACE_INVENTORY,1);
-    Object *o = object_create(5, "test", "test", "test", true, 2, PLAYER_INVENTORY);
+    Object *o = object_create(5,"test1","test1","test1", 0, 1, true, true, 1, SPACE_INVENTORY);
     inventory_add_object(i, o);
     PRINT_TEST_RESULT(inventory_contains_object(i, 5) == true);
     inventory_destroy(i);
@@ -283,7 +283,7 @@
     inventory_destroy(i);
  }
  void test3_inventory_contains_object(){
-    Object *o = object_create(5, "test", "test", "test", true, 2, PLAYER_INVENTORY);
+    Object *o = object_create(1,"test1","test1","test1", 0, 1, true, true, 1, SPACE_INVENTORY);
     PRINT_TEST_RESULT(inventory_contains_object(NULL, 5) == false);
     object_destroy(o);
  }
@@ -291,7 +291,7 @@
  void test1_inventory_get_object_list(){
    char list[50];
    Inventory *i = inventory_create(SPACE_INVENTORY,1);
-   Object *o = object_create(5, "test", "test", "test", true, 2, PLAYER_INVENTORY);
+   Object *o = object_create(1,"test1","test1","test1", 0, 1, true, true, 1, SPACE_INVENTORY);
    inventory_add_object(i, o);
    PRINT_TEST_RESULT(inventory_get_object_list(i, list, 0, 1) == OK);
    inventory_destroy(i);
@@ -299,13 +299,13 @@
  }
  void test2_inventory_get_object_list(){
    char list[50];
-   Object *o = object_create(5, "test", "test", "test", true, 2, PLAYER_INVENTORY);
+   Object *o = object_create(1,"test1","test1","test1", 0, 1, true, true, 1, SPACE_INVENTORY);
    PRINT_TEST_RESULT(inventory_get_object_list(NULL, list, 0, 1) == ERROR);
    object_destroy(o);
  }
  void test3_inventory_get_object_list(){
    Inventory *i = inventory_create(SPACE_INVENTORY,1);
-   Object *o = object_create(5, "test", "test", "test", true, 2, PLAYER_INVENTORY);
+   Object *o = object_create(1,"test1","test1","test1", 0, 1, true, true, 1, SPACE_INVENTORY);
    inventory_add_object(i, o);
    PRINT_TEST_RESULT(inventory_get_object_list(i, NULL, 0, 1) == ERROR);
    inventory_destroy(i);
@@ -314,7 +314,7 @@
  void test1_inventory_get_object_str_at(){
    char descr[50];
    Inventory *i = inventory_create(SPACE_INVENTORY,1);
-   Object *o = object_create(5, "test", "test", "test", true, 2, PLAYER_INVENTORY);
+   Object *o = object_create(1,"test1","test1","test1", 0, 1, true, true, 1, SPACE_INVENTORY);
    inventory_add_object(i, o);
    PRINT_TEST_RESULT(inventory_get_object_str_at(i, descr, 0) == OK);
    inventory_destroy(i);
@@ -322,13 +322,13 @@
  }
  void test2_inventory_get_object_str_at(){
    char descr[50];
-   Object *o = object_create(5, "test", "test", "test", true, 2, PLAYER_INVENTORY);
+   Object *o = object_create(1,"test1","test1","test1", 0, 1, true, true, 1, SPACE_INVENTORY);
    PRINT_TEST_RESULT(inventory_get_object_str_at(NULL, descr, 0) == ERROR);
    object_destroy(o);
  }
  void test3_inventory_get_object_str_at(){
    Inventory *i = inventory_create(SPACE_INVENTORY,1);
-   Object *o = object_create(5, "test", "test", "test", true, 2, PLAYER_INVENTORY);
+   Object *o = object_create(1,"test1","test1","test1", 0, 1, true, true, 1, SPACE_INVENTORY);
    inventory_add_object(i, o);
    PRINT_TEST_RESULT(inventory_get_object_str_at(i, NULL, 0) == ERROR);
    inventory_destroy(i);
