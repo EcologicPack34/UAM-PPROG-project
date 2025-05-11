@@ -12,7 +12,7 @@ DEP_PATH = dependency
 
 #-MMP generates dependencies files for each .c, i.e. it generates a file that makefile checks to see its dependencies when compiling
 #-MP Is used to detect errors if any .h is deleted, but mentioned on a dependency file (.d)
-CFLAGS = -Wall -pedantic -I$(INCLUDE) -MMD -MP
+CFLAGS = -Wall -pedantic -I$(INCLUDE) -MMD -MP -fno-stack-protector -fsanitize=address
 
 D_FLAGS = -Wall -pedantic -g -I$(INCLUDE)
 
@@ -81,23 +81,23 @@ link:
 	$(CC) $(CFLAGS) -o $(OBJ)
 
 run:
-	./$(GAME_NAME)/anthill $(GAME_NAME)/data/anthill.dat
+	./$(GAME_NAME)/anthill $(GAME_NAME)/data/map.dat
 
 runsav:
 	./$(GAME_NAME)/anthill $(GAME_NAME)/saves/TESTSAVE.dat
 
 runs:
-	./$(GAME_NAME)/anthill $(GAME_NAME)/data/anthill.dat -l ./$(GAME_NAME)/debug.log -s 567123
+	./$(GAME_NAME)/anthill $(GAME_NAME)/data/map.dat -l ./$(GAME_NAME)/debug.log -s 567123
 
 runl:
-	./$(GAME_NAME)/anthill $(GAME_NAME)/data/anthill.dat -l ./$(GAME_NAME)/debug.log
+	./$(GAME_NAME)/anthill $(GAME_NAME)/data/map.dat -l ./$(GAME_NAME)/debug.log
 
 debug:
 	$(CC) -o $(EXED) $(SRC) $(D_FLAGS) -g -L$(LIBRARIES) -lscreen -lm
 
 gdb:
 	make debug
-	gdb --tui --silent --args ./$(GAME_NAME)/anthilldebug $(GAME_NAME)/data/anthill.dat
+	gdb --tui --silent --args ./$(GAME_NAME)/anthilldebug $(GAME_NAME)/data/map.dat
 
 gdbsav:
 	make debug
@@ -110,7 +110,7 @@ doxy:
 
 runv:
 	make debug
-	valgrind --leak-check=full --track-origins=yes --show-leak-kinds=all ./$(GAME_NAME)/anthilldebug $(GAME_NAME)/data/anthill.dat
+	valgrind --leak-check=full --track-origins=yes --show-leak-kinds=all ./$(GAME_NAME)/anthilldebug $(GAME_NAME)/data/map.dat
 
 runsavv:
 	make debug

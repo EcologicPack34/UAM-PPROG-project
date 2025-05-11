@@ -947,7 +947,12 @@ Status game_actions_equip(Game *game){
     return ERROR;
   }
 
-  return player_equip_piece(player, object);
+  if(player_equip_piece(player, object) == ERROR){
+    game_add_log_message(game, MESSAGE_HELP, "Probably you have already a two handed weapon equipped or a one hand weapon, try to unequip them!");
+    return ERROR;
+  }
+
+  return OK;
 }
 
 

@@ -1,5 +1,10 @@
+PLAYERS
+Formato Player: #p:ID|Nombre|LocationID|Money|XP actual|XP del siguiente nivel 100 si nivel es 1|nivel|skill points|gdesc
+Formato STATS: #st:IDEntity|EntityType|VidaMaxima|Vida|DanoBase|Fuerza|Defensa|NivelMagia
 #p:1|Hero1|11|100|0|100|1|1|mO^"
 #st:1|1|100|100|25|1|1|1
+#p:2|Hero2|11|100|0|100|1|1|m1^"
+#st:2|1|100|100|25|1|1|1
 
 Formato Space: #s:ID|Nombre|gdescId|northLink|eastLink|southLink|westLink|upLink|downLink|descr
 
@@ -72,7 +77,13 @@ Formato Link: #l:ID|Space1|Space2|adjacent|locked //Recordar añadir en cada esp
 #l:33|28|14|1|0
 #l:34|27|28|1|0
 
-
+GRAPHIC DESCRIPTIONS
+Formato Graphic description:
+-#gd:ID|height|width|type
+-  line1
+-  line2
+-  ...
+-  lineHeight
 #gd:1|5|9|1
 esto
 es
@@ -81,6 +92,14 @@ test
 description
 ----------
 
+NPCS
+Formato NPC: #n:ID|Dialogue State - 1 means initial - 0 means no dialogue|Nombre|LocationID|is_follower|Status|gdesc
+Status formato: UNKNOWN_STATUS = 0, NEUTRAL = 1, ALLY = 2, ENEMY = 3
+#n:1|1|Old_Merchant|12|0|1|ToT"
+#n:2|1|Divine_Merchant|12|0|1|GOD"
+#n:3|1|Young_Merchant|12|0|1|uWu"
+
+
 Formato Object: #o:ID|Nombre|Data|Descripcion|cost|Dependency_id|is_movable|is_consumable|LocationID|InventoryType
 Use dependency_id = -1 for no dependency
 InventoryType = {UNKNOWN_INVENTORY == 0, PLAYER_INVENTORY == 1, NPC_INVENTORY == 2, SPACE_INVENTORY == 3}
@@ -88,20 +107,45 @@ InventoryType = {UNKNOWN_INVENTORY == 0, PLAYER_INVENTORY == 1, NPC_INVENTORY ==
 Relevant objects
 #o:1|north_med|NONE|Collect the other Medallion to open the boss gate|0|-1|1|0|24|3
 #o:2|south_med|NONE|Collect the other Medallion to open the boss gate|0|-1|1|0|35|3
-#o:3|Grain1|NONE|Needs Pickaxe to be picked|100|9|1|0|11|3
 
 Optional objects
 
-Equipment objects
-#o:15|Helmet_Of_Void|wearable helmet base_damage:1 strength:1 max_health:20|Helmet TEST|1|-1|1|1|1|2
-#o:16|Chest_Of_Loneliness|wearable chest base_damage:1 strength:1 max_health:20|Chest TEST|2|-1|1|1|1|2
-#o:17|Arms_Of_Hell|wearable arms base_damage:1 strength:1 max_health:20|Arms TEST|3|-1|1|1|1|2
-#o:18|Legs_Of_Penance|wearable leg_armor base_damage:1 strength:1 max_health:20|Legs TEST|4|-1|1|1|1|2
-#o:19|Shoes_Of_Pain|wearable shoes base_damage:1 strength:1 max_health:20|Shoes TEST|5|-1|1|1|1|2
-#o:20|Ant_Slayer|wearable two_handed base_damage:1 strength:1 max_health:20|An ancient weapon... Seemingly created by the heavens, gives the wearer the power to destroy their enemies!  |6|-1|1|1|1|2
+Armor of DPS build
+#o:100|Helmet_Of_Void|wearable helmet base_damage:1 strength:1 max_health:10 defense:2|Created to cover the face of the most ominous beings on this world, gives the wearer the eyes of a demon! STATS: +1 strength, +10 max health +2 defense|0|-1|1|0|11|3
+#o:101|Chest_Of_Loneliness|wearable chest base_damage:1 strength:1 max_health:30 defense:4|A long time has passed since someone found this relic, gives the wearer the endurance of a mountain! STATS: +2 strength, + 30 max health +4 defense|0|-1|1|0|11|3
+#o:102|Arms_Of_Hell|wearable arms strength:2 max_health:10 defense:2|These arms were forged in this AntHell, by the Grand master blacksmith AntGod, gives the wearer the agility to cut through their enemies! STATS: +2 strength, +10 max health +2 defense|0|-1|1|0|11|3
+#o:103|Legs_Of_Penance|wearable leg_armor strength:1 max_health:20 defense:3|Leg armor is heavy, but not as heavy as the burden of penance, gives the wearer the will to carry on! STATS: +1 strength, +20 max health +2 defense|0|-1|1|0|11|3
+#o:104|Shoes_Of_Pain|wearable shoes strength:2 max_health:15 defense:2|Not a regular pair of shoes, these were carried by the old Ant Slayer, gives the wearer the determination to advance! STATS: +2 strength, +15 max health +2 defense|0|-1|1|0|11|3
+#o:105|Ant_Slayer|wearable two_handed base_damage:15 strength:5 max_health:5|An ancient weapon... Seemingly created by the heavens, gives the wearer the power to destroy every ant! STATS: +15 base damage, +5 strength, +5 max health|0|-1|1|0|11|3
 
+Armor of the tank
+#o:106|Helmet_Of_Grace|wearable helmet magic_level:2 max_health:30 defense:5|A decorated but resilient helmet, gives the wearer the looks of a god! STATS: +2 magic level, +30 max health +5 defense|0|-1|1|0|12|3
+#o:107|Chest_Of_Loyalty|wearable chest magic_level:3 max_health:40 defense:10|Through thousands of years, the knights of Great Lond venerated the ones who used this chest plate. Every STATS: +3 magic level, + 40 max health +10 defense|0|-1|1|0|12|3
+#o:108|Arms_Of_Heaven|wearable arms magic_level:2 max_health:20 defense:4|These arms were forged on a far away forge, by the Grand master blacksmith AntGod, gives the wearer the agility to curse their enemies! STATS: +2 magic level, +20 max health +4 defense|0|-1|1|0|12|3
+#o:109|Legs_Of_Will|wearable leg_armor magic_level:2 max_health:30 defense:8|Legs tend to be undervalued, but they can hold the determination of the body, gives the wearer the magic power to annihilate their enemies! STATS: +2 magic_level, +30 max health +8 defense|0|-1|1|0|12|3
+#o:110|Shoes_Of_Speed|wearable shoes magic_level:1 max_health:20 defense:5|Speed is the base of combat, gives the wearer the magic to power its incantations! STATS: +1 magic level, +20 max health +5 defense|0|-1|1|0|12|3
+#o:111|Ant_Cataclism|wearable handr base_damage:5 strength:3 max_health:20|A one hand mace, give your enemies a bonk that leaves them sleepig for the rest of their lives! STATS: +5 base damage +3 strength +20 max health|0|-1|1|0|12|3
+#o:112|Ant_Protector|wearable handl strength:2 max_health:50 defense:7|A shield that protects the wearer from every threat! STATS: +2 strength +50 max health +7 defense|0|-1|1|0|12|3
 
 Store objects
+
+Health potions
+#o:115|HP|NONE|Health Potion that heals 40 HP|10|-1|1|1|2|2
+#o:116|HP|NONE|Health Potion that heals 40 HP|10|-1|1|1|2|2
+#o:117|HP|NONE|Health Potion that heals 40 HP|10|-1|1|1|2|2
+#o:118|HP|NONE|Health Potion that heals 40 HP|10|-1|1|1|2|2
+#o:119|HP|NONE|Health Potion that heals 40 HP|10|-1|1|1|2|2
+#o:120|HP|NONE|Health Potion that heals 40 HP|10|-1|1|1|2|2
+#o:121|HP|NONE|Health Potion that heals 40 HP|10|-1|1|1|2|2
+#o:122|HP|NONE|Health Potion that heals 40 HP|10|-1|1|1|2|2
+#o:123|HP|NONE|Health Potion that heals 40 HP|10|-1|1|1|2|2
+#o:124|HP|NONE|Health Potion that heals 40 HP|10|-1|1|1|2|2
+#o:125|HP|NONE|Health Potion that heals 40 HP|10|-1|1|1|2|2
+#o:126|HP|NONE|Health Potion that heals 40 HP|10|-1|1|1|2|2
+#o:127|HP|NONE|Health Potion that heals 40 HP|10|-1|1|1|2|2
+#o:128|HP|NONE|Health Potion that heals 40 HP|10|-1|1|1|2|2
+#o:129|HP|NONE|Health Potion that heals 40 HP|10|-1|1|1|2|2
+#o:130|HP|NONE|Health Potion that heals 40 HP|10|-1|1|1|2|2
 
 
 Formato Event: #e:Id|Type|cmdTriggersNum|cmdName1 , ...|removeOnTrigger|tagvalue1:tagvalue2,...
@@ -111,3 +155,22 @@ data string for objects_fusion is id1:id2;obj:ID;Name;Description;abilityId;Link
 #e:1|objects_fusion|5|tk,w,a,s,d|1|1:2;obj:100;Silver_Medallion;use this medallion to open a gate;1;2
 
 Formato Ability: #sk:Id|Type|Name|Entityid(ObjectId) Es -1 si no esta asignado --> A la tienda|is_player_ability|is_object_use|cd_init|cd_max|cost|data
+
+
+Health potions skills
+#sk:115|heal_self|HEALTHPOTIONS|115|0|1|0|1|0|40
+#sk:116|heal_self|HEALTHPOTIONS|116|0|1|0|1|0|40
+#sk:117|heal_self|HEALTHPOTIONS|117|0|1|0|1|0|40
+#sk:118|heal_self|HEALTHPOTIONS|118|0|1|0|1|0|40
+#sk:119|heal_self|HEALTHPOTIONS|119|0|1|0|1|0|40
+#sk:120|heal_self|HEALTHPOTIONS|120|0|1|0|1|0|40
+#sk:121|heal_self|HEALTHPOTIONS|121|0|1|0|1|0|40
+#sk:122|heal_self|HEALTHPOTIONS|122|0|1|0|1|0|40
+#sk:123|heal_self|HEALTHPOTIONS|123|0|1|0|1|0|40
+#sk:124|heal_self|HEALTHPOTIONS|124|0|1|0|1|0|40
+#sk:125|heal_self|HEALTHPOTIONS|125|0|1|0|1|0|40
+#sk:126|heal_self|HEALTHPOTIONS|126|0|1|0|1|0|40
+#sk:127|heal_self|HEALTHPOTIONS|127|0|1|0|1|0|40
+#sk:128|heal_self|HEALTHPOTIONS|128|0|1|0|1|0|40
+#sk:129|heal_self|HEALTHPOTIONS|129|0|1|0|1|0|40
+#sk:130|heal_self|HEALTHPOTIONS|130|0|1|0|1|0|40

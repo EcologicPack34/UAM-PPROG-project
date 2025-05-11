@@ -357,7 +357,7 @@ Status inventory_get_object_str_at(Inventory *inventory, char *objectdescr, int 
 
     tempobject = inventory_get_object_at(inventory, index);
     sprintf(objectdescr, "[CYAN]%d[RESET].ID:[YELLOW]%ld [RESET]| Name: [YELLOW]%s \
-[RESET]| Desc: [YELLOW]%s", index + 1, object_get_id(tempobject), object_get_name(tempobject), object_get_descr(tempobject));
+[RESET]", index + 1, object_get_id(tempobject), object_get_name(tempobject));
 
     return OK;
 }

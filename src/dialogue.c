@@ -237,7 +237,7 @@ Status dialogue_update(Dialogue *dialogue){
     strcpy(aux_str, "");
     for(i = 0; i < line_num && i < LINE_MAX; i++){
         fgets(str, LINE_LENGTH, dialogue->dialogue_file);
-        string_remove_endofline_escape_sequence_on_end_to_newline(str);
+        string_remove_n_r_on_end(str);
         strcat(aux_str, str);
     }
     
@@ -257,12 +257,13 @@ Status dialogue_update(Dialogue *dialogue){
 
     for(i = 0; i < line_num; i++){
         fgets(str, WORD_SIZE, dialogue->dialogue_file);
-        string_remove_endofline_escape_sequence_on_end_to_newline(str);
+        string_remove_n_r_on_end(str);
         toks = strtok(str, ":");
         if(toks == NULL) return ERROR;
-        dyn_str = (char *)malloc((LINE_LENGTH + 1)*sizeof(char));
+        dyn_str = (char *)calloc((LINE_LENGTH + 1),sizeof(char));
         if(!dyn_str) return ERROR;
-        strcpy(dyn_str, toks);
+        strncpy(dyn_str, toks, LINE_LENGTH);
+        dyn_str[LINE_LENGTH] = '\0';
         dialogue->player_replies[dialogue->player_replies_num] = dyn_str;
 
         toks = strtok(NULL,":");

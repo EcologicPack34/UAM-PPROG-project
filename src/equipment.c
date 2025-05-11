@@ -26,7 +26,7 @@ char *equip_to_str[N_PIECES] = {"","helmet","chest","arms","leg_armor","shoes","
 /**
  * @brief Array of strings to save the text references to each stat
  */
-char *stat_to_str[N_STATS] = {"","max_health","health","base_damage","strength","defense","magic_Level"};
+char *stat_to_str[N_STATS] = {"","max_health","health","base_damage","strength","defense","magic_level"};
 
 
 /**
@@ -149,7 +149,7 @@ Status equipment_equip_from_code(Equipment *equipment, EquipmentCode code, Objec
         }
         break;
     case TWO_HANDED:
-        if(equipment->weapon_two_hands == NULL){
+        if(equipment->weapon1_one_hand == NULL && equipment->weapon2_one_hand == NULL && equipment->weapon_two_hands == NULL){
             equipment->weapon_two_hands = object;
             equipment->is_two_handed = true;
             return OK;

@@ -558,56 +558,56 @@ void graphic_engine_paint_playerDesc(Graphic_engine *ge, Game *game)
   eqObj = equipment_get_piece(equipment, HELMET);
   if (eqObj)
   {
-    sprintf(strAux, "%sHelmet: ID:[YELLOW]%ld [RESET]| Name: [YELLOW]%s", tab, object_get_id(eqObj), object_get_name(eqObj));
+    sprintf(strAux, "%shelmet: ID:[YELLOW]%ld [RESET]| Name: [YELLOW]%s", tab, object_get_id(eqObj), object_get_name(eqObj));
     screen_area_puts(ge->descript2, strAux);
     auxInt++;
   }
   eqObj = equipment_get_piece(equipment, CHEST);
   if (eqObj)
   {
-    sprintf(strAux, "%sChestplate: ID:[YELLOW]%ld [RESET]| Name: [YELLOW]%s", tab, object_get_id(eqObj), object_get_name(eqObj));
+    sprintf(strAux, "%schest: ID:[YELLOW]%ld [RESET]| Name: [YELLOW]%s", tab, object_get_id(eqObj), object_get_name(eqObj));
     screen_area_puts(ge->descript2, strAux);
     auxInt++;
   }
   eqObj = equipment_get_piece(equipment, ARMS);
   if (eqObj)
   {
-    sprintf(strAux, "%sArms: ID:[YELLOW]%ld [RESET]| Name: [YELLOW]%s", tab, object_get_id(eqObj), object_get_name(eqObj));
+    sprintf(strAux, "%sarms: ID:[YELLOW]%ld [RESET]| Name: [YELLOW]%s", tab, object_get_id(eqObj), object_get_name(eqObj));
     screen_area_puts(ge->descript2, strAux);
     auxInt++;
   }
   eqObj = equipment_get_piece(equipment, LEG_ARMOR);
   if (eqObj)
   {
-    sprintf(strAux, "%sLeg Armor: ID:[YELLOW]%ld [RESET]| Name: [YELLOW]%s", tab, object_get_id(eqObj), object_get_name(eqObj));
+    sprintf(strAux, "%sleg_armor: ID:[YELLOW]%ld [RESET]| Name: [YELLOW]%s", tab, object_get_id(eqObj), object_get_name(eqObj));
     screen_area_puts(ge->descript2, strAux);
     auxInt++;
   }
   eqObj = equipment_get_piece(equipment, SHOES);
   if (eqObj)
   {
-    sprintf(strAux, "%sShoes: ID:[YELLOW]%ld [RESET]| Name: [YELLOW]%s", tab, object_get_id(eqObj), object_get_name(eqObj));
+    sprintf(strAux, "%sshoes: ID:[YELLOW]%ld [RESET]| Name: [YELLOW]%s", tab, object_get_id(eqObj), object_get_name(eqObj));
     screen_area_puts(ge->descript2, strAux);
     auxInt++;
   }
   eqObj = equipment_get_piece(equipment, TWO_HANDED);
   if (eqObj)
   {
-    sprintf(strAux, "%sBoth Hands: ID:[YELLOW]%ld [RESET]| Name: [YELLOW]%s", tab, object_get_id(eqObj), object_get_name(eqObj));
+    sprintf(strAux, "%stwo_handed: ID:[YELLOW]%ld [RESET]| Name: [YELLOW]%s", tab, object_get_id(eqObj), object_get_name(eqObj));
     screen_area_puts(ge->descript2, strAux);
     auxInt++;
   }
   eqObj = equipment_get_piece(equipment, HANDL);
   if (eqObj)
   {
-    sprintf(strAux, "%sLeft Hand: ID:[YELLOW]%ld [RESET]| Name: [YELLOW]%s", tab, object_get_id(eqObj), object_get_name(eqObj));
+    sprintf(strAux, "%shandl: ID:[YELLOW]%ld [RESET]| Name: [YELLOW]%s", tab, object_get_id(eqObj), object_get_name(eqObj));
     screen_area_puts(ge->descript2, strAux);
     auxInt++;
   }
   eqObj = equipment_get_piece(equipment, HANDR);
   if (eqObj)
   {
-    sprintf(strAux, "%sRight Hand: ID:[YELLOW]%ld [RESET]| Name: [YELLOW]%s", tab, object_get_id(eqObj), object_get_name(eqObj));
+    sprintf(strAux, "%shandr: ID:[YELLOW]%ld [RESET]| Name: [YELLOW]%s", tab, object_get_id(eqObj), object_get_name(eqObj));
     screen_area_puts(ge->descript2, strAux);
     auxInt++;
   }
@@ -1299,7 +1299,7 @@ void graphic_engine_paint_dialogue(Graphic_engine *ge, Game *game)
   n_player_replies = dialogue_get_num_player_replies(dialogue);
   for (count = 0; count < n_player_replies; count++)
   {
-    sprintf(str, "   %d. %s | (%s)", count + 1, player_replies[count], dialogue_get_outcome_as_string(dialogue_get_output_at(dialogue, count)));
+    snprintf(str,WORD_SIZE, "   %d. %s | (%s)", count + 1, player_replies[count], dialogue_get_outcome_as_string(dialogue_get_output_at(dialogue, count)));
     screen_area_puts(ge->map, str);
   }
 

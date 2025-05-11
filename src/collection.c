@@ -82,6 +82,7 @@ Status collection_add_non_unique(Collection *collection, void *element){
             return ERROR;
         }
 
+        collection->allocated_size *= 2;
         collection->list = auxp;
     }
 

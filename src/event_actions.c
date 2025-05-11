@@ -391,7 +391,7 @@ bool event_trigger_npc_rand_move(Event *event, Game *game){
         npc = collection_get_element_at(npcs, i);
 
         /*if ally doesn't try to move as it follows player*/
-        if(npc_get_status(npc) == ALLY || entity_get_health(npc_get_entity(npc)) <= 0){
+        if(npc_get_status(npc) == ALLY || npc_get_status(npc) == NEUTRAL || entity_get_health(npc_get_entity(npc)) <= 0){
             continue;
         } 
         /*Checks a probability, if not, it doesnt move the entity*/

@@ -54,7 +54,7 @@
 #define LVLUP_TO_ABILITY_STORE_TEXT "To the ability store! Here you can buy your abilities!"                                    /*!< Text to get on the ability store*/
 
 /*Dialogue MACROS*/
-#define LINE_LENGTH 100             /*!< Max length of a line of dialogue*/
+#define LINE_LENGTH 200             /*!< Max length of a line of dialogue*/
 #define LINE_MAX 4                  /*!< Maximum number of lines in a dialogue*/
 
 /*Generic store MACROS*/
