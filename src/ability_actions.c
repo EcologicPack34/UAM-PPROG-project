@@ -526,7 +526,7 @@ Status ability_revive_player(Ability *ability, Game *game){
     args = command_get_arguments(comm);
     if(!args) return ERROR;
     n_args = command_get_arguments_count(comm);
-    if(n_args != 2) return ERROR;
+    if(n_args != 1) return ERROR;
 
     player = game_get_player_by_id(game, ability_get_entityid(ability));
     if(!player) return ERROR;
@@ -545,4 +545,6 @@ Status ability_revive_player(Ability *ability, Game *game){
     if(fin_play == NULL) return ERROR;
 
     entity_set_health(player_get_entity(player_to_revive), 1);
+
+    return OK;
 }

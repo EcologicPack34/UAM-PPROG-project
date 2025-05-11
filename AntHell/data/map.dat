@@ -1,9 +1,9 @@
 PLAYERS
 Formato Player: #p:ID|Nombre|LocationID|Money|XP actual|XP del siguiente nivel 100 si nivel es 1|nivel|skill points|gdesc
 Formato STATS: #st:IDEntity|EntityType|VidaMaxima|Vida|DanoBase|Fuerza|Defensa|NivelMagia
-#p:1|Hero1|11|100|0|100|1|100|mO^"
-#st:1|1|1000|1000|25|1|1|1
-#p:2|Hero2|11|100|0|100|1|1|m1^"
+#p:1|Hero1|11|50|0|100|1|0|mO^"
+#st:1|1|100|100|25|1|1|1
+#p:2|Hero2|11|50|0|100|1|0|m1^"
 #st:2|1|100|100|25|1|1|1
 
 Formato Space: #s:ID|Nombre|gdescId|northLink|eastLink|southLink|westLink|upLink|downLink|descr
@@ -12,6 +12,7 @@ Initial/final rooms
 #s:11|Entry|14|-1|1|-1|-1|-1|-1|NODESCR
 #s:12|Lobby|19|3|2|19|1|-1|-1|NODESCR
 #s:100|Boss Room|3|-1|-1|-1|2|-1|-1|NODESCR
+#s:101|Escape tunel|21|-1|35|-1|-1|NODESCR
 #s:13|Hall1|9|4|-1|3|-1|-1|-1|NODESCR
 #s:14|Lobby2|19|33|10|4|5|-1|-1|NODESCR
 #s:15|Path|4|-1|5|-1|6|-1|-1|NODESCR
@@ -76,6 +77,7 @@ Formato Link: #l:ID|Space1|Space2|adjacent|locked //Recordar añadir en cada esp
 #l:32|33|35|1|0
 #l:33|28|14|1|0
 #l:34|27|28|1|0
+#l:35|100|101|1
 
 GRAPHIC DESCRIPTIONS
 Formato Graphic description:
@@ -224,6 +226,13 @@ _________
    _    / 
  __/ \__/
 --------------
+#gd:21|5|9|1
+  ______ 
+        \ 
+        |
+        | 
+ _______/
+--------------
 NPCS
 Formato NPC: #n:ID|Dialogue State - 1 means initial - 0 means no dialogue|Nombre|LocationID|is_follower|Status|gdesc
 Status formato: UNKNOWN_STATUS = 0, NEUTRAL = 1, ALLY = 2, ENEMY = 3
@@ -241,16 +250,16 @@ MERCHANTS:
 #st:3|2|100|100|25|1|1|1
 
 AVAILABLE FOLLOWERS:
-#n:4|1|Young_Warrior|12|1|1|WoW"
+#n:4|1|Young_Warrior|14|1|1|WoW"
 #st:4|2|100|100|25|10|15|1
 
-#n:5|1|Old_Knight|12|1|1|bTd"
+#n:5|1|Old_Knight|30|1|1|bTd"
 #st:5|2|200|100|30|20|15|1
 
 #n:6|1|Another_Traveler|12|1|1|IyI"
 #st:6|2|80|80|20|5|1|1
 
-#n:7|1|Ant_Assasin|12|1|1|><>"
+#n:7|1|Ant_Assasin|35|1|1|><>"
 #st:7|2|120|120|30|15|5|1
 
 ENEMIES:
@@ -357,14 +366,26 @@ SECOND ZONE, MAZE ENEMIES
 #n:42|0|Mutant_Ant|31|0|3|om^"
 #st:42|2|150|150|30|40|40|1
 
+#n:43|0|Mutant_Ant|31|0|3|om^"
+#st:42|2|150|150|30|40|40|1
+
+#n:44|0|Ant_Hell_King|100|0|3|om^"
+#st:44|2|1000|1000|50|40|40|1
+
+#n:45|0|Ant_Hell_Guard|100|0|3|om^"
+#st:45|2|300|300|30|40|40|1
+
+#n:46|0|Ant_Hell_Guard|100|0|3|om^"
+#st:46|2|300|300|30|40|40|1
+
 
 Formato Object: #o:ID|Nombre|Data|Descripcion|cost|Dependency_id|is_movable|is_consumable|LocationID|InventoryType
 Use dependency_id = -1 for no dependency
 InventoryType = {UNKNOWN_INVENTORY == 0, PLAYER_INVENTORY == 1, NPC_INVENTORY == 2, SPACE_INVENTORY == 3}
 
 Relevant objects
-#o:1|Northern_Half_Medallion|NONE|Collect the other Medallion to open the boss gate|0|3|1|0|24|3
-#o:2|Southern_Half_Medallion|NONE|Collect the other Medallion to open the boss gate|0|1|1|0|35|3
+#o:1|Northern_Half_Med|NONE|Collect the other Medallion to open the boss gate|0|3|1|0|24|3
+#o:2|Southern_Half_Med|NONE|Collect the other Medallion to open the boss gate|0|1|1|0|35|3
 #o:3|Extrakorita_Crystal|NONE|An ancient crystal... This crystal can't be taken without a Crystal Collector|0|10|1|0|20|3
 #o:4|Broken_Extrakorita|NONE|An ancient crystal broken and unstable, can't be taken even with the help of a Crystal Collector|0|-1|0|0|11|3
 
@@ -434,6 +455,7 @@ data string for objects_fusion is id1:id2;obj:ID;Name;Description;abilityId;Link
 #e:4|trigger_combat|3|sh,ou,sk|0|50
 #e:5|trigger_effects|9|w,a,s,d,up,dw,at,sk,ou|0|0
 #e:6|dialogue_complete|0|0|28;10;1
+#e:7|space_end|0|0|101
 
 Formato Ability: #sk:Id|Type|Name|Entityid(ObjectId) Es -1 si no esta asignado --> A la tienda|is_player_ability|is_object_use|cd_init|cd_max|cost|data
 
@@ -466,6 +488,8 @@ Store skills
 #sk:54|effect_enemy|Poison Bomb|-1|1|0|0|6|3|1
 #sk:55|heal_self|Heal self 20 HP Maximum CD: 0|-1|0|1|0|0|1|20
 #sk:56|heal_ally|Heals an ally 30 HP, not available to self|-1|1|0|0|8|3|30
+#sk:57|revive_player|Revives a player dead in your location|-1|1|0|0|25|6|NONE
+
 
 formato effects #ef:Id|name|EffectType|EffectAffects|InfiniteTurns(y/N)|DefaultNumberOfTurns|data
 EffectType = {UNKNOWN_EFFECT = 0, REGENERATION = 1, POISON = 2, FIRE = 3}
