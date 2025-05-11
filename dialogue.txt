@@ -108,3 +108,12 @@ DS:0
 I don't have anything to tell you
 1
 Have a nice day!:1:0
+
+ID:5
+DS:1
+2
+[RED]AAGHH![RESET]
+You [RED]BASTARD! I HATE YOU![RESET]
+2
+adawdaw:1:1
+Bye!:1:1

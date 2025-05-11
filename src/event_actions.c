@@ -147,6 +147,29 @@ bool event_trigger_objects_fusion2key(Event *event, Game *game);
  */
 bool event_trigger_end_on_kill_enemy(Event *event, Game *game);
 
+/**
+ * @brief this function triggers an npc's dialogue after his death
+ * @author Aaron Charameli Mair
+ * 
+ * @param event event struct
+ * @param game game struct
+ * @return true 
+ * @return false 
+ * @note the event's data will be the npc's id
+ */
+bool event_trigger_death_dialogue(Event *event, Game *game);
+
+/**
+ * @brief this function triggers an npc's dialogue after entering a certain space
+ * 
+ * @param event event struct
+ * @param game game struct
+ * @return true 
+ * @return false 
+ * @note the event's data will be the npcID:SpaceID
+ */
+bool event_trigger_dialogue_in_space(Event *event, Game *game);
+
 /*
     * Public functions
 */
@@ -177,7 +200,7 @@ void event_actions_trigger_events(Game *game){
 
     for (i = 0; i < eventCount; i++)
     {
-        if(game_get_state(game) == STORE_STATE){
+        if((game_get_state(game) == STORE_STATE) || (game_get_state(game) == DIALOGUE)){
             break;
         }
 
@@ -212,6 +235,12 @@ void event_actions_trigger_events(Game *game){
                 break;
             case END_ON_KILL_ENEMY:
                 triggered = event_trigger_end_on_kill_enemy(event, game);
+                break;
+            case DEATH_DIALOGUE:
+                triggered = event_trigger_death_dialogue(event, game);
+                break;
+            case DIALOGUE_IN_SPACE:
+                triggered = event_trigger_dialogue_in_space(event, game);
                 break;
             default:
                 break;
@@ -700,9 +729,9 @@ bool event_trigger_objects_fusion2key(Event *event, Game *game){
 bool event_trigger_end_on_kill_enemy(Event *event, Game *game){
     Id id = NO_ID;
     Collection *npcs = NULL;
-    NPC *npc;
-    Entity *ent;
-    int n_npcs;
+    NPC *npc=NULL;
+    Entity *ent=NULL;
+    int n_npcs=0;
     char str[WORD_SIZE];
 
     if(!event || !game) return false;
@@ -728,4 +757,54 @@ bool event_trigger_end_on_kill_enemy(Event *event, Game *game){
     }
     
     return false;
+}
+
+bool event_trigger_death_dialogue(Event *event, Game *game){
+    Id id=NO_ID;
+    NPC *npc=NULL;
+
+    if(!event || !game){
+        return ERROR;
+    }
+
+    if(!event_get_aux_data(event)){
+        return false;
+    }
+
+    id=atol(event_get_aux_data(event));
+
+    npc=game_get_NPC_by_id(game, id);
+
+    if(entity_is_dead(npc_get_entity(npc)) == false){
+        return false;
+    }
+    return game_dialogue_init(game, npc);
+}
+
+bool event_trigger_dialogue_in_space(Event *event, Game *game){
+    char data[WORD_SIZE]="";
+    char *toks=NULL;
+    Id id=NO_ID, location=NO_ID;
+    NPC *npc=NULL;
+
+    if(!event || !game) return ERROR;
+
+    if(!event_get_aux_data(event)) return false;
+
+    strcpy(data, event_get_aux_data(event));
+
+    toks = strtok(data, ":"); 
+    if(!toks) return false;
+    id=atol(toks);
+
+    toks = strtok(data, ":\n\r"); 
+    if(!toks) return false;
+    location=atol(toks);
+
+    game_get_NPC_by_id(game, id);
+
+    if(game_get_player_location(game) == location)
+        return game_dialogue_init(game, npc);
+    else
+        return false;
 }

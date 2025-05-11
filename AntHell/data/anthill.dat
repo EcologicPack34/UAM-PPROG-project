@@ -102,7 +102,8 @@ Formato Event: #e:Id|Type|cmdTriggersNum|cmdName1 , ...|removeOnTrigger|tagvalue
 #e:7|effect_area|7|w,a,s,d,up,dw,sk|0|1:121
 #e:8|trigger_effects|8|w,a,s,d,up,dw,at,sk|0|0
 #e:9|player_turn|9|a,s,w,d,up,dw,sk,m,sh|0|10
-#e:10|end_on_kill_enemy|0|0|4
+e:10|end_on_kill_enemy|0|0|4
+#e:11|death_dialogue|10|a,s,w,d,at,up,dw,sk,m,sh|1|5
 
 Formato NPC: #n:ID|Dialogue State - 1 means initial - 0 means no dialogue|Nombre|LocationID|is_follower|Status|
 #n:1|1|NPC1|11|1|1|^0m"
@@ -114,10 +115,10 @@ Formato NPC: #n:ID|Dialogue State - 1 means initial - 0 means no dialogue|Nombre
 #n:3|1|NPC3|11|1|1|^2m"
 #st:3|2|100|100|10|2|2|2|
 
-#n:4|DIE|Enemy1|11|0|3|^3m"
+#n:4|0|Enemy1|11|0|3|^3m"
 #st:4|2|100|7|10|2|2|2|
 
-#n:5|0|Enemy2|11|0|3|^4m"
+#n:5|1|Enemy2|11|0|3|^4m"
 #st:5|2|100|100|10|2|2|2|
 
 #n:6|0|Enemy3|11|0|3|^5m"
