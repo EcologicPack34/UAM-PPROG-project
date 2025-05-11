@@ -1,0 +1,420 @@
+#NO_OUTPUT = 0, DIALOGUE_STOP = 1, FIGHT = 2, STORE = 3, FOLLOW = 4, UNFOLLOW = 5, GIVE_OBJECT = 6
+
+###################################################################
+#EXAMPLE
+
+#ID:{NPCID} //Has to be of the type: ID:1
+#DS:{DIALOGUE_STATE}
+#AT:{NUMBER_OF_LINES}
+#{1-ACTUAL_TEXT}
+#{....}
+#NR:{NUMBER_OF_REPLIES}
+#{PLAYER REPLY}:{DIALOGUE_OUTCOME}:{DIALOGUE_STATE} 
+#{PLAYER REPLY}:{DIALOGUE_OUTCOME}:{DIALOGUE_STATE} 
+#{PLAYER REPLY}:{DIALOGUE_OUTCOME}:{DIALOGUE_STATE} 
+#{...}
+#
+#DS:{DIALOGUE_STATE}
+#AT:{NUMBER_OF_LINES}
+#{1-ACTUAL_TEXT}
+#{....}
+#NR:{NUMBER_OF_REPLIES}
+#{PLAYER REPLY}:{DIALOGUE_OUTCOME}:{DIALOGUE_STATE} 
+#{PLAYER REPLY}:{DIALOGUE_OUTCOME}:{DIALOGUE_STATE} 
+#{PLAYER REPLY}:{DIALOGUE_OUTCOME}:{DIALOGUE_STATE} 
+#{...}
+#
+#DS:{DIALOGUE_STATE}
+#AT:{NUMBER_OF_LINES}
+#{1-ACTUAL_TEXT}
+#{....}
+#NR:{NUMBER_OF_REPLIES}
+#{PLAYER REPLY}:{DIALOGUE_OUTCOME}:{DIALOGUE_STATE} 
+#{PLAYER REPLY}:{DIALOGUE_OUTCOME}:{DIALOGUE_STATE} 
+#{PLAYER REPLY}:{DIALOGUE_OUTCOME}:{DIALOGUE_STATE} 
+#{...}
+#
+#DS:{DIALOGUE_STATE} //Last one only has to have one reply and it sends itself to the next dialogue_state
+#AT:{NUMBER_OF_LINES}
+#{1-ACTUAL_TEXT}
+#{....}
+#NR:{NUMBER_OF_REPLIES}
+#{PLAYER REPLY}:{DIALOGUE_OUTCOME}:{DIALOGUE_STATE} 
+#####################################################################################################
+
+Old_Merchant
+ID:1
+DS:1
+3
+Hello Traveler!
+I have some nice goods for you.
+Take a look!
+3
+[GREEN]I'll buy something!:3:1
+[CYAN]I'm not interested,:1:1
+[RED]I don't care, DIE!:2:0
+
+DS:0
+1
+I don't have anything to tell you!
+1
+DIE FOR GODS SAKE!:2:0
+
+Divine_Merchant
+ID:2
+DS:1
+2
+Welcome little creature!
+Do you have some gold to trade with me?
+3
+[GREEN]Okey...?:3:1
+[CYAN]I'm not interested,!:1:1
+[RED]You will die by my hand!:2:0
+
+DS:0
+1
+You dare to come again mortal...
+1
+I'LL KILL YOU GOD!:2:0
+
+Young_Merchant
+ID:3
+DS:1
+4
+Hello Traveler!
+We both share a tragic fall...
+I have some nice goods for you.
+Take a look!
+3
+[GREEN]I'll take a look!:3:1
+[CYAN]I'm not interested,:1:1
+[RED]I don't care, DIE!:2:0
+
+DS:0
+1
+I don't have anything to tell you!
+1
+DIE!:2:0
+
+Young_Warrior
+ID:4
+DS:1
+4
+Are you kidding me? You are really the
+new one here? C'mon... Just when I thought 
+I would find someone strong...
+I'll never get out of here.
+3
+[GREEN]Are you sure? You didn't even tested my strength.:0:2
+[RED]You think I am weak?! I'll kill you!:2:0
+[CYAN](Ignore):1:1
+
+DS:2
+2
+Mmmh... At least you have guts...
+Are you sure *********?
+3
+[GREEN]I'm sure.:0:3
+[RED]I'll show you that I'm stronger with your dead body in the ground!:2:0
+[CYAN](Ignore):1:2
+
+DS:3
+3
+Well well, you convinced me!
+That type of will and authority is what
+I'm looking for!
+3
+[GREEN]Fine, then let's beat these ants!:4:4
+[RED]I changed my mind, go to hell!:2:0
+[CYAN]Not for now, but thank you!:1:3
+
+DS:4
+3
+I'm not tired at all!
+I can beat every ant I see 
+Even that big ant we shaw on the inital zone!
+2
+[GREEN]Okey, but wait for me on this spot:5:3
+[CYAN]Not for now, but thank you!:1:4
+
+DS:0
+1
+I don't have anything to tell you!
+1
+DIE!:2:0
+
+Old_Knight
+ID:5
+DS:1
+4
+Where violence is key,
+where death is cold,
+I'll lure between them,
+and take their throne...
+3
+[GREEN]Mmmh Hello?:0:2
+[RED]Even a knight can't beat me!:2:0
+[CYAN](Ignore):1:1
+
+DS:2
+2
+Ooh... I didn't notice you traveler.
+What brings you to this Ant Hell?
+3
+[GREEN]I fell and I don't remember anything...:0:3
+[RED]Too much talk for me!:2:0
+[CYAN](Ignore):1:2
+
+DS:3
+3
+I had a similar story, since then
+I have been wandering through these caves...
+Do you want my help in your endeavour?
+3
+[GREEN]Of course sir, I'll appreciate your help!:4:4
+[RED]I changed my mind, go to hell!:2:0
+[CYAN]Thank you sir, but I'll see you later!:1:3
+
+DS:4
+2
+I'll keep crushing these ants..
+For my lord!
+2
+[GREEN]Wait for me on this spot:5:3
+[CYAN]Let's go!:1:4
+
+DS:0
+1
+I don't have anything to tell you!
+1
+DIE!:2:0
+
+Another_Traveler
+ID:6
+DS:1
+2
+AAAAH! You scared me!
+What are you doing here?!
+3
+[GREEN]Chill, i'm just as lost as you:0:2
+[RED]What a weakling, DIE!:2:0
+[CYAN](Ignore):1:1
+
+DS:2
+3
+Okey okey...
+Can i go with you?
+I need to leave fast...
+3
+[GREEN]I don't know... You don't seem fit to fight:0:3
+[RED]Ignorant peasant!:2:0
+[CYAN](Ignore):1:2
+
+DS:3
+3
+Don't worry! I have killed 
+bigger ants than you sir,
+trust me!
+3
+[GREEN]Mmmm okay...:4:4
+[RED]Go to hell!:2:0
+[CYAN]You're too weak for this, sorry.:1:3
+
+DS:4
+2
+Oh my god... These ants 
+are really strong...
+2
+[GREEN]Wait for me on this spot:5:3
+[CYAN]Just keep your mind calm friend!:1:4
+
+DS:0
+1
+I don't have anything to tell you!
+1
+DIE!:2:0
+
+Ant_Assasin
+ID:7
+DS:1
+1
+...
+3
+[GREEN]Hey, you know I can see you right?:0:2
+[RED]Are you stupid?!:2:0
+[CYAN](Ignore):1:1
+
+DS:2
+2
+Damn...Your cold eyes are too much
+for my camouflage...
+3
+[GREEN]What did you think?:0:3
+[RED]Ignorant assasin!:2:0
+[CYAN](Ignore):1:2
+
+DS:3
+2
+I'll trust you with my service
+I'll slay everyone in our path master...
+3
+[GREEN]Mmmm okay...:4:4
+[RED]Go to hell!:2:0
+[CYAN]I don't need a stupid ghost.:1:3
+
+DS:4
+1
+At your service my master...
+2
+[GREEN]Wait for me on this spot assasin.:5:3
+[CYAN]Don't call me master...:1:4
+
+DS:0
+1
+DIE!
+1
+DIE!:2:0
+
+Guide
+ID:28
+DS:1
+4
+[YELLOW]Welcome traveler!
+[YELLOW]It seems that you fell from 
+[YELLOW]that hole on the roof,
+[YELLOW]you took a lot of hits...
+1
+[GREEN]What...?I don't remember anything...:0:2
+
+DS:2
+4
+[YELLOW]Oh, don't worry about that... Every person
+[YELLOW]that has fallen to these caves has lost 
+[YELLOW]it's memories or they just remember a 
+[YELLOW]tiny part of their lives.
+1
+[GREEN]I see... And how do I get out:0:3
+
+DS:3
+4
+[YELLOW]Well, that's the difficult part...
+[YELLOW]You see, on the east door behind the next space,
+[YELLOW]there is a powerful being, called the AntHellKing.
+[YELLOW]If we kill him we will escape easily
+1
+[GREEN]Then let's kill him!:0:4
+
+DS:4
+4
+[YELLOW]I said that it's not easy, he has been keeping
+[YELLOW]his eyes on us through the walls and nobody ever
+[YELLOW]got to kill him, even though a lot of people fell
+[YELLOW]before you...
+1
+[GREEN]I see...:0:5
+
+DS:5
+4
+[YELLOW]But don't worry traveler, this caves hold a lot
+[YELLOW]of treasures for those who are strong enough
+[YELLOW]to claim them, so keep your eyes up and face
+[YELLOW]the harsh reality, if we are alive we fight!
+1
+[GREEN]Yes!:0:6
+
+DS:6
+5
+[YELLOW]Anyways, I'm the guide, you'll find a lot 
+[YELLOW]of people around here too, at any time you 
+[YELLOW]can talk with me if you have a problem with 
+[YELLOW]the caves. Probably I'll be able to
+[YELLOW]guide you!
+1
+[GREEN]Thank you!:1:10
+
+DS:10
+2
+[YELLOW]Hello traveler!
+[YELLOW]How can i help you in these horrendous caves?
+4
+[GREEN]How can I get the first medallion?:0:11
+[GREEN]How can I get the second medallion?:0:14
+[GREEN]Can I talk to you about other things?:0:15
+[CYAN]Sorry, I'm just passing by!:1:10
+
+DS:11
+5
+[YELLOW]All you have to do is find the hidden room
+[YELLOW]in the north caves, there it is the medallion.
+[YELLOW]But before that, you need to get a Crystal
+[YELLOW]Collector and some Extrakorita or you 
+[YELLOW]won't be able to pick it up.
+1
+[GREEN]How do I get the Crystal Collector and that?:0:12
+
+DS:12
+4
+[YELLOW]Look in the surrounding merchants, probably one
+[YELLOW]will sell a Crystal Collector. Extrakorita is 
+[YELLOW]said to be found on the north caves, at the east
+[YELLOW]side. And one more thing.
+1
+[GREEN]What else do i need?:0:13
+
+DS:13
+5
+[YELLOW]Don't forget to go to the space 12, next to us
+[YELLOW]then use the medallion as the key to the south.
+[YELLOW]To use it write 'ou [OBJECT_NAME] [DIRECTION]
+[YELLOW]Good luck in your adventure! Remember, there
+[YELLOW]are more deadly enemies on the south!
+1
+[GREEN]Thank you!:0:10
+
+DS:14
+5
+[YELLOW]You have to cross the Ant Hell Maze, to do it,
+[YELLOW]look at your surroundings, the walls have some
+[YELLOW]writings that may help you to find what you want.
+[YELLOW]There are rumours that an ancient merchant is
+[YELLOW]around the zone, try to find him!
+1
+[GREEN]Thank you!:0:10
+
+DS:15
+1
+[YELLOW]Of course, what else do you want to know?
+4
+[GREEN]How do I get extra help?:0:16
+[GREEN]How do I revive my friend?:0:17
+[GREEN]How do I get XP and money?:0:18
+
+DS:16
+5
+[YELLOW]To get help, try to talk with people you find
+[YELLOW]along the way, maybe they will help you.
+[YELLOW]If you need help with a command don't forget
+[YELLOW]to use the command 'help (COMMAND)',
+[YELLOW]you will get extra help!
+1
+[GREEN]Thank you!:0:10
+
+DS:17
+5
+[YELLOW]To revive your friend try to learn the
+[YELLOW]resurrection spell, but be careful, it will
+[YELLOW]take a lot of skill points...
+[YELLOW]Also remember you can follow him so both of
+[YELLOW]you survive out there in battle!
+1
+[GREEN]Thank you!:0:10
+
+DS:18
+5
+[YELLOW]For every enemy you kill you will get
+[YELLOW]XP and money according to the stats of the
+[YELLOW]enemy, it also applies to anyone you fight
+[YELLOW]through combat. Some enemies may drop
+[YELLOW]money bags that u can use!
+1
+[GREEN]Thank you!:0:10

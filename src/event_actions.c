@@ -161,6 +161,7 @@ bool event_trigger_death_dialogue(Event *event, Game *game);
 
 /**
  * @brief this function triggers an npc's dialogue after entering a certain space
+ * @author Aaron Charameli Mair
  * 
  * @param event event struct
  * @param game game struct
@@ -169,6 +170,18 @@ bool event_trigger_death_dialogue(Event *event, Game *game);
  * @note the event's data will be the npcID:SpaceID
  */
 bool event_trigger_dialogue_in_space(Event *event, Game *game);
+
+/**
+ * @brief Opens all near links to the player when even is triggered
+ * @author Maksym Polyak
+ * 
+ * @param event event struct
+ * @param game game struct
+ * @return true 
+ * @return false 
+ * @note the event's data will be the NPCID;(required dialogue state >=);LINKID
+ */
+bool event_trigger_dialogue_completed(Event *event, Game *game);
 
 /*
     * Public functions
@@ -239,6 +252,9 @@ void event_actions_trigger_events(Game *game){
                 break;
             case DIALOGUE_IN_SPACE:
                 triggered = event_trigger_dialogue_in_space(event, game);
+                break;
+            case DIALOGUE_COMPLETE:
+                triggered = event_trigger_dialogue_completed(event, game);
                 break;
             default:
                 break;
@@ -426,7 +442,7 @@ bool event_trigger_npc_rand_move(Event *event, Game *game){
                     link = space_get_up(currentSpace);
                     break;
                 case 5: /*down*/
-                    link = space_get_south(currentSpace);
+                    link = space_get_down(currentSpace);
                     break;
                 default:
                     break;
@@ -805,4 +821,47 @@ bool event_trigger_dialogue_in_space(Event *event, Game *game){
         return game_dialogue_init(game, npc);
     else
         return false;
+}
+
+bool event_trigger_dialogue_completed(Event *event, Game *game){
+    char data[WORD_SIZE]="";
+    char *dat = NULL;
+    char *toks=NULL;
+    Id id=NO_ID, link=NO_ID;
+    int dialogue_state;
+    NPC *npc=NULL;
+    Link *linkp = NULL;
+    
+    if(!event || !game) return false;
+
+    if((dat = event_get_aux_data(event)) == NULL) return false;
+
+    strcpy(data, dat);
+
+    toks = strtok(data, ";");
+    if(!toks) return false;
+
+    id = atoi(toks);
+    if(id == 0) return false;
+
+    npc = game_get_NPC_by_id(game, id);
+    if(!npc) return false;
+
+    toks = strtok(NULL, ";");
+    if(!toks) return false;
+
+    dialogue_state = atoi(toks);
+
+    if(npc_get_dialogue_state(npc) < dialogue_state) return false;
+
+    toks = strtok(NULL, ";");
+    if(!toks) return false;
+
+    link = atoi(toks);
+
+    if((linkp = game_get_link_by_id(game, link)) == NULL) return false;
+
+    link_set_locked(linkp, false);
+
+    return true;
 }

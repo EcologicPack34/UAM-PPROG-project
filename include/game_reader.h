@@ -16,7 +16,7 @@
 #include "types.h"
 #include "game.h"
 
-#define SETTINGS_FILE_PATH "./settings.dat" /*!< constant path to the base settings of the game*/
+#define SETTINGS_FILE_PATH "./AntHell/data/settings.dat" /*!< constant path to the base settings of the game*/
 
 /**
  * @brief Initializes game, loads the spaces in game and sets the player/object location

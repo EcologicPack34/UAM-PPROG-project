@@ -482,7 +482,7 @@ void graphic_engine_paint_playerDesc(Graphic_engine *ge, Game *game)
     strcat(str, "[GREEN]");
   }
 
-  sprintf(strAux, "%.2lf / %.2lf", entity_get_health(entityplayer), entity_get_max_health(entityplayer));
+  sprintf(strAux, "%.2lf / %.2lf[RESET] | Magic level: [YELLOW]%d", entity_get_health(entityplayer), entity_get_max_health(entityplayer), entity_get_magicLevel(entityplayer));
   strcat(str, strAux);
 
   screen_area_puts(ge->descript2, str); // health
@@ -767,7 +767,7 @@ void graphic_engine_paint_generalDesc(Graphic_engine *ge, Game *game)
   {
     player = game_get_player_at(game, i);
     ent = player_get_entity(player);
-    if (player == game_get_player(game) || entity_get_location(ent) != game_get_player_location(game) || entity_is_dead(ent))
+    if (player == game_get_player(game) || entity_get_location(ent) != game_get_player_location(game))
     {
       continue;
     }
@@ -875,6 +875,7 @@ void graphic_engine_paint_combat(Graphic_engine *ge, Game *game){
   char str[WORD_SIZE] = "";
   char strAux[WORD_SIZE] = "";
   char spacing[WORD_SIZE] = "";
+  char minstraux[LINE_LENGTH] = "";
   Combat *combat = NULL;
   int i, j;
   int div;
@@ -1175,7 +1176,8 @@ void graphic_engine_paint_combat(Graphic_engine *ge, Game *game){
   }
   for (i = combat_get_player_count(combat); i < ally_count; i++)
   {
-    strcpy(str, tab);
+    strcpy(minstraux, entity_get_name(stats[i].entity));
+    sprintf(str, "%s%s | ", tab, minstraux);
     strcat(str, entity_get_graphic_description(stats[i].entity));
     strcat(str, ": H: ");
     if(stats[i].stats.health/stats[i].stats.maxhealth <= .5){
@@ -1380,7 +1382,7 @@ void graphic_engine_paint_store(Graphic_engine *ge, Game *game){
 
     auxaux = game_store_get_name(type, ele);
     if(!auxaux) return;
-    sprintf(aux_str, "[YELLOW]%s[RESET] |", auxaux);
+    sprintf(aux_str, "[CYAN]%s[RESET] |", auxaux);
     strcat(str, aux_str);
 
     auxaux = game_store_get_descr(type, ele);

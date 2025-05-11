@@ -212,6 +212,10 @@ Status entity_set_health(Entity *entity, double health){
     if(!entity)
         return ERROR;
 
+    if(health < 0) health = 0;
+
+    if(health > entity->stats.maxhealth) health = entity->stats.maxhealth;
+
     entity->stats.health = health;
 
     return OK;

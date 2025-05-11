@@ -1123,6 +1123,8 @@ Status game_combat_end(Game *game){
     player_add_money(game_get_player_by_id(game, entity_get_id(combat_get_allies_stats_at(game->combat,i)->entity)), money);
   }
 
+
+
   combat_free(game->combat);
   game_set_state(game, DEFAULT);  
   game->combat = NULL;
@@ -1931,6 +1933,8 @@ Status game_store_move_item_at(Game *game, int i){
         game_add_log_message(game, MESSAGE_HELP, "You already have the maximum amount of abilities!");
         return ERROR;
       }
+
+      ability_set_entityid_and_type((Ability *)ele, entity_get_id(player_get_entity((Player *)player)), true);
 
       store_remove_item_at(store, i);
 

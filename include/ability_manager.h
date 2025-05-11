@@ -17,12 +17,12 @@
 #include <stdio.h>
 #include "collection.h"
 
-#define N_SKILLS 8 /*!< Number of skills implemented on AbilityType*/
+#define N_SKILLS 9 /*!< Number of skills implemented on AbilityType*/
 
 /**
  * @brief Enum storing the different types of events 
  */
-typedef enum {NO_SKILL, HEAL_SELF, HEAL_ALLY, MONEY_BAG, LINK_UNLOCK, EFFECT_SELF, EFFECT_ENEMY, EFFECT_ALLY}AbilityType;
+typedef enum {NO_SKILL, HEAL_SELF, HEAL_ALLY, MONEY_BAG, LINK_UNLOCK, EFFECT_SELF, EFFECT_ENEMY, EFFECT_ALLY, REVIVE_PLAYER}AbilityType;
 
 /**
  * @brief Ability ADT that contains all the information about the ability
@@ -59,6 +59,16 @@ Ability *ability_create(Id id, char *data, char *name, AbilityType type, Id enti
  * @param ability ability to destroy
  */
 void ability_destroy(void *ability);
+
+/**
+ * @brief Sets an ability entityid and type
+ * 
+ * @param ability abilty struct
+ * @param entityid entity id
+ * @param is_player true if its for a player, false if its for an object
+ * @return Status 
+ */
+Status ability_set_entityid_and_type(Ability *ability, Id entityid, bool is_player);
 
 /*
   * Ability GETTERS

@@ -24,7 +24,7 @@
 #include "attack.h"
 
 #define TEMP_DIALOGUE_FILENAME "tempdiag.txt" /*!< Name of the temporal dialogue filename for moving dialogue to a save*/
-#define DIALOGUE_INIT_PATH "dialogue.txt"     /*!< Name of the location with the txt with dialogues for generic initialization*/
+#define DIALOGUE_INIT_PATH "./AntHell/data/dialogue.txt"     /*!< Name of the location with the txt with dialogues for generic initialization*/
 
 /*
 * Declaration of private functions

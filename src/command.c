@@ -406,7 +406,8 @@ Status command_get_user_input(Command* command) {
   char *fget = NULL;
 
   int i = UNKNOWN - NO_CMD + 1;
-  int wordCount = 0, argsCount = 0, counter;
+  int wordCount = 0, argsCount = 0;
+  /*int counter;*/
   int inputLength;
   CommandCode cmd;
   
@@ -459,15 +460,22 @@ Status command_get_user_input(Command* command) {
       return command_set_code(command, cmd);
     }
     /*Tries to read all posible arguments*/
-    for (i = 0; i < MAX_CMD_ARGS_NUM; i++)
+    for (i = 0; i < MAX_CMD_ARGS_NUM && token != NULL; i++)
     {
-      /*Ignores blank spaces*/
+      token = strtok(NULL, " \n");
+      if(token != NULL){
+
+      strncpy(aux, token, MAX_CMD_ARGS_LENGTH);
+      string_remove_n_r_on_end(aux);
+      aux[MAX_CMD_ARGS_LENGTH - 1] = '\0';
+      /*
+      //Ignores blank spaces
       while(originalInput[wordCount] == ' ' && wordCount + 1 < inputLength) wordCount++;
 
       counter = 0;
       if(originalInput[wordCount] == '\n' || originalInput[wordCount] == '\00' || wordCount == inputLength)
         break;
-      /*Counts the amount of letters and assing it to an aux string*/
+      //Counts the amount of letters and assing it to an aux string
       while(originalInput[wordCount + counter] != '\n' && originalInput[wordCount + counter] != '\00' && originalInput[wordCount + counter] != ' '
           && wordCount + counter < inputLength && counter < MAX_CMD_ARGS_LENGTH){
         
@@ -477,13 +485,15 @@ Status command_get_user_input(Command* command) {
       if(counter == MAX_CMD_ARGS_LENGTH){
         debug_log(LOG_WARNING,"at command_get_user_input : argument count reached size limit tho it will be inclomplete");
       }
-      /*We end the string by putting a null character*/
-      aux[counter] = '\00';
+      //We end the string by putting a null character
       wordCount += counter;
+      aux[MAX_CMD_ARGS_LENGTH - 1] = '\0';*/
       command_set_argument_at(command, aux, i);
+      }
+      
     }
     
-    command_set_arguments_count(command,i);
+    command_set_arguments_count(command,i - 1);
     return command_set_code(command, cmd);
   }
   else

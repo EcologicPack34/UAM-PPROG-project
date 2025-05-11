@@ -97,6 +97,16 @@ Status ability_effect_self(Ability *ability, Game *game);
  */
 Status ability_effect_ally(Ability *ability, Game *game);
 
+/**
+ * @brief Revives a plaer by name
+ * @author Maksym Polyak
+ * 
+ * @param ability ability struct
+ * @param game game struct
+ * @return Status 
+ */
+Status ability_revive_player(Ability *ability, Game *game);
+
 Status ability_heal_self(Ability *ability, Game *game){
     Combat *combat = NULL;
     Stats *stats = NULL;
@@ -128,7 +138,7 @@ Status ability_heal_self(Ability *ability, Game *game){
             health_recovered = stats->stats.maxhealth - stats->stats.health;
             if(health_recovered < 0) health_recovered = 0;
         }
-        stats->stats.health += health_recovered;
+        stats->stats.health += health_recovered*((stats->stats.magicLevel - 1)/100 + 1);
     }else{
         player = game_get_player(game);
         entity = player_get_entity(player);
@@ -142,7 +152,7 @@ Status ability_heal_self(Ability *ability, Game *game){
         if(max_health - health <= health_recovered){
             health_recovered = max_health - health;
         }
-        entity_set_health(entity, health + health_recovered);
+        entity_set_health(entity, health + health_recovered*((stats->stats.magicLevel - 1)/100 + 1));
         
     }
 
@@ -151,12 +161,14 @@ Status ability_heal_self(Ability *ability, Game *game){
 
 Status ability_heal_ally(Ability *ability, Game *game){
     Command *command = NULL;
-    Combat *combat = NULL;
-    Stats *stats = NULL;
-    int n_arg, random, count;
+    Stats *stats = NULL, *fin_stats = NULL;
+    int n_arg, size, i;
+    char **args = NULL;
     char *data = NULL;
+    Player *player = NULL;
+    Entity *ent = NULL, *fin_ent = NULL;
 
-    double health_recovered;
+    double health_recovered, multiplier;
     
     if(!ability || !game) return ERROR;
 
@@ -167,29 +179,61 @@ Status ability_heal_ally(Ability *ability, Game *game){
     if(!data) return ERROR;
 
     health_recovered = atof(data);
+    if(health_recovered == 0) return ERROR;
 
     if(ability_get_is_player_ability(ability) == true){
-        command = game_get_last_command(game);
-        n_arg = command_get_arguments_count(command);
-        if(n_arg < 1){
-            return ERROR;
-        }
-
-        /*NON - IMPLEMENTED ALLIES*/
-    }else{
-        /*Searches for a random enemy alive and then heals them*/
-        combat = game_get_combat(game);
-        if(combat){
-            count = 0;
-            do{
-                random = rand() % NPC_MAX_ENEMIES;
-                count++;
-                stats = combat_get_enemies_stats_at(combat, random);
-            }while( stats->stats.health < 0 && count < NPC_MAX_ENEMIES);
-            
-            if(count < NPC_MAX_ENEMIES){
-                stats->stats.health += health_recovered;
+        if(game_get_state(game) == DEFAULT){
+            command = game_get_last_command(game);
+            n_arg = command_get_arguments_count(command);
+            args = command_get_arguments(command);
+            if(n_arg < 1 || n_arg > 2 || !args){
+                return ERROR;
             }
+
+            player = game_get_player_by_id(game, ability_get_entityid(ability));
+            if(!player) return ERROR;
+
+            size = player_get_follower_num(player);
+            for(i = 0; i < size && fin_ent == NULL; i++){
+                ent = player_get_follower_at(player, i);
+                if(!ent) return ERROR;
+                if(strcmp(entity_get_name(ent), args[1]) == 0){
+                    fin_ent = ent;
+                }
+            }
+
+            if(fin_ent == NULL) return ERROR;
+
+            multiplier = (entity_get_magicLevel(player_get_entity(player)) - 1)/100 + 1;
+
+
+            entity_set_health(fin_ent, entity_get_health(fin_ent) + health_recovered*multiplier);
+        } else if(game_get_state(game) == COMBAT){
+            command = game_get_last_command(game);
+            n_arg = command_get_arguments_count(command);
+            args = command_get_arguments(command);
+            if(n_arg < 1 || n_arg > 2 || !args){
+                return ERROR;
+            }
+
+            player = game_get_player_by_id(game, ability_get_entityid(ability));
+            if(!player) return ERROR;
+
+            size = combat_get_allies_count(game_get_combat(game));
+            for(i = 0; i < size && fin_stats == NULL; i++){
+                stats = combat_get_allies_stats_at(game_get_combat(game), i);
+                if(!stats) return ERROR;
+                if((strcmp(entity_get_name(stats->entity), entity_get_name(player_get_entity(player))) != 0) && (strcmp(entity_get_name(stats->entity), args[1]) == 0)){
+                    fin_stats = stats;
+                }
+            }
+
+            if(fin_stats == NULL) return ERROR;
+
+            multiplier = (entity_get_magicLevel(player_get_entity(player)) - 1)/100 + 1;
+
+
+            fin_stats->stats.health += health_recovered*multiplier;
         }
     }
 
@@ -403,6 +447,9 @@ Status ability_actions_use_ability(Game *game){
         case EFFECT_ALLY:
             status = ability_effect_ally(ability, game);
             break;
+        case REVIVE_PLAYER:
+            status = ability_revive_player(ability, game);
+            break;
         default:
             break;
     }
@@ -461,4 +508,41 @@ Status ability_actions_manage_cooldowns(Game *game){
     queue_destroy(auxqueue);
 
     return OK;
+}
+
+Status ability_revive_player(Ability *ability, Game *game){
+    Player *player_to_revive = NULL, *player = NULL, *fin_play = NULL;
+    Id locationid;
+    int i, size;
+
+    Command *comm = NULL;
+    char **args = NULL;
+    int n_args;
+    
+    if(!ability || !game) return ERROR;
+
+    comm = game_get_last_command(game);
+    if(!comm) return ERROR;
+    args = command_get_arguments(comm);
+    if(!args) return ERROR;
+    n_args = command_get_arguments_count(comm);
+    if(n_args != 2) return ERROR;
+
+    player = game_get_player_by_id(game, ability_get_entityid(ability));
+    if(!player) return ERROR;
+
+    locationid = entity_get_location(player_get_entity(player));
+    if(locationid == NO_ID) return ERROR;
+
+    size = game_get_n_players(game);
+    for(i = 0; i < size && fin_play == NULL; i++){
+        player_to_revive = game_get_player_at(game, i);
+        if(entity_get_location(player_get_entity(player_to_revive)) == locationid && entity_is_dead(player_get_entity(player_to_revive)) == true){
+            fin_play = player_to_revive;
+        }
+    }
+
+    if(fin_play == NULL) return ERROR;
+
+    entity_set_health(player_get_entity(player_to_revive), 1);
 }

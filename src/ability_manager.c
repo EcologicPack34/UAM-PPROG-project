@@ -27,8 +27,8 @@
  * @brief Tags related to the ability references on the .dat. Uses N_SKILLS as maximum size
  * 
  */
-char *abilityTags[N_SKILLS] = { "" , "heal_self", "heal_ally", "money_bag","link_unlock","effect_self","effect_enemy"\
-  ,"effect_ally"}; /*!< Tags related to the type | Same order as AbilityType*/
+char *abilityTags[N_SKILLS] = { "" , "heal_self", "heal_ally", "money_bag", "link_unlock","effect_self","effect_enemy"\
+  ,"effect_ally", "revive_player"}; /*!< Tags related to the type | Same order as AbilityType*/
 
 /**
  * @brief Struct that contains all the information related to an ability
@@ -121,7 +121,22 @@ void ability_destroy(void *ability){
   }
 }
 
+Status ability_set_entityid_and_type(Ability *ability, Id entityid, bool is_player){
 
+  if(!ability) return ERROR;
+
+  ability->entityid = entityid;
+
+  if(is_player == true){
+    ability->is_player_ability = true;
+    ability->is_object_use = false;
+  } else {
+    ability->is_player_ability = false;
+    ability->is_object_use = true;
+  }
+
+  return OK;
+}
 
 /*GETTERS*/
 

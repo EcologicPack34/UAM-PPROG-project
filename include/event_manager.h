@@ -16,13 +16,13 @@
 #include "types.h"
 #include <stdio.h>
 
-#define N_EVENTS 13 /*!< Number of events implemented*/
+#define N_EVENTS 14 /*!< Number of events implemented*/
 
 /**
  * @brief Enum storing the different types of events 
  */
 typedef enum {NO_EVENT, OBJECT_ON_SPACE, TRIGGER_COMBAT, PLAYER_DEATH, NPC_RAND_MOVE, TRIGGER_EFFECTS, EFFECT_AREA, PLAYER_TURN, UNLOCK_WITH_OBJECT_INV, OBJECTS_FUSION,\
-END_ON_KILL_ENEMY, DEATH_DIALOGUE, DIALOGUE_IN_SPACE}EventType;
+END_ON_KILL_ENEMY, DEATH_DIALOGUE, DIALOGUE_IN_SPACE, DIALOGUE_COMPLETE}EventType;
 
 /**
  * @brief ADT containing basic info about event

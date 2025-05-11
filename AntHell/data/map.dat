@@ -1,8 +1,8 @@
 PLAYERS
 Formato Player: #p:ID|Nombre|LocationID|Money|XP actual|XP del siguiente nivel 100 si nivel es 1|nivel|skill points|gdesc
 Formato STATS: #st:IDEntity|EntityType|VidaMaxima|Vida|DanoBase|Fuerza|Defensa|NivelMagia
-#p:1|Hero1|11|100|0|100|1|1|mO^"
-#st:1|1|100|100|25|1|1|1
+#p:1|Hero1|11|100|0|100|1|100|mO^"
+#st:1|1|1000|1000|25|1|1|1
 #p:2|Hero2|11|100|0|100|1|1|m1^"
 #st:2|1|100|100|25|1|1|1
 
@@ -44,7 +44,7 @@ South rooms
 
 Formato Link: #l:ID|Space1|Space2|adjacent|locked //Recordar añadir en cada espacio sus links adyacentes
 
-#l:1|11|12|1|0
+#l:1|11|12|1|1
 #l:2|12|100|1|1
 #l:3|12|13|1|0
 #l:4|13|14|1|0
@@ -62,7 +62,7 @@ Formato Link: #l:ID|Space1|Space2|adjacent|locked //Recordar añadir en cada esp
 #l:15|25|26|1|0
 #l:16|26|27|1|0
 #l:17|20|27|0|0
-#l:19|12|30|1|0
+#l:19|12|30|1|1
 #l:22|30|31|0|0
 #l:23|30|32|0|0
 #l:24|31|32|0|0
@@ -229,12 +229,133 @@ Formato NPC: #n:ID|Dialogue State - 1 means initial - 0 means no dialogue|Nombre
 Status formato: UNKNOWN_STATUS = 0, NEUTRAL = 1, ALLY = 2, ENEMY = 3
 Formato STATS: #st:IDEntity|EntityType|VidaMaxima|Vida|DanoBase|Fuerza|Defensa|NivelMagia
 Entitytype: UNKNOWN_ENTITY = 0, PLAYER_TYPE = 1, NPC_TYPE = 2
-#n:1|1|Old_Merchant|12|0|1|ToT"
+
+MERCHANTS:
+#n:1|1|Old_Merchant|14|0|1|ToT"
 #st:1|2|100|100|25|1|1|1
-#n:2|1|Divine_Merchant|12|0|1|GOD"
+
+#n:2|1|Divine_Merchant|32|0|1|GOD"
 #st:2|2|1000|1000|1000|1000|1000|1000
+
 #n:3|1|Young_Merchant|12|0|1|uWu"
 #st:3|2|100|100|25|1|1|1
+
+AVAILABLE FOLLOWERS:
+#n:4|1|Young_Warrior|12|1|1|WoW"
+#st:4|2|100|100|25|10|15|1
+
+#n:5|1|Old_Knight|12|1|1|bTd"
+#st:5|2|200|100|30|20|15|1
+
+#n:6|1|Another_Traveler|12|1|1|IyI"
+#st:6|2|80|80|20|5|1|1
+
+#n:7|1|Ant_Assasin|12|1|1|><>"
+#st:7|2|120|120|30|15|5|1
+
+ENEMIES:
+#n:8|0|Small_Ant|13|0|3|^0m"
+#st:8|2|100|100|15|5|5|1
+
+#n:9|0|Small_Ant|13|0|3|^1m"
+#st:9|2|110|110|15|5|5|1
+
+#n:10|0|Small_Ant|21|0|3|^2m"
+#st:10|2|80|80|15|5|5|1
+
+#n:11|0|Small_Ant|21|0|3|^3m"
+#st:11|2|120|120|15|5|5|1
+
+#n:12|0|Small_Ant|27|0|3|^4m"
+#st:12|2|100|100|15|5|5|1
+
+#n:13|0|Small_Ant|27|0|3|^5m"
+#st:13|2|110|110|23|5|5|1
+
+#n:14|0|Small_Ant|21|0|3|^6m"
+#st:14|2|80|80|15|5|5|1
+
+#n:15|0|Big_Ant|21|0|3|^7m"
+#st:15|2|120|120|30|5|5|1
+
+#n:16|0|Small_Ant|13|0|3|^8m"
+#st:16|2|100|100|15|5|5|1
+
+#n:17|0|Small_Ant|27|0|3|^9m"
+#st:17|2|110|110|15|5|5|1
+
+#n:18|0|Spider|24|0|3|/O\"
+#st:18|2|200|200|40|10|10|1
+
+#n:19|0|Spider|19|0|3|/1\"
+#st:19|2|200|200|40|10|10|1
+
+#n:20|0|Big_Ant|19|0|3|^m^"
+#st:20|2|120|120|30|5|5|1
+
+#n:21|0|Small_Ant|19|0|3|^4m"
+#st:21|2|100|100|15|5|5|1
+
+#n:22|0|Small_Ant|19|0|3|^5m"
+#st:22|2|110|110|15|5|5|1
+
+#n:23|0|Spider|19|0|3|/2\"
+#st:23|2|200|200|40|10|10|1
+
+#n:24|0|Big_Ant|25|0|3|^m^"
+#st:24|2|120|120|30|5|5|1
+
+#n:25|0|Small_Ant|25|0|3|^4m"
+#st:25|2|100|100|15|5|5|1
+
+#n:26|0|Small_Ant|25|0|3|^5m"
+#st:26|2|110|110|15|5|5|1
+
+#n:27|0|Spider|25|0|3|/2\"
+#st:27|2|200|200|40|10|10|1
+
+#n:28|1|Guide|11|0|1|GuD"
+#st:28|2|100|100|25|1|1|1
+
+SECOND ZONE, MAZE ENEMIES 
+#n:30|0|Spider|30|0|3|/3\"
+#st:30|2|200|200|40|10|10|1
+
+#n:31|0|Spider|34|0|3|/4\"
+#st:31|2|200|200|40|10|10|1
+
+#n:32|0|Spider|37|0|3|/5\"
+#st:32|2|200|200|40|10|10|1
+
+#n:33|0|Spider|32|0|3|/6\"
+#st:33|2|250|250|40|10|10|1
+
+#n:34|0|Spider|35|0|3|/7\"
+#st:34|2|250|250|40|10|10|1
+
+#n:35|0|Mutant_Ant|30|0|3|om^"
+#st:35|2|150|150|30|15|15|1
+
+#n:36|0|Mutant_Ant|34|0|3|om^"
+#st:36|2|150|150|30|15|15|1
+
+#n:37|0|Mutant_Ant|33|0|3|om^"
+#st:37|2|150|150|30|15|15|1
+
+#n:38|0|Mutant_Ant|35|0|3|om^"
+#st:38|2|150|150|30|15|15|1
+
+#n:39|0|Mutant_Ant|36|0|3|om^"
+#st:39|2|150|150|30|40|40|1
+
+#n:40|0|Mutant_Ant|37|0|3|om^"
+#st:40|2|150|150|30|40|40|1
+
+#n:41|0|Mutant_Ant|32|0|3|om^"
+#st:41|2|150|150|30|40|40|1
+
+#n:42|0|Mutant_Ant|31|0|3|om^"
+#st:42|2|150|150|30|40|40|1
 
 
 Formato Object: #o:ID|Nombre|Data|Descripcion|cost|Dependency_id|is_movable|is_consumable|LocationID|InventoryType
@@ -242,78 +363,114 @@ Use dependency_id = -1 for no dependency
 InventoryType = {UNKNOWN_INVENTORY == 0, PLAYER_INVENTORY == 1, NPC_INVENTORY == 2, SPACE_INVENTORY == 3}
 
 Relevant objects
-#o:1|Northern_Half_Medallion|NONE|Collect the other Medallion to open the boss gate|0|-1|1|0|24|3
-#o:2|Southern_Half_Medallion|NONE|Collect the other Medallion to open the boss gate|0|-1|1|0|35|3
+#o:1|Northern_Half_Medallion|NONE|Collect the other Medallion to open the boss gate|0|3|1|0|24|3
+#o:2|Southern_Half_Medallion|NONE|Collect the other Medallion to open the boss gate|0|1|1|0|35|3
+#o:3|Extrakorita_Crystal|NONE|An ancient crystal... This crystal can't be taken without a Crystal Collector|0|10|1|0|20|3
+#o:4|Broken_Extrakorita|NONE|An ancient crystal broken and unstable, can't be taken even with the help of a Crystal Collector|0|-1|0|0|11|3
+
+
 Optional objects
 ----------------------------------
 
+Rest of pieces are dropped around the map
 Armor of DPS build:
-#o:100|Helmet_Of_Void|wearable helmet base_damage:1 strength:1 max_health:10 defense:2|Created to cover the face of the most ominous beings on this world, gives the wearer the eyes of a demon! STATS: +1 strength, +10 max health +2 defense|0|-1|1|0|11|3
-#o:101|Chest_Of_Loneliness|wearable chest base_damage:1 strength:1 max_health:30 defense:4|A long time has passed since someone found this relic, gives the wearer the endurance of a mountain! STATS: +2 strength, + 30 max health +4 defense|0|-1|1|0|11|3
-#o:102|Arms_Of_Hell|wearable arms strength:2 max_health:10 defense:2|These arms were forged in this AntHell, by the Grand master blacksmith AntGod, gives the wearer the agility to cut through their enemies! STATS: +2 strength, +10 max health +2 defense|0|-1|1|0|11|3
--->Divine_merchant:#o:103|Legs_Of_Penance|wearable leg_armor strength:1 max_health:20 defense:3|Leg armor is heavy, but not as heavy as the burden of penance, gives the wearer the will to carry on! STATS: +1 strength, +20 max health +2 defense|0|-1|1|0|11|3
-#o:104|Shoes_Of_Pain|wearable shoes strength:2 max_health:15 defense:2|Not a regular pair of shoes, these were carried by the old Ant Slayer, gives the wearer the determination to advance! STATS: +2 strength, +15 max health +2 defense|0|-1|1|0|11|3
--->Divine_merchant:#o:105|Ant_Slayer|wearable two_handed base_damage:15 strength:5 max_health:5|An ancient weapon... Seemingly created by the heavens, gives the wearer the power to destroy every ant! STATS: +15 base damage, +5 strength, +5 max health|0|-1|1|0|11|3
+-->Spider loot: Helmet_Of_Void
+-->Spider loot: Chest_Of_Loneliness
+#o:102|Arms_Of_Hell|wearable arms strength:2 max_health:10 defense:2|These arms were forged in this AntHell, by the Grand master blacksmith AntGod, gives the wearer the agility to cut through their enemies! STATS: +2 strength, +10 max health +2 defense|0|-1|1|0|18|3
+-->Divine_merchant:Legs_Of_Penance
+#o:103|Shoes_Of_Pain|wearable shoes strength:2 max_health:15 defense:2|Not a regular pair of shoes, these were carried by the old Ant Slayer, gives the wearer the determination to advance! STATS: +2 strength, +15 max health +2 defense|0|-1|1|0|24|3
+-->Divine_merchant:Ant_Slayer
 
 Armor of the tank:
-#o:106|Helmet_Of_Grace|wearable helmet magic_level:2 max_health:30 defense:5|A decorated but resilient helmet, gives the wearer the looks of a god! STATS: +2 magic level, +30 max health +5 defense|0|-1|1|0|12|3
--->Divine_merchant:#o:107|Chest_Of_Loyalty|wearable chest magic_level:3 max_health:40 defense:10|Through thousands of years, the knights of Great Lond venerated the ones who used this chest plate. Every STATS: +3 magic level, + 40 max health +10 defense|0|-1|1|0|12|3
-#o:108|Arms_Of_Heaven|wearable arms magic_level:2 max_health:20 defense:4|These arms were forged on a far away forge, by the Grand master blacksmith AntGod, gives the wearer the agility to curse their enemies! STATS: +2 magic level, +20 max health +4 defense|0|-1|1|0|12|3
-#o:109|Legs_Of_Will|wearable leg_armor magic_level:2 max_health:30 defense:8|Legs tend to be undervalued, but they can hold the determination of the body, gives the wearer the magic power to annihilate their enemies! STATS: +2 magic_level, +30 max health +8 defense|0|-1|1|0|12|3
-#o:110|Shoes_Of_Speed|wearable shoes magic_level:1 max_health:20 defense:5|Speed is the base of combat, gives the wearer the magic to power its incantations! STATS: +1 magic level, +20 max health +5 defense|0|-1|1|0|12|3
-#o:111|Ant_Cataclism|wearable handr base_damage:5 strength:3 max_health:20|A one hand mace, give your enemies a bonk that leaves them sleepig for the rest of their lives! STATS: +5 base damage +3 strength +20 max health|0|-1|1|0|12|3
--->Divine_merchant:#o:112|Ant_Protector|wearable handl strength:2 max_health:50 defense:7|A shield that protects the wearer from every threat! STATS: +2 strength +50 max health +7 defense|0|-1|1|0|12|3
+-->Spider loot: Helmet_Of_Grace
+-->Divine_merchant: Chest_Of_Loyalty
+#o:105|Arms_Of_Heaven|wearable arms magic_level:2 max_health:20 defense:4|These arms were forged on a far away forge, by the Grand master blacksmith AntGod, gives the wearer the agility to curse their enemies! STATS: +2 magic level, +20 max health +4 defense|0|-1|1|0|20|3
+-->Spider lott: Legs_Of_Will
+#o:107|Shoes_Of_Speed|wearable shoes magic_level:1 max_health:20 defense:5|Speed is the base of combat, gives the wearer the magic to power its incantations! STATS: +1 magic level, +20 max health +5 defense|0|-1|1|0|24|3
+#o:108|Ant_Cataclism|wearable handr base_damage:5 strength:3 max_health:20|A one hand mace, give your enemies a bonk that leaves them sleepig for the rest of their lives! STATS: +5 base damage +3 strength +20 max health|0|-1|1|0|30|3
+-->Divine_merchant:Ant_Protector
 
 Store objects
 ----------------------------------
 Divine_Merchant store:
-#o:103|Legs_Of_Penance|wearable leg_armor strength:1 max_health:20 defense:3|Leg armor is heavy, but not as heavy as the burden of penance, gives the wearer the will to carry on! STATS: +1 strength, +20 max health +2 defense|0|-1|1|0|2|2
-#o:105|Ant_Slayer|wearable two_handed base_damage:15 strength:5 max_health:5|An ancient weapon... Seemingly created by the heavens, gives the wearer the power to destroy every ant! STATS: +15 base damage, +5 strength, +5 max health|0|-1|1|0|2|2
-#o:107|Chest_Of_Loyalty|wearable chest magic_level:3 max_health:40 defense:10|Through thousands of years, the knights of Great Lond venerated the ones who used this chest plate. Every STATS: +3 magic level, + 40 max health +10 defense|0|-1|1|0|2|2
-#o:112|Ant_Protector|wearable handl strength:2 max_health:50 defense:7|A shield that protects the wearer from every threat! STATS: +2 strength +50 max health +7 defense|0|-1|1|0|2|2
+#o:109|Legs_Of_Penance|wearable leg_armor strength:1 max_health:20 defense:3|Leg armor is heavy, but not as heavy as the burden of penance, gives the wearer the will to carry on! STATS: +1 strength, +20 max health +2 defense|1000|-1|1|0|2|2
+#o:110|Ant_Slayer|wearable two_handed base_damage:15 strength:5 max_health:5|An ancient weapon... Seemingly created by the heavens, gives the wearer the power to destroy every ant! STATS: +15 base damage, +5 strength, +5 max health|1000|-1|1|0|2|2
+#o:111|Chest_Of_Loyalty|wearable chest magic_level:3 max_health:40 defense:10|Through thousands of years, the knights of Great Lond venerated the ones who used this chest plate. Every STATS: +3 magic level, + 40 max health +10 defense|1000|-1|1|0|2|2
+#o:112|Ant_Protector|wearable handl strength:2 max_health:50 defense:7|A shield that protects the wearer from every threat! STATS: +2 strength +50 max health +7 defense|1000|-1|1|0|2|2
+#o:131|IHP|NONE|A seamingly infinite potion, refills every time it is taken, but it does not heal that much, just 20 HP.|500|-1|1|0|2|2
+#o:132|IHP|NONE|A seamingly infinite potion, refills every time it is taken, but it does not heal that much, just 20 HP.|500|-1|1|0|2|2
 
-Health potions:
-#o:115|HP|NONE|Health Potion that heals 40 HP|10|-1|1|1|2|2
-#o:116|HP|NONE|Health Potion that heals 40 HP|10|-1|1|1|2|2
-#o:117|HP|NONE|Health Potion that heals 40 HP|10|-1|1|1|2|2
-#o:118|HP|NONE|Health Potion that heals 40 HP|10|-1|1|1|2|2
-#o:119|HP|NONE|Health Potion that heals 40 HP|10|-1|1|1|2|2
-#o:120|HP|NONE|Health Potion that heals 40 HP|10|-1|1|1|2|2
-#o:121|HP|NONE|Health Potion that heals 40 HP|10|-1|1|1|2|2
-#o:122|HP|NONE|Health Potion that heals 40 HP|10|-1|1|1|2|2
-#o:123|HP|NONE|Health Potion that heals 40 HP|10|-1|1|1|2|2
-#o:124|HP|NONE|Health Potion that heals 40 HP|10|-1|1|1|2|2
-#o:125|HP|NONE|Health Potion that heals 40 HP|10|-1|1|1|2|2
-#o:126|HP|NONE|Health Potion that heals 40 HP|10|-1|1|1|2|2
-#o:127|HP|NONE|Health Potion that heals 40 HP|10|-1|1|1|2|2
-#o:128|HP|NONE|Health Potion that heals 40 HP|10|-1|1|1|2|2
-#o:129|HP|NONE|Health Potion that heals 40 HP|10|-1|1|1|2|2
-#o:130|HP|NONE|Health Potion that heals 40 HP|10|-1|1|1|2|2
+Old_Merchant store:
+#o:113|Crystal_Collector|NONE|Grants you the ability to extract Extakorita, a strange mineral that can't be taken or carried without this collector.|100|-1|1|0|1|2
+#o:115|HP|NONE|Health Potion: 40 HP|30|-1|1|1|1|2
+#o:116|HP|NONE|Health Potion: 40 HP|30|-1|1|1|1|2
+#o:117|HP|NONE|Health Potion: 40 HP|30|-1|1|1|1|2
+#o:118|HP|NONE|Health Potion: 40 HP|30|-1|1|1|1|2
+#o:119|HP|NONE|Health Potion: 40 HP|30|-1|1|1|1|2
+#o:120|HP|NONE|Health Potion: 40 HP|30|-1|1|1|1|2
 
+Young_Merchant store:
+#o:121|HP|NONE|Health Potion: 40 HP|30|-1|1|1|3|2
+#o:122|HP|NONE|Health Potion: 40 HP|30|-1|1|1|3|2
+#o:123|HP|NONE|Health Potion: 40 HP|30|-1|1|1|3|2
+#o:124|HP|NONE|Health Potion: 40 HP|30|-1|1|1|3|2
+#o:125|HP|NONE|Health Potion: 40 HP|30|-1|1|1|3|2
+#o:126|HP|NONE|Health Potion: 40 HP|30|-1|1|1|3|2
+
+
+Loot items:
+#o:104|Helmet_Of_Grace|wearable helmet magic_level:2 max_health:30 defense:5|A decorated but resilient helmet, gives the wearer the looks of a god! STATS: +2 magic level, +30 max health +5 defense|0|-1|1|0|27|2
+#o:106|Legs_Of_Will|wearable leg_armor magic_level:2 max_health:30 defense:8|Legs tend to be undervalued, but they can hold the determination of the body, gives the wearer the magic power to annihilate their enemies! STATS: +2 magic_level, +30 max health +8 defense|0|-1|1|0|23|2
+#o:101|Chest_Of_Loneliness|wearable chest base_damage:1 strength:1 max_health:30 defense:4|A long time has passed since someone found this relic, gives the wearer the endurance of a mountain! STATS: +2 strength, + 30 max health +4 defense|0|-1|1|0|19|2
+#o:100|Helmet_Of_Void|wearable helmet base_damage:1 strength:1 max_health:10 defense:2|Created to cover the face of the most ominous beings on this world, gives the wearer the eyes of a demon! STATS: +1 strength, +10 max health +2 defense|0|-1|1|0|18|2
 
 Formato Event: #e:Id|Type|cmdTriggersNum|cmdName1 , ...|removeOnTrigger|tagvalue1:tagvalue2,...
 
 data string for objects_fusion is id1:id2;obj:ID;Name;Description;abilityId;LinkId
 
 #e:1|objects_fusion|5|tk,w,a,s,d|1|1:2;obj:100;Silver_Medallion;use this medallion to open a gate;1;2
+#e:2|npc_rand_move|6|w,a,s,d,up,dw|0|20
+#e:3|trigger_combat|2|tk,dr|0|20
+#e:4|trigger_combat|3|sh,ou,sk|0|50
+#e:5|trigger_effects|9|w,a,s,d,up,dw,at,sk,ou|0|0
+#e:6|dialogue_complete|0|0|28;10;1
 
 Formato Ability: #sk:Id|Type|Name|Entityid(ObjectId) Es -1 si no esta asignado --> A la tienda|is_player_ability|is_object_use|cd_init|cd_max|cost|data
 
+Special abilities
+#sk:1|link_unlock|Unlock link to the portal maze|1|0|1|0|1|0|19
 
 Health potions skills
-#sk:115|heal_self|HEALTHPOTIONS|115|0|1|0|1|0|40
-#sk:116|heal_self|HEALTHPOTIONS|116|0|1|0|1|0|40
-#sk:117|heal_self|HEALTHPOTIONS|117|0|1|0|1|0|40
-#sk:118|heal_self|HEALTHPOTIONS|118|0|1|0|1|0|40
-#sk:119|heal_self|HEALTHPOTIONS|119|0|1|0|1|0|40
-#sk:120|heal_self|HEALTHPOTIONS|120|0|1|0|1|0|40
-#sk:121|heal_self|HEALTHPOTIONS|121|0|1|0|1|0|40
-#sk:122|heal_self|HEALTHPOTIONS|122|0|1|0|1|0|40
-#sk:123|heal_self|HEALTHPOTIONS|123|0|1|0|1|0|40
-#sk:124|heal_self|HEALTHPOTIONS|124|0|1|0|1|0|40
-#sk:125|heal_self|HEALTHPOTIONS|125|0|1|0|1|0|40
-#sk:126|heal_self|HEALTHPOTIONS|126|0|1|0|1|0|40
-#sk:127|heal_self|HEALTHPOTIONS|127|0|1|0|1|0|40
-#sk:128|heal_self|HEALTHPOTIONS|128|0|1|0|1|0|40
-#sk:129|heal_self|HEALTHPOTIONS|129|0|1|0|1|0|40
-#sk:130|heal_self|HEALTHPOTIONS|130|0|1|0|1|0|40
+#sk:115|heal_self|HEALTH POTION|115|0|1|0|1|0|40
+#sk:116|heal_self|HEALTH POTION|116|0|1|0|1|0|40
+#sk:117|heal_self|HEALTH POTION|117|0|1|0|1|0|40
+#sk:118|heal_self|HEALTH POTION|118|0|1|0|1|0|40
+#sk:119|heal_self|HEALTH POTION|119|0|1|0|1|0|40
+#sk:120|heal_self|HEALTH POTION|120|0|1|0|1|0|40
+#sk:121|heal_self|HEALTH POTION|121|0|1|0|1|0|40
+#sk:122|heal_self|HEALTH POTION|122|0|1|0|1|0|40
+#sk:123|heal_self|HEALTH POTION|123|0|1|0|1|0|40
+#sk:124|heal_self|HEALTH POTION|124|0|1|0|1|0|40
+#sk:125|heal_self|HEALTH POTION|125|0|1|0|1|0|40
+#sk:126|heal_self|HEALTH POTION|126|0|1|0|1|0|40
+
+Infinite health potions
+#sk:131|heal_self|HEALTH POTION|131|0|1|0|1|0|20
+#sk:132|heal_self|HEALTH POTION|132|0|1|0|1|0|20
+
+Store skills
+#sk:50|heal_self|Heal self 50 HP|-1|1|0|0|8|3|50
+#sk:51|effect_self|Self Regeneration Spell|-1|1|0|0|2|1|3
+#sk:52|effect_ally|Ally Regeneration Spell|-1|1|0|0|3|1|3
+#sk:53|effect_enemy|FireBall Launcher|-1|1|0|0|0|3|2
+#sk:54|effect_enemy|Poison Bomb|-1|1|0|0|6|3|1
+#sk:55|heal_self|Heal self 20 HP Maximum CD: 0|-1|0|1|0|0|1|20
+#sk:56|heal_ally|Heals an ally 30 HP, not available to self|-1|1|0|0|8|3|30
+
+formato effects #ef:Id|name|EffectType|EffectAffects|InfiniteTurns(y/N)|DefaultNumberOfTurns|data
+EffectType = {UNKNOWN_EFFECT = 0, REGENERATION = 1, POISON = 2, FIRE = 3}
+EffectAffects = {AFFECTS_PLAYER = (p/P), AFFECTS_ALLY = (a/A), AFFECTS_ENEMY = (e/E)}
+
+#ef:1|Poison|2|E|N|10|3
+#ef:2|Fire|3|E|N|10|1
+#ef:3|Regeneration|1|p|y|4|5

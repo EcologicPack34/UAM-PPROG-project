@@ -31,14 +31,14 @@
 #define DEFENSE_REDUCED_DAMAGE_PERCENTAGE 1     /*!< Rate at which the defense reduces the damage of an incoming attack*/
 #define MAX_STRENGTH 30                         /*!< Maximum level where the strength takes effect*/
 #define MAX_DEFENSE 40                          /*!< Maximum level where the defense takes effect*/
-#define MONEY_MIN 10                            /*!< Minimum amount of money an enemy can yield when defeated*/
+#define MONEY_MIN 40                            /*!< Minimum amount of money an enemy can yield when defeated*/
 
 /*Leveling MACROS*/
 #define LEVELING_DIFFICULTY_MULTIPLIER 2    /*!< Defines the rate at which the leveling difficulty increases per level up*/
 #define BASE_XP_QUANTITY 100                /*!< Base XP on level 1*/
 #define SKILL_POINTS_PER_LEVEL 1            /*!< Number of skill points an entity gets per level up*/
 #define XP_MINIMUM 1                        /*!< Minimum XP a dead enemy gives*/
-#define XP_MULT 10                          /*!< Multiplier for the stats to add XP when an enemy dies*/
+#define XP_MULT 30                          /*!< Multiplier for the stats to add XP when an enemy dies*/
 
 /*Level up store MACROS*/
 #define LVLUP_TYPES_NUM 3                   /*!< Defines the num of stats you can level up when upgrading level*/
@@ -55,11 +55,11 @@
 
 /*Dialogue MACROS*/
 #define LINE_LENGTH 200             /*!< Max length of a line of dialogue*/
-#define LINE_MAX 4                  /*!< Maximum number of lines in a dialogue*/
+#define LINE_MAX 5                  /*!< Maximum number of lines in a dialogue*/
 
 /*Generic store MACROS*/
 #define STORETYPE_ENUM_NUM 4        /*!< Number of stores implemented including the error one*/
-#define STORE_PAGE_MAX 6            /*!< Maximum number of items per page*/
+#define STORE_PAGE_MAX 4            /*!< Maximum number of items per page*/
 
 /**
  * @brief Id typedef
