@@ -1262,7 +1262,7 @@ void graphic_engine_paint_combat(Graphic_engine *ge, Game *game){
 
 void graphic_engine_paint_dialogue(Graphic_engine *ge, Game *game)
 {
-  char str[MAP_WIDTH] = "";
+  char str[WORD_SIZE] = "";
   Dialogue *dialogue = NULL;
   NPC *npc = NULL;
   char *text = NULL;
