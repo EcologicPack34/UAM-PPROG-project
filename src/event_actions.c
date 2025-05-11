@@ -613,7 +613,7 @@ bool event_trigger_players_turn(Event *event, Game *game){
     if(game_get_state(game) != DEFAULT) return false;
     if(!event_is_cmd_valid(event, game_get_last_command(game))) return false;
 
-    if(player_turn == -1) player_turn = atoi(event_get_aux_data(event));
+    if(player_turn == -1 || game_has_request_switch(game)) player_turn = atoi(event_get_aux_data(event));
     player_turn--;
     if(player_turn == 0){
         player_turn = atoi(event_get_aux_data(event));
