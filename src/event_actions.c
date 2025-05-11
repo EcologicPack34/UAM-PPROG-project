@@ -152,7 +152,8 @@ void event_actions_trigger_events(Game *game){
 
     debug_log(DEBUG, "Checking for event triggers, count %d", eventCount);
 
-    for (i = 0; i < eventCount; i++)
+    if(game_get_state(game) != STORE_STATE){
+        for (i = 0; i < eventCount; i++)
     {
         event = event_manager_get_event(manager, i);
         triggered = false;
@@ -191,6 +192,7 @@ void event_actions_trigger_events(Game *game){
             event_destroy(event);
         }
             
+    }
     }
     /*Always checked events*/
     if(game_get_state(game) == COMBAT)
