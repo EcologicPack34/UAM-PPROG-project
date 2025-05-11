@@ -30,7 +30,9 @@ struct _Collection{
     void (*print_element)(void *element);   /*!< Method to print an element of the collection*/
 };
 
-/*----------PRIVATE FUNCTIONS-----------*/
+/*
+  * Private functions
+*/
 
 /**
  * @brief Adds a unique element to the collection
@@ -87,7 +89,10 @@ Status collection_add_non_unique(Collection *collection, void *element){
     return OK;
 }
 
-/*----------PUBLIC FUNCTIONS----------*/
+/*
+  * Public functions
+*/
+
 Collection *collection_create(long initialSize, bool fixed_length, bool unique_elements, P_elem_cmp compare_elements, void (*print_element)(void *)){
     Collection *collection = NULL;
     
@@ -131,7 +136,9 @@ void collection_destroy(Collection * collection){
     }
 }
 
-/*-----------SETTERS----------*/
+/*
+  * Collection setters
+*/
 
 Status collection_add(Collection *collection, void *element){
     if(!collection || !element) return ERROR;
@@ -182,7 +189,9 @@ Status collection_remove_at(Collection *collection, long index){
     return OK;
 }
 
-/*----------GETTERS----------*/
+/*
+  * Collection getters
+*/
 
 void *collection_get_element_at(Collection *collection, long index){
     if(!collection) return NULL;
@@ -220,7 +229,9 @@ long collection_length(Collection *collection){
     return collection->length;
 }
 
-/*----------OTHERS----------*/
+/*
+  * Collection general functions
+*/
 
 Status collection_free_elements(Collection *collection, void (*free_element)(void *)){
     int i;

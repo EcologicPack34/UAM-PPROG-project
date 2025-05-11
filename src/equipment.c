@@ -40,7 +40,7 @@ struct _Equipment{
     Object *shoes;              /*!< Shoes of the entity*/
 
     bool is_two_handed;         /*!< Determines if the entity is using a two handed weapon or not*/
-    Object *weapon_two_hands;   /*!< two hands weapon of the entity*/
+    Object *weapon_two_hands;   /*!< Two hands weapon of the entity*/
     Object *weapon1_one_hand;   /*!< weapon on first hand of the entity*/
     Object *weapon2_one_hand;   /*!< weapon on second hand of the entity*/
 };
@@ -336,7 +336,7 @@ Status equipment_remove_stats(Entity *entity, Equipment *equipment, Object *obje
 }
 
 /*
-    * PUBLIC FUNCTIONS
+    * Equipment public functions
 */
 
 Equipment *equipment_create(){
@@ -356,6 +356,10 @@ void equipment_destroy(Equipment *equipment){
         free(equipment);
 }
 
+/*
+    * Equipment getters
+*/
+
 EquipmentCode equipment_code_from_str(char *data){
     int i;
     
@@ -368,6 +372,43 @@ EquipmentCode equipment_code_from_str(char *data){
 
     return EQUIPMENT_ERROR;
 }
+
+Status equipment_add_piece(Entity *entity, Equipment *equipment, Object *object){
+    char *data = NULL;
+    char line[WORD_SIZE];
+    char *toks = NULL;
+    EquipmentCode code = EQUIPMENT_ERROR;
+    
+    if(!equipment || !object) return ERROR;
+
+    data = object_get_data(object);
+    if(data == NULL)
+        return ERROR;
+
+    strcpy(line, data);
+
+    toks = strtok(line, " ");
+    if(strcmp(toks, "wearable") != 0 || object_get_is_equipped(object) == true)
+        return ERROR;
+
+    toks = strtok(NULL, " ");
+    code = equipment_code_from_str(toks);
+    if(code == EQUIPMENT_ERROR)
+        return ERROR;
+
+    if(equipment_equip_from_code(equipment, code, object) == ERROR)
+        return ERROR;
+
+    if(equipment_add_stats(entity, equipment, object) == ERROR) return ERROR;
+
+    object_set_is_equipped(object, true); 
+
+    return OK;
+}
+
+/*
+    * Equipment setters
+*/
 
 Status equipment_add_piece(Entity *entity, Equipment *equipment, Object *object){
     char *data = NULL;
@@ -422,15 +463,3 @@ Object *equipment_remove_piece(Entity *entity, Equipment *equipment, char *data)
 
     return retobject;
 }
-
-Object *equipment_get_piece(Equipment *equipment, EquipmentCode code){
-    Object *retobject = NULL;
-    
-    if(!equipment) return NULL;
-
-    retobject = equipment_unequip_from_code(equipment, code);
-    equipment_equip_from_code(equipment, code, retobject);
-
-    return retobject;
-}
-

@@ -33,6 +33,10 @@ typedef struct _Event Event;
  */
 typedef struct _EventManager EventManager;
 
+/*
+    * Event functions
+*/
+
 /**
  * @brief Event creation
  * @author Daniel Gómez
@@ -55,37 +59,9 @@ Event *event_create(Id id, EventType type, CommandCode *commands, int cmdNum, ch
  */
 void event_destroy(void *event);
 
-/**
- * @brief Compares 2 events
- * @author Daniel Gómez
- * 
- * @param e1 event struct 1
- * @param e2 event struct 1
- * @return int 
- */
-int event_compare(void * e1, void *e2);
-
-/**
- * @brief Gets the event type from a string(see event_manager.c for the valid values)
- * @author Daniel Gómez
- * 
- * @param string string from event_to_str
- * @return EventType 
- */
-EventType event_type_from_str(char *string);
-
-/**
- * @brief Checks if a given cmd is within the ones that trigger an event
- * @author Daniel Gómez
- * 
- * @param event event struct
- * @param cmd command struct
- * @return true if valid
- * @return false if not valid or error
- */
-bool event_is_cmd_valid(Event *event, Command *cmd);
-
-/*----------EVENT GETTERS----------*/
+/*
+    * Event getters
+*/
 
 /**
  * @brief Gets the type of an event
@@ -142,7 +118,62 @@ bool event_get_removeOnTrigger(Event *event);
  */
 char *event_get_aux_data(Event *event);
 
-/*----------EVENT MANAGER----------*/
+/*
+    * Event general functions
+*/
+
+/**
+ * @brief Compares 2 events
+ * @author Daniel Gómez
+ * 
+ * @param e1 event struct 1
+ * @param e2 event struct 1
+ * @return int 
+ */
+int event_compare(void * e1, void *e2);
+
+/**
+ * @brief Gets the event type from a string(see event_manager.c for the valid values)
+ * @author Daniel Gómez
+ * 
+ * @param string string from event_to_str
+ * @return EventType 
+ */
+EventType event_type_from_str(char *string);
+
+/**
+ * @brief Checks if a given cmd is within the ones that trigger an event
+ * @author Daniel Gómez
+ * 
+ * @param event event struct
+ * @param cmd command struct
+ * @return true if valid
+ * @return false if not valid or error
+ */
+bool event_is_cmd_valid(Event *event, Command *cmd);
+
+/**
+ * @brief Saves an event on a file stream
+ * @author Maksym Polyak
+ * 
+ * @param event event struct
+ * @param fOUT file stream output
+ * @return int with num of char printed or -1 if error
+ */
+int event_save_on_file(Event *event, FILE *fOUT);
+
+/**
+ * @brief Creates an event struct from a file
+ * @author Maksym Polyak
+ * 
+ * @param fIN file stream input
+ * @return Event* or NULL if error
+ */
+Event *event_create_from_file(FILE *fIN);
+
+/*
+    * Event manager functions
+*/
 
 /**
  * @brief Creates a event manager
@@ -218,24 +249,5 @@ int event_manager_save_on_file(EventManager *manager, FILE *fOUT);
  * @return Status 
  */
 Status event_manager_read_from_file(EventManager *manager, FILE *fIN);
-
-/**
- * @brief Saves an event on a file stream
- * @author Maksym Polyak
- * 
- * @param event event struct
- * @param fOUT file stream output
- * @return int with num of char printed or -1 if error
- */
-int event_save_on_file(Event *event, FILE *fOUT);
-
-/**
- * @brief Creates an event struct from a file
- * @author Maksym Polyak
- * 
- * @param fIN file stream input
- * @return Event* or NULL if error
- */
-Event *event_create_from_file(FILE *fIN);
 
 #endif

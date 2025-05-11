@@ -30,7 +30,7 @@ typedef enum {EQUIPMENT_ERROR, HELMET, CHEST, ARMS, LEG_ARMOR, SHOES, TWO_HANDED
 typedef struct _Equipment Equipment;
 
 /*
-    * PUBLIC FUNCTIONS
+    * Equipment public functions
 */
 
 /**
@@ -49,6 +49,20 @@ Equipment *equipment_create();
  */
 void equipment_destroy(Equipment *equipment);
 
+/*
+    * Equipment getters
+*/
+
+/**
+ * @brief Gets object in certain equipment slot
+ * @author Daniel Gómez
+ * 
+ * @param equipment equipment struct
+ * @param code equipment code of the piece to remove
+ * @return Object* 
+ */
+Object *equipment_get_piece(Equipment *equipment, EquipmentCode code);
+
 /**
  * @brief Gets the EquipmentCode from a string
  * @author Maksym Polyak
@@ -57,6 +71,10 @@ void equipment_destroy(Equipment *equipment);
  * @return EquipmentCode 
  */
 EquipmentCode equipment_code_from_str(char *data);
+
+/*
+    * Equipment setters
+*/
 
 /**
  * @brief Tries to add an object as a piece if it is compatible
@@ -79,15 +97,5 @@ Status equipment_add_piece(Entity *entity, Equipment *equipment, Object *object)
  * @return Object* or NULL if error
  */
 Object *equipment_remove_piece(Entity *entity, Equipment *equipment, char *data);
-
-/**
- * @brief Gets object in certain equipment slot
- * @author Daniel Gómez
- * 
- * @param equipment equipment struct
- * @param code equipment code of the piece to remove
- * @return Object* 
- */
-Object *equipment_get_piece(Equipment *equipment, EquipmentCode code);
 
 #endif

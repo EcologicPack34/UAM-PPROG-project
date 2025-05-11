@@ -50,6 +50,9 @@ typedef struct _CommandInfo CommandInfo;
  */
 typedef struct _Command Command;
 
+/*
+    * Command functions
+*/
 
 /**
  * @brief Creates a command dynamically
@@ -85,6 +88,9 @@ CommandInfo *command_info_create();
  */
 Status command_info_destroy(CommandInfo *cmdData);
 
+/*
+    * Command setters
+*/
 
 /**
  * @brief changes name of the command on the command struct
@@ -138,15 +144,9 @@ Status command_state_add_type(Command * command, GameState state, CommandCode ty
  */
 Status command_set_player_data(Command *cmd, CommandInfo *data);
 
-/**
- * @brief Updates the data of cmd stored by player
- * 
- * @param cmd command struct
- * @return Status 
- */
-Status command_update_player_data(Command *cmd);
-
-/*-----------GETTERS--------------*/
+/*
+    * Command getters
+*/
 
 /**
  * @brief Copies into dest the info of the current command.
@@ -157,17 +157,6 @@ Status command_update_player_data(Command *cmd);
  * @return Status 
  */
 Status command_get_as_string(Command *cmd, char *dest);
-
-/**
- * @brief Gets if the current command is valid by checking the game state
- * @author Daniel Gómoez
- * 
- * @param command command struct
- * @param state state to check if its valid
- * @return true if valid
- * @return false if not valid
- */
-bool command_current_type_valid_by_state(Command *command, GameState state);
 
 /**
  * @brief Gets the pointer to the string containing the info of a command
@@ -245,6 +234,29 @@ Status command_get_status(Command *command);
  * @return Status
  */
 Status command_get_list(Command *command, char *destination, GameState state, bool getAll);
+
+/*
+    * Command general functions
+*/
+
+/**
+ * @brief Updates the data of cmd stored by player
+ * 
+ * @param cmd command struct
+ * @return Status 
+ */
+Status command_update_player_data(Command *cmd);
+
+/**
+ * @brief Gets if the current command is valid by checking the game state
+ * @author Daniel Gómoez
+ * 
+ * @param command command struct
+ * @param state state to check if its valid
+ * @return true if valid
+ * @return false if not valid
+ */
+bool command_current_type_valid_by_state(Command *command, GameState state);
 
 /**
  * @brief Checks if two commands codes are equal

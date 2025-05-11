@@ -49,6 +49,10 @@ Debug *debug_create(char *debugFilePath, bool setAsGlobal);
  */
 void debug_destroy(Debug *info);
 
+/*
+    * Debug printing general functions
+*/
+
 /**
  * @brief Prints a message with format into the log file
  * @author Daniel Gómez

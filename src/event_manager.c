@@ -36,7 +36,10 @@ struct _EventManager{
     Collection *events;     /*!< Events collection*/
 };
 
-/*----PUBLIC FUNCTIONS------*/
+/*
+    * Public functions
+*/
+
 Event *event_create(Id id, EventType type, CommandCode *commands, int cmdNum, char *data, bool removeOnTrigger){
     Event *event = NULL;
     int i;
@@ -99,6 +102,44 @@ void event_destroy(void *event){
     }
 }
 
+/*
+    * Event getters
+*/
+
+EventType event_get_type(Event *event){
+    if(!event) return NO_EVENT;
+    return event->type;
+}
+
+Id event_get_id(Event *event){
+    if(!event) return NO_ID;
+    return event->id;
+}
+
+CommandCode *event_get_commands(Event *event){
+    if(!event) return NULL;
+    return event->commands;
+}
+
+int event_get_cmd_count(Event *event){
+    if(!event) return -1;
+    return event->cmdNum;
+}
+
+bool event_get_removeOnTrigger(Event *event){
+    if(!event) return false;
+    return event->removeOnTrigger;
+}
+
+char *event_get_aux_data(Event *event){
+    if(!event) return NULL;
+    return event->data;
+}
+
+/*
+    * Event general functions
+*/
+
 int event_compare(void * e1, void *e2){
     if(!e1 || !e2) return -2;
 
@@ -139,117 +180,6 @@ bool event_is_cmd_valid(Event *event, Command *cmd){
         }
     }
     return false;
-}
-
-/*-----------EVENT GETTERS---------*/
-
-EventType event_get_type(Event *event){
-    if(!event) return NO_EVENT;
-    return event->type;
-}
-
-Id event_get_id(Event *event){
-    if(!event) return NO_ID;
-    return event->id;
-}
-
-CommandCode *event_get_commands(Event *event){
-    if(!event) return NULL;
-    return event->commands;
-}
-
-int event_get_cmd_count(Event *event){
-    if(!event) return -1;
-    return event->cmdNum;
-}
-
-bool event_get_removeOnTrigger(Event *event){
-    if(!event) return false;
-    return event->removeOnTrigger;
-}
-
-char *event_get_aux_data(Event *event){
-    if(!event) return NULL;
-    return event->data;
-}
-
-/* ==============================
-   --------EVENT MANAGER---------
-   ==============================*/
-
-EventManager *event_manager_create(){
-    EventManager *manager = NULL;
-
-    manager = calloc(1, sizeof(EventManager));
-    if(!manager) return NULL;
-
-    manager->events = collection_create(EVENT_MANAGER_DEFAULT_SIZE, false, true, event_compare, NULL);
-    if(!(manager->events)){
-        free(manager);
-        return NULL;
-    }
-    return manager;
-}
-
-void event_manager_destroy(void *manager){
-    if(manager){
-        if(((EventManager *)manager)->events){
-            collection_free_elements(((EventManager *)manager)->events, event_destroy);
-            collection_destroy(((EventManager *)manager)->events);
-        }
-        free(manager);
-    }
-}
-
-Status event_manager_add_event(EventManager *manager, Event *event){
-    if(!manager || !event) return ERROR;
-
-    return collection_add(manager->events, (void *)event);
-}
-
-Status event_manager_remove_event(EventManager *manager, Event *event){
-    if(!manager || !event) return ERROR;
-
-    return collection_remove(manager->events, (void *)event);
-}
-
-long event_manager_get_event_count(EventManager *manager){
-    if(!manager) return -1;
-    return collection_length(manager->events);
-}
-
-Event *event_manager_get_event(EventManager *manager, long index){
-    if(!manager || index < 0) return NULL;
-
-    return (Event*)collection_get_element_at(manager->events, index);
-}
-
-int event_manager_save_on_file(EventManager *manager, FILE *fOUT){
-    int i, count = 0, size;
-
-    if(!manager || !fOUT) return -1;
-
-    size = collection_length(manager->events);
-    count += fprintf(fOUT, "%d\n", size);
-    for(i = 0; i < size; i++){
-        count += event_save_on_file(collection_get_element_at(manager->events, i), fOUT);
-    }
-
-    return count;
-}
-
-Status event_manager_read_from_file(EventManager *manager, FILE *fIN){
-    int i, size;
-
-    if(!manager || !fIN) return ERROR;
-
-    fscanf(fIN, "%d\n", &size);
-    for(i = 0; i < size; i++){
-        if(event_manager_add_event(manager, event_create_from_file(fIN)) == ERROR)
-            return ERROR;
-    }
-
-    return OK;
 }
 
 int event_save_on_file(Event *event, FILE *fOUT){
@@ -301,4 +231,89 @@ Event *event_create_from_file(FILE *fIN){
     free(commands);
 
     return event;
+}
+
+
+
+/* ==============================
+   --------EVENT MANAGER---------
+   ==============================*/
+
+EventManager *event_manager_create(){
+    EventManager *manager = NULL;
+
+    manager = calloc(1, sizeof(EventManager));
+    if(!manager) return NULL;
+
+    manager->events = collection_create(EVENT_MANAGER_DEFAULT_SIZE, false, true, event_compare, NULL);
+    if(!(manager->events)){
+        free(manager);
+        return NULL;
+    }
+    return manager;
+}
+
+void event_manager_destroy(void *manager){
+    if(manager){
+        if(((EventManager *)manager)->events){
+            collection_free_elements(((EventManager *)manager)->events, event_destroy);
+            collection_destroy(((EventManager *)manager)->events);
+        }
+        free(manager);
+    }
+}
+
+/* ========================================
+   --------EVENT MANAGER FUNCTIONS---------
+   ========================================*/
+
+Status event_manager_add_event(EventManager *manager, Event *event){
+    if(!manager || !event) return ERROR;
+
+    return collection_add(manager->events, (void *)event);
+}
+
+Status event_manager_remove_event(EventManager *manager, Event *event){
+    if(!manager || !event) return ERROR;
+
+    return collection_remove(manager->events, (void *)event);
+}
+
+long event_manager_get_event_count(EventManager *manager){
+    if(!manager) return -1;
+    return collection_length(manager->events);
+}
+
+Event *event_manager_get_event(EventManager *manager, long index){
+    if(!manager || index < 0) return NULL;
+
+    return (Event*)collection_get_element_at(manager->events, index);
+}
+
+int event_manager_save_on_file(EventManager *manager, FILE *fOUT){
+    int i, count = 0, size;
+
+    if(!manager || !fOUT) return -1;
+
+    size = collection_length(manager->events);
+    count += fprintf(fOUT, "%d\n", size);
+    for(i = 0; i < size; i++){
+        count += event_save_on_file(collection_get_element_at(manager->events, i), fOUT);
+    }
+
+    return count;
+}
+
+Status event_manager_read_from_file(EventManager *manager, FILE *fIN){
+    int i, size;
+
+    if(!manager || !fIN) return ERROR;
+
+    fscanf(fIN, "%d\n", &size);
+    for(i = 0; i < size; i++){
+        if(event_manager_add_event(manager, event_create_from_file(fIN)) == ERROR)
+            return ERROR;
+    }
+
+    return OK;
 }
