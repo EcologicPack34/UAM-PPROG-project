@@ -154,12 +154,22 @@ Status link_move_entity(Link* link, Entity* entity);
 
 /**
  * @brief Tries to unlock a link using a certain object
+ * @author Daniel Gómez
  * 
  * @param link link struct
  * @param player player that used it
  * @return Status 
  */
 Status link_unlock(Link *link, Entity *player);
+
+/**
+ * @brief Unlocks a links without the necesety of a player to be in the room containing the link
+ * @author Daniel Gómez
+ * 
+ * @param link 
+ * @return Status 
+ */
+Status link_general_unlock(Link *link);
 
 /**
  * @brief Compares two links

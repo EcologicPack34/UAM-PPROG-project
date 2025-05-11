@@ -183,6 +183,18 @@ bool event_trigger_dialogue_in_space(Event *event, Game *game);
  */
 bool event_trigger_dialogue_completed(Event *event, Game *game);
 
+/**
+ * @brief Opens a link when an specified enemy dies
+ * @author Daniel Gómez
+ * 
+ * @param event 
+ * @param game 
+ * @return true 
+ * @return false 
+ * @note data format: npcId:linkId
+ */
+bool event_trigger_unlock_on_kill(Event *event, Game *game);
+
 /*
     * Public functions
 */
@@ -255,6 +267,9 @@ void event_actions_trigger_events(Game *game){
                 break;
             case DIALOGUE_COMPLETE:
                 triggered = event_trigger_dialogue_completed(event, game);
+                break;
+            case UNLOCK_ON_KILL:
+                triggered = event_trigger_unlock_on_kill(event, game);
                 break;
             default:
                 break;
@@ -864,4 +879,40 @@ bool event_trigger_dialogue_completed(Event *event, Game *game){
     link_set_locked(linkp, false);
 
     return true;
+}
+
+bool event_trigger_unlock_on_kill(Event *event, Game *game){
+    Id linkId = NO_ID, enemyId = NO_ID;
+    char *toks = NULL;
+    char str[WORD_SIZE];
+
+    Link *link;
+    NPC *npc;
+
+    if(!event || !game) return false;
+
+    strcpy(str, event_get_aux_data(event));
+
+    toks = strtok(str, ":\r\n");
+    if(!toks) return false;
+
+    enemyId = atol(toks);
+
+    toks = strtok(NULL, "\r\n");
+    if(!toks) return false;
+
+    linkId = atol(toks);
+    
+    link = game_get_link_by_id(game, linkId);
+    if(!link) return false;
+
+    npc = game_get_NPC_by_id(game, enemyId);
+    if(!npc) return false;
+
+
+    if(entity_is_dead(npc_get_entity(npc))){
+        link_general_unlock(link);
+        return true;
+    }
+    return false;
 }

@@ -248,6 +248,12 @@ Status link_unlock(Link *link, Entity *player){
     return OK;
 }
 
+Status link_general_unlock(Link *link){
+    if(!link) return ERROR;
+    link->locked = false;
+    return OK;
+}
+
 int link_cmp(void *e1, void *e2){
     if(!e1 || !e2) return -1;
     return ((Link *)e1)->id - ((Link*)e2)->id;
