@@ -59,5 +59,21 @@ void test1_entity_get_defense();
 void test2_entity_get_defense();
 void test1_entity_get_magicLevel();
 void test2_entity_get_magicLevel();
+void test1_entity_add_ability();
+void test2_entity_add_ability();
+void test1_entity_set_stats();
+void test2_entity_set_stats();
+void test1_entity_is_dead();
+void test2_entity_is_dead();
+void test1_entity_stats_is_dead();
+void test1_entity_stats_is_dead();
+void test1_entity_compare();
+void test2_entity_compare();
+void test1_entity_get_ability_at();
+void test2_entity_get_ability_at();
+void test1_entity_get_ability_name_at();
+void test2_entity_get_ability_name_at();
+void test1_entity_get_n_abilities();
+void test2_entity_get_n_abilities();
 
 #endif

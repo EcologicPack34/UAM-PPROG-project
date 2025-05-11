@@ -98,6 +98,23 @@ void test2_object_add_object_effect();
 /*adds a non existent ObjectEffect to an object, expected result ERROR*/
 void test3_object_add_object_effect();
 
+/*IT 4 new tests*/
+void test1_object_set_cost();
+void test2_object_set_cost();
+void test1_object_set_is_equipped();
+void test2_object_set_is_equipped();
+void test1_object_set_is_movable();
+void test2_object_set_is_movable();
+void test1_object_get_cost();
+void test2_object_get_cost();
+void test1_object_get_is_equipped();
+void test2_object_get_is_equipped();
+void test1_object_get_is_movable();
+void test2_object_get_is_movable();
+void test1_object_get_dependency();
+void test2_object_get_dependency();
+
+
 int main(int argc, char** argv) {
 
     int test = 0;
@@ -157,6 +174,20 @@ int main(int argc, char** argv) {
     if (all || test == 37) test1_object_add_object_effect();
     if (all || test == 38) test2_object_add_object_effect();
     if (all || test == 39) test3_object_add_object_effect();
+    if (all || test == 40) test1_object_set_cost();
+    if (all || test == 41) test2_object_set_cost();
+    if (all || test == 42) test1_object_set_is_equipped();
+    if (all || test == 43) test2_object_set_is_equipped();
+    if (all || test == 44) test1_object_set_is_movable();
+    if (all || test == 45) test2_object_set_is_movable();
+    if (all || test == 46) test1_object_get_cost();
+    if (all || test == 47) test2_object_get_cost();
+    if (all || test == 48) test1_object_get_is_equipped();
+    if (all || test == 49) test2_object_get_is_equipped();
+    if (all || test == 50) test1_object_get_is_movable();
+    if (all || test == 51) test2_object_get_is_movable();
+    if (all || test == 52) test1_object_get_dependency();
+    if (all || test == 53) test2_object_get_dependency();
     
     PRINT_PASSED_PERCENTAGE;
   
@@ -342,5 +373,76 @@ void test2_object_add_object_effect(){
 void test3_object_add_object_effect(){
     Object *obj= object_create(1,"test1","test1","test1", 0, 1, true, true, 1, SPACE_INVENTORY);
     PRINT_TEST_RESULT(object_add_object_effect(obj, NULL) == ERROR);
+    object_destroy(obj);
+}
+void test1_object_set_cost(){
+    Object *obj= object_create(1,"test1","test1","test1", 0, 1, true, true, 1, SPACE_INVENTORY);
+    PRINT_TEST_RESULT(object_set_cost(obj, 1) == OK);
+    object_destroy(obj);
+}
+void test2_object_set_cost(){
+    Object *obj= object_create(1,"test1","test1","test1", 0, 1, true, true, 1, SPACE_INVENTORY);
+    PRINT_TEST_RESULT(object_set_cost(obj, -1) == ERROR);
+    object_destroy(obj);
+}
+void test1_object_set_is_equipped(){
+    Object *obj= object_create(1,"test1","test1","test1", 0, 1, true, true, 1, SPACE_INVENTORY);
+    PRINT_TEST_RESULT(object_set_is_equipped(obj, true) == OK);
+    object_destroy(obj);
+}
+void test2_object_set_is_equipped(){
+    Object *obj= object_create(1,"test1","test1","test1", 0, 1, true, true, 1, SPACE_INVENTORY);
+    PRINT_TEST_RESULT(object_set_is_equipped(NULL, true) == ERROR);
+    object_destroy(obj);
+}
+void test1_object_set_is_movable(){
+    Object *obj= object_create(1,"test1","test1","test1", 0, 1, true, true, 1, SPACE_INVENTORY);
+    PRINT_TEST_RESULT(object_set_is_movable(obj, true) == OK);
+    object_destroy(obj);
+}
+void test2_object_set_is_movable(){
+    Object *obj= object_create(1,"test1","test1","test1", 0, 1, true, true, 1, SPACE_INVENTORY);
+    PRINT_TEST_RESULT(object_set_is_movable(NULL, true) == OK);
+    object_destroy(obj);
+}
+void test1_object_get_cost(){
+    Object *obj= object_create(1,"test1","test1","test1", 0, 1, true, true, 1, SPACE_INVENTORY);
+    PRINT_TEST_RESULT(object_get_cost(obj) == 0);
+    object_destroy(obj);
+}
+void test2_object_get_cost(){
+    Object *obj= object_create(1,"test1","test1","test1", 0, 1, true, true, 1, SPACE_INVENTORY);
+    PRINT_TEST_RESULT(object_get_cost(NULL) == 0);
+    object_destroy(obj);
+}
+void test1_object_get_is_equipped(){
+    Object *obj= object_create(1,"test1","test1","test1", 0, 1, true, true, 1, SPACE_INVENTORY);
+    object_set_is_equipped(obj, true);
+    PRINT_TEST_RESULT(object_get_is_equipped(obj) == true);
+    object_destroy(obj);
+}
+void test2_object_get_is_equipped(){
+    Object *obj= object_create(1,"test1","test1","test1", 0, 1, true, true, 1, SPACE_INVENTORY);
+    PRINT_TEST_RESULT(object_get_is_equipped(NULL) == false);
+    object_destroy(obj);
+}
+void test1_object_get_is_movable(){
+    Object *obj= object_create(1,"test1","test1","test1", 0, 1, true, true, 1, SPACE_INVENTORY);
+    PRINT_TEST_RESULT(object_get_is_movable(obj) == true);
+    object_destroy(obj);
+}
+void test2_object_get_is_movable(){
+    Object *obj= object_create(1,"test1","test1","test1", 0, 1, true, true, 1, SPACE_INVENTORY);
+    PRINT_TEST_RESULT(object_get_is_movable(NULL) == true);
+    object_destroy(obj);
+}
+void test1_object_get_dependency(){
+    Object *obj= object_create(1,"test1","test1","test1", 0, 1, true, true, 1, SPACE_INVENTORY);
+    PRINT_TEST_RESULT(object_get_dependency(obj) == 1);
+    object_destroy(obj);
+}
+void test2_object_get_dependency(){
+    Object *obj= object_create(1,"test1","test1","test1", 0, 1, true, true, 1, SPACE_INVENTORY);
+    PRINT_TEST_RESULT(object_get_dependency(NULL) == NO_ID);
     object_destroy(obj);
 }

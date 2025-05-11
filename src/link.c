@@ -249,6 +249,7 @@ Status link_unlock(Link *link, Entity *player){
 }
 
 int link_cmp(void *e1, void *e2){
+    if(!e1 || !e2) return -1;
     return ((Link *)e1)->id - ((Link*)e2)->id;
 }
 

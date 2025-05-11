@@ -6,7 +6,7 @@
 #include <string.h>
 #include <stdlib.h>
 
-#define MAX_TESTS 48
+#define MAX_TESTS 65
 
 int main(int argc, char** argv) {
 
@@ -74,6 +74,22 @@ int main(int argc, char** argv) {
     if (all || test == 46) test2_entity_get_defense();
     if (all || test == 47) test1_entity_get_magicLevel();
     if (all || test == 48) test2_entity_get_magicLevel();
+    if (all || test == 49) test1_entity_add_ability();
+    if (all || test == 50) test2_entity_add_ability();
+    if (all || test == 51) test1_entity_set_stats();
+    if (all || test == 52) test2_entity_set_stats();
+    if (all || test == 53) test1_entity_is_dead();
+    if (all || test == 54) test2_entity_is_dead();
+    if (all || test == 55) test1_entity_stats_is_dead();
+    if (all || test == 56) test1_entity_stats_is_dead();
+    if (all || test == 57) test1_entity_compare();
+    if (all || test == 58) test2_entity_compare();
+    if (all || test == 59) test1_entity_get_ability_at();
+    if (all || test == 61) test2_entity_get_ability_at();
+    if (all || test == 62) test1_entity_get_ability_name_at();
+    if (all || test == 63) test2_entity_get_ability_name_at();
+    if (all || test == 64) test1_entity_get_n_abilities();
+    if (all || test == 65) test2_entity_get_n_abilities();
   
     PRINT_PASSED_PERCENTAGE;
   
@@ -460,4 +476,110 @@ void test2_entity_get_magicLevel(){
 
     PRINT_TEST_RESULT(entity_get_magicLevel(entity) == 9);
     entity_destroy(entity);
+}
+void test1_entity_add_ability(){
+    Entity *e =entity_create("TEST", 1, 2, 3);
+    Ability *a=ability_create(1,"test","test",LINK_UNLOCK,1,true,false,0,0,0);
+    PRINT_TEST_RESULT(entity_add_ability(e,a) == OK);
+    entity_destroy(e);
+    ability_destroy(a);
+}
+void test2_entity_add_ability(){
+    Entity *e =entity_create("TEST", 1, 2, 3);
+    Ability *a=ability_create(1,"test","test",LINK_UNLOCK,1,true,false,0,0,0);
+    PRINT_TEST_RESULT(entity_add_ability(e,NULL) == ERROR);
+    entity_destroy(e);
+    ability_destroy(a);
+}
+void test1_entity_set_stats(){
+    Entity *e =entity_create("TEST", 1, 2, 3);
+    PRINT_TEST_RESULT(entity_set_stats(e,1,1,1,1,1,1) == OK);
+    entity_destroy(e);
+}
+void test2_entity_set_stats(){
+    Entity *e =entity_create("TEST", 1, 2, 3);
+    PRINT_TEST_RESULT(entity_set_stats(NULL,1,1,1,1,1,1) == ERROR);
+    entity_destroy(e);
+}
+void test1_entity_is_dead(){
+    Entity *e =entity_create("TEST", 1, 2, 3);
+    PRINT_TEST_RESULT(entity_is_dead(e) == false);
+    entity_destroy(e);
+}
+void test2_entity_is_dead(){
+    Entity *e =entity_create("TEST", 1, 2, 3);
+    PRINT_TEST_RESULT(entity_is_dead(e) == true);
+    entity_destroy(e);
+}
+void test1_entity_stats_is_dead(){
+    EntityStats e;
+    entity_stats_set_all(&e,1,100,1,1,1,1);
+    PRINT_TEST_RESULT(entity_stats_is_dead(&e) == false);
+}
+void test1_entity_stats_is_dead(){
+    EntityStats e;
+    entity_stats_set_all(&e,1,100,1,1,1,1);
+    PRINT_TEST_RESULT(entity_stats_is_dead(NULL) == true);
+}
+void test1_entity_compare(){
+    Entity *e1 =entity_create("TEST", 1, 2, 3);
+    Entity *e2 =entity_create("TEST", 1, 2, 3);
+    PRINT_TEST_RESULT(entity_compare(e1,e2) == 0);
+    entity_destroy(e1);
+    entity_destroy(e2);
+}
+void test2_entity_compare(){
+    Entity *e1 =entity_create("TEST", 1, 2, 3);
+    Entity *e2 =entity_create("TEST", 1, 2, 3);
+    PRINT_TEST_RESULT(entity_compare(NULL,e2) == 0);
+    entity_destroy(e1);
+    entity_destroy(e2);
+}
+void test1_entity_get_ability_at(){
+    Entity *e =entity_create("TEST", 1, 2, 3);
+    Ability *a=ability_create(1,"test","test",LINK_UNLOCK,1,true,false,0,0,0);
+    entity_add_ability(e,a);
+    PRINT_TEST_RESULT(entity_get_ability_at(e,0) == a);
+    entity_destroy(e);
+    ability_destroy(a);
+}
+void test2_entity_get_ability_at(){
+    Entity *e =entity_create("TEST", 1, 2, 3);
+    Ability *a=ability_create(1,"test","test",LINK_UNLOCK,1,true,false,0,0,0);
+    entity_add_ability(e,a);
+    PRINT_TEST_RESULT(entity_get_ability_at(e,-1) == NULL);
+    entity_destroy(e);
+    ability_destroy(a);
+}
+void test1_entity_get_ability_name_at(){
+    Entity *e =entity_create("TEST", 1, 2, 3);
+    Ability *a=ability_create(1,"test","test",LINK_UNLOCK,1,true,false,0,0,0);
+    entity_add_ability(e,a);
+    PRINT_TEST_RESULT(strcmp("test", entity_get_ability_name_at(e,0)) == 0);
+    entity_destroy(e);
+    ability_destroy(a);
+}
+void test2_entity_get_ability_name_at(){
+    Entity *e =entity_create("TEST", 1, 2, 3);
+    Ability *a=ability_create(1,"test","test",LINK_UNLOCK,1,true,false,0,0,0);
+    entity_add_ability(e,a);
+    PRINT_TEST_RESULT(entity_get_ability_name_at(e, -1) == NULL);
+    entity_destroy(e);
+    ability_destroy(a);
+}
+void test1_entity_get_n_abilities(){
+    Entity *e =entity_create("TEST", 1, 2, 3);
+    Ability *a=ability_create(1,"test","test",LINK_UNLOCK,1,true,false,0,0,0);
+    entity_add_ability(e,a);
+    PRINT_TEST_RESULT(entity_get_n_abilities(e) == 1);
+    entity_destroy(e);
+    ability_destroy(a);
+}
+void test2_entity_get_n_abilities(){
+    Entity *e =entity_create("TEST", 1, 2, 3);
+    Ability *a=ability_create(1,"test","test",LINK_UNLOCK,1,true,false,0,0,0);
+    entity_add_ability(e,a);
+    PRINT_TEST_RESULT(entity_get_n_abilities(NULL) == -1);
+    entity_destroy(e);
+    ability_destroy(a);
 }

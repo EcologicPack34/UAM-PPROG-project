@@ -85,6 +85,10 @@
  /*gets an object's descr from an inventory by its index to a non existent string, expected result ERROR*/
  void test3_inventory_get_object_str_at();
 
+ void test1_inventory_move_object();
+ void test2_inventory_move_object();
+ void test3_inventory_move_object();
+
  int main(int argc, char *argv[]){
     int test = 0;
     int all = 1;
@@ -332,6 +336,33 @@
    inventory_add_object(i, o);
    PRINT_TEST_RESULT(inventory_get_object_str_at(i, NULL, 0) == ERROR);
    inventory_destroy(i);
+   object_destroy(o);
+ }
+ void test1_inventory_move_object(){
+   Inventory *i1 = inventory_create(SPACE_INVENTORY,1);
+   Inventory *i2 = inventory_create(SPACE_INVENTORY,1);
+   Object *o = object_create(5,"test1","test1","test1", 0, 1, true, true, 1, SPACE_INVENTORY);
+   inventory_add_object(i1, o);
+   PRINT_TEST_RESULT(inventory_move_object(i1,i2,5) == OK);
+   inventory_destroy(i1);
+   inventory_destroy(i2);
+   object_destroy(o);
+ }
+ void test2_inventory_move_object(){
+   Inventory *i1 = inventory_create(SPACE_INVENTORY,1);
+   Inventory *i2 = inventory_create(SPACE_INVENTORY,1);
+   Object *o = object_create(5,"test1","test1","test1", 0, 1, true, true, 1, PLAYER_INVENTORY);
+   PRINT_TEST_RESULT(inventory_move_object(i1,i2,5) == ERROR);
+   inventory_destroy(i1);
+   inventory_destroy(i2);
+   object_destroy(o);
+ }
+ void test3_inventory_move_object(){
+   Inventory *i1 = inventory_create(SPACE_INVENTORY,1);
+   Object *o = object_create(5,"test1","test1","test1", 0, 1, true, true, 1, SPACE_INVENTORY);
+   inventory_add_object(i1, o);
+   PRINT_TEST_RESULT(inventory_move_object(i1,NULL,5) == ERROR);
+   inventory_destroy(i1);
    object_destroy(o);
  }
 

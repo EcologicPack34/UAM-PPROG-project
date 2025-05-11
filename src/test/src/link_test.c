@@ -16,7 +16,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#define N_TEST 32
+#define N_TEST 35
 
 /*creates a link with a NO_ID space id, expected result NULL*/
 void test1_link_create();
@@ -82,6 +82,13 @@ void test1_link_unlock();
 void test2_link_unlock();
 /*unlocks a non existent link if an entity is in the right condition, expected result ERROR*/
 void test3_link_unlock();
+/*compares to identical links (by id), expected result == 0*/
+void test1_link_cmp();
+/*compares to non identical links, expected result != 0*/
+void test2_link_cmp();
+/*compares a link with a non existent link, expected result == -1*/
+void test3_link_cmp();
+
 
 int main(int argc, char** argv) {
 
@@ -135,6 +142,9 @@ int main(int argc, char** argv) {
     if (all || test == 30) test1_link_unlock();
     if (all || test == 31) test2_link_unlock();
     if (all || test == 32) test3_link_unlock();
+    if (all || test == 33) test1_link_cmp();
+    if (all || test == 34) test2_link_cmp();
+    if (all || test == 35) test3_link_cmp();
     
     PRINT_PASSED_PERCENTAGE;
   
@@ -293,4 +303,25 @@ void test3_link_unlock(){
     Entity *e = entity_create("test3",1,21,PLAYER_INVENTORY);
     PRINT_TEST_RESULT(link_unlock(NULL,e) == ERROR);
     entity_destroy(e);
+}
+void test1_link_cmp(){
+    Link *l1=link_create(1,10,11,true,false);
+    Link *l2=link_create(1,10,11,true,false);
+    PRINT_TEST_RESULT(link_cmp(l1,l2) == 0);
+    link_destroy(l1);
+    link_destroy(l2);
+}
+void test2_link_cmp(){
+    Link *l1=link_create(1,10,11,true,false);
+    Link *l2=link_create(2,10,11,true,false);
+    PRINT_TEST_RESULT(link_cmp(l1,l2) != 0);
+    link_destroy(l1);
+    link_destroy(l2);
+}
+void test3_link_cmp(){
+    Link *l1=link_create(1,10,11,true,false);
+    Link *l2=link_create(2,10,11,true,false);
+    PRINT_TEST_RESULT(link_cmp(l1,NULL) != 0);
+    link_destroy(l1);
+    link_destroy(l2);
 }

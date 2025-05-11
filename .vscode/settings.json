@@ -16,6 +16,11 @@
         "collection.h": "c",
         "effect.h": "c",
         "player.h": "c",
-        "npc.h": "c"
+        "npc.h": "c",
+        "graphic_description.h": "c",
+        "space.h": "c",
+        "space_test.h": "c",
+        "entity.h": "c",
+        "entity_test.h": "c"
     }
 }

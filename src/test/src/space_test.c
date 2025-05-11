@@ -666,3 +666,41 @@ void test2_space_get_NPC_list(){
     space_destroy(space);
     npc_destroy(npc);
 }
+void test1_space_is_discovered(){
+    Space *s = NULL;
+    s = space_create(1);
+    space_set_isDiscovered(s, true);
+    PRINT_TEST_RESULT(space_is_discovered(s) == true);
+    space_destroy(s);
+}
+void test2_space_is_discovered(){
+    PRINT_TEST_RESULT(space_is_discovered(NULL) == false);
+}
+void test1_space_set_discovered(){
+    Space *s = NULL;
+    s = space_create(1);
+    PRINT_TEST_RESULT(space_set_isDiscovered(s, true) == OK);
+    space_destroy(s);
+}
+void test2_space_set_discovered(){
+    Space *s = NULL;
+    s = space_create(NO_ID);
+    PRINT_TEST_RESULT(space_set_isDiscovered(s, true) == ERROR);
+    space_destroy(s);
+}
+void test1_space_cmp(){
+    Space *s1,*s2 = NULL;
+    s1 = space_create(1);
+    s2 = space_create(1);
+    PRINT_TEST_RESULT(space_cmp(s1, s2) == 0);
+    space_destroy(s1);
+    space_destroy(s2);
+}
+void test2_space_cmp(){
+    Space *s1,*s2 = NULL;
+    s1 = space_create(NO_ID);
+    s2 = space_create(1);
+    PRINT_TEST_RESULT(space_cmp(s1, s2) != 0);
+    space_destroy(s1);
+    space_destroy(s2);
+}

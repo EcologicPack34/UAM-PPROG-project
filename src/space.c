@@ -491,6 +491,7 @@ bool space_is_discovered(Space *space){
 }
 
 int space_cmp(void *e1, void *e2){
+  if(!e1 || !e2) return -1;
   return ((Space *)e1)->id - ((Space *)e2)->id;
 }
 

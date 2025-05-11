@@ -69,6 +69,12 @@ void test1_space_get_NPC_by_name();
 void test2_space_get_NPC_by_name();
 void test1_space_get_NPC_list();
 void test2_space_get_NPC_list();
+void test1_space_is_discovered();
+void test2_space_is_discovered();
+void test1_space_set_discovered();
+void test2_space_set_discovered();
+void test1_space_cmp();
+void test2_space_cmp();
 
 
 #endif
