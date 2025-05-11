@@ -39,7 +39,6 @@ GDesc *gdesc_create(Id id, int height, int width, GDescType type){
     return gdesc;
 }
 
-
 void gdesc_destroy(void *gdesc){
     if(gdesc){
         for (size_t i = 0; i < ((GDesc*)gdesc)->height; i++)
@@ -53,18 +52,9 @@ void gdesc_destroy(void *gdesc){
     }
 }
 
-Status gdesc_set_line(GDesc *gdesc, int line, char *content){
-    if(!gdesc || !content) return ERROR;
-    if(line < 0 || line >= gdesc->height) return ERROR;
-
-    string_remove_n_r_on_end(content);
-
-    gdesc->description[line] = (char *)calloc(gdesc->width + 2, sizeof(char));
-    if(!(gdesc->description[line])) return ERROR;
-
-    strncpy(gdesc->description[line], content, gdesc->width);
-    return OK;
-}
+/*
+    * Graphic description getters
+*/
 
 char *gdesc_get_line(GDesc *gdesc, int line){
     if(!gdesc) return NULL;
@@ -81,6 +71,27 @@ Id gdesc_get_id(GDesc *gdesc){
     if(!gdesc)return NO_ID;
     return gdesc->id;
 }
+
+/*
+    * Graphic description setters
+*/
+
+Status gdesc_set_line(GDesc *gdesc, int line, char *content){
+    if(!gdesc || !content) return ERROR;
+    if(line < 0 || line >= gdesc->height) return ERROR;
+
+    string_remove_n_r_on_end(content);
+
+    gdesc->description[line] = (char *)calloc(gdesc->width + 2, sizeof(char));
+    if(!(gdesc->description[line])) return ERROR;
+
+    strncpy(gdesc->description[line], content, gdesc->width);
+    return OK;
+}
+
+/*
+    * Graphic description general functions
+*/
 
 int gdesc_cmp(void *e1, void *e2){
     int res;

@@ -45,7 +45,9 @@ GDesc *gdesc_create(Id id, int height, int width, GDescType type);
  */
 void gdesc_destroy(void *gdesc);
 
-/*-------SETTERS---------*/
+/*
+    * Graphic description setters
+*/
 
 /**
  * @brief Sets a line of the gdesc to a specified string by making a copy of it
@@ -58,7 +60,9 @@ void gdesc_destroy(void *gdesc);
  */
 Status gdesc_set_line(GDesc *gdesc, int line, char *content);
 
-/*------GETTERS------*/
+/*
+    * Graphic description getters
+*/
 
 /**
  * @brief Gets the id of a graphic description
@@ -88,7 +92,9 @@ char *gdesc_get_line(GDesc *gdesc, int line);
  */
 GDescType gdesc_get_type(GDesc *gdesc);
 
-/*-----OTHERS-----*/
+/*
+    * Graphic description general functions
+*/
 
 /**
  * @brief Compares two graphic descriptions by their ID
