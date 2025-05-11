@@ -346,15 +346,16 @@ Status entity_add_ability(Entity *entity, Ability *ability){
 }
 
 Ability *entity_get_ability_at(Entity *entity, int index){
-    if(!entity || index < 0 || index > entity->n_ability)
+    if(!entity || (index < 0) || (index > entity->n_ability))
         return NULL;
 
     return entity->ability[index];
 }
 
 char *entity_get_ability_name_at(Entity *entity, int index){
-    if(!entity)
+    if(!entity || (index < 0) || (index>=entity_get_n_abilities(entity))){
         return NULL;
+    }
 
     return ability_get_name(entity->ability[index]);
 }

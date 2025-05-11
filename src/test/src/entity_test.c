@@ -8,7 +8,7 @@
 
 #define MAX_TESTS 65
 
-int main(int argc, char** argv) {
+int main(int argc, char** argv){
 
     int test = 0;
     int all = 1;
@@ -106,7 +106,7 @@ void test1_entity_create(){
 
 void test2_entity_create(){
     Entity *entity = NULL;
-    entity = entity_create("TEST", 1, 2, 3);
+    entity = entity_create("TEST", NO_ID, 2, 3);
 
     PRINT_TEST_RESULT(entity == NULL);
 }
@@ -384,7 +384,7 @@ void test2_entity_get_max_health(){
     Entity *entity = NULL;
     entity = entity_create("TEST", 1, 2, 3);
 
-    PRINT_TEST_RESULT(entity_get_max_health(entity) == 4);
+    PRINT_TEST_RESULT(entity_get_max_health(NULL) == -1);
     entity_destroy(entity);
 }
 
@@ -402,7 +402,7 @@ void test2_entity_get_health(){
     Entity *entity = NULL;
     entity = entity_create("TEST", 1, 2, 3);
 
-    PRINT_TEST_RESULT(entity_get_health(entity) == 5);
+    PRINT_TEST_RESULT(entity_get_health(NULL) == -1);
     entity_destroy(entity);
 }
 
@@ -420,7 +420,7 @@ void test2_entity_get_baseDamage(){
     Entity *entity = NULL;
     entity = entity_create("TEST", 1, 2, 3);
 
-    PRINT_TEST_RESULT(entity_get_baseDamage(entity) == 6);
+    PRINT_TEST_RESULT(entity_get_baseDamage(NULL) == -1);
     entity_destroy(entity);
 }
 
@@ -438,7 +438,7 @@ void test2_entity_get_strength(){
     Entity *entity = NULL;
     entity = entity_create("TEST", 1, 2, 3);
 
-    PRINT_TEST_RESULT(entity_get_strength(entity) == 7);
+    PRINT_TEST_RESULT(entity_get_strength(NULL) == -1);
     entity_destroy(entity);
 }
 
@@ -456,7 +456,7 @@ void test2_entity_get_defense(){
     Entity *entity = NULL;
     entity = entity_create("TEST", 1, 2, 3);
 
-    PRINT_TEST_RESULT(entity_get_defense(entity) == 8);
+    PRINT_TEST_RESULT(entity_get_defense(NULL) == -1);
     entity_destroy(entity);
 }
 
@@ -474,7 +474,7 @@ void test2_entity_get_magicLevel(){
     Entity *entity = NULL;
     entity = entity_create("TEST", 1, 2, 3);
 
-    PRINT_TEST_RESULT(entity_get_magicLevel(entity) == 9);
+    PRINT_TEST_RESULT(entity_get_magicLevel(NULL) == -1);
     entity_destroy(entity);
 }
 void test1_entity_add_ability(){
@@ -508,7 +508,7 @@ void test1_entity_is_dead(){
 }
 void test2_entity_is_dead(){
     Entity *e =entity_create("TEST", 1, 2, 3);
-    PRINT_TEST_RESULT(entity_is_dead(e) == true);
+    PRINT_TEST_RESULT(entity_is_dead(NULL) == true);
     entity_destroy(e);
 }
 void test1_entity_stats_is_dead(){
@@ -516,7 +516,7 @@ void test1_entity_stats_is_dead(){
     entity_stats_set_all(&e,1,100,1,1,1,1);
     PRINT_TEST_RESULT(entity_stats_is_dead(&e) == false);
 }
-void test1_entity_stats_is_dead(){
+void test2_entity_stats_is_dead(){
     EntityStats e;
     entity_stats_set_all(&e,1,100,1,1,1,1);
     PRINT_TEST_RESULT(entity_stats_is_dead(NULL) == true);
@@ -552,10 +552,12 @@ void test2_entity_get_ability_at(){
     ability_destroy(a);
 }
 void test1_entity_get_ability_name_at(){
+    char name[WORD_SIZE]="";
     Entity *e =entity_create("TEST", 1, 2, 3);
     Ability *a=ability_create(1,"test","test",LINK_UNLOCK,1,true,false,0,0,0);
     entity_add_ability(e,a);
-    PRINT_TEST_RESULT(strcmp("test", entity_get_ability_name_at(e,0)) == 0);
+    strcpy(name,entity_get_ability_name_at(e,0));
+    PRINT_TEST_RESULT(strcmp("test", name) == 0);
     entity_destroy(e);
     ability_destroy(a);
 }

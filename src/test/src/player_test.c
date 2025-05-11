@@ -6,7 +6,7 @@
 #include <string.h>
 #include <stdlib.h>
 
-#define MAX_TESTS 32
+#define MAX_TESTS 38
 
 /*creates a player, expected result != NULL*/
 void test1_player_create();
@@ -73,6 +73,13 @@ void test1_player_get_followers_num();
 /*Gets non existent player's followers number, expected result == -1*/
 void test2_player_get_followers_num();
 
+void test1_player_get_leveling();
+void test2_player_get_leveling();
+void test1_player_has_object();
+void test2_player_has_object();
+void test1_player_get_money_pointer();
+void test2_player_get_money_pointer();
+
 
 int main(int argc, char** argv) {
 
@@ -124,6 +131,12 @@ int main(int argc, char** argv) {
     if (all || test == 30) test2_player_get_follower_at();
     if (all || test == 31) test1_player_get_followers_num();
     if (all || test == 32) test2_player_get_followers_num();
+    if (all || test == 33) test1_player_get_leveling();
+    if (all || test == 34) test2_player_get_leveling();
+    if (all || test == 35) test1_player_has_object();
+    if (all || test == 36) test2_player_has_object();
+    if (all || test == 37) test1_player_get_money_pointer();
+    if (all || test == 38) test2_player_get_money_pointer();
     
   
     PRINT_PASSED_PERCENTAGE;
@@ -293,4 +306,40 @@ void test2_player_get_followers_num(){
   PRINT_TEST_RESULT(player_get_follower_num(NULL) == -1);
   player_destroy(p);
   npc_destroy(npc);
+}
+void test1_player_get_leveling(){
+  Player *p = player_create("test",1,1,1,1,1,1,1);
+  PRINT_TEST_RESULT(player_get_leveling(p) != NULL);
+  player_destroy(p);
+}
+void test2_player_get_leveling(){
+  Player *p = player_create("test",1,1,1,1,1,1,1);
+  PRINT_TEST_RESULT(player_get_leveling(NULL) == NULL);
+  player_destroy(p);
+}
+void test1_player_has_object(){
+  Player *p = player_create("test",1,1,1,1,1,1,1);
+  Object *o = object_create(1,"helmet","wearable helmet base_damage:1 strength:1 max_health:20","test1", 0, 1, true, true, 1, PLAYER_INVENTORY);
+  inventory_add_object(entity_get_inventory(player_get_entity(p)), o);
+  PRINT_TEST_RESULT(player_has_object(p, object_get_id(o)) == true);
+  player_destroy(p);
+  object_destroy(o);
+}
+void test2_player_has_object(){
+  Player *p = player_create("test",1,1,1,1,1,1,1);
+  Object *o = object_create(1,"helmet","wearable helmet base_damage:1 strength:1 max_health:20","test1", 0, 1, true, true, 1, PLAYER_INVENTORY);
+  inventory_add_object(entity_get_inventory(player_get_entity(p)), o);
+  PRINT_TEST_RESULT(player_has_object(p, NO_ID) == false);
+  player_destroy(p);
+  object_destroy(o);
+}
+void test1_player_get_money_pointer(){
+  Player *p = player_create("test",1,1,1,1,1,1,1);
+  PRINT_TEST_RESULT(player_get_money_pointer(p) != NULL);
+  player_destroy(p);
+}
+void test2_player_get_money_pointer(){
+  Player *p = player_create("test",1,1,1,1,1,1,1);
+  PRINT_TEST_RESULT(player_get_money_pointer(NULL) == NULL);
+  player_destroy(p);
 }

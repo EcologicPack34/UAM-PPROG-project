@@ -17,7 +17,7 @@
  #include <stdio.h>
  #include <string.h>
  
- #define N_TEST 39
+ #define N_TEST 53
 
 /*it creates an object, expected result != NULL*/
 void test1_object_create();
@@ -402,7 +402,7 @@ void test1_object_set_is_movable(){
 }
 void test2_object_set_is_movable(){
     Object *obj= object_create(1,"test1","test1","test1", 0, 1, true, true, 1, SPACE_INVENTORY);
-    PRINT_TEST_RESULT(object_set_is_movable(NULL, true) == OK);
+    PRINT_TEST_RESULT(object_set_is_movable(NULL, true) == false);
     object_destroy(obj);
 }
 void test1_object_get_cost(){
@@ -412,7 +412,7 @@ void test1_object_get_cost(){
 }
 void test2_object_get_cost(){
     Object *obj= object_create(1,"test1","test1","test1", 0, 1, true, true, 1, SPACE_INVENTORY);
-    PRINT_TEST_RESULT(object_get_cost(NULL) == 0);
+    PRINT_TEST_RESULT(object_get_cost(NULL) == -1);
     object_destroy(obj);
 }
 void test1_object_get_is_equipped(){
@@ -433,7 +433,7 @@ void test1_object_get_is_movable(){
 }
 void test2_object_get_is_movable(){
     Object *obj= object_create(1,"test1","test1","test1", 0, 1, true, true, 1, SPACE_INVENTORY);
-    PRINT_TEST_RESULT(object_get_is_movable(NULL) == true);
+    PRINT_TEST_RESULT(object_get_is_movable(NULL) == false);
     object_destroy(obj);
 }
 void test1_object_get_dependency(){

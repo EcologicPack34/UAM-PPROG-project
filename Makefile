@@ -125,45 +125,46 @@ LINK_TEST_OBJ = ./$(OP)/link_test.o ./$(OP)/link.o ./$(OP)/ability_manager.o ./$
 SPACE_TEST_OBJ  = ./$(OP)/space_test.o ./$(OP)/space.o ./$(OP)/ability_manager.o ./$(OP)/queue.o ./$(OP)/inventory.o ./$(OP)/collection.o ./$(OP)/debug_printing.o ./$(OP)/object.o ./$(OP)/link.o ./$(OP)/npc.o ./$(OP)/entity.o ./$(OP)/vector2.o ./$(OP)/graphic_description.o ./$(OP)/utils.o
 OBJECT_TEST_OBJ = ./$(OP)/object_test.o ./$(OP)/object.o ./$(OP)/ability_manager.o ./$(OP)/queue.o ./$(OP)/debug_printing.o ./$(OP)/collection.o ./$(OP)/utils.o
 INVENTORY_TEST_OBJ = ./$(OP)/inventory_test.o ./$(OP)/inventory.o ./$(OP)/collection.o ./$(OP)/object.o ./$(OP)/debug_printing.o ./$(OP)/utils.o
-ENTITY_TEST_OBJ = ./$(OP)/entity.o ./$(OP)/inventory.o ./$(OP)/object.o ./$(OP)/collection.o ./$(OP)/debug_printing.o ./$(OP)/ability_manager.o ./$(OP)/queue.o ./$(OP)/utils.o
+ENTITY_TEST_OBJ = ./$(OP)/entity_test.o ./$(OP)/entity.o ./$(OP)/inventory.o ./$(OP)/object.o ./$(OP)/collection.o ./$(OP)/debug_printing.o ./$(OP)/ability_manager.o ./$(OP)/queue.o ./$(OP)/utils.o
 COLLECTION_TEST_OBJ = ./$(OP)/collection_test.o ./$(OP)/collection.o ./$(OP)/debug_printing.o ./$(OP)/utils.o
 PLAYER_TEST_OBJ = ./$(OP)/player_test.o ./$(OP)/player.o ./$(OP)/command.o ./$(OP)/equipment.o ./$(OP)/npc.o ./$(OP)/entity.o ./$(OP)/object.o ./$(OP)/debug_printing.o ./$(OP)/inventory.o ./$(OP)/collection.o ./$(OP)/ability_manager.o ./$(OP)/queue.o ./$(OP)/utils.o ./$(OP)/leveling.o
 
-test_all: collection_test space_test link_test object_test inventory_test player_test
+TEST_FLAGS= -g -Wall -pedantic -I$(INCLUDE)
+test_all: collection_test space_test link_test object_test inventory_test player_test entity_test
 
 entity_test:
 	make
-	$(CC) -Wall -pedantic -I$(INCLUDE) -c ./src/test/src/entity_test.c -o ./$(OBJ_PATH)/entity_test.o 
-	$(CC) $(CFLAGS) -g -o ./src/test/link_test $(ENTITY_TEST_OBJ)
+	$(CC) $(TEST_FLAGS) -c ./src/test/src/entity_test.c -o ./$(OBJ_PATH)/entity_test.o 
+	$(CC) $(CFLAGS) -g -o ./src/test/entity_test $(ENTITY_TEST_OBJ)
 
 collection_test:
 	make
-	$(CC) -Wall -pedantic -I$(INCLUDE) -c ./src/test/src/collection_test.c -o ./$(OBJ_PATH)/collection_test.o 
+	$(CC) $(TEST_FLAGS) -c ./src/test/src/collection_test.c -o ./$(OBJ_PATH)/collection_test.o 
 	$(CC) $(CFLAGS) -g -o ./src/test/collection_test $(COLLECTION_TEST_OBJ)
 
 space_test:
 	make
-	$(CC) -Wall -pedantic -c ./src/test/src/space_test.c -o ./$(OBJ_PATH)/space_test.o 
+	$(CC) $(TEST_FLAGS) -c ./src/test/src/space_test.c -o ./$(OBJ_PATH)/space_test.o 
 	$(CC) $(CFLAGS) -g -o ./src/test/space_test $(SPACE_TEST_OBJ)
 
 link_test:
 	make
-	$(CC) -Wall -pedantic -I$(INCLUDE) -c ./src/test/src/link_test.c -o ./$(OBJ_PATH)/link_test.o 
+	$(CC) $(TEST_FLAGS) -c ./src/test/src/link_test.c -o ./$(OBJ_PATH)/link_test.o 
 	$(CC) $(CFLAGS) -g -o ./src/test/link_test $(LINK_TEST_OBJ)
 
 object_test:
 	make
-	$(CC) -Wall -pedantic -I$(INCLUDE) -c ./src/test/src/object_test.c -o ./$(OBJ_PATH)/object_test.o 
+	$(CC) $(TEST_FLAGS) -c ./src/test/src/object_test.c -o ./$(OBJ_PATH)/object_test.o 
 	$(CC) $(CFLAGS) -g -o ./src/test/object_test $(OBJECT_TEST_OBJ)
 
 inventory_test:
 	make
-	$(CC) -Wall -pedantic -I$(INCLUDE) -c ./src/test/src/inventory_test.c -o ./$(OBJ_PATH)/inventory_test.o 
+	$(CC) $(TEST_FLAGS) -c ./src/test/src/inventory_test.c -o ./$(OBJ_PATH)/inventory_test.o 
 	$(CC) $(CFLAGS) -g -o ./src/test/inventory_test $(INVENTORY_TEST_OBJ)
 
 player_test:
 	make
-	$(CC) -g -Wall -pedantic -I$(INCLUDE) -c ./src/test/src/player_test.c -o ./$(OBJ_PATH)/player_test.o 
+	$(CC) $(TEST_FLAGS) -c ./src/test/src/player_test.c -o ./$(OBJ_PATH)/player_test.o 
 	$(CC) $(CFLAGS) -g -o ./src/test/player_test $(PLAYER_TEST_OBJ) -lm
 	
 clean_test:
