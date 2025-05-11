@@ -373,37 +373,15 @@ EquipmentCode equipment_code_from_str(char *data){
     return EQUIPMENT_ERROR;
 }
 
-Status equipment_add_piece(Entity *entity, Equipment *equipment, Object *object){
-    char *data = NULL;
-    char line[WORD_SIZE];
-    char *toks = NULL;
-    EquipmentCode code = EQUIPMENT_ERROR;
+Object *equipment_get_piece(Equipment *equipment, EquipmentCode code){
+    Object *retobject = NULL;
     
-    if(!equipment || !object) return ERROR;
+    if(!equipment) return NULL;
 
-    data = object_get_data(object);
-    if(data == NULL)
-        return ERROR;
+    retobject = equipment_unequip_from_code(equipment, code);
+    equipment_equip_from_code(equipment, code, retobject);
 
-    strcpy(line, data);
-
-    toks = strtok(line, " ");
-    if(strcmp(toks, "wearable") != 0 || object_get_is_equipped(object) == true)
-        return ERROR;
-
-    toks = strtok(NULL, " ");
-    code = equipment_code_from_str(toks);
-    if(code == EQUIPMENT_ERROR)
-        return ERROR;
-
-    if(equipment_equip_from_code(equipment, code, object) == ERROR)
-        return ERROR;
-
-    if(equipment_add_stats(entity, equipment, object) == ERROR) return ERROR;
-
-    object_set_is_equipped(object, true); 
-
-    return OK;
+    return retobject;
 }
 
 /*

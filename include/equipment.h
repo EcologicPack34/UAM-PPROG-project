@@ -2,7 +2,7 @@
  * @file equipment.h
  * @author Maksym Polyak
  * @brief To read a piece of equipment in the data camp of the object struct it has to have
- * a string named WEARABLE {EquipmentCode in string} {Stats affected}
+ * a string named wearable {EquipmentCode in string} {Stats affected}
  * EquipmentCode in string = "helmet" or "chest" or "arms" or "leg_armor" or "shoes" or "two_handed" or "handl" or "handr"
  * Stats affected = max_health:10 baseDamage:-2 (IF POSITIVE SIGN NOT NEEDED)
  * @version 0.1
