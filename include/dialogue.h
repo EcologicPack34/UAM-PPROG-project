@@ -1,7 +1,9 @@
 /**
  * @file dialogue.h
  * @author Maksym Polyak
- * @brief 
+ * @brief ADT that controls dialogue outputs, if the game is not reading from
+ * a save takes the dialogues from the DIALOGUE_INIT_PATH on game reader.
+ * If reading from a save, then enters the save file and gets the dialogues.
  * @version 0.1
  * @date 2025-04-24
  * 
@@ -19,7 +21,7 @@
 #define DOUTPUTS_NUM 6          /*!< Number of dialogue_outputs implemented*/
 
 /**
- * @brief Dialogue outputs enum
+ * @brief Dialogue outputs types enum
  * 
  */
 typedef enum{NO_OUTPUT, DIALOGUE_STOP, FIGHT, STORE, FOLLOW, UNFOLLOW}Dialogue_Outputs;
@@ -47,6 +49,10 @@ Dialogue *dialogue_create(NPC *npc, FILE *fIN);
  * @param dialogue dialogue struct
  */
 void dialogue_destroy(Dialogue *dialogue);
+
+/*
+    * Dialogue getters
+*/
 
 /**
  * @brief Gets the NPC of a dialogue
@@ -101,6 +107,10 @@ Dialogue_Outputs dialogue_get_output_at(Dialogue *dialogue, int i);
  * @return char* or NULL if not found or error
  */
 char *dialogue_get_outcome_as_string(Dialogue_Outputs output);
+
+/*
+    * Dialogue general functions
+*/
 
 /**
  * @brief Updates dialogues to the next states and controls outcomes

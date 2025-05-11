@@ -1,12 +1,9 @@
 /**
  * @brief It defines the entity module interface
  * 
- * An entity is the base ADT which stores essential information about Non-Playables Characters,
- * players and everything that moves. For now, each entity is defined by their type (EntityType),
- * a name, a unique id between entities, a location and an own inventory.
+ * An entity is the base ADT which stores essential information about everything that interacts
+ * with the game world, essentially NPCs and players.
  * 
- * Entity also saves the stats for each entity. The stats struct has not been made an ADT for the
- * reasons specified on the README.txt
  * 
  * Each entity saves its own graphic description for the graphic_engine
  *
@@ -20,12 +17,11 @@
 #ifndef ENTITY_H
 #define ENTITY_H
 
-#define ENTITY_GRAPHIC_LENGTH 3 /*!< Maximum length of an entity graphic description (without \n)*/
-
 #include "inventory.h"
 #include "ability_manager.h"
 #include "types.h"
 
+#define ENTITY_GRAPHIC_LENGTH 3 /*!< Maximum length of an entity graphic description (without \n)*/
 #define N_STATS 7 /*!< Number of stats implemented + NO_STAT*/
 #define N_ENTITY_TYPE 3 /*!< Number of entity types*/
 
@@ -81,7 +77,9 @@ Entity *entity_create(char *name, Id identity, Id idlocation, InventoryType inve
  */
 void entity_destroy(Entity *entity);
 
-/*Entity SETTERS*/
+/*
+    * Entity setters
+*/
 
 /**
  * @brief Sets a entity name with the name argument
@@ -197,12 +195,12 @@ Status entity_set_graphic_description(Entity *entity, char *gdesc);
  * @brief This function sets the stats values of an Entity;
  * 
  * @param ent contains all the information related to the entity
- * @param maxhealth 
- * @param health 
- * @param baseDamage 
- * @param strength 
- * @param defense 
- * @param magicLevel 
+ * @param maxhealth maximum health to set
+ * @param health health to set
+ * @param baseDamage base damage to set
+ * @param strength strength to set
+ * @param defense defense to set
+ * @param magicLevel magic level to set
  * @return Status 
  */
 Status entity_set_stats(Entity *ent, double maxhealth, double health, double baseDamage, int strength, int defense, int magicLevel);
@@ -213,17 +211,29 @@ Status entity_set_stats(Entity *ent, double maxhealth, double health, double bas
  * @author Aaron Charameli Mair
  * 
  * @param es a pointer to the EntityStats to modify
- * @param maxhealth 
- * @param health 
- * @param baseDamage 
- * @param strength 
- * @param defense 
- * @param magicLevel 
+ * @param maxhealth maximum health to set
+ * @param health health to set
+ * @param baseDamage base damage to set
+ * @param strength strength to set
+ * @param defense defense to set
+ * @param magicLevel magic level to set
  * @return Status 
  */
 Status entity_stats_set_all(EntityStats *es, double maxhealth, double health, double baseDamage, int strength, int defense, int magicLevel);
 
-/*Entity GETTERS*/
+/**
+ * @brief Adds a ability to the entity if it is not full
+ * @author Maksym Polyak
+ * 
+ * @param entity contains all the information related to the entity
+ * @param ability ability to add
+ * @return Status 
+ */
+Status entity_add_ability(Entity *entity, Ability *ability);
+
+/*
+    * Entity getters
+*/
 
 /**
  * @brief Gets if an entity is dead or not by its stats, used in combat module
@@ -297,19 +307,7 @@ Id entity_get_id(Entity *entity);
  * @param entity contains all the information related to the entity
  * @return EntityType or UNKNOWN_ENTITY if error
  */
-EntityType entity_get_entityType(Entity *entity);
-
-/**
- * @brief Adds a ability to the entity if it is not full
- * @author Maksym Polyak
- * 
- * @param entity contains all the information related to the entity
- * @param ability ability to add
- * @return Status 
- */
-Status entity_add_ability(Entity *entity, Ability *ability);
-
-/**
+EntityType entity_get_entityType(Entity *entity);/**
  * @brief Gets the ability at the index of the entity
  * @author Maksym Polyak
  * 
@@ -333,7 +331,7 @@ char *entity_get_ability_name_at(Entity *entity, int index);
  * @brief Gets the number of abilities an entity has
  * @author Maksym Polyak
  * 
- * @param entity 
+ * @param entity entity struct
  * @return int or -1 if error
  */
 int entity_get_n_abilities(Entity *entity);
@@ -392,6 +390,10 @@ int entity_get_defense(Entity *entity);
  * @return magicLevel stat if well or -1 if wrong
  */
 int entity_get_magicLevel(Entity *entity);
+
+/*
+    * Entity general functions
+*/
 
 /**
  * @brief Compares the ids of two entities

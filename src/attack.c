@@ -21,11 +21,10 @@
  * @brief Struct of the attack module to save the data of the attack
  */
 struct _Attack{
-
-    char name[WORD_SIZE];
-    double damage_multiplication;
-    bool needs_target;
-    double no_missing_chance;
+    char name[WORD_SIZE];           /*!< Name of the attack*/
+    double damage_multiplication;   /*!< Damage multiplicator of the attack*/
+    bool needs_target;              /*!< Bool to check if attack needs a target or not*/
+    double no_missing_chance;       /*!< Chance to succesfully make an attack*/
 };
 
 Attack *attack_create(char *name) {
@@ -43,13 +42,18 @@ Attack *attack_create(char *name) {
     return at;
 }
 
-void attack_free(Attack *at) {
+void attack_destroy(void *at) {
 
-    free(at);
+    if (!at)
+        return;
+    
+    free((Attack*)at);
 }
 
 
-/*------SETTERS------*/
+/*
+  * Attack SETTERS
+*/
 
 
 Status attack_set_damage_multiplicator(Attack *at, double mult) {
@@ -79,7 +83,9 @@ Status attack_set_failure_chance(Attack *at, double probability) {
     return OK;
 }
 
-/*-------GETTERS-------*/
+/*
+  * Attack GETTERS
+*/
 
 double attack_get_damage_multiplicator(Attack *at) {
 
@@ -113,6 +119,10 @@ char *attack_get_name(Attack *at) {
     return at->name;
 }
 
+/*
+  * Attack general functions
+*/
+
 int attack_compare(void *e1, void *e2){
 
     if (!e1 || !e2)
@@ -130,14 +140,6 @@ void attack_print(void *at) {
         
     att = (Attack*)at;
     printf("Name: %s | Damage multiplication: %lf || Needs target: %d || Success chance: %lf", att->name, att->damage_multiplication, att->needs_target, att->no_missing_chance);
-}
-
-void attack_destroy(void *at) {
-
-    if (!at)
-        return;
-    
-    free((Attack*)at);
 }
 
 

@@ -40,7 +40,7 @@ struct _Equipment{
     Object *shoes;              /*!< Shoes of the entity*/
 
     bool is_two_handed;         /*!< Determines if the entity is using a two handed weapon or not*/
-    Object *weapon_two_hands;   /*!< two hands weapon of the entity*/
+    Object *weapon_two_hands;   /*!< Two hands weapon of the entity*/
     Object *weapon1_one_hand;   /*!< weapon on first hand of the entity*/
     Object *weapon2_one_hand;   /*!< weapon on second hand of the entity*/
 };
@@ -336,7 +336,7 @@ Status equipment_remove_stats(Entity *entity, Equipment *equipment, Object *obje
 }
 
 /*
-    * PUBLIC FUNCTIONS
+    * Equipment public functions
 */
 
 Equipment *equipment_create(){
@@ -356,6 +356,10 @@ void equipment_destroy(Equipment *equipment){
         free(equipment);
 }
 
+/*
+    * Equipment getters
+*/
+
 EquipmentCode equipment_code_from_str(char *data){
     int i;
     
@@ -368,6 +372,21 @@ EquipmentCode equipment_code_from_str(char *data){
 
     return EQUIPMENT_ERROR;
 }
+
+Object *equipment_get_piece(Equipment *equipment, EquipmentCode code){
+    Object *retobject = NULL;
+    
+    if(!equipment) return NULL;
+
+    retobject = equipment_unequip_from_code(equipment, code);
+    equipment_equip_from_code(equipment, code, retobject);
+
+    return retobject;
+}
+
+/*
+    * Equipment setters
+*/
 
 Status equipment_add_piece(Entity *entity, Equipment *equipment, Object *object){
     char *data = NULL;
@@ -422,15 +441,3 @@ Object *equipment_remove_piece(Entity *entity, Equipment *equipment, char *data)
 
     return retobject;
 }
-
-Object *equipment_get_piece(Entity *entity, Equipment *equipment, EquipmentCode code){
-    Object *retobject = NULL;
-    
-    if(!equipment) return NULL;
-
-    retobject = equipment_unequip_from_code(equipment, code);
-    equipment_equip_from_code(equipment, code, retobject);
-
-    return retobject;
-}
-

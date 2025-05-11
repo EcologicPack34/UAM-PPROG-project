@@ -14,12 +14,16 @@
 #include <stdlib.h>
 #include <math.h>
 
+/**
+ * @brief Leveling ADT implementation
+ * 
+ */
 struct _Leveling{
-    int XP;
-    int next_XP;
+    int XP;             /*!< Current XP of the entity*/
+    int next_XP;        /*!< Total amount of XP required to reach next level*/
 
-    int level;
-    int skill_points;
+    int level;          /*!< Current level of the entity*/
+    int skill_points;   /*!< Amount of skill points for their use on other modules*/
 };
 
 /*

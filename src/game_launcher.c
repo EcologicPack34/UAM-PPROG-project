@@ -1,13 +1,30 @@
+/**
+ * @file game_launcher.c
+ * @author David Gómez
+ * @brief This module creates a game launcher to select from various options, for
+ * example procedural generation, save selection and more.
+ * @version 0.1
+ * @date 2025-05-10
+ * 
+ * @copyright Copyright (c) 2025
+ * 
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
 #include <string.h>
 #include <time.h>
 
-#define PROGRAM_NAME "AntAmnesia/anthill"
-#define SAVE_DIR "./AntAmnesia/saves"
-#define DATA_DIR "./AntAmnesia/data"
+#define PROGRAM_NAME "AntHell/anthill"  /*!< Name of the executable of the game*/
+#define SAVE_DIR "./AntHell/saves"      /*!< Location with the saves of the game*/
+#define DATA_DIR "./AntHell/data"       /*!< Location with the data to initialize a new game*/
 
+/**
+ * @brief Main program for the game launcher
+ * 
+ * @return int -1 for error or 0 for correct execution or exit
+ */
 int main(){
     int seed;
     bool procedural;
@@ -60,10 +77,10 @@ int main(){
         return -1;
     }
     
-    printf("Your files are:\n ");
+    printf("Your files are:\n");
     while(fgets(save, 500, file)){
         n_files++;
-        printf("%d. %s", n_files , save + 1 + ((loadSave == 1) ? strlen(DATA_DIR) : strlen(SAVE_DIR)));
+        printf(" %d. %s", n_files , save + 1 + ((loadSave == 1) ? strlen(DATA_DIR) : strlen(SAVE_DIR)));
     }
     do{
         printf("input> ");

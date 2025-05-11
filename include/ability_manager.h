@@ -1,8 +1,7 @@
 /**
  * @file ability_manager.h
  * @author Maksym Polyak
- * @brief This module controls player special interactions with the environment,
- * specially in combat throught the use of ability.
+ * @brief This module controls ability and ability manager creation for their use on game.
  * @version 0.1
  * @date 2025-03-25
  * 
@@ -23,7 +22,7 @@
 /**
  * @brief Enum storing the different types of events 
  */
-typedef enum {NO_SKILL, HEAL_SELF, HEAL_ALLY, MONEY_BAG, LINK_UNLOCK, EFFECT_SELF, EFFECT_ENEMY, EFFECT_ALLY}AbilityType; /*!< Type to determine the effect of an ability*/
+typedef enum {NO_SKILL, HEAL_SELF, HEAL_ALLY, MONEY_BAG, LINK_UNLOCK, EFFECT_SELF, EFFECT_ENEMY, EFFECT_ALLY}AbilityType;
 
 /**
  * @brief Ability ADT that contains all the information about the ability
@@ -61,7 +60,10 @@ Ability *ability_create(Id id, char *data, char *name, AbilityType type, Id enti
  */
 void ability_destroy(void *ability);
 
-/*GETTERS*/
+/*
+  * Ability GETTERS
+*/
+
 /**
  * @brief Gets the id of the ability
  * @author Maksym Polyak
@@ -154,7 +156,9 @@ char *ability_get_name(Ability *ability);
  */
 int ability_get_cost(Ability *ability);
 
-/*SETTERS*/
+/*
+  * Ability general functions
+*/
 
 /**
  * @brief Sets a ability cooldown count to 0;
@@ -212,6 +216,25 @@ int ability_compare(void * e1, void *e2);
  */
 AbilityType ability_type_from_str(char *string);
 
+/**
+ * @brief Saves an ability on a file
+ * @author Maksym Polyak
+ * 
+ * @param ability ability struct
+ * @param fOUT file stream output
+ * @return int with num of char printed or -1 if error
+ */
+int ability_save_on_file(Ability *ability, FILE *fOUT);
+  
+/**
+ * @brief Creates an ability from a file
+ * @author Maksym Polyak
+ * 
+ * @param fIN file stream input
+ * @return Ability* or NULL if error
+ */
+Ability *ability_create_from_file(FILE *fIN);
+
 /* SKILLS MANAGER */
 
 /**
@@ -230,15 +253,9 @@ AbilityManager *ability_manager_create();
  */
 void ability_manager_destroy(AbilityManager *sm);
 
-/**
- * @brief Adds an ability to be evaluated by the ability_manager
- * @author Maksym Polyak    
- * 
- * @param sm ability manager struct
- * @param ability ability to be added
- * @return Status 
- */
-Status ability_manager_add_evaluated_ability(AbilityManager *sm, Ability *ability);
+/*
+  * Ability manager getters
+*/
 
 /**
  * @brief Gets the evaluated ability
@@ -259,16 +276,6 @@ Ability *ability_manager_get_evaluated_ability(AbilityManager *sm);
 Collection *ability_manager_get_unused_abilities(AbilityManager *sm);
 
 /**
- * @brief Moves an ability from unused to used abilities
- * @author Maksym Polyak
- * 
- * @param sm ability manager struct
- * @param ability ability struct
- * @return Status 
- */
-Status ability_manager_move_ability_to_used(AbilityManager *sm, Ability *ability);
-
-/**
  * @brief Gets the ability at the index of unused abilities
  * @author Maksym Polyak
  * 
@@ -277,6 +284,58 @@ Status ability_manager_move_ability_to_used(AbilityManager *sm, Ability *ability
  * @return Ability* 
  */
 Ability *ability_manager_get_unused_ability_at(AbilityManager *sm, int i);
+
+/**
+ * @brief Gets the count of ability in the collection
+ * @author Maksym Polyak
+ * 
+ * @param sm ability manager
+ * @return long or -1 if error
+ */
+long ability_manager_get_ability_count(AbilityManager *sm);
+
+/**
+ * @brief Gets the ability on the index received of the collection on ability manager struct
+ * @author Maksym Polyak
+ * 
+ * @param sm ability manager
+ * @param index where the ability is taken
+ * @return Ability* or NULL if error
+ */
+Ability *ability_manager_get_ability_at(AbilityManager *sm, long index);
+
+/**
+ * @brief Gets the queue of ability to be used of the ability manager
+ * @author Maksym Polyak
+ * 
+ * @param sm ability manager
+ * @return Queue * or NULL if error
+ */
+Queue *ability_manager_get_queue(AbilityManager *sm);
+
+/*
+  * Ability manager general functions
+*/
+
+/**
+ * @brief Adds an ability to be evaluated by the ability_manager
+ * @author Maksym Polyak    
+ * 
+ * @param sm ability manager struct
+ * @param ability ability to be added
+ * @return Status 
+ */
+Status ability_manager_add_evaluated_ability(AbilityManager *sm, Ability *ability);
+
+/**
+ * @brief Moves an ability from unused to used abilities
+ * @author Maksym Polyak
+ * 
+ * @param sm ability manager struct
+ * @param ability ability struct
+ * @return Status 
+ */
+Status ability_manager_move_ability_to_used(AbilityManager *sm, Ability *ability);
 
 /**
  * @brief Adds a ability to the ability manager collection
@@ -299,25 +358,6 @@ Status ability_manager_add_ability_to_cd(AbilityManager *sm, Ability *ability);
 Status ability_manager_remove_ability_from_cd(AbilityManager *sm, Ability *ability);
 
 /**
- * @brief Gets the count of ability in the collection
- * @author Maksym Polyak
- * 
- * @param sm ability manager
- * @return long or -1 if error
- */
-long ability_manager_get_ability_count(AbilityManager *sm);
-
-/**
- * @brief Gets the ability on the index received of the collection on ability manager struct
- * @author Maksym Polyak
- * 
- * @param sm ability manager
- * @param index where the ability is taken
- * @return Ability* or NULL if error
- */
-Ability *ability_manager_get_ability_at(AbilityManager *sm, long index);
-
-/**
  * @brief Tries to use an ability, if succesfull, adds it to the queue of abilities
  * DOES NOT COPY THE ABILITY STRUCT
  * @author Maksym Polyak
@@ -327,15 +367,6 @@ Ability *ability_manager_get_ability_at(AbilityManager *sm, long index);
  * @return Status
  */
 Status ability_manager_use_ability(AbilityManager *sm, Ability *ability);
-
-/**
- * @brief Gets the queue of ability to be used of the ability manager
- * @author Maksym Polyak
- * 
- * @param sm ability manager
- * @return Queue * or NULL if error
- */
-Queue *ability_manager_get_queue(AbilityManager *sm);
 
 /**
  * @brief Saves an ability manager struct on a file
@@ -356,24 +387,5 @@ int ability_manager_save_on_file(AbilityManager *sm, FILE *fOUT);
  * @return Status 
  */
 Status ability_manager_read_from_file(AbilityManager *sm, FILE *fIN);
-  
-/**
- * @brief Saves an ability on a file
- * @author Maksym Polyak
- * 
- * @param ability ability struct
- * @param fOUT file stream output
- * @return int with num of char printed or -1 if error
- */
-int ability_save_on_file(Ability *ability, FILE *fOUT);
-  
-/**
- * @brief Creates an ability from a file
- * @author Maksym Polyak
- * 
- * @param fIN file stream input
- * @return Ability* or NULL if error
- */
-Ability *ability_create_from_file(FILE *fIN);
 
 #endif

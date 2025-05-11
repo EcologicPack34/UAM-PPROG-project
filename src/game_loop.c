@@ -35,6 +35,8 @@
  * @param game struct that saves all information related to the game
  * @param gengine struct that saves all information related to the graphic engine
  * @param file_name string with the name of the filename with the game information
+ * @param seed seed to init the game
+ * @param procedural bool to determine if the game is procedural or not
  * @return 0 if everything goes well or 1 if there was some mistake
  */
 int game_loop_init(Game **game, Graphic_engine **gengine, char *file_name, int seed, bool procedural);
@@ -63,8 +65,8 @@ void game_loop_cleanup(Game *game, Graphic_engine *gengine);
  * @brief Checks the arguments and initializes the game.
  * @author Original: Profesores PPROG, Modified By: Daniel Gómez
  *
- * @param argc
- * @param argv
+ * @param argc number of arguments received
+ * @param argv arguments received as strings on the argv array
  * @return 0 if game execution went well or 1 if arguments check failed
  */
 int main(int argc, char *argv[]){

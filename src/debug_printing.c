@@ -19,7 +19,6 @@ struct _Debug
  */
 Debug* globalDebug = NULL;   
 
-
 Debug* debug_create(char* debugFilePath, bool setAsGlobal)
 {
     Debug *debug = NULL;
@@ -53,6 +52,10 @@ void debug_destroy(Debug * info){
         free(info);
     }
 }
+
+/*
+    * Debug general functions
+*/
 
 /* GNU printf code: 
 https://sourceware.org/git/?p=glibc.git;a=blob;f=stdio-common/printf.c;h=4c8f3a2a0c38ab27a2eed4d2ff3b804980aa8f9f;hb=3321010338384ecdc6633a8b032bb0ed6aa9b19a */

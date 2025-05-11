@@ -54,7 +54,9 @@ struct _Command {
   Collection *stateCommands[N_GAME_STATES]; /*!<array of collections containing cmd types*/
 };
 
-/*--------------Private Functions---------------*/
+/*
+    * Private functions
+*/
 
 /**
  * @brief Copies data from data2 into data1
@@ -64,6 +66,38 @@ struct _Command {
  * @param data2 command info 2
  * @return Status 
  */
+Status command_info_copy(CommandInfo *data1, CommandInfo *data2);
+
+/**
+ * @brief Sets the number of readed arguments
+ * @author Daniel Gómez
+ * 
+ * @param command command struct
+ * @param num count to set
+ * @return Status 
+ */
+Status command_set_arguments_count(Command *command, int num);
+
+/**
+ * @brief Sets the argument to a given string at a given argument
+ * @author Daniel Gómez
+ * 
+ * @param command command struct
+ * @param args string to set
+ * @param index index of where it is set
+ * @return Status 
+ */
+Status command_set_argument_at(Command *command, char args[MAX_CMD_ARGS_LENGTH], int index);
+
+/**
+ * @brief Resets the arguments to avoid getting them between commands
+ * @author Daniel Gómez
+ * 
+ * @param command command struct
+ * @return Status 
+ */
+Status command_reset_arguments(Command *command);
+
 Status command_info_copy(CommandInfo *data1, CommandInfo *data2){
   if(!data1 || !data2) return ERROR;
 
@@ -78,14 +112,6 @@ Status command_info_copy(CommandInfo *data1, CommandInfo *data2){
   return OK;
 }
 
-/**
- * @brief Sets the number of readed arguments
- * @author Daniel Gómez
- * 
- * @param command command struct
- * @param num count to set
- * @return Status 
- */
 Status command_set_arguments_count(Command *command, int num){
   if(!command) return ERROR;
 
@@ -97,15 +123,6 @@ Status command_set_arguments_count(Command *command, int num){
   return OK;
 }
 
-/**
- * @brief Sets the argument to a given string at a given argument
- * @author Daniel Gómez
- * 
- * @param command command struct
- * @param args string to set
- * @param index index of where it is set
- * @return Status 
- */
 Status command_set_argument_at(Command *command, char args[MAX_CMD_ARGS_LENGTH], int index){
 
   if(!(command->cmdData)) return ERROR;
@@ -116,13 +133,6 @@ Status command_set_argument_at(Command *command, char args[MAX_CMD_ARGS_LENGTH],
   return OK;
 }
 
-/**
- * @brief Resets the arguments to avoid getting them between commands
- * @author Daniel Gómez
- * 
- * @param command command struct
- * @return Status 
- */
 Status command_reset_arguments(Command *command){
   int i;
   char **arguments = NULL;
@@ -140,7 +150,9 @@ Status command_reset_arguments(Command *command){
   return OK;
 }
 
-/*--------------Public Functions---------------*/
+/*
+    * Public functions
+*/
 
 Command* command_create() {
   int i;
@@ -232,7 +244,10 @@ Status command_info_destroy(CommandInfo *cmdData){
   return ERROR;
 }
 
-/*----SETTERS----*/
+/*
+    * Command setters
+*/
+
 Status command_set_code(Command* command, CommandCode code) {
   if (!command) {
     return ERROR;
@@ -297,7 +312,9 @@ Status command_update_player_data(Command *cmd){
   return OK;
 }
 
-/*----GETTERS----*/
+/*
+    * Command getters
+*/
 
 Status command_get_as_string(Command *cmd, char *dest){
   int i;
@@ -540,10 +557,15 @@ Status command_get_status(Command *command){
   return command->cmdData->cmdStatus;
 }
 
+/*
+    * Command general functions
+*/
+
 int command_code_isEqual(void *cmd1, void *cmd2){
   if(!cmd1 || !cmd2) return -1;
   return *((CommandCode *)cmd1) != *((CommandCode *)cmd2);
 }
+
 bool command_current_type_valid_by_state(Command *command, GameState state){
   int length, i;
   if(!command || state == ERROR_STATE) return false;

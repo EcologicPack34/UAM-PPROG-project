@@ -49,6 +49,10 @@ Debug *debug_create(char *debugFilePath, bool setAsGlobal);
  */
 void debug_destroy(Debug *info);
 
+/*
+    * Debug printing general functions
+*/
+
 /**
  * @brief Prints a message with format into the log file
  * @author Daniel Gómez
@@ -70,7 +74,7 @@ int debug_log(LOG_LEVEL level, char *formatedString, ...);
 char *debug_getPath(Debug *info);
 
 /**
- * @brief Closes the global debug file without needen to destroy de debug
+ * @brief Closes the global debug file without the need to destroy the debug
  *  USE ONLY BEFORE ABORTING PROGRAM, OTHER WISE IT WILL BREAK DEBUG LOGS
  */
 void debug_force_global_fclose();

@@ -18,11 +18,6 @@
 
 #include "types.h"
 
-/* Util para hacer un graphics engine nuevo
-#define console_clear() printf("\033[H\033[J")
-#define console_gotoxy(x,y) printf("\033[%d;%dH", (y), (x))
-*/
-
 /**
  * @brief Removes a newline escape sequence from a string if found
  * @author Maksym Polyak

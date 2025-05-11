@@ -2,7 +2,8 @@
  * @file equipment.h
  * @author Maksym Polyak
  * @brief To read a piece of equipment in the data camp of the object struct it has to have
- * a string named WEARABLE {EquipmentCode in string} {Stats affected}
+ * a string named wearable {EquipmentCode in string} {Stats affected}
+ * EquipmentCode in string = "helmet" or "chest" or "arms" or "leg_armor" or "shoes" or "two_handed" or "handl" or "handr"
  * Stats affected = max_health:10 baseDamage:-2 (IF POSITIVE SIGN NOT NEEDED)
  * @version 0.1
  * @date 2025-03-29
@@ -29,7 +30,7 @@ typedef enum {EQUIPMENT_ERROR, HELMET, CHEST, ARMS, LEG_ARMOR, SHOES, TWO_HANDED
 typedef struct _Equipment Equipment;
 
 /*
-    * PUBLIC FUNCTIONS
+    * Equipment public functions
 */
 
 /**
@@ -48,6 +49,20 @@ Equipment *equipment_create();
  */
 void equipment_destroy(Equipment *equipment);
 
+/*
+    * Equipment getters
+*/
+
+/**
+ * @brief Gets object in certain equipment slot
+ * @author Daniel Gómez
+ * 
+ * @param equipment equipment struct
+ * @param code equipment code of the piece to remove
+ * @return Object* 
+ */
+Object *equipment_get_piece(Equipment *equipment, EquipmentCode code);
+
 /**
  * @brief Gets the EquipmentCode from a string
  * @author Maksym Polyak
@@ -56,6 +71,10 @@ void equipment_destroy(Equipment *equipment);
  * @return EquipmentCode 
  */
 EquipmentCode equipment_code_from_str(char *data);
+
+/*
+    * Equipment setters
+*/
 
 /**
  * @brief Tries to add an object as a piece if it is compatible
@@ -78,16 +97,5 @@ Status equipment_add_piece(Entity *entity, Equipment *equipment, Object *object)
  * @return Object* or NULL if error
  */
 Object *equipment_remove_piece(Entity *entity, Equipment *equipment, char *data);
-
-/**
- * @brief Gets object in certain equipment slot
- * @author Daniel Gómez
- * 
- * @param entity 
- * @param equipment 
- * @param code 
- * @return Object* 
- */
-Object *equipment_get_piece(Entity *entity, Equipment *equipment, EquipmentCode code);
 
 #endif

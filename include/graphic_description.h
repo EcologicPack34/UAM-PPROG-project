@@ -14,6 +14,10 @@
 #include "types.h"
 #include <stdio.h>
 
+/**
+ * @brief Types of graphic description implemented
+ * 
+ */
 typedef enum {NO_DESC = 0, SPACE_DESC, ENTITY_DESC} GDescType;
 
 /**
@@ -25,8 +29,10 @@ typedef struct _GDesc GDesc;
  * @brief Creates a graphic description
  * @author Daniel Gómez
  * 
- * @param height 
- * @param width 
+ * @param id id of the gdesc
+ * @param height height of the gdesc
+ * @param width width of the gdesc
+ * @param type graphic description type of the gdesc
  * @return GDesc* 
  */
 GDesc *gdesc_create(Id id, int height, int width, GDescType type);
@@ -35,30 +41,34 @@ GDesc *gdesc_create(Id id, int height, int width, GDescType type);
  * @brief Destroys and frees memory for a graphic description
  * @author Daniel Gómez
  * 
- * @param gdesc 
+ * @param gdesc graphic description struct
  */
 void gdesc_destroy(void *gdesc);
 
-/*-------SETTERS---------*/
+/*
+    * Graphic description setters
+*/
 
 /**
  * @brief Sets a line of the gdesc to a specified string by making a copy of it
  * @author Daniel Gómez
  * 
- * @param gdesc 
- * @param line 
- * @param content 
+ * @param gdesc graphic description struct
+ * @param line line to set
+ * @param content content to replace the line
  * @return Status 
  */
 Status gdesc_set_line(GDesc *gdesc, int line, char *content);
 
-/*------GETTERS------*/
+/*
+    * Graphic description getters
+*/
 
 /**
  * @brief Gets the id of a graphic description
  * @author Daniel Gómez
  * 
- * @param gdesc 
+ * @param gdesc graphic description struct
  * @return Id 
  */
 Id gdesc_get_id(GDesc *gdesc);
@@ -67,8 +77,8 @@ Id gdesc_get_id(GDesc *gdesc);
  * @brief Gets a line of the gdesc
  * @author Daniel Gómez
  * 
- * @param gdesc 
- * @param line 
+ * @param gdesc graphic description struct
+ * @param line line index
  * @return pointer to the line
  */
 char *gdesc_get_line(GDesc *gdesc, int line);
@@ -77,19 +87,21 @@ char *gdesc_get_line(GDesc *gdesc, int line);
  * @brief Gets the type of graphic description
  * @author Daniel Gómez
  * 
- * @param gdesc 
+ * @param gdesc graphic description struct
  * @return GDescType 
  */
 GDescType gdesc_get_type(GDesc *gdesc);
 
-/*-----OTHERS-----*/
+/*
+    * Graphic description general functions
+*/
 
 /**
  * @brief Compares two graphic descriptions by their ID
  * @author Daniel Gómez
  *  
- * @param e1 
- * @param e2 
+ * @param e1 graphic description struct
+ * @param e2 graphic description struct
  * @return negative if e1<e2, 0 if equal, positive if e1>e2
  */
 int gdesc_cmp(void *e1, void *e2);
@@ -98,7 +110,7 @@ int gdesc_cmp(void *e1, void *e2);
  * @brief Saves a gdesc on a file
  * @author Maksym Polyak
  * 
- * @param gdesc graphic description
+ * @param gdesc graphic description struct
  * @param fOUT file stream output
  * @return int with num of char printed or -1 if error
  */

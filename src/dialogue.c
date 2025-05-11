@@ -44,12 +44,34 @@ struct _Dialogue{
     FILE *dialogue_file;                /*!< FILE stream where the dialogue is located*/
 };
 
+/*
+    * Private functions
+*/
+
 /**
  * @brief Frees memory from player replies
  * 
  * @param dialogue 
  */
 void dialogue_strings_destroy(Dialogue *dialogue);
+
+void dialogue_strings_destroy(Dialogue *dialogue){
+    int i;
+    
+    if(dialogue){
+        for(i = 0; i < dialogue->player_replies_num; i++){
+            free(dialogue->player_replies[i]);
+        }
+        free(dialogue->player_replies);
+        free(dialogue->outcomes);
+        free(dialogue->next_dialogue_states);
+        dialogue->player_replies_num = 0;
+    }
+}
+
+/*
+    * Public functions
+*/
 
 Dialogue *dialogue_create(NPC *npc, FILE *fIN){
     Dialogue *dialogue = NULL;
@@ -83,19 +105,9 @@ void dialogue_destroy(Dialogue *dialogue){
     }
 }
 
-void dialogue_strings_destroy(Dialogue *dialogue){
-    int i;
-    
-    if(dialogue){
-        for(i = 0; i < dialogue->player_replies_num; i++){
-            free(dialogue->player_replies[i]);
-        }
-        free(dialogue->player_replies);
-        free(dialogue->outcomes);
-        free(dialogue->next_dialogue_states);
-        dialogue->player_replies_num = 0;
-    }
-}
+/*
+    * Dialogue getters
+*/
 
 NPC *dialogue_get_NPC(Dialogue *dialogue){
     if(!dialogue) return NULL;
@@ -181,6 +193,10 @@ NR:{NUMBER_OF_REPLIES}
 
 ---------
 
+*/
+
+/*
+    * Dialogue general functions
 */
 
 Status dialogue_update(Dialogue *dialogue){

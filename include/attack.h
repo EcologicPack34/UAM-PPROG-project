@@ -4,7 +4,7 @@
  * @brief The attack module saves the and creates the different attack types that will be read from file
  * 
  * Every time a game starts, the attack struct is created and takes all the information
- * from attacks in the file.
+ * from attacks in the file. When a combat starts, it gets a collection from game with the attacks.
  * 
  * @version 0.1
  * @date 2025-04-11
@@ -34,15 +34,16 @@ typedef struct _Attack Attack;
 Attack *attack_create(char *name);
 
 /**
- * @brief Frees the memory of the struct attack
+ * @brief Frees the attack
  * @author Sofía Calvo
- * 
- * @param at attack struct to free
+ *
+ * @param at pointer to the structure that contains the information of the attack
  */
-void attack_free(Attack *at);
+void attack_destroy(void *at);
 
-
-/*------SETTERS------*/
+/*
+  * Attack setters
+*/
 
 /**
  * @brief Sets the damage multiplicator of the attack
@@ -74,7 +75,9 @@ Status attack_set_target_bool(Attack *at, bool target_need);
  */
 Status attack_set_failure_chance(Attack *at, double probability);
 
-/*-------GETTERS-------*/
+/*
+  * Attack GETTERS
+*/
 
 /**
  * @brief Gets the damage multiplicator of the attack
@@ -86,7 +89,7 @@ Status attack_set_failure_chance(Attack *at, double probability);
 double attack_get_damage_multiplicator(Attack *at);
 
 /**
- * @brief  gets wether the attack needs a target or not
+ * @brief  Gets wether the attack needs a target or not
  * @author Sofía Calvo
  *
  * @param at pointer to the structure that contains the information of the attack
@@ -112,11 +115,16 @@ double attack_get_success_chance(Attack *at);
  */
 char *attack_get_name(Attack *at);
 
+/*
+  * Attack general functions
+*/
+
 /**
  * @brief Compares two attacks
  * @author Sofía Calvo
  *
- * @param at pointer to the structure that contains the information of the attack
+ * @param e1 attack struct
+ * @param e2 attack struct
  * @return the strcmp of the names, 0 if there was a mistake
  */
 int attack_compare(void *e1, void *e2);
@@ -128,14 +136,6 @@ int attack_compare(void *e1, void *e2);
  * @param at pointer to the structure that contains the information of the attack
  */
 void attack_print(void *at);
-
-/**
- * @brief Frees the attack
- * @author Sofía Calvo
- *
- * @param at pointer to the structure that contains the information of the attack
- */
-void attack_destroy(void *at);
 
 /**
  * @brief Saves an attack struct info on a file

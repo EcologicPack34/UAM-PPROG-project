@@ -64,6 +64,7 @@ struct _Graphic_engine
  *
  * @param area where the print is done
  * @param string string to be printed
+ * @param extra string to be added as an extra to the string
  */
 void graphic_engine_newline_print_with_extra(Area *area, char *string, char *extra);
 
@@ -554,56 +555,56 @@ void graphic_engine_paint_playerDesc(Graphic_engine *ge, Game *game)
 
   auxInt = 0;
   /*equipment checks*/
-  eqObj = equipment_get_piece(entityplayer, equipment, HELMET);
+  eqObj = equipment_get_piece(equipment, HELMET);
   if (eqObj)
   {
     sprintf(strAux, "%sHelmet: ID:[YELLOW]%ld [RESET]| Name: [YELLOW]%s", tab, object_get_id(eqObj), object_get_name(eqObj));
     screen_area_puts(ge->descript2, strAux);
     auxInt++;
   }
-  eqObj = equipment_get_piece(entityplayer, equipment, CHEST);
+  eqObj = equipment_get_piece(equipment, CHEST);
   if (eqObj)
   {
     sprintf(strAux, "%sChestplate: ID:[YELLOW]%ld [RESET]| Name: [YELLOW]%s", tab, object_get_id(eqObj), object_get_name(eqObj));
     screen_area_puts(ge->descript2, strAux);
     auxInt++;
   }
-  eqObj = equipment_get_piece(entityplayer, equipment, ARMS);
+  eqObj = equipment_get_piece(equipment, ARMS);
   if (eqObj)
   {
     sprintf(strAux, "%sArms: ID:[YELLOW]%ld [RESET]| Name: [YELLOW]%s", tab, object_get_id(eqObj), object_get_name(eqObj));
     screen_area_puts(ge->descript2, strAux);
     auxInt++;
   }
-  eqObj = equipment_get_piece(entityplayer, equipment, LEG_ARMOR);
+  eqObj = equipment_get_piece(equipment, LEG_ARMOR);
   if (eqObj)
   {
     sprintf(strAux, "%sLeg Armor: ID:[YELLOW]%ld [RESET]| Name: [YELLOW]%s", tab, object_get_id(eqObj), object_get_name(eqObj));
     screen_area_puts(ge->descript2, strAux);
     auxInt++;
   }
-  eqObj = equipment_get_piece(entityplayer, equipment, SHOES);
+  eqObj = equipment_get_piece(equipment, SHOES);
   if (eqObj)
   {
     sprintf(strAux, "%sShoes: ID:[YELLOW]%ld [RESET]| Name: [YELLOW]%s", tab, object_get_id(eqObj), object_get_name(eqObj));
     screen_area_puts(ge->descript2, strAux);
     auxInt++;
   }
-  eqObj = equipment_get_piece(entityplayer, equipment, TWO_HANDED);
+  eqObj = equipment_get_piece(equipment, TWO_HANDED);
   if (eqObj)
   {
     sprintf(strAux, "%sBoth Hands: ID:[YELLOW]%ld [RESET]| Name: [YELLOW]%s", tab, object_get_id(eqObj), object_get_name(eqObj));
     screen_area_puts(ge->descript2, strAux);
     auxInt++;
   }
-  eqObj = equipment_get_piece(entityplayer, equipment, HANDL);
+  eqObj = equipment_get_piece(equipment, HANDL);
   if (eqObj)
   {
     sprintf(strAux, "%sLeft Hand: ID:[YELLOW]%ld [RESET]| Name: [YELLOW]%s", tab, object_get_id(eqObj), object_get_name(eqObj));
     screen_area_puts(ge->descript2, strAux);
     auxInt++;
   }
-  eqObj = equipment_get_piece(entityplayer, equipment, HANDR);
+  eqObj = equipment_get_piece(equipment, HANDR);
   if (eqObj)
   {
     sprintf(strAux, "%sRight Hand: ID:[YELLOW]%ld [RESET]| Name: [YELLOW]%s", tab, object_get_id(eqObj), object_get_name(eqObj));
