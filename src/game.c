@@ -1698,6 +1698,8 @@ Status game_get_combat_log_message(Game *game, char *str){
 
   message_get_str(mess, str);
 
+  message_destroy(mess);
+
   return OK;
 }
 
