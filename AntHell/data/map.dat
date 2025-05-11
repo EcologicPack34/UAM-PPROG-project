@@ -28,19 +28,19 @@ North rooms
 #s:23|tmp|5|14|-1|12|-1|13|-1|What is this a tmp file???
 #s:24|Artifact Room|18|-1|-1|-1|-1|-1|13|Great treasures await those who are strong enough to take them
 #s:25|Armory|3|-1|-1|14|15|-1|-1|Another armory??? Really???
-#s:26|Path|1|-1|15|-1|16|-1|-1|NODESCR
-#s:27|Portal Room|2|-1|16|34|-1|-1|17|NODESCR
-#s:28|Union Room|9|34|-1|33|-1|-1|-1|NODESCR
+#s:26|Path|1|-1|15|-1|16|-1|-1|Another and another and another and another path!
+#s:27|Portal Room|2|-1|16|34|-1|-1|17|A smaller portal, where will it go?
+#s:28|Union Room|9|34|-1|33|-1|-1|-1|Its what it says!! A union!
 
 South rooms
-#s:30|Room1|12|19|23|-1|22|-1|-1|NODESCR
-#s:31|Maze1|7|26|22|24|25|-1|-1|NODESCR
-#s:32|Maze2|12|23|24|26|29|-1|-1|NODESCR
-#s:33|Maze3|7|28|-1|32|-1|-1|-1|NODESCR
-#s:34|Maze4|12|-1|27|28|25|-1|-1|NODESCR
-#s:35|Artifact Room|17|32|-1|30|-1|-1|-1|NODESCR
-#s:36|Treasure Room|6|29|-1|31|-1|-1|-1|NODESCR
-#s:37|Treasure Room|6|31|-1|-1|-1|-1|-1|NODESCR
+#s:30|Room1|12|19|23|-1|22|-1|-1|Common room?
+#s:31|Maze1|7|26|22|24|25|-1|-1|You can see messages searching for help in the walls... People has been lost here for ages...
+#s:32|Maze2|12|23|24|26|29|-1|-1|Some bones still rot in the ground...
+#s:33|Maze3|7|28|-1|32|-1|-1|-1|Even a skull can look pleasant in front of this Hell
+#s:34|Maze4|12|-1|27|28|25|-1|-1|Maybe you are reaching the end?
+#s:35|Artifact Room|17|32|-1|30|-1|-1|-1|Artifact room of the south
+#s:36|Treasure Room|6|29|-1|31|-1|-1|-1|A treasure room wow!
+#s:37|Treasure Room|6|31|-1|-1|-1|-1|-1|Another treasure rooom!! WOWWW!
 
 
 Formato Link: #l:ID|Space1|Space2|adjacent|locked //Recordar añadir en cada espacio sus links adyacentes
