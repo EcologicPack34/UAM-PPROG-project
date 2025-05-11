@@ -922,8 +922,10 @@ void game_crossfade_music(Game *game);
 
 /**
  * @brief Sets the volume to a value between 1 and 0, if value is greater or smaller, then is set to 0 or 1
+ * @author Daniel Gómez
  * 
- * @param game 
+ * @param game game struct
+ * @param value value
  * @return Status 
  */
 Status game_set_music_volume(Game *game, float value);

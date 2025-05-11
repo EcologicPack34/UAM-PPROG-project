@@ -92,7 +92,7 @@ struct _Game {
   pthread_t crossfade;                /*!< Audio threading needed*/
   bool crosfadeInit;                  /*!< Bool to determine if threading has to be initiated*/
   GameState musicState;               /*!< State of the music*/
-  float musicVolume;
+  float musicVolume;                  /*!< Music volume*/
 };
 
 /*-----PRIVATE FUNCTIONS-----*/
