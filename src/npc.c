@@ -171,7 +171,7 @@ Status npc_get_str_descr(NPC *npc, char *str, int index){
         return ERROR;
 
     ent = npc_get_entity(npc);
-    sprintf(str, "%s ([YELLOW]%s[RESET]):", entity_get_graphic_description(ent), entity_get_name(ent));
+    sprintf(str, "%s (%s%s[RESET]):", entity_get_graphic_description(ent), (npc->status == ENEMY) ? "[RED]" : "[YELLOW]",entity_get_name(ent));
 
     if(entity_get_health(ent)/entity_get_max_health(ent) <= .5){
         strcat(str, "[YELLOW]");

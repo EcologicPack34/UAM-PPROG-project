@@ -384,7 +384,7 @@ DS:14
 DS:15
 1
 [YELLOW]Of course, what else do you want to know?
-4
+3
 [GREEN]How do I get extra help?:0:16
 [GREEN]How do I revive my friend?:0:17
 [GREEN]How do I get XP and money?:0:18
