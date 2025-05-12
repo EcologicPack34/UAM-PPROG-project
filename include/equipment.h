@@ -77,6 +77,17 @@ EquipmentCode equipment_code_from_str(char *data);
 */
 
 /**
+ * @brief Removes the stats of an object from the entity
+ * @author Maksym Polyak
+ * 
+ * @param entity entity that has the stats of an object removed
+ * @param equipment equipment struct
+ * @param object object from where the stats are taken
+ * @return Status 
+ */
+Status equipment_remove_stats(Entity *entity, Equipment *equipment, Object *object);
+
+/**
  * @brief Tries to add an object as a piece if it is compatible
  * @author Maksym Polyak
  * 

@@ -101,17 +101,6 @@ Status equipment_change_stat_value_by_code(Entity *entity, StatCode code, double
  */
 Status equipment_add_stats(Entity *entity, Equipment *equipment, Object *object);
 
-/**
- * @brief Removes the stats of an object from the entity
- * @author Maksym Polyak
- * 
- * @param entity entity that has the stats of an object removed
- * @param equipment equipment struct
- * @param object object from where the stats are taken
- * @return Status 
- */
-Status equipment_remove_stats(Entity *entity, Equipment *equipment, Object *object);
-
 Status equipment_equip_from_code(Equipment *equipment, EquipmentCode code, Object *object){
     if(!equipment || !object) return ERROR;
 
@@ -413,8 +402,10 @@ Status equipment_add_piece(Entity *entity, Equipment *equipment, Object *object)
 
     if(equipment_equip_from_code(equipment, code, object) == ERROR)
         return ERROR;
-
-    if(equipment_add_stats(entity, equipment, object) == ERROR) return ERROR;
+    
+    if(object_get_is_equipped(object) == false){
+        if(equipment_add_stats(entity, equipment, object) == ERROR) return ERROR;
+    }
 
     object_set_is_equipped(object, true); 
 

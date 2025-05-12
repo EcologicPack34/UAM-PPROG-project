@@ -1727,14 +1727,17 @@ Status game_reader_load_others_from_save_file(Game *game, char *filename){
   /*object & equipment load*/
   fscanf(fIN, "%d\n", &size);
   for(i=0; i<size; i++){
-    obj = object_create_from_file(fIN);    
+    obj = object_create_from_file(fIN); 
     
-    if(game_add_object(game, obj) == ERROR) return ERROR;
-
     if(object_get_is_equipped(obj)){
+      object_set_is_equipped(obj, false);
       equipment_add_piece(player_get_entity(game_get_player_by_id(game, object_get_location(obj))),\
       player_get_equipment(game_get_player_by_id(game, object_get_location(obj))), obj);
+      equipment_remove_stats(player_get_entity(game_get_player_by_id(game, object_get_location(obj))),\
+      player_get_equipment(game_get_player_by_id(game, object_get_location(obj))), obj);
     }
+      
+    if(game_add_object(game, obj) == ERROR) return ERROR;
   }
 
   /*attack load*/

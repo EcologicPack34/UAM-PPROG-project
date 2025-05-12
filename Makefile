@@ -101,7 +101,7 @@ gdb:
 
 gdbsav:
 	make debug
-	gdb --tui --silent --args ./$(GAME_NAME)/anthilldebug $(GAME_NAME)/saves/TESTSAVE.dat
+	gdb --tui --silent --args ./$(GAME_NAME)/anthilldebug $(GAME_NAME)/saves/BOSSFIGHT.dat
 
 #in order for doxygen to work run $sudo apt install doxygen
 #for graphs to work it needs graphviz, to install run $sudo apt install graphviz

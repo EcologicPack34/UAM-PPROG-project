@@ -998,6 +998,8 @@ Status game_add_object(Game *game, Object *object){
   if(collection_add(game_get_objects(game), object) == ERROR)
     return ERROR;
 
+  if(object_get_is_equipped(object) == true) return OK;
+
   switch(object_get_type(object)){
     case UNKNOWN_INVENTORY: 
       return ERROR;
@@ -1007,7 +1009,7 @@ Status game_add_object(Game *game, Object *object){
       break;
     case NPC_INVENTORY:
       npc = game_get_NPC_by_id(game, object_get_location(object));
-      status = inventory_add_object(entity_get_inventory(npc_get_entity(npc)), object); /*An npc inventory is being implemented*/
+      status = inventory_add_object(entity_get_inventory(npc_get_entity(npc)), object);
       break;
     case SPACE_INVENTORY:
       proceduralLoc = (game->procedural) ? (rand() % (game->n_spaces - 1) + 2) : object_get_location(object);

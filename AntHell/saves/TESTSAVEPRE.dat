@@ -1,0 +1,937 @@
+SAVE
+0;1;0;0;0;1
+#gd:1|5|9|1
+   .    o
+  o   .  
+ .   O   
+  o    o 
+ .   o   
+#gd:2|5|9|1
+  Y   y Y
+ y Y  Y  
+  Y y   Y
+ y   Y  y
+  y Y y Y
+#gd:3|5|9|1
+   o    .
+  .   o  
+  o   O  
+   .   . 
+  o    o 
+#gd:4|5|9|1
+   Y   y 
+  y   Y  
+  Y y   Y
+  y Y y Y
+   Y   y 
+#gd:5|5|9|1
+  x   #  
+ #   .   
+  x  x  .
+ .   #   
+  #   .  
+#gd:6|5|9|1
+.  $   $ 
+ $ .  $  
+ .  $  . 
+  $  $   
+ . .  $  
+#gd:7|5|9|1
+------   
+ !   ____
+ !____  !
+ !  ____!
+     !   
+#gd:8|5|9|1
+    A    
+  _/ \_  
+  \   /  
+    !    
+---------
+#gd:9|5|9|1
+   \ /   
+   / \   
+  /   \  
+ !     ! 
+ \     / 
+#gd:10|5|9|1
+  !   !  
+  !   \  
+  !    --
+  !    __
+  !   /  
+#gd:11|5|9|1
+  . *    
+ .  ' `  
+  , . 
+  _. ,   
+   *     
+#gd:12|5|9|1
+ ! --  -!
+ !--  --!
+ !- -  -!
+ ! ---  !
+ !- -  -!
+#gd:13|5|9|1
+__/==\___
+    mo'\_
+__@  _   
+  \__/ \_
+---------
+#gd:14|5|9|1
+_________
+ 
+ 
+_________
+
+#gd:15|5|9|1
+    _    
+\  \___  
+\      \_
+\    _   
+ \__/ \__
+#gd:16|5|9|1
+    _    
+  ___\  \
+ /  mo' !
+\ @  _  /
+ \__/ \__
+#gd:17|5|9|1
+   ___   
+  / _ \  
+ | |I| | 
+  \___/  
+
+#gd:18|5|9|1
+   ___   
+  / _ \  
+ | |I| | 
+  \___/  
+
+#gd:19|5|9|1
+   /   /
+--/    \_
+
+--_    --
+   \    \
+#gd:20|5|9|1
+  /     /
+  /     /
+ _/     /
+   _    /
+ __/ \__/
+#gd:21|5|9|1
+  ______ 
+        \
+        |
+        |
+ _______/
+#l:1|11|12|1|0
+#l:2|12|100|1|1
+#l:3|12|13|1|0
+#l:4|13|14|1|0
+#l:5|14|15|1|0
+#l:6|15|16|1|0
+#l:18|16|17|1|0
+#l:7|17|19|1|0
+#l:8|17|18|1|0
+#l:9|19|20|1|0
+#l:10|14|21|1|0
+#l:11|21|22|1|0
+#l:12|22|23|1|0
+#l:13|23|24|1|0
+#l:14|23|25|1|0
+#l:15|25|26|1|0
+#l:16|26|27|1|0
+#l:17|20|27|0|0
+#l:19|12|30|1|1
+#l:22|30|31|0|0
+#l:23|30|32|0|0
+#l:24|31|32|0|0
+#l:25|31|34|0|0
+#l:26|32|31|0|0
+#l:27|34|30|0|0
+#l:28|34|33|0|0
+#l:29|32|36|0|0
+#l:30|35|30|0|0
+#l:31|36|37|1|0
+#l:32|33|35|1|0
+#l:33|28|14|1|0
+#l:34|27|28|1|0
+#l:35|100|101|1|1
+#s:11|Entry|14|-1|1|-1|-1|-1|-1|A hole in the roof far away seems to be your end...|1
+#s:12|Lobby|19|3|2|19|1|-1|-1|Some people pass, you see a great door with a medallion icon empty in the center|1
+#s:100|Boss Room|3|-1|35|-1|2|-1|-1|This is HELL, flames, and a giant ant with two of its guards...|0
+#s:101|Escape tunel|21|-1|-1|-1|35|-1|-1|The escape...You made it.|0
+#s:13|Hall1|9|4|-1|3|-1|-1|-1|A common hall, common for what a cave can be, goes to the north...|1
+#s:14|Lobby2|19|33|10|4|5|-1|-1|Here a merchant rests waiting for someone like you.|1
+#s:15|Path|4|-1|5|-1|6|-1|-1|A simple but dangerous path|1
+#s:16|Path|2|-1|6|-1|18|-1|-1|Another simple but dangerous path|1
+#s:17|Enemy Den|1|7|18|8|-1|-1|-1|A lot of enemies seem to have grown here...|1
+#s:18|Armory|5|8|-1|-1|-1|-1|-1|An ant armory??|1
+#s:19|Path|3|9|-1|7|-1|-1|-1|Another another simple but dangerous path|1
+#s:20|Portal Room|2|-1|-1|9|-1|17|-1|A great portal stands in fron of you...|1
+#s:21|MoneyBag|3|-1|11|-1|10|-1|-1|Do ants even collect money? I guess mutant ants do|1
+#s:22|Ally|20|12|-1|-1|11|-1|-1|Look well, there are no allies here|1
+#s:23|tmp|5|14|-1|12|-1|13|-1|What is this a tmp file???|1
+#s:24|Artifact Room|18|-1|-1|-1|-1|-1|13|Great treasures await those who are strong enough to take them|1
+#s:25|Armory|3|-1|-1|14|15|-1|-1|Another armory??? Really???|1
+#s:26|Path|1|-1|15|-1|16|-1|-1|Another and another and another and another path!|1
+#s:27|Portal Room|2|-1|16|34|-1|-1|17|A smaller portal, where will it go?|1
+#s:28|Union Room|9|34|-1|33|-1|-1|-1|Its what it says!! A union!|1
+#s:30|Room1|12|19|23|-1|22|-1|-1|Common room?|0
+#s:31|Maze1|7|26|22|24|25|-1|-1|You can see messages searching for help in the walls... People has been lost here for ages...|0
+#s:32|Maze2|12|23|24|26|29|-1|-1|Some bones still rot in the ground...|0
+#s:33|Maze3|7|28|-1|32|-1|-1|-1|Even a skull can look pleasant in front of this Hell|0
+#s:34|Maze4|12|-1|27|28|25|-1|-1|Maybe you are reaching the end?|0
+#s:35|Artifact Room|17|32|-1|30|-1|-1|-1|Artifact room of the south|0
+#s:36|Treasure Room|6|29|-1|31|-1|-1|-1|A treasure room wow!|0
+#s:37|Treasure Room|6|31|-1|-1|-1|-1|-1|Another treasure rooom!! WOWWW!|0
+45
+#n:1|1|Old_Merchant|14|0|1|ToT
+#st:1|2|100|100|25|1|1|1
+#n:2|1|Divine_Merchant|32|0|1|GOD
+#st:2|2|1000|1000|1000|1000|1000|1000
+#n:3|1|Young_Merchant|12|0|1|uWu
+#st:3|2|100|100|25|1|1|1
+#n:4|4|Young_Warrior|23|1|2|WoW
+#st:4|2|100|100|25|10|15|1
+#n:5|1|Old_Knight|30|1|1|bTd
+#st:5|2|200|100|30|20|15|1
+#n:6|4|Another_Traveler|23|1|2|IyI
+#st:6|2|80|80|20|5|1|1
+#n:7|1|Ant_Assasin|35|1|1|><>
+#st:7|2|120|120|30|15|5|1
+#n:8|0|Small_Ant|11|0|3|^0m
+#st:8|2|100|0|15|5|5|1
+#n:9|0|Small_Ant|14|0|3|^1m
+#st:9|2|110|0|15|5|5|1
+#n:10|0|Small_Ant|21|0|3|^2m
+#st:10|2|80|0|15|5|5|1
+#n:11|0|Small_Ant|14|0|3|^3m
+#st:11|2|120|0|15|5|5|1
+#n:12|0|Small_Ant|21|0|3|^4m
+#st:12|2|100|0|15|5|5|1
+#n:13|0|Small_Ant|21|0|3|^5m
+#st:13|2|110|0|23|5|5|1
+#n:14|0|Small_Ant|25|0|3|^6m
+#st:14|2|80|0|15|5|5|1
+#n:15|0|Big_Ant|22|0|3|^7m
+#st:15|2|120|0|30|5|5|1
+#n:16|0|Small_Ant|13|0|3|^8m
+#st:16|2|100|0|15|5|5|1
+#n:17|0|Small_Ant|28|0|3|^9m
+#st:17|2|110|0|15|5|5|1
+#n:18|0|Spider|23|0|3|/O\
+#st:18|2|200|200|25|10|10|1
+#n:19|0|Spider|16|0|3|/1\
+#st:19|2|200|0|25|10|10|1
+#n:20|0|Big_Ant|17|0|3|^m^
+#st:20|2|120|0|30|5|5|1
+#n:21|0|Small_Ant|20|0|3|^4m
+#st:21|2|100|0|15|5|5|1
+#n:22|0|Small_Ant|15|0|3|^5m
+#st:22|2|110|0|15|5|5|1
+#n:23|0|Spider|19|0|3|/2\
+#st:23|2|200|0|25|10|10|1
+#n:24|0|Big_Ant|24|0|3|^m^
+#st:24|2|120|120|30|5|5|1
+#n:25|0|Small_Ant|24|0|3|^4m
+#st:25|2|100|0|15|5|5|1
+#n:26|0|Small_Ant|22|0|3|^5m
+#st:26|2|110|0|15|5|5|1
+#n:27|0|Spider|23|0|3|/2\
+#st:27|2|200|200|25|10|10|1
+#n:28|10|Guide|11|0|1|GuD
+#st:28|2|100|100|25|1|1|1
+#n:30|0|Spider|30|0|3|/3\
+#st:30|2|200|200|40|10|10|1
+#n:31|0|Spider|34|0|3|/4\
+#st:31|2|200|200|40|10|10|1
+#n:32|0|Spider|36|0|3|/5\
+#st:32|2|200|200|40|10|10|1
+#n:33|0|Spider|32|0|3|/6\
+#st:33|2|250|250|40|10|10|1
+#n:34|0|Spider|33|0|3|/7\
+#st:34|2|250|250|40|10|10|1
+#n:35|0|Mutant_Ant|30|0|3|om^
+#st:35|2|150|150|30|15|15|1
+#n:36|0|Mutant_Ant|34|0|3|om^
+#st:36|2|150|150|30|15|15|1
+#n:37|0|Mutant_Ant|35|0|3|om^
+#st:37|2|150|150|30|15|15|1
+#n:38|0|Mutant_Ant|33|0|3|om^
+#st:38|2|150|150|30|15|15|1
+#n:39|0|Mutant_Ant|36|0|3|om^
+#st:39|2|150|150|30|40|40|1
+#n:40|0|Mutant_Ant|37|0|3|om^
+#st:40|2|150|150|30|40|40|1
+#n:41|0|Mutant_Ant|32|0|3|om^
+#st:41|2|150|150|30|40|40|1
+#n:42|0|Mutant_Ant|31|0|3|om^
+#st:42|2|150|150|30|40|40|1
+#n:43|0|Mutant_Ant|31|0|3|om^
+#st:43|2|150|150|30|40|40|1
+#n:44|1|Ant_Hell_King|100|0|3|HEL
+#st:44|2|1000|1000|50|40|40|1
+#n:45|0|Ant_Hell_Guard|100|0|3|GAR
+#st:45|2|300|300|30|40|40|1
+#n:46|0|Ant_Hell_Guard|100|0|3|GAR
+#st:46|2|300|300|30|40|40|1
+#p:1|Traveler1|23|748|967|600|6|1|mO^|3;6-2;4-2;2-1
+12;1;2
+2
+Young_Warrior
+#st:1|1|155|155|26|6|9|1
+#p:2|Traveler2|23|666|1389|300|3|0|m1^|1;1-1
+9;1;2
+strong
+1
+#st:2|1|170|170|25|1|18|6
+OBJ
+32
+1;24;3;3;1;0;0;0
+Northern_Half_Med
+NONE
+Collect the other Medallion to open the boss gate
+2;35;3;1;1;0;0;0
+Southern_Half_Med
+NONE
+Collect the other Medallion to open the boss gate
+3;1;1;10;1;0;0;0
+Extrakorita_Crystal
+NONE
+An ancient crystal... This crystal can't be taken without a Crystal Collector
+4;11;3;-1;0;0;0;0
+Broken_Extrakorita
+NONE
+An ancient crystal broken and unstable, can't be taken even with the help of a Crystal Collector
+102;1;1;-1;1;0;1;0
+Arms_Of_Hell
+wearable arms strength:2 max_health:10 defense:2
+These arms were forged in this AntHell, by the Grand master blacksmith AntGod, gives the wearer the agility to cut through their enemies! STATS: +2 strength, +10 max health +2 defense
+103;1;1;-1;1;0;1;0
+Shoes_Of_Pain
+wearable shoes strength:2 max_health:15 defense:2
+Not a regular pair of shoes, these were carried by the old Ant Slayer, gives the wearer the determination to advance! STATS: +2 strength, +15 max health +2 defense
+105;2;1;-1;1;0;1;0
+Arms_Of_Heaven
+wearable arms magic_level:2 max_health:20 defense:4
+These arms were forged on a far away forge, by the Grand master blacksmith AntGod, gives the wearer the agility to curse their enemies! STATS: +2 magic level, +20 max health +4 defense
+107;2;1;-1;1;0;1;0
+Shoes_Of_Speed
+wearable shoes magic_level:1 max_health:20 defense:5
+Speed is the base of combat, gives the wearer the magic to power its incantations! STATS: +1 magic level, +20 max health +5 defense
+108;30;3;-1;1;0;0;0
+Ant_Cataclism
+wearable handr base_damage:5 strength:3 max_health:20
+A one hand mace, give your enemies a bonk that leaves them sleepig for the rest of their lives! STATS: +5 base damage +3 strength +20 max health
+109;2;2;-1;1;0;0;1000
+Legs_Of_Penance
+wearable leg_armor strength:1 max_health:20 defense:3
+Leg armor is heavy, but not as heavy as the burden of penance, gives the wearer the will to carry on! STATS: +1 strength, +20 max health +2 defense
+110;2;2;-1;1;0;0;1000
+Ant_Slayer
+wearable two_handed base_damage:15 strength:5 max_health:5
+An ancient weapon... Seemingly created by the heavens, gives the wearer the power to destroy every ant! STATS: +15 base damage, +5 strength, +5 max health
+111;2;2;-1;1;0;0;1000
+Chest_Of_Loyalty
+wearable chest magic_level:3 max_health:40 defense:10
+Through thousands of years, the knights of Great Lond venerated the ones who used this chest plate. Every STATS: +3 magic level, + 40 max health +10 defense
+112;2;2;-1;1;0;0;1000
+Ant_Protector
+wearable handl strength:2 max_health:50 defense:7
+A shield that protects the wearer from every threat! STATS: +2 strength +50 max health +7 defense
+131;2;2;-1;1;0;0;500
+IHP
+NONE
+A seamingly infinite potion, refills every time it is taken, but it does not heal that much, just 20 HP.
+132;2;2;-1;1;0;0;500
+IHP
+NONE
+A seamingly infinite potion, refills every time it is taken, but it does not heal that much, just 20 HP.
+10;1;1;-1;1;0;0;100
+Crystal_Collector
+NONE
+Grants you the ability to extract Extakorita, a strange mineral that can't be taken or carried without this collector.
+115;1;2;-1;1;1;0;30
+HP
+NONE
+Health Potion: 40 HP
+116;1;2;-1;1;1;0;30
+HP
+NONE
+Health Potion: 40 HP
+117;1;2;-1;1;1;0;30
+HP
+NONE
+Health Potion: 40 HP
+118;1;2;-1;1;1;0;30
+HP
+NONE
+Health Potion: 40 HP
+119;1;2;-1;1;1;0;30
+HP
+NONE
+Health Potion: 40 HP
+120;1;2;-1;1;1;0;30
+HP
+NONE
+Health Potion: 40 HP
+121;1;1;-1;1;1;0;30
+HP
+NONE
+Health Potion: 40 HP
+122;1;1;-1;1;1;0;30
+HP
+NONE
+Health Potion: 40 HP
+123;1;1;-1;1;1;0;30
+HP
+NONE
+Health Potion: 40 HP
+124;3;2;-1;1;1;0;30
+HP
+NONE
+Health Potion: 40 HP
+125;3;2;-1;1;1;0;30
+HP
+NONE
+Health Potion: 40 HP
+126;3;2;-1;1;1;0;30
+HP
+NONE
+Health Potion: 40 HP
+104;27;2;-1;1;0;0;0
+Helmet_Of_Grace
+wearable helmet magic_level:2 max_health:30 defense:5
+A decorated but resilient helmet, gives the wearer the looks of a god! STATS: +2 magic level, +30 max health +5 defense
+106;2;1;-1;1;0;1;0
+Legs_Of_Will
+wearable leg_armor magic_level:2 max_health:30 defense:8
+Legs tend to be undervalued, but they can hold the determination of the body, gives the wearer the magic power to annihilate their enemies! STATS: +2 magic_level, +30 max health +8 defense
+101;1;1;-1;1;0;1;0
+Chest_Of_Loneliness
+wearable chest base_damage:1 strength:1 max_health:30 defense:4
+A long time has passed since someone found this relic, gives the wearer the endurance of a mountain! STATS: +2 strength, + 30 max health +4 defense
+100;18;2;-1;1;0;0;0
+Helmet_Of_Void
+wearable helmet base_damage:1 strength:1 max_health:10 defense:2
+Created to cover the face of the most ominous beings on this world, gives the wearer the eyes of a demon! STATS: +1 strength, +10 max health +2 defense
+4
+0.800000;1;90.000000
+light
+1.800000;1;70.000000
+strong
+1.000000;1;60.000000
+quick
+0.500000;0;50.000000
+swift
+9
+1;9;1;5.6,3,5,2,4,1:2;obj:1000;Silver_Medallion;use this medallion to open a gate;1000;2
+2;4;0;6.3,5,2,4,21,22,10
+3;2;0;2.6,7,20
+4;2;0;3.16,13,12,50
+5;5;0;9.3,5,2,4,21,22,9,12,13,0
+6;13;0;0.28;10;1
+7;15;0;0.101
+8;14;0;0.44;35
+9;11;1;0.44
+19
+1;4;1;0;1;0;1;0
+Unlock link to the portal maze
+19
+115;1;115;0;1;0;1;0
+HEALTH POTION
+40
+116;1;116;0;1;0;1;0
+HEALTH POTION
+40
+117;1;117;0;1;0;1;0
+HEALTH POTION
+40
+118;1;118;0;1;0;1;0
+HEALTH POTION
+40
+119;1;119;0;1;0;1;0
+HEALTH POTION
+40
+120;1;120;0;1;0;1;0
+HEALTH POTION
+40
+121;1;121;0;1;0;1;0
+HEALTH POTION
+40
+122;1;122;0;1;0;1;0
+HEALTH POTION
+40
+123;1;123;0;1;0;1;0
+HEALTH POTION
+40
+124;1;124;0;1;0;1;0
+HEALTH POTION
+40
+125;1;125;0;1;0;1;0
+HEALTH POTION
+40
+126;1;126;0;1;0;1;0
+HEALTH POTION
+40
+131;1;131;0;1;0;1;0
+HEALTH POTION
+20
+132;1;132;0;1;0;1;0
+HEALTH POTION
+20
+51;5;1;1;0;0;2;1
+Self Regeneration Spell
+3
+56;2;1;1;0;8;8;3
+Heals an ally 30 HP, not available to self
+30
+52;7;2;1;0;0;3;1
+Ally Regeneration Spell
+3
+55;1;2;1;0;0;4;1
+Heal self 20 HP Maximum CD: 0
+20
+26;1;1
+TESTSAVEPRE
+12;1;2
+2
+Young_Warrior
+Error code for commands. Doesn
+Code for unkown commands.
+Exits the game.
+Moves one space to the south.
+Moves one space to the north.
+Moves one space to the east.
+Moves one space to the west.
+Takes an object to the current space. Needs one argument. Ex: take Object1.
+Drops an object to the current space. Needs one argument. Ex: drop Object1.
+Chats with an NPC in the space. Needs one argument. Ex: chat NPC1.
+If in exploration, it starts combat, no arguments needed. In combat mode: "at attackType target", attack types available: light, strong, quick, swift(no target).
+Exits combat.
+Switches current player. Ex: switch list (gets player list). switch (swithches to next player). switch Id (switches to player with given Id)
+Uses an ability. Takes one argument, the number of the ability on the description part. Ex: sk 1.
+Uses the ability of an object. Takes one argument. Ex: object_use ObjectName.
+Prints all the commands if no arguments. If specified a command, prgdb ints its description.
+Generic command for moving. Needs one argument (north, east, south, west). Ex: move north.
+Searches in the current space to obtain info about NPCs and objects.
+Tries to add a piece of equipment to the active player from the inventory. Use prototype: eq OBJECT_NAME Ex: eq HTEST
+Removes a piece of equipment. Use prototype: ue PIECE_TO_REMOVE: helmet,chest,arms,leg_armor,shoes,two_handed,one_handed1,one_handed2. Ex: ue helmet
+Inspect an object that is contained in the players inventory. Ex: inspect objectName. Also works on store
+Enables God Mod, gives high health, discovers all spaces...
+Moves one space up.
+Moves one space down.
+Levels up the player if he has skill points available. In level up state write lu (option you want)
+Buys the object if you have enough money
+Follows another player, can
+Saves the game instance to a file. use: sv NAMEOFTHEFILE
+Shows a minimap of the game. 
+Sets the volume of the music to the specified value between 0 and 1
+30
+-1,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,
+25
+15,3,2,4,5,9,6,7,8,1,14,12,13,16,17,18,19,11,21,22,23,25,26,27,28,
+8
+9,10,1,14,12,13,19,28,
+4
+8,14,1,28,
+4
+24,14,1,28,
+2
+27,28,
+3
+#ef:1|Poison|2|2|0|10|3
+0
+#ef:2|Fire|3|2|0|10|1
+0
+#ef:3|Regeneration|1|0|0|4|5
+0
+ID:1
+DS:1
+3
+Hello Traveler!
+I have some nice goods for you.
+Take a look!
+3
+[GREEN]I'll buy something!:3:1
+[CYAN]I'm not interested,:1:1
+[RED]I don't care, DIE!:2:0
+
+DS:0
+1
+I don't have anything to tell you!
+1
+DIE FOR GODS SAKE!:2:0
+
+Divine_Merchant
+ID:2
+DS:1
+2
+Welcome little creature!
+Do you have some gold to trade with me?
+3
+[GREEN]Okey...?:3:1
+[CYAN]I'm not interested,!:1:1
+[RED]You will die by my hand!:2:0
+
+DS:0
+1
+You dare to come again mortal...
+1
+I'LL KILL YOU GOD!:2:0
+
+Young_Merchant
+ID:3
+DS:1
+4
+Hello Traveler!
+We both share a tragic fall...
+I have some nice goods for you.
+Take a look!
+3
+[GREEN]I'll take a look!:3:1
+[CYAN]I'm not interested,:1:1
+[RED]I don't care, DIE!:2:0
+
+DS:0
+1
+I don't have anything to tell you!
+1
+DIE!:2:0
+
+Young_Warrior
+ID:4
+DS:1
+4
+Are you kidding me? You are really the
+new one here? C'mon... Just when I thought 
+I would find someone strong...
+I'll never get out of here.
+3
+[GREEN]Are you sure? You didn't even tested my strength.:0:2
+[RED]You think I am weak?! I'll kill you!:2:0
+[CYAN](Ignore):1:1
+
+DS:2
+2
+Mmmh... At least you have guts...
+Are you sure *********?
+3
+[GREEN]I'm sure.:0:3
+[RED]I'll show you that I'm stronger with your dead body in the ground!:2:0
+[CYAN](Ignore):1:2
+
+DS:3
+3
+Well well, you convinced me!
+That type of will and authority is what
+I'm looking for!
+3
+[GREEN]Fine, then let's beat these ants!:4:4
+[RED]I changed my mind, go to hell!:2:0
+[CYAN]Not for now, but thank you!:1:3
+
+DS:4
+3
+I'm not tired at all!
+I can beat every ant I see 
+Even that big ant we shaw on the inital zone!
+2
+[GREEN]Okey, but wait for me on this spot:5:3
+[CYAN]Not for now, but thank you!:1:4
+
+DS:0
+1
+I don't have anything to tell you!
+1
+DIE!:2:0
+
+Old_Knight
+ID:5
+DS:1
+4
+Where violence is key,
+where death is cold,
+I'll lure between them,
+and take their throne...
+3
+[GREEN]Mmmh Hello?:0:2
+[RED]Even a knight can't beat me!:2:0
+[CYAN](Ignore):1:1
+
+DS:2
+2
+Ooh... I didn't notice you traveler.
+What brings you to this Ant Hell?
+3
+[GREEN]I fell and I don't remember anything...:0:3
+[RED]Too much talk for me!:2:0
+[CYAN](Ignore):1:2
+
+DS:3
+3
+I had a similar story, since then
+I have been wandering through these caves...
+Do you want my help in your endeavour?
+3
+[GREEN]Of course sir, I'll appreciate your help!:4:4
+[RED]I changed my mind, go to hell!:2:0
+[CYAN]Thank you sir, but I'll see you later!:1:3
+
+DS:4
+2
+I'll keep crushing these ants..
+For my lord!
+2
+[GREEN]Wait for me on this spot:5:3
+[CYAN]Let's go!:1:4
+
+DS:0
+1
+I don't have anything to tell you!
+1
+DIE!:2:0
+
+Another_Traveler
+ID:6
+DS:1
+2
+AAAAH! You scared me!
+What are you doing here?!
+3
+[GREEN]Chill, i'm just as lost as you:0:2
+[RED]What a weakling, DIE!:2:0
+[CYAN](Ignore):1:1
+
+DS:2
+3
+Okey okey...
+Can i go with you?
+I need to leave fast...
+3
+[GREEN]I don't know... You don't seem fit to fight:0:3
+[RED]Ignorant peasant!:2:0
+[CYAN](Ignore):1:2
+
+DS:3
+3
+Don't worry! I have killed 
+bigger ants than you sir,
+trust me!
+3
+[GREEN]Mmmm okay...:4:4
+[RED]Go to hell!:2:0
+[CYAN]You're too weak for this, sorry.:1:3
+
+DS:4
+2
+Oh my god... These ants 
+are really strong...
+2
+[GREEN]Wait for me on this spot:5:3
+[CYAN]Just keep your mind calm friend!:1:4
+
+DS:0
+1
+I don't have anything to tell you!
+1
+DIE!:2:0
+
+Ant_Assasin
+ID:7
+DS:1
+1
+...
+3
+[GREEN]Hey, you know I can see you right?:0:2
+[RED]Are you stupid?!:2:0
+[CYAN](Ignore):1:1
+
+DS:2
+2
+Damn...Your cold eyes are too much
+for my camouflage...
+3
+[GREEN]What did you think?:0:3
+[RED]Ignorant assasin!:2:0
+[CYAN](Ignore):1:2
+
+DS:3
+2
+I'll trust you with my service
+I'll slay everyone in our path master...
+3
+[GREEN]Mmmm okay...:4:4
+[RED]Go to hell!:2:0
+[CYAN]I don't need a stupid ghost.:1:3
+
+DS:4
+1
+At your service my master...
+2
+[GREEN]Wait for me on this spot assasin.:5:3
+[CYAN]Don't call me master...:1:4
+
+DS:0
+1
+DIE!
+1
+DIE!:2:0
+
+Guide
+ID:28
+DS:1
+4
+[YELLOW]Welcome traveler!
+[YELLOW]It seems that you fell from 
+[YELLOW]that hole on the roof,
+[YELLOW]you took a lot of hits...
+1
+[GREEN]What...?I don't remember anything...:0:2
+
+DS:2
+4
+[YELLOW]Oh, don't worry about that... Every person
+[YELLOW]that has fallen to these caves has lost 
+[YELLOW]it's memories or they just remember a 
+[YELLOW]tiny part of their lives.
+1
+[GREEN]I see... And how do I get out:0:3
+
+DS:3
+4
+[YELLOW]Well, that's the difficult part...
+[YELLOW]You see, on the east door behind the next space,
+[YELLOW]there is a powerful being, called the AntHellKing.
+[YELLOW]If we kill him we will escape easily
+1
+[GREEN]Then let's kill him!:0:4
+
+DS:4
+4
+[YELLOW]I said that it's not easy, he has been keeping
+[YELLOW]his eyes on us through the walls and nobody ever
+[YELLOW]got to kill him, even though a lot of people fell
+[YELLOW]before you...
+1
+[GREEN]I see...:0:5
+
+DS:5
+4
+[YELLOW]But don't worry traveler, this caves hold a lot
+[YELLOW]of treasures for those who are strong enough
+[YELLOW]to claim them, so keep your eyes up and face
+[YELLOW]the harsh reality, if we are alive we fight!
+1
+[GREEN]Yes!:0:6
+
+DS:6
+5
+[YELLOW]Anyways, I'm the guide, you'll find a lot 
+[YELLOW]of people around here too, at any time you 
+[YELLOW]can talk with me if you have a problem with 
+[YELLOW]the caves. Probably I'll be able to
+[YELLOW]guide you!
+1
+[GREEN]Thank you!:1:10
+
+DS:10
+2
+[YELLOW]Hello traveler!
+[YELLOW]How can i help you in these horrendous caves?
+4
+[GREEN]How can I get the first medallion?:0:11
+[GREEN]How can I get the second medallion?:0:14
+[GREEN]Can I talk to you about other things?:0:15
+[CYAN]Sorry, I'm just passing by!:1:10
+
+DS:11
+5
+[YELLOW]All you have to do is find the hidden room
+[YELLOW]in the north caves, there it is the medallion.
+[YELLOW]But before that, you need to get a Crystal
+[YELLOW]Collector and some Extrakorita or you 
+[YELLOW]won't be able to pick it up.
+1
+[GREEN]How do I get the Crystal Collector and that?:0:12
+
+DS:12
+4
+[YELLOW]Look in the surrounding merchants, probably one
+[YELLOW]will sell a Crystal Collector. Extrakorita is 
+[YELLOW]said to be found on the north caves, at the east
+[YELLOW]side. And one more thing.
+1
+[GREEN]What else do i need?:0:13
+
+DS:13
+5
+[YELLOW]Don't forget to go to the space 12, next to us
+[YELLOW]then use the medallion as the key to the south.
+[YELLOW]To use it write 'ou [OBJECT_NAME] [DIRECTION]
+[YELLOW]Good luck in your adventure! Remember, there
+[YELLOW]are more deadly enemies on the south!
+1
+[GREEN]Thank you!:0:10
+
+DS:14
+5
+[YELLOW]You have to cross the Ant Hell Maze, to do it,
+[YELLOW]look at your surroundings, the walls have some
+[YELLOW]writings that may help you to find what you want.
+[YELLOW]There are rumours that an ancient merchant is
+[YELLOW]around the zone, try to find him!
+1
+[GREEN]Thank you!:0:10
+
+DS:15
+1
+[YELLOW]Of course, what else do you want to know?
+3
+[GREEN]How do I get extra help?:0:16
+[GREEN]How do I revive my friend?:0:17
+[GREEN]How do I get XP and money?:0:18
+
+DS:16
+5
+[YELLOW]To get help, try to talk with people you find
+[YELLOW]along the way, maybe they will help you.
+[YELLOW]If you need help with a command don't forget
+[YELLOW]to use the command 'help (COMMAND)',
+[YELLOW]you will get extra help!
+1
+[GREEN]Thank you!:0:10
+
+DS:17
+5
+[YELLOW]To revive your friend try to learn the
+[YELLOW]resurrection spell, but be careful, it will
+[YELLOW]take a lot of skill points...
+[YELLOW]Also remember you can follow him so both of
+[YELLOW]you survive out there in battle!
+1
+[GREEN]Thank you!:0:10
+
+DS:18
+5
+[YELLOW]For every enemy you kill you will get
+[YELLOW]XP and money according to the stats of the
+[YELLOW]enemy, it also applies to anyone you fight
+[YELLOW]through combat. Some enemies may drop
+[YELLOW]money bags that u can use!
+1
+[GREEN]Thank you!:0:10
+
+AntHellKing
+ID:44
+DS:1
+4
+[YELLOW]I never thought a mortal would defeat me...
+[YELLOW]I underestimated you traveler.
+[YELLOW]But don't forget this
+[YELLOW]I always come back...
+1
+[GREEN]...:1:1
