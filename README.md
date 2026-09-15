@@ -40,7 +40,7 @@ As this was a first-year university project, the project structure and code qual
 
 - And more stuff I'm probably forgetting about.
 
-## Credit
+## Contributors
 
 - [@EcologicPack34](https://github.com/EcologicPack34)
 
